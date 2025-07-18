@@ -174,7 +174,11 @@
 
     .ant-btn.boton_p,
     .ant-btn.boton_guardar {
-        padding: 8px 20px; 
+        height: 40px;
+        line-height: 40px;
+        display: inline-block;
+        vertical-align: middle;
+        padding: 0 20px; 
         border-radius: var(--border-radius-base); 
         font-weight: 600; 
         transition: background-color 0.3s ease, box-shadow 0.3s ease;
@@ -259,8 +263,8 @@
                     </div>
 
                     <div class="inpt-container">
-                        <AntDesign.InputNumber Size="InputSize.Large" Placeholder="Año" @bind-Value="@vehiculoView.Año"
-                                               Min="1900" Max="@DateTime.Now.Year"></AntDesign.InputNumber>
+                        <Input Size="InputSize.Large" Placeholder="Año" @bind-Value="@vehiculoView.Año"Min="1900" Max="@DateTime.Now.Year"
+                                AllowClear />
                     </div>
 
                     <div class="inpt-container">
@@ -270,11 +274,6 @@
 
                     <div class="inpt-container">
                         <Input Size="InputSize.Large" Placeholder="Tipo" @bind-Value="@vehiculoView.Tipo"
-                               AllowClear />
-                    </div>
-
-                    <div class="inpt-container">
-                        <Input Size="InputSize.Large" Placeholder="Color" @bind-Value="@vehiculoView.Color"
                                AllowClear />
                     </div>
 

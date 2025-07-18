@@ -22,7 +22,7 @@
         <div style="width: 100%;height: 100%; background: #fff;">
             @if (current == 0)
             {
-                <div style="height: 22em;width: 100%;padding: 10px;">
+                <div class="form-column">
                     <div class="inpt-container">
                         <input type="text" @bind="vehiculoView.Marca" placeholder="Marca: " />
                     </div>
@@ -38,10 +38,8 @@
                     <div class="inpt-container">
                         <input type="text" @bind="vehiculoView.Tipo" placeholder="Tipo: " />
                     </div>
-                    <div class="inpt-container">
-                        <input type="text" @bind="vehiculoView.Color" placeholder="Color: " />
-                    </div>
-                    <div class="inpt-container">
+                    
+                    <div class="inpt-container upload-container">
                         <label class="lblInputFile" for="fotoMovil"><Icon Type="cloud-upload" Theme="IconThemeType.Outline" Style="height: 14px;width: 14px;" />Cargar foto del móvil</label>
                         <InputFile OnChange="SubirFoto" id="fotoMovil" style="display: none;" />
                         <h3 id="path" style="display: inline-block;font-size:12px;">@imagenView.Nombre @* <Icon Type="eye" Theme="IconThemeType.Outline" /> *@</h3>
@@ -50,12 +48,17 @@
             }
             else if (current == 1)
             {
-                <div style="height: 30em;width: 100%;padding: 10px;">
+                <div class="form-column"> 
                     <div class="inpt-container">
                         <input type="text" @bind="vehiculoView.NumeroMovil" placeholder="Nº del Móvil:" />
                     </div>
-                    <div class="inpt-container">
-                        Es un movil: <Switch @bind-Checked="@EsMovil" Value="@EsMovil" />
+                    <div class="inpt-container"> 
+                        <Space Style="width: 100%; justify-content: flex-start; align-items: center;"> 
+                            <SpaceItem>Es un móvil:</SpaceItem> 
+                            <SpaceItem>
+                                <Switch @bind-Checked="@EsMovil" Value="@EsMovil" />
+                            </SpaceItem>
+                        </Space>
                     </div>
                     @if (EsMovil == true)
                     {
@@ -114,21 +117,7 @@
     </div>
 </div>
 
-<style>
-    .steps-content {
-        margin-top: 16px;
-        border: 1px dashed #e9e9e9;
-        border-radius: 6px;
-        background-color: #fafafa;
-        min-height: 200px;
-        text-align: center;
-        padding-top: 80px;
-    }
 
-    .steps-action {
-        margin-top: 24px;
-    }
-</style>
 @code {
     [Parameter] public int VehiculoId { get; set; }
     [Parameter] public EventCallback OnClose { get; set; }
