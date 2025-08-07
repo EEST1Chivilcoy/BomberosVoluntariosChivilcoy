@@ -3,6 +3,7 @@
 @using Vista.Data.ViewModels.Personal
 @using Vista.Data.Models.Personas.Personal
 @using Vista.Data.Models.Personas.Personal.Componentes
+@using Vista.Data.Mappers
 
 @*Servicios Utilizados*@
 @using Vista.Services
@@ -11,413 +12,458 @@
 @inject IMessageService MessageService
 
 <style>
-	.template {
-		width: 100%;
-		height: 100%;
-		max-width: 97%;
-		min-width: 400px;
-		max-height: 100vh;
-		border-radius: 10px;
-		box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-		background: #fff;
-		display: flex;
-		flex-direction: column;
-		margin: 1em;
-		padding: 10px;
-		overflow: auto;
-	}
+    .template {
+        width: 100%;
+        height: 100%;
+        max-width: 97%;
+        min-width: 400px;
+        max-height: 100vh;
+        border-radius: 10px;
+        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+        background: #fff;
+        display: flex;
+        flex-direction: column;
+        margin: 1em;
+        padding: 10px;
+        overflow: auto;
+    }
 
-	.ant-table {
-		width: 100%;
-		background-color: white;
-		border-radius: 8px;
-		overflow: hidden;
-	}
+    .ant-table {
+        width: 100%;
+        background-color: white;
+        border-radius: 8px;
+        overflow: hidden;
+    }
 
-	.ant-table-title {
-		background-color: #A63333
-	}
+    .ant-table-title {
+        background-color: #A63333
+    }
 
-	.ant-table-thead .ant-table-cell {
-		background-color: #A63333 !important;
-		color: white !important;
-		font-weight: bold;
-	}
+    .ant-table-thead .ant-table-cell {
+        background-color: #A63333 !important;
+        color: white !important;
+        font-weight: bold;
+    }
 
-	.ant-table-cell {
-		padding: 16px !important;
-	}
+    .ant-table-cell {
+        padding: 16px !important;
+    }
 
-	.title-template-container {
-		background-color: #A63333;
-		padding: 16px;
-		border-top-left-radius: 8px;
-		border-top-right-radius: 8px;
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-	}
+    .title-template-container {
+        background-color: #A63333;
+        padding: 16px;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-	.search-input {
-		width: 250px;
-	}
+    .search-input {
+        width: 250px;
+    }
 
-		.search-input input {
-			background-color: rgba(255, 255, 255, 0.1);
-			color: white;
-			border: none;
-		}
+        .search-input input {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+        }
 
-			.search-input input::placeholder {
-				color: rgba(255, 255, 255, 0.7);
-			}
+            .search-input input::placeholder {
+                color: rgba(255, 255, 255, 0.7);
+            }
 
-	.add-button {
-		background-color: #4CAF50 !important;
-		border-color: #438E46 !important;
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-	}
+    .add-button {
+        background-color: #4CAF50 !important;
+        border-color: #438E46 !important;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
 
-	.boton_p {
-		background-color: #732D2D !important;
-		color: white !important;
-		border: none;
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-	}
+    .boton_p {
+        background-color: #732D2D !important;
+        color: white !important;
+        border: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
 
-	@@media (max-width: 960px) {
-		.title-template-container {
-			flex-direction: column;
-			align-items: stretch;
-		}
-	}
+    @@media (max-width: 960px) {
+        .title-template-container {
+            flex-direction: column;
+            align-items: stretch;
+        }
+    }
 
-	.ant-form-horizontal .ant-form-item-label {
-		flex-grow: 1;
-		background: #A63333;
-	}
+    .ant-form-horizontal .ant-form-item-label {
+        flex-grow: 1;
+        background: #A63333;
+    }
 
-		.ant-form-horizontal .ant-form-item-label > label {
-			color: #FFFFFF;
-			padding: 2px 4px;
-		}
+        .ant-form-horizontal .ant-form-item-label > label {
+            color: #FFFFFF;
+            padding: 2px 4px;
+        }
 
-	.ant-form-item {
-		box-sizing: border-box;
-		margin: 0;
-		margin-bottom: 0px;
-		padding: 0;
-		color: rgba(0, 0, 0, 0.85);
-		font-size: 14px;
-		line-height: 1.5715;
-		list-style: none;
-		font-feature-settings: 'tnum';
-		margin-bottom: 8px !important;
-		vertical-align: top;
-		font-weight: bold;
-	}
+    .ant-form-item {
+        box-sizing: border-box;
+        margin: 0;
+        margin-bottom: 0px;
+        padding: 0;
+        color: rgba(0, 0, 0, 0.85);
+        font-size: 14px;
+        line-height: 1.5715;
+        list-style: none;
+        font-feature-settings: 'tnum';
+        margin-bottom: 8px !important;
+        vertical-align: top;
+        font-weight: bold;
+    }
 
-	.ant-modal-content {
-		position: relative;
-		background-color: #fff;
-		background-clip: padding-box;
-		border: 0;
-		border-radius: 2px;
-		box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
-		pointer-events: auto;
-		border: 1px solid red !important;
-	}
+    .ant-modal-content {
+        position: relative;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 0;
+        border-radius: 2px;
+        box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+        pointer-events: auto;
+        border: 1px solid red !important;
+    }
 </style>
 
 <div class="template">
-	<Table TItem="BrigadaViewModelTable"
-		   DataSource="@BrigadaViewModels"
-		   @bind-PageIndex="_pageIndex"
-		   @bind-PageSize="_pageSize"
-		   Title="Brigadas"
-		   Responsive>
-		<TitleTemplate>
-			<GridRow>
-				<GridCol Span="12">
-					<Title Level="3" Style="color: white;">Brigadas</Title>
-				</GridCol>
-				<GridCol Span="12" Style="text-align: right;">
-					<Button Type="ButtonType.Primary" OnClick="()=>ViewAddBrigade()">
-						<Icon Type="plus" /> Nueva
-					</Button>
-				</GridCol>
-			</GridRow>
-		</TitleTemplate>
-		<ColumnDefinitions>
-			<PropertyColumn Title="Nombre" Property="d=>d.Nombre" Sortable />
+    <Table TItem="BrigadaViewModelTable"
+           DataSource="@BrigadaViewModels"
+           @bind-PageIndex="_pageIndex"
+           @bind-PageSize="_pageSize"
+           Title="Brigadas"
+           Responsive>
+        <TitleTemplate>
+            <GridRow>
+                <GridCol Span="12">
+                    <Title Level="3" Style="color: white;">Brigadas</Title>
+                </GridCol>
+                <GridCol Span="12" Style="text-align: right;">
+                    <Button Type="ButtonType.Primary" OnClick="() => ViewAddBrigade()">
+                        <Icon Type="plus" /> Nueva
+                    </Button>
+                </GridCol>
+            </GridRow>
+        </TitleTemplate>
+        <ColumnDefinitions>
+            <PropertyColumn Title="Nombre" Property="d => d.Nombre" Sortable />
 
-			<PropertyColumn Title="Encargado" Property="d=>d.EncargadoApellidoYNombre" Sortable />
+            <PropertyColumn Title="Encargado" Property="d => d.EncargadoApellidoYNombre" Sortable />
 
-			<ActionColumn Title="Acciones" Align=ColumnAlign.Center>
-				<Space>
-					<SpaceItem>
-						<Button OnClick="()=>ViewBrigadeDetails(context.Id)">
-							<Icon Type="team" />
-						</Button>
-					</SpaceItem>
-					<SpaceItem>
-						<Popconfirm Title="¿Eliminar esta brigada?"
-									OnConfirm="() => DeleteBrigade(context.Id)"
-									OkText="Si"
-									CancelText="No">
-							<Button Danger>
-								<Icon Type="delete" />
-							</Button>
-						</Popconfirm>
-					</SpaceItem>
-					<SpaceItem>
-						<Button Type="@ButtonType.Primary" OnClick="()=>
-                            ViewEditBrigade(context.Id)" Ghost>
-							<Icon Type="edit" />
-						</Button>
-					</SpaceItem>
-				</Space>
-			</ActionColumn>
+            <ActionColumn Title="Acciones" Align=ColumnAlign.Center>
+                <Space>
+                    <SpaceItem>
+                        <Button OnClick="() => ViewBrigadeDetails(context.Id)">
+                            <Icon Type="team" />
+                        </Button>
+                    </SpaceItem>
+                    <SpaceItem>
+                        <Popconfirm Title="¿Eliminar esta brigada?"
+                                    OnConfirm="() => DeleteBrigade(context.Id)"
+                                    OkText="Si"
+                                    CancelText="No">
+                            <Button Danger>
+                                <Icon Type="delete" />
+                            </Button>
+                        </Popconfirm>
+                    </SpaceItem>
+                    <SpaceItem>
+                        <Button Type="@ButtonType.Primary" OnClick="()=>
+                                                                                       ViewEditBrigade(context.Id)" Ghost>
+                            <Icon Type="edit" />
+                        </Button>
+                    </SpaceItem>
+                </Space>
+            </ActionColumn>
 
-		</ColumnDefinitions>
-	</Table>
+        </ColumnDefinitions>
+    </Table>
 </div>
 
 @*Modal para Añadir Brigada*@
 <Modal @bind-Visible="_modalAñadirVisible" Title="Añadir Brigada" OkText="@("Guardar")" CancelText="@("Cancelar")" OnOk="@AddBrigade">
-	<Form Model="newBrigada">
-		<FormItem Label="Nombre">
-			<Input @bind-Value="newBrigada.Nombre" />
-		</FormItem>
-		<FormItem Label="Encargado">
-			<Select TItem="BomberoViweModel"
-					TItemValue="BomberoViweModel"
-					DataSource="@bomberosTodos"
-					@bind-Value="newBrigada.Encargado"
-					LabelName="@nameof(BomberoViweModel.ApellidoYNombre)"
-					Placeholder="Seleccione un bombero"
-					DefaultActiveFirstOption="false"
-					AllowClear="true" EnableSearch>
-			</Select>
-		</FormItem>
-	</Form>
+    <Form Model="newBrigada">
+        <FormItem Label="Nombre">
+            <Input @bind-Value="newBrigada.Nombre" />
+        </FormItem>
+        <FormItem Label="Encargado">
+            <Select TItem="BomberoViweModel"
+                    TItemValue="BomberoViweModel"
+                    DataSource="@bomberosTodosViewModel"
+                    @bind-Value="newBrigada.Encargado"
+                    LabelName="@nameof(BomberoViweModel.ApellidoYNombre)"
+                    Placeholder="Seleccione un bombero"
+                    DefaultActiveFirstOption="false"
+                    AllowClear="true" EnableSearch>
+            </Select>
+        </FormItem>
+    </Form>
 </Modal>
 
 @*Modal para Editar Brigada*@
 <Modal @bind-Visible="_modalEditarVisible" Title="Editar Brigada" OkText="@("Editar")" CancelText="@("Cancelar")" OnOk="@EditBrigade">
-	<Form Model="selBrigada">
-		<FormItem Label="Nombre">
-			<Input @bind-Value="selBrigada.Nombre" />
-		</FormItem>
-		<FormItem Label="Encargado">
-			<Select TItem="BomberoViweModel"
-					TItemValue="BomberoViweModel"
-					DataSource="@bomberosTodos"
-					@bind-Value="selBrigada.Encargado"
-					LabelName="@nameof(BomberoViweModel.ApellidoYNombre)"
-					Placeholder="Seleccione un bombero"
-					DefaultActiveFirstOption="false"
-					AllowClear="true" EnableSearch>
-			</Select>
-		</FormItem>
-	</Form>
+    <Form Model="selBrigada">
+        <FormItem Label="Nombre">
+            <Input @bind-Value="selBrigada.Nombre" />
+        </FormItem>
+        <FormItem Label="Encargado">
+            <Select TItem="BomberoViweModel"
+                    TItemValue="BomberoViweModel"
+                    DataSource="@bomberosTodosViewModel"
+                    @bind-Value="selBrigada.Encargado"
+                    LabelName="@nameof(BomberoViweModel.ApellidoYNombre)"
+                    Placeholder="Seleccione un bombero"
+                    DefaultActiveFirstOption="false"
+                    AllowClear="true" EnableSearch>
+            </Select>
+        </FormItem>
+    </Form>
 </Modal>
 
 <Modal @bind-Visible="_modalDetallesVisible" Title="@TitleBrigadaSel" Maximizable="@true" Centered="@true">
-	<BomberosBrigada BrigadaId="@IdBrigadaSel"></BomberosBrigada>
+    <BomberosBrigada BrigadaId="@IdBrigadaSel"></BomberosBrigada>
 </Modal>
 
 @code {
-	//Lista con todos los bomberos
-	private List<BomberoViweModel> bomberosTodos = new();
+    // Lista con todos los bomberos
+    private List<Bombero> bomberosTodos = new();
 
-	// Variables
-	private BrigadaViewModelTable newBrigada = new();
-	private BrigadaViewModelTable selBrigada = new();
-	private string? TitleBrigadaSel;
-	private int IdBrigadaSel;
+    // Lista con todos los bomberos en formato ViewModel
+    private List<BomberoViweModel> bomberosTodosViewModel = new();
 
-	// Modals
-	private bool _modalAñadirVisible = false;
-	private bool _modalDetallesVisible = false;
-	private bool _modalEditarVisible = false;
+    // Variables
+    private BrigadaViewModelTable newBrigada = new();
+    private BrigadaViewModelTable selBrigada = new();
+    private string? TitleBrigadaSel;
+    private int IdBrigadaSel;
 
-	// Lista de Brigadas
-	private List<Brigada> Brigadas = new List<Brigada>();
+    // Modals
+    private bool _modalAñadirVisible = false;
+    private bool _modalDetallesVisible = false;
+    private bool _modalEditarVisible = false;
 
-	// Variables de Tamaño de la Tabla
-	int _pageIndex = 1;
-	int _pageSize = 5;
+    // Lista de Brigadas
+    private List<Brigada> Brigadas = new List<Brigada>();
 
-	// Lista de ViewModels de Brigada
-	private List<BrigadaViewModelTable> BrigadaViewModels = new List<BrigadaViewModelTable>();
+    // Variables de Tamaño de la Tabla
+    int _pageIndex = 1;
+    int _pageSize = 5;
 
-	public class BrigadaViewModelTable
-	{
-		public int Id { get; set; }
-		public string Nombre { get; set; } = null!;
-		public string? EncargadoApellidoYNombre { get; set; }
-		public BomberoViweModel Encargado { get; set; } = null!;
-	}
+    // Lista de ViewModels de Brigada
+    private List<BrigadaViewModelTable> BrigadaViewModels = new List<BrigadaViewModelTable>();
 
-	protected override async Task OnInitializedAsync()
-	{
-		bomberosTodos = await BomberoService.ObtenerTodosLosBomberosViewModelAsync(); // Obtiene todos los Bomberos.
-		Brigadas = await BrigadaService.ObtenerTodasLasBrigadasAsync();
-		BrigadaViewModels = await MapBrigadesAsync(Brigadas);
-		StateHasChanged();
-	}
+    public class BrigadaViewModelTable
+    {
+        public int Id { get; set; }
+        public string Nombre { get; set; } = null!;
+        public string? EncargadoApellidoYNombre { get; set; }
+        public BomberoViweModel Encargado { get; set; } = null!;
+    }
 
-	private async Task ViewAddBrigade()
-	{
-		if (bomberosTodos.Count == 0)
-		{
-			await MessageService.ErrorAsync("No hay bomberos disponibles para asignar como encargado.");
-			return;
-		}
+    protected override async Task OnInitializedAsync()
+    {
+        // Validamos si el servicio de Bombero está disponible.
+        if (BomberoService == null)
+        {
+            await MessageService.ErrorAsync("El servicio de bomberos no está disponible.");
+            return;
+        }
 
-		newBrigada = new BrigadaViewModelTable();
-		_modalAñadirVisible = true;
-	}
+        bomberosTodos = await BomberoService.ObtenerTodosLosBomberosAsync(); // Obtiene todos los Bomberos.
 
-	public async Task<List<BrigadaViewModelTable>> MapBrigadesAsync(List<Brigada> brigadas)
-	{
-		return await Task.Run(() => brigadas.Select(b => new BrigadaViewModelTable
-			{
-				Id = b.BrigadaId,
-				Nombre = b.NombreBrigada,
-				EncargadoApellidoYNombre = $"{b.Encargado.Apellido}, {b.Encargado.Nombre}"
-			}).ToList());
-	}
+        // Verifica si la lista de bomberos está vacía.
+        if (bomberosTodos == null || bomberosTodos.Count == 0)
+        {
+            await MessageService.ErrorAsync("No se encontraron bomberos disponibles.");
+            return;
+        }
 
-	private async Task AddBrigade()
-	{
-		if (newBrigada.Encargado == null)
-		{
-			await MessageService.ErrorAsync("El encargado de la brigada no puede estar vacío.");
-			return;
-		}
+        bomberosTodosViewModel = bomberosTodos.ToBomberoViewModelList(); // Convierte la lista de Bomberos a ViewModel.
 
-		if (string.IsNullOrWhiteSpace(newBrigada.Nombre))
-		{
-			await MessageService.ErrorAsync("El nombre de la brigada no puede estar vacío.");
-			return;
-		}
+        // Verifica si la lista de Bomberos a ViewModel.
+        if (bomberosTodosViewModel == null || bomberosTodosViewModel.Count == 0)
+        {
+            bomberosTodosViewModel = new List<BomberoViweModel>();
+        }
 
-		Bombero BomberoEncargado = await BomberoService.ObtenerBomberoObjetoPorLegajoAsync(newBrigada.Encargado.NumeroLegajo);
+        // Obtiene todas las brigadas.
+        Brigadas = await BrigadaService.ObtenerTodasLasBrigadasAsync();
 
-		if (BomberoEncargado == null)
-		{
-			await MessageService.ErrorAsync("El encargado seleccionado no es válido.");
-			return;
-		}
+        // Verifica si la lista de Brigadas está vacía. (Si no hay brigadas, se muestra un mensaje de advertencia).
+        if (Brigadas == null || Brigadas.Count == 0)
+        {
+            await MessageService.WarningAsync("No se encontraron brigadas disponibles en la base de datos.");
+            return;
+        }
 
-		var brigada = new Brigada
-			{
-				NombreBrigada = newBrigada.Nombre,
-				Encargado = BomberoEncargado
-			};
+        // Mapea las Brigadas a ViewModels.
+        BrigadaViewModels = await MapBrigadesAsync(Brigadas);
 
-		await BrigadaService.AgregarBrigadaAsync(brigada);
-		newBrigada = new BrigadaViewModelTable();
-		_modalAñadirVisible = false;
-		await OnInitializedAsync();
-		await MessageService.SuccessAsync("Brigada añadida correctamente.");
-	}
+        // Verifica si la lista de BrigadaViewModels está vacía. Pero tambien verifica si la lista de Brigadas está vacía. Esto para determinar si es un error de mapeo.
+        if (BrigadaViewModels == null || BrigadaViewModels.Count == 0 || Brigadas != null || Brigadas.Count != 0)
+        {
+            await MessageService.ErrorAsync("Error al mapear las brigadas. Por favor, intente nuevamente más tarde.");
+            return;
+        }
 
-	private async Task EditBrigade()
-	{
-		if (selBrigada.Encargado == null)
-		{
-			await MessageService.ErrorAsync("El encargado de la brigada no puede estar vacío.");
-			return;
-		}
+        // Si todo está bien, actualiza el estado del componente.
+        StateHasChanged();
+    }
 
-		if (string.IsNullOrWhiteSpace(selBrigada.Nombre))
-		{
-			await MessageService.ErrorAsync("El nombre de la brigada no puede estar vacío.");
-			return;
-		}
+    private async Task ViewAddBrigade()
+    {
+        if (bomberosTodos.Count == 0)
+        {
+            await MessageService.ErrorAsync("No hay bomberos disponibles para asignar como encargado.");
+            return;
+        }
 
-		if (selBrigada.Id <= 0)
-		{
-			await MessageService.ErrorAsync("ID inválido. Por favor, proporcione un ID válido.");
-			return;
-		}
+        newBrigada = new BrigadaViewModelTable();
+        _modalAñadirVisible = true;
+    }
 
-		var BomberoEncargado = await BomberoService.ObtenerBomberoObjetoPorLegajoAsync(selBrigada.Encargado.NumeroLegajo);
+    public async Task<List<BrigadaViewModelTable>> MapBrigadesAsync(List<Brigada> brigadas)
+    {
+        return await Task.Run(() => brigadas.Select(b => new BrigadaViewModelTable
+        {
+            Id = b.BrigadaId,
+            Nombre = b.NombreBrigada,
+            EncargadoApellidoYNombre = $"{b.Encargado.Apellido}, {b.Encargado.Nombre}"
+        }).ToList());
+    }
 
-		if (BomberoEncargado == null)
-		{
-			await MessageService.ErrorAsync("El encargado seleccionado no es válido.");
-			return;
-		}
+    private async Task AddBrigade()
+    {
+        if (newBrigada.Encargado == null)
+        {
+            await MessageService.ErrorAsync("El encargado de la brigada no puede estar vacío.");
+            return;
+        }
 
-		var brigada = new Brigada
-			{
-				BrigadaId = selBrigada.Id,
-				NombreBrigada = selBrigada.Nombre,
-				Encargado = BomberoEncargado
-			};
+        if (string.IsNullOrWhiteSpace(newBrigada.Nombre))
+        {
+            await MessageService.ErrorAsync("El nombre de la brigada no puede estar vacío.");
+            return;
+        }
 
-		await BrigadaService.EditarBrigadaAsync(brigada);
-		_modalEditarVisible = false;
-		await OnInitializedAsync();
-		await MessageService.SuccessAsync("Brigada editada correctamente.");
-	}
+        Bombero BomberoEncargado = await BomberoService.ObtenerBomberoObjetoPorLegajoAsync(newBrigada.Encargado.NumeroLegajo);
 
-	private async Task ViewEditBrigade(int id)
-	{
-		if (id <= 0)
-		{
-			await MessageService.ErrorAsync("ID inválido. Por favor, proporcione un ID válido.");
-			return;
-		}
+        if (BomberoEncargado == null)
+        {
+            await MessageService.ErrorAsync("El encargado seleccionado no es válido.");
+            return;
+        }
 
-		var brigada = await BrigadaService.ObtenerBrigadaPorIdAsync(id);
+        var brigada = new Brigada
+        {
+            NombreBrigada = newBrigada.Nombre,
+            Encargado = BomberoEncargado
+        };
 
-		if (brigada == null)
-		{
-			await MessageService.ErrorAsync("Error al intentar editar la brigada: No se encontró.");
-			return;
-		}
+        await BrigadaService.AgregarBrigadaAsync(brigada);
+        newBrigada = new BrigadaViewModelTable();
+        _modalAñadirVisible = false;
+        await OnInitializedAsync();
+        await MessageService.SuccessAsync("Brigada añadida correctamente.");
+    }
 
-		var encargado = bomberosTodos.FirstOrDefault(b => b.NumeroLegajo == brigada.Encargado.NumeroLegajo);
+    private async Task EditBrigade()
+    {
+        if (selBrigada.Encargado == null)
+        {
+            await MessageService.ErrorAsync("El encargado de la brigada no puede estar vacío.");
+            return;
+        }
 
-		if (encargado == null)
-		{
-			await MessageService.ErrorAsync("Error al intentar editar la dependencia: No se encontró un encargado válido.");
-			return;
-		}
+        if (string.IsNullOrWhiteSpace(selBrigada.Nombre))
+        {
+            await MessageService.ErrorAsync("El nombre de la brigada no puede estar vacío.");
+            return;
+        }
 
-		selBrigada = new BrigadaViewModelTable
-			{
-				Id = brigada.BrigadaId,
-				Nombre = brigada.NombreBrigada,
-				Encargado = encargado
-			};
+        if (selBrigada.Id <= 0)
+        {
+            await MessageService.ErrorAsync("ID inválido. Por favor, proporcione un ID válido.");
+            return;
+        }
 
-		_modalEditarVisible = true;
-	}
+        var BomberoEncargado = await BomberoService.ObtenerBomberoObjetoPorLegajoAsync(selBrigada.Encargado.NumeroLegajo);
 
-	private async Task ViewBrigadeDetails(int id)
-	{
-		var brigada = await BrigadaService.ObtenerBrigadaPorIdAsync(id);
+        if (BomberoEncargado == null)
+        {
+            await MessageService.ErrorAsync("El encargado seleccionado no es válido.");
+            return;
+        }
 
-		if (brigada != null!)
-		{
-			TitleBrigadaSel = brigada.NombreBrigada;
-			IdBrigadaSel = brigada.BrigadaId;
-			_modalDetallesVisible = true;
-		}
-		else
-			await MessageService.ErrorAsync("Error al abrir la brigada: No se encontró.");
-	}
+        var brigada = new Brigada
+        {
+            BrigadaId = selBrigada.Id,
+            NombreBrigada = selBrigada.Nombre,
+            Encargado = BomberoEncargado
+        };
 
-	private async Task DeleteBrigade(int id)
-	{
-		await BrigadaService.EliminarBrigadaAsync(id);
-		await OnInitializedAsync();
-		await MessageService.SuccessAsync("Brigada eliminada con éxito.");
-	}
+        await BrigadaService.EditarBrigadaAsync(brigada);
+        _modalEditarVisible = false;
+        await OnInitializedAsync();
+        await MessageService.SuccessAsync("Brigada editada correctamente.");
+    }
+
+    private async Task ViewEditBrigade(int id)
+    {
+        if (id <= 0)
+        {
+            await MessageService.ErrorAsync("ID inválido. Por favor, proporcione un ID válido.");
+            return;
+        }
+
+        var brigada = await BrigadaService.ObtenerBrigadaPorIdAsync(id);
+
+        if (brigada == null)
+        {
+            await MessageService.ErrorAsync("Error al intentar editar la brigada: No se encontró.");
+            return;
+        }
+
+        var encargado = bomberosTodosViewModel.FirstOrDefault(b => b.NumeroLegajo == brigada.Encargado.NumeroLegajo);
+
+        if (encargado == null)
+        {
+            await MessageService.ErrorAsync("Error al intentar editar la dependencia: No se encontró un encargado válido.");
+            return;
+        }
+
+        selBrigada = new BrigadaViewModelTable
+        {
+            Id = brigada.BrigadaId,
+            Nombre = brigada.NombreBrigada,
+            Encargado = encargado
+        };
+
+        _modalEditarVisible = true;
+    }
+
+    private async Task ViewBrigadeDetails(int id)
+    {
+        var brigada = await BrigadaService.ObtenerBrigadaPorIdAsync(id);
+
+        if (brigada != null!)
+        {
+            TitleBrigadaSel = brigada.NombreBrigada;
+            IdBrigadaSel = brigada.BrigadaId;
+            _modalDetallesVisible = true;
+        }
+        else
+            await MessageService.ErrorAsync("Error al abrir la brigada: No se encontró.");
+    }
+
+    private async Task DeleteBrigade(int id)
+    {
+        await BrigadaService.EliminarBrigadaAsync(id);
+        await OnInitializedAsync();
+        await MessageService.SuccessAsync("Brigada eliminada con éxito.");
+    }
 }

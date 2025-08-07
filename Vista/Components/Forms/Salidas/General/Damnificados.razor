@@ -1,0 +1,146 @@
+﻿@using Vista.Data.ViewModels;
+@using Vista.Data.ViewModels.Personal;
+@using Vista.Data.Models.Salidas;
+@using Vista.Data.Models.Personas;
+@using System.Linq;
+
+@inject IMessageService MessageService
+
+<Table Context="Damnificados" DataSource="Model.Damnificados" Bordered>
+    <PropertyColumn Property="d => d.Nombre"></PropertyColumn>
+    <PropertyColumn Property="d => d.Apellido"></PropertyColumn>
+    <PropertyColumn Property="d => d.Edad"></PropertyColumn>
+    <PropertyColumn Property="d => d.Estado"></PropertyColumn>
+    <ActionColumn Title="Acciones">
+        <Popconfirm Title="¿Quieres borrar este damnificado?"
+                    OnConfirm="@(() => deleteRowDamnificados(Damnificados.Documento))"
+                    OkText="Si"
+                    CancelText="No"
+                    Style="display: flex; justify-content: center; align-items: center;">
+            <i class="fa-solid fa-trash" style="color: #e90c0c; cursor: pointer;"></i>
+        </Popconfirm>
+    </ActionColumn>
+</Table>
+
+<Modal Footer="null" Title="@("Datos del damnificado")" Visible="@visibleDamnificados" OkText="@("Agregar")" CancelText="@("Cancelar")" OnOk="@AgregarDamnificado">
+    <Form Model="Damnificado">
+        <FormItem Label="Nombre" Required="true">
+            <Input @bind-Value="@Damnificado.Nombre" />
+        </FormItem>
+
+        <FormItem Label="Apellido" Required="true">
+            <Input @bind-Value="@Damnificado.Apellido" />
+        </FormItem>
+
+        <FormItem Label="Documento" Required="true">
+            <Input @bind-Value="@Damnificado.Dni" />
+        </FormItem>
+
+        <FormItem Label="Sexo">
+            <Input @bind-Value="@Damnificado.Sexo" />
+        </FormItem>
+
+        <FormItem Label="Edad">
+            @if (Damnificado.FechaDeNacimiento.HasValue)
+            {
+                <Input Value="@CalcularEdad(Damnificado.FechaDeNacimiento)" ReadOnly="true" />
+            }
+            else
+            {
+                <Input @bind-Value="@Damnificado.Edad" />
+            }
+        </FormItem>
+
+        <FormItem Label="Lugar de Nacimiento">
+            <Input @bind-Value="@Damnificado.LugarDeNacimiento" />
+        </FormItem>
+
+        <FormItem Label="Fecha de Nacimiento">
+            <DatePicker TValue="DateTime?" @bind-Value="@Damnificado.FechaDeNacimiento" />
+        </FormItem>
+
+        <FormItem Label="Estado">
+            <EnumSelect TEnum="TipoDamnificado" @bind-Value="@Damnificado.Estado" />
+        </FormItem>
+    </Form>
+</Modal>
+
+@code {
+    [Parameter, EditorRequired] public SalidasViewModels Model { get; set; } = null!;
+
+    private DamnificadoViewModels Damnificado = new DamnificadoViewModels();
+
+    // Variables para controlar la visibilidad de los modals
+    private bool visibleDamnificados = false;
+    private bool visibleVerDamnificados = false;
+
+    private async Task deleteRowDamnificados(int DNI)
+    {
+        if (Model.Damnificados == null || !Model.Damnificados.Any())
+        {
+            await MessageService.ErrorAsync("No hay damnificados registrados.");
+            return;
+        }
+
+        if (!Model.Damnificados.Any(m => m.Documento == DNI))
+        {
+            await MessageService.ErrorAsync($"No se encontró un damnificado con el DNI {DNI}.");
+            return;
+        }
+
+        Model.Damnificados = Model.Damnificados.Where(m => m.Documento != DNI).ToList();
+        await MessageService.SuccessAsync($"Damnificado con DNI {DNI} eliminado correctamente.");
+    }
+
+    private async Task AgregarDamnificado()
+    {
+        try
+        {
+            Damnificado_Salida dp = new()
+            {
+                Nombre = Damnificado.Nombre,
+                Apellido = Damnificado.Apellido,
+                Documento = Damnificado.Dni,
+                Sexo = Damnificado.Sexo,
+                LugarNacimiento = Damnificado.LugarDeNacimiento,
+                Edad = Damnificado.Edad,
+                Estado = Damnificado.Estado,
+            };
+
+            if (Model.Damnificados == null)
+            {
+                Model.Damnificados = new List<Damnificado_Salida>();
+            }
+
+            if (Model.Damnificados.Any(d => d.Documento == dp.Documento))
+            {
+                await MessageService.ErrorAsync("Ya existe un damnificado con ese documento", 5);
+                return;
+            }
+
+            Model.Damnificados.Add(dp);
+
+            Damnificado = new DamnificadoViewModels();
+
+            visibleDamnificados = false;
+            await MessageService.SuccessAsync("Damnificado agregado correctamente");
+            StateHasChanged();
+        }
+        catch (Exception e)
+        {
+            StateHasChanged();
+
+            if (e.InnerException != null)
+                await MessageService.ErrorAsync(e.InnerException.Message, 5);
+            else
+                await MessageService.ErrorAsync(e.Message, 5);
+        }
+    }
+
+    private int CalcularEdad(DateTime? fechaNacimiento)
+    {
+        return fechaNacimiento.HasValue
+            ? (int)((DateTime.Now - fechaNacimiento.Value).TotalDays / 365.25)
+            : 0;
+    }
+}

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using DocumentFormat.OpenXml.InkML;
+using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -13,15 +14,13 @@ namespace Vista.Services
 {
     public interface IBomberoService
     {
-        Task<Bombero> CrearBombero(Bombero bombero);
+        Task CrearBombero(Bombero bombero);
         Task<bool> BorrarBombero(Bombero bombero);
         Task<Bombero> EditarBombero(Bombero bombero);
         Task<Sancion> SancionarBombero(Sancion sancion);
         Task<Bombero> CambiarEstado(Bombero bombero);
         Task<AscensoBombero> AscenderBombero(AscensoBombero ascenso);
-        Task<List<BomberoViweModel>> ObtenerTodosLosBomberosViewModelAsync();
         Task<List<Bombero>> ObtenerTodosLosBomberosAsync();
-        Task<BomberoViweModel> ObtenerBomberoPorLegajoAsync(int numeroLegajo);
         Task<Bombero> ObtenerBomberoObjetoPorLegajoAsync(int numeroLegajo);
     }
 
@@ -34,7 +33,7 @@ namespace Vista.Services
             _context = context;
         }
 
-        public async Task<Bombero> CrearBombero(Bombero bombero)
+        public async Task CrearBombero(Bombero bombero)
         {
             // Asumiendo que Id es la clave primaria
             if (await _context.Bomberos.AnyAsync(b => b.PersonaId == bombero.PersonaId))
@@ -42,9 +41,15 @@ namespace Vista.Services
                 throw new InvalidOperationException("Ya existe un bombero con este ID.");
             }
 
+            bool legajoExistente = await _context.Bomberos.AnyAsync(b => b.NumeroLegajo == bombero.NumeroLegajo);
+
+            if (legajoExistente)
+            {
+                throw new Exception("Número de legajo ya existente.");
+            }
+
             _context.Bomberos.Add(bombero);
             await _context.SaveChangesAsync();
-            return bombero;
         }
 
         public async Task<Bombero> EditarBombero(Bombero bombero)
@@ -118,6 +123,7 @@ namespace Vista.Services
                 return false;
             }
         }
+
         public async Task<Sancion> SancionarBombero(Sancion sancion)
         {
             Bombero? BomberoSancionado = await _context.Bomberos.Where(b => b.NumeroLegajo == sancion.PersonalSancionado.NumeroLegajo).SingleOrDefaultAsync();
@@ -133,6 +139,7 @@ namespace Vista.Services
             await _context.SaveChangesAsync();
             return sancion;
         }
+
         public async Task<AscensoBombero> AscenderBombero(AscensoBombero ascenso)
         {
             Bombero? BomberoAfectado = await _context.Bomberos.Where(b => b.NumeroLegajo == ascenso.PersonalAfectado.NumeroLegajo).SingleOrDefaultAsync();
@@ -148,58 +155,9 @@ namespace Vista.Services
             return ascenso;
         }
 
-        public async Task<List<BomberoViweModel>> ObtenerTodosLosBomberosViewModelAsync()
-        {
-            return await _context.Bomberos
-                .Select(b => new BomberoViweModel
-                {
-                    Id = b.PersonaId,
-                    FechaNacimiento = b.FechaNacimiento,
-                    Sexo = b.Sexo,
-                    Nombre = b.Nombre,
-                    Apellido = b.Apellido,
-                    Documento = b.Documento,
-                    NumeroLegajo = b.NumeroLegajo,
-                    NumeroIoma = b.NumeroIoma,
-                    LugarNacimiento = b.LugarNacimiento,
-                    Grado = b.Grado,
-                    Dotacion = b.Dotacion,
-                    Estado = b.Estado,
-                    EsChofer = b.Chofer,
-                    VencimientoRegistro = b.VencimientoRegistro,
-                    Direccion = b.Direccion,
-                    Observaciones = b.Observaciones,
-                    Profesion = b.Profesion,
-                    NivelEstudios = b.NivelEstudios,
-                    FechaAceptacion = b.FechaAceptacion
-                })
-                .ToListAsync();
-        }
-
         public async Task<List<Bombero>> ObtenerTodosLosBomberosAsync()
         {
             return await _context.Bomberos.ToListAsync();
-        }
-
-        public async Task<BomberoViweModel> ObtenerBomberoPorLegajoAsync(int numeroLegajo)
-        {
-            // Consulta el bombero según el número de legajo
-            var bombero = await _context.Bomberos
-                .FirstOrDefaultAsync(b => b.NumeroLegajo == numeroLegajo);
-
-            if (bombero == null)
-            {
-                return null;
-            }
-
-            var bomberoViweModel = new BomberoViweModel
-            {
-                NumeroLegajo = bombero.NumeroLegajo,
-                Nombre = bombero.Nombre,
-                Apellido = bombero.Apellido
-            };
-
-            return bomberoViweModel;
         }
 
         public async Task<Bombero> ObtenerBomberoObjetoPorLegajoAsync(int numeroLegajo)

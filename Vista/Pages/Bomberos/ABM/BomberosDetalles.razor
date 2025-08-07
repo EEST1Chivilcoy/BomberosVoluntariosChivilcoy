@@ -10,10 +10,48 @@
 @using Vista.Data.Models.Personas.Personal.Componentes
 @using Vista.Data.Models.Imagenes
 
+<style>
+    /* Contenedor del contenido del modal */
+    .ant-modal-content {
+        position: relative;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 0;
+        border-radius: 2px;
+        box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+        pointer-events: auto;
+        border: 1px solid red !important; /* ¡Este estilo modifica el borde del modal! */
+    }
+
+    /* Etiquetas del formulario dentro del modal */
+    .ant-form-horizontal .ant-form-item-label {
+        flex-grow: 1;
+        background: #A63333;
+    }
+
+        .ant-form-horizontal .ant-form-item-label > label {
+            color: #FFFFFF;
+            padding: 2px 4px;
+        }
+
+    /* Ítems del formulario */
+    .ant-form-item {
+        box-sizing: border-box;
+        margin: 0;
+        margin-bottom: 8px !important;
+        padding: 0;
+        color: rgba(0, 0, 0, 0.85);
+        font-size: 14px;
+        line-height: 1.5715;
+        font-weight: bold;
+        vertical-align: top;
+    }
+</style>
+
 @* Detalles del Bombero *@
 <Form Model="@bomberoVM" LabelColSpan="8" WrapperColSpan="16">
     <h2 class="modal-title">Detalles del Bombero</h2>
-    <div class="info-section">       
+    <div class="info-section">
         <FormItem Label="Nombre">@bomberoVM.Nombre</FormItem>
         <FormItem Label="Apellido">@bomberoVM.Apellido</FormItem>
         <FormItem Label="Dirección">@bomberoVM.Direccion</FormItem>
@@ -64,7 +102,7 @@
     BomberosDbContext? Context { get; set; }
     public Bombero bomberoVM { get; set; } = new();
     public Contacto contactoVM { get; set; } = new();
-    public Brigada brigadaVM {get; set;} = new();
+    public Brigada brigadaVM { get; set; } = new();
 
     //Carga de imagen
     public string CargarImage
@@ -92,7 +130,7 @@
     {
         Context = DbFactory.CreateDbContext();
         bomberoVM = await Context.Bomberos.Where(b => b.PersonaId == BomberoId).SingleOrDefaultAsync();
-        contactoVM = await Context.Contactos.Where(c=>c.PersonalId == BomberoId).SingleOrDefaultAsync();
+        contactoVM = await Context.Contactos.Where(c => c.PersonalId == BomberoId).SingleOrDefaultAsync();
 
         StateHasChanged();
     }

@@ -486,18 +486,9 @@
 	{
 		try
 		{
-			//Validacion Numero de Legajo
-			Bombero? NumeroLegajo = await DbFactory.CreateDbContext().Bomberos.Where(b => b.NumeroLegajo == bomberoView.NumeroLegajo).SingleOrDefaultAsync();
-
 			if (bomberoView.NumeroLegajo == 0)
 			{
 				await message.WarningAsync("El número de legajo no puede ser cero.");
-				return;
-			}
-
-			if (NumeroLegajo != null)
-			{
-				await message.WarningAsync("Numero de legajo ya existente.");
 				return;
 			}
 
@@ -507,56 +498,65 @@
 			}
 
 			Bombero bombero = new Bombero()
+			{
+				FechaNacimiento = bomberoView.FechaNacimiento,
+				Sexo = bomberoView.Sexo,
+				Nombre = bomberoView.Nombre,
+				Apellido = bomberoView.Apellido,
+				Documento = bomberoView.Documento,
+				NumeroLegajo = bomberoView.NumeroLegajo,
+				NumeroIoma = bomberoView.NumeroIoma,
+				LugarNacimiento = bomberoView.LugarNacimiento,
+				Grado = bomberoView.Grado,
+				Imagen = new()
 				{
-					FechaNacimiento = bomberoView.FechaNacimiento,
-					Sexo = bomberoView.Sexo,
-					Nombre = bomberoView.Nombre,
-					Apellido = bomberoView.Apellido,
-					Documento = bomberoView.Documento,
-					NumeroLegajo = bomberoView.NumeroLegajo,
-					NumeroIoma = bomberoView.NumeroIoma,
-					LugarNacimiento = bomberoView.LugarNacimiento,
-					Grado = bomberoView.Grado,
-					Imagen = new()
-					{
-						NombreImagen = bomberoView.NombreImagen,
-						TipoImagen = bomberoView.TipoImagen,
-						Base64Imagen = bomberoView.Base64
-					},
-					Dotacion = bomberoView.Dotacion,
-					GrupoSanguineo = bomberoView.GrupoSanguineo,
-					Altura = bomberoView.Altura,
-					Peso = bomberoView.Peso,
-					Estado = bomberoView.Estado,
-					Chofer = bomberoView.Chofer,
-					VencimientoRegistro = bomberoView.VencimientoRegistro,
-					Direccion = bomberoView.Direccion,
-					Observaciones = bomberoView.Observaciones,
-					Profesion = bomberoView.Profesion,
-					NivelEstudios = bomberoView.NivelEstudios,
-					FechaAceptacion = bomberoView.FechaAceptacion,
-					Contacto = new Contacto
-					{
-						TelefonoCel = bomberoView.TelefonoCel,
-						TelefonoFijo = bomberoView.TelefonoFijo,
-						TelefonoLaboral = bomberoView.TelefonoLaboral,
-						Email = bomberoView.Email
-					}
-				};
+					NombreImagen = bomberoView.NombreImagen,
+					TipoImagen = bomberoView.TipoImagen,
+					Base64Imagen = bomberoView.Base64
+				},
+				Dotacion = bomberoView.Dotacion,
+				GrupoSanguineo = bomberoView.GrupoSanguineo,
+				Altura = bomberoView.Altura,
+				Peso = bomberoView.Peso,
+				Estado = bomberoView.Estado,
+				Chofer = bomberoView.Chofer,
+				VencimientoRegistro = bomberoView.VencimientoRegistro,
+				Direccion = bomberoView.Direccion,
+				Observaciones = bomberoView.Observaciones,
+				Profesion = bomberoView.Profesion,
+				NivelEstudios = bomberoView.NivelEstudios,
+				FechaAceptacion = bomberoView.FechaAceptacion,
+				Contacto = new Contacto
+				{
+					TelefonoCel = bomberoView.TelefonoCel,
+					TelefonoFijo = bomberoView.TelefonoFijo,
+					TelefonoLaboral = bomberoView.TelefonoLaboral,
+					Email = bomberoView.Email
+				}
+			};
 
 			await BomberoService.CrearBombero(bombero);
+
 			bomberoView = new BomberosViewModel();
 			StateHasChanged();
-			await message.SuccessAsync("Se agrego el bombero.");
+            message.Success("Se agregó el bombero."); // Se quita el await para evitar bloqueos innecesarios
 			navigationManager.NavigateTo($"/bomberos", true);
 		}
 		catch (Exception ex)
 		{
-			await message.ErrorAsync(ex.Message);
-			Console.WriteLine($"Error: {ex.Message}");
+			// Mensajes personalizados de validación del service
+			if (ex.Message.Contains("legajo", StringComparison.OrdinalIgnoreCase))
+			{
+				await message.WarningAsync(ex.Message);
+			}
+			else
+			{
+				// Otros errores no controlados
+				await message.ErrorAsync("Ocurrió un error al crear el bombero.");
+				Console.WriteLine($"Error: {ex.Message}");
+			}
 		}
 	}
-
 
 	private void OnFinish(EditContext editContext)
 	{

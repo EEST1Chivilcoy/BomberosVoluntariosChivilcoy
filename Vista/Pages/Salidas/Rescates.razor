@@ -27,9 +27,19 @@
 
         <!-- Header -->
         <div style="text-align: center; margin-bottom: 3rem; padding-bottom: 1rem; border-bottom: 2px solid #f0f0f0;">
-            <h1 style="margin: 0; color: #1890ff; font-size: 2.5rem; font-weight: 600;">
-                RESCATE PERSONA
-            </h1>
+            @if (TipoRescate == 1)
+            {
+                <h1 style="margin: 0; color: #1890ff; font-size: 2.5rem; font-weight: 600;">
+                    RESCATE PERSONA
+                </h1>
+            }
+            else if (TipoRescate == 2)
+            {
+                <h1 style="margin: 0; color: #1890ff; font-size: 2.5rem; font-weight: 600;">
+                    RESCATE ANIMAL
+                </h1>
+            }
+
             <p style="margin: 0.5rem 0 0 0; color: #666; font-size: 1.1rem;">
                 Complete todos los campos requeridos para registrar la salida
             </p>
@@ -44,70 +54,85 @@
                     <span class="section-number" style="background: #1890ff;">1</span>
                     Datos Generales
                 </h3>
-                <DatosGenerales Model="@PersonaViewModel" />
+                <DatosGenerales Model="@PersonaViewModel" OnCompleted="@((bool done) => _parte1Completa = done)" />
             </div>
 
             <!-- Grid de 2 columnas para secciones medianas -->
             <div class="two-column-grid">
                 <!-- Participantes Section -->
-                <div class="section-card participantes">
+                <div class="section-card participantes @(!_parte1Completa ? "disabled" : "")">
                     <h3 class="section-title">
                         <span class="section-number" style="background: #52c41a;">2</span>
-                        Participantes
+                        Datos telefónicos
                     </h3>
-                    <Participantes Model="@PersonaViewModel" />
+                    @if (!_parte1Completa)
+                    {
+                        <div class="disabled-message">
+                            Complete la sección anterior para continuar
+                        </div>
+                    }
+                    <Participantes Model="@PersonaViewModel" OnCompleted="@((bool done) => _parte2Completa = done)" isUnlocked="@_parte1Completa" />
                 </div>
 
+                <!-- Nueva Sección Damnificados -->
+                <div class="section-card damnificados">
+                    <h3 class="section-title">
+                        <span class="section-number" style="background: #13c2c2;">3</span>
+                        Damnificados
+                    </h3>
+                    <Damnificados Model="@PersonaViewModel" />
+                </div>
+            </div>
+
+            <!-- Grid de 2 columnas para Vehículos y Personal -->
+            <div class="two-column-grid">
                 <!-- Vehículos Section -->
                 <div class="section-card vehiculos">
                     <h3 class="section-title">
-                        <span class="section-number" style="background: #fa8c16;">3</span>
+                        <span class="section-number" style="background: #fa8c16;">4</span>
                         Vehículos
                     </h3>
                     <Vehiculos Model="@PersonaViewModel" BomberosTodos="@BomberosTodos" Moviles="@MovilesTodos" />
                 </div>
-            </div>
 
-            <!-- Grid de 2 columnas para Personal y Tipo de Servicio -->
-            <div class="two-column-grid">
                 <!-- Personal Section -->
                 <div class="section-card personal">
                     <h3 class="section-title">
-                        <span class="section-number" style="background: #722ed1;">4</span>
+                        <span class="section-number" style="background: #722ed1;">5</span>
                         Personal
                     </h3>
-                    <Personal Model="@PersonaViewModel" />
+                    <Personal Model="@PersonaViewModel" BomberosTodos="@BomberosTodos" />
                 </div>
+            </div>
 
-                <!-- Tipo de Servicio Section -->
-                <div class="section-card tipo-servicio">
-                    <h3 class="section-title">
-                        <span class="section-number" style="background: #eb2f96;">5</span>
-                        Tipo de Servicio
-                    </h3>
+            <!-- Tipo de Servicio Section - Ancho completo -->
+            <div class="section-card tipo-servicio">
+                <h3 class="section-title">
+                    <span class="section-number" style="background: #eb2f96;">6</span>
+                    Tipo de Servicio
+                </h3>
 
-                    <div class="service-type-grid">
-                        <!-- Tipo Servicio -->
-                        <div class="form-group-card">
-                            <FormItem>
-                                <label class="form-label">
-                                    Tipo Servicio Salida
-                                </label>
-                                <EnumSelect TEnum="TipoServicioSalida" @bind-Value="@PersonaViewModel.TipoServicio"
-                                            Style="width: 100%;" />
-                            </FormItem>
-                        </div>
+                <div class="service-type-grid">
+                    <!-- Tipo Servicio -->
+                    <div class="form-group-card">
+                        <FormItem>
+                            <label class="form-label">
+                                Tipo Servicio Salida
+                            </label>
+                            <EnumSelect TEnum="TipoServicioSalida" @bind-Value="@PersonaViewModel.TipoServicio"
+                                        Style="width: 100%;" />
+                        </FormItem>
+                    </div>
 
-                        <!-- Tipo Lugar Rescate -->
-                        <div class="form-group-card">
-                            <FormItem>
-                                <label class="form-label">
-                                    Tipo Lugar de Rescate
-                                </label>
-                                <EnumSelect TEnum="TipoLugarRescatePersona" @bind-Value="@PersonaViewModel.TipoRescatePersona"
-                                            Style="width: 100%;" />
-                            </FormItem>
-                        </div>
+                    <!-- Tipo Lugar Rescate -->
+                    <div class="form-group-card">
+                        <FormItem>
+                            <label class="form-label">
+                                Tipo Lugar de Rescate
+                            </label>
+                            <EnumSelect TEnum="TipoLugarRescatePersona" @bind-Value="@PersonaViewModel.TipoRescatePersona"
+                                        Style="width: 100%;" />
+                        </FormItem>
                     </div>
                 </div>
             </div>
@@ -133,6 +158,162 @@
 </Form>
 
 <style>
+    /* Estilos para secciones deshabilitadas/inhabilitadas */
+    .section-card.disabled {
+        background: #f5f5f5 !important;
+        border-left-color: #d9d9d9 !important;
+        opacity: 0.6;
+        pointer-events: none;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .section-card.disabled:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
+            transform: none !important;
+        }
+
+        /* Overlay para indicar que está deshabilitada */
+        .section-card.disabled::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.7);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Icono de candado para secciones deshabilitadas */
+        .section-card.disabled::after {
+            content: '🔒';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem;
+            z-index: 2;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        /* Título de sección deshabilitada */
+        .section-card.disabled .section-title {
+            color: #999 !important;
+        }
+
+        .section-card.disabled .section-number {
+            background: #d9d9d9 !important;
+            color: #999 !important;
+        }
+
+        /* Contenido dentro de sección deshabilitada */
+        .section-card.disabled * {
+            color: #999 !important;
+        }
+
+        .section-card.disabled .form-group-card {
+            background: #f0f0f0 !important;
+            border-color: #e8e8e8 !important;
+        }
+
+        .section-card.disabled .form-label {
+            color: #bbb !important;
+        }
+
+        /* Inputs deshabilitados específicamente para Ant Design */
+        .section-card.disabled .ant-select,
+        .section-card.disabled .ant-input,
+        .section-card.disabled .ant-btn,
+        .section-card.disabled .ant-checkbox,
+        .section-card.disabled .ant-radio {
+            pointer-events: none !important;
+            opacity: 0.6 !important;
+            background-color: #f5f5f5 !important;
+            color: #999 !important;
+        }
+
+        .section-card.disabled .ant-select-selector {
+            background-color: #f5f5f5 !important;
+            color: #999 !important;
+        }
+
+    /* Variante alternativa sin overlay (más sutil) */
+    .section-card.disabled-subtle {
+        background: #fafafa !important;
+        border-left-color: #e8e8e8 !important;
+        opacity: 0.8;
+        pointer-events: none;
+        filter: grayscale(0.5);
+    }
+
+        .section-card.disabled-subtle:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
+            transform: none !important;
+        }
+
+        .section-card.disabled-subtle .section-title {
+            color: #bbb !important;
+        }
+
+        .section-card.disabled-subtle .section-number {
+            background: #e8e8e8 !important;
+            color: #999 !important;
+        }
+
+    /* Mensaje de ayuda para secciones deshabilitadas */
+    .disabled-message {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        font-size: 0.875rem;
+        z-index: 3;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .section-card.disabled:hover .disabled-message {
+        opacity: 1;
+    }
+
+    /* Animación para cuando se habilita una sección */
+    .section-card.enabling {
+        animation: enableSection 0.5s ease-out;
+    }
+
+    @@keyframes enableSection {
+        0% {
+            opacity: 0.6;
+            filter: grayscale(0.5);
+            transform: scale(0.98);
+        }
+
+        100% {
+            opacity: 1;
+            filter: grayscale(0);
+            transform: scale(1);
+        }
+    }
+
+    /* Para móviles - ajustar el icono de candado */
+    @@media (max-width: 767px) {
+        .section-card.disabled::after {
+            font-size: 2rem;
+        }
+
+        .disabled-message {
+            right: 0.5rem;
+            top: 0.5rem;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+        }
+    }
     /* Grid principal */
     .main-grid {
         display: grid;
@@ -170,6 +351,10 @@
         border-left: 4px solid #52c41a;
     }
 
+    .damnificados {
+        border-left: 4px solid #13c2c2;
+    }
+
     .vehiculos {
         border-left: 4px solid #fa8c16;
     }
@@ -198,6 +383,10 @@
 
     .participantes .section-title {
         color: #52c41a;
+    }
+
+    .damnificados .section-title {
+        color: #13c2c2;
     }
 
     .vehiculos .section-title {

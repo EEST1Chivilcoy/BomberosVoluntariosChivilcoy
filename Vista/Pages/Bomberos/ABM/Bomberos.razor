@@ -1,0 +1,355 @@
+﻿@inject NavigationManager navigationManager
+@inject IDbContextFactory<BomberosDbContext> DbFactory
+@inject IMessageService message
+@page "/bomberos"
+@using Vista.Services
+@inject IBomberoService BomberoService
+@using Microsoft.AspNetCore.Components.Forms
+@using System.ComponentModel
+@using AntDesign.TableModels
+@using System.Text.Json
+@using Vista.Data.Models.Imagenes
+@using Vista.Data.Models.Personas.Personal
+@using Vista.Data.Models.Personas.Personal.Componentes
+
+<style>
+    .abm-container {
+        width: 100% !important;
+        max-width: 1400px !important;
+        margin: 0 auto !important;
+        padding: 32px 16px !important;
+    }
+
+    .abm-header {
+        background-color: #A63333 !important;
+        padding: 32px 24px !important;
+        text-align: center !important;
+    }
+
+    .abm-title {
+        font-size: 28px !important;
+        font-weight: bold !important;
+        color: #ffffff !important;
+        margin-bottom: 24px !important;
+    }
+
+    .abm-filters {
+        display: grid !important;
+        grid-template-columns: 1fr 2fr auto !important;
+        align-items: center !important;
+        gap: 16px !important;
+        margin-bottom: 16px !important;
+    }
+
+        .abm-filters .ant-select,
+        .abm-filters .ant-input {
+            font-size: 16px !important;
+            width: 100% !important;
+            height: 40px !important;
+        }
+
+        .abm-filters .ant-input-search {
+            display: flex !important;
+        }
+
+        .abm-filters button {
+            height: 40px !important;
+            font-size: 16px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 6px !important;
+        }
+
+    .ant-table {
+        overflow: hidden !important;
+        font-size: 16px !important;
+        background-color: #ffffff !important;
+    }
+
+    .ant-table-thead .ant-table-cell {
+        background-color: #A63333 !important;
+        color: #ffffff !important;
+        font-weight: bold !important;
+        padding: 16px !important;
+    }
+
+    .ant-table-cell {
+        padding: 18px !important;
+        border-bottom: 1px solid #f0f0f0 !important;
+    }
+
+    .abm-action-buttons {
+        display: flex !important;
+        justify-content: center !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+    }
+
+        .abm-action-buttons .ant-btn {
+            min-width: 110px !important;
+            height: 38px !important;
+            font-size: 15px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 6px !important;
+            line-height: 1.2 !important;
+            padding: 0 12px !important;
+        }
+
+    .ant-btn-dangerous {
+        color: #a63333 !important;
+        border-color: #a63333 !important;
+    }
+
+        .ant-btn-dangerous:hover {
+            background-color: #a63333 !important;
+            color: white !important;
+        }
+
+    .ant-pagination {
+        justify-content: center !important;
+        margin-top: 24px !important;
+    }
+
+    .ant-pagination-item {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .ant-pagination-prev,
+    .ant-pagination-next {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    @@media (max-width: 768px) {
+        .abm-title {
+            font-size: 22px !important;
+        }
+
+        .ant-table {
+            font-size: 15px !important;
+        }
+
+        .abm-action-buttons {
+            flex-direction: column !important;
+            align-items: stretch !important;
+        }
+
+        .abm-filters {
+            grid-template-columns: 1fr !important;
+        }
+
+        .abm-action-buttons .ant-btn {
+            width: 100% !important;
+        }
+    }
+</style>
+
+<Flex Class="flex-container" Justify="FlexJustify.Center" Align="FlexAlign.Center">
+    <div class="abm-container">
+        <div class="abm-header">
+            <div class="abm-title">Gestión de Bomberos</div>
+            <div class="abm-filters">
+                <EnumSelect DefaultValue="EstadoBombero.CuerpoActivo"
+                            ValueChanged="(EstadoBombero estado) => search(searchString, estado)"
+                            TEnum="EstadoBombero" />
+                <Search Placeholder="Buscar Bombero"
+                        @bind-Value="@searchString"
+                        OnSearch="()=>search(searchString, Estado)"
+                        BindOnInput />
+                <Button Type="ButtonType.Primary"
+                        OnClick="@(() => navigationManager.NavigateTo("/bomberos/agregar"))">
+                    <Icon Type="plus" /> Agregar Bombero
+                </Button>
+            </div>
+        </div>
+
+        <Table @ref="table"
+               TItem="Bombero"
+               DataSource="@bomberos"
+               OnChange="OnChange"
+               @bind-PageIndex="_pageIndex"
+               @bind-PageSize="_pageSize"
+               Responsive>
+            <ColumnDefinitions>
+                <Column TData="Bombero" Title="Foto" Width="100">
+                    <Avatar Size="AvatarSize.Large" Src="@CargarImage(context)" />
+                </Column>
+                <PropertyColumn Property="@(c => $"{c.Apellido}, {c.Nombre}")" Title="Apellido y Nombre" Sortable />
+                <PropertyColumn Title="Legajo" Property="c => c.NumeroLegajo" Sortable />
+                <PropertyColumn Title="Jerarquía" Property="@(c => c.Grado.GetDisplayName())" Sortable />
+                <PropertyColumn Title="Estado" Property="@(c => c.Estado.GetDisplayName())" Sortable />
+                <ActionColumn Title="Acciones" Align=ColumnAlign.Center>
+                    <div class="abm-action-buttons">
+                        <Button Type="ButtonType.Primary" OnClick="() => DetalleBombero(context.PersonaId)">
+                            <Icon Type="eye" /> Detalles
+                        </Button>
+                        <Button Type="default" OnClick="() => EditarBombero(context.PersonaId)">
+                            <Icon Type="edit" /> Editar
+                        </Button>
+                        @if (context.Estado != EstadoBombero.Inactivo)
+                        {
+                            <Popconfirm Title="¿Está seguro de dar de baja?"
+                                        OnConfirm="()=>CambiarEstado(context.PersonaId, EstadoBombero.Inactivo)"
+                                        OkText="Sí" CancelText="No">
+                                <Button Danger>
+                                    <Icon Type="down" /> Baja
+                                </Button>
+                            </Popconfirm>
+                        }
+                        else
+                        {
+                            <Popconfirm Title="¿Está seguro de dar de alta?"
+                                        OnConfirm="()=>CambiarEstado(context.PersonaId, EstadoBombero.CuerpoActivo)"
+                                        OkText="Sí" CancelText="No">
+                                <Button Color="Color.Green2">
+                                    <Icon Type="up" /> Alta
+                                </Button>
+                            </Popconfirm>
+                        }
+                    </div>
+                </ActionColumn>
+            </ColumnDefinitions>
+        </Table>
+    </div>
+</Flex>
+
+@{
+    RenderFragment footer = @<Template>
+        <Button OnClick="@CloseModals" @key="@("back")">Cerrar</Button>
+    </Template>;
+}
+
+@if (EditarVisible == true)
+{
+    <Modal Footer="null" Title="Editar" OnCancel="CloseModals" Visible="@EditarVisible">
+        <BomberosEditar BomberoId="@BomberoId" OnClose="CloseModals" />
+    </Modal>
+}
+@if (DetallesVisible == true)
+{
+    <Modal Visible="@DetallesVisible" OnCancel="@CloseModals" Footer="@footer">
+        <BomberosDetalles BomberoId="@BomberoId" />
+    </Modal>
+}
+
+@code {
+    string searchString;
+    ITable table;
+    List<Bombero>? bomberos = new List<Bombero>();
+    List<Bombero>? SinFiltrar = new List<Bombero>();
+    public EstadoBombero Estado = EstadoBombero.CuerpoActivo;
+
+    private TableFilter<EscalafonJerarquico>[] EscalafonJerarquicoFilter;
+
+    int _pageIndex = 1;
+    int _pageSize = 6;
+
+    // Funciones modal
+    public int BomberoId { get; set; }
+    public bool EditarVisible { get; set; }
+    public bool DetallesVisible { get; set; }
+
+    private async Task CambiarEstado(int BomberoId, EstadoBombero estado)
+    {
+        using var db = await DbFactory.CreateDbContextAsync();
+        Bombero bombero = await db.Bomberos.Where(b => b.PersonaId == BomberoId).SingleOrDefaultAsync();
+        bombero.Estado = estado;
+        await BomberoService.CambiarEstado(bombero);
+        await RefreshData();
+    }
+
+    private void EditarBombero(int ID)
+    {
+        BomberoId = ID;
+        EditarVisible = true;
+    }
+    private void DetalleBombero(int ID)
+    {
+        BomberoId = ID;
+        DetallesVisible = true;
+    }
+    private async void CloseModals()
+    {
+        DetallesVisible = false;
+        EditarVisible = false;
+        await RefreshData();
+    }
+
+    // Init, OnChange y Carga de datos
+    protected override async Task OnInitializedAsync()
+    {
+        using var db = await DbFactory.CreateDbContextAsync();
+
+        SinFiltrar = await db.Bomberos.Include(b => b.Imagen).ToListAsync();
+        search(searchString, Estado);
+
+        EscalafonJerarquicoFilter = new TableFilter<EscalafonJerarquico>[Enum.GetValues(typeof(EscalafonJerarquico)).Length];
+        int i = 0;
+        foreach (EscalafonJerarquico value in Enum.GetValues(typeof(EscalafonJerarquico)))
+        {
+            EscalafonJerarquicoFilter[i] = new() { Text = Enum.GetName(typeof(EscalafonJerarquico), value), Value = value };
+            i++;
+        }
+
+        StateHasChanged();
+    }
+
+    private async Task RefreshData()
+    {
+        using var db = await DbFactory.CreateDbContextAsync();
+        SinFiltrar = await db.Bomberos.ToListAsync();
+        search(searchString, Estado);
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task OnChange(QueryModel<Bombero> queryModel)
+    {
+        Console.WriteLine(JsonSerializer.Serialize(queryModel));
+        OnInitializedAsync();
+    }
+
+    public string CargarImage(Bombero bombero)
+    {
+        string src = "/";
+
+        if (bombero.Imagen is not null)
+        {
+            src = $"/api/imagenes/{bombero.Imagen.ImagenId}";
+        }
+
+        return src;
+    }
+
+    private void search(string value, EstadoBombero estado)
+    {
+        int number;
+
+        Estado = estado;
+
+        bomberos = SinFiltrar.Where(d => d.Estado == Estado).ToList();
+
+        if (string.IsNullOrEmpty(value))
+        {
+            StateHasChanged();
+            return;
+        }
+
+        bomberos = bomberos.Where(d =>
+        d.Nombre.Contains(value, StringComparison.OrdinalIgnoreCase) ||
+        Enum.GetName(typeof(EscalafonJerarquico), d.Grado).Contains(value, StringComparison.OrdinalIgnoreCase) ||
+        d.Apellido.Contains(value, StringComparison.OrdinalIgnoreCase))
+        .ToList();
+        if (int.TryParse(value, out number))
+        {
+            bomberos = bomberos.Where(d =>
+            d.NumeroLegajo.Equals(number)).ToList();
+        }
+        StateHasChanged();
+    }
+}

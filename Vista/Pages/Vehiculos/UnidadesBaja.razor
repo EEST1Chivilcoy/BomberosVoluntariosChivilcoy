@@ -3,75 +3,37 @@
 @using Vista.Data.Models.Vehiculos.Flota
 @inject NavigationManager navigationManager
 @inject IDbContextFactory<BomberosDbContext> DbFactory
+<link rel="stylesheet" href="css/Unidades.css" />
 @page "/unidades/unidades-baja"
 
-<style>
-    .template {
-        width: 100%;
-        height: 100%;
-        max-width: 97%;
-        min-width: 400px;
-        max-height: 100vh;
-        border-radius: 10px;
-        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-        background: #fff;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        margin: 1em;
-        padding: 0;
-        overflow: auto;
-    }
-
-    .grid {
-        max-width: 1300px;
-        min-width: 320px;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: flex-start;
-        gap: 12px;
-        margin: 30px 0;
-        overflow: auto;
-    }
-
-    @@media screen and (max-width: 1048px) {
-        .grid {
-            flex-direction: column;
-            align-items: center;
-        }
-    }
-
-    @@media screen and (max-width: 719px) {
-        .grid {
-            flex-direction: column;
-            align-items: center;
-        }
-    }
-</style>
-
-<div class="template">
-    <div class="grid">
-        <div style="display: flex;justify-content: space-between;width: 100%;min-width: 320px;align-items: center;">
-            <div style="position: relative;">
-                <p style="font-family:'Agency FB';width: 15em;position: absolute; transform: translate(0%, -50%);font-size: 1.5em;display: contents;">
-                    <b>UNIDADES</b>
-                </p>
-            </div>
-            <div>
-                <a @onclick="@(() => { navigationManager.NavigateTo($"/unidades"); })">
-                    <Button Style="background: rgb(62, 24, 24);color: #fff;border: none;">Unidades activas</Button>
-                </a>
-            </div>
-        </div>
+<div class="container-baja">
+    <Content Style="padding: 16px;">
+        <Card Bordered="false"
+                  Style="width: 100%; border-radius: 16px; box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.1); background: #ffffff;">
+                <div class="header-container" style="display: flex; justify-content: space-between; align-items: center;"> <div>
+                    <h2 style="margin-bottom: 0;"><Icon Type="Car"/>UNIDADES</h2>
+                    <p style="margin-top: 4px; color: #666;">@vehiculos?.Count(v => v.Estado == TipoEstadoMovil.Inactivo) unidades de baja</p>
+                </div>
+                <Space>
+                    <Button class="btn-volver-unidades"
+                            OnClick="@(() => navigationManager.NavigateTo("/unidades"))"
+                            Style="border-radius: 8px; font-size: 14px; ">
+                        <Icon Type="folder-open"/>Volver a Unidades activas
+                    </Button>
+                </Space>
+                </div>
+            <div style="margin-top: 24px;">  
         @if (vehiculos is not null)
         {
+            <div class="vehicles-grid">
             @foreach (VehiculoSalida m in vehiculos)
             {
+                
                 if (m.Estado == TipoEstadoMovil.Activo) continue;
                 <VehiculosCarta Vehiculo="m" OnChange="Init"/>
+                
             }
+            </div>
         }
         else
         {
@@ -79,9 +41,11 @@
                 <Spin Delay="500" Indicator=antIcon />
             </div>
         }
-    </div>
-</div>
+            </div>
+                     </Card>
+    </Content>
 
+ </div>
 @code {
     RenderFragment antIcon = @<Icon Type="loading" Theme="IconThemeType.Outline" Style="font-size: 24px; text-align: center; color: rgb(62, 24, 24);" Spin />;
     VehiculoSalida[]? vehiculos;

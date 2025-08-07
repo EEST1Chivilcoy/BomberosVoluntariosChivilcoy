@@ -6,50 +6,44 @@
 
 @using Vista.Data.Models.Imagenes
 @using Vista.Data.Models.Vehiculos.Flota
+<link rel="stylesheet" href="css/Unidades.css" />
 
-<style>
-    .botonCarta {
-        width: 33.3%;
-        outline: none;
-        box-shadow: none;
-        border-bottom-color: #fff !important;
-    }
-</style>
-
-<card class="cartaPropia" style="margin-bottom: 15px;display: flex; flex-direction: column;height: 345px;width: 250px;border-radius: 3px;box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);">
-    <div style="width: 100%;height: 75%;margin: 0; padding: 0;">
-        <img src="@CargarImage(Vehiculo)" style="width: 100%;height:100%;object-fit: cover;overflow: hidden;border-radius: 3px 3px 0 0;">
+<card class="vehiculo-card">
+    <div class="vehiculo-imagen-contenedor">
+        <img src="@CargarImage(Vehiculo)" class="vehiculo-imagen" />
     </div>
-    <div style="width: 100%;height:25%;">
-        <div style="height: 50%">
-            <p style="height: 100%;background: #fff;font-size: 16px;display:flex;justify-content: center;align-items: center;font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans',sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji';">Móvil nº @Vehiculo.NumeroMovil</p>
+
+    <div class="vehiculo-info">
+        <div class="vehiculo-titulo">
+            <p>Móvil nº @Vehiculo.NumeroMovil</p>
         </div>
-        <div style="display: flex; flex-direction: row;height: 50%;background: transparent;">
-            <Button class="botonCarta" Style="height: 100%;border-radius: 0 0 0 3px;border-right: 0;border-left: 0;border-top: 1px solid #d9d9d9;" OnClick="()=>DetallesVisible = true">
+
+        <div class="botones-grid">
+            <Button OnClick="()=>DetallesVisible = true">
                 <Icon Type="Menu" Theme="IconThemeType.Outline" />
             </Button>
-            <Button class="botonCarta" Style="height: 100%;border-radius: 0;border-right: 1px solid #d9d9d9;border-left: 1px solid #d9d9d9;border-top: 1px solid #d9d9d9;" OnClick="()=> FichaVisible = true">
+
+            <Button OnClick="()=>FichaVisible = true">
                 <Icon Type="Tool" Theme="IconThemeType.Outline" />
             </Button>
-            <Button Disabled="false" class="botonCarta" Style="height: 100%;border-radius: 0;border-right: 1px solid #d9d9d9;border-left: 1px solid #d9d9d9;border-top: 1px solid #d9d9d9;" OnClick="()=> EditarVisible = true">
-                <Icon Type="edit" Theme="IconThemeType.Outline" />
+
+            <Button OnClick="()=>EditarVisible = true">
+                <Icon Type="Edit" Theme="IconThemeType.Outline" />
             </Button>
-            @if(Vehiculo.Estado == TipoEstadoMovil.Activo){
-                <Popconfirm Style="width: 33.3%;" Title="¿Estás seguro de dar de baja a este móvil?"
-                        OnConfirm="()=>CambiarEstado(Vehiculo.VehiculoId,TipoEstadoMovil.Inactivo)"
-                        OnCancel="Cancel">
-                    <Button class="botonCarta" Style="width: 100%!important;height: 100%;border-radius: 0 0 3px 0;border-right: 0;border-left: 0;border-top: 1px solid #d9d9d9;">
+
+            @if (Vehiculo.Estado == TipoEstadoMovil.Activo)
+            {
+                <Popconfirm Title="¿Estás seguro de dar de baja a este móvil?" OnConfirm="()=>CambiarEstado(Vehiculo.VehiculoId, TipoEstadoMovil.Inactivo)" OnCancel="Cancel">
+                    <Button>
                         <i class="fa fa-trash" aria-hidden="true"></i>
                     </Button>
                 </Popconfirm>
             }
             else
             {
-                <Popconfirm Style="width: 33.3%;" Title="¿Estás seguro de dar de alta a este móvil?"
-                            OnConfirm="()=>CambiarEstado(Vehiculo.VehiculoId,TipoEstadoMovil.Activo)"
-                            OnCancel="Cancel">
-                    <Button class="botonCarta" Style="width: 100%!important;height: 100%;border-radius: 0 0 3px 0;border-right: 0;border-left: 0;border-top: 1px solid #d9d9d9;">
-                        <Icon Type="up" Theme="IconThemeType.Outline" />
+                <Popconfirm Title="¿Estás seguro de dar de alta a este móvil?" OnConfirm="()=>CambiarEstado(Vehiculo.VehiculoId, TipoEstadoMovil.Activo)" OnCancel="Cancel">
+                    <Button>
+                        <Icon Type="Up" Theme="IconThemeType.Outline" />
                     </Button>
                 </Popconfirm>
             }
@@ -57,20 +51,23 @@
     </div>
 </card>
 
-@if (EditarVisible == true){
+@if (EditarVisible)
+{
     <Modal Footer="null" Title="Editar" OnCancel="()=> EditarVisible = false" Visible="@EditarVisible">
         <VehiculoEditar VehiculoId="@VehiculoId" OnClose="HandleCancelEditar" />
     </Modal>
 }
 
-@if (DetallesVisible == true){
-    <Modal Footer="null" Title="Detalles" OnCancel="()=> DetallesVisible = false" Visible="@DetallesVisible" Style="width: 65%!important;">
+@if (DetallesVisible)
+{
+    <Modal Footer="null" Title="Detalles" OnCancel="()=> DetallesVisible = false" Visible="@DetallesVisible" Class="modal-detalles">
         <VehiculoDetalles vehiculoId="@VehiculoId" />
     </Modal>
 }
 
-@if (FichaVisible == true){
-    <Modal Footer="null" Title="Ficha técnica" OnCancel="()=> FichaVisible = false" Visible="@FichaVisible" Style="width: 35%!important;">
+@if (FichaVisible)
+{
+    <Modal Footer="null" Title="Ficha técnica" OnCancel="()=> FichaVisible = false" Visible="@FichaVisible" Class="modal-ficha">
         <FichaTecnica VehiculoId="@VehiculoId" />
     </Modal>
 }
@@ -105,16 +102,12 @@
     public string CargarImage(VehiculoSalida vehiculo)
     {
         Context = DbFactory.CreateDbContext();
-
         string src = "/";
-
         Imagen? imagen = Context.ImagenesVehiculo.Where(i => i.ImagenId == vehiculo.ImagenId).SingleOrDefault();
-
         if (imagen is not null)
         {
             src = $"data:{imagen.TipoImagen}; base64,{imagen.Base64Imagen}";
         }
-
         return src;
     }
 

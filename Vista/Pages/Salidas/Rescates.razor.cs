@@ -14,42 +14,36 @@ namespace Vista.Pages.Salidas
 {
     public partial class Rescates
     {
-        /// <summary>
-        /// ViewModel para la carga de Rescates de Personas.
-        /// </summary>
+        // ViewModel para la carga de Rescates de Personas.
         private RescatePersonaViewModels PersonaViewModel = new();
 
-        /// <summary>
-        /// Lista con todos los Bomberos del sistema.
-        /// </summary>
+        // Lista con todos los Bomberos del sistema.
         private List<Bombero> BomberosTodos = new();
 
-        /// <summary>
-        /// Lista con todos los Moviles del sistema.
-        /// </summary>
+        // Lista con todos los Moviles del sistema.
         private List<Movil> MovilesTodos = new();
 
+        // Variables tipo boolean para indicar las partes del formulario completadas.
+        private bool _parte1Completa = false;
+        private bool _parte2Completa = false;
+        private bool _parte3Completa = false;
 
-        /// <summary>
-        /// Numero de Salida del Año en Seleccionado.
-        /// </summary>
+        // Variables parametros para la carga de Rescates.
+
+        // Numero de Salida del Año en Seleccionado.
         [Parameter]
         public int? NumeroSalida { get; set; } = 0;
-        /// <summary>
-        /// Año de Salida
-        /// </summary>
+
+        // Anio de Salida del Año en Seleccionado.
         [Parameter]
         public int? AnioSalida { get; set; } = 0;
-        /// <summary>
-        /// Tipo de Rescate
-        /// </summary>
-
+        
+        // Tipo de Rescate.
         [Parameter]
         public int TipoRescate { get; set; }
 
 
-        //Carga de Salida
-
+        // Funcion de Carga de Salida.
         private async void OnFinish(EditContext editContext)
         {
 
@@ -138,10 +132,10 @@ namespace Vista.Pages.Salidas
             }
         }
 
-        //Inicio
-        protected override void OnInitialized()
+        // Inicio
+        protected override async Task OnInitializedAsync()
         {
-            Init();
+            await Init();
         }
 
         private async Task Init()

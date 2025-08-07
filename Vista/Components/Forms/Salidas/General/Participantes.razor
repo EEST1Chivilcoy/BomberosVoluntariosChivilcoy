@@ -3,233 +3,93 @@
 @using Vista.Data.Models.Salidas;
 @using Vista.Data.Models.Personas;
 @using System.Linq;
-
 @inject IMessageService MessageService
 
 <Form Model="Model">
-    <FormItem Label="Nombre del Solicitante">
-        <Input @bind-Value="@Model.NombreSolicitante" />
-    </FormItem>
-
-    <FormItem Label="Apellido del Solicitante">
-        <Input @bind-Value="@Model.ApellidoSolicitante" />
-    </FormItem>
-
-    <FormItem Label="Documento del Solicitante">
-        <Input @bind-Value="@Model.DniSolicitante" />
-    </FormItem>
-
-    <FormItem Label="Telefono del Solicitante">
-        <Input @bind-Value="@Model.TelefonoSolicitante" />
-    </FormItem>
-
-    <FormItem Label="Nómbre del Receptor">
-        <Input @bind-Value="@Model.NombreReceptor" />
-    </FormItem>
-
-    <FormItem Label="Apellido del Receptor">
-        <Input @bind-Value="@Model.ApellidoReceptor" />
-    </FormItem>
-
-    <FormItem Label="¿Hubo damnificados?">
-        <Switch Value="@switchValue" ValueChanged="@UpdateSwitchDamificados" Style="width: 10px!important;" />
-    </FormItem>
-
-    @if (switchValue)
-    {
-        <div class="inpt-cont" style="display: flex; flex-direction: column; justify-content: space-around; min-width: 90px;">
-            <label class="inpt-cont--lbl">Agregar otro</label>
-            <Button OnClick="() => visibleDamnificados = true">
-                <i class="fa-solid fa-user-plus"></i>
-            </Button>
+    @*Sección Solicitante*@
+    <div style="margin-bottom: 24px;">
+        <div style="border-bottom: 2px solid #52c41a; padding-bottom: 8px; margin-bottom: 16px;">
+            <h4 style="color: #52c41a; margin: 0; font-weight: 600;">Datos del Solicitante</h4>
         </div>
-        <div class="inpt-cont" style="display: flex; flex-direction: column; justify-content: space-around; min-width: 90px;">
-            <label class="inpt-cont--lbl">Ver damnificados</label>
-            <Button OnClick="() => visibleVerDamnificados = true">
-                <i class="fa-solid fa-users-gear"></i>
-            </Button>
+
+        <Row Gutter="16">
+            <Col Span="12">
+                <FormItem Label="Nombre" Required>
+                    <Input @bind-Value="@Model.NombreSolicitante"
+                           Disabled="@(!isUnlocked)"
+                           Placeholder="Ingrese el nombre" />
+                </FormItem>
+            </Col>
+            <AntDesign.Col Span="12">
+                <FormItem Label="Apellido" Required>
+                    <Input @bind-Value="@Model.ApellidoSolicitante"
+                           Disabled="@(!isUnlocked)"
+                           Placeholder="Ingrese el apellido" />
+                </FormItem>
+            </AntDesign.Col>
+        </Row>
+
+        <Row Gutter="16">
+            <Col Span="12">
+                <FormItem Label="Documento">
+                    <Input @bind-Value="@Model.DniSolicitante"
+                           Disabled="@(!isUnlocked)"
+                           Placeholder="Número de documento" />
+                </FormItem>
+            </Col>
+            <Col Span="12">
+                <FormItem Label="Teléfono" Required>
+                    <Input @bind-Value="@Model.TelefonoSolicitante"
+                           Disabled="@(!isUnlocked)"
+                           Placeholder="Número de teléfono" />
+                </FormItem>
+            </Col>
+        </Row>
+    </div>
+
+    @*Sección Receptor*@
+    <div style="margin-bottom: 24px;">
+        <div style="border-bottom: 2px solid #52c41a; padding-bottom: 8px; margin-bottom: 16px;">
+            <h4 style="color: #52c41a; margin: 0; font-weight: 600;">Datos del Receptor</h4>
         </div>
-    }
+
+        <Row Gutter="16">
+            <Col Span="12">
+                <FormItem Label="Nombre" Required>
+                    <Input @bind-Value="@Model.NombreReceptor"
+                           Disabled="@(!isUnlocked)"
+                           Placeholder="Ingrese el nombre" />
+                </FormItem>
+            </Col>
+            <Col Span="12">
+                <FormItem Label="Apellido" Required>
+                    <Input @bind-Value="@Model.ApellidoReceptor"
+                           Disabled="@(!isUnlocked)"
+                           Placeholder="Ingrese el apellido" />
+                </FormItem>
+            </Col>
+        </Row>
+    </div>
 </Form>
 
-<Modal Footer="null" Title="@("Damnificados")"
-       Visible="@visibleVerDamnificados"
-       OnOk="@HandleOkD"
-       OnCancel="@HandleCancelVD">
-    <div class="inpt-cont">
-        <Table Context="Damnificados" DataSource="Model.Damnificados" Bordered>
-            <PropertyColumn Property="d => d.Nombre"></PropertyColumn>
-            <PropertyColumn Property="d => d.Apellido"></PropertyColumn>
-            <PropertyColumn Property="d => d.Edad"></PropertyColumn>
-            <PropertyColumn Property="d => d.Estado"></PropertyColumn>
-            <ActionColumn Title="Acciones">
-                <Popconfirm Title="¿Quieres borrar este damnificado?"
-                            OnConfirm="@(() => deleteRowDamnificados(Damnificados.Documento))"
-                            OkText="Si"
-                            CancelText="No"
-                            Style="display: flex; justify-content: center; align-items: center;">
-                    <i class="fa-solid fa-trash" style="color: #e90c0c; cursor: pointer;"></i>
-                </Popconfirm>
-            </ActionColumn>
-        </Table>
-    </div>
-</Modal>
-
-<Modal Footer="null" Title="@("Datos del damnificado")" Visible="@visibleDamnificados" OkText="@("Agregar")" CancelText="@("Cancelar")" OnOk="@AgregarDamnificado">
-    <Form Model="damnificado">
-        <FormItem Label="Nombre" Required="true">
-            <Input @bind-Value="@damnificado.Nombre" />
-        </FormItem>
-
-        <FormItem Label="Apellido" Required="true">
-            <Input @bind-Value="@damnificado.Apellido" />
-        </FormItem>
-
-        <FormItem Label="Documento" Required="true">
-            <Input @bind-Value="@damnificado.Dni" />
-        </FormItem>
-
-        <FormItem Label="Sexo">
-            <Input @bind-Value="@damnificado.Sexo" />
-        </FormItem>
-
-        <FormItem Label="Edad">
-            @if (damnificado.FechaDeNacimiento.HasValue)
-            {
-                <Input Value="@CalcularEdad(damnificado.FechaDeNacimiento)" ReadOnly="true" />
-            }
-            else
-            {
-                <Input @bind-Value="@damnificado.Edad" />
-            }
-        </FormItem>
-
-        <FormItem Label="Lugar de Nacimiento">
-            <Input @bind-Value="@damnificado.LugarDeNacimiento" />
-        </FormItem>
-
-        <FormItem Label="Fecha de Nacimiento">
-            <DatePicker TValue="DateTime?" @bind-Value="@damnificado.FechaDeNacimiento" />
-        </FormItem>
-
-        <FormItem Label="Estado">
-            <EnumSelect TEnum="TipoDamnificado" @bind-Value="@damnificado.Estado" />
-        </FormItem>
-    </Form>
-</Modal>
-
 @code {
-    [Parameter] public SalidasViewModels Model { get; set; } = null!;
+    [Parameter, EditorRequired] public SalidasViewModels Model { get; set; } = null!;
+    [Parameter, EditorRequired] public bool isUnlocked { get; set; } = false;
+    [Parameter, EditorRequired] public EventCallback<bool> OnCompleted { get; set; } // Evento para notificar que se ha completado el formulario
 
-    private DamnificadoViewModels damnificado = new DamnificadoViewModels();
+    // Variable del Formulario utilizada para la validación
+    private EditContext editContext;
 
-    private bool visibleDamnificados = false;
-    private bool visibleVerDamnificados = false;
-
-    private bool switchValue;
-
-    protected override void OnInitialized()
+    private async Task ValidateForm()
     {
-        base.OnInitialized();
-        if (Model.Damnificados == null)
+        var esValido = editContext.Validate();
+        if (esValido)
         {
-            Model.Damnificados = new List<Damnificado_Salida>();
+            await OnCompleted.InvokeAsync(true); // Invoca el evento OnCompleted si el formulario es válido
         }
-        switchValue = Model.Damnificados.Any();
-    }
-
-    private void UpdateSwitchDamificados(bool value)
-    {
-        switchValue = value;
-        if (!value && Model.Damnificados != null)
+        else
         {
-            Model.Damnificados.Clear();
+            await OnCompleted.InvokeAsync(false); // Invoca el evento OnCompleted si el formulario no es válido
         }
-        StateHasChanged();
-    }
-
-    private void HandleOkD(MouseEventArgs e)
-    {
-        visibleDamnificados = false;
-    }
-
-    private void HandleCancelD(MouseEventArgs e)
-    {
-        visibleDamnificados = false;
-    }
-
-    private void HandleCancelVD(MouseEventArgs e)
-    {
-        visibleVerDamnificados = false;
-    }
-
-    private async Task deleteRowDamnificados(int DNI)
-    {
-        if (Model.Damnificados == null || !Model.Damnificados.Any())
-        {
-            await MessageService.ErrorAsync("No hay damnificados registrados.");
-            return;
-        }
-
-        if (!Model.Damnificados.Any(m => m.Documento == DNI))
-        {
-            await MessageService.ErrorAsync($"No se encontró un damnificado con el DNI {DNI}.");
-            return;
-        }
-
-        Model.Damnificados = Model.Damnificados.Where(m => m.Documento != DNI).ToList();
-        await MessageService.SuccessAsync($"Damnificado con DNI {DNI} eliminado correctamente.");
-    }
-
-    private async Task AgregarDamnificado()
-    {
-        try
-        {
-            Damnificado_Salida dp = new()
-            {
-                Nombre = damnificado.Nombre,
-                Apellido = damnificado.Apellido,
-                Documento = damnificado.Dni,
-                Sexo = damnificado.Sexo,
-                LugarNacimiento = damnificado.LugarDeNacimiento,
-                Edad = damnificado.Edad,
-                Estado = damnificado.Estado,
-            };
-
-            if (Model.Damnificados == null)
-            {
-                Model.Damnificados = new List<Damnificado_Salida>();
-            }
-
-            if (Model.Damnificados.Any(d => d.Documento == dp.Documento))
-            {
-                await MessageService.ErrorAsync("Ya existe un damnificado con ese documento", 5);
-                return;
-            }
-
-            Model.Damnificados.Add(dp);
-
-            damnificado = new DamnificadoViewModels();
-
-            visibleDamnificados = false;
-            await MessageService.SuccessAsync("Damnificado agregado correctamente");
-            StateHasChanged();
-        }
-        catch (Exception e)
-        {
-            StateHasChanged();
-
-            if (e.InnerException != null)
-                await MessageService.ErrorAsync(e.InnerException.Message, 5);
-            else
-                await MessageService.ErrorAsync(e.Message, 5);
-        }
-    }
-
-    private int CalcularEdad(DateTime? fechaNacimiento)
-    {
-        return fechaNacimiento.HasValue
-            ? (int)((DateTime.Now - fechaNacimiento.Value).TotalDays / 365.25)
-            : 0;
     }
 }

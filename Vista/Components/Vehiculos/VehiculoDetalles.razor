@@ -4,52 +4,45 @@
 @using Vista.Data.Models.Personas.Personal
 @using Vista.Data.Models.Personas.Personal.Componentes
 @using Vista.Data.Models.Vehiculos.Flota
+@using AntDesign
 
-<style>
-    #ImagenMovil {
-        border: 1px solid #f0f5f5;
-        border-radius: 2px;
-        height: 25em;
-        max-height: 25em;
-        min-height: 25em;
-        width: 40%;
-        max-width: 40%;
-        min-width: 40%;
-        object-fit: cover;
-        overflow: hidden;
-        display: block;
-        margin: 0 auto;
-    }
+<link rel="stylesheet" href="/css/DetallesVehiculosEstilos.css" />
 
-    .table-container {
-        overflow-x: auto;
-        width: 100%;
-        margin-bottom: 1em;
-    }
-
-    .ant-table-pagination.ant-pagination {
-        display: none !important;
-    }
-</style>
 @if (vehiculo != null)
 {
-    <div>
-        <img id="ImagenMovil" src="@CargarImage()" />
-    </div>
-    <br>
-    <div class="table-container">
-        <Table TItem="VehiculoView" DataSource="@(new[] { vehiculoView })" Responsive>
-            <PropertyColumn Property="c => c.Tipo">@vehiculoView.Tipo</PropertyColumn>
-            <PropertyColumn Property="c => c.Encargado">@vehiculoView.Encargado</PropertyColumn>
-            <PropertyColumn Property="c => c.Marca">@vehiculoView.Marca</PropertyColumn>
-            <PropertyColumn Property="c => c.Modelo">@vehiculoView.Modelo</PropertyColumn>
-            <PropertyColumn Property="c => c.Patente">@vehiculoView.Patente</PropertyColumn>
-        </Table>
+    <div class="vehiculo-detalles-completo-container">
+        <div class="image-container-completo">
+            <img id="ImagenMovil" class="vehiculo-image-completo" src="@CargarImage()" alt="Imagen de la Unidad" />
+        </div>
+        
+        <div class="info-completo-container">
+            <h3>Detalles del Vehículo</h3>
+            <Table TItem="VehiculoView" DataSource="@(new[] { vehiculoView })" Responsive>
+                <PropertyColumn Property="c => c.NumeroMovil" Title="N° Móvil"></PropertyColumn>
+                <PropertyColumn Property="c => c.Marca" Title="Marca"></PropertyColumn>
+                <PropertyColumn Property="c => c.Modelo" Title="Modelo"></PropertyColumn>
+                <PropertyColumn Property="c => c.Año" Title="Año"></PropertyColumn>
+                <PropertyColumn Property="c => c.Patente" Title="Patente"></PropertyColumn>
+                <PropertyColumn Property="c => c.Tipo" Title="Tipo"></PropertyColumn>
+                <PropertyColumn Property="c => c.Encargado" Title="Encargado"></PropertyColumn>
+                <PropertyColumn Property="c => c.Estado" Title="Estado"></PropertyColumn>
+            </Table>
+            @if (vehiculo is Movil) 
+            {
+                <h4 class="mt-4">Datos Técnicos</h4>
+                <Table TItem="VehiculoView" DataSource="@(new[] { vehiculoView })" Responsive>
+                    <PropertyColumn Property="c => c.NumeroMotor" Title="N° Motor"></PropertyColumn>
+                    <PropertyColumn Property="c => c.NumeroChasis" Title="N° Chasis"></PropertyColumn>
+                    <PropertyColumn Property="c => c.ModeloBomba" Title="Bomba"></PropertyColumn>
+                    <PropertyColumn Property="c => c.CantidadLitros" Title="Litros"></PropertyColumn>
+                </Table>
+            }
+        </div>
     </div>
 }
 else
 {
-    <div style="display: flex; justify-content: center; width: 100%; margin: 1em 1em;">
+    <div class="loading-container">
         <Spin Delay="500" Indicator=antIcon />
     </div>
 }
@@ -58,12 +51,12 @@ else
     RenderFragment antIcon = @<Icon Type="loading" Theme="IconThemeType.Outline" Style="font-size: 24px; text-align: center; color: rgb(62, 24, 24);" Spin />;
 
     [Parameter] public int vehiculoId { get; set; }
+
     BomberosDbContext Context;
     public VehiculoSalida vehiculo { get; set; }
     public VehiculoView vehiculoView { get; set; } = new();
-    public ImagenViewModel imagenView { get; set; } = new();
+    public ImagenViewModel ImagenView { get; set; }  = new();
 
-    // View models
     public class VehiculoView
     {
         public string? Tipo { get; set; }
@@ -71,14 +64,21 @@ else
         public string? Marca { get; set; }
         public string? Modelo { get; set; }
         public string? Patente { get; set; }
+        public string? Año { get; set; }
+        public string? NumeroMovil { get; set; }
+        public string? Estado { get; set; }
+        public string? NumeroMotor { get; set; } 
+        public string? NumeroChasis { get; set; } 
+        public string? ModeloBomba { get; set; } 
+        public string? CantidadLitros { get; set; } 
     }
 
-    public class ImagenViewModel
-    {
-        public string? Base64 { get; set; }
-        public string? TipoImagen { get; set; }
-        public string? Nombre { get; set; }
-    }
+    public class ImagenViewModel
+    {
+        public string? Base64 { get; set; }
+        public string? TipoImagen { get; set; }
+        public string? Nombre { get; set; }
+    }
 
     // Funciones - Carga de datos
     public async Task CargarDatos()
@@ -87,17 +87,28 @@ else
         if (vehiculo != null)
         {
             vehiculoView = new VehiculoView
-                {
-                    Tipo = vehiculo.Tipo,
-                    Marca = vehiculo.Marca,
-                    Modelo = vehiculo.Modelo,
-                    Patente = vehiculo.Patente
-                };
+            {
+                Tipo = vehiculo.Tipo,
+                Marca = vehiculo.Marca,
+                Modelo = vehiculo.Modelo,
+                Patente = vehiculo.Patente,
+                Año = vehiculo.Año?.ToString(), 
+                NumeroMovil = vehiculo.NumeroMovil?.ToString(), 
+                Estado = vehiculo.Estado.ToString() 
+            };
 
             if (vehiculo.EncargadoId != null)
             {
                 Bombero? Encargado = await Context.Bomberos.SingleOrDefaultAsync(b => b.PersonaId == vehiculo.EncargadoId);
                 vehiculoView.Encargado = Encargado?.Nombre + " " + Encargado?.Apellido;
+            }
+            
+            if (vehiculo is Movil movil)
+            {
+                vehiculoView.NumeroMotor = movil.NumeroMotor;
+                vehiculoView.NumeroChasis = movil.NumeroChasis;
+                vehiculoView.ModeloBomba = movil.ModeloBomba;
+                vehiculoView.CantidadLitros = movil.CantidadLitros?.ToString(); 
             }
         }
     }

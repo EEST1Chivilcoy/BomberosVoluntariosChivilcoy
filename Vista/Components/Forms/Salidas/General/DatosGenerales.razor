@@ -10,25 +10,25 @@
 @inject ISalidaService SalidaService
 
 <style>
-/* Contenedor para el mapa */
-.map-container {
-    width: 300px;
-    height: 300px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    overflow: hidden;
-    margin: 20px auto;
-}
-
-@@media screen and (max-width: 450px) {
+    /* Contenedor para el mapa */
     .map-container {
-        width: 100%;
-        height: auto;
+        width: 300px;
+        height: 300px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        overflow: hidden;
+        margin: 20px auto;
     }
-}
+
+    @@media screen and (max-width: 450px) {
+        .map-container {
+            width: 100%;
+            height: auto;
+        }
+    }
 </style>
 
-<Form Model="Model">
+<Form Model="Model" OnFieldChanged="@ValidateForm">
     @if (Model.TimeLlegada < Model.TimeSalida)
     {
         <FormItem Label="Fechas (salida y llegada)" Required>
@@ -42,6 +42,14 @@
             <DatePicker TValue="DateTime" Picker="@DatePickerType.Date" @bind-Value="@Model.FechaSalida" />
         </FormItem>
     }
+
+    <FormItem Label="Hora de Salida" Required>
+        <TimePicker @bind-Value="@Model.TimeSalida" Format="HH:mm" />
+    </FormItem>
+
+    <FormItem Label="Hora de Llegada" Required>
+        <TimePicker @bind-Value="@Model.TimeLlegada" Format="HH:mm" />
+    </FormItem>
 
     <FormItem Label="Tipo Zona" Required>
         <EnumSelect TEnum="TipoZona" @bind-Value="@Model.TipoZona" />
@@ -59,7 +67,9 @@
                         Placeholder="Seleccione una calle"
                         LabelName="@nameof(Direccion.NombreYAltura)"
                         OnSearch="OnSearch"
+                        SearchDebounceMilliseconds="350"
                         EnableSearch
+                        Loading="@_loading"
                         OnSelectedItemChanged="OnStreetSelected">
                 </Select>
             }
@@ -70,25 +80,11 @@
         </FormItem>
 
         <FormItem Label="Latitud">
-            @if(isApiAvailable)
-            {
-                <Input @bind-Value="@Model.Latitud" Disabled="true" />
-            }
-            else
-            {
-                <Input @bind-Value="@Model.Latitud" />
-            }
+            <Input @bind-Value="@Model.Latitud" Disabled="@isApiAvailable" />
         </FormItem>
 
         <FormItem Label="Longitud">
-            @if(isApiAvailable)
-            {
-                <Input @bind-Value="@Model.Longitud" Disabled="true" />
-            }
-            else
-            {
-                <Input @bind-Value="@Model.Longitud" />
-            }
+            <Input @bind-Value="@Model.Longitud" Disabled="@isApiAvailable" />
         </FormItem>
     }
     else
@@ -106,10 +102,10 @@
     {
         <div class="map-container">
             <iframe width="300"
-                height="300"
-                style="border:0;"
-                src="@GetOpenStreetMapUrl(Model.Latitud, Model.Longitud)"
-                frameborder="0" allowfullscreen></iframe>
+                    height="300"
+                    style="border:0;"
+                    src="@GetOpenStreetMapUrl(Model.Latitud, Model.Longitud)"
+                    frameborder="0" allowfullscreen></iframe>
         </div>
     }
 
@@ -151,26 +147,37 @@
 </Form>
 
 @code {
-    [Parameter] public SalidasViewModels Model { get; set; }
+    [Parameter, EditorRequired] public required SalidasViewModels Model { get; set; }
     [Parameter] public bool esSoloDireccion { get; set; } = false;
     [Parameter] public bool MostrarOpcionDepartamento { get; set; } = true;
+    [Parameter] public EventCallback<bool> OnCompleted { get; set; } // Evento para notificar que se ha completado el formulario
 
     private bool isApiAvailable;
     private int anio = DateTime.Now.Year;
+    private bool _loading = false; // Variable para controlar el estado de carga
     private bool esDepartamento;
     private bool SeConvocoGuardia;
-
-    //Timers para la API
-    private Timer _debounceTimer = null!;
-    private int _debounceTime = 500; // Tiempo de espera en milisegundos
-
-    private string? searchValue; // Variable para almacenar temporalmente el valor de búsqueda
-
     private List<Direccion> direcciones = new();
 
     protected override async Task OnInitializedAsync()
     {
         isApiAvailable = await GeorefService.CheckApiConnectionAsync();
+    }
+
+    private async Task ValidateForm()
+    {
+        var esValido = true;
+
+        if (Model.FechaSalida == default ||
+            Model.TimeSalida == default ||
+            Model.TimeLlegada == default ||
+            string.IsNullOrWhiteSpace(Model.Descripcion) ||
+            Model.Latitud == 0.0 || Model.Longitud == 0.0)
+        {
+            esValido = false;
+        }
+
+        await OnCompleted.InvokeAsync(esValido);
     }
 
     private void OnStreetSelected(Direccion selectedStreet)
@@ -186,16 +193,33 @@
 
     private async void OnSearch(string value)
     {
-        if (value.Length >= 3) // Verificación de caracteres mínimos
+        if (value.Length >= 3)
         {
-            // Guarda el valor actual de búsqueda
-            searchValue = value;
+            _loading = true;
+            StateHasChanged(); // actualiza el componente para que se muestre el spinner
 
-            // Reinicia el Timer en cada cambio
-            _debounceTimer.Stop();
-            _debounceTimer.Start();
+            try
+            {
+                direcciones = await GeorefService.GetStreetSuggestionsAsync(value);
+            }
+            catch (Exception ex)
+            {
+                // Podés loguear el error si querés
+                Console.Error.WriteLine($"Error al buscar direcciones: {ex.Message}");
+                direcciones.Clear();
+            }
+
+            _loading = false;
+            await InvokeAsync(StateHasChanged); // vuelve a actualizar el componente
+        }
+        else
+        {
+            direcciones.Clear();
+            _loading = false;
+            await InvokeAsync(StateHasChanged);
         }
     }
+
 
     private DateTime[] FechaRange
     {
@@ -213,11 +237,6 @@
     {
         base.OnInitialized();
 
-        // Inicializa el Timer
-        _debounceTimer = new Timer(_debounceTime);
-        _debounceTimer.Elapsed += OnDebounceElapsed;
-        _debounceTimer.AutoReset = false; // No queremos que se reinicie automáticamente
-
         if (Model != null)
         {
             if (Model.FechaSalida == DateTime.MinValue)
@@ -226,18 +245,6 @@
             }
             esDepartamento = !string.IsNullOrEmpty(Model.PisoNumero) ||
                               !string.IsNullOrEmpty(Model.Depto);
-        }
-    }
-
-    private async void OnDebounceElapsed(object sender, ElapsedEventArgs e)
-    {
-        // Llama a la API para obtener sugerencias de calles usando el valor almacenado
-        _debounceTimer.Stop();
-
-        if (!string.IsNullOrWhiteSpace(searchValue))
-        {
-            direcciones = await GeorefService.GetStreetSuggestionsAsync(searchValue);
-            await InvokeAsync(StateHasChanged);
         }
     }
 

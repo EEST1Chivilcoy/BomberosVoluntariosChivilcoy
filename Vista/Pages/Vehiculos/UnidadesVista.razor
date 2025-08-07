@@ -3,28 +3,34 @@
 @using AntDesign
 @inject NavigationManager navigationManager
 @inject IDbContextFactory<BomberosDbContext> DbFactory
+<link rel="stylesheet" href="css/Unidades.css" />
 @page "/unidades"
 
 <div class="container">
     <Content Style="padding: 16px;">
         <Card Bordered="false"
-              Style="width: 100%; border-radius: 12px; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); background: #ffffff;">
-            <div class="header-container">
-                <span class="title">UNIDADES</span>
+                  Style="width: 100%; border-radius: 16px; box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.1); background: #ffffff;">
+                <div class="header-container" style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h2 style="margin-bottom: 0;"><Icon Type="Car"/>UNIDADES</h2>
+                    <p style="margin-top: 4px; color: #666;">@vehiculos?.Count(v => v.Estado == TipoEstadoMovil.Activo) unidades activas</p>
+                </div>
                 <Space>
-                    <Button Type="default"
+                     <Button Type="ButtonType.Primary"
                             OnClick="@(() => navigationManager.NavigateTo("/unidades/unidades-baja"))"
-                            Style="background: #d32f2f; color: white; border-radius: 8px; font-size: 14px;">
-                        Unidades de Baja
+                            Style="margin-right: 12px;  background: #d32f2f; color: white; border-radius: 8px; font-weight: 600;">
+                         <Icon Type="folder"/> Unidades de baja
                     </Button>
+                
                     <Button Type="ButtonType.Primary"
                             OnClick="@(() => AgregarVisible = true)"
-                            Style="border-radius: 8px; font-size: 14px;">
-                        <Icon Type="plus" /> Nueva
+                            Style="border-radius: 8px; font-size: 14px; background: #4CAF50">
+                         <Icon Type="plus"/>Nueva Unidad
                     </Button>
                 </Space>
             </div>
 
+            <div style="margin-top: 24px;">
             @if (vehiculos is not null)
             {
                 <div class="vehicles-grid">
@@ -40,6 +46,7 @@
                     <Spin Size="SpinSize.Large" Indicator="@LoadingIcon" />
                 </div>
             }
+            </div>
         </Card>
     </Content>
 
