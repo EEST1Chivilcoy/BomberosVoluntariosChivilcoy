@@ -6,6 +6,7 @@
 
 <link href="css/layout.css" rel="stylesheet" />
 
+
 <Layout>
     <Header class="main-header">
         <div class="header-content">
@@ -25,7 +26,7 @@
                   InlineCollapsed="collapsedMenu"
                   class="main-menu">
 
-                <MenuItem Key="legajo">
+                <MenuItem Key="legajo" OnClick="@(() => navigationManager.NavigateTo("/Bomberos/Legajo"))">
                     <IconTemplate>
                         <i class="fa-solid fa-user menu-icon"></i>
                     </IconTemplate>
@@ -34,7 +35,7 @@
                     </ChildContent>
                 </MenuItem>
 
-                <MenuItem Key="licencias">
+                <MenuItem Key="licencias" OnClick="@(() => navigationManager.NavigateTo("/licencias"))">
                     <IconTemplate>
                         <i class="fa-solid fa-file-signature menu-icon"></i>
                     </IconTemplate>
@@ -43,7 +44,7 @@
                     </ChildContent>
                 </MenuItem>
 
-                <MenuItem Key="moviles">
+                <MenuItem Key="moviles" OnClick="@(() => navigationManager.NavigateTo("/unidades"))">
                     <IconTemplate>
                         <i class="fa-solid fa-truck menu-icon"></i>
                     </IconTemplate>
@@ -52,7 +53,7 @@
                     </ChildContent>
                 </MenuItem>
 
-                <MenuItem Key="personal">
+                <MenuItem Key="personal" OnClick="@(() => navigationManager.NavigateTo("/bomberos"))">
                     <IconTemplate>
                         <i class="fa-solid fa-people-group menu-icon"></i>
                     </IconTemplate>
@@ -61,7 +62,7 @@
                     </ChildContent>
                 </MenuItem>
 
-                <MenuItem Key="salidas">
+                <MenuItem Key="salidas" OnClick="@(() => navigationManager.NavigateTo("/salidas"))">
                     <IconTemplate>
                         <i class="fa-solid fa-fire-extinguisher menu-icon"></i>
                     </IconTemplate>
@@ -70,7 +71,7 @@
                     </ChildContent>
                 </MenuItem>
 
-                <MenuItem Key="firmas">
+                <MenuItem Key="firmas" OnClick="@(() => navigationManager.NavigateTo("/incidentes-vehiculos"))">
                     <IconTemplate>
                         <i class="fa-solid fa-scroll menu-icon"></i>
                     </IconTemplate>

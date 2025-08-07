@@ -112,7 +112,7 @@
 }
 else
 {
-    <div style="display: flex; justify-content: center; width: 100%; margin: 1em 1em;">
+    <div class="loading-container">
         <Spin Delay="500" Indicator=antIcon />
     </div>
 }
@@ -121,12 +121,12 @@ else
     RenderFragment antIcon = @<Icon Type="loading" Theme="IconThemeType.Outline" Style="font-size: 24px; text-align: center; color: rgb(62, 24, 24);" Spin />;
 
     [Parameter] public int vehiculoId { get; set; }
+
     BomberosDbContext Context;
     public VehiculoSalida vehiculo { get; set; }
     public VehiculoView vehiculoView { get; set; } = new();
-    public ImagenViewModel imagenView { get; set; } = new();
+    public ImagenViewModel ImagenView { get; set; }  = new();
 
-    // View models
     public class VehiculoView
     {
         public string? Tipo { get; set; }
@@ -144,12 +144,12 @@ else
         public string? CantidadLitros { get; set; }
     }
 
-    public class ImagenViewModel
-    {
-        public string? Base64 { get; set; }
-        public string? TipoImagen { get; set; }
-        public string? Nombre { get; set; }
-    }
+    public class ImagenViewModel
+    {
+        public string? Base64 { get; set; }
+        public string? TipoImagen { get; set; }
+        public string? Nombre { get; set; }
+    }
 
     // Funciones - Carga de datos
     public async Task CargarDatos()

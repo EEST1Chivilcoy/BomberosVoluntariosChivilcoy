@@ -1,0 +1,287 @@
+
+/*
+ * =============================================================================
+ * CSS para UnidadesVista
+ * Este bloque contiene estilos generales para la página de unidades
+ * y elementos comunes como el contenedor principal, encabezados y cuadrículas.
+ * =============================================================================
+ */
+
+/* Contenedor principal */
+.container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+/* Título y Botones (Header) */
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0 16px;
+}
+
+.header-container h2 {
+    font-family: 'Bebas Neue', 'Fjalla One', sans-serif;
+    font-size: 2.5rem;
+    letter-spacing: 2px;
+    color: #d32f2f;
+    text-shadow: 1px 2px 8px #ffd6d6;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 6px;
+}
+
+.header-container h2::after {
+    content: '';
+    display: block;
+    width: 60%;
+    height: 4px;
+    background: linear-gradient(90deg, #d32f2f 60%, #ffd6d6 100%);
+    border-radius: 2px;
+    margin-top: 4px;
+    transition: width 0.3s;
+}
+
+.header-container h2:hover::after {
+    width: 100%;
+}
+
+.title {
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Cuadrícula de vehículos */
+.vehicles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    padding: 16px 0;
+}
+
+/* Estilos para cada ítem dentro de la cuadrícula de vehículos (tarjetas) */
+.vehicles-grid > *{
+   
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    border-radius: 12px;
+    background: #ffffffff;
+    border-top: 5px solid #d32f2f; /* Borde superior con color de marca */
+    padding-top: 12px;
+}
+
+.vehicles-grid > *:hover {
+    transform: translateY(-6px) scale(1.03);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+
+/* Contenedor de carga (cuando no hay vehículos) */
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    background: rgba(255, 229, 236, 0.3);
+    border-radius: 12px;
+}
+
+/* Responsividad para UnidadesVista */
+@media screen and (max-width: 1048px) {
+    .vehicles-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+}
+
+@media screen and (max-width: 719px) {
+    .header-container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .vehicles-grid {
+        grid-template-columns: 1fr;
+    }
+}
+/* Card principal Ant Design en UnidadesVista */
+.ant-card {
+    box-shadow: 0 4px 32px rgba(0, 255, 21, 0.1), 0 1.5px 8px rgba(0,0,0,0.04);
+    border-radius: 18px !important;
+    transition: box-shadow 0.3s, transform 0.3s;
+}
+
+button.btn-volver-unidades
+{
+    background: #2fd33f !important;
+    color: white !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+}
+
+button.btn-volver-unidades:hover {
+    background: #1f9d2f !important;
+    color: white !important;
+    transform: scale(1.13);
+    transition: transform 0.2s ease-in-out;
+}
+button.btn-volver-unidades:hover .anticon {
+    animation:bounce 0.5s;
+}
+
+/* Animación de rebote para botones Ant Design en UnidadesVista */
+button.ant-btn-primary:hover .anticon {
+    animation: bounce 0.5s;
+}
+button.ant-btn-primary:hover {
+    transform: scale(1.13);
+    transition: transform 0.2s ease-in-out;
+}
+
+button.ant-btn-primary {
+    transition: transform 0.2s ease-in-out;
+}
+
+
+@keyframes bounce {
+    0% { transform: translateY(0);}
+    30% { transform: translateY(-6px);}
+    60% { transform: translateY(2px);}
+    100% { transform: translateY(0);}
+}
+
+/* Estilos de modales en UnidadesVista */
+.modal-detalles {
+    width: 65% !important;
+}
+
+.modal-ficha {
+    width: 35% !important;
+}
+
+/*
+ * =============================================================================
+ * CSS para VehiculosCarta.Razor
+ * Este bloque contiene estilos específicos para la tarjeta individual de vehículo.
+ * =============================================================================
+ */
+
+/* Tarjeta de vehículo individual */
+.vehiculo-card {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    height: 345px;
+    width: 250px;
+    border-radius: 3px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    background-color: white;
+    transition: all 0.3s ease-in-out; 
+    overflow: hidden; 
+}
+
+.vehiculo-card:hover {
+    /* Efecto de levantamiento y escala */
+    transform: translateY(-8px) scale(1.02); /* Un poco más de levantamiento y escala */
+    /* Sombra más prominente para un efecto "iluminado" */
+    box-shadow: 0 15px 30px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22); /* Sombra más grande y definida */
+    /* Efecto de borde o "glow" */
+    border: 3px solid #d32f2f; /* Un borde del color de la marca */
+    /* También podrías usar un box-shadow con color para el efecto "glow" */
+    /* box-shadow: 0 0 20px rgba(211,47,47,0.6), 0 15px 30px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22); */
+}
+
+/* Contenedor de la imagen del vehículo */
+.vehiculo-imagen-contenedor {
+    width: 100%;
+    height: 75%;
+}
+
+/* Imagen del vehículo */
+.vehiculo-imagen {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    overflow: hidden;
+    border-radius: 3px 3px 0 0;
+}
+
+/* Contenedor de información del vehículo */
+.vehiculo-info {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Título del vehículo (Número de móvil) */
+.vehiculo-titulo {
+    height: 50%;
+    background: #fff;
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Cuadrícula de botones en la tarjeta del vehículo */
+.botones-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    height: 50%;
+}
+
+/* Estilos para los botones dentro de la cuadrícula de la tarjeta */
+.botones-grid button {
+    border-radius: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    border: none !important;
+    background-color: #a16060 !important;
+    color: rgb(255, 255, 255) !important;
+    font-size: 16px !important;
+    transition: background-color 0.2s !important;
+}
+
+.botones-grid button:hover {
+    background-color: #7b4545 !important; /* Un tono más oscuro del rojo original */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3); /* Sombra para profundidad */
+}
+
+/*
+ * =============================================================================
+ * CSS para UnidadesBaja.razor
+ * Este bloque contiene estilos generales para la página de unidades bajas
+ * =============================================================================
+ */
+
+ 
+.Boton-Baja {
+    background: #43a047 !important;
+    border-color: #43a047 !important;
+    color: white !important;
+
+}
+
+
+
+.vehiculo-imagen-contenedor {
+    height: 200px !important;
+    width: 100% !important;
+    object-fit: cover !important;
+    border-radius: 8px !important;
+}
+
+.vehiculo-info {
+    flex-grow: 1 !important;
+    margin-top: 10px !important;
+}
+
+.botones-grid {
+    margin-top: 20px;
+    
+}

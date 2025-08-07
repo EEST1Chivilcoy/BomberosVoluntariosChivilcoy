@@ -39,7 +39,7 @@ namespace Vista.Data.Models.Vehiculos.Flota
         /// Este campo es opcional.
         /// </summary>
         [StringLength(255)]
-        public string? CantidadLitros { get; set; }
+        public int? CantidadLitros { get; set; }
 
         /// <summary>
         /// Kilometraje actual del vehículo móvil.

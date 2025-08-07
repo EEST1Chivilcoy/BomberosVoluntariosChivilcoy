@@ -43,13 +43,13 @@
 
     <FormItem Label="Kilometraje Actual">
         <Input @bind-Value="movilSalidaView.KmSalida" Disabled>
-            <Suffix>Km</Suffix>
+        <Suffix>Km</Suffix>
         </Input>
     </FormItem>
 
     <FormItem Label="Kilometraje de Llegada">
         <Input @bind-Value="movilSalidaView.KmLlegada" Placeholder="Ingrese el kilometraje de llegada">
-            <Suffix>Km</Suffix>
+        <Suffix>Km</Suffix>
         </Input>
     </FormItem>
 
@@ -111,9 +111,9 @@
 }
 
 @code {
-    [Parameter] public SalidasViewModels Model { get; set; } = null!;
-    [Parameter] public List<Bombero> BomberosTodos { get; set; } = null!;
-    [Parameter] public List<Movil> Moviles { get; set; } = null!;
+    [Parameter, EditorRequired] public SalidasViewModels Model { get; set; } = null!;
+    [Parameter, EditorRequired] public List<Bombero> BomberosTodos { get; set; } = null!;
+    [Parameter, EditorRequired] public List<Movil> Moviles { get; set; } = null!;
 
     private List<BomberoViweModel> bomberoChoferes { get; set; } = new();
     private List<BomberoViweModel> bomberoChoferesSalir { get; set; } = new();
@@ -126,7 +126,7 @@
     private bool _visible = false;
     private bool loading = false;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
         // Inicializar la lista de moviles si es null
         if (Model.Moviles == null)
@@ -134,8 +134,8 @@
             Model.Moviles = new List<Movil_Salida>();
         }
 
-        // Mapeamos los bomberos a su ViewModel
-        BomberosViewModelTodos = await MapBomberosViewModelAsync(BomberosTodos);
+        // Clonar la lista para que el componente hijo trabaje con una copia
+        BomberosViewModelTodos = (await MapBomberosViewModelAsync(BomberosTodos)).ToList();
 
         // Obtener las listas de bomberos choferes y móviles
         bomberoChoferes = await FiltrarBomberosChoferesAsync(BomberosViewModelTodos);
@@ -212,16 +212,41 @@
             return new List<BomberoViweModel>(); // Retorna lista vacía para evitar errores
         }
 
-        var choferes = bomberos.Where(b => b.EsChofer).ToList();
+        // Filtra los choferes y crea copias independientes de cada objeto
+        var choferes = bomberos
+            .Where(b => b.EsChofer)
+            .Select(b => new BomberoViweModel
+            {
+                Id = b.Id,
+                FechaNacimiento = b.FechaNacimiento,
+                Sexo = b.Sexo,
+                Nombre = b.Nombre,
+                Apellido = b.Apellido,
+                Documento = b.Documento,
+                NumeroLegajo = b.NumeroLegajo,
+                NumeroIoma = b.NumeroIoma,
+                LugarNacimiento = b.LugarNacimiento,
+                Grado = b.Grado,
+                Dotacion = b.Dotacion,
+                Estado = b.Estado,
+                EsChofer = b.EsChofer,
+                VencimientoRegistro = b.VencimientoRegistro,
+                Direccion = b.Direccion,
+                Observaciones = b.Observaciones,
+                Profesion = b.Profesion,
+                NivelEstudios = b.NivelEstudios,
+                FechaAceptacion = b.FechaAceptacion,
+            })
+            .ToList();
 
         if (!choferes.Any())
         {
             await MessageService.WarningAsync("No se encontraron bomberos con el rol de chofer.");
         }
 
+        await MessageService.SuccessAsync("Bomberos choferes filtrados correctamente.");
         return choferes;
     }
-
 
     private void OnFinishFailed(EditContext editContext)
     {
@@ -279,8 +304,8 @@
             bomberoChoferesSalir.RemoveAll(b => b.NumeroLegajo == bomberoChofer.NumeroLegajo);
             Moviles.RemoveAll(m => m.NumeroMovil == Movilsalida.NumeroMovil);
 
-            string? QuienLleno = movilSalidaView.QuienLleno != null? $"{movilSalidaView.QuienLleno.Apellido}, {movilSalidaView.QuienLleno.Nombre}" : null;
-            
+            string? QuienLleno = movilSalidaView.QuienLleno != null ? $"{movilSalidaView.QuienLleno.Apellido}, {movilSalidaView.QuienLleno.Nombre}" : null;
+
             // Crear el Objeto Movil Salida
             Movil_Salida m = new()
             {
@@ -350,6 +375,7 @@
             FechaAceptacion = b.FechaAceptacion,
         }).ToList();
 
+        await MessageService.SuccessAsync("Bomberos mapeados correctamente.");
         return bomberosViewModel;
     }
 }

@@ -144,8 +144,8 @@
 </div>
 
 @code {
-    [Parameter] public SalidasViewModels Model { get; set; } = null!;
-    [Parameter] public List<Bombero> BomberosTodos { get; set; } = null!;
+    [Parameter, EditorRequired] public SalidasViewModels Model { get; set; } = null!;
+    [Parameter, EditorRequired] public List<Bombero> BomberosTodos { get; set; } = null!;
 
     private IEnumerable<BomberoSalidaViewModels> _selectedRows = new List<BomberoSalidaViewModels>(); //Bomberos Seleccionados
     private List<BomberoViweModel> bomberosTodosView = new(); //Lista con todos los bomberos
@@ -162,10 +162,13 @@
     private bool BotonSolo { get; set; } = true;
     private bool MostrarBoton => _selectedRows.Any(); //Any() es un método de LINQ que verifica si una colección tiene al menos un elemento.
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
-        bomberosTodosView = await MapBomberosViewModelAsync(BomberosTodos); // Mapea los bomberos a la vista modelo.
-        bomberosSalirTodos = bomberosTodosView.ToList(); // Copia el contenido de la Lista bomberosTodos a una nueva lista.
+        // Clonar la lista para que el componente hijo trabaje con una copia
+        bomberosTodosView = (await MapBomberosViewModelAsync(BomberosTodos)).ToList();
+
+        // Crea una copia independiente para manipular en pantalla sin afectar la lista original.
+        bomberosSalirTodos = bomberosTodosView.Select(b => b).ToList();
 
         if (Model.Moviles != null && Model.Moviles.Any())
         {
@@ -373,6 +376,7 @@
             FechaAceptacion = b.FechaAceptacion,
         }).ToList();
 
+        await MessageService.SuccessAsync("Bomberos mapeados correctamente.");
         return bomberosViewModel;
     }
 }

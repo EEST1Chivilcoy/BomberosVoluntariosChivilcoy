@@ -7,8 +7,7 @@ using Microsoft.AspNetCore.Localization;
 using System.Globalization;
 using AntDesign;
 using Microsoft.Extensions.Options;
-using Mapster;
-using MapsterMapper;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,13 +40,10 @@ builder.Services.AddScoped<IDependenciaService, DependenciaService>();
 builder.Services.AddScoped<IFuerzaIntervinienteService, FuerzaIntervinienteService>();
 builder.Services.AddScoped<IImagenService, ImagenService>();
 
-// Registrar el mapper
-builder.Services.AddMapster(); // Configura IMapper autom·ticamente
-
 // Servicios HttpClient
 builder.Services.AddHttpClient<IGeorefService, GeorefService>();
 
-// Configurar la localizaciÛn
+// Configurar la localizaciÔøΩn
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
 builder.Services.Configure<RequestLocalizationOptions>(options =>
@@ -78,14 +74,14 @@ if (!app.Environment.IsDevelopment())
 //Localizacion AntDesign
 LocaleProvider.SetLocale("es-Es");
 
-// Habilitar controllers (Es necesario para que el controlador de im·genes funcione)
+// Habilitar controllers (Es necesario para que el controlador de im√°genes funcione)
 app.MapControllers();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
-// AÒadir el middleware de localizaciÛn
+// A√±adir el middleware de localizaci√≥n
 var localizationOptions = app.Services.GetService<IOptions<RequestLocalizationOptions>>()?.Value;
 
 if (localizationOptions != null)
@@ -95,7 +91,7 @@ if (localizationOptions != null)
 else
 {
     // Manejar el caso en que localizationOptions sea null
-    Console.WriteLine("Error: RequestLocalizationOptions no est· configurado correctamente.");
+    Console.WriteLine("Error: RequestLocalizationOptions no est√° configurado correctamente.");
 }
 
 app.MapBlazorHub();

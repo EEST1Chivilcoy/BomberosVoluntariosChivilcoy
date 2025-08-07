@@ -2,6 +2,7 @@
 @using Vista.Data.ViewModels.Personal
 @using Vista.Data.Models.Personas.Personal
 @using Vista.Data.Models.Personas.Personal.Componentes
+@using Vista.Data.Mappers
 
 @*Servicios Utilizados*@
 @using Vista.Services
@@ -156,7 +157,7 @@
 <Modal @bind-Visible="_modalAñadirBomberosVisible" Title="Añadir Bomberos" OkText="@("Guardar")" CancelText="@("Cancelar")" OnOk="@AddFirefighterToDepartmentAsync">
 	<Select Mode="SelectMode.Multiple"
 			Placeholder="Elige los bomberos a agregar a la dependencia"
-			DataSource="@BomberosTodos"
+			DataSource="@BomberosTodosViewModel"
 			Values="@BomberosSeleccionados"
 			TItem="BomberoViweModel"
 			TItemValue="int"
@@ -168,11 +169,12 @@
 </Modal>
 
 @code {
-	[Parameter] public int DependenciaId { get; set; }
-	private List<Bombero?> DependenciaBomberos = new();
-	public List<BomberoDependenciaViewModel?> BomberosViewModel { get; set; } = new();
-	private List<int> BomberosSeleccionados = new List<int>();
-	public List<BomberoViweModel> BomberosTodos { get; set; } = new();
+	[Parameter] public int DependenciaId { get; set; } // ID de la Dependencia que se está editando
+	private List<Bombero?> DependenciaBomberos = new(); // Lista de Bomberos de la Dependencia
+	public List<BomberoDependenciaViewModel?> BomberosViewModel { get; set; } = new(); // Lista de Bomberos en formato ViewModel para la Dependencia
+	private List<int> BomberosSeleccionados = new List<int>(); // Lista de IDs de Bomberos seleccionados para agregar a la Dependencia
+	public List<BomberoViweModel?> BomberosTodosViewModel { get; set; } = new(); // Lista de Bomberos en formato ViewModel para todos los Bomberos disponibles
+	public List<Bombero?> BomberosTodos { get; set; } = new(); // Lista de todos los Bomberos disponibles
 
 	// Variables de Tamaño de la Tabla
 	int _pageIndex = 1;
@@ -195,10 +197,63 @@
 
 	public async Task OnInit()
 	{
-		BomberosTodos = await BomberoService.ObtenerTodosLosBomberosViewModelAsync();
+		if (DependenciaId <= 0)
+		{
+			await MessageService.ErrorAsync("ID de Dependencia inválido.");
+			return;
+		}
+
+		if (DependenciaService == null)
+		{
+			await MessageService.ErrorAsync("Servicio de Dependencia no está disponible.");
+			return;
+		}
+
+		if (BomberoService == null)
+		{
+			await MessageService.ErrorAsync("Servicio de Bombero no está disponible.");
+			return;
+		}
+
+
+		// Si todo está bien, obtenemos todos los bomberos de la base de datos
+		BomberosTodos = await BomberoService.ObtenerTodosLosBomberosAsync();
+
+		// Si no hay bomberos, mostramos un mensaje de error
+
+		if (BomberosTodos == null || !BomberosTodos.Any())
+		{
+			await MessageService.ErrorAsync("No hay bomberos disponibles en la base de datos.");
+			return;
+		}
+
+		// Los mapeamos a ViewModel
+		BomberosTodosViewModel = BomberosTodos.ToBomberoViewModelList();
+
+		// Si no hay bomberos disponibles en la lista, mostramos un mensaje de error indicando que fue un error de mapeo
+		if (BomberosTodosViewModel == null || !BomberosTodosViewModel.Any())
+		{
+			await MessageService.ErrorAsync("Error al mapear los bomberos a la lista de ViewModel.");
+			return;
+		}
+
+		// Obtenemos los bomberos de la dependencia específica
 		DependenciaBomberos = await DependenciaService.ObtenerBomberosDeDependenciaAsync(DependenciaId);
+
+		// Mapeamos los bomberos de la dependencia a ViewModel
 		BomberosViewModel = MapFirefightersToDepartmentViewModels(DependenciaBomberos);
+
+		// Si no se pudieron mapear los bomberos a ViewModel, mostramos un mensaje de error
+		if (BomberosViewModel == null || !BomberosViewModel.Any() || DependenciaBomberos != null || DependenciaBomberos.Any())
+	{
+            await MessageService.ErrorAsync("Error al mapear los bomberos de la dependencia a ViewModel");
+            return;
+		}
+
+        // Limpiamos la lista de bomberos seleccionados
 		BomberosSeleccionados = new();
+
+        // Si todo salió bien, actualizamos el estado del componente
 		StateHasChanged();
 	}
 
