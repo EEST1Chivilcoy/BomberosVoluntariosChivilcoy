@@ -191,11 +191,6 @@
                                AllowClear />
                     </div>
 
-                    <div class="inpt-container">
-                        <Input Size="InputSize.Large" Placeholder="Color" @bind-Value="@vehiculoView.Color"
-                               AllowClear />
-                    </div>
-
                     <div class="upload-container">
                         <label class="lblInputFile" for="fotoMovil">
                             <Icon Type="cloud-upload" Theme="IconThemeType.Outline" Style="width: 16px; height: 16px;" />
@@ -344,8 +339,6 @@
     {
         public string? Marca { get; set; }
 
-        public string? Color { get; set; }
-
         public string? Modelo { get; set; }
 
         public int? Año { get; set; }
@@ -460,7 +453,6 @@
                 Embarcacion vehiculo = new Embarcacion()
                     {
                         Marca = vehiculoView.Marca,
-                        Color = vehiculoView.Color,
                         Modelo = vehiculoView.Modelo,
                         Año = vehiculoView.Año,
                         Patente = vehiculoView.Patente,
