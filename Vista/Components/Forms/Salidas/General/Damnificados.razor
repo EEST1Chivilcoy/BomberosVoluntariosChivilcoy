@@ -6,73 +6,168 @@
 
 @inject IMessageService MessageService
 
-<Table Context="Damnificados" DataSource="Model.Damnificados" Bordered>
-    <PropertyColumn Property="d => d.Nombre"></PropertyColumn>
-    <PropertyColumn Property="d => d.Apellido"></PropertyColumn>
-    <PropertyColumn Property="d => d.Edad"></PropertyColumn>
-    <PropertyColumn Property="d => d.Estado"></PropertyColumn>
-    <ActionColumn Title="Acciones">
-        <Popconfirm Title="¿Quieres borrar este damnificado?"
-                    OnConfirm="@(() => deleteRowDamnificados(Damnificados.Documento))"
-                    OkText="Si"
-                    CancelText="No"
-                    Style="display: flex; justify-content: center; align-items: center;">
-            <i class="fa-solid fa-trash" style="color: #e90c0c; cursor: pointer;"></i>
-        </Popconfirm>
-    </ActionColumn>
-</Table>
+<style>
+    .damnificados-componente .ant-table {
+        width: 100%;
+        background-color: white;
+        border-radius: 8px;
+        overflow: hidden;
+    }
 
-<Modal Footer="null" Title="@("Datos del damnificado")" Visible="@visibleDamnificados" OkText="@("Agregar")" CancelText="@("Cancelar")" OnOk="@AgregarDamnificado">
-    <Form Model="Damnificado">
-        <FormItem Label="Nombre" Required="true">
-            <Input @bind-Value="@Damnificado.Nombre" />
-        </FormItem>
+    .damnificados-componente .ant-table-title {
+        background-color: #A63333;
+    }
 
-        <FormItem Label="Apellido" Required="true">
-            <Input @bind-Value="@Damnificado.Apellido" />
-        </FormItem>
+    .damnificados-componente .ant-table-thead .ant-table-cell {
+        background-color: #A63333 !important;
+        color: white !important;
+        font-weight: bold;
+    }
 
-        <FormItem Label="Documento" Required="true">
-            <Input @bind-Value="@Damnificado.Dni" />
-        </FormItem>
+    .damnificados-componente .ant-table-cell {
+        padding: 16px !important;
+    }
 
-        <FormItem Label="Sexo">
-            <Input @bind-Value="@Damnificado.Sexo" />
-        </FormItem>
+    .damnificados-componente .title-template-container {
+        background-color: #A63333;
+        padding: 16px;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-        <FormItem Label="Edad">
-            @if (Damnificado.FechaDeNacimiento.HasValue)
-            {
-                <Input Value="@CalcularEdad(Damnificado.FechaDeNacimiento)" ReadOnly="true" />
-            }
-            else
-            {
-                <Input @bind-Value="@Damnificado.Edad" />
-            }
-        </FormItem>
+    .damnificados-componente .add-button {
+        background-color: #4CAF50 !important;
+        border-color: #438E46 !important;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
 
-        <FormItem Label="Lugar de Nacimiento">
-            <Input @bind-Value="@Damnificado.LugarDeNacimiento" />
-        </FormItem>
+    .damnificados-componente .boton_p {
+        background-color: #732D2D !important;
+        color: white !important;
+        border: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
 
-        <FormItem Label="Fecha de Nacimiento">
-            <DatePicker TValue="DateTime?" @bind-Value="@Damnificado.FechaDeNacimiento" />
-        </FormItem>
+    @@media (max-width: 960px) {
+        .damnificados-componente .title-template-container {
+            flex-direction: column;
+            align-items: stretch;
+        }
+    }
 
-        <FormItem Label="Estado">
-            <EnumSelect TEnum="TipoDamnificado" @bind-Value="@Damnificado.Estado" />
-        </FormItem>
-    </Form>
-</Modal>
+    .damnificados-componente .ant-form-horizontal .ant-form-item-label {
+        flex-grow: 1;
+        background: #A63333;
+    }
+
+        .damnificados-componente .ant-form-horizontal .ant-form-item-label > label {
+            color: #FFFFFF;
+            padding: 2px 4px;
+        }
+
+    .damnificados-componente .ant-form-item {
+        box-sizing: border-box;
+        margin: 0;
+        margin-bottom: 0px;
+        padding: 0;
+        color: rgba(0, 0, 0, 0.85);
+        font-size: 14px;
+        line-height: 1.5715;
+        list-style: none;
+        font-feature-settings: 'tnum';
+        margin-bottom: 8px !important;
+        vertical-align: top;
+        font-weight: bold;
+    }
+
+    .damnificados-componente .ant-modal-content {
+        position: relative;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 0;
+        border-radius: 2px;
+        box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+        pointer-events: auto;
+        border: 1px solid red !important;
+    }
+</style>
+
+
+<div class="damnificados-componente">
+
+    <Table Context="Damnificados" DataSource="Model.Damnificados" Bordered>
+        <TitleTemplate>
+            <GridRow>
+                <GridCol Span="24" Style="text-align: right;">
+                    <Button Type="ButtonType.Primary" OnClick="@(() => visibleDamnificados = true)">
+                        <Icon Type="plus" /> Nueva
+                    </Button>
+                </GridCol>
+            </GridRow>
+        </TitleTemplate>
+        <ColumnDefinitions>
+            <PropertyColumn Property="d => d.Nombre"></PropertyColumn>
+            <PropertyColumn Property="d => d.Apellido"></PropertyColumn>
+            <PropertyColumn Property="d => d.Edad"></PropertyColumn>
+            <PropertyColumn Property="d => d.Estado"></PropertyColumn>
+            <ActionColumn Title="Acciones">
+                <Popconfirm Title="¿Quieres borrar este damnificado?"
+                            OnConfirm="@(() => deleteRowDamnificados(Damnificados.Documento))"
+                            OkText="Si"
+                            CancelText="No">
+                    <Button Danger>
+                        <Icon Type="delete" />
+                    </Button>
+                </Popconfirm>
+            </ActionColumn>
+        </ColumnDefinitions>
+    </Table>
+
+    <Modal @bind-Visible="visibleDamnificados" Title="@("Datos del damnificado")" OkText="@("Agregar")" CancelText="@("Cancelar")" OnOk="@AgregarDamnificado">
+        <Form Model="Damnificado">
+            <FormItem Label="Nombre" Required="true">
+                <Input @bind-Value="@Damnificado.Nombre" />
+            </FormItem>
+
+            <FormItem Label="Apellido" Required="true">
+                <Input @bind-Value="@Damnificado.Apellido" />
+            </FormItem>
+
+            <FormItem Label="Documento" Required="true">
+                <Input @bind-Value="@Damnificado.Dni" />
+            </FormItem>
+
+            <FormItem Label="Sexo">
+                <Input @bind-Value="@Damnificado.Sexo" />
+            </FormItem>
+
+            <FormItem Label="Edad">
+                <Input @bind-Value="@Damnificado.Edad" Disabled="@Damnificado.FechaDeNacimiento.HasValue" />
+            </FormItem>
+
+            <FormItem Label="Lugar de Nacimiento">
+                <Input @bind-Value="@Damnificado.LugarDeNacimiento" />
+            </FormItem>
+
+            <FormItem Label="Fecha de Nacimiento">
+                <DatePicker TValue="DateTime?" @bind-Value="@Damnificado.FechaDeNacimiento" OnChange="@CalcularEdad" />
+            </FormItem>
+
+            <FormItem Label="Estado">
+                <EnumSelect TEnum="TipoDamnificado" @bind-Value="@Damnificado.Estado" />
+            </FormItem>
+        </Form>
+    </Modal>
+</div>
 
 @code {
     [Parameter, EditorRequired] public SalidasViewModels Model { get; set; } = null!;
 
     private DamnificadoViewModels Damnificado = new DamnificadoViewModels();
-
-    // Variables para controlar la visibilidad de los modals
     private bool visibleDamnificados = false;
-    private bool visibleVerDamnificados = false;
 
     private async Task deleteRowDamnificados(int DNI)
     {
@@ -137,10 +232,12 @@
         }
     }
 
-    private int CalcularEdad(DateTime? fechaNacimiento)
+    private Task CalcularEdad()
     {
-        return fechaNacimiento.HasValue
-            ? (int)((DateTime.Now - fechaNacimiento.Value).TotalDays / 365.25)
+        Damnificado.Edad = Damnificado.FechaDeNacimiento.HasValue
+            ? (int)((DateTime.Now - Damnificado.FechaDeNacimiento.Value).TotalDays / 365.25)
             : 0;
+
+        return Task.CompletedTask;
     }
 }
