@@ -14,6 +14,9 @@ namespace Vista.Data.Models.Vehiculos
         /// </summary>
         public int VehiculoId { get; set; }
 
+        /// <summary>
+        /// Discriminador que indica el tipo.
+        /// </summary>
         public TipoVehiculo Discriminador { get; set; }
 
         /// <summary>
@@ -47,25 +50,6 @@ namespace Vista.Data.Models.Vehiculos
         [StringLength(255)]
         public string? Tipo { get; set; }
 
-        /// <summary>
-        /// Color del vehículo.
-        /// </summary>
-        public string? Color { get; set; }
-        /// <summary>
-        /// Tipo de combustible (por ejemplo, Diesel). Con un maximo de 255 caracteres.
-        /// </summary>
-        [StringLength(255)]
-        public string? Combustible { get; set; }
-
-        /// <summary>
-        /// Fecha de realizacion del ultimo service al vehiculo.
-        /// </summary>
-        public DateTime? FechaUltimoService { get; set; }
-
-        /// <summary>
-        /// Fecha en la que se realizara un service al vehiculo
-        /// </summary>
-        public DateTime? FechaProximoService { get; set; }
         /// <summary>
         /// Identificador único del seguro asociado al vehículo.
         /// </summary>
