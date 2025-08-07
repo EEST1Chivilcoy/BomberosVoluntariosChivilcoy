@@ -67,12 +67,6 @@
                         <span class="detail-value">@vehiculoView.Estado</span>
                     </div>
                 </AntDesign.Col>
-                <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
-                    <div class="detail-item">
-                        <span class="detail-label">Combustible:</span>
-                        <span class="detail-value">@vehiculoView.Combustible</span>
-                    </div>
-                </AntDesign.Col>
             </Row>
 
             @if (vehiculo is Movil)
@@ -100,10 +94,10 @@
                         </AntDesign.Col>
                         <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
                             <div class="detail-item">
-                                <span class="detail-label">Cantidad Litros:</span>
+                                <span class="detail-label">Cantidad de Litros:</span>
                                 <span class="detail-value">@vehiculoView.CantidadLitros</span>
                             </div>
-                        </AntDesign.Col>  
+                        </AntDesign.Col>
                     </Row>
                 </div>
             }
@@ -112,7 +106,7 @@
 }
 else
 {
-    <div class="loading-container">
+    <div style="display: flex; justify-content: center; width: 100%; margin: 1em 1em;">
         <Spin Delay="500" Indicator=antIcon />
     </div>
 }
@@ -121,12 +115,12 @@ else
     RenderFragment antIcon = @<Icon Type="loading" Theme="IconThemeType.Outline" Style="font-size: 24px; text-align: center; color: rgb(62, 24, 24);" Spin />;
 
     [Parameter] public int vehiculoId { get; set; }
-
     BomberosDbContext Context;
     public VehiculoSalida vehiculo { get; set; }
     public VehiculoView vehiculoView { get; set; } = new();
-    public ImagenViewModel ImagenView { get; set; }  = new();
+    public ImagenViewModel imagenView { get; set; } = new();
 
+    // View models
     public class VehiculoView
     {
         public string? Tipo { get; set; }
@@ -134,7 +128,6 @@ else
         public string? Marca { get; set; }
         public string? Modelo { get; set; }
         public string? Patente { get; set; }
-        public string? Combustible { get; set; }
         public string? Año { get; set; }
         public string? NumeroMovil { get; set; }
         public string? Estado { get; set; }
@@ -144,12 +137,12 @@ else
         public string? CantidadLitros { get; set; }
     }
 
-    public class ImagenViewModel
-    {
-        public string? Base64 { get; set; }
-        public string? TipoImagen { get; set; }
-        public string? Nombre { get; set; }
-    }
+    public class ImagenViewModel
+    {
+        public string? Base64 { get; set; }
+        public string? TipoImagen { get; set; }
+        public string? Nombre { get; set; }
+    }
 
     // Funciones - Carga de datos
     public async Task CargarDatos()
