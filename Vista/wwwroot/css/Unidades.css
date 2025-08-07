@@ -270,20 +270,18 @@ button.ant-btn-primary {
 
 
 .vehiculo-imagen-contenedor {
-    height: 200px;
-    width: 100%;
-    object-fit: cover;
-    border-radius: 8px;
+    height: 200px !important;
+    width: 100% !important;
+    object-fit: cover !important;
+    border-radius: 8px !important;
 }
 
 .vehiculo-info {
-    flex-grow: 1;
-    margin-top: 10px;
+    flex-grow: 1 !important;
+    margin-top: 10px !important;
 }
 
-.vehiculo-botones {
-    display: flex;
-    justify-content: space-between;
-    gap: 6px;
-    margin-top: 10px;
+.botones-grid {
+    margin-top: 20px;
+    
 }
