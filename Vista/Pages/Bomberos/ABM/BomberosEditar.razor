@@ -11,357 +11,528 @@
 @using Vista.Data.Models.Personas.Personal
 @using Vista.Data.Models.Personas.Personal.Componentes
 
+
 <style>
-    /* Contenedor del contenido del modal */
-    .ant-modal-content {
-        position: relative;
-        background-color: #fff;
-        background-clip: padding-box;
-        border: 0;
-        border-radius: 2px;
-        box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
-        pointer-events: auto;
-        border: 1px solid red !important; /* ¡Este estilo modifica el borde del modal! */
-    }
+	.container { padding: 24px; min-height: 100vh; }
+	.page-title { font-size: 24px; font-weight: 600; color: #1f1f1f; margin-bottom: 24px; display:flex; align-items:center; }
+	.page-title-icon { margin-right: 12px; color: #c43a3a; }
+	.card { background-color: rgb(255, 255, 255); border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 24px; margin-bottom: 24px; }
+	.card-title { font-size: 18px; font-weight: 500; color: #434343; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #f0f0f0; }
 
-    /* Etiquetas del formulario dentro del modal */
-    .ant-form-horizontal .ant-form-item-label {
-        flex-grow: 1;
-        background: #A63333;
-    }
+	.profile-photo-container { display:flex; flex-direction:column; align-items:center; padding:16px; }
+	.photo-preview { width:150px; height:150px; border-radius:50%; overflow:hidden; margin-bottom:16px; display:flex; align-items:center; justify-content:center; }
 
-        .ant-form-horizontal .ant-form-item-label > label {
-            color: #FFFFFF;
-            padding: 2px 4px;
-        }
+	.upload-actions { display:flex; gap:8px; }
 
-    /* Ítems del formulario */
-    .ant-form-item {
-        box-sizing: border-box;
-        margin: 0;
-        margin-bottom: 8px !important;
-        padding: 0;
-        color: rgba(0, 0, 0, 0.85);
-        font-size: 14px;
-        line-height: 1.5715;
-        font-weight: bold;
-        vertical-align: top;
-    }
+	.form-section { margin-bottom:24px; }
+	.action-buttons { display:flex; justify-content:flex-end; gap:12px; margin-top:24px; }
+
+	:deep(.ant-form-item) { margin-bottom:16px; }
+	:deep(.ant-form-item-label > label) { color:#595959; font-weight:500; }
+	:deep(.ant-input), :deep(.ant-select:not(.ant-select-customize-input) .ant-select-selector), :deep(.ant-picker), :deep(.ant-input-number) {
+		border-radius:4px; border:1px solid #d9d9d9;
+	}
+	:deep(.ant-input:hover), :deep(.ant-select:not(.ant-select-customize-input) .ant-select-selector:hover), :deep(.ant-picker:hover), :deep(.ant-input-number:hover) {
+		border-color:#c43a3a;
+	}
+	:deep(.ant-input:focus), :deep(.ant-select-focused:not(.ant-select-customize-input) .ant-select-selector), :deep(.ant-picker-focused), :deep(.ant-input-number-focused) {
+		border-color:#c43a3a; box-shadow:0 0 0 2px rgba(196,58,58,0.2);
+	}
+	:deep(.ant-switch-checked) { background-color:#c43a3a; }
+
+	.required-field::after { content:'*'; color:#c43a3a; margin-left:4px; }
+
+	.conditional-field { margin-top:12px; padding-top:12px; border-top:1px dashed #f0f0f0; }
+
+
+
+.ant-modal{
+    width: 1200px !important; 
+    max-width: 90% !important;
+    top: 100% !important;
+    transform: translateY(-50%) !important;
+    margin: 0 auto;
+}
+
+
+
+
 </style>
 
-@* Editar bombero *@
-<Form Loading="loading" Model="@bomberoVM"
-      LabelColSpan="8"
-      WrapperColSpan="16"
-      OnFinishFailed="OnFinishFailed">
-    <FormItem Label="Foto" class="custom-label">
-        <InputFile OnChange="SubirFoto" />
-    </FormItem>
-    <FormItem Label="Nombre">
-        <Input DefaultValue="@bomberoVM.Nombre" @bind-Value="@bomberoVM.Nombre" />
-    </FormItem>
-    <FormItem Label="Apellido">
-        <Input DefaultValue="@bomberoVM.Apellido" @bind-Value="@bomberoVM.Apellido" />
-    </FormItem>
+<div class="container">
+	<div class="page-title">
+		<Icon Type="edit" Theme="IconThemeType.Outline" Class="page-title-icon" />
+		Editar Bombero
+	</div>
 
-    <FormItem Label="Fecha de Nacimiento">
-        <DatePicker @bind-Value="@bomberoVM.FechaNacimiento" Picker="@DatePickerType.Date" Style="width: 100%;" AllowClear />
-    </FormItem>
+	<Form Model="@bomberoVM"
+		  Layout="FormLayout.Vertical"
+		  OnFinish="OnFinish"
+		  OnFinishFailed="OnFinishFailed">
+		<div class="card">
+			<div class="card-title">Información Personal</div>
+			<Row Gutter="24">
+				<Col Span="6">
+					<div class="profile-photo-container">
+						<div class="photo-preview">
+							@if (imageUrl != null)
+							{
+								<Avatar Src="@imageUrl" Alt="Foto de perfil" Size="@("5rem")" />
+							}
+							else
+							{
+								<Avatar Icon="@IconType.Outline.User" Size="@("5rem")" />
+							}
+						</div>
 
-    <FormItem Label="DNI">
-        <Input DefaultValue="@bomberoVM.Documento" @bind-Value="@bomberoVM.Documento" />
-    </FormItem>
-    <FormItem Label="Dirección">
-        <Input DefaultValue="@bomberoVM.Direccion" @bind-Value="@bomberoVM.Direccion" />
-    </FormItem>
-    <FormItem Label="Dotaciónes">
-        <EnumSelect DefaultValue="@bomberoVM.Dotacion" TEnum="TipoDotaciones" @bind-Value="@bomberoVM.Dotacion" />
-    </FormItem>
+						<div class="upload-actions">
+							<Button Type="@ButtonType.Primary">
+								<label style="cursor:pointer; margin:0;">
+									<Icon Type="upload" /> Subir foto
+									<InputFile OnChange="SubirFoto" style="display:none;" accept=".jpg,.jpeg,.png" />
+								</label>
+							</Button>
 
-    <FormItem Label="Número Legajo">
-        <AntDesign.InputNumber DefaultValue="@bomberoVM.NumeroLegajo" @bind-Value="@bomberoVM.NumeroLegajo" />
-    </FormItem>
+							@if (imageUrl != null)
+							{
+								<Button Type="@ButtonType.Default" OnClick="RemovePhoto" Danger>
+									<Icon Type="delete" /> Eliminar
+								</Button>
+							}
+						</div>
+					</div>
+				</Col>
 
-    <FormItem Label="Fecha de Aceptación">
-        <DatePicker DefaultValue="@bomberoVM.FechaAceptacion" @bind-Value="@bomberoVM.FechaAceptacion" Picker="@DatePickerType.Date" Style="width: 100%;" AllowClear />
-    </FormItem>
+				<Col Span="18">
+					<Row Gutter="16">
+						<Col Span="12">
+							<FormItem Label="Nombre" Required>
+								<Input @bind-Value="@bomberoVM.Nombre" Placeholder="Ingrese el nombre" />
+							</FormItem>
+						</Col>
+						<Col Span="12">
+							<FormItem Label="Apellido" Required>
+								<Input @bind-Value="@bomberoVM.Apellido" Placeholder="Ingrese el apellido" />
+							</FormItem>
+						</Col>
+					</Row>
 
-    <FormItem Label="Número IOMA">
-        <Input DefaultValue="@bomberoVM.NumeroIoma" @bind-Value="@bomberoVM.NumeroIoma" />
-    </FormItem>
+					<Row Gutter="16">
+						<Col Span="8">
+							<FormItem Label="DNI" Required>
+								<Input @bind-Value="@bomberoVM.Documento" Placeholder="Ingrese el DNI" />
+							</FormItem>
+						</Col>
+						<Col Span="8">
+							<FormItem Label="Fecha de Nacimiento">
+								<DatePicker @bind-Value="@bomberoVM.FechaNacimiento"
+											Picker="@DatePickerType.Date"
+											Style="width: 100%;"
+											Placeholder="@("Seleccione fecha")"
+											AllowClear />
+							</FormItem>
+						</Col>
+						<Col Span="8">
+							<FormItem Label="Lugar de nacimiento">
+								<Input @bind-Value="@bomberoVM.LugarNacimiento" Placeholder="Ingrese lugar de nacimiento" />
+							</FormItem>
+						</Col>
+					</Row>
 
-    <FormItem Label="Lugar de nacimiento">
-        <Input DefaultValue="@bomberoVM.LugarNacimiento" @bind-Value="@bomberoVM.LugarNacimiento" />
-    </FormItem>
+					<Row Gutter="16">
+						<Col Span="12">
+							<FormItem Label="Dirección">
+								<Input @bind-Value="@bomberoVM.Direccion" Placeholder="Ingrese dirección" />
+							</FormItem>
+						</Col>
+						<Col Span="6">
+							<FormItem Label="Sexo">
+								<EnumSelect TEnum="TipoSexo" @bind-Value="@bomberoVM.Sexo" />
+							</FormItem>
+						</Col>
+						<Col Span="6">
+							<FormItem Label="Grupo Sanguíneo">
+								<EnumSelect TEnum="TipoGrupoSanguineo" @bind-Value="@bomberoVM.GrupoSanguineo" AllowClear />
+							</FormItem>
+						</Col>
+					</Row>
+				</Col>
+			</Row>
+		</div>
 
-    <FormItem Label="Grupo Sanguíneo">
-        <EnumSelect DefaultValue="@bomberoVM.GrupoSanguineo" TEnum="TipoGrupoSanguineo" @bind-Value="@bomberoVM.GrupoSanguineo" />
-    </FormItem>
+		<div class="card">
+			<div class="card-title">Información Profesional</div>
+			<Row Gutter="16">
+				<Col Span="6">
+					<FormItem Label="Número Legajo" Required>
+						<Input @bind-Value="@bomberoVM.NumeroLegajo" Placeholder="Ingrese número de legajo" />
+					</FormItem>
+				</Col>
+				<Col Span="6">
+					<FormItem Label="Dotación" Required>
+						<EnumSelect TEnum="TipoDotaciones" @bind-Value="@bomberoVM.Dotacion" />
+					</FormItem>
+				</Col>
+				<Col Span="6">
+					<FormItem Label="Grado">
+						<EnumSelect TEnum="EscalafonJerarquico" @bind-Value="@bomberoVM.Grado" AllowClear />
+					</FormItem>
+				</Col>
+				<Col Span="6">
+					<FormItem Label="Estado">
+						<EnumSelect TEnum="EstadoBombero" @bind-Value="@bomberoVM.Estado" AllowClear />
+					</FormItem>
+				</Col>
+			</Row>
 
-    <FormItem Label="Altura (cm)">
-        <AntDesign.InputNumber DefaultValue="@bomberoVM.Altura" @bind-Value="@bomberoVM.Altura" />
-    </FormItem>
+			<Row Gutter="16">
+				<Col Span="8">
+					<FormItem Label="Fecha de Aceptación">
+						<DatePicker @bind-Value="@bomberoVM.FechaAceptacion"
+									Picker="@DatePickerType.Date"
+									Style="width:100%;"
+									Placeholder="@("Seleccione fecha")"
+									AllowClear />
+					</FormItem>
+				</Col>
+				<Col Span="8">
+					<FormItem Label="Número IOMA">
+						<Input @bind-Value="@bomberoVM.NumeroIoma" Placeholder="Ingrese número IOMA" />
+					</FormItem>
+				</Col>
+			</Row>
 
-    <FormItem Label="Peso">
-        <AntDesign.InputNumber DefaultValue="@bomberoVM.Peso" @bind-Value="@bomberoVM.Peso" />
-    </FormItem>
+			<Row Gutter="16">
+				<Col Span="12">
+					<FormItem Label="¿Es chofer?">
+						<Switch @bind-Checked="@bomberoVM.Chofer"></Switch>
+						@if (bomberoVM.Chofer)
+						{
+							<div class="conditional-field">
+								<FormItem Label="Fecha vencimiento del carnet">
+									<DatePicker @bind-Value="@bomberoVM.VencimientoRegistro"
+												Picker="@DatePickerType.Date"
+												Style="width:100%;"
+												Placeholder="@("Seleccione fecha de vencimiento")"
+												AllowClear />
+								</FormItem>
+							</div>
+						}
+					</FormItem>
+				</Col>
+			</Row>
+		</div>
 
-    <FormItem Label="Observaciónes">
-        <Input DefaultValue="@bomberoVM.Observaciones" @bind-Value="@bomberoVM.Observaciones" />
-    </FormItem>
+		<div class="card">
+			<div class="card-title">Información Adicional</div>
+			<Row Gutter="16">
+				<Col Span="6">
+					<FormItem Label="Altura (cm)">
+						<AntDesign.InputNumber @bind-Value="@bomberoVM.Altura" Style="width:100%;" Placeholder="Ingrese altura" />
+					</FormItem>
+				</Col>
+				<Col Span="6">
+					<FormItem Label="Peso (kg)">
+						<AntDesign.InputNumber @bind-Value="@bomberoVM.Peso" Style="width:100%;" Placeholder="Ingrese peso" />
+					</FormItem>
+				</Col>
+				<Col Span="6">
+					<FormItem Label="Nivel de estudio">
+						<Input @bind-Value="@bomberoVM.NivelEstudios" Placeholder="Ingrese nivel de estudios" />
+					</FormItem>
+				</Col>
+				<Col Span="6">
+					<FormItem Label="Profesión">
+						<Input @bind-Value="@bomberoVM.Profesion" Placeholder="Ingrese profesión" />
+					</FormItem>
+				</Col>
+			</Row>
 
-    <FormItem Label="Nivel de estudio">
-        <Input DefaultValue="@bomberoVM.NivelEstudios" @bind-Value="@bomberoVM.NivelEstudios" />
-    </FormItem>
+			<FormItem Label="Observaciones">
+				<TextArea @bind-Value="@bomberoVM.Observaciones" Placeholder="Ingrese observaciones" Rows="4" />
+			</FormItem>
+		</div>
 
-    <FormItem Label="Profesión">
-        <Input DefaultValue="@bomberoVM.Profesion" @bind-Value="@bomberoVM.Profesion" />
-    </FormItem>
+		<div class="card">
+			<div class="card-title">Información de Contacto</div>
+			<Row Gutter="16">
+				<Col Span="6">
+					<FormItem Label="Teléfono Celular">
+						<Input @bind-Value="@contactoVM.TelefonoCel" Placeholder="Ingrese teléfono celular" />
+					</FormItem>
+				</Col>
+				<Col Span="6">
+					<FormItem Label="Teléfono Fijo">
+						<Input @bind-Value="@contactoVM.TelefonoFijo" Placeholder="Ingrese teléfono fijo" />
+					</FormItem>
+				</Col>
+				<Col Span="6">
+					<FormItem Label="Teléfono Laboral">
+						<Input @bind-Value="@contactoVM.TelefonoLaboral" Placeholder="Ingrese teléfono laboral" />
+					</FormItem>
+				</Col>
+				<Col Span="6">
+					<FormItem Label="Email">
+						<Input @bind-Value="@contactoVM.Email" Placeholder="Ingrese email" />
+					</FormItem>
+				</Col>
+			</Row>
+		</div>
 
-    <FormItem Label="Es chofer">
-        <Switch @bind-Checked="@bomberoVM.Chofer" />
-        @if (bomberoVM.Chofer)
-        {
-            <label id="texto"> Vencimiento del carnet</label>
-            <br>
-            <DatePicker DefaultValue="@bomberoVM.VencimientoRegistro" @bind-Value="@bomberoVM.VencimientoRegistro" Picker="@DatePickerType.Date" Style="width: 100%;" AllowClear />
-        }
-        @if (!bomberoVM.Chofer)
-        {
-            <label id="texto"></label>
-        }
-    </FormItem>
-
-    <FormItem Label="Grado">
-        <EnumSelect DefaultValue="@bomberoVM.Grado" TEnum="EscalafonJerarquico" @bind-Value="@bomberoVM.Grado" />
-    </FormItem>
-    <FormItem Label="Estado">
-        <Select @bind-Value="@bomberoVM.Estado"
-                DefaultValue="@(bomberoVM.Estado)"
-                Style="width:200px"
-                TItemValue="EstadoBombero"
-                TItem="EstadoBombero"
-                Bordered="true">
-            <SelectOptions>
-                <SelectOption TItemValue="EstadoBombero" TItem="EstadoBombero" Value="@(EstadoBombero.CuerpoActivo)" Label="Cuerpo activo" />
-                <SelectOption TItemValue="EstadoBombero" TItem="EstadoBombero" Value="@(EstadoBombero.Reserva)" Label="Reserva" />
-                <SelectOption TItemValue="EstadoBombero" TItem="EstadoBombero" Value="@(EstadoBombero.Inactivo)" Label="Inactivo" />
-            </SelectOptions>
-        </Select>
-    </FormItem>
-
-    <FormItem Label="Sexo">
-        <EnumSelect DefaultValue="@bomberoVM.Sexo" TEnum="TipoSexo" @bind-Value="@bomberoVM.Sexo" />
-    </FormItem>
-
-    @* Carga Contacto-----------------------------------------------------------------------*@
-    <FormItem Label="Teléfono Laboral">
-        <Input DefaultValue="@contactoVM.TelefonoLaboral" @bind-Value="@contactoVM.TelefonoLaboral" />
-    </FormItem>
-
-    <FormItem Label="Teléfono Celular">
-        <Input DefaultValue="@contactoVM.TelefonoCel" @bind-Value="@contactoVM.TelefonoCel" />
-    </FormItem>
-
-    <FormItem Label="Teléfono Fijo">
-        <Input DefaultValue="@contactoVM.TelefonoFijo" @bind-Value="@contactoVM.TelefonoFijo" />
-    </FormItem>
-
-    <FormItem Label="Email">
-        <Input DefaultValue="@contactoVM.Email" @bind-Value="@contactoVM.Email" />
-    </FormItem>
-
-    <FormItem Label="Nombre Brigada">
-        <Select TItem="Brigada"
-                TItemValue="int"
-                DataSource="@brigadas"
-                @bind-Value="@brigadaVM.BrigadaId"
-                DefaultValue="@brigadaVM.BrigadaId"
-                LabelName="@nameof(Brigada.NombreBrigada)"
-                ValueName="@nameof(Brigada.BrigadaId)">
-        </Select>
-    </FormItem>
-    <Button Class="boton_p" @onclick="@EditarBombero">
-        Guardar
-    </Button>
-    <Button Class="boton_p" @onclick="OnClose">
-        Cancelar
-    </Button>
-</Form>
+		<div class="action-buttons">
+			<Button Type="@ButtonType.Default" OnClick="Cancelar">
+				Cancelar
+			</Button>
+			<Button Type="@ButtonType.Primary" HtmlType="submit" OnClick="EditarBombero">
+				Guardar
+			</Button>
+		</div>
+	</Form>
+</div>
 
 @code {
-    [Parameter] public int BomberoId { get; set; }
-    [Parameter] public EventCallback OnClose { get; set; }
-    BomberosDbContext? Context { get; set; }
-    public Brigada[]? brigadas;
-    public Bombero bomberoData { get; set; }
-    public BomberosViewModel bomberoVM { get; set; } = new();
-    public BrigadaViewModel brigadaVM { get; set; } = new();
-    public ContactoViewModel contactoVM { get; set; } = new();
-    public ImagenViewModel imagenVM { get; set; } = new();
+	[Parameter] public int BomberoId { get; set; }
+	[Parameter] public EventCallback OnClose { get; set; }
 
-    //Cargar ViewModel
-    public async Task CargarBomberoVM()
-    {
-        bomberoVM = new();
-        foreach (var i in bomberoData.GetType().GetProperties())
-        {
-            var propNombre = i.Name;
-            var propValor = i.GetValue(bomberoData);
-            var editarProp = bomberoVM.GetType().GetProperty(propNombre);
-            if (editarProp != null && editarProp.CanWrite && propValor != null && propNombre != "Brigada" && propNombre != "BrigadaId")
-            {
-                editarProp.SetValue(bomberoVM, propValor);
-            }
-        }
-        Contacto? contacto = await Context.Contactos.Where(c => c.PersonalId == BomberoId).SingleOrDefaultAsync();
-        if (contacto != null)
-        {
-            contactoVM = new()
-            {
-                TelefonoCel = contacto.TelefonoCel,
-                TelefonoLaboral = contacto.TelefonoLaboral,
-                TelefonoFijo = contacto.TelefonoFijo,
-                Email = contacto.Email
-            };
-        }
-    }
+	BomberosDbContext? Context { get; set; }
+	public Brigada[]? brigadas;
+	public Bombero? bomberoData;
+	public string? imageUrl;
 
-    private async void SubirFoto(InputFileChangeEventArgs e)
-    {
-        string imagenBase64 = await Base64Helper.StreamToBase64(e.File.OpenReadStream());
+	public BomberosViewModel bomberoVM { get; set; } = new();
+	public BrigadaViewModel brigadaVM { get; set; } = new();
+	public ContactoViewModel contactoVM { get; set; } = new();
+	public ImagenViewModel imagenVM { get; set; } = new();
 
-        imagenVM.Base64 = imagenBase64;
-        imagenVM.TipoImagen = e.File.ContentType;
-        imagenVM.Nombre = e.File.Name;
-    }
+	private async Task CargarBomberoVM()
+	{
+		if (bomberoData == null) return;
 
-    // Funcion editar o cancelar
-    private async void EditarBombero()
-    {
-        Bombero? bombero = await Context.Bomberos
-        .Where(b => b.PersonaId == BomberoId)
-        .Include(c => c.Contacto)
-        .SingleOrDefaultAsync();
-        Brigada? brigada = brigadaVM.BrigadaId != 0 ? await Context.Brigadas.SingleOrDefaultAsync(m => m.BrigadaId == brigadaVM.BrigadaId) : null;
-        bombero.FechaNacimiento = bomberoVM.FechaNacimiento;
-        bombero.Sexo = bomberoVM.Sexo;
-        bombero.FechaNacimiento = bomberoVM.FechaNacimiento;
-        bombero.Sexo = bomberoVM.Sexo;
-        bombero.Nombre = bomberoVM.Nombre;
-        bombero.Apellido = bomberoVM.Apellido;
-        bombero.Documento = bomberoVM.Documento;
-        bombero.NumeroLegajo = bomberoVM.NumeroLegajo;
-        bombero.NumeroIoma = bomberoVM.NumeroIoma;
-        bombero.LugarNacimiento = bomberoVM.LugarNacimiento;
-        bombero.Grado = bomberoVM.Grado;
-        bombero.Dotacion = bomberoVM.Dotacion;
-        bombero.GrupoSanguineo = bomberoVM.GrupoSanguineo;
-        bombero.Altura = bomberoVM.Altura;
-        bombero.Peso = bomberoVM.Peso;
-        bombero.Estado = bomberoVM.Estado;
-        bombero.Chofer = bomberoVM.Chofer;
-        bombero.VencimientoRegistro = bomberoVM.VencimientoRegistro;
-        bombero.Direccion = bomberoVM.Direccion;
-        bombero.Observaciones = bomberoVM.Observaciones;
-        bombero.Profesion = bomberoVM.Profesion;
-        bombero.NivelEstudios = bomberoVM.NivelEstudios;
-        bombero.FechaAceptacion = bomberoVM.FechaAceptacion;
-        // Informacion Contacto
-        bombero.Contacto = new()
-        {
-            TelefonoCel = contactoVM.TelefonoCel,
-            TelefonoFijo = contactoVM.TelefonoFijo,
-            TelefonoLaboral = contactoVM.TelefonoLaboral,
-            Email = contactoVM.Email
-        };
-        // ----------------------
-        if (!string.IsNullOrEmpty(imagenVM.Base64))
-        {
-            bombero.Imagen = new()
-            {
-                Base64Imagen = imagenVM.Base64,
-                TipoImagen = imagenVM.TipoImagen,
-                NombreImagen = imagenVM.Nombre
-            };
-        }
+		bomberoVM = new BomberosViewModel
+		{
+			FechaNacimiento = bomberoData.FechaNacimiento,
+			FechaAceptacion = bomberoData.FechaAceptacion,
+			Nombre = bomberoData.Nombre,
+			Apellido = bomberoData.Apellido,
+			Estado = bomberoData.Estado,
+			NumeroLegajo = bomberoData.NumeroLegajo,
+			Grado = bomberoData.Grado,
+			Dotacion = bomberoData.Dotacion,
+			GrupoSanguineo = bomberoData.GrupoSanguineo,
+			Altura = bomberoData.Altura,
+			Peso = bomberoData.Peso,
+			Chofer = bomberoData.Chofer,
+			VencimientoRegistro = bomberoData.VencimientoRegistro,
+			Sexo = bomberoData.Sexo,
+			Direccion = bomberoData.Direccion,
+			LugarNacimiento = bomberoData.LugarNacimiento,
+			Documento = bomberoData.Documento,
+			Observaciones = bomberoData.Observaciones,
+			Profesion = bomberoData.Profesion,
+			NivelEstudios = bomberoData.NivelEstudios,
+			NumeroIoma = bomberoData.NumeroIoma
+		};
 
-        await BomberoService.EditarBombero(bombero);
-        await OnClose.InvokeAsync();
-        await OnInitializedAsync();
-        StateHasChanged();
-    }
-    private void OnFinishFailed(EditContext editContext)
-    {
-        Console.WriteLine($"Failed:{JsonSerializer.Serialize(bomberoVM)}");
-    }
+		var contacto = await Context.Contactos.Where(c => c.PersonalId == BomberoId).SingleOrDefaultAsync();
+		if (contacto != null)
+		{
+			contactoVM = new ContactoViewModel
+			{
+				TelefonoCel = contacto.TelefonoCel,
+				TelefonoFijo = contacto.TelefonoFijo,
+				TelefonoLaboral = contacto.TelefonoLaboral,
+				Email = contacto.Email
+			};
+		}
 
-    // Loading
-    bool loading = false;
-    void toggle(bool value) => loading = value;
+		if (bomberoData.Imagen != null && !string.IsNullOrEmpty(bomberoData.Imagen.Base64Imagen))
+		{
+			imageUrl = $"data:{bomberoData.Imagen.TipoImagen};base64,{bomberoData.Imagen.Base64Imagen}";
+			imagenVM = new ImagenViewModel
+			{
+				Base64 = bomberoData.Imagen.Base64Imagen,
+				TipoImagen = bomberoData.Imagen.TipoImagen,
+				Nombre = bomberoData.Imagen.NombreImagen
+			};
+		}
+	}
 
-    // View Models
-    public class BomberosViewModel
-    {
-        public DateTime? FechaNacimiento { get; set; }
-        public DateTime? FechaAceptacion { get; set; }
-        [Required, StringLength(255)]
-        public string Nombre { get; set; }
-        [Required, StringLength(255)]
-        public string Apellido { get; set; }
-        public EstadoBombero Estado { get; set; }
-        [Required]
-        public int NumeroLegajo { get; set; }
-        public EscalafonJerarquico Grado { get; set; }
-        public TipoDotaciones Dotacion { get; set; }
-        public TipoGrupoSanguineo GrupoSanguineo { get; set; }
-        public int? Altura { get; set; }
-        public int? Peso { get; set; }
-        public bool Chofer { get; set; }
-        public DateTime? VencimientoRegistro { get; set; }
-        public TipoSexo Sexo { get; set; }
-        public string? Direccion { get; set; }
-        public string? LugarNacimiento { get; set; }
-        [Required]
-        public int Documento { get; set; }
-        public string? Observaciones { get; set; }
-        public string? Profesion { get; set; }
-        public string? NivelEstudios { get; set; }
-        public string? NumeroIoma { get; set; }
-        //Contacto
-        public string? TelefonoCel { get; set; }
-        public string? TelefonoLaboral { get; set; }
-        public string? TelefonoFijo { get; set; }
-        public string? Email { get; set; }
-    }
-    public class BrigadaViewModel()
-    {
-        public int BrigadaId { get; set; }
-        public string? Nombre { get; set; }
-    }
-    public class ContactoViewModel()
-    {
-        public string? TelefonoCel { get; set; }
-        public string? TelefonoLaboral { get; set; }
-        public string? TelefonoFijo { get; set; }
-        public string? Email { get; set; }
-    }
-    public class ImagenViewModel
-    {
-        public string? Base64 { get; set; }
-        public string? TipoImagen { get; set; }
-        public string? Nombre { get; set; }
-    }
+	private async void SubirFoto(InputFileChangeEventArgs e)
+	{
+		string imagenBase64 = await Base64Helper.StreamToBase64(e.File.OpenReadStream());
+		imagenVM.Base64 = imagenBase64;
+		imagenVM.TipoImagen = e.File.ContentType;
+		imagenVM.Nombre = e.File.Name;
+		imageUrl = $"data:{imagenVM.TipoImagen};base64,{imagenVM.Base64}";
+		StateHasChanged();
+		await message.SuccessAsync("Foto subida correctamente.");
+	}
 
-    // Init
-    protected override async Task OnInitializedAsync()
-    {
-        Context = DbFactory.CreateDbContext();
-        bomberoData = await Context.Bomberos.Where(b => b.PersonaId == BomberoId).SingleOrDefaultAsync();
-        brigadas = await Context.Brigadas.ToArrayAsync();
+	private async Task RemovePhoto()
+	{
+		imageUrl = null;
+		imagenVM = new ImagenViewModel();
+		await Task.CompletedTask;
+	}
 
-        await CargarBomberoVM();
+	private async void EditarBombero()
+	{
+		try
+		{
+			if (bomberoVM.NumeroLegajo == 0)
+			{
+				await message.WarningAsync("El número de legajo no puede ser cero.");
+				return;
+			}
 
-        StateHasChanged();
-    }
+			var bombero = await Context.Bomberos
+				.Where(b => b.PersonaId == BomberoId)
+				.Include(b => b.Contacto)
+				.Include(b => b.Imagen)
+				.SingleOrDefaultAsync();
+
+			if (bombero == null)
+			{
+				await message.ErrorAsync("No se encontró el bombero.");
+				return;
+			}
+
+			bombero.Nombre = bomberoVM.Nombre;
+			bombero.Apellido = bomberoVM.Apellido;
+			bombero.Documento = bomberoVM.Documento;
+			bombero.NumeroLegajo = bomberoVM.NumeroLegajo;
+			bombero.NumeroIoma = bomberoVM.NumeroIoma;
+			bombero.LugarNacimiento = bomberoVM.LugarNacimiento;
+			bombero.Grado = bomberoVM.Grado;
+			bombero.Dotacion = bomberoVM.Dotacion;
+			bombero.GrupoSanguineo = bomberoVM.GrupoSanguineo;
+			bombero.Altura = bomberoVM.Altura;
+			bombero.Peso = bomberoVM.Peso;
+			bombero.Estado = bomberoVM.Estado;
+			bombero.Chofer = bomberoVM.Chofer;
+			bombero.VencimientoRegistro = bomberoVM.VencimientoRegistro;
+			bombero.Direccion = bomberoVM.Direccion;
+			bombero.Observaciones = bomberoVM.Observaciones;
+			bombero.Profesion = bomberoVM.Profesion;
+			bombero.NivelEstudios = bomberoVM.NivelEstudios;
+			bombero.FechaAceptacion = bomberoVM.FechaAceptacion;
+			bombero.FechaNacimiento = bomberoVM.FechaNacimiento;
+			bombero.Sexo = bomberoVM.Sexo;
+
+			bombero.Contacto = new Contacto
+			{
+				TelefonoCel = contactoVM.TelefonoCel,
+				TelefonoFijo = contactoVM.TelefonoFijo,
+				TelefonoLaboral = contactoVM.TelefonoLaboral,
+				Email = contactoVM.Email
+			};
+
+			 if (string.IsNullOrEmpty(imageUrl) && (bombero.Imagen != null) && string.IsNullOrEmpty(imagenVM.Base64))
+			{
+				bombero.Imagen = null;
+			}
+
+			await BomberoService.EditarBombero(bombero);
+			await message.SuccessAsync("Bombero actualizado.");
+			await OnClose.InvokeAsync();
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine($"Error editar: {ex.Message}");
+			await message.ErrorAsync("Ocurrió un error al editar el bombero.");
+		}
+	}
+
+	private void OnFinish(EditContext editContext)
+	{
+		Console.WriteLine($"Success:{JsonSerializer.Serialize(bomberoVM)}");
+	}
+
+	private void OnFinishFailed(EditContext editContext)
+	{
+		Console.WriteLine($"Failed:{JsonSerializer.Serialize(bomberoVM)}");
+	}
+
+	public Task Cancelar()
+	{
+		if (OnClose.HasDelegate)
+			OnClose.InvokeAsync();
+		else
+			navigationManager.NavigateTo("/bomberos", true);
+
+		return Task.CompletedTask;
+	}
+
+	public async Task CancelarAsync()
+	{
+		if (OnClose.HasDelegate)
+			await OnClose.InvokeAsync();
+		else
+			navigationManager.NavigateTo("/bomberos", true);
+	}
+
+	protected override async Task OnInitializedAsync()
+	{
+		Context = DbFactory.CreateDbContext();
+		bomberoData = await Context.Bomberos
+			.Where(b => b.PersonaId == BomberoId)
+			.Include(b => b.Imagen)
+			.SingleOrDefaultAsync();
+
+		brigadas = await Context.Brigadas.ToArrayAsync();
+
+		await CargarBomberoVM();
+
+		StateHasChanged();
+	}
+
+	public class BomberosViewModel
+	{
+		public DateTime? FechaNacimiento { get; set; }
+		public DateTime? FechaAceptacion { get; set; }
+		[Required, StringLength(255)]
+		public string Nombre { get; set; }
+		[Required, StringLength(255)]
+		public string Apellido { get; set; }
+		public EstadoBombero Estado { get; set; }
+		[Required]
+		public int NumeroLegajo { get; set; }
+		public EscalafonJerarquico Grado { get; set; }
+		public TipoDotaciones Dotacion { get; set; }
+		public TipoGrupoSanguineo GrupoSanguineo { get; set; }
+		public int? Altura { get; set; }
+		public int? Peso { get; set; }
+		public bool Chofer { get; set; }
+		public DateTime? VencimientoRegistro { get; set; }
+		public TipoSexo Sexo { get; set; }
+		public string? Direccion { get; set; }
+		public string? LugarNacimiento { get; set; }
+		[Required]
+		public int Documento { get; set; }
+		public string? Observaciones { get; set; }
+		public string? Profesion { get; set; }
+		public string? NivelEstudios { get; set; }
+		public string? NumeroIoma { get; set; }
+	}
+
+	public class BrigadaViewModel
+	{
+		public int BrigadaId { get; set; }
+		public string? Nombre { get; set; }
+	}
+
+	public class ContactoViewModel
+	{
+		public string? TelefonoCel { get; set; }
+		public string? TelefonoLaboral { get; set; }
+		public string? TelefonoFijo { get; set; }
+		public string? Email { get; set; }
+	}
+
+	public class ImagenViewModel
+	{
+		public string? Base64 { get; set; }
+		public string? TipoImagen { get; set; }
+		public string? Nombre { get; set; }
+	}
 }

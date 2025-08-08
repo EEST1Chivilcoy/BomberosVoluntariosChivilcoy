@@ -23,5 +23,21 @@ namespace Vista.Data.Models.Vehiculos.Flota
         public int? ImagenId { get; set; }
         public Imagen_VehiculoSalida? Imagen { get; set; }
         public List<NovedadVehiculo>? Novedades { get; set; }
+
+        /// <summary>
+        /// Tipo de combustible (por ejemplo, Diesel). Con un maximo de 255 caracteres.
+        /// </summary>
+        [StringLength(255)]
+        public string? Combustible { get; set; }
+
+        /// <summary>
+        /// Fecha de realizacion del ultimo service al vehiculo.
+        /// </summary>
+        public DateTime? FechaUltimoService { get; set; }
+
+        /// <summary>
+        /// Fecha en la que se realizara un service al vehiculo
+        /// </summary>
+        public DateTime? FechaProximoService { get; set; }
     }
 }
