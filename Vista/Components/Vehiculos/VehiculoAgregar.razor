@@ -1,152 +1,238 @@
-﻿@using Vista.Services
+﻿﻿@using Vista.Services
 @using System.Reflection
 @using Vista.Data.Models.Personas.Personal
 @using Vista.Data.Models.Personas.Personal.Componentes
 @using Vista.Data.Models.Vehiculos.Flota
-
 @inject IVehiculoService VehiculoService
 @inject IDbContextFactory<BomberosDbContext> DbFactory
 @inject IMessageService message
 @inject IJSRuntime jsRuntime
 
 <style>
-    /* Variables CSS para consistencia */
     :root {
-        --primary-color: #732D2D;
-        --primary-hover: #8B3737;
-        --secondary-color: #1890ff;
-        --secondary-hover: #40a9ff;
-        --border-radius: 8px;
+        --primary-color: #641e1e;
+        --primary-hover: #C03F3F; 
+        --secondary-color: #2D8BCE; 
+        --secondary-hover: #4FB0EE; 
+        --background-light: #f5f7fa; 
+        --background-darker: #ebf0f5; 
+        --text-color-dark: #333; 
+        --text-color-medium: #555; 
+        --text-color-light: #888; 
+        --border-color: #e0e0e0; 
+        --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.05);
+        --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.1);
+        --border-radius-base: 12px; 
+        --spacing-xs: 4px;
         --spacing-sm: 8px;
-        --spacing-md: 16px;
-        --spacing-lg: 24px;
+        --spacing-md: 12px; 
+        --spacing-lg: 16px; 
+        --spacing-xl: 20px;
     }
 
     .modal-content-container {
-        padding: var(--spacing-md);
+        padding: var(--spacing-md); 
+        background-color: var(--background-light); 
+        border-radius: var(--border-radius-base);
+        box-shadow: var(--shadow-medium); 
+    }
+
+    .ant-steps {
+        margin-bottom: var(--spacing-lg); 
+        padding: var(--spacing-sm); 
+        background-color: #fff; 
+        border-radius: var(--border-radius-base);
+        box-shadow: var(--shadow-light); 
     }
 
     .steps-content {
-        border: none !important;
-        margin-bottom: var(--spacing-lg);
-        min-height: 400px;
+        border: none !important; 
+        margin-bottom: var(--spacing-lg); 
+        min-height: 350px; 
+        padding: var(--spacing-lg); 
+        background-color: #fff; 
+        border-radius: var(--border-radius-base);
+        box-shadow: var(--shadow-light); 
     }
 
     .form-section {
         display: grid;
-        gap: var(--spacing-md);
-        padding: var(--spacing-md) 0;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+        gap: var(--spacing-lg); 
+        padding: var(--spacing-sm) 0; 
     }
 
-    .inpt-container {
-        margin-bottom: var(--spacing-md);
+    .ant-form-item-label > label {
+        font-weight: 600; 
+        color: var(--text-color-dark);
+        margin-bottom: var(--spacing-xs); 
+    }
+    
+    .ant-input-number, .ant-select, .ant-input {
+        width: 100% !important;
+        border-radius: var(--border-radius-base); 
     }
 
-    /* Estilos mejorados para el upload */
-    /* Estilos mejorados para el contenedor de carga */
     .upload-container {
-        border: 2px dashed var(--primary-color, #d9d9d9);
-        border-radius: var(--border-radius, 8px);
-        background-color: #f9f9f9;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 120px; 
+        border: 2px dashed var(--border-color); 
+        border-radius: calc(var(--border-radius-base) * 1.5); 
+        background-color: var(--background-darker); 
         text-align: center;
-        padding: 16px;
-        transition: border-color 0.3s, background-color 0.3s;
+        padding: var(--spacing-sm); 
+        transition: border-color 0.3s ease, background-color 0.3s ease;
         cursor: pointer;
-        max-width: 300px;
-        margin: 0 auto;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05); 
+        position: relative; 
+        overflow: hidden; 
     }
 
         .upload-container:hover {
-            border-color: var(--secondary-color, #1890ff);
-            background-color: #f0f8ff;
+            border-color: var(--secondary-color);
+            background-color: #e0f0fb; 
         }
 
     .lblInputFile {
         font-size: 14px;
-        font-weight: 500;
-        color: var(--text-color, #333);
-        padding: 8px 16px;
-        border: 1px solid var(--primary-color, #d9d9d9);
-        border-radius: var(--border-radius, 8px);
-        background-color: #ffffff;
+        font-weight: 600;
+        color: var(--secondary-color);
+        background-color: transparent;
         display: inline-flex;
         align-items: center;
-        gap: 8px;
-        transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        gap: var(--spacing-xs); 
+        transition: color 0.3s ease;
+        cursor: pointer;
+        z-index: 1; 
     }
 
         .lblInputFile:hover {
-            background-color: var(--secondary-color-light, #e6f7ff);
-            color: var(--secondary-color, #1890ff);
-            border-color: var(--secondary-color, #1890ff);
+            color: var(--secondary-hover);
         }
 
         .lblInputFile Icon {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
+            font-size: 20px; 
+            color: var(--secondary-color);
         }
 
     #path {
-        display: inline-block;
-        font-size: 12px;
-        color: #666;
-        margin-top: 8px;
+        display: block;
+        font-size: 12px; 
+        color: var(--text-color-medium);
+        margin-top: var(--spacing-xs); 
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        max-width: 180px;
+        max-width: 90%;
+        z-index: 1;
     }
 
-    /* Estilos para los botones */
+    .image-preview {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover; 
+        border-radius: calc(var(--border-radius-base) * 1.5); 
+        opacity: 0.7; 
+        transition: opacity 0.3s ease;
+    }
+
+    .image-preview-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5); 
+        border-radius: calc(var(--border-radius-base) * 1.5); 
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 2;
+        color: white;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .upload-container:hover .image-preview-overlay {
+        opacity: 1;
+    }
+
     .steps-action {
         display: flex;
         justify-content: flex-end;
-        gap: var(--spacing-md);
+        gap: var(--spacing-sm);
         margin-top: var(--spacing-lg);
+    }
+
+    .ant-btn.boton_p,
+    .ant-btn.boton_guardar {
+        height: 40px;
+        line-height: 40px;
+        display: inline-block;
+        vertical-align: middle;
+        padding: 0 20px; 
+        border-radius: var(--border-radius-base); 
+        font-weight: 600; 
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); 
     }
 
     .ant-btn.boton_p {
         background-color: var(--primary-color);
         color: white;
         border: none;
-        padding: 8px 24px;
-        border-radius: var(--border-radius);
-        transition: background-color 0.3s;
     }
 
         .ant-btn.boton_p:hover {
             background-color: var(--primary-hover);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
         }
 
     .ant-btn.boton_guardar {
         background-color: var(--secondary-color);
         color: white;
         border: none;
-        padding: 8px 24px;
-        border-radius: var(--border-radius);
-        transition: background-color 0.3s;
     }
 
         .ant-btn.boton_guardar:hover {
             background-color: var(--secondary-hover);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
         }
 
-    /* Estilos responsivos */
     @@media (max-width: 768px) {
         .modal-content-container {
             padding: var(--spacing-sm);
         }
 
+        .steps-content {
+            padding: var(--spacing-sm); 
+            min-height: auto; 
+        }
+
+        .form-section {
+            grid-template-columns: 1fr; 
+            gap: var(--spacing-md);
+            padding: var(--spacing-xs) 0; 
+        }
+
         .steps-action {
             flex-direction: column;
             align-items: stretch;
+            gap: var(--spacing-xs); 
+            margin-top: var(--spacing-md); 
         }
 
         .ant-btn {
             width: 100%;
-            margin-bottom: var(--spacing-sm);
+            margin-bottom: var(--spacing-xs); 
         }
     }
 </style>
@@ -177,8 +263,8 @@
                     </div>
 
                     <div class="inpt-container">
-                        <AntDesign.InputNumber Size="InputSize.Large" Placeholder="Año" @bind-Value="@vehiculoView.Año"
-                                               Min="1900" Max="@DateTime.Now.Year"></AntDesign.InputNumber>
+                        <Input Size="InputSize.Large" Placeholder="Año" @bind-Value="@vehiculoView.Año"Min="1900" Max="@DateTime.Now.Year"
+                                AllowClear />
                     </div>
 
                     <div class="inpt-container">
@@ -193,7 +279,7 @@
 
                     <div class="upload-container">
                         <label class="lblInputFile" for="fotoMovil">
-                            <Icon Type="cloud-upload" Theme="IconThemeType.Outline" Style="width: 16px; height: 16px;" />
+                            <Icon Type="cloud-upload" Theme="IconThemeType.Outline" Style="width: 20px; height: 20px;" /> 
                             Cargar foto del móvil
                         </label>
                         <InputFile OnChange="SubirFoto" id="fotoMovil" accept=".jpg,.jpeg,.png" style="display: none;" />
@@ -219,6 +305,7 @@
                             </SpaceItem>
                         </Space>
                     </div>
+                    
 
                     @if (EsMovil)
                     {

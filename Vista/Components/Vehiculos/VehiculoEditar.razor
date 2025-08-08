@@ -9,102 +9,7 @@
 @inject IDbContextFactory<BomberosDbContext> DbFactory
 @inject IMessageService message
 
-<style>
-    .steps-content {
-    border: none !important;
-    }
-
-    .inpt-container {
-    position: relative;
-    padding: .8em 0;
-    }
-
-    input[type=text], input[type=number] {
-    border: none;
-    background: none;
-    border-bottom: 1px solid #bdb8b8;
-    outline: none;
-    padding: 1em;
-    width: 100%;
-    height: .6em;
-    }
-
-    .inpt-label {
-    position: absolute;
-    top: 0;
-    left: 5px;
-    transform: translateY(10px);
-    color: #bdb8b8;
-    transition: transform .5s, color .3s;
-    }
-
-    input[type=text]:focus, input[type=number]:focus, input[type=file]:focus, input[type=date]:focus {
-    border-bottom: 1px solid rgb(62, 24, 24);
-    transition: 1s;
-    }
-
-    input[type = text]:focus + .inpt-label, input[type = text]:not(:placeholder-shown) + .inpt-label {
-    transform: translateY(-4px) scale(.9);
-    transform-origin: left top;
-    color: rgb(62, 24, 24);
-    }
-
-    .select-estadoMovil {
-    padding: .8em 0;
-    width: 100%;
-    border: 1px solid #bdb8b8;
-    outline: none;
-    box-shadow: none;
-    }
-
-    .select-estadoMovil option {
-    border: 1px solid #bdb8b8;
-    }
-
-    .ant-carousel .slick-dots li {
-    display: none !important;
-    }
-
-    .lblInputFile {
-    border: 1px solid #403F3F;
-    color: #403F3F;
-    padding: .5em .8em;
-    border-radius: 50px;
-    background: #eee;
-    cursor: pointer;
-    font-family: unset;
-    font-size: 14px;
-    width: 60%;
-    transform: translate(50% -50%);
-    text-align: center;
-    }
-
-    .raro {
-    padding: 6em 0;
-    }
-
-    .boton_p{
-    background-color: #732D2D;
-    color: white;
-    border-radius: 4px 4px;
-    }
-    .boton_guardar{
-    background-color: #1890ff;
-    color: white;
-    border-radius: 4px 4px;
-    }
-
-    .ant-btn:hover, .ant-btn:focus, .ant-btn:active {
-    text-decoration: none;
-    background: #40a9ff;
-    }
-
-    .ant-btn:hover, .ant-btn:focus {
-    color: white;
-    border-color: #40a9ff;
-    background: #40a9ff;
-    }
-</style>
+<link rel="stylesheet" href="css/EditarMovilEstilos.css">
 
 <div style="width: 100%;">
     <Steps Current="current">
@@ -117,7 +22,7 @@
         <div style="width: 100%;height: 100%; background: #fff;">
             @if (current == 0)
             {
-                <div style="height: 22em;width: 100%;padding: 10px;">
+                <div class="form-column">
                     <div class="inpt-container">
                         <input type="text" @bind="vehiculoView.Marca" placeholder="Marca: " />
                     </div>
@@ -133,21 +38,29 @@
                     <div class="inpt-container">
                         <input type="text" @bind="vehiculoView.Tipo" placeholder="Tipo: " />
                     </div>
+                  
+                    <div class="inpt-container upload-container">
                     <div class="inpt-container">
                         <label class="lblInputFile" for="fotoMovil"><Icon Type="cloud-upload" Theme="IconThemeType.Outline" Style="height: 14px;width: 14px;" />Cargar foto del móvil</label>
-                        <InputFile OnChange="SubirFoto" id="fotoMovil" accept=".jpg,.jpeg,.png" style="display: none;" />
+                        <InputFile OnChange="SubirFoto" id="fotoMovil" style="display: none;" />
                         <h3 id="path" style="display: inline-block;font-size:12px;">@imagenView.Nombre @* <Icon Type="eye" Theme="IconThemeType.Outline" /> *@</h3>
                     </div>
+        
                 </div>
             }
             else if (current == 1)
             {
-                <div style="height: 30em;width: 100%;padding: 10px;">
+                <div class="form-column"> 
                     <div class="inpt-container">
                         <input type="text" @bind="vehiculoView.NumeroMovil" placeholder="Nº del Móvil:" />
                     </div>
-                    <div class="inpt-container">
-                        Es un movil: <Switch @bind-Checked="@EsMovil" Value="@EsMovil" />
+                    <div class="inpt-container"> 
+                        <Space Style="width: 100%; justify-content: flex-start; align-items: center;"> 
+                            <SpaceItem>Es un móvil:</SpaceItem> 
+                            <SpaceItem>
+                                <Switch @bind-Checked="@EsMovil" Value="@EsMovil" />
+                            </SpaceItem>
+                        </Space>
                     </div>
                     @if (EsMovil == true)
                     {
@@ -172,16 +85,16 @@
                     </div>
                     <div class="inpt-container">
                         <Select TItem="BomberoViewModel"
-                        TItemValue="int"
-                        DataSource="@ListaBomberos"
-                        Placeholder="Seleccione Bombero Encargado"
-                        @bind-Value="@vehiculoView.EncargadoId"
-                        LabelName="@nameof(BomberoViewModel.NombreYApellido)"
-                        ValueName="@nameof(BomberoViewModel.PersonaId)"
-                        DefaultValue="@vehiculoView.EncargadoId">
+                                TItemValue="int"
+                                DataSource="@ListaBomberos"
+                                Placeholder="Seleccione Bombero Encargado"
+                                @bind-Value="@vehiculoView.EncargadoId"
+                                LabelName="@nameof(BomberoViewModel.NombreYApellido)"
+                                ValueName="@nameof(BomberoViewModel.PersonaId)"
+                                DefaultValue="@vehiculoView.EncargadoId">
                         </Select>
                     </div>
-
+                    
 
                 </div>
             }
@@ -206,21 +119,7 @@
     </div>
 </div>
 
-<style>
-    .steps-content {
-    margin-top: 16px;
-    border: 1px dashed #e9e9e9;
-    border-radius: 6px;
-    background-color: #fafafa;
-    min-height: 200px;
-    text-align: center;
-    padding-top: 80px;
-    }
 
-    .steps-action {
-    margin-top: 24px;
-    }
-</style>
 @code {
     [Parameter] public int VehiculoId { get; set; }
     [Parameter] public EventCallback OnClose { get; set; }
@@ -335,7 +234,6 @@
                         },
                         NumeroMovil = vehiculoView.NumeroMovil,
                         Estado = vehiculoView.Estado,
-                        Discriminador = Data.Enums.Discriminadores.TipoVehiculo.Embarcacion,
                     };
                 if (EsMovil == true)
                 {
@@ -343,7 +241,6 @@
                     movil.NumeroMotor = movilView.NumeroMotor;
                     movil.NumeroChasis = movilView.NumeroChasis;
                     movil.ModeloBomba = movilView.ModeloBomba;
-                    movil.Discriminador = Data.Enums.Discriminadores.TipoVehiculo.Movil;
                     await VehiculoService.EditarVehiculo(movil);
                 }
                 else
@@ -371,16 +268,6 @@
     private async void SubirFoto(InputFileChangeEventArgs e)
     {
         if (e == null) return;
-        var archivo = e.File;
-
-        string[] allowedExtensions = { ".jpg", ".jpeg", ".png" };
-        string extension = Path.GetExtension(archivo.Name).ToLower();
-        if (!allowedExtensions.Contains(extension))
-        {
-            await message.ErrorAsync("Solo se permiten archivos JPG, JPEG o PNG");
-            return;
-        }
-
         string imagenBase64 = await Base64Helper.StreamToBase64(e.File.OpenReadStream());
 
         imagenView.Base64 = imagenBase64;

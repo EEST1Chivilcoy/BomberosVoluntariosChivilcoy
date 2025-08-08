@@ -4,7 +4,7 @@
 @using Vista.Data.Models.Personas.Personal
 @using Vista.Data.Models.Personas.Personal.Componentes
 @using Vista.Data.Models.Vehiculos.Flota
-@using AntDesign
+@using AntDesign;
 
 <link rel="stylesheet" href="/css/DetallesVehiculosEstilos.css" />
 
@@ -14,35 +14,99 @@
         <div class="image-container-completo">
             <img id="ImagenMovil" class="vehiculo-image-completo" src="@CargarImage()" alt="Imagen de la Unidad" />
         </div>
-        
+
         <div class="info-completo-container">
-            <h3>Detalles del Vehículo</h3>
-            <Table TItem="VehiculoView" DataSource="@(new[] { vehiculoView })" Responsive>
-                <PropertyColumn Property="c => c.NumeroMovil" Title="N° Móvil"></PropertyColumn>
-                <PropertyColumn Property="c => c.Marca" Title="Marca"></PropertyColumn>
-                <PropertyColumn Property="c => c.Modelo" Title="Modelo"></PropertyColumn>
-                <PropertyColumn Property="c => c.Año" Title="Año"></PropertyColumn>
-                <PropertyColumn Property="c => c.Patente" Title="Patente"></PropertyColumn>
-                <PropertyColumn Property="c => c.Tipo" Title="Tipo"></PropertyColumn>
-                <PropertyColumn Property="c => c.Encargado" Title="Encargado"></PropertyColumn>
-                <PropertyColumn Property="c => c.Estado" Title="Estado"></PropertyColumn>
-            </Table>
-            @if (vehiculo is Movil) 
+            <h3 class="section-title">Detalles del Vehículo:</h3>
+
+            <Row Gutter="@((32, 24))" Class="detail-grid">
+                <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
+                    <div class="detail-item">
+                        <span class="detail-label">Tipo:</span>
+                        <span class="detail-value">@vehiculoView.Tipo</span>
+                    </div>
+                </AntDesign.Col>
+                <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
+                    <div class="detail-item">
+                        <span class="detail-label">Encargado:</span>
+                        <span class="detail-value">@vehiculoView.Encargado</span>
+                    </div>
+                </AntDesign.Col>
+                <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
+                    <div class="detail-item">
+                        <span class="detail-label">Marca:</span>
+                        <span class="detail-value">@vehiculoView.Marca</span>
+                    </div>
+                </AntDesign.Col>
+                <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
+                    <div class="detail-item">
+                        <span class="detail-label">Modelo:</span>
+                        <span class="detail-value">@vehiculoView.Modelo</span>
+                    </div>
+                </AntDesign.Col>
+                <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
+                    <div class="detail-item">
+                        <span class="detail-label">Patente:</span>
+                        <span class="detail-value">@vehiculoView.Patente</span>
+                    </div>
+                </AntDesign.Col>
+                <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
+                    <div class="detail-item">
+                        <span class="detail-label">Año:</span>
+                        <span class="detail-value">@vehiculoView.Año</span>
+                    </div>
+                </AntDesign.Col>
+                <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
+                    <div class="detail-item">
+                        <span class="detail-label">N° Móvil:</span>
+                        <span class="detail-value">@vehiculoView.NumeroMovil</span>
+                    </div>
+                </AntDesign.Col>
+                <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
+                    <div class="detail-item">
+                        <span class="detail-label">Estado:</span>
+                        <span class="detail-value">@vehiculoView.Estado</span>
+                    </div>
+                </AntDesign.Col>
+            </Row>
+
+            @if (vehiculo is Movil)
             {
-                <h4 class="mt-4">Datos Técnicos</h4>
-                <Table TItem="VehiculoView" DataSource="@(new[] { vehiculoView })" Responsive>
-                    <PropertyColumn Property="c => c.NumeroMotor" Title="N° Motor"></PropertyColumn>
-                    <PropertyColumn Property="c => c.NumeroChasis" Title="N° Chasis"></PropertyColumn>
-                    <PropertyColumn Property="c => c.ModeloBomba" Title="Bomba"></PropertyColumn>
-                    <PropertyColumn Property="c => c.CantidadLitros" Title="Litros"></PropertyColumn>
-                </Table>
+                <div class="technical-details-section">
+                    <h4 class="section-title">Datos Técnicos:</h4>
+                    <Row Gutter="@((32, 24))" Class="detail-grid">
+                        <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
+                            <div class="detail-item">
+                                <span class="detail-label">N° Motor:</span>
+                                <span class="detail-value">@vehiculoView.NumeroMotor</span>
+                            </div>
+                        </AntDesign.Col>
+                        <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
+                            <div class="detail-item">
+                                <span class="detail-label">N° Chasis:</span>
+                                <span class="detail-value">@vehiculoView.NumeroChasis</span>
+                            </div>
+                        </AntDesign.Col>
+                        <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
+                            <div class="detail-item">
+                                <span class="detail-label">Modelo Bomba:</span>
+                                <span class="detail-value">@vehiculoView.ModeloBomba</span>
+                            </div>
+                        </AntDesign.Col>
+                        <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
+                            <div class="detail-item">
+                                <span class="detail-label">Cantidad de Litros:</span>
+                                <span class="detail-value">@vehiculoView.CantidadLitros</span>
+                            </div>
+                        </AntDesign.Col>
+                    </Row>
+                </div>
             }
         </div>
     </div>
 }
 else
 {
-    <div class="loading-container">
+    <div style="display: flex; justify-content: center; width: 100%; margin: 1em 1em;">
         <Spin Delay="500" Indicator=antIcon />
     </div>
 }
@@ -51,12 +115,12 @@ else
     RenderFragment antIcon = @<Icon Type="loading" Theme="IconThemeType.Outline" Style="font-size: 24px; text-align: center; color: rgb(62, 24, 24);" Spin />;
 
     [Parameter] public int vehiculoId { get; set; }
-
     BomberosDbContext Context;
     public VehiculoSalida vehiculo { get; set; }
     public VehiculoView vehiculoView { get; set; } = new();
-    public ImagenViewModel ImagenView { get; set; }  = new();
+    public ImagenViewModel imagenView { get; set; } = new();
 
+    // View models
     public class VehiculoView
     {
         public string? Tipo { get; set; }
@@ -67,18 +131,18 @@ else
         public string? Año { get; set; }
         public string? NumeroMovil { get; set; }
         public string? Estado { get; set; }
-        public string? NumeroMotor { get; set; } 
-        public string? NumeroChasis { get; set; } 
-        public string? ModeloBomba { get; set; } 
-        public string? CantidadLitros { get; set; } 
+        public string? NumeroMotor { get; set; }
+        public string? NumeroChasis { get; set; }
+        public string? ModeloBomba { get; set; }
+        public string? CantidadLitros { get; set; }
     }
 
-    public class ImagenViewModel
-    {
-        public string? Base64 { get; set; }
-        public string? TipoImagen { get; set; }
-        public string? Nombre { get; set; }
-    }
+    public class ImagenViewModel
+    {
+        public string? Base64 { get; set; }
+        public string? TipoImagen { get; set; }
+        public string? Nombre { get; set; }
+    }
 
     // Funciones - Carga de datos
     public async Task CargarDatos()
@@ -87,28 +151,27 @@ else
         if (vehiculo != null)
         {
             vehiculoView = new VehiculoView
-            {
-                Tipo = vehiculo.Tipo,
-                Marca = vehiculo.Marca,
-                Modelo = vehiculo.Modelo,
-                Patente = vehiculo.Patente,
-                Año = vehiculo.Año?.ToString(), 
-                NumeroMovil = vehiculo.NumeroMovil?.ToString(), 
-                Estado = vehiculo.Estado.ToString() 
-            };
+                {
+                    NumeroMovil = vehiculo.NumeroMovil,
+                    Tipo = vehiculo.Tipo,
+                    Marca = vehiculo.Marca,
+                    Modelo = vehiculo.Modelo,
+                    Patente = vehiculo.Patente,
+                    Año = vehiculo.Año.ToString(),
+                    Estado = vehiculo.Estado.ToString(),
+                };
 
             if (vehiculo.EncargadoId != null)
             {
                 Bombero? Encargado = await Context.Bomberos.SingleOrDefaultAsync(b => b.PersonaId == vehiculo.EncargadoId);
                 vehiculoView.Encargado = Encargado?.Nombre + " " + Encargado?.Apellido;
             }
-            
             if (vehiculo is Movil movil)
             {
                 vehiculoView.NumeroMotor = movil.NumeroMotor;
                 vehiculoView.NumeroChasis = movil.NumeroChasis;
                 vehiculoView.ModeloBomba = movil.ModeloBomba;
-                vehiculoView.CantidadLitros = movil.CantidadLitros?.ToString(); 
+                vehiculoView.CantidadLitros = movil.CantidadLitros?.ToString();
             }
         }
     }

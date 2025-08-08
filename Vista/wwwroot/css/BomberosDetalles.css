@@ -1,0 +1,97 @@
+/*
+ * CSS para la vista de detalles a pantalla completa.
+ * Ocupa todo el viewport para una mejor visualización de la información.
+ */
+
+.full-screen-detalles-container {
+    width: 100vw;
+    min-height: 100vh;
+    padding: 24px 32px;
+    background-color: var(--background-color, #f0f2f5);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: var(--text-color, #595959);
+}
+
+.full-screen-detalles-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-color, #d9d9d9);
+}
+
+.full-screen-detalles-header h1 {
+    margin: 0;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--heading-color, #262626);
+}
+
+.full-screen-detalles-header .back-button {
+    padding: 10px 20px;
+    border-radius: 6px;
+    background-color: var(--primary-color, #1890ff);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.full-screen-detalles-header .back-button:hover {
+    background-color: var(--primary-dark-color, #096dd9);
+}
+
+.full-screen-detalles-content {
+    display: grid;
+    gap: 24px;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+}
+
+.detalles-seccion {
+    background-color: var(--card-background, #ffffff);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    padding: 24px;
+}
+
+.detalles-seccion-titulo {
+    font-size: 22px;
+    font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 16px;
+    color: var(--heading-color, #262626);
+    border-bottom: 1px solid var(--border-color, #f0f0f0);
+    padding-bottom: 10px;
+}
+
+.detalles-info-item {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.detalles-info-label {
+    font-weight: 600;
+    color: var(--heading-color, #262626);
+    min-width: 150px;
+}
+
+.detalles-info-valor {
+    flex: 1;
+    word-break: break-word;
+    line-height: 1.6;
+}
+
+/* Ajustes para pantallas más pequeñas */
+@media (max-width: 768px) {
+    .full-screen-detalles-container {
+        padding: 16px;
+    }
+
+    .full-screen-detalles-header h1 {
+        font-size: 24px;
+    }
+}
