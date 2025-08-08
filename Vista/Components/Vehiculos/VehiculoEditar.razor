@@ -38,25 +38,23 @@
                     <div class="inpt-container">
                         <input type="text" @bind="vehiculoView.Tipo" placeholder="Tipo: " />
                     </div>
-                  
+
                     <div class="inpt-container upload-container">
-                    <div class="inpt-container">
                         <label class="lblInputFile" for="fotoMovil"><Icon Type="cloud-upload" Theme="IconThemeType.Outline" Style="height: 14px;width: 14px;" />Cargar foto del móvil</label>
                         <InputFile OnChange="SubirFoto" id="fotoMovil" style="display: none;" />
                         <h3 id="path" style="display: inline-block;font-size:12px;">@imagenView.Nombre @* <Icon Type="eye" Theme="IconThemeType.Outline" /> *@</h3>
                     </div>
-        
                 </div>
             }
             else if (current == 1)
             {
-                <div class="form-column"> 
+                <div class="form-column">
                     <div class="inpt-container">
                         <input type="text" @bind="vehiculoView.NumeroMovil" placeholder="Nº del Móvil:" />
                     </div>
-                    <div class="inpt-container"> 
-                        <Space Style="width: 100%; justify-content: flex-start; align-items: center;"> 
-                            <SpaceItem>Es un móvil:</SpaceItem> 
+                    <div class="inpt-container">
+                        <Space Style="width: 100%; justify-content: flex-start; align-items: center;">
+                            <SpaceItem>Es un móvil:</SpaceItem>
                             <SpaceItem>
                                 <Switch @bind-Checked="@EsMovil" Value="@EsMovil" />
                             </SpaceItem>
@@ -94,7 +92,7 @@
                                 DefaultValue="@vehiculoView.EncargadoId">
                         </Select>
                     </div>
-                    
+
 
                 </div>
             }
@@ -218,23 +216,23 @@
                     message.Warning("No se ingreso una foto del vehiculo");
                 }
                 Embarcacion vehiculoNew = new Embarcacion()
+                {
+                    VehiculoId = VehiculoId,
+                    Marca = vehiculoView.Marca,
+                    Modelo = vehiculoView.Modelo,
+                    Año = vehiculoView.Año,
+                    Patente = vehiculoView.Patente,
+                    Tipo = vehiculoView.Tipo,
+                    Encargado = EncargadoNew != null ? EncargadoNew : vehiculo.Encargado,
+                    Imagen = string.IsNullOrEmpty(imagenView.Base64) ? null : new()
                     {
-                        VehiculoId = VehiculoId,
-                        Marca = vehiculoView.Marca,
-                        Modelo = vehiculoView.Modelo,
-                        Año = vehiculoView.Año,
-                        Patente = vehiculoView.Patente,
-                        Tipo = vehiculoView.Tipo,
-                        Encargado = EncargadoNew != null ? EncargadoNew : vehiculo.Encargado,
-                        Imagen = string.IsNullOrEmpty(imagenView.Base64) ? null : new()
-                        {
-                            NombreImagen = imagenView.Nombre,
-                            TipoImagen = imagenView.TipoImagen,
-                            Base64Imagen = imagenView.Base64
-                        },
-                        NumeroMovil = vehiculoView.NumeroMovil,
-                        Estado = vehiculoView.Estado,
-                    };
+                        NombreImagen = imagenView.Nombre,
+                        TipoImagen = imagenView.TipoImagen,
+                        Base64Imagen = imagenView.Base64
+                    },
+                    NumeroMovil = vehiculoView.NumeroMovil,
+                    Estado = vehiculoView.Estado,
+                };
                 if (EsMovil == true)
                 {
                     Movil movil = Convertir<Movil>(vehiculoNew);
@@ -286,10 +284,10 @@
         foreach (Bombero b in bomberos)
         {
             BomberoViewModel Bvm = new()
-                {
-                    Apellido = b.Apellido,
-                    Nombre = b.Nombre
-                };
+            {
+                Apellido = b.Apellido,
+                Nombre = b.Nombre
+            };
             ListaBomberos.Add(Bvm);
         }
     }
