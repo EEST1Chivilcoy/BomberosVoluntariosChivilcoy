@@ -9,94 +9,157 @@
 @using Vista.Data.Models.Personas.Personal
 @using Vista.Data.Models.Personas.Personal.Componentes
 @using Vista.Data.Models.Imagenes
+@using AntDesign;
 
-<style>
-    /* Contenedor del contenido del modal */
-    .ant-modal-content {
-        position: relative;
-        background-color: #fff;
-        background-clip: padding-box;
-        border: 0;
-        border-radius: 2px;
-        box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
-        pointer-events: auto;
-        border: 1px solid red !important; /* ¡Este estilo modifica el borde del modal! */
-    }
 
-    /* Etiquetas del formulario dentro del modal */
-    .ant-form-horizontal .ant-form-item-label {
-        flex-grow: 1;
-        background: #A63333;
-    }
+<link rel="stylesheet" href="/css/BomberosDetallesEstilos.css" />
 
-        .ant-form-horizontal .ant-form-item-label > label {
-            color: #FFFFFF;
-            padding: 2px 4px;
-        }
+<div class="container">
+        <div class="page-title">
+            <Icon Type="fire" Theme="IconThemeType.Fill" Class="page-title-icon" />
+            Detalles del Bombero
+        </div>
 
-    /* Ítems del formulario */
-    .ant-form-item {
-        box-sizing: border-box;
-        margin: 0;
-        margin-bottom: 8px !important;
-        padding: 0;
-        color: rgba(0, 0, 0, 0.85);
-        font-size: 14px;
-        line-height: 1.5715;
-        font-weight: bold;
-        vertical-align: top;
-    }
-</style>
+        <Form Model="@bomberoVM" LabelColSpan="8" WrapperColSpan="16">
+            <div class="card">
+                <Row Gutter="24">
+                    <AntDesign.Col Span="6">
+                        <div class="profile-photo-container">
+                            <div class="photo-preview">
+                                @if (bomberoVM.Imagen is not null)
+                                {
+                                    <Avatar Src="@CargarImage" Alt="Foto de perfil" Size="@("150px")" />
+                                }
+                                else
+                                {
+                                    <Avatar Icon="@IconType.Outline.User" Size="@("150px")" />
+                                }
+                            </div>
+                        </div>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="18">
+                        <div class="card-title">Información Personal</div>
+                        <Row Gutter="16">
+                            <AntDesign.Col Span="12">
+                                <FormItem Label="Nombre">@bomberoVM.Nombre</FormItem>
+                            </AntDesign.Col>
+                            <AntDesign.Col Span="12">
+                                <FormItem Label="Apellido">@bomberoVM.Apellido</FormItem>
+                            </AntDesign.Col>
+                        </Row>
+                        <Row Gutter="16">
+                            <AntDesign.Col Span="8">
+                                <FormItem Label="Documento">@bomberoVM.Documento</FormItem>
+                            </AntDesign.Col>
+                            <AntDesign.Col Span="8">
+                                <FormItem Label="Fecha de Nacimiento">@bomberoVM.FechaNacimiento</FormItem>
+                            </AntDesign.Col>
+                            <AntDesign.Col Span="8">
+                                <FormItem Label="Lugar de Nacimiento">@bomberoVM.LugarNacimiento</FormItem>
+                            </AntDesign.Col>
+                        </Row>
+                        <Row Gutter="16">
+                            <AntDesign.Col Span="12">
+                                <FormItem Label="Dirección">@bomberoVM.Direccion</FormItem>
+                            </AntDesign.Col>
+                            <AntDesign.Col Span="6">
+                                <FormItem Label="Sexo">@bomberoVM.Sexo</FormItem>
+                            </AntDesign.Col>
+                            <AntDesign.Col Span="6">
+                                <FormItem Label="Grupo Sanguíneo">@bomberoVM.GrupoSanguineo.GetDisplayName()</FormItem>
+                                
+                            </AntDesign.Col>
+                        </Row>
+                    </AntDesign.Col>
+                </Row>
+            </div>
 
-@* Detalles del Bombero *@
-<Form Model="@bomberoVM" LabelColSpan="8" WrapperColSpan="16">
-    <h2 class="modal-title">Detalles del Bombero</h2>
-    <div class="info-section">
-        <FormItem Label="Nombre">@bomberoVM.Nombre</FormItem>
-        <FormItem Label="Apellido">@bomberoVM.Apellido</FormItem>
-        <FormItem Label="Dirección">@bomberoVM.Direccion</FormItem>
-        <FormItem Label="Fecha De Nacimiento">@bomberoVM.FechaNacimiento</FormItem>
-        <FormItem Label="Numero De Legajo">@bomberoVM.NumeroLegajo</FormItem>
-        <FormItem Label="Grado">@bomberoVM.Grado</FormItem>
-        <FormItem Label="Dotación">@bomberoVM.Dotacion</FormItem>
-        <FormItem Label="Chofer">
-            @if (bomberoVM.Chofer)
-            {
-                <span>Es Chofer</span>
-                <br />
-                <span>Vencimiento Registro: @bomberoVM.VencimientoRegistro</span>
-            }
-            else
-            {
-                <span>No es Chofer</span>
-            }
-        </FormItem>
-        <FormItem Label="Sexo">@bomberoVM.Sexo</FormItem>
-        <FormItem Label="Lugar de Nacimiento">@bomberoVM.LugarNacimiento</FormItem>
-        <FormItem Label="Documento">@bomberoVM.Documento</FormItem>
-        <FormItem Label="Grupo Sanguíneo">@bomberoVM.GrupoSanguineo.GetDisplayName()</FormItem>
-        <FormItem Label="Altura">@bomberoVM.Altura cm</FormItem>
-        <FormItem Label="Peso">@bomberoVM.Peso kg</FormItem>
-        <FormItem Label="Profesión">@bomberoVM.Profesion</FormItem>
-        <FormItem Label="Observaciones">@bomberoVM.Observaciones</FormItem>
-        <FormItem Label="Nivel de Estudios">@bomberoVM.NivelEstudios</FormItem>
-        <FormItem Label="Número de Ioma">@bomberoVM.NumeroIoma</FormItem>
+            <div class="card">
+                <div class="card-title">Información Profesional</div>
+                <Row Gutter="16">
+                    <AntDesign.Col Span="6">
+                        <FormItem Label="Número de Legajo">@bomberoVM.NumeroLegajo</FormItem>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="6">
+                        <FormItem Label="Grado">@bomberoVM.Grado</FormItem>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="6">
+                        <FormItem Label="Dotación">@bomberoVM.Dotacion</FormItem>
+                    </AntDesign.Col>
+                </Row>
+                <Row>
+                    <AntDesign.Col Span="12">
+                        <FormItem Label="Chofer">
+                            @if (bomberoVM.Chofer)
+                            {
+                                <div class="chofer-info">
+                                    <p>Es Chofer</p>
+                                    <p>Vencimiento Registro: @bomberoVM.VencimientoRegistro</p>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="chofer-info">
+                                    <p>No es Chofer</p>
+                                </div>
+                            }
+                        </FormItem>
+                    </AntDesign.Col>
+                </Row>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">Información Adicional</div>
+                <Row Gutter="16">
+                    <AntDesign.Col Span="6">
+                        <FormItem Label="Altura">@bomberoVM.Altura cm</FormItem>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="6">
+                        <FormItem Label="Peso">@bomberoVM.Peso kg</FormItem>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="6">
+                        <FormItem Label="Profesión">@bomberoVM.Profesion</FormItem>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="6">
+                        <FormItem Label="Nivel de Estudios">@bomberoVM.NivelEstudios</FormItem>
+                    </AntDesign.Col>
+                </Row>
+                <Row Gutter="16">
+                    <AntDesign.Col Span="12">
+                        <FormItem Label="Número de Ioma">@bomberoVM.NumeroIoma</FormItem>
+                    </AntDesign.Col>
+                </Row>
+                <FormItem Label="Observaciones">@bomberoVM.Observaciones</FormItem>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">Información de Contacto</div>
+                <Row Gutter="16">
+                    <AntDesign.Col Span="6">
+                        <FormItem Label="Teléfono Celular">@contactoVM.TelefonoCel</FormItem>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="6">
+                        <FormItem Label="Teléfono Fijo">@contactoVM.TelefonoFijo</FormItem>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="6">
+                        <FormItem Label="Teléfono Laboral">@contactoVM.TelefonoLaboral</FormItem>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="6">
+                        <FormItem Label="Email">@contactoVM.Email</FormItem>
+                    </AntDesign.Col>
+                </Row>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Información de Brigada</div>
+                <Row Gutter="16">
+                    <AntDesign.Col Span="12">
+                        <FormItem Label="Nombre de Brigada">@brigadaVM?.NombreBrigada</FormItem>
+                    </AntDesign.Col>
+                </Row>
+            </div>
+        </Form>
     </div>
-
-    <h3 class="section-title">Información de Contacto</h3>
-    <div class="info-section">
-        <FormItem Label="Teléfono Cel">@contactoVM.TelefonoCel</FormItem>
-        <FormItem Label="Teléfono Laboral">@contactoVM.TelefonoLaboral</FormItem>
-        <FormItem Label="Teléfono Fijo">@contactoVM.TelefonoFijo</FormItem>
-        <FormItem Label="Email">@contactoVM.Email</FormItem>
-    </div>
-
-    <h3 class="section-title">Información de Brigada</h3>
-    <div class="info-section">
-        <FormItem Label="Nombre de Brigada">@brigadaVM?.NombreBrigada</FormItem>
-    </div>
-</Form>
-
 @code {
     [Parameter] public int BomberoId { get; set; }
     BomberosDbContext? Context { get; set; }
