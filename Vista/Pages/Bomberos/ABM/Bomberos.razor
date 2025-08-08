@@ -1,9 +1,5 @@
-﻿@inject NavigationManager navigationManager
-@inject IDbContextFactory<BomberosDbContext> DbFactory
-@inject IMessageService message
-@page "/bomberos"
-@using Vista.Services
-@inject IBomberoService BomberoService
+﻿@page "/bomberos"
+
 @using Microsoft.AspNetCore.Components.Forms
 @using System.ComponentModel
 @using AntDesign.TableModels
@@ -11,6 +7,12 @@
 @using Vista.Data.Models.Imagenes
 @using Vista.Data.Models.Personas.Personal
 @using Vista.Data.Models.Personas.Personal.Componentes
+
+@*Servicios utilizados*@
+@using Vista.Services
+@inject IBomberoService BomberoService
+@inject IMessageService message
+@inject NavigationManager navigationManager
 
 <style>
     .abm-container {
@@ -227,13 +229,13 @@
 
 @if (EditarVisible == true)
 {
-    <Modal Footer="null" Title="Editar" OnCancel="CloseModals" Visible="@EditarVisible">
+    <Modal Footer="null" OnCancel="CloseModals" Visible="@EditarVisible" Centered="@true" DefaultMaximized="@true">
         <BomberosEditar BomberoId="@BomberoId" OnClose="CloseModals" />
     </Modal>
 }
 @if (DetallesVisible == true)
 {
-    <Modal Visible="@DetallesVisible" OnCancel="@CloseModals" Footer="@footer">
+    <Modal Visible="@DetallesVisible" OnCancel="@CloseModals" Footer="@footer" Centered="@true" DefaultMaximized="@true">
         <BomberosDetalles BomberoId="@BomberoId" />
     </Modal>
 }
@@ -257,8 +259,7 @@
 
     private async Task CambiarEstado(int BomberoId, EstadoBombero estado)
     {
-        using var db = await DbFactory.CreateDbContextAsync();
-        Bombero bombero = await db.Bomberos.Where(b => b.PersonaId == BomberoId).SingleOrDefaultAsync();
+        var bombero = await BomberoService.ObtenerBomberoPorIdAsync(BomberoId);
         bombero.Estado = estado;
         await BomberoService.CambiarEstado(bombero);
         await RefreshData();
@@ -269,11 +270,13 @@
         BomberoId = ID;
         EditarVisible = true;
     }
+
     private void DetalleBombero(int ID)
     {
         BomberoId = ID;
         DetallesVisible = true;
     }
+
     private async void CloseModals()
     {
         DetallesVisible = false;
@@ -284,9 +287,8 @@
     // Init, OnChange y Carga de datos
     protected override async Task OnInitializedAsync()
     {
-        using var db = await DbFactory.CreateDbContextAsync();
+        SinFiltrar = await BomberoService.ObtenerTodosLosBomberosAsync();
 
-        SinFiltrar = await db.Bomberos.Include(b => b.Imagen).ToListAsync();
         search(searchString, Estado);
 
         EscalafonJerarquicoFilter = new TableFilter<EscalafonJerarquico>[Enum.GetValues(typeof(EscalafonJerarquico)).Length];
@@ -302,8 +304,7 @@
 
     private async Task RefreshData()
     {
-        using var db = await DbFactory.CreateDbContextAsync();
-        SinFiltrar = await db.Bomberos.ToListAsync();
+        SinFiltrar = await BomberoService.ObtenerTodosLosBomberosAsync();
         search(searchString, Estado);
         await InvokeAsync(StateHasChanged);
     }

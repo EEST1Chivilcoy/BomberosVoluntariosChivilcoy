@@ -1,7 +1,4 @@
-﻿@inject NavigationManager navigationManager
-@inject IDbContextFactory<BomberosDbContext> DbFactory
-@using Vista.Services
-@using Microsoft.AspNetCore.Components.Forms
+﻿@using Microsoft.AspNetCore.Components.Forms
 @using System.ComponentModel
 @using AntDesign.TableModels
 @using System.Text.Json
@@ -9,193 +6,338 @@
 @using Vista.Data.Models.Personas.Personal
 @using Vista.Data.Models.Personas.Personal.Componentes
 @using Vista.Data.Models.Imagenes
+@using Vista.Data.Mappers
 @using AntDesign;
 
+@*Servicios utilizados*@
+@using Vista.Services
+@inject IBomberoService BomberoService
+@inject NavigationManager navigationManager
 
-<link rel="stylesheet" href="/css/BomberosDetallesEstilos.css" />
+<style>
+    .container {
+        padding: 24px;
+        min-height: 100vh;
+    }
+
+    .page-title {
+        font-size: 24px;
+        font-weight: 600;
+        color: #1f1f1f;
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+    }
+
+    .page-title-icon {
+        margin-right: 12px;
+        color: #c43a3a;
+    }
+
+    .card {
+        background-color: rgb(255, 255, 255);
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        padding: 24px;
+        margin-bottom: 24px;
+    }
+
+    .card-title {
+        font-size: 18px;
+        font-weight: 500;
+        color: #434343;
+        margin-bottom: 16px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .profile-photo-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 16px;
+    }
+
+    .photo-preview {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .upload-actions {
+        display: flex;
+        gap: 8px;
+    }
+
+    .form-section {
+        margin-bottom: 24px;
+    }
+
+    .action-buttons {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 24px;
+    }
+
+    :deep(.ant-form-item) {
+        margin-bottom: 16px;
+    }
+
+    :deep(.ant-form-item-label > label) {
+        color: #595959;
+        font-weight: 500;
+    }
+
+    :deep(.ant-input), :deep(.ant-select:not(.ant-select-customize-input) .ant-select-selector), :deep(.ant-picker), :deep(.ant-input-number) {
+        border-radius: 4px;
+        border: 1px solid #d9d9d9;
+    }
+
+    :deep(.ant-input:hover), :deep(.ant-select:not(.ant-select-customize-input) .ant-select-selector:hover), :deep(.ant-picker:hover), :deep(.ant-input-number:hover) {
+        border-color: #c43a3a;
+    }
+
+    :deep(.ant-input:focus), :deep(.ant-select-focused:not(.ant-select-customize-input) .ant-select-selector), :deep(.ant-picker-focused), :deep(.ant-input-number-focused) {
+        border-color: #c43a3a;
+        box-shadow: 0 0 0 2px rgba(196,58,58,0.2);
+    }
+
+    :deep(.ant-switch-checked) {
+        background-color: #c43a3a;
+    }
+
+    .required-field::after {
+        content: '*';
+        color: #c43a3a;
+        margin-left: 4px;
+    }
+
+    .conditional-field {
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px dashed #f0f0f0;
+    }
+</style>
 
 <div class="container">
-        <div class="page-title">
-            <Icon Type="fire" Theme="IconThemeType.Fill" Class="page-title-icon" />
-            Detalles del Bombero
+    <div class="page-title">
+        <Icon Type="info-circle" Theme="IconThemeType.Outline" Class="page-title-icon" />
+        Detalles Bombero
+    </div>
+
+    <Form Model="@bomberoVM"
+          Layout="FormLayout.Vertical">
+        <div class="card">
+            <div class="card-title">Información Personal</div>
+            <Row Gutter="24">
+                <Col Span="6">
+                <div class="profile-photo-container">
+                    <div class="photo-preview">
+                        @if (bomberoVM.UrlImagen != null)
+                        {
+                            <Avatar Src="@bomberoVM.UrlImagen" Alt="Foto de perfil" Size="@("5rem")" />
+                        }
+                        else
+                        {
+                            <Avatar Icon="@IconType.Outline.User" Size="@("5rem")" />
+                        }
+                    </div>
+                </div>
+                </Col>
+
+                <Col Span="18">
+                <Row Gutter="16">
+                    <Col Span="12">
+                    <FormItem Label="Nombre" Required>
+                        <Input @bind-Value="@bomberoVM.Nombre" Placeholder="No disponible" ReadOnly />
+                    </FormItem>
+                    </Col>
+                    <Col Span="12">
+                    <FormItem Label="Apellido" Required>
+                        <Input @bind-Value="@bomberoVM.Apellido" Placeholder="No disponible" ReadOnly />
+                    </FormItem>
+                    </Col>
+                </Row>
+
+                <Row Gutter="16">
+                    <Col Span="8">
+                    <FormItem Label="DNI" Required>
+                        <Input @bind-Value="@bomberoVM.Documento" Placeholder="No disponible" ReadOnly />
+                    </FormItem>
+                    </Col>
+                    <Col Span="8">
+                    <FormItem Label="Fecha de Nacimiento">
+                        <Input Value="@bomberoVM.FechaNacimiento?.ToString("dd/MM/yyyy")"
+                               Placeholder="No disponible"
+                               ReadOnly
+                               Style="width:100%;" />
+                    </FormItem>
+                    </Col>
+                    <Col Span="8">
+                    <FormItem Label="Lugar de nacimiento">
+                        <Input @bind-Value="@bomberoVM.LugarNacimiento" Placeholder="No disponible" ReadOnly />
+                    </FormItem>
+                    </Col>
+                </Row>
+
+                <Row Gutter="16">
+                    <Col Span="12">
+                    <FormItem Label="Dirección">
+                        <Input @bind-Value="@bomberoVM.Direccion" Placeholder="No disponible" ReadOnly />
+                    </FormItem>
+                    </Col>
+                    <Col Span="6">
+                    <FormItem Label="Sexo">
+                        <Input Value="@bomberoVM.Sexo.GetDisplayName()" Placeholder="No disponible" ReadOnly />
+                    </FormItem>
+                    </Col>
+                    <Col Span="6">
+                    <FormItem Label="Grupo Sanguíneo">
+                        <Input Value="@bomberoVM.GrupoSanguineo.GetDisplayName()" Placeholder="No disponible" ReadOnly />
+                    </FormItem>
+                    </Col>
+                </Row>
+                </Col>
+            </Row>
         </div>
 
-        <Form Model="@bomberoVM" LabelColSpan="8" WrapperColSpan="16">
-            <div class="card">
-                <Row Gutter="24">
-                    <AntDesign.Col Span="6">
-                        <div class="profile-photo-container">
-                            <div class="photo-preview">
-                                @if (bomberoVM.Imagen is not null)
-                                {
-                                    <Avatar Src="@CargarImage" Alt="Foto de perfil" Size="@("150px")" />
-                                }
-                                else
-                                {
-                                    <Avatar Icon="@IconType.Outline.User" Size="@("150px")" />
-                                }
-                            </div>
+        <div class="card">
+            <div class="card-title">Información Profesional</div>
+            <Row Gutter="16">
+                <Col Span="6">
+                <FormItem Label="Número Legajo" Required>
+                    <Input @bind-Value="@bomberoVM.NumeroLegajo" Placeholder="No disponible" ReadOnly />
+                </FormItem>
+                </Col>
+                <Col Span="6">
+                <FormItem Label="Dotación" Required>
+                    <Input Value="@bomberoVM.Dotacion.GetDisplayName()" Placeholder="No disponible" ReadOnly />
+                </FormItem>
+                </Col>
+                <Col Span="6">
+                <FormItem Label="Grado">
+                    <Input Value="@bomberoVM.Grado.GetDisplayName()" Placeholder="No disponible" ReadOnly />
+                </FormItem>
+                </Col>
+                <Col Span="6">
+                <FormItem Label="Estado">
+                    <Input Value="@bomberoVM.Estado.GetDisplayName()" Placeholder="No disponible" ReadOnly />
+                </FormItem>
+                </Col>
+            </Row>
+
+            <Row Gutter="16">
+                <Col Span="8">
+                <FormItem Label="Fecha de Aceptación">
+                    <Input Value="@bomberoVM.FechaAceptacion?.ToString("dd/MM/yyyy")"
+                           Placeholder="No disponible"
+                           ReadOnly
+                           Style="width:100%;" />
+                </FormItem>
+                </Col>
+                <Col Span="8">
+                <FormItem Label="Número IOMA">
+                    <Input @bind-Value="@bomberoVM.NumeroIoma" Placeholder="No disponible" ReadOnly />
+                </FormItem>
+                </Col>
+            </Row>
+
+            <Row Gutter="16">
+                <Col Span="12">
+                <FormItem Label="¿Es chofer?">
+                    <Switch @bind-Checked="@bomberoVM.EsChofer" Disabled></Switch>
+                    @if (bomberoVM.EsChofer)
+                    {
+                        <div class="conditional-field">
+                            <FormItem Label="Fecha vencimiento del carnet">
+                                <Input Value="@bomberoVM.VencimientoRegistro?.ToString("dd/MM/yyyy")"
+                                       Placeholder="No disponible"
+                                       ReadOnly
+                                       Style="width:100%;" />
+                            </FormItem>
                         </div>
-                    </AntDesign.Col>
-                    <AntDesign.Col Span="18">
-                        <div class="card-title">Información Personal</div>
-                        <Row Gutter="16">
-                            <AntDesign.Col Span="12">
-                                <FormItem Label="Nombre">@bomberoVM.Nombre</FormItem>
-                            </AntDesign.Col>
-                            <AntDesign.Col Span="12">
-                                <FormItem Label="Apellido">@bomberoVM.Apellido</FormItem>
-                            </AntDesign.Col>
-                        </Row>
-                        <Row Gutter="16">
-                            <AntDesign.Col Span="8">
-                                <FormItem Label="Documento">@bomberoVM.Documento</FormItem>
-                            </AntDesign.Col>
-                            <AntDesign.Col Span="8">
-                                <FormItem Label="Fecha de Nacimiento">@bomberoVM.FechaNacimiento</FormItem>
-                            </AntDesign.Col>
-                            <AntDesign.Col Span="8">
-                                <FormItem Label="Lugar de Nacimiento">@bomberoVM.LugarNacimiento</FormItem>
-                            </AntDesign.Col>
-                        </Row>
-                        <Row Gutter="16">
-                            <AntDesign.Col Span="12">
-                                <FormItem Label="Dirección">@bomberoVM.Direccion</FormItem>
-                            </AntDesign.Col>
-                            <AntDesign.Col Span="6">
-                                <FormItem Label="Sexo">@bomberoVM.Sexo</FormItem>
-                            </AntDesign.Col>
-                            <AntDesign.Col Span="6">
-                                <FormItem Label="Grupo Sanguíneo">@bomberoVM.GrupoSanguineo.GetDisplayName()</FormItem>
-                                
-                            </AntDesign.Col>
-                        </Row>
-                    </AntDesign.Col>
-                </Row>
-            </div>
+                    }
+                </FormItem>
+                </Col>
+            </Row>
+        </div>
 
-            <div class="card">
-                <div class="card-title">Información Profesional</div>
-                <Row Gutter="16">
-                    <AntDesign.Col Span="6">
-                        <FormItem Label="Número de Legajo">@bomberoVM.NumeroLegajo</FormItem>
-                    </AntDesign.Col>
-                    <AntDesign.Col Span="6">
-                        <FormItem Label="Grado">@bomberoVM.Grado</FormItem>
-                    </AntDesign.Col>
-                    <AntDesign.Col Span="6">
-                        <FormItem Label="Dotación">@bomberoVM.Dotacion</FormItem>
-                    </AntDesign.Col>
-                </Row>
-                <Row>
-                    <AntDesign.Col Span="12">
-                        <FormItem Label="Chofer">
-                            @if (bomberoVM.Chofer)
-                            {
-                                <div class="chofer-info">
-                                    <p>Es Chofer</p>
-                                    <p>Vencimiento Registro: @bomberoVM.VencimientoRegistro</p>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="chofer-info">
-                                    <p>No es Chofer</p>
-                                </div>
-                            }
-                        </FormItem>
-                    </AntDesign.Col>
-                </Row>
-            </div>
-            
-            <div class="card">
-                <div class="card-title">Información Adicional</div>
-                <Row Gutter="16">
-                    <AntDesign.Col Span="6">
-                        <FormItem Label="Altura">@bomberoVM.Altura cm</FormItem>
-                    </AntDesign.Col>
-                    <AntDesign.Col Span="6">
-                        <FormItem Label="Peso">@bomberoVM.Peso kg</FormItem>
-                    </AntDesign.Col>
-                    <AntDesign.Col Span="6">
-                        <FormItem Label="Profesión">@bomberoVM.Profesion</FormItem>
-                    </AntDesign.Col>
-                    <AntDesign.Col Span="6">
-                        <FormItem Label="Nivel de Estudios">@bomberoVM.NivelEstudios</FormItem>
-                    </AntDesign.Col>
-                </Row>
-                <Row Gutter="16">
-                    <AntDesign.Col Span="12">
-                        <FormItem Label="Número de Ioma">@bomberoVM.NumeroIoma</FormItem>
-                    </AntDesign.Col>
-                </Row>
-                <FormItem Label="Observaciones">@bomberoVM.Observaciones</FormItem>
-            </div>
-            
-            <div class="card">
-                <div class="card-title">Información de Contacto</div>
-                <Row Gutter="16">
-                    <AntDesign.Col Span="6">
-                        <FormItem Label="Teléfono Celular">@contactoVM.TelefonoCel</FormItem>
-                    </AntDesign.Col>
-                    <AntDesign.Col Span="6">
-                        <FormItem Label="Teléfono Fijo">@contactoVM.TelefonoFijo</FormItem>
-                    </AntDesign.Col>
-                    <AntDesign.Col Span="6">
-                        <FormItem Label="Teléfono Laboral">@contactoVM.TelefonoLaboral</FormItem>
-                    </AntDesign.Col>
-                    <AntDesign.Col Span="6">
-                        <FormItem Label="Email">@contactoVM.Email</FormItem>
-                    </AntDesign.Col>
-                </Row>
-            </div>
+        <div class="card">
+            <div class="card-title">Información Adicional</div>
+            <Row Gutter="16">
+                <Col Span="6">
+                <FormItem Label="Altura (cm)">
+                    <Input @bind-Value="@bomberoVM.Altura" Style="width:100%;" Placeholder="No disponible" ReadOnly />
+                </FormItem>
+                </Col>
+                <Col Span="6">
+                <FormItem Label="Peso (kg)">
+                    <Input @bind-Value="@bomberoVM.Peso" Style="width:100%;" Placeholder="No disponible" ReadOnly />
+                </FormItem>
+                </Col>
+                <Col Span="6">
+                <FormItem Label="Nivel de estudio">
+                    <Input @bind-Value="@bomberoVM.NivelEstudios" Placeholder="No disponible" ReadOnly />
+                </FormItem>
+                </Col>
+                <Col Span="6">
+                <FormItem Label="Profesión">
+                    <Input @bind-Value="@bomberoVM.Profesion" Placeholder="No disponible" ReadOnly />
+                </FormItem>
+                </Col>
+            </Row>
 
-            <div class="card">
-                <div class="card-title">Información de Brigada</div>
-                <Row Gutter="16">
-                    <AntDesign.Col Span="12">
-                        <FormItem Label="Nombre de Brigada">@brigadaVM?.NombreBrigada</FormItem>
-                    </AntDesign.Col>
-                </Row>
-            </div>
-        </Form>
-    </div>
+            <FormItem Label="Observaciones">
+                <TextArea @bind-Value="@bomberoVM.Observaciones" Placeholder="No disponible" Rows="4" ReadOnly />
+            </FormItem>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Información de Contacto</div>
+            <Row Gutter="16">
+                <Col Span="6">
+                <FormItem Label="Teléfono Celular">
+                    <Input @bind-Value="@bomberoVM.TelefonoCel" Placeholder="No disponible" ReadOnly />
+                </FormItem>
+                </Col>
+                <Col Span="6">
+                <FormItem Label="Teléfono Fijo">
+                    <Input @bind-Value="@bomberoVM.TelefonoFijo" Placeholder="No disponible" ReadOnly />
+                </FormItem>
+                </Col>
+                <Col Span="6">
+                <FormItem Label="Teléfono Laboral">
+                    <Input @bind-Value="@bomberoVM.TelefonoLaboral" Placeholder="No disponible" ReadOnly />
+                </FormItem>
+                </Col>
+                <Col Span="6">
+                <FormItem Label="Email">
+                    <Input @bind-Value="@bomberoVM.Email" Placeholder="No disponible" ReadOnly />
+                </FormItem>
+                </Col>
+            </Row>
+        </div>
+
+    </Form>
+</div>
+
 @code {
     [Parameter] public int BomberoId { get; set; }
-    BomberosDbContext? Context { get; set; }
-    public Bombero bomberoVM { get; set; } = new();
-    public Contacto contactoVM { get; set; } = new();
-    public Brigada brigadaVM { get; set; } = new();
-
-    //Carga de imagen
-    public string CargarImage
-    {
-        get
-        {
-            using var context = DbFactory.CreateDbContext();
-
-            string src = "/";
-
-            var imagen = context.ImagenesBomberos
-                                .SingleOrDefault(i => i.ImagenId == bomberoVM.Imagen.ImagenId);
-
-            if (imagen is not null)
-            {
-                src = $"data:{imagen.TipoImagen};base64,{imagen.Base64Imagen}";
-            }
-
-            return src;
-        }
-    }
+    public BomberoViweModel bomberoVM { get; set; } = new();
 
     // Init
     protected override async Task OnInitializedAsync()
     {
-        Context = DbFactory.CreateDbContext();
-        bomberoVM = await Context.Bomberos.Where(b => b.PersonaId == BomberoId).SingleOrDefaultAsync();
-        contactoVM = await Context.Contactos.Where(c => c.PersonalId == BomberoId).SingleOrDefaultAsync();
+        Bombero bombero = await BomberoService.ObtenerBomberoPorIdAsync(BomberoId);
+
+        bomberoVM = bombero.ToBomberoViewModel();
 
         StateHasChanged();
     }
-
 }

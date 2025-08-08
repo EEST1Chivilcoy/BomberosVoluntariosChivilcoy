@@ -21,6 +21,7 @@ namespace Vista.Services
         Task<Bombero> CambiarEstado(Bombero bombero);
         Task<AscensoBombero> AscenderBombero(AscensoBombero ascenso);
         Task<List<Bombero>> ObtenerTodosLosBomberosAsync();
+        Task<Bombero> ObtenerBomberoPorIdAsync(int id);
         Task<Bombero> ObtenerBomberoObjetoPorLegajoAsync(int numeroLegajo);
     }
 
@@ -31,6 +32,20 @@ namespace Vista.Services
         public BomberoService(BomberosDbContext context)
         {
             _context = context;
+        }
+
+        public async Task<Bombero> ObtenerBomberoPorIdAsync(int id)
+        {
+            var bombero = await _context.Bomberos
+                .Include(b => b.Imagen)
+                .Include(b => b.Brigadas)
+                .Include(b => b.Contacto)
+                .FirstOrDefaultAsync(b => b.PersonaId == id);
+            if (bombero == null)
+            {
+                throw new KeyNotFoundException($"No se encontró un bombero con el ID {id}.");
+            }
+            return bombero;
         }
 
         public async Task CrearBombero(Bombero bombero)
