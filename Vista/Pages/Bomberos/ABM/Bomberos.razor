@@ -7,6 +7,7 @@
 @using Vista.Data.Models.Imagenes
 @using Vista.Data.Models.Personas.Personal
 @using Vista.Data.Models.Personas.Personal.Componentes
+@using Vista.Data.Mappers
 
 @*Servicios utilizados*@
 @using Vista.Services
@@ -172,7 +173,7 @@
         </div>
 
         <Table @ref="table"
-               TItem="Bombero"
+               TItem="BomberoViweModel"
                DataSource="@bomberos"
                OnChange="OnChange"
                @bind-PageIndex="_pageIndex"
@@ -180,7 +181,14 @@
                Responsive>
             <ColumnDefinitions>
                 <Column TData="Bombero" Title="Foto" Width="100">
-                    <Avatar Size="AvatarSize.Large" Src="@CargarImage(context)" />
+                    @if (context.UrlImagen != null)
+                    {
+                        <Avatar Size="AvatarSize.Large" Src="@(context.UrlImagen)" />
+                    }
+                    else
+                    {
+                        <Avatar Size="AvatarSize.Large" Icon="user" />
+                    }
                 </Column>
                 <PropertyColumn Property="@(c => $"{c.Apellido}, {c.Nombre}")" Title="Apellido y Nombre" Sortable />
                 <PropertyColumn Title="Legajo" Property="c => c.NumeroLegajo" Sortable />
@@ -188,16 +196,16 @@
                 <PropertyColumn Title="Estado" Property="@(c => c.Estado.GetDisplayName())" Sortable />
                 <ActionColumn Title="Acciones" Align=ColumnAlign.Center>
                     <div class="abm-action-buttons">
-                        <Button Type="ButtonType.Primary" OnClick="() => DetalleBombero(context.PersonaId)">
+                        <Button Type="ButtonType.Primary" OnClick="() => DetalleBombero(context.Id)">
                             <Icon Type="eye" /> Detalles
                         </Button>
-                        <Button Type="default" OnClick="() => EditarBombero(context.PersonaId)">
+                        <Button Type="default" OnClick="() => EditarBombero(context.Id)">
                             <Icon Type="edit" /> Editar
                         </Button>
                         @if (context.Estado != EstadoBombero.Inactivo)
                         {
                             <Popconfirm Title="¿Está seguro de dar de baja?"
-                                        OnConfirm="()=>CambiarEstado(context.PersonaId, EstadoBombero.Inactivo)"
+                                        OnConfirm="()=>CambiarEstado(context.Id, EstadoBombero.Inactivo)"
                                         OkText="Sí" CancelText="No">
                                 <Button Danger>
                                     <Icon Type="down" /> Baja
@@ -207,7 +215,7 @@
                         else
                         {
                             <Popconfirm Title="¿Está seguro de dar de alta?"
-                                        OnConfirm="()=>CambiarEstado(context.PersonaId, EstadoBombero.CuerpoActivo)"
+                                        OnConfirm="()=>CambiarEstado(context.Id, EstadoBombero.CuerpoActivo)"
                                         OkText="Sí" CancelText="No">
                                 <Button Color="Color.Green2">
                                     <Icon Type="up" /> Alta
@@ -243,8 +251,8 @@
 @code {
     string searchString;
     ITable table;
-    List<Bombero>? bomberos = new List<Bombero>();
-    List<Bombero>? SinFiltrar = new List<Bombero>();
+    List<BomberoViweModel>? bomberos = new();
+    List<BomberoViweModel>? SinFiltrar = new();
     public EstadoBombero Estado = EstadoBombero.CuerpoActivo;
 
     private TableFilter<EscalafonJerarquico>[] EscalafonJerarquicoFilter;
@@ -287,7 +295,8 @@
     // Init, OnChange y Carga de datos
     protected override async Task OnInitializedAsync()
     {
-        SinFiltrar = await BomberoService.ObtenerTodosLosBomberosAsync();
+        var bomberos = await BomberoService.ObtenerTodosLosBomberosAsync();
+        SinFiltrar = bomberos.ToBomberoViewModelList();
 
         search(searchString, Estado);
 
@@ -304,27 +313,17 @@
 
     private async Task RefreshData()
     {
-        SinFiltrar = await BomberoService.ObtenerTodosLosBomberosAsync();
+        var bomberos = await BomberoService.ObtenerTodosLosBomberosAsync();
+        SinFiltrar = bomberos.ToBomberoViewModelList();
+
         search(searchString, Estado);
         await InvokeAsync(StateHasChanged);
     }
 
-    private async Task OnChange(QueryModel<Bombero> queryModel)
+    private async Task OnChange(QueryModel<BomberoViweModel> queryModel)
     {
         Console.WriteLine(JsonSerializer.Serialize(queryModel));
-        OnInitializedAsync();
-    }
-
-    public string CargarImage(Bombero bombero)
-    {
-        string src = "/";
-
-        if (bombero.Imagen is not null)
-        {
-            src = $"/api/imagenes/{bombero.Imagen.ImagenId}";
-        }
-
-        return src;
+        await OnInitializedAsync();
     }
 
     private void search(string value, EstadoBombero estado)
