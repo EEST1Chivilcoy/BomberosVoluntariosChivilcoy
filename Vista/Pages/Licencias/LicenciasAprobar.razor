@@ -107,7 +107,7 @@
         LicenciasActivasVM = new();
         var Licencias = await Context.Licencias
             .Where(l => l.EstadoLicencia == TipoEstadoLicencia.Pendiente)
-            .Include(b => b.PersonalAfectado)
+            .Include(b => b.BomberoAfectado)
             .ToListAsync();
 
         foreach (var l in Licencias)
@@ -126,7 +126,7 @@
                     Desde = l.Desde,
                     Hasta = l.Hasta,
                     EstadoLicencia = l.EstadoLicencia,
-                    ApellidoYNombre = l.PersonalAfectado?.Apellido + ", " + l.PersonalAfectado?.Nombre,
+                    ApellidoYNombre = l.BomberoAfectado?.Apellido + ", " + l.BomberoAfectado?.Nombre,
                 };
 
             // Verifica que DuracionEnDias se calcule correctamente.

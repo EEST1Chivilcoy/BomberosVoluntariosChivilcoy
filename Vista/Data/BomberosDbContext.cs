@@ -97,7 +97,7 @@ namespace Vista.Data
         // Brigada
 
         public DbSet<Brigada> Brigadas { get; set; }
-        
+
         // Tablas para Relacion Muchos a Muchos
 
         public DbSet<Bombero_Dependencia> bombero_dependencia { get; set; }
@@ -113,12 +113,19 @@ namespace Vista.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //Foreaneas 1:1 (Imagenes)
+            // Relaciónes 1:1 (Imagenes)
 
             modelBuilder.Entity<Personal>()
                 .HasOne(p => p.Imagen)
                 .WithOne(pi => pi.Personal)
                 .HasForeignKey<Imagen_Personal>(pi => pi.PersonalId); // Clave foránea en ProfileImage
+
+            // Relaciónes 1:N (uno a muchos)
+            modelBuilder.Entity<Licencia>()
+                .HasOne(l => l.BomberoAfectado)       // Una licencia tiene un bombero
+                .WithMany(b => b.Licencias)           // Un bombero tiene muchas licencias
+                .HasForeignKey(l => l.PersonalId)      // Clave foránea en Licencia
+                .OnDelete(DeleteBehavior.Restrict);   // Esto evita borrado en cascada
 
             // Relaciones mucho a muchos
 

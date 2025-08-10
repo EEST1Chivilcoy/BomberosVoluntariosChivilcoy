@@ -1,556 +1,372 @@
 ﻿@using Vista.Data.Models.Personas.Personal
 @using Vista.Data.Models.Personas.Personal.Componentes
+@using Vista.Data.Mappers;
 
-@implements IDisposable
-@inject NavigationManager navigationManager
-@inject IDbContextFactory<BomberosDbContext> DbFactory
-@inject IMessageService message
-@inject MessageService _message
+@*Servicios utilizados*@
+
+@using Vista.Services;
+@inject ILicenciaService LicenciaService
+@inject IMessageService MessageService
+@inject IBomberoService BomberoService
+
 @page "/licencias"
 
-<style>
-	.template {
-		width: 100%;
-		height: 100%;
-		max-width: 97%;
-		min-width: 400px;
-		max-height: 100vh;
-		border-radius: 10px;
-		box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-		background: #fff;
-		display: flex;
-		flex-direction: column;
-		margin: 1em;
-		padding: 10px;
-		overflow: auto;
-	}
-
-	.ant-table {
-		width: 100%;
-		background-color: white;
-		border-radius: 8px;
-		overflow: hidden;
-	}
-
-	.ant-table-title {
-		background-color: #A63333;
-		padding: 16px !important;
-		border-top-left-radius: 8px;
-		border-top-right-radius: 8px;
-	}
-
-	.ant-table-thead .ant-table-cell {
-		background-color: #A63333 !important;
-		color: white !important;
-		font-weight: bold;
-	}
-
-	.ant-table-cell {
-		padding: 16px !important;
-	}
-
-	.filters-container {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 16px;
-		align-items: flex-end;
-		margin-bottom: 16px;
-	}
-
-	.date-filter-container {
-		display: flex;
-		gap: 8px;
-		align-items: flex-end;
-	}
-
-	.filter-group {
-		display: flex;
-		flex-direction: column;
-	}
-
-	.filter-label {
-		font-weight: 500;
-		color: white;
-		margin-bottom: 4px;
-	}
-
-	.actions-container {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		gap: 16px;
-	}
-
-	.search-container {
-		flex-grow: 1;
-		max-width: 300px;
-	}
-
-	.add-button {
-		background-color: #4CAF50 !important;
-		border-color: #438E46 !important;
-		color: white !important;
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-		height: 40px;
-		padding: 0 20px;
-		font-weight: 500;
-		display: flex;
-		align-items: center;
-		gap: 8px;
-	}
-
-	.notification-badge {
-		margin-left: 16px;
-		cursor: pointer;
-	}
-
-	.status-badge {
-		padding: 4px 12px;
-		border-radius: 16px;
-		font-weight: 500;
-		text-align: center;
-		display: inline-block;
-		min-width: 100px;
-	}
-
-	.status-approved {
-		background-color: #E6F7E9;
-		color: #2E7D32;
-	}
-
-	.status-pending {
-		background-color: #FFF8E1;
-		color: #F57F17;
-	}
-
-	.status-rejected {
-		background-color: #FFEBEE;
-		color: #C62828;
-	}
-
-	.duration-badge {
-		padding: 4px 12px;
-		border-radius: 4px;
-		font-weight: 500;
-		text-align: center;
-		display: inline-block;
-		min-width: 80px;
-	}
-
-	.modal-footer {
-		margin-top: 24px;
-		display: flex;
-		justify-content: flex-end;
-		gap: 12px;
-	}
-
-	.cancel-button {
-		background-color: #f5f5f5;
-		border: 1px solid #d9d9d9;
-	}
-
-	/* Color de fondo para filas según estado */
-	.ant-table-tbody > tr.ant-table-row.Aprobada > td {
-		background-color: rgba(46, 125, 50, 0.05) !important;
-	}
-
-	.ant-table-tbody > tr.ant-table-row.Pendiente > td {
-		background-color: rgba(245, 127, 23, 0.05) !important;
-	}
-
-	.ant-table-tbody > tr.ant-table-row.Rechazada > td {
-		background-color: rgba(198, 40, 40, 0.05) !important;
-	}
-
-	/* Responsive */
-	@@media (max-width: 768px) {
-		.filters-container {
-			flex-direction: column;
-			align-items: stretch;
-		}
-
-		.date-filter-container {
-			flex-direction: column;
-			align-items: stretch;
-		}
-
-		.actions-container {
-			flex-direction: column;
-			align-items: stretch;
-		}
-
-		.search-container {
-			max-width: 100%;
-			margin-bottom: 12px;
-		}
-
-		.add-button {
-			width: 100%;
-			justify-content: center;
-		}
-
-		.notification-badge {
-			margin-left: 0;
-			align-self: flex-end;
-		}
-	}
-</style>
+<link rel="stylesheet" href="css/Licencias.css" />
 
 <div class="template">
-	<Table DataSource="LicenciasActivasVM"
-		   PageSize="20"
-		   Responsive
-		   TItem="LicencasVm"
-		   Loading="isLoading"
-		   RowClassName="@(c => c.Data.EstadoLicencia.ToString())">
+    <Table DataSource="LicenciasVM"
+           PageSize="20"
+           Responsive
+           TItem="LicenciaViewModel"
+           RowClassName="@(c => c.Data.EstadoLicencia.ToString())">
 
-		<TitleTemplate>
-			<div style="background-color: #A63333; color: white; padding: 16px; border-radius: 8px;">
-				<div class="filters-container">
-					<div class="date-filter-container">
-						<div class="filter-group">
-							<label class="filter-label">Desde:</label>
-							<DatePicker TValue="DateTime"
-										DefaultValue="@DateTime.Now.AddDays(-14)"
-										@bind-Value="@FechaBuscarI"
-										Size="InputSize.Large"
-										Style="min-width: 150px;" />
-						</div>
-						<div class="filter-group">
-							<label class="filter-label">Hasta:</label>
-							<DatePicker TValue="DateTime"
-										DefaultValue="@DateTime.Now"
-										@bind-Value="@FechaBuscarF"
-										Size="InputSize.Large"
-										Style="min-width: 150px;" />
-						</div>
-						<Button Type="ButtonType.Primary"
-								OnClick="@LicenciasBuscar"
-								Icon="search"
-								Size="ButtonSize.Large"
-								Style="margin-bottom: 0;">
-							Filtrar
-						</Button>
-					</div>
+        <TitleTemplate>
+            <div style="background-color: #A63333; color: white; padding: 16px; border-radius: 8px;">
+                <div class="filters-container">
+                    <div class="date-filter-container">
+                        <div class="filter-group">
+                            <label class="filter-label">Desde:</label>
+                            <DatePicker TValue="DateTime"
+                                        DefaultValue="@DateTime.Now.AddDays(-14)"
+                                        @bind-Value="@FechaBuscarI"
+                                        Size="InputSize.Large"
+                                        Style="min-width: 150px;" />
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Hasta:</label>
+                            <DatePicker TValue="DateTime"
+                                        DefaultValue="@DateTime.Now"
+                                        @bind-Value="@FechaBuscarF"
+                                        Size="InputSize.Large"
+                                        Style="min-width: 150px;" />
+                        </div>
+                        <Button Type="ButtonType.Primary"
+                                Icon="search"
+                                Size="ButtonSize.Large"
+                                Style="margin-bottom: 0;">
+                            Filtrar
+                        </Button>
+                    </div>
 
-					<div class="actions-container">
-						<div class="search-container">
-							<Search Placeholder="Buscar licencias..."
-									AllowClear
-									EnterButton="true"
-									Size="InputSize.Large"
-									@bind-Value="Busqueda"
-									OnChange="BuscarLicenciado" />
-						</div>
+                    <div class="actions-container">
+                        <div class="search-container">
+                            <Search Placeholder="Buscar licencias..."
+                                    AllowClear
+                                    EnterButton="true"
+                                    Size="InputSize.Large"
+                                    @bind-Value="Busqueda" />
+                        </div>
 
-						<div style="display: flex; align-items: center;">
-							<Button Class="add-button"
-									OnClick="()=>ShowModalAgregar()"
-									Icon="plus">
-								Nueva Licencia
-							</Button>
+                        <div style="display: flex; align-items: center;">
+                            <Button Class="add-button"
+                                    OnClick="@(() => _modalAñadirVisible = true)"
+                                    Icon="plus">
+                                Nueva Licencia
+                            </Button>
 
-							<Dropdown Trigger="@(new Trigger[] { Trigger.Click })"
-									  Placement="Placement.BottomRight"
-									  Arrow
-									  Class="notification-badge">
-								<Overlay>
-									<Menu Style="min-width:520px; max-width:1000px;">
-										<LicenciasAprobar />
-									</Menu>
-								</Overlay>
-								<ChildContent>
-									<Badge Count="LicenciasPendientes.Count" Style="font-size: 14px;">
-										<Button Shape="ButtonShape.Circle" Icon="bell" Size="ButtonSize.Large" />
-									</Badge>
-								</ChildContent>
-							</Dropdown>
-						</div>
-					</div>
-				</div>
-			</div>
-		</TitleTemplate>
+                            <Dropdown Trigger="@(new Trigger[] { Trigger.Click })"
+                                      Placement="Placement.BottomRight"
+                                      Arrow
+                                      Class="notification-badge">
+                                <Overlay>
+                                    <Menu Style="min-width:520px; max-width:1000px;">
+                                        <LicenciasAprobar />
+                                    </Menu>
+                                </Overlay>
+                                <ChildContent>
+                                    <Badge Count="LicenciasVM_PendientesDeAprobacion.Count" Style="font-size: 14px;">
+                                        <Button Shape="ButtonShape.Circle" Icon="bell" Size="ButtonSize.Large" />
+                                    </Badge>
+                                </ChildContent>
+                            </Dropdown>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </TitleTemplate>
 
-		<ColumnDefinitions Context="licencia">
-			<PropertyColumn Title="Apellido y Nombre"
-							Property="c=>c.ApellidoYNombre"
-							Sortable
-							Width="250px" />
+        <ColumnDefinitions Context="licencia">
+            <PropertyColumn Title="Apellido y Nombre"
+                            Property="c => c.ApellidoYNombre"
+                            Sortable
+                            Width="250px" />
 
-			<PropertyColumn Title="Desde"
-							Property="c=>c.Desde"
-							Format="dd/MM/yyyy"
-							Sortable
-							Width="130px" />
+            <PropertyColumn Title="Desde"
+                            Property="c => c.Desde"
+                            Format="dd/MM/yyyy"
+                            Sortable
+                            Width="130px" />
 
-			<PropertyColumn Title="Hasta"
-							Property="c=>c.Hasta"
-							Format="dd/MM/yyyy"
-							Sortable
-							Width="130px" />
+            <PropertyColumn Title="Hasta"
+                            Property="c => c.Hasta"
+                            Format="dd/MM/yyyy"
+                            Sortable
+                            Width="130px" />
 
-			<PropertyColumn Title="Duración"
-							Property="c => c.DuracionEnDias"
-							Sortable
-							Width="120px">
-				<Template>
-					@{
-						string bgColor;
-						string textColor;
+            <PropertyColumn Title="Duración"
+                            Property="c => c.DuracionEnDias"
+                            Sortable
+                            Width="120px">
+                <Template>
+                    @{
+                        string bgColor;
+                        string textColor;
 
-						if (licencia.EstadoLicencia == TipoEstadoLicencia.Rechazada)
-						{
-							bgColor = "#FFEBEE";
-							textColor = "#C62828";
-						}
-						else if (licencia.EstadoLicencia == TipoEstadoLicencia.Aprobada)
-						{
-							bgColor = "#E6F7E9";
-							textColor = "#2E7D32";
-						}
-						else
-						{
-							bgColor = "#FFF8E1";
-							textColor = "#F57F17";
-						}
-					}
-					<span class="duration-badge" style="background-color:@bgColor; color:@textColor;">
-						@licencia.DuracionEnDias días
-					</span>
-				</Template>
-			</PropertyColumn>
+                        if (licencia.EstadoLicencia == TipoEstadoLicencia.Rechazada)
+                        {
+                            bgColor = "#FFEBEE";
+                            textColor = "#C62828";
+                        }
+                        else if (licencia.EstadoLicencia == TipoEstadoLicencia.Aprobada)
+                        {
+                            bgColor = "#E6F7E9";
+                            textColor = "#2E7D32";
+                        }
+                        else
+                        {
+                            bgColor = "#FFF8E1";
+                            textColor = "#F57F17";
+                        }
+                    }
+                    <span class="duration-badge" style="background-color:@bgColor; color:@textColor;">
+                        @licencia.DuracionEnDias días
+                    </span>
+                </Template>
+            </PropertyColumn>
 
-			<PropertyColumn Title="Tipo"
-							Property="@(c => c.TipoLicencia.GetDisplayName())"
-							Sortable="true"
-							Width="200px" />
+            <PropertyColumn Title="Tipo"
+                            Property="@(c => c.TipoLicencia.GetDisplayName())"
+                            Sortable="true"
+                            Width="200px" />
 
-			<PropertyColumn Title="Estado"
-							Property="c => c.EstadoLicencia"
-							Sortable
-							Filterable
-							Width="150px">
-				<Template>
-					@{
-						string statusClass = licencia.EstadoLicencia switch
-						{
-							TipoEstadoLicencia.Rechazada => "status-rejected",
-							TipoEstadoLicencia.Aprobada => "status-approved",
-							_ => "status-pending"
-						};
-					}
-					<span class="status-badge @statusClass">
-						@licencia.EstadoLicencia.ToString()
-					</span>
-				</Template>
-			</PropertyColumn>
-		</ColumnDefinitions>
-	</Table>
+            <PropertyColumn Title="Estado"
+                            Property="c => c.EstadoLicencia"
+                            Sortable
+                            Filterable
+                            Width="150px">
+                <Template>
+                    @{
+                        string statusClass = licencia.EstadoLicencia switch
+                        {
+                            TipoEstadoLicencia.Rechazada => "status-rejected",
+                            TipoEstadoLicencia.Aprobada => "status-approved",
+                            _ => "status-pending"
+                        };
+                    }
+                    <span class="status-badge @statusClass">
+                        @licencia.EstadoLicencia.ToString()
+                    </span>
+                </Template>
+            </PropertyColumn>
+        </ColumnDefinitions>
+    </Table>
 </div>
 
-<Modal Title="@("Nueva Licencia")"
-	   Visible="@_visibleAgregar"
-	   Footer="null"
-	   Width="700"
-	   Centered
-	   MaskClosable="false"
-	   OnCancel="@HandleCancelAgregar">
+@*Modal para el añadir Licencia*@
+<Modal @bind-Visible="_modalAñadirVisible" Title="Añadir Licencia" OkText="@("Cargar")" CancelText="@("Cancelar")" OnOk="@AddLicencia">
+    <Form Model="nuevaLicencia">
+        <FormItem Label="Nombre del Bombero">
+            <Select TItem="BomberoViweModel"
+                    TItemValue="int"
+                    DataSource="@BomberosVM"
+                    @bind-Value="@nuevaLicencia.NumeroLegajo"
+                    LabelName="@nameof(BomberoViweModel.NombreYApellido)"
+                    ValueName="@nameof(BomberoViweModel.Id)"
+                    Placeholder="Seleccione el bombero"
+                    DefaultActiveFirstOption="false"
+                    AllowClear="true"
+                    EnableSearch>
+            </Select>
+        </FormItem>
 
-	<LicenciasAlta />
-	<div class="modal-footer">
-		<Button Class="cancel-button" OnClick="@HandleCancelAgregar">
-			Volver
-		</Button>
-	</div>
+        <FormItem Label="Numero Legajo">
+            <AntDesign.InputNumber @bind-Value="nuevaLicencia.NumeroLegajo" Disabled />
+        </FormItem>
+
+        <FormItem Label="Tipo Licencia">
+            <EnumSelect TEnum="TipoLicencia?"
+                        @bind-Value="@nuevaLicencia.TipoLicencia"
+                        AllowClear
+                        Placeholder="Seleccione el tipo de licencia" />
+        </FormItem>
+
+        @if (nuevaLicencia.TipoLicencia == TipoLicencia.RazonesDeSalud)
+        {
+            <FormItem Label="Adjuntar Certificado Médico">
+                <InputFile />
+            </FormItem>
+        }
+
+        <FormItem Label="Descripcion">
+            <TextArea @bind-Value="@nuevaLicencia.Descripcion"
+                      Placeholder="Ingrese una descripción"
+                      Rows="4" />
+        </FormItem>
+
+        <FormItem Label="Fecha inicio">
+            <DatePicker TValue="DateTime"
+                        DefaultValue="DateTime.Now"
+                        @bind-Value="@nuevaLicencia.Desde"
+                        DisabledDate="@(date => date < DateTime.Today)"
+                        Placeholder="@("Seleccione la fecha de inicio")" />
+        </FormItem>
+
+        <FormItem Label="Fecha finalizacion">
+            <DatePicker TValue="DateTime"
+                        DefaultValue="DateTime.Now"
+                        @bind-Value="@nuevaLicencia.Hasta"
+                        DisabledDate="@(date => date < nuevaLicencia.Desde)"
+                        Placeholder="@("Seleccione la fecha de finalización")" />
+        </FormItem>
+
+        <FormItem Label="Duración en días">
+            <Input Value="@nuevaLicencia.DuracionEnDias.ToString()" ReadOnly />
+        </FormItem>
+    </Form>
+
 </Modal>
+
+@*Modal para el Historial de la Licencia*@
+
 @code {
+    /// <summary>
+    /// ViewModel para la gestión de licencias (alta, baja, modificación y listado).
+    /// </summary>
+    public class LicenciaViewModel
+    {
+        /// <summary>
+        /// Tipo de licencia.
+        /// </summary>
+        [Required(ErrorMessage = "El tipo de licencia es obligatorio.")]
+        public TipoLicencia? TipoLicencia { get; set; }
 
-	public class LicencasVm
-	{
-		[Required]
-		public TipoLicencia TipoLicencia { get; set; }
-		public string Descripcion { get; set; }
-		public DateTime Desde { get; set; }
-		public DateTime Hasta { get; set; }
-		public TipoEstadoLicencia EstadoLicencia { get; set; }
-		public int PersonaId { get; set; }
-		public Bombero? PersonalAfectado { get; set; }
-		public string? ApellidoYNombre { get; set; }
+        /// <summary>
+        /// Numero de legajo del bombero afectado por la licencia.
+        /// </summary>
+        public int NumeroLegajo { get; set; }
 
-		public int DuracionEnDias
-		{
-			get
-			{
-				return (Hasta - Desde).Days + 1;
-			}
-		}
-	}
+        /// <summary>
+        /// Id del bombero afectado por la licencia.
+        /// </summary>
+        public int PersonaId { get; set; }
 
-	//variables Locales
-	DateTime FechaBuscarI;
-	DateTime FechaBuscarF;
-	BomberosDbContext Context { get; set; }
-	public LicencasVm LicencasVM = new();
-	List<LicencasVm> LicenciasActivasVM = new();
-	List<Licencia> LicenciasPendientes = new();
-	public bool _visibleAgregar = false;
-	string? Busqueda;
+        /// <summary>
+        /// Bombero afectado por la licencia.
+        /// </summary>
+        public BomberoViweModel? PersonalAfectado { get; set; }
 
-	private bool isLoading = false;
+        /// <summary>
+        /// Apellido y nombre del bombero afectado por la licencia.
+        /// </summary>
+        public string? ApellidoYNombre { get; set; }
 
-	protected override async Task OnInitializedAsync()
-	{
-		await Init();
-	}
+        /// <summary>
+        /// Descripción de la licencia.
+        /// </summary>
+        public string? Descripcion { get; set; }
 
-	private async Task Init()
-	{
-		LicencasVM = new();
-		Context = DbFactory.CreateDbContext();
-		await LicenciasActivas();
-		await LicenciasPendiente();
-		await BorrarLicenciasDefectuosas();
-	}
+        /// <summary>
+        /// Fecha de inicio de la licencia.
+        /// Esta fecha debe ser mayor o igual a la fecha actual.
+        /// Es obligatoria.
+        /// </summary>
+        [Required(ErrorMessage = "La fecha de inicio es obligatoria.")]
+        public DateTime Desde { get; set; }
 
-	private async Task LicenciasActivas()
-	{
-		LicenciasActivasVM.Clear();
-		var haceDosSemanas = DateTime.Today.AddDays(-14);
-		var Licencias = await Context.Licencias
-			.Include(b => b.PersonalAfectado)
-			.Where(l => l.Hasta > haceDosSemanas)
-			.ToListAsync();
+        /// <summary>
+        /// Fecha de finalización de la licencia.
+        /// Esta fecha debe ser mayor o igual a la fecha de inicio.
+        /// Es obligatoria.
+        /// </summary>
+        [Required(ErrorMessage = "La fecha de fin es obligatoria.")]
+        public DateTime Hasta { get; set; }
 
-		foreach (var l in Licencias)
-		{
-			LicencasVm LicVm = new()
-				{
-					TipoLicencia = l.TipoLicencia,
-					Descripcion = l.Descripcion,
-					Desde = l.Desde,
-					Hasta = l.Hasta,
-					EstadoLicencia = l.EstadoLicencia,
-					ApellidoYNombre = l.PersonalAfectado?.Apellido + ", " + l.PersonalAfectado?.Nombre,
-				};
+        /// <summary>
+        /// Estado de la licencia. (Aprobada, Rechazada, Pendiente)
+        /// La licencia se encuentra en estado pendiente hasta que se aprueba o rechaza.
+        /// </summary>
+        public TipoEstadoLicencia EstadoLicencia { get; set; }
 
-			LicenciasActivasVM.Add(LicVm);
-		}
-		StateHasChanged();
-	}
+        /// <summary>
+        /// Duración de la licencia en días (inclusive).
+        /// </summary>
+        public int DuracionEnDias => (Hasta - Desde).Days + 1;
 
-	private async Task BorrarLicenciasDefectuosas()
-	{
-		var añoMinimo = new DateTime(2000, 1, 1);
+        /// <summary>
+        /// Indica si las fechas cumplen con la lógica de validación.
+        /// </summary>
+        public bool FechasValidas => Desde >= DateTime.Today && Hasta >= Desde;
+    }
 
-		var licenciasDefectuosas = await Context.Licencias
-			.Where(l => l.Desde < añoMinimo || l.Hasta < añoMinimo || l.Desde > l.Hasta)
-			.ToListAsync();
+    // Variables para la búsqueda de licencias
+    DateTime FechaBuscarI;
+    DateTime FechaBuscarF;
+    string? Busqueda;
 
-		if (licenciasDefectuosas.Any())
-		{
-			Context.Licencias.RemoveRange(licenciasDefectuosas);
-			await Context.SaveChangesAsync();
-			await _message.ErrorAsync($"{licenciasDefectuosas.Count} licencias defectuosas han sido eliminadas.");
-		}
-	}
+    // Lista de licencias
+    List<LicenciaViewModel> LicenciasVM = new();
+    List<LicenciaViewModel> LicenciasVM_SinFiltro = new();
+    List<LicenciaViewModel> LicenciasVM_PendientesDeAprobacion = new();
 
-	private async Task LicenciasBuscar()
-	{
-		LicenciasActivasVM.Clear();
-		var licencias = await Context.Licencias
-			.Where(l => l.Desde >= FechaBuscarI && l.Hasta <= FechaBuscarF)
-			.Include(b => b.PersonalAfectado)
-			.ToListAsync();
+    // Lista de bomberos para el select
+    List<BomberoViweModel> BomberosVM = new();
 
-		foreach (var licencia in licencias)
-		{
-			LicencasVm LicVm = new()
-				{
-					TipoLicencia = licencia.TipoLicencia,
-					Descripcion = licencia.Descripcion,
-					Desde = licencia.Desde,
-					Hasta = licencia.Hasta,
-					EstadoLicencia = licencia.EstadoLicencia,
-					ApellidoYNombre = licencia.PersonalAfectado?.Apellido + ", " + licencia.PersonalAfectado?.Nombre,
-				};
+    // Variables para el modal de añadir licencia
+    private bool _modalAñadirVisible = false;
+    private LicenciaViewModel nuevaLicencia = new LicenciaViewModel();
 
-			LicenciasActivasVM.Add(LicVm);
-		}
+    // Funciones para el inicio de la página y la inicialización de datos
+    protected override async Task OnInitializedAsync()
+    {
+        await Init();
+    }
 
-		StateHasChanged();
-	}
+    private async Task Init()
+    {
+        // Obtener todas las licencias y bomberos de la base de datos mediante los servicios
+        var licencias = await LicenciaService.ObtenerTodasLasLicencias();
+        var bomberos = await BomberoService.ObtenerTodosLosBomberosAsync();
 
-	private async Task LicenciasPendiente()
-	{
-		LicenciasPendientes = new();
-		var fechaActual = DateTime.Now;
+        // Mapeo de licencias a ViewModel
+        LicenciasVM_SinFiltro = LicenciasToViewModel(licencias).ToList();
 
-		// Filtrar licencias pendientes
-		LicenciasPendientes = await Context.Licencias
-			.Where(l => l.EstadoLicencia == TipoEstadoLicencia.Pendiente)
-			.ToListAsync();
+        // Mapeo de bomberos a ViewModel
+        BomberosVM = bomberos.ToBomberoViewModelList();
 
-		// Verificar fechas y actualizar estado
-		foreach (var licencia in LicenciasPendientes)
-		{
-			if (licencia.Desde <= fechaActual)
-			{
-				licencia.EstadoLicencia = TipoEstadoLicencia.Rechazada;
-			}
-		}
+        // Copia de la lista de licencias sin filtro a la lista de licencias con filtro para luego aplicar filtros
+        LicenciasVM = LicenciasVM_SinFiltro.ToList();
+    }
 
-		// Guardar cambios en el contexto
-		await Context.SaveChangesAsync();
+    private List<LicenciaViewModel> LicenciasToViewModel(List<Licencia> licencias)
+    {
+        var licenciasVM = new List<LicenciaViewModel>();
 
-		// Filtrar nuevamente las licencias pendientes que no hayan pasado su fecha de inicio
-		LicenciasPendientes = LicenciasPendientes
-			.Where(l => l.EstadoLicencia == TipoEstadoLicencia.Pendiente && l.Desde > fechaActual)
-			.ToList();
-	}
+        foreach (var l in licencias)
+        {
+            var licVm = new LicenciaViewModel
+            {
+                TipoLicencia = l.TipoLicencia,
+                NumeroLegajo = l.BomberoAfectado?.NumeroLegajo ?? 0,
+                PersonaId = l.PersonalId,
+                PersonalAfectado = l.BomberoAfectado.ToBomberoViewModel(),
+                ApellidoYNombre = l.BomberoAfectado != null
+                    ? $"{l.BomberoAfectado.Apellido}, {l.BomberoAfectado.Nombre}"
+                    : string.Empty,
+                Descripcion = l.Descripcion,
+                Desde = l.Desde,
+                Hasta = l.Hasta,
+                EstadoLicencia = l.EstadoLicencia
+            };
 
-	// Buscar Licenciados
-	private async Task BuscarLicenciado()
-	{
-		LicenciasActivasVM.Clear();
-		var licencias = await Context.Licencias
-		.Where(l => l.PersonalAfectado.Nombre.ToLower().Contains(Busqueda.ToLower()) || l.PersonalAfectado.Apellido.ToLower().Contains(Busqueda.ToLower()))
-		.Include(b => b.PersonalAfectado).ToListAsync();
-		foreach (var l in licencias)
-		{
-			LicencasVm LicVm = new()
-				{
-					TipoLicencia = l.TipoLicencia,
-					Descripcion = l.Descripcion,
-					Desde = l.Desde,
-					Hasta = l.Hasta,
-					EstadoLicencia = l.EstadoLicencia,
-					ApellidoYNombre = l.PersonalAfectado?.Apellido + ", " + l.PersonalAfectado?.Nombre,
-				};
-			LicenciasActivasVM.Add(LicVm);
-		}
-	}
+            licenciasVM.Add(licVm);
+        }
 
-	private async void HandleOkAgregar(MouseEventArgs e)
-	{
-		_visibleAgregar = false;
-		await Init();
-	}
+        return licenciasVM;
+    }
 
-	public async void HandleCancelAgregar(MouseEventArgs e)
-	{
-		Console.WriteLine(e);
-		_visibleAgregar = false;
-		await Init();
-	}
 
-	private async void ShowModalAgregar()
-	{
-		_visibleAgregar = true;
-		await Init();
-	}
+    private async Task AddLicencia()
+    {
 
-	public void Dispose()
-	{
-		Context?.Dispose();
-	}
+    }
 }
