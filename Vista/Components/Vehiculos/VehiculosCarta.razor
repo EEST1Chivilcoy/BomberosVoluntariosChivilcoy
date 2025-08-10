@@ -19,19 +19,19 @@
         </div>
 
         <div class="botones-grid">
-            <Button OnClick="()=>DetallesVisible = true">
+            <Button OnClick="() => DetallesVisible = true">
                 <Icon Type="Menu" Theme="IconThemeType.Outline" />
             </Button>
 
-            
 
-            <Button OnClick="()=>EditarVisible = true">
+
+            <Button OnClick="() => EditarVisible = true">
                 <Icon Type="Edit" Theme="IconThemeType.Outline" />
             </Button>
 
             @if (Vehiculo.Estado == TipoEstadoMovil.Activo)
             {
-                <Popconfirm Title="¿Estás seguro de dar de baja a este móvil?" OnConfirm="()=>CambiarEstado(Vehiculo.VehiculoId, TipoEstadoMovil.Inactivo)" OnCancel="Cancel">
+                <Popconfirm Title="¿Estás seguro de dar de baja a este móvil?" OnConfirm="() => CambiarEstado(Vehiculo.VehiculoId, TipoEstadoMovil.Inactivo)" OnCancel="Cancel">
                     <Button>
                         <i class="fa fa-trash" aria-hidden="true"></i>
                     </Button>
@@ -39,7 +39,7 @@
             }
             else
             {
-                <Popconfirm Title="¿Estás seguro de dar de alta a este móvil?" OnConfirm="()=>CambiarEstado(Vehiculo.VehiculoId, TipoEstadoMovil.Activo)" OnCancel="Cancel">
+                <Popconfirm Title="¿Estás seguro de dar de alta a este móvil?" OnConfirm="() => CambiarEstado(Vehiculo.VehiculoId, TipoEstadoMovil.Activo)" OnCancel="Cancel">
                     <Button>
                         <Icon Type="Up" Theme="IconThemeType.Outline" />
                     </Button>
@@ -51,22 +51,15 @@
 
 @if (EditarVisible)
 {
-    <Modal Footer="null" Title="Editar" OnCancel="()=> EditarVisible = false" Visible="@EditarVisible">
+    <Modal Footer="null" Title="Editar" OnCancel="() => EditarVisible = false" Visible="@EditarVisible">
         <VehiculoEditar VehiculoId="@VehiculoId" OnClose="HandleCancelEditar" />
     </Modal>
 }
 
 @if (DetallesVisible)
 {
-    <Modal Footer="null" Title="Detalles" OnCancel="()=> DetallesVisible = false" Visible="@DetallesVisible" Class="modal-detalles">
+    <Modal Footer="null" Title="Detalles" OnCancel="() => DetallesVisible = false" Visible="@DetallesVisible" Class="modal-detalles">
         <VehiculoDetalles vehiculoId="@VehiculoId" />
-    </Modal>
-}
-
-@if (FichaVisible)
-{
-    <Modal Footer="null" Title="Ficha técnica" OnCancel="()=> FichaVisible = false" Visible="@FichaVisible" Class="modal-ficha">
-        <FichaTecnica VehiculoId="@VehiculoId" />
     </Modal>
 }
 
