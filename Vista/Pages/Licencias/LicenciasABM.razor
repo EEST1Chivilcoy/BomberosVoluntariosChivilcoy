@@ -15,7 +15,7 @@
 
 <div class="template">
     <Table DataSource="LicenciasVM"
-           PageSize="20"
+           PageSize="5"
            Responsive
            TItem="LicenciaViewModel"
            RowClassName="@(c => c.Data.EstadoLicencia.ToString())">
@@ -70,11 +70,11 @@
                                       Class="notification-badge">
                                 <Overlay>
                                     <Menu Style="min-width:520px; max-width:1000px;">
-                                        <LicenciasAprobar />
+                                        <LicenciasAprobar OnCompleted="@Init"/>
                                     </Menu>
                                 </Overlay>
                                 <ChildContent>
-                                    <Badge Count="LicenciasVM_PendientesDeAprobacion.Count" Style="font-size: 14px;">
+                                    <Badge Count="LicenciasVM_PendientesDeAprobacion" Style="font-size: 14px;">
                                         <Button Shape="ButtonShape.Circle" Icon="bell" Size="ButtonSize.Large" />
                                     </Badge>
                                 </ChildContent>
@@ -169,7 +169,9 @@
             <Select TItem="BomberoViweModel"
                     TItemValue="int"
                     DataSource="@BomberosVM"
-                    @bind-Value="@nuevaLicencia.NumeroLegajo"
+                    Value="nuevaLicencia.PersonaId"
+                    ValueChanged="OnBomberoChanged"
+                    ValueExpression="() => nuevaLicencia.PersonaId"
                     LabelName="@nameof(BomberoViweModel.NombreYApellido)"
                     ValueName="@nameof(BomberoViweModel.Id)"
                     Placeholder="Seleccione el bombero"
@@ -229,84 +231,17 @@
 @*Modal para el Historial de la Licencia*@
 
 @code {
-    /// <summary>
-    /// ViewModel para la gestión de licencias (alta, baja, modificación y listado).
-    /// </summary>
-    public class LicenciaViewModel
-    {
-        /// <summary>
-        /// Tipo de licencia.
-        /// </summary>
-        [Required(ErrorMessage = "El tipo de licencia es obligatorio.")]
-        public TipoLicencia? TipoLicencia { get; set; }
-
-        /// <summary>
-        /// Numero de legajo del bombero afectado por la licencia.
-        /// </summary>
-        public int NumeroLegajo { get; set; }
-
-        /// <summary>
-        /// Id del bombero afectado por la licencia.
-        /// </summary>
-        public int PersonaId { get; set; }
-
-        /// <summary>
-        /// Bombero afectado por la licencia.
-        /// </summary>
-        public BomberoViweModel? PersonalAfectado { get; set; }
-
-        /// <summary>
-        /// Apellido y nombre del bombero afectado por la licencia.
-        /// </summary>
-        public string? ApellidoYNombre { get; set; }
-
-        /// <summary>
-        /// Descripción de la licencia.
-        /// </summary>
-        public string? Descripcion { get; set; }
-
-        /// <summary>
-        /// Fecha de inicio de la licencia.
-        /// Esta fecha debe ser mayor o igual a la fecha actual.
-        /// Es obligatoria.
-        /// </summary>
-        [Required(ErrorMessage = "La fecha de inicio es obligatoria.")]
-        public DateTime Desde { get; set; }
-
-        /// <summary>
-        /// Fecha de finalización de la licencia.
-        /// Esta fecha debe ser mayor o igual a la fecha de inicio.
-        /// Es obligatoria.
-        /// </summary>
-        [Required(ErrorMessage = "La fecha de fin es obligatoria.")]
-        public DateTime Hasta { get; set; }
-
-        /// <summary>
-        /// Estado de la licencia. (Aprobada, Rechazada, Pendiente)
-        /// La licencia se encuentra en estado pendiente hasta que se aprueba o rechaza.
-        /// </summary>
-        public TipoEstadoLicencia EstadoLicencia { get; set; }
-
-        /// <summary>
-        /// Duración de la licencia en días (inclusive).
-        /// </summary>
-        public int DuracionEnDias => (Hasta - Desde).Days + 1;
-
-        /// <summary>
-        /// Indica si las fechas cumplen con la lógica de validación.
-        /// </summary>
-        public bool FechasValidas => Desde >= DateTime.Today && Hasta >= Desde;
-    }
-
     // Variables para la búsqueda de licencias
     DateTime FechaBuscarI;
     DateTime FechaBuscarF;
     string? Busqueda;
 
+    // Contador de licencias pendientes de aprobación
+    int LicenciasVM_PendientesDeAprobacion => LicenciasVM.Count(l => l.EstadoLicencia == TipoEstadoLicencia.Pendiente);
+
     // Lista de licencias
     List<LicenciaViewModel> LicenciasVM = new();
     List<LicenciaViewModel> LicenciasVM_SinFiltro = new();
-    List<LicenciaViewModel> LicenciasVM_PendientesDeAprobacion = new();
 
     // Lista de bomberos para el select
     List<BomberoViweModel> BomberosVM = new();
@@ -345,6 +280,7 @@
         {
             var licVm = new LicenciaViewModel
             {
+                Id = l.LicenciaId,
                 TipoLicencia = l.TipoLicencia,
                 NumeroLegajo = l.BomberoAfectado?.NumeroLegajo ?? 0,
                 PersonaId = l.PersonalId,
@@ -364,9 +300,103 @@
         return licenciasVM;
     }
 
+    private async Task OnBomberoChanged(int nuevoValor)
+    {
+        nuevaLicencia.PersonaId = nuevoValor;
+
+        var bombero = BomberosVM.FirstOrDefault(b => b.Id == nuevoValor);
+
+        if (bombero != null)
+        {
+            nuevaLicencia.ApellidoYNombre = bombero.NombreYApellido;
+            nuevaLicencia.NumeroLegajo = bombero.NumeroLegajo;
+        }
+        else
+        {
+            nuevaLicencia.ApellidoYNombre = null;
+            nuevaLicencia.NumeroLegajo = 0;
+        }
+
+        StateHasChanged();
+    }
 
     private async Task AddLicencia()
     {
+        // El modal se cierra cuando se hace clic en "Cargar" asi que lo volvemos a abrir
+        _modalAñadirVisible = true;
 
+        // Validaciones
+        if (string.IsNullOrWhiteSpace(nuevaLicencia.ApellidoYNombre) ||
+           nuevaLicencia.NumeroLegajo <= 0 ||
+           nuevaLicencia.TipoLicencia == null ||
+           nuevaLicencia.Descripcion == null ||
+           nuevaLicencia.Desde == default ||
+           nuevaLicencia.Hasta == default)
+        {
+            await MessageService.ErrorAsync("Por favor, complete todos los campos obligatorios.");
+            return;
+        }
+
+        if (!BomberosVM.Any(b => b.Id == nuevaLicencia.PersonaId))
+        {
+            await MessageService.ErrorAsync("El bombero seleccionado no es válido.");
+            return;
+        }
+
+        if (nuevaLicencia.Desde > nuevaLicencia.Hasta)
+        {
+            await MessageService.ErrorAsync("La fecha de inicio no puede ser mayor que la fecha de finalización.");
+            return;
+        }
+
+        if (nuevaLicencia.Desde < DateTime.Today)
+        {
+            await MessageService.ErrorAsync("La fecha de inicio no puede ser anterior a hoy.");
+            return;
+        }
+
+        @*if (nuevaLicencia.TipoLicencia == TipoLicencia.RazonesDeSalud && (archivoCertificado == null || archivoCertificado.Length == 0))
+        {
+            await MessageService.ErrorAsync("Debe adjuntar el certificado médico para licencias por razones de salud.");
+            return;
+        } <-- Arreglar en algun momento el tema del certificado medico*@
+
+        var bombero = await BomberoService.ObtenerBomberoPorIdAsync(nuevaLicencia.PersonaId);
+
+        if (bombero == null)
+        {
+            await MessageService.ErrorAsync("No se encontró el bombero seleccionado.");
+            return;
+        }
+
+        // Validar duración en días
+        var duracionCalculada = (nuevaLicencia.Hasta - nuevaLicencia.Desde).Days + 1;
+
+        if (nuevaLicencia.DuracionEnDias != duracionCalculada)
+        {
+            await MessageService.ErrorAsync("La duración en días no coincide con las fechas seleccionadas.");
+            return;
+        }
+
+        var nuevaLicenciaModel = new Licencia
+        {
+            TipoLicencia = nuevaLicencia.TipoLicencia!.Value,
+            PersonalId = nuevaLicencia.PersonaId,
+            Descripcion = nuevaLicencia.Descripcion,
+            Desde = nuevaLicencia.Desde,
+            Hasta = nuevaLicencia.Hasta,
+            EstadoLicencia = TipoEstadoLicencia.Pendiente,
+            BomberoAfectado = bombero,
+        };
+
+        // Si todo es válido, guardar la nueva licencia en la base de datos mediante el servicio
+        await LicenciaService.AgregarLicencia(nuevaLicenciaModel);
+
+        // Cerrar el modal y limpiar el formulario
+        _modalAñadirVisible = false;
+        nuevaLicencia = new LicenciaViewModel();
+
+        // Recargamos la pagina para mostrar la nueva licencia
+        await Init();
     }
 }
