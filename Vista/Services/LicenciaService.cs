@@ -37,6 +37,7 @@ namespace Vista.Services
 
                 return await _context.Licencias
                     .Include(l => l.BomberoAfectado)
+                    .AsNoTracking()
                     .ToListAsync();
             }
             catch (Exception ex)
