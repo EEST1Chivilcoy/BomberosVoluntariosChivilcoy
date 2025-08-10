@@ -40,12 +40,6 @@
                                         Size="InputSize.Large"
                                         Style="min-width: 150px;" />
                         </div>
-                        <Button Type="ButtonType.Primary"
-                                Icon="search"
-                                Size="ButtonSize.Large"
-                                Style="margin-bottom: 0;">
-                            Filtrar
-                        </Button>
                     </div>
 
                     <div class="actions-container">
@@ -54,6 +48,7 @@
                                     AllowClear
                                     EnterButton="true"
                                     Size="InputSize.Large"
+                                    OnSearch="@(() => LicenciasVM = FiltrarLicencias())"
                                     @bind-Value="Busqueda" />
                         </div>
 
@@ -70,7 +65,7 @@
                                       Class="notification-badge">
                                 <Overlay>
                                     <Menu Style="min-width:520px; max-width:1000px;">
-                                        <LicenciasAprobar OnCompleted="@Init"/>
+                                        <LicenciasAprobar OnCompleted="@Init" />
                                     </Menu>
                                 </Overlay>
                                 <ChildContent>
@@ -256,6 +251,7 @@
         await Init();
     }
 
+    // Función para inicializar los datos de la página
     private async Task Init()
     {
         // Obtener todas las licencias y bomberos de la base de datos mediante los servicios
@@ -268,10 +264,24 @@
         // Mapeo de bomberos a ViewModel
         BomberosVM = bomberos.ToBomberoViewModelList();
 
-        // Copia de la lista de licencias sin filtro a la lista de licencias con filtro para luego aplicar filtros
-        LicenciasVM = LicenciasVM_SinFiltro.ToList();
+        // Filtrar las licencias según la fecha y búsqueda de texto
+        LicenciasVM = FiltrarLicencias();
     }
 
+    private List<LicenciaViewModel> FiltrarLicencias()
+    {
+        // Filtrar por fecha y búsqueda de texto
+        return LicenciasVM_SinFiltro
+            .Where(l => (FechaBuscarI == default || l.Desde >= FechaBuscarI) &&
+                        (FechaBuscarF == default || l.Hasta <= FechaBuscarF) &&
+                        (string.IsNullOrWhiteSpace(Busqueda) ||
+                         l.ApellidoYNombre.Contains(Busqueda, StringComparison.OrdinalIgnoreCase)))
+            .ToList();
+
+        StateHasChanged();
+    }
+
+    // Función para mapear las licencias a ViewModel
     private List<LicenciaViewModel> LicenciasToViewModel(List<Licencia> licencias)
     {
         var licenciasVM = new List<LicenciaViewModel>();
@@ -300,6 +310,7 @@
         return licenciasVM;
     }
 
+    // Función para que se actualicen atributos de la licencia cuando se cambia el bombero seleccionado
     private async Task OnBomberoChanged(int nuevoValor)
     {
         nuevaLicencia.PersonaId = nuevoValor;
@@ -320,6 +331,7 @@
         StateHasChanged();
     }
 
+    // Función para añadir una nueva licencia
     private async Task AddLicencia()
     {
         // El modal se cierra cuando se hace clic en "Cargar" asi que lo volvemos a abrir
