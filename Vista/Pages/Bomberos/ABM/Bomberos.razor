@@ -295,7 +295,7 @@
     // Init, OnChange y Carga de datos
     protected override async Task OnInitializedAsync()
     {
-        var bomberos = await BomberoService.ObtenerTodosLosBomberosAsync();
+        var bomberos = await BomberoService.ObtenerTodosLosBomberosAsync(ConImagenes: true);
         SinFiltrar = bomberos.ToBomberoViewModelList();
 
         search(searchString, Estado);
