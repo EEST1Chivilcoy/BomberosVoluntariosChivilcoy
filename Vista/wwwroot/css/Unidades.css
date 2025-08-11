@@ -24,14 +24,16 @@
 }
 
 .header-container h2 {
+
     font-family: 'Bebas Neue', 'Fjalla One', sans-serif;
     font-size: 2.5rem;
     letter-spacing: 2px;
     color: #d32f2f;
-    text-shadow: 1px 2px 8px #ffd6d6;
+    text-shadow: 1px 2px 8px #ffffff;
     position: relative;
     display: inline-block;
     padding-bottom: 6px;
+    
 }
 
 .header-container h2::after {
