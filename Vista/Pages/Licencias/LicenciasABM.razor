@@ -11,7 +11,8 @@
 
 @page "/licencias"
 
-<<<<<<< HEAD
+<link rel="stylesheet" href="css/Licencias.css" />
+
 <style>
 	.template {
 		width: 100%;
@@ -210,9 +211,6 @@
     padding-bottom: 6px;
         }
 </style>
-=======
-<link rel="stylesheet" href="css/Licencias.css" />
->>>>>>> ff83faf664e792450e05c79967c50daa0a8af19c
 
 <div class="template">
     <Table DataSource="LicenciasVM"
@@ -221,43 +219,11 @@
            TItem="LicenciaViewModel"
            RowClassName="@(c => c.Data.EstadoLicencia.ToString())">
 
-<<<<<<< HEAD
-		<TitleTemplate>
-			<div style="background-color: #A63333; color: white; padding: 16px; border-radius: 8px;">
-					<div class="Licencia-titulo">
-              		  <h2 style="margin-bottom: 0;"><Icon Type="key" style="color: #FFD700;"/>LICENCIAS</h2>
-					</div>
-                </div>  
-            <div class="abm-filters">
-				<div class="filters-container">
-					<div class="date-filter-container">
-						<div class="filter-group">
-							<label class="filter-label">Desde:</label>
-							<DatePicker TValue="DateTime"
-										DefaultValue="@DateTime.Now.AddDays(-14)"
-										@bind-Value="@FechaBuscarI"
-										Size="InputSize.Large"
-										Style="min-width: 150px;" />
-						</div>
-						<div class="filter-group">
-							<label class="filter-label">Hasta:</label>
-							<DatePicker TValue="DateTime"
-										DefaultValue="@DateTime.Now"
-										@bind-Value="@FechaBuscarF"
-										Size="InputSize.Large"
-										Style="min-width: 150px;" />
-						</div>
-						<Button Type="ButtonType.Primary"
-								OnClick="@LicenciasBuscar"
-								Icon="search"
-								Size="ButtonSize.Large"
-								Style="margin-bottom: 0;">
-							Filtrar
-						</Button>
-					</div>
-=======
         <TitleTemplate>
             <div style="background-color: #A63333; color: white; padding: 16px; border-radius: 8px;">
+                		<div class="Licencia-titulo">
+              		  <h2 style="margin-bottom: 0;"><Icon Type="key" style="color: #FFD700;"/>LICENCIAS</h2>
+					</div>
                 <div class="filters-container">
                     <div class="date-filter-container">
                         <div class="filter-group">
@@ -277,7 +243,6 @@
                                         Style="min-width: 150px;" />
                         </div>
                     </div>
->>>>>>> ff83faf664e792450e05c79967c50daa0a8af19c
 
                     <div class="actions-container">
                         <div class="search-container">
