@@ -17,11 +17,9 @@ namespace Vista.Services
     {
         Task<VehiculoSalida> AgregarVehiculo(VehiculoSalida vehiculo);
         Task<VehiculoSalida> EditarVehiculo(VehiculoSalida vehiculo);
-        Task<VehiculoSalida> CambiarEstado(int movilid, TipoEstadoMovil estado);
         Task<Incidente> AgregarIncidente(Incidente incidente);
         Task<Incidente> BorrarIncidente(Incidente incidente);
         Task<Movil> ObtenerMovilPorNumero(string NumeroMovil);
-        Task<List<Movil>> ObtenerTodosLosMoviles();
     }
 
     public class VehiculoService : IVehiculoService

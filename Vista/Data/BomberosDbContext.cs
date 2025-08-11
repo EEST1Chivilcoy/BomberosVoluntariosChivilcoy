@@ -106,6 +106,9 @@ namespace Vista.Data
         // Propiedad experimental
         public DbSet<Salida> Salidas { get; set; }
 
+        // Otra Propiedad experimental para el servicio de VehiculoSalida
+        public DbSet<VehiculoSalida> VehiculoSalidas { get; set; }
+
         public BomberosDbContext(DbContextOptions<BomberosDbContext> options)
             : base(options)
         {

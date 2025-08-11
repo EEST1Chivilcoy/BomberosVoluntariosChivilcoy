@@ -7,6 +7,7 @@
 @using Vista.Services
 @inject IMessageService MessageService
 
+@*
 <Form Model="movilSalidaView">
 
     <FormItem Label="Seleccione al Chofer">
@@ -60,7 +61,7 @@
     <Button OnClick="@AgregarMovilSalida">Cargar movil</Button>
 </Form>
 
-@*Modal para los Datos de la Carga de Combustible*@
+@*Modal para los Datos de la Carga de Combustible
 <Modal Title="Datos de la carga de combustible" Visible="@_visible" OnCancel="@HandleCancelMovil" OkText=@("Cargar Movil") CancelText="@("Cancelar")">
     <Form Model="@movilSalidaView">
         <FormItem Label="Número de Remito">
@@ -113,7 +114,7 @@
 @code {
     [Parameter, EditorRequired] public SalidasViewModels Model { get; set; } = null!;
     [Parameter, EditorRequired] public List<Bombero> BomberosTodos { get; set; } = null!;
-    [Parameter, EditorRequired] public List<Movil> Moviles { get; set; } = null!;
+    [Parameter, EditorRequired] public List<VehiculoSalida> Flota { get; set; } = null!;
 
     private List<BomberoViweModel> bomberoChoferes { get; set; } = new();
     private List<BomberoViweModel> bomberoChoferesSalir { get; set; } = new();
@@ -379,3 +380,4 @@
         return bomberosViewModel;
     }
 }
+*@

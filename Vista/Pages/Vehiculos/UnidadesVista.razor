@@ -1,9 +1,14 @@
 ﻿@using Vista.Components.Vehiculos
 @using Vista.Data.Models.Vehiculos.Flota
 @using AntDesign
-@inject NavigationManager navigationManager
-@inject IDbContextFactory<BomberosDbContext> DbFactory
+
 <link rel="stylesheet" href="css/Unidades.css" />
+
+@*Servicios utilizados*@
+@using Vista.Services
+@inject NavigationManager navigationManager
+@inject IVehiculoSalidaService VehiculoSalidaService
+
 @page "/unidades"
 
 <div class="container">
@@ -13,7 +18,7 @@
             <div class="header-container" style="display: flex; justify-content: space-between; align-items: center;">
                 <div>
                     <h2 style="margin-bottom: 0;"><Icon Type="Car" />UNIDADES</h2>
-                    <p style="margin-top: 4px; color: #666;">@vehiculos?.Count(v => v.Estado == TipoEstadoMovil.Activo) unidades activas</p>
+                    <p style="margin-top: 4px; color: #666;">@vehiculos?.Count() unidades activas</p>
                 </div>
                 <Space>
                     <Button Type="ButtonType.Primary"
@@ -34,9 +39,9 @@
                 @if (vehiculos is not null)
                 {
                     <div class="vehicles-grid">
-                        @foreach (VehiculoSalida m in vehiculos.Where(v => v.Estado == TipoEstadoMovil.Activo))
+                        @foreach (var m in vehiculos)
                         {
-                            <VehiculosCarta Vehiculo="m" OnChange="Init" />
+                            <VehiculosCarta VehiculoId="m.Id" OnChange="Init" />
                         }
                     </div>
                 }
@@ -61,9 +66,16 @@
 
 @code {
     RenderFragment LoadingIcon => @<Icon Type="loading" Theme="IconThemeType.Outline" Style="font-size: 24px; color: rgb(62, 24, 24);" Spin />;
-    List<VehiculoSalida> vehiculos = new();
     bool AgregarVisible { get; set; }
-    BomberosDbContext Context { get; set; }
+
+    private List<UnidadesViewModel> vehiculos = new();
+
+    public class UnidadesViewModel
+    {
+        public int Id { get; set; }
+        public string NumeroMovil { get; set; } = string.Empty;
+        public string? ImageUrl { get; set; } = string.Empty;
+    }
 
     private async void CloseVehiculo()
     {
@@ -79,16 +91,27 @@
 
     private async Task Init()
     {
-        using (Context = DbFactory.CreateDbContext())
+        var flota = await VehiculoSalidaService.ObtenerVehiculosSalidasPorEstadoAsync(TipoEstadoMovil.Activo);
+
+        if (flota != null && flota.Any())
         {
-            vehiculos = await Context.Set<VehiculoSalida>()
-                .OrderBy(m => m.NumeroMovil)
-                .ToListAsync();
+            vehiculos = MapearVehiculos(flota);
+        }
+        else
+        {
+            vehiculos = new List<UnidadesViewModel>();
         }
     }
 
-    public void Dispose()
+    private List<UnidadesViewModel> MapearVehiculos(List<VehiculoSalida> vehiculos)
     {
-        Context?.Dispose();
+        return vehiculos.Select(v => new UnidadesViewModel
+        {
+            Id = v.VehiculoId,
+            NumeroMovil = v.NumeroMovil ?? "-",
+
+            // Mapeo de Imagen (si existe)
+            ImageUrl = v.Imagen != null ? $"/api/imagenes/{v.Imagen.ImagenId}" : null
+        }).ToList();
     }
 }
