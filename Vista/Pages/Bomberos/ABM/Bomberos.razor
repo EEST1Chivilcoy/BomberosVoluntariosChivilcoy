@@ -192,10 +192,10 @@
                         <Button Type="default" OnClick="() => EditarBombero(context.PersonaId)">
                             <Icon Type="edit" /> Editar
                         </Button>
-                        @if (context.Estado != EstadoBombero.Inactivo)
+                        @if (context.Estado != EstadoBombero.Baja)
                         {
                             <Popconfirm Title="¿Está seguro de dar de baja?"
-                                        OnConfirm="()=>CambiarEstado(context.PersonaId, EstadoBombero.Inactivo)"
+                                        OnConfirm="()=>CambiarEstado(context.PersonaId, EstadoBombero.Baja)"
                                         OkText="Sí" CancelText="No">
                                 <Button Danger>
                                     <Icon Type="down" /> Baja

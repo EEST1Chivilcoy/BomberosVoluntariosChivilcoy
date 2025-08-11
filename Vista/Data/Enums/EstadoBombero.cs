@@ -9,9 +9,6 @@ public enum EstadoBombero
     [Display(Name = "Reserva")]
     Reserva,
 
-    [Display(Name = "Inactivo")]
-    Inactivo,
-
     [Display(Name = "Baja")]
     Baja,
 

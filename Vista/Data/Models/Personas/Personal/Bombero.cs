@@ -31,7 +31,7 @@ namespace Vista.Data.Models.Personas.Personal
         public int NumeroLegajo { get; set; }
 
         /// <summary>
-        /// Estado actual del bombero (activo, inactivo, etc.).
+        /// Estado actual del bombero (activo, baja, etc.).
         /// </summary>
         public EstadoBombero Estado { get; set; }
 
