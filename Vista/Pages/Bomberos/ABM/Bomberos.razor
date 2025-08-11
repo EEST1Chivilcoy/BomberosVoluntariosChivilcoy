@@ -150,13 +150,28 @@
         .abm-action-buttons .ant-btn {
             width: 100% !important;
         }
+
+
     }
+
+            .abm-title h2 {
+    font-family: 'Bebas Neue', 'Fjalla One', sans-serif;
+    font-size: 2.5rem;
+    letter-spacing: 2px;
+
+    color: #ffffff;
+    position: relative;
+    margin-right: 950px;
+    padding-bottom: 6px;
+        }
 </style>
 
 <Flex Class="flex-container" Justify="FlexJustify.Center" Align="FlexAlign.Center">
     <div class="abm-container">
         <div class="abm-header">
-            <div class="abm-title">Gestión de Bomberos</div>
+            <div class="abm-title">
+                <h2 style="margin-bottom: 0;"><Icon Type="fire" style="color: #ff5722;"/>Gestión de Bomberos</h2>
+                </div>  
             <div class="abm-filters">
                 <EnumSelect DefaultValue="EstadoBombero.CuerpoActivo"
                             ValueChanged="(EstadoBombero estado) => search(searchString, estado)"

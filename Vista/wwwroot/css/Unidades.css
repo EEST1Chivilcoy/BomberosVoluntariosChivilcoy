@@ -23,6 +23,20 @@
     padding: 8px 0 16px;
 }
 
+<<<<<<< HEAD
+.header-container h2 {
+
+    font-family: 'Bebas Neue', 'Fjalla One', sans-serif;
+    font-size: 2.5rem;
+    letter-spacing: 2px;
+    color: #d32f2f;
+    text-shadow: 1px 2px 8px #ffffff;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 6px;
+    
+}
+=======
     .header-container h2 {
         font-family: 'Bebas Neue', 'Fjalla One', sans-serif;
         font-size: 2.5rem;
@@ -33,6 +47,7 @@
         display: inline-block;
         padding-bottom: 6px;
     }
+>>>>>>> ff83faf664e792450e05c79967c50daa0a8af19c
 
         .header-container h2::after {
             content: '';
