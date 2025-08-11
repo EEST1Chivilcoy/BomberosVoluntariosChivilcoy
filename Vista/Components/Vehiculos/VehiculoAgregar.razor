@@ -191,11 +191,6 @@
                                AllowClear />
                     </div>
 
-                    <div class="inpt-container">
-                        <Input Size="InputSize.Large" Placeholder="Color" @bind-Value="@vehiculoView.Color"
-                               AllowClear />
-                    </div>
-
                     <div class="upload-container">
                         <label class="lblInputFile" for="fotoMovil">
                             <Icon Type="cloud-upload" Theme="IconThemeType.Outline" Style="width: 16px; height: 16px;" />
@@ -344,8 +339,6 @@
     {
         public string? Marca { get; set; }
 
-        public string? Color { get; set; }
-
         public string? Modelo { get; set; }
 
         public int? Año { get; set; }
@@ -458,23 +451,22 @@
                 }
                 // Se crea una embarcación ya que VehiculoSalida es abstracta
                 Embarcacion vehiculo = new Embarcacion()
+                {
+                    Marca = vehiculoView.Marca,
+                    Modelo = vehiculoView.Modelo,
+                    Año = vehiculoView.Año,
+                    Patente = vehiculoView.Patente,
+                    Tipo = vehiculoView.Tipo,
+                    Encargado = Encargado,
+                    Imagen = string.IsNullOrEmpty(imagenView.Base64) ? null : new()
                     {
-                        Marca = vehiculoView.Marca,
-                        Color = vehiculoView.Color,
-                        Modelo = vehiculoView.Modelo,
-                        Año = vehiculoView.Año,
-                        Patente = vehiculoView.Patente,
-                        Tipo = vehiculoView.Tipo,
-                        Encargado = Encargado,
-                        Imagen = string.IsNullOrEmpty(imagenView.Base64) ? null : new()
-                        {
-                            NombreImagen = imagenView.Nombre,
-                            TipoImagen = imagenView.TipoImagen,
-                            Base64Imagen = imagenView.Base64
-                        },
-                        NumeroMovil = vehiculoView.NumeroMovil,
-                        Estado = vehiculoView.Estado == TipoEstadoMovil.Estado ? TipoEstadoMovil.Activo : vehiculoView.Estado,
-                    };
+                        NombreImagen = imagenView.Nombre,
+                        TipoImagen = imagenView.TipoImagen,
+                        Base64Imagen = imagenView.Base64
+                    },
+                    NumeroMovil = vehiculoView.NumeroMovil,
+                    Estado = vehiculoView.Estado == TipoEstadoMovil.Estado ? TipoEstadoMovil.Activo : vehiculoView.Estado,
+                };
 
                 if (EsMovil == true)
                 {
@@ -531,12 +523,12 @@
         foreach (Bombero b in bomberos)
         {
             BomberoViewModel Bvm = new()
-                {
-                    Apellido = b.Apellido,
-                    Nombre = b.Nombre,
-                    PersonaId = b.PersonaId
+            {
+                Apellido = b.Apellido,
+                Nombre = b.Nombre,
+                PersonaId = b.PersonaId
 
-                };
+            };
             ListaBomberos.Add(Bvm);
         }
     }

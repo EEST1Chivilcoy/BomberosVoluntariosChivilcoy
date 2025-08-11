@@ -57,12 +57,7 @@ namespace Vista.Data.ViewModels.Personal
         [StringLength(255)]
         public string? Email { get; set; }
         //Imagen-------------------------------
-        public string? Base64 { get; set; }
-        [StringLength(255)]
-        public string? TipoImagen { get; set; }
-        [StringLength(255)]
-        public string? NombreImagen { get; set; }
-        
+        public string? UrlImagen { get; set; }
         //Brigada-------------------------------
         public int BrigadaId { get; set; }
         public string NombreBrigada { get; set; }

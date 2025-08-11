@@ -53,9 +53,7 @@ namespace Vista.Data.Mappers
                 Email = bombero.Contacto?.Email,
 
                 // Mapeo de Imagen (si existe)
-                Base64 = bombero.Imagen?.Base64Imagen,
-                TipoImagen = bombero.Imagen?.TipoImagen,
-                NombreImagen = bombero.Imagen?.NombreImagen,
+                UrlImagen = bombero.Imagen != null ? $"/api/imagenes/{bombero.Imagen.ImagenId}" : null,
 
                 // Mapeo de Brigada (primera brigada si existe)
                 Brigada = bombero.Brigadas?.FirstOrDefault()?.Brigada,

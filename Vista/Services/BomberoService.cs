@@ -20,7 +20,8 @@ namespace Vista.Services
         Task<Sancion> SancionarBombero(Sancion sancion);
         Task<Bombero> CambiarEstado(Bombero bombero);
         Task<AscensoBombero> AscenderBombero(AscensoBombero ascenso);
-        Task<List<Bombero>> ObtenerTodosLosBomberosAsync();
+        Task<List<Bombero>> ObtenerTodosLosBomberosAsync(bool ConImagenes = false, bool ConTodasLasDemasRelaciones = false);
+        Task<Bombero> ObtenerBomberoPorIdAsync(int id);
         Task<Bombero> ObtenerBomberoObjetoPorLegajoAsync(int numeroLegajo);
     }
 
@@ -31,6 +32,20 @@ namespace Vista.Services
         public BomberoService(BomberosDbContext context)
         {
             _context = context;
+        }
+
+        public async Task<Bombero> ObtenerBomberoPorIdAsync(int id)
+        {
+            var bombero = await _context.Bomberos
+                .Include(b => b.Imagen)
+                .Include(b => b.Brigadas)
+                .Include(b => b.Contacto)
+                .FirstOrDefaultAsync(b => b.PersonaId == id);
+            if (bombero == null)
+            {
+                throw new KeyNotFoundException($"No se encontró un bombero con el ID {id}.");
+            }
+            return bombero;
         }
 
         public async Task CrearBombero(Bombero bombero)
@@ -155,10 +170,49 @@ namespace Vista.Services
             return ascenso;
         }
 
-        public async Task<List<Bombero>> ObtenerTodosLosBomberosAsync()
+        public async Task<List<Bombero>> ObtenerTodosLosBomberosAsync(
+            bool ConImagenes = false,
+            bool ConTodasLasDemasRelaciones = false)
         {
-            return await _context.Bomberos.ToListAsync();
+            IQueryable<Bombero> query = _context.Bomberos.AsQueryable();
+
+            // Si no se pide nada, traemos solo los bomberos pelados
+            if (!ConImagenes && !ConTodasLasDemasRelaciones)
+            {
+                return await query
+                    .AsNoTracking()
+                    .ToListAsync();
+            }
+
+            // Carga condicional de relaciones
+            if (ConImagenes)
+            {
+                query = query.Include(b => b.Imagen);
+            }
+
+            if (ConTodasLasDemasRelaciones)
+            {
+                query = query
+                    .Include(b => b.Firmas)
+                    .Include(b => b.Brigadas)
+                    .Include(b => b.VehiculosEncargado)
+                    .Include(b => b.Dependencias)
+                    .Include(b => b.Incidentes)
+                    .Include(b => b.Salidas)
+                    .Include(b => b.Handie)
+                    .Include(b => b.Ascensos)
+                    .Include(b => b.DestinoMaterial)
+                    .Include(b => b.SancionesRecibidas)
+                    .Include(b => b.Limpieza)
+                    .Include(b => b.Novedades)
+                    .Include(b => b.Licencias);
+            }
+
+            return await query
+                .AsNoTracking()
+                .ToListAsync();
         }
+
 
         public async Task<Bombero> ObtenerBomberoObjetoPorLegajoAsync(int numeroLegajo)
         {

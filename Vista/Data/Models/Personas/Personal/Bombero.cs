@@ -131,5 +131,10 @@ namespace Vista.Data.Models.Personas.Personal
         /// </summary>
         public List<NovedadBase>? Novedades { get; set; } = new();
 
+        /// <summary>
+        /// Lista de licencias asociadas a el bombero. Inicializada como una lista vacía por defecto.
+        /// </summary>
+        public List<Licencia> Licencias { get; set; } = new();
+
     }
 }
