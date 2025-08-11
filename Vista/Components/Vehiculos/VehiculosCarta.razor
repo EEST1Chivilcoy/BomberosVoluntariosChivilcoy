@@ -1,7 +1,7 @@
-﻿﻿@using Vista.Services
-@inject IVehiculoService VehiculoService
+﻿@*Servicios utilizados*@
+@using Vista.Services
+@inject IVehiculoSalidaService VehiculoSalidaService
 @inject NavigationManager navigationManager
-@inject IDbContextFactory<BomberosDbContext> DbFactory
 @inject IMessageService _message
 
 @using Vista.Data.Models.Imagenes
@@ -10,7 +10,7 @@
 
 <card class="vehiculo-card">
     <div class="vehiculo-imagen-contenedor">
-        <img src="@CargarImage(Vehiculo)" class="vehiculo-imagen" />
+        <img src="@Vehiculo.ImageUrl" class="vehiculo-imagen" />
     </div>
 
     <div class="vehiculo-info">
@@ -19,21 +19,19 @@
         </div>
 
         <div class="botones-grid">
-            <Button OnClick="()=>DetallesVisible = true">
+            <Button OnClick="() => DetallesVisible = true">
                 <Icon Type="Menu" Theme="IconThemeType.Outline" />
             </Button>
 
-            <Button OnClick="()=>FichaVisible = true">
-                <Icon Type="Tool" Theme="IconThemeType.Outline" />
-            </Button>
 
-            <Button OnClick="()=>EditarVisible = true">
+
+            <Button OnClick="() => EditarVisible = true">
                 <Icon Type="Edit" Theme="IconThemeType.Outline" />
             </Button>
 
             @if (Vehiculo.Estado == TipoEstadoMovil.Activo)
             {
-                <Popconfirm Title="¿Estás seguro de dar de baja a este móvil?" OnConfirm="()=>CambiarEstado(Vehiculo.VehiculoId, TipoEstadoMovil.Inactivo)" OnCancel="Cancel">
+                <Popconfirm Title="¿Estás seguro de dar de baja a este móvil?" OnConfirm="() => CambiarEstado(Vehiculo.Id, TipoEstadoMovil.Inactivo)" OnCancel="Cancel">
                     <Button>
                         <i class="fa fa-trash" aria-hidden="true"></i>
                     </Button>
@@ -41,7 +39,7 @@
             }
             else
             {
-                <Popconfirm Title="¿Estás seguro de dar de alta a este móvil?" OnConfirm="()=>CambiarEstado(Vehiculo.VehiculoId, TipoEstadoMovil.Activo)" OnCancel="Cancel">
+                <Popconfirm Title="¿Estás seguro de dar de alta a este móvil?" OnConfirm="() => CambiarEstado(Vehiculo.Id, TipoEstadoMovil.Activo)" OnCancel="Cancel">
                     <Button>
                         <Icon Type="Up" Theme="IconThemeType.Outline" />
                     </Button>
@@ -53,33 +51,34 @@
 
 @if (EditarVisible)
 {
-    <Modal Footer="null" Title="Editar" OnCancel="()=> EditarVisible = false" Visible="@EditarVisible">
+    <Modal Footer="null" Title="Editar" OnCancel="() => EditarVisible = false" Visible="@EditarVisible">
         <VehiculoEditar VehiculoId="@VehiculoId" OnClose="HandleCancelEditar" />
     </Modal>
 }
 
 @if (DetallesVisible)
 {
-    <Modal Footer="null" Title="Detalles" OnCancel="()=> DetallesVisible = false" Visible="@DetallesVisible" Class="modal-detalles">
+    <Modal Footer="null" Title="Detalles" OnCancel="() => DetallesVisible = false" Visible="@DetallesVisible" Class="modal-detalles">
         <VehiculoDetalles vehiculoId="@VehiculoId" />
     </Modal>
 }
 
-@if (FichaVisible)
-{
-    <Modal Footer="null" Title="Ficha técnica" OnCancel="()=> FichaVisible = false" Visible="@FichaVisible" Class="modal-ficha">
-        <FichaTecnica VehiculoId="@VehiculoId" />
-    </Modal>
-}
-
 @code {
-    [Parameter] public VehiculoSalida Vehiculo { get; set; }
+    [Parameter] public int VehiculoId { get; set; }
     [Parameter] public EventCallback OnChange { get; set; }
-    BomberosDbContext Context { get; set; }
-    int VehiculoId { get; set; }
+
+    public class UnidadesViewModel
+    {
+        public int Id { get; set; }
+        public string NumeroMovil { get; set; } = string.Empty;
+        public string? ImageUrl { get; set; } = string.Empty;
+        public TipoEstadoMovil Estado { get; set; }
+    }
+
+    private UnidadesViewModel Vehiculo = new();
+
     bool EditarVisible { get; set; }
     bool DetallesVisible { get; set; }
-    bool FichaVisible { get; set; }
     bool AgregarVisible { get; set; }
 
     protected override async Task OnInitializedAsync()
@@ -95,25 +94,34 @@
 
     private async Task Init()
     {
-        Context = DbFactory.CreateDbContext();
-        VehiculoId = Vehiculo.VehiculoId;
+        var vehiculo = await VehiculoSalidaService.ObtenerVehiculoSalidaPorIdAsync(VehiculoId);
+
+        if (vehiculo is not null)
+        {
+            Vehiculo = MapearVehiculo(vehiculo);
+        }
+        else
+        {
+            _message.Error("Vehículo no encontrado.");
+        }
+
+        StateHasChanged();
     }
 
-    public string CargarImage(VehiculoSalida vehiculo)
+    private UnidadesViewModel MapearVehiculo(VehiculoSalida vehiculo)
     {
-        Context = DbFactory.CreateDbContext();
-        string src = "/";
-        Imagen? imagen = Context.ImagenesVehiculo.Where(i => i.ImagenId == vehiculo.ImagenId).SingleOrDefault();
-        if (imagen is not null)
+        return new UnidadesViewModel
         {
-            src = $"data:{imagen.TipoImagen}; base64,{imagen.Base64Imagen}";
-        }
-        return src;
+            Id = vehiculo.VehiculoId,
+            NumeroMovil = vehiculo.NumeroMovil ?? "-",
+            ImageUrl = vehiculo.Imagen != null ? $"/api/imagenes/{vehiculo.Imagen.ImagenId}" : null,
+            Estado = vehiculo.Estado
+        };
     }
 
     public async void CambiarEstado(int movilid, TipoEstadoMovil estado)
     {
-        await VehiculoService.CambiarEstado(movilid, estado);
+        await VehiculoSalidaService.CambiarEstadoAsync(movilid, estado);
         await OnChange.InvokeAsync();
         StateHasChanged();
         await _message.SuccessAsync("Este movil se dio de baja");
@@ -122,10 +130,5 @@
     private void Cancel()
     {
         _message.Error("Operación cancelada.");
-    }
-
-    public void Dispose()
-    {
-        Context?.Dispose();
     }
 }

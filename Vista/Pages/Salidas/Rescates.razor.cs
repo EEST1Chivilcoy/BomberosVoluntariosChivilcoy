@@ -9,6 +9,7 @@ using AntDesign;
 using Vista.Data.Models.Vehiculos.Flota;
 using DocumentFormat.OpenXml.Office2010.Drawing;
 using System.Threading.Tasks;
+using Vista.Data.Enums;
 
 namespace Vista.Pages.Salidas
 {
@@ -20,8 +21,8 @@ namespace Vista.Pages.Salidas
         // Lista con todos los Bomberos del sistema.
         private List<Bombero> BomberosTodos = new();
 
-        // Lista con todos los Moviles del sistema.
-        private List<Movil> MovilesTodos = new();
+        // Lista con todos los vehiculos de la flota del sistema.
+        private List<VehiculoSalida> MovilesTodos = new();
 
         // Variables tipo boolean para indicar las partes del formulario completadas.
         private bool _parte1Completa = false;
@@ -154,7 +155,8 @@ namespace Vista.Pages.Salidas
 
             BomberosTodos = await BomberoService.ObtenerTodosLosBomberosAsync();
 
-            MovilesTodos = await VehiculoService.ObtenerTodosLosMoviles();
+            // Obtenemos todos los vehiculos de la flota (activos).
+            MovilesTodos = await VehiculoSalidaService.ObtenerVehiculosSalidasPorEstadoAsync(TipoEstadoMovil.Activo);
         }
 
         //Finish Failed

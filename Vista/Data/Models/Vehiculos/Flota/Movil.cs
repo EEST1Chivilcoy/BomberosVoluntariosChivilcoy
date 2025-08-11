@@ -42,6 +42,23 @@ namespace Vista.Data.Models.Vehiculos.Flota
         public int? CantidadLitros { get; set; }
 
         /// <summary>
+        /// Tipo de Aceite (Mineral, Sintetico)
+        /// </summary>
+        [StringLength(255)]
+        public string? TipoAceite { get; set; }
+
+        /// <summary>
+        /// Marca del Aceite.
+        /// </summary>
+        [StringLength(255)]
+        public string? MarcaAceite { get; set; }
+
+        /// <summary>
+        /// Cantidad de Litros de Aceite.
+        /// </summary>
+        public int? CantidadAceite { get; set; }
+
+        /// <summary>
         /// Kilometraje actual del vehículo móvil.
         /// </summary>
         public int Kilometraje { get; set; }

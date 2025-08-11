@@ -37,6 +37,8 @@ builder.Services.AddScoped<IDepositoService, DepositoService>();
 builder.Services.AddScoped<IVehiculoService, VehiculoService>();
 builder.Services.AddScoped<ISalidaService, SalidaService>();
 builder.Services.AddScoped<IDependenciaService, DependenciaService>();
+builder.Services.AddScoped<ILicenciaService, LicenciaService>();
+builder.Services.AddScoped<IVehiculoSalidaService, VehiculoSalidaService>();
 builder.Services.AddScoped<IFuerzaIntervinienteService, FuerzaIntervinienteService>();
 builder.Services.AddScoped<IImagenService, ImagenService>();
 

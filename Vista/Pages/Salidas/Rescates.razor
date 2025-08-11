@@ -10,7 +10,7 @@
 @using Vista.Services;
 @inject ISalidaService SalidaService
 @inject IBomberoService BomberoService
-@inject IVehiculoService VehiculoService
+@inject IVehiculoSalidaService VehiculoSalidaService
 @inject INavigationInterception NavigationInterception
 
 @*Componentes Generales*@
@@ -92,7 +92,9 @@
                         <span class="section-number" style="background: #fa8c16;">4</span>
                         Vehículos
                     </h3>
+                    @*
                     <Vehiculos Model="@PersonaViewModel" BomberosTodos="@BomberosTodos" Moviles="@MovilesTodos" />
+                    !Inactivo hasta el refactor del servicio de VehiculoSalida!*@
                 </div>
 
                 <!-- Personal Section -->

@@ -14,6 +14,9 @@ namespace Vista.Data.Models.Vehiculos
         /// </summary>
         public int VehiculoId { get; set; }
 
+        /// <summary>
+        /// Discriminador que indica el tipo.
+        /// </summary>
         public TipoVehiculo Discriminador { get; set; }
 
         /// <summary>
@@ -46,11 +49,6 @@ namespace Vista.Data.Models.Vehiculos
         /// </summary>
         [StringLength(255)]
         public string? Tipo { get; set; }
-
-        /// <summary>
-        /// Color del vehículo.
-        /// </summary>
-        public string? Color { get; set; }
 
         /// <summary>
         /// Identificador único del seguro asociado al vehículo.

@@ -79,11 +79,6 @@ namespace Vista.Data.Models.Personas.Personal
         public Contacto? Contacto { get; set; }
 
         /// <summary>
-        /// Lista de licencias asociadas a la persona. Inicializada como una lista vacía por defecto.
-        /// </summary>
-        public List<Licencia> Licencias { get; set; } = new();
-
-        /// <summary>
         /// Relación con la entidad Imagen_Personal, que representa la imagen asociada a este objeto.
         /// </summary>
         public Imagen_Personal? Imagen { get; set; }

@@ -49,7 +49,8 @@ namespace Vista.Data.Models.Personas.Personal.Componentes
 
         /// <summary>
         /// Información del personal al que está asignada la licencia. Es una relación foránea.
+        /// Esta propiedad es obligatoria.
         /// </summary>
-        public Personal PersonalAfectado { get; set; } = null!;
+        public Bombero BomberoAfectado { get; set; } = null!;
     }
 }

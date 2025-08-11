@@ -1,13 +1,13 @@
 ﻿@using Vista.Data.Models.Personas.Personal
 @using Vista.Data.Models.Personas.Personal.Componentes
-@implements IDisposable
-@inject NavigationManager navigationManager
-@inject IDbContextFactory<BomberosDbContext> DbFactory
+@using Vista.Data.Mappers
+
+@*Servicios utilizados*@
+@using Vista.Services
+@inject ILicenciaService LicenciaService
 @inject IMessageService message
-@page "/Licencias-Aprobar"
 
 <style>
-
     .ant-table-row > td {
         color: black;
         background-color: white;
@@ -21,31 +21,32 @@
         text-align: right;
     }
 </style>
+
 <div>
-    <Table DataSource="LicenciasActivasVM" Bordered Responsive Size="TableSize.Small">
+    <Table DataSource="LicenciasVM_PendientesDeAprobacion" Bordered Responsive Size="TableSize.Small">
 
-        <PropertyColumn Title="Apellido y Nombre" Property="c=>c.ApellidoYNombre"></PropertyColumn>
+        <PropertyColumn Title="Apellido y Nombre" Property="c => c.ApellidoYNombre"></PropertyColumn>
 
-        <PropertyColumn Property="c=>c.Desde" Format="dd/MM/yyyy"></PropertyColumn>
+        <PropertyColumn Property="c => c.Desde" Format="dd/MM/yyyy"></PropertyColumn>
 
-        <PropertyColumn Property="c=>c.Hasta" Format="dd/MM/yyyy"></PropertyColumn>
+        <PropertyColumn Property="c => c.Hasta" Format="dd/MM/yyyy"></PropertyColumn>
 
         <PropertyColumn Title="Duración en Días" Property="c => c.DuracionEnDias"></PropertyColumn>
 
         <PropertyColumn Title="Tipo"
                         Property="@(c => c.TipoLicencia.GetDisplayName())" />
 
-        <PropertyColumn Title="Estado" Property="c=>c.EstadoLicencia"></PropertyColumn>
+        <PropertyColumn Title="Estado" Property="c => c.EstadoLicencia"></PropertyColumn>
 
         <ActionColumn Title="Acciones" Style="display:flex;justify-content:space-around;">
             <Popconfirm Title="¿Quiere aprobar esta licencia?"
-                        OnConfirm="()=> AprobarLicencia(context.LicenciaId)"
+                        OnConfirm="()=> AprobarLicencia(context.Id)"
                         OkText="Si"
                         CancelText="No">
                 <i class="fa-solid fa-check" style="color: #40c011;cursor: pointer;"></i>
             </Popconfirm>
             <Popconfirm Title="Desea Rechazar Licencia?"
-                        OnConfirm="()=> RechazarLicencia(context.LicenciaId)"
+                        OnConfirm="()=> RechazarLicencia(context.Id)"
                         OkText="Si"
                         CancelText="No">
                 <i class="fa-solid fa-trash" style="color: red ;cursor: pointer;"></i>
@@ -56,115 +57,91 @@
 </div>
 
 @code {
-    public class LicencasVm
-    {
-        public int LicenciaId { get; set; }
+    [Parameter, EditorRequired] public EventCallback OnCompleted { get; set; } // Evento para notificar que se aprobó o rechazó una licencia (esto es para actualizar la vista padre)
 
-        [Required]
-        public TipoLicencia TipoLicencia { get; set; }
+    // Lista para almacenar las licencias pendientes de aprobación
+    private List<LicenciaViewModel> LicenciasVM_PendientesDeAprobacion = new();
 
-        public string Descripcion { get; set; }
+    // Lista para almacenar todas las licencias sin ningun tipo de filtro (osea todas las licencias)
+    private List<LicenciaViewModel> LicenciasVM_SinFiltro = new();
 
-        public DateTime Desde { get; set; }
-
-        public DateTime Hasta { get; set; }
-
-        public TipoEstadoLicencia EstadoLicencia { get; set; }
-
-        public int PersonaId { get; set; }
-
-        public Bombero? PersonalAfectado { get; set; }
-
-        public string? ApellidoYNombre { get; set; }
-
-        // Propiedad calculada para la duración en días
-        public int DuracionEnDias
-        {
-            get
-            {
-                return (Hasta - Desde).Days + 1;
-            }
-        }
-    }
-
-
-    BomberosDbContext Context { get; set; }
-    public LicencasVm LicencasVM = new();
-    List<LicencasVm> LicenciasActivasVM = new();
+    // Método que se ejecuta al inicializar el componente
     protected override async Task OnInitializedAsync()
     {
         await Init();
     }
+
+    // Carga inicial de datos
     private async Task Init()
     {
-        LicencasVM = new();
-        Context = DbFactory.CreateDbContext();
-        await LicenciasPendientes();
+        // Cargamos todas las licencias de la base de datos mediante el servicio
+        var licencias = await LicenciaService.ObtenerTodasLasLicencias();
+
+        // Mapeo de licencias a ViewModel
+        LicenciasVM_SinFiltro = LicenciasToViewModel(licencias).ToList();
+
+        // Filtramos las licencias que están pendientes de aprobación
+        LicenciasVM_PendientesDeAprobacion = CargarLicenciasPendientes(LicenciasVM_SinFiltro);
+
+        StateHasChanged();
     }
 
-    private async Task LicenciasPendientes()
+    // Mapea las licencias del modelo de datos al ViewModel
+    private List<LicenciaViewModel> LicenciasToViewModel(List<Licencia> licencias)
     {
-        LicenciasActivasVM = new();
-        var Licencias = await Context.Licencias
-            .Where(l => l.EstadoLicencia == TipoEstadoLicencia.Pendiente)
-            .Include(b => b.PersonalAfectado)
-            .ToListAsync();
+        var licenciasVM = new List<LicenciaViewModel>();
 
-        foreach (var l in Licencias)
+        foreach (var l in licencias)
         {
-            if (l.Desde == DateTime.MinValue || l.Hasta == DateTime.MinValue)
+            var licVm = new LicenciaViewModel
             {
-                Console.WriteLine($"Licencia con ID {l.LicenciaId} tiene fechas inválidas.");
-                continue;
-            }
+                Id = l.LicenciaId,
+                TipoLicencia = l.TipoLicencia,
+                NumeroLegajo = l.BomberoAfectado?.NumeroLegajo ?? 0,
+                PersonaId = l.PersonalId,
+                PersonalAfectado = l.BomberoAfectado.ToBomberoViewModel(),
+                ApellidoYNombre = l.BomberoAfectado != null
+                    ? $"{l.BomberoAfectado.Apellido}, {l.BomberoAfectado.Nombre}"
+                    : string.Empty,
+                Descripcion = l.Descripcion,
+                Desde = l.Desde,
+                Hasta = l.Hasta,
+                EstadoLicencia = l.EstadoLicencia
+            };
 
-            LicencasVm LicVm = new()
-                {
-                    LicenciaId = l.LicenciaId,
-                    TipoLicencia = l.TipoLicencia,
-                    Descripcion = l.Descripcion,
-                    Desde = l.Desde,
-                    Hasta = l.Hasta,
-                    EstadoLicencia = l.EstadoLicencia,
-                    ApellidoYNombre = l.PersonalAfectado?.Apellido + ", " + l.PersonalAfectado?.Nombre,
-                };
-
-            // Verifica que DuracionEnDias se calcule correctamente.
-            Console.WriteLine($"Duración calculada para licencia {l.LicenciaId}: {LicVm.DuracionEnDias} días");
-
-            LicenciasActivasVM.Add(LicVm);
+            licenciasVM.Add(licVm);
         }
+
+        return licenciasVM;
     }
+
+    // Filtra las licencias que están en estado pendiente
+    private List<LicenciaViewModel> CargarLicenciasPendientes(List<LicenciaViewModel> licencias)
+    {
+        return licencias
+            .Where(l => l.EstadoLicencia == TipoEstadoLicencia.Pendiente)
+            .ToList();
+    }
+
+    // Aprueba la licencia que esta en pendiente
     private async Task AprobarLicencia(int IdLicencia)
     {
-        var LicenciaAprobar = await Context.Licencias.SingleOrDefaultAsync(l => l.LicenciaId == IdLicencia);
-        if (LicenciaAprobar is not null)
-        {
-            LicenciaAprobar.EstadoLicencia = TipoEstadoLicencia.Aprobada;
-        }
-        await Context.SaveChangesAsync();
+        // Llamamos al servicio para aprobar la licencia
+        await LicenciaService.CambiarEstadoLicencia(IdLicencia, TipoEstadoLicencia.Aprobada);
 
         await Init();
-        StateHasChanged();
         await message.SuccessAsync("Licencia Aprobada!");
+        await OnCompleted.InvokeAsync(); // Notificamos que se completó la acción
     }
-    //Elimina la licencia que esta en pendiente
+
+    // Elimina la licencia que esta en pendiente
     private async Task RechazarLicencia(int IdLicencia)
     {
-        var licenciaARechazar = await Context.Licencias.SingleOrDefaultAsync(l => l.LicenciaId == IdLicencia);
-        if (licenciaARechazar != null)
-        {
-            licenciaARechazar.EstadoLicencia = TipoEstadoLicencia.Rechazada;
-        }
-        await Context.SaveChangesAsync();
+        // Llamamos al servicio para rechazar la licencia
+        await LicenciaService.CambiarEstadoLicencia(IdLicencia, TipoEstadoLicencia.Rechazada);
 
         await Init();
-        StateHasChanged();
         await message.SuccessAsync("Licencia Rechazada!");
-
-    }
-    public void Dispose()
-    {
-        Context?.Dispose();
+        await OnCompleted.InvokeAsync(); // Notificamos que se completó la acción
     }
 }

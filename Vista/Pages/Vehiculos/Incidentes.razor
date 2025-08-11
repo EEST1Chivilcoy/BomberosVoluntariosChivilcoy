@@ -1,4 +1,4 @@
-﻿@inject NavigationManager navigationManager
+@inject NavigationManager navigationManager
 @inject IDbContextFactory<BomberosDbContext> DbFactory
 @inject IMessageService message
 @page "/incidentes-vehiculos"
@@ -58,15 +58,15 @@
         width: 250px;
     }
 
-    .search-input input {
-        background-color: rgba(255, 255, 255, 0.1);
-        color: white;
-        border: none;
-    }
+        .search-input input {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+        }
 
-    .search-input input::placeholder {
-        color: rgba(255, 255, 255, 0.7);
-    }
+            .search-input input::placeholder {
+                color: rgba(255, 255, 255, 0.7);
+            }
 
     .add-button {
         background-color: #4CAF50 !important;
@@ -129,7 +129,7 @@
         vertical-align: top;
         font-weight: bold;
     }
-    
+
     .ant-modal-content {
         position: relative;
         background-color: #fff;
@@ -155,13 +155,13 @@
                 <Column TData="VehiculoSalida" Title="Foto" Width="100">
                     <Image Src="@CargarImage(context)" />
                 </Column>
-                <PropertyColumn Title="Número Movil" Property="m=>m.NumeroMovil" Sortable />
+                <PropertyColumn Title="Número Movil" Property="m => m.NumeroMovil" Sortable />
                 <PropertyColumn Title="Encargado" Property="@(c => CargarEncargado(context))" Sortable />
-                <PropertyColumn Title="Patente" Property="c=>c.Patente" Sortable />
+                <PropertyColumn Title="Patente" Property="c => c.Patente" Sortable />
                 <ActionColumn Align=ColumnAlign.Center>
                     <Space>
                         <SpaceItem>
-                            <Button Danger OnClick="()=>IncidentesVista(context.VehiculoId)">
+                            <Button Danger OnClick="() => IncidentesVista(context.VehiculoId)">
                                 <Icon Type="Schedule" /> Incidentes
                             </Button>
                         </SpaceItem>
@@ -172,9 +172,10 @@
     </div>
 </Flex>
 
-@if(IncidentesVisible == true){
-    <Modal Footer="null" OnCancel="()=> IncidentesVisible = false" Visible="@IncidentesVisible" Style="width: 65%!important;">
-        <VehiculoIncidentes VehiculoId="@VehiculoId" OnClose="()=> IncidentesVisible = false" />
+@if (IncidentesVisible == true)
+{
+    <Modal Footer="null" OnCancel="() => IncidentesVisible = false" Visible="@IncidentesVisible" Style="width: 65%!important;">
+        <VehiculoIncidentes VehiculoId="@VehiculoId" OnClose="() => IncidentesVisible = false" />
     </Modal>
 }
 

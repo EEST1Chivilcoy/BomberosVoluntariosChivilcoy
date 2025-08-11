@@ -1,9 +1,5 @@
-﻿@inject NavigationManager navigationManager
-@inject IDbContextFactory<BomberosDbContext> DbFactory
-@inject IMessageService message
 @page "/bomberos"
-@using Vista.Services
-@inject IBomberoService BomberoService
+
 @using Microsoft.AspNetCore.Components.Forms
 @using System.ComponentModel
 @using AntDesign.TableModels
@@ -11,6 +7,13 @@
 @using Vista.Data.Models.Imagenes
 @using Vista.Data.Models.Personas.Personal
 @using Vista.Data.Models.Personas.Personal.Componentes
+@using Vista.Data.Mappers
+
+@*Servicios utilizados*@
+@using Vista.Services
+@inject IBomberoService BomberoService
+@inject IMessageService message
+@inject NavigationManager navigationManager
 
 <style>
     .abm-container {
@@ -185,7 +188,7 @@
         </div>
 
         <Table @ref="table"
-               TItem="Bombero"
+               TItem="BomberoViweModel"
                DataSource="@bomberos"
                OnChange="OnChange"
                @bind-PageIndex="_pageIndex"
@@ -193,7 +196,14 @@
                Responsive>
             <ColumnDefinitions>
                 <Column TData="Bombero" Title="Foto" Width="100">
-                    <Avatar Size="AvatarSize.Large" Src="@CargarImage(context)" />
+                    @if (context.UrlImagen != null)
+                    {
+                        <Avatar Size="AvatarSize.Large" Src="@(context.UrlImagen)" />
+                    }
+                    else
+                    {
+                        <Avatar Size="AvatarSize.Large" Icon="user" />
+                    }
                 </Column>
                 <PropertyColumn Property="@(c => $"{c.Apellido}, {c.Nombre}")" Title="Apellido y Nombre" Sortable />
                 <PropertyColumn Title="Legajo" Property="c => c.NumeroLegajo" Sortable />
@@ -201,16 +211,16 @@
                 <PropertyColumn Title="Estado" Property="@(c => c.Estado.GetDisplayName())" Sortable />
                 <ActionColumn Title="Acciones" Align=ColumnAlign.Center>
                     <div class="abm-action-buttons">
-                        <Button Type="ButtonType.Primary" OnClick="() => DetalleBombero(context.PersonaId)">
+                        <Button Type="ButtonType.Primary" OnClick="() => DetalleBombero(context.Id)">
                             <Icon Type="eye" /> Detalles
                         </Button>
-                        <Button Type="default" OnClick="() => EditarBombero(context.PersonaId)">
+                        <Button Type="default" OnClick="() => EditarBombero(context.Id)">
                             <Icon Type="edit" /> Editar
                         </Button>
                         @if (context.Estado != EstadoBombero.Baja)
                         {
                             <Popconfirm Title="¿Está seguro de dar de baja?"
-                                        OnConfirm="()=>CambiarEstado(context.PersonaId, EstadoBombero.Baja)"
+                                        OnConfirm="()=>CambiarEstado(context.Id, EstadoBombero.Baja)"
                                         OkText="Sí" CancelText="No">
                                 <Button Danger>
                                     <Icon Type="down" /> Baja
@@ -220,7 +230,7 @@
                         else
                         {
                             <Popconfirm Title="¿Está seguro de dar de alta?"
-                                        OnConfirm="()=>CambiarEstado(context.PersonaId, EstadoBombero.CuerpoActivo)"
+                                        OnConfirm="()=>CambiarEstado(context.Id, EstadoBombero.CuerpoActivo)"
                                         OkText="Sí" CancelText="No">
                                 <Button Color="Color.Green2">
                                     <Icon Type="up" /> Alta
@@ -242,13 +252,13 @@
 
 @if (EditarVisible == true)
 {
-    <Modal Footer="null" Title="Editar" OnCancel="CloseModals" Visible="@EditarVisible">
+    <Modal Footer="null" OnCancel="CloseModals" Visible="@EditarVisible" Centered="@true" DefaultMaximized="@true">
         <BomberosEditar BomberoId="@BomberoId" OnClose="CloseModals" />
     </Modal>
 }
 @if (DetallesVisible == true)
 {
-    <Modal Visible="@DetallesVisible" OnCancel="@CloseModals" Footer="@footer">
+    <Modal Visible="@DetallesVisible" OnCancel="@CloseModals" Footer="@footer" Centered="@true" DefaultMaximized="@true">
         <BomberosDetalles BomberoId="@BomberoId" />
     </Modal>
 }
@@ -256,8 +266,8 @@
 @code {
     string searchString;
     ITable table;
-    List<Bombero>? bomberos = new List<Bombero>();
-    List<Bombero>? SinFiltrar = new List<Bombero>();
+    List<BomberoViweModel>? bomberos = new();
+    List<BomberoViweModel>? SinFiltrar = new();
     public EstadoBombero Estado = EstadoBombero.CuerpoActivo;
 
     private TableFilter<EscalafonJerarquico>[] EscalafonJerarquicoFilter;
@@ -272,8 +282,7 @@
 
     private async Task CambiarEstado(int BomberoId, EstadoBombero estado)
     {
-        using var db = await DbFactory.CreateDbContextAsync();
-        Bombero bombero = await db.Bomberos.Where(b => b.PersonaId == BomberoId).SingleOrDefaultAsync();
+        var bombero = await BomberoService.ObtenerBomberoPorIdAsync(BomberoId);
         bombero.Estado = estado;
         await BomberoService.CambiarEstado(bombero);
         await RefreshData();
@@ -284,11 +293,13 @@
         BomberoId = ID;
         EditarVisible = true;
     }
+
     private void DetalleBombero(int ID)
     {
         BomberoId = ID;
         DetallesVisible = true;
     }
+
     private async void CloseModals()
     {
         DetallesVisible = false;
@@ -299,9 +310,9 @@
     // Init, OnChange y Carga de datos
     protected override async Task OnInitializedAsync()
     {
-        using var db = await DbFactory.CreateDbContextAsync();
+        var bomberos = await BomberoService.ObtenerTodosLosBomberosAsync(ConImagenes: true);
+        SinFiltrar = bomberos.ToBomberoViewModelList();
 
-        SinFiltrar = await db.Bomberos.Include(b => b.Imagen).ToListAsync();
         search(searchString, Estado);
 
         EscalafonJerarquicoFilter = new TableFilter<EscalafonJerarquico>[Enum.GetValues(typeof(EscalafonJerarquico)).Length];
@@ -317,28 +328,17 @@
 
     private async Task RefreshData()
     {
-        using var db = await DbFactory.CreateDbContextAsync();
-        SinFiltrar = await db.Bomberos.ToListAsync();
+        var bomberos = await BomberoService.ObtenerTodosLosBomberosAsync();
+        SinFiltrar = bomberos.ToBomberoViewModelList();
+
         search(searchString, Estado);
         await InvokeAsync(StateHasChanged);
     }
 
-    private async Task OnChange(QueryModel<Bombero> queryModel)
+    private async Task OnChange(QueryModel<BomberoViweModel> queryModel)
     {
         Console.WriteLine(JsonSerializer.Serialize(queryModel));
-        OnInitializedAsync();
-    }
-
-    public string CargarImage(Bombero bombero)
-    {
-        string src = "/";
-
-        if (bombero.Imagen is not null)
-        {
-            src = $"/api/imagenes/{bombero.Imagen.ImagenId}";
-        }
-
-        return src;
+        await OnInitializedAsync();
     }
 
     private void search(string value, EstadoBombero estado)
