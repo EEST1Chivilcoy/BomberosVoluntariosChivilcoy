@@ -19,22 +19,33 @@
         <FormItem Label="Tipo de Evacuación">
             <EnumSelect TEnum="TipoEvacuacion" @bind-Value="@incendioView.TipoEvacuacion" />
         </FormItem>
+
+        <FormItem Label="Detalle de la superficie afectada" Required>
+            <TextArea Placeholder="Describí qué zonas fueron afectadas y en qué medida" @bind-Value="@incendioView.DetalleSuperficieAfectadaIncendio" />
+        </FormItem>
     }
 
-    <FormItem Label="Descripción" Required>
-        <TextArea Placeholder="Descripción" @bind-Value="Model.Descripcion" />
-    </FormItem>
+
 
     @if (Model is IncendioViewModels incendioView1)
     {
         <FormItem>
-            <Checkbox @bind-Checked="incendioView1.DeteccionAutomaticaId">Deteccion Automatica</Checkbox>
+            <Checkbox Checked="incendioView1.DeteccionAutomaticaId"
+                      CheckedChanged="@(value => incendioView1.DeteccionAutomaticaId = value)">
+                Detección Automática
+            </Checkbox>
         </FormItem>
         <FormItem>
-            <Checkbox @bind-Checked="incendioView1.Extintor">Extintor</Checkbox>
+            <Checkbox Checked="incendioView1.Extintor"
+                      CheckedChanged="@(value => incendioView1.Extintor = value)">
+                Extintor
+            </Checkbox>
         </FormItem>
         <FormItem>
-            <Checkbox @bind-Checked="incendioView1.Hidrante">Hidrante</Checkbox>
+            <Checkbox Checked="incendioView1.Hidrante"
+                      CheckedChanged="@(value => incendioView1.Hidrante = value)">
+                Hidrante
+            </Checkbox>
         </FormItem>
     }
 
