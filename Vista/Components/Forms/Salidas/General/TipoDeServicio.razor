@@ -1,0 +1,49 @@
+﻿@using Vista.Data.ViewModels;
+@using Vista.Data.ViewModels.Incendios;
+
+<Form Model="Model">
+    <FormItem Label="Tipo de Servicio" Required>
+        <EnumSelect TEnum="TipoServicioSalida" @bind-Value="@Model.TipoServicio" />
+    </FormItem>
+
+    @if (Model is IncendioViewModels incendioView)
+    {
+        <FormItem Label="Causa" Required>
+            <EnumSelect TEnum="TipoCausaIncendio" @bind-Value="@incendioView.SuperficieAfectadaCausa" />
+        </FormItem>
+
+        <FormItem Label="Dimensiones" Required>
+            <EnumSelect TEnum="TipoSuperficie" @bind-Value="@incendioView.TipoSuperficieAfectada" />
+        </FormItem>
+
+        <FormItem Label="Tipo de Evacuación">
+            <EnumSelect TEnum="TipoEvacuacion" @bind-Value="@incendioView.TipoEvacuacion" />
+        </FormItem>
+    }
+
+    <FormItem Label="Descripción" Required>
+        <TextArea Placeholder="Descripción" @bind-Value="Model.Descripcion" />
+    </FormItem>
+
+    @if (Model is IncendioViewModels incendioView1)
+    {
+        <FormItem>
+            <Checkbox @bind-Checked="incendioView1.DeteccionAutomaticaId">Deteccion Automatica</Checkbox>
+        </FormItem>
+        <FormItem>
+            <Checkbox @bind-Checked="incendioView1.Extintor">Extintor</Checkbox>
+        </FormItem>
+        <FormItem>
+            <Checkbox @bind-Checked="incendioView1.Hidrante">Hidrante</Checkbox>
+        </FormItem>
+    }
+
+</Form>
+
+
+
+@code {
+    [Parameter, EditorRequired] public SalidasViewModels Model { get; set; } = null!;
+    [Parameter, EditorRequired] public bool isUnlocked { get; set; } = false;
+    [Parameter, EditorRequired] public EventCallback<bool> OnCompleted { get; set; } // Evento para notificar que se ha completado el formulario
+}

@@ -84,13 +84,13 @@
                 </div>
             </div>
 
-            <!-- Grid de 2 columnas para Vehículos y Personal -->
+            <!-- Grid de 2 columnas para Unidades y Personal -->
             <div class="two-column-grid">
-                <!-- Vehículos Section -->
+                <!-- Unidades Section -->
                 <div class="section-card vehiculos">
                     <h3 class="section-title">
                         <span class="section-number" style="background: #fa8c16;">4</span>
-                        Vehículos
+                        Unidades
                     </h3>
                     @*
                     <Vehiculos Model="@PersonaViewModel" BomberosTodos="@BomberosTodos" Moviles="@MovilesTodos" />
@@ -114,29 +114,6 @@
                     Tipo de Servicio
                 </h3>
 
-                <div class="service-type-grid">
-                    <!-- Tipo Servicio -->
-                    <div class="form-group-card">
-                        <FormItem>
-                            <label class="form-label">
-                                Tipo Servicio Salida
-                            </label>
-                            <EnumSelect TEnum="TipoServicioSalida" @bind-Value="@PersonaViewModel.TipoServicio"
-                                        Style="width: 100%;" />
-                        </FormItem>
-                    </div>
-
-                    <!-- Tipo Lugar Rescate -->
-                    <div class="form-group-card">
-                        <FormItem>
-                            <label class="form-label">
-                                Tipo Lugar de Rescate
-                            </label>
-                            <EnumSelect TEnum="TipoLugarRescatePersona" @bind-Value="@PersonaViewModel.TipoRescatePersona"
-                                        Style="width: 100%;" />
-                        </FormItem>
-                    </div>
-                </div>
             </div>
 
             <!-- Submit Section -->
