@@ -43,7 +43,7 @@ builder.Services.AddScoped<IFuerzaIntervinienteService, FuerzaIntervinienteServi
 builder.Services.AddScoped<IImagenService, ImagenService>();
 
 // Servicios HttpClient
-builder.Services.AddHttpClient<IGeorefService, GeorefService>();
+builder.Services.AddHttpClient<INominatimService, NominatimService>();
 
 // Configurar la localizaci�n
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");

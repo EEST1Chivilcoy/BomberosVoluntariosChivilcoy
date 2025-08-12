@@ -1,16 +1,20 @@
-﻿using System.Net.Http;
-using System.Threading.Tasks;
-using System.Net.Http.Json;
+﻿using Microsoft.JSInterop;
 using System.Collections.Generic;
-using Microsoft.JSInterop;
-using Vista.Data.ViewModels.APIResponse;
+using System.Globalization;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Threading.Tasks;
+using Vista.Data.Mappers;
+using Vista.DTOs.Nominatim;
+using Vista.DTOs.Nominatim.Raw;
+using Vista.Data.Mappers;
 
 namespace Vista.Services
 {
     /// <summary>
-    /// Interfaz para el servicio que interactúa con la API de Georef.
+    /// Interfaz para el servicio que interactúa con la API de Nominatim.
     /// </summary>
-    public interface IGeorefService
+    public interface INominatimService
     {
         /// <summary>
         /// Valida la conexión a la API de Georef.
@@ -30,12 +34,12 @@ namespace Vista.Services
         Task<List<Direccion>> GetStreetSuggestionsAsync(string calle);
     }
 
-    public class GeorefService : IGeorefService
+    public class NominatimService : INominatimService
     {
         private readonly HttpClient _httpClient;
         private readonly IJSRuntime _jsRuntime;
 
-        public GeorefService(HttpClient httpClient, IJSRuntime jsRuntime)
+        public NominatimService(HttpClient httpClient, IJSRuntime jsRuntime)
         {
             _httpClient = httpClient;
             _jsRuntime = jsRuntime;
@@ -47,7 +51,7 @@ namespace Vista.Services
         {
             try
             {
-                var response = await _httpClient.GetAsync("https://apis.datos.gob.ar/georef/api/provincias");
+                var response = await _httpClient.GetAsync("https://nominatim.openstreetmap.org/search?city=Chivilcoy&country=Argentina&format=json&limit=1");
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -69,30 +73,33 @@ namespace Vista.Services
 
         public async Task<List<Direccion>> GetStreetSuggestionsAsync(string calle)
         {
-            if (!string.IsNullOrWhiteSpace(calle))
+            if (string.IsNullOrWhiteSpace(calle))
+                return new List<Direccion>();
+
+            var isConnected = await CheckApiConnectionAsync();
+
+            if (!isConnected)
             {
-                var isConnected = await CheckApiConnectionAsync();
-                if (!isConnected)
-                {
-                    await LogErrorToConsoleAsync("API connection failed. Street suggestions will not be fetched.");
-                    return new List<Direccion>();
-                }
-
-                var calleEscaped = Uri.EscapeDataString(calle.Trim());
-                var url = $"https://apis.datos.gob.ar/georef/api/direcciones?direccion={calleEscaped}&localidad=Chivilcoy&provincia=Buenos%20Aires";
-
-                try
-                {
-                    var response = await _httpClient.GetFromJsonAsync<GeorefResponse>(url);
-                    return response?.Direcciones ?? new List<Direccion>();
-                }
-                catch (Exception ex)
-                {
-                    await LogErrorToConsoleAsync($"Error fetching street suggestions: {ex.Message}");
-                    return new List<Direccion>();
-                }
+                await LogErrorToConsoleAsync("API connection failed. Street suggestions will not be fetched.");
+                return new List<Direccion>();
             }
-            return new List<Direccion>();
+
+            var calleEscaped = Uri.EscapeDataString(calle.Trim());
+            var url = $"https://nominatim.openstreetmap.org/search?street={calleEscaped}&city=Chivilcoy&state=Buenos%20Aires&country=Argentina&format=json&addressdetails=1";
+
+            try
+            {
+                var rawResults = await _httpClient.GetFromJsonAsync<List<NominatimRaw>>(url);
+
+                return rawResults is null
+                    ? new List<Direccion>()
+                    : NominatimMapper.Map(rawResults).Direcciones;
+            }
+            catch (Exception ex)
+            {
+                await LogErrorToConsoleAsync($"Error fetching street suggestions: {ex.Message}");
+                return new List<Direccion>();
+            }
         }
 
         private async Task LogErrorToConsoleAsync(string message)

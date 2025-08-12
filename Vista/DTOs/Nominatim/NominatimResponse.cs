@@ -1,6 +1,6 @@
-﻿namespace Vista.Data.ViewModels.APIResponse
+﻿namespace Vista.DTOs.Nominatim
 {
-    public class GeorefResponse
+    public class NominatimResponse
     {
         public List<Direccion> Direcciones { get; set; } = new();
     }

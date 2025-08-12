@@ -58,4 +58,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Data\ViewModels\APIResponse\" />
+  </ItemGroup>
 </Project>

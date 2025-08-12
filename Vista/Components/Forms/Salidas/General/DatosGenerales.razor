@@ -1,12 +1,12 @@
-﻿@using Vista.Data.ViewModels
-@using System.Timers
+﻿@using System.Timers
 @using System.Web
-@using Vista.Data.ViewModels.APIResponse
+@using Vista.DTOs.Nominatim
 @using Vista.Data.Enums.Salidas
+@using Vista.Data.ViewModels
 
 @*Servicios Utilizados*@
 @using Vista.Services
-@inject IGeorefService GeorefService
+@inject INominatimService GeorefService
 
 <style>
     /* Contenedor para el mapa */
