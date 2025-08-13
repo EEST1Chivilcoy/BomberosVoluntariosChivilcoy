@@ -85,7 +85,7 @@
 
                             <div class="inpt-container">
                                 <Space>
-                                    <SpaceItem>Es un móvil:</SpaceItem>
+                                    <SpaceItem>Es una Embarcación:</SpaceItem>
                                     <SpaceItem>
                                         <Switch @bind-Checked="@EsEmbarcacion"
                                                  CheckedChildren="Sí"
@@ -108,9 +108,30 @@
                                 <div class="inpt-container">
                                     <AntDesign.InputNumber Size="InputSize.Large" Placeholder="Cantidad de litros" @bind-Value="@movilView.CantidadLitros" Min="0"></AntDesign.InputNumber>
                                 </div>
+                                <div class="inpt-container">
+                                    <AntDesign.InputNumber Size="InputSize.Large" Placeholder="Modelo de Filtro de Aire" @bind-Value="@movilView.ModeloFiltroAire" AllowClear />
+                                </div>
+                                <div class="inpt-container">
+                                    <AntDesign.InputNumber Size="InputSize.Large" Placeholder="Medidas de Cubiertas" @bind-Value="@movilView.MedidasCubiertas" AllowClear />
+                                </div>
+                                <div class="inpt-container">
+                                    <AntDesign.InputNumber Size="InputSize.Large" Placeholder="Libras de Cubiertas" @bind-Value="@movilView.LibrasCubiertas" AllowClear />
+                                </div>
+                                <div class="inpt-container">
+                                    <EnumSelect TEnum="TipoTension" Size="InputSize.Large" Placeholder="Tensión C. Eléctrico" @bind-Value="movilView.TensionCElectrico" AllowClear />
+                                </div>
+                                <div class="inpt-container">
+                                    <EnumSelect TEnum="TipoDireccionUnidades"  Size="InputSize.Large" Placeholder="Tipo de Dirección" @bind-Value="movilView.TipoDireccion" AllowClear />
+                                </div>
+                                <div class="inpt-container">
+                                    <AntDesign.InputNumber Size="InputSize.Large" Placeholder="Marca de Batería" @bind-Value="@movilView.MarcaBateria" AllowClear />
+                                </div>
+                                <div class="inpt-container">
+                                    <AntDesign.InputNumber Size="InputSize.Large" Placeholder="Fecha Último Cambio de Batería" @bind-Value="@movilView.FechaUltimoCambioBateria" AllowClear />
+                                </div>
                             }
                             <div class="inpt-container">
-                                <EnumSelect TEnum="TipoEstadoMovil" @bind-Value="vehiculoView.Estado" Size="InputSize.Large" Placeholder="Seleccione estado del vehículo" />
+                                <EnumSelect TEnum="TipoEstadoMovil" Size="InputSize.Large" Placeholder="Seleccione estado del vehículo" @bind-Value="vehiculoView.Estado" />
                             </div>
                             <div class="inpt-container">
                                 <Select TItem="BomberoViewModel"
@@ -223,8 +244,8 @@
         public string? MedidasCubiertas { get; set; }
         public string? LibrasCubiertas { get; set; }
         public TipoCajaVelocidades CajaVelocidades { get; set; }
-        public TipoTension? TensionCElectrico { get; set; }
-        public TipoDireccionUnidades? TipoDireccion { get; set; }
+        public TipoTension TensionCElectrico { get; set; }
+        public TipoDireccionUnidades TipoDireccion { get; set; }
         public string? MarcaBateria { get; set; }
         public DateTime? FechaUltimoCambioBateria { get; set; }
     }
