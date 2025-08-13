@@ -7,6 +7,8 @@ namespace Vista.Data.Enums
         [Display(Name = "Manual")]
         Manual,
         [Display(Name = "Automatica")]
-        Automatica
+        Automatica,
+        [Display(Name = "Semiautomática")]
+        SemiAutomatica
     }
 }
