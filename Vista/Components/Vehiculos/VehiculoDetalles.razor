@@ -11,26 +11,19 @@
 @if (vehiculo != null)
 {
     <div class="vehiculo-detalles-completo-container">
-        <div class="image-container-completo">
-            <img id="ImagenMovil" class="vehiculo-image-completo" src="@CargarImage()" alt="Imagen de la Unidad" />
+        <div class="image-and-number-wrapper">
+            <div class="image-container-completo">
+                <img id="ImagenMovil" class="vehiculo-image-completo" src="@CargarImage()" alt="Imagen de la Unidad" />
+            </div>
+            <div class="movil-number-container">
+                Unidad N° @vehiculoView.NumeroMovil
+            </div>
         </div>
 
         <div class="info-completo-container">
             <h3 class="section-title">Detalles del Vehículo:</h3>
-
+            
             <Row Gutter="@((32, 24))" Class="detail-grid">
-                <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
-                    <div class="detail-item">
-                        <span class="detail-label">Tipo:</span>
-                        <span class="detail-value">@vehiculoView.Tipo</span>
-                    </div>
-                </AntDesign.Col>
-                <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
-                    <div class="detail-item">
-                        <span class="detail-label">Encargado:</span>
-                        <span class="detail-value">@vehiculoView.Encargado</span>
-                    </div>
-                </AntDesign.Col>
                 <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
                     <div class="detail-item">
                         <span class="detail-label">Marca:</span>
@@ -45,20 +38,26 @@
                 </AntDesign.Col>
                 <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
                     <div class="detail-item">
-                        <span class="detail-label">Patente:</span>
-                        <span class="detail-value">@vehiculoView.Patente</span>
-                    </div>
-                </AntDesign.Col>
-                <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
-                    <div class="detail-item">
                         <span class="detail-label">Año:</span>
                         <span class="detail-value">@vehiculoView.Año</span>
                     </div>
                 </AntDesign.Col>
                 <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
                     <div class="detail-item">
-                        <span class="detail-label">N° Móvil:</span>
-                        <span class="detail-value">@vehiculoView.NumeroMovil</span>
+                        <span class="detail-label">Patente:</span>
+                        <span class="detail-value">@vehiculoView.Patente</span>
+                    </div>
+                </AntDesign.Col>
+                <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
+                    <div class="detail-item">
+                        <span class="detail-label">Tipo:</span>
+                        <span class="detail-value">@vehiculoView.Tipo</span>
+                    </div>
+                </AntDesign.Col>
+                <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
+                    <div class="detail-item">
+                        <span class="detail-label">Encargado:</span>
+                        <span class="detail-value">@vehiculoView.Encargado</span>
                     </div>
                 </AntDesign.Col>
                 <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
@@ -98,6 +97,42 @@
                                 <span class="detail-value">@vehiculoView.CantidadLitros</span>
                             </div>
                         </AntDesign.Col>
+                         <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
+                            <div class="detail-item">
+                                <span class="detail-label">Tipo de Aceite:</span>
+                                <span class="detail-value">@vehiculoView.TipoAceite</span>
+                            </div>
+                        </AntDesign.Col>
+                         <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
+                            <div class="detail-item">
+                                <span class="detail-label">Marca de Aceite:</span>
+                                <span class="detail-value">@vehiculoView.MarcaAceite</span>
+                            </div>
+                        </AntDesign.Col>
+                         <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
+                            <div class="detail-item">
+                                <span class="detail-label">Cantidad de Aceite:</span>
+                                <span class="detail-value">@vehiculoView.CantidadAceite</span>
+                            </div>
+                        </AntDesign.Col>
+                        <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
+                            <div class="detail-item">
+                                <span class="detail-label">Combustible:</span>
+                                <span class="detail-value">@vehiculoView.Combustible</span>
+                            </div>
+                        </AntDesign.Col>
+                        <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
+                            <div class="detail-item">
+                                <span class="detail-label">Fecha Ultimo Service:</span>
+                                <span class="detail-value">@vehiculoView.FechaUltimoService</span>
+                            </div>
+                        </AntDesign.Col>
+                        <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
+                            <div class="detail-item">
+                                <span class="detail-label">Fecha Proximo Service:</span>
+                                <span class="detail-value">@vehiculoView.FechaProximoService</span>
+                            </div>
+                        </AntDesign.Col>
                     </Row>
                 </div>
             }
@@ -135,6 +170,21 @@ else
         public string? NumeroChasis { get; set; }
         public string? ModeloBomba { get; set; }
         public string? CantidadLitros { get; set; }
+        public string? Combustible { get; set; }
+        public string? FechaUltimoService { get; set; }
+        public string? FechaProximoService { get; set; }
+        public string? TipoAceite { get; set; }
+        public string? MarcaAceite { get; set; }
+        public string? CantidadAceite { get; set; }
+        public string? Observaciones { get; set; }
+        public string? ModeloFiltroAire { get; set; }
+        public string? MedidasCubiertas { get; set; }
+        public string? LibrasCubiertas { get; set; }
+        public string? CajasVelocidades { get; set; }
+        public string? TensionCElectrico { get; set; }
+        public string? TipoDireccion { get; set; }
+        public string? MarcaBateria { get; set; }
+        public string? FechaUltimoCambioBateria { get; set; }
     }
 
     public class ImagenViewModel
@@ -152,13 +202,17 @@ else
         {
             vehiculoView = new VehiculoView
                 {
-                    NumeroMovil = vehiculo.NumeroMovil,
                     Tipo = vehiculo.Tipo,
                     Marca = vehiculo.Marca,
                     Modelo = vehiculo.Modelo,
                     Patente = vehiculo.Patente,
-                    Año = vehiculo.Año.ToString(),
+                    Año = vehiculo.Año?.ToString(),
+                    NumeroMovil = vehiculo.NumeroMovil?.ToString(),
                     Estado = vehiculo.Estado.ToString(),
+                    Combustible = vehiculo.Combustible,
+                    FechaUltimoService = vehiculo.FechaUltimoService.ToString(),
+                    FechaProximoService = vehiculo.FechaProximoService.ToString(),
+                    Observaciones = vehiculo.Observaciones
                 };
 
             if (vehiculo.EncargadoId != null)
@@ -166,12 +220,24 @@ else
                 Bombero? Encargado = await Context.Bomberos.SingleOrDefaultAsync(b => b.PersonaId == vehiculo.EncargadoId);
                 vehiculoView.Encargado = Encargado?.Nombre + " " + Encargado?.Apellido;
             }
+
             if (vehiculo is Movil movil)
             {
                 vehiculoView.NumeroMotor = movil.NumeroMotor;
                 vehiculoView.NumeroChasis = movil.NumeroChasis;
                 vehiculoView.ModeloBomba = movil.ModeloBomba;
                 vehiculoView.CantidadLitros = movil.CantidadLitros?.ToString();
+                vehiculoView.TipoAceite = movil.TipoAceite;
+                vehiculoView.MarcaAceite = movil.MarcaAceite;
+                vehiculoView.CantidadAceite = movil.CantidadAceite.ToString();
+                vehiculoView.ModeloFiltroAire = movil.ModeloFiltroAire;
+                vehiculoView.MedidasCubiertas = movil.MedidasCubiertas;
+                vehiculoView.LibrasCubiertas = movil.LibrasCubiertas;
+                vehiculoView.CajasVelocidades = movil.CajaVelocidades.ToString();
+                vehiculoView.TensionCElectrico = movil.TensionCElectrico.ToString();
+                vehiculoView.TipoDireccion = movil.TipoDireccion.ToString();
+                vehiculoView.MarcaBateria = movil.MarcaBateria;
+                vehiculoView.FechaUltimoCambioBateria = movil.FechaUltCambioBateria.ToString();
             }
         }
     }

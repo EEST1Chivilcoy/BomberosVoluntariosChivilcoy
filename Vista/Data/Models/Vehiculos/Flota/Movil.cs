@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Vista.Data.Models.Grupos.Dependencias.Comunicaciones;
+using Vista.Data.Enums.Discriminadores;
 
 namespace Vista.Data.Models.Vehiculos.Flota
 {
@@ -57,6 +58,54 @@ namespace Vista.Data.Models.Vehiculos.Flota
         /// Cantidad de Litros de Aceite.
         /// </summary>
         public int? CantidadAceite { get; set; }
+
+        /// <summary>
+        /// Modelo del filtro de aire
+        /// </summary>
+        [StringLength(255)]
+        public string? ModeloFiltroAire { get; set; }
+
+        /// <summary>
+        /// Medidas de las cubiertas.
+        /// Este campo es de tipo String
+        /// </summary>
+        [StringLength(255)]
+        public string? MedidasCubiertas { get; set; }
+
+        /// <summary>
+        /// Libras de las Cubiertas, en PSI
+        /// </summary>
+        [StringLength(255)]
+        public string? LibrasCubiertas { get; set; }
+        
+        /// <summary>
+        /// Tension del Circuito Electrico, 12V o 24v.
+        /// Trabaja con un Enum.
+        /// </summary>
+        public TipoTension? TensionCElectrico { get; set; }
+
+        /// <summary>
+        /// Tipo de direccion.
+        /// Trabaja con un Enum.
+        /// </summary>
+        public TipoDireccionUnidades? TipoDireccion { get; set; }
+
+        /// <summary>
+        /// Tipo de Cajas de Velocidades.
+        /// Trabaja con un Enum.
+        /// </summary>
+        public TipoCajaVelocidades? CajaVelocidades { get; set; }
+
+        /// <summary>
+        /// Marca de la Bateria.
+        /// </summary>
+        [StringLength(255)]
+        public string? MarcaBateria { get; set; }
+
+        /// <summary>
+        /// Fecha del Ultimo cambio de bateria.
+        /// </summary>
+        public DateTime? FechaUltCambioBateria { get; set; }
 
         /// <summary>
         /// Kilometraje actual del vehículo móvil.
