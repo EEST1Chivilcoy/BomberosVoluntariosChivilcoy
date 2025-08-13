@@ -86,18 +86,20 @@
     border: 1px solid #707070; 
     height: 100%;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+    min-height: 75px; 
+    justify-content: space-between;
 }
 
 .detail-label {
     font-weight: 600;
     color: #475569; 
     font-size: 0.875rem;
-    margin-bottom: 0.25rem;
 }
 
 .detail-value {
     color: #1a202c;
     font-size: 1rem;
+    word-wrap: break-word;
 }
 
 .technical-details-section {
@@ -172,4 +174,33 @@ body.ant-scrolling-effect {
 .info-completo-container h4.mt-4 {
     margin-top: 1.5rem; 
     margin-bottom: 1rem;
+}
+
+.image-and-number-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    text-align: center;
+    gap: 2rem; 
+}
+
+.image-container-completo {
+    width: 320px;
+    height: auto;
+}
+
+.movil-number-container {
+    font-size: 2.0rem; 
+    font-weight: bold;
+    color: #000000;
+    margin-top: -1.5rem; 
+}
+
+@media (max-width: 900px) {
+    .vehiculo-detalles-completo-container {
+        flex-direction: column;
+    }
+    .image-and-number-wrapper {
+        width: 100%;
+    }
 }

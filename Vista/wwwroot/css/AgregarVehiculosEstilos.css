@@ -1,0 +1,141 @@
+
+.modal-content-container {
+    width: 90%;
+    max-width: 1000px; 
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    overflow: hidden;
+    padding: 0;
+}
+
+.agregar-vehiculo-wrapper {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 40px;
+    padding: 32px; 
+    align-items: flex-start; 
+}
+
+
+.image-preview-column {
+    flex-basis: 300px; 
+    flex-grow: 0;
+    flex-shrink: 0; 
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    gap: 20px;
+    padding-top: 0;
+}
+
+
+.image-preview-card {
+    width: 100%;
+    height: 350px;
+    background: #f0f2f5;
+    border: 1px dashed #d9d9d9;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 12px;
+}
+
+.image-preview-card img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.no-image-placeholder {
+    text-align: center;
+    color: #8c8c8c;
+}
+
+.no-image-placeholder .anticon {
+    font-size: 48px;
+}
+
+.no-image-placeholder span {
+    display: block;
+    margin-top: 8px;
+}
+
+.upload-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.lblInputFile {
+    background-color: #e6f7ff;
+    border: 1px solid #1890ff;
+    border-radius: 4px;
+    color: #1890ff;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.lblInputFile:hover {
+    background-color: #bae7ff;
+}
+
+#path {
+    color: #595959;
+    font-style: italic;
+    margin: 0;
+}
+
+.steps-and-form-column {
+    flex: 1; 
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+
+.form-section {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.inpt-container {
+    width: 100%;
+}
+
+.steps-action {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 24px;
+}
+
+.steps-content {
+    background: transparent;
+    padding: 0;
+}
+
+.boton_p {
+    background-color: #fff;
+    border-color: #d9d9d9;
+    color: #000;
+}
+
+.boton_guardar {
+    background-color: #52c41a;
+    border-color: #52c41a;
+    color: #fff;
+}

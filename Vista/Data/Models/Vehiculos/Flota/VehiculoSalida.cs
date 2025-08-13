@@ -39,5 +39,7 @@ namespace Vista.Data.Models.Vehiculos.Flota
         /// Fecha en la que se realizara un service al vehiculo
         /// </summary>
         public DateTime? FechaProximoService { get; set; }
+
+        public string? Observaciones { get; set; }
     }
 }
