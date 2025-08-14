@@ -1,10 +1,10 @@
 ﻿@using AntDesign.TableModels
+@using Vista.Pages.Licencias.Componentes
 @using Vista.Data.Models.Personas.Personal
 @using Vista.Data.Models.Personas.Personal.Componentes
-@using Vista.Data.Mappers;
+@using Vista.Data.Mappers
 
 @*Servicios utilizados*@
-
 @using Vista.Services;
 @inject ILicenciaService LicenciaService
 @inject IMessageService MessageService
@@ -12,579 +12,872 @@
 
 @page "/licencias"
 
-<link rel="stylesheet" href="css/Licencias.css" />
-
 <style>
-    .template {
-        width: 100%;
-        height: 100%;
-        max-width: 97%;
-        min-width: 400px;
-        max-height: 100vh;
-        border-radius: 10px;
-        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-        background: #fff;
-        display: flex;
-        flex-direction: column;
-        margin: 1em;
-        padding: 10px;
-        overflow: auto;
+    /* Variables CSS para colores principales */
+    :root {
+        --primary-color: #A63333;
+        --primary-dark: #732D2D;
+        --success-color: #4CAF50;
+        --success-dark: #438E46;
+        --warning-color: #F57F17;
+        --warning-light: #FFF8E1;
+        --error-color: #C62828;
+        --error-light: #FFEBEE;
+        --approved-color: #2E7D32;
+        --approved-light: #E6F7E9;
+        --gold-color: #FFD700;
     }
 
-    .ant-table {
-        width: 100%;
-        background-color: white;
-        border-radius: 8px;
+    /* Layout principal responsive */
+    .licenses-container {
+        padding: 12px;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    }
+
+    /* Card principal con efecto glassmorphism */
+    .main-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        box-shadow: 0 8px 32px rgba(166, 51, 51, 0.1), 0 4px 16px rgba(0, 0, 0, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.2);
         overflow: hidden;
     }
 
-    .ant-table-title {
-        background-color: #A63333;
-        padding: 16px !important;
-        border-top-left-radius: 8px;
-        border-top-right-radius: 8px;
+    /* Header responsivo */
+    .header-section {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+        color: white;
+        padding: 24px;
+        position: relative;
+        overflow: hidden;
     }
 
-    .ant-table-thead .ant-table-cell {
-        background-color: #A63333 !important;
-        color: white !important;
-        font-weight: bold;
+        .header-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+            animation: rotate 20s linear infinite;
+        }
+
+    @@keyframes rotate {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
     }
 
-    .ant-table-cell {
-        padding: 16px !important;
+    .title-container {
+        position: relative;
+        z-index: 2;
+        margin-bottom: 24px;
     }
 
-    .filters-container {
+    .main-title {
+        font-family: 'Bebas Neue', 'Fjalla One', sans-serif;
+        font-size: 2.5rem;
+        letter-spacing: 3px;
+        margin: 0;
         display: flex;
-        flex-wrap: wrap;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .title-icon {
+        color: var(--gold-color);
+        font-size: 2rem;
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    }
+
+    /* Filtros responsivos */
+    .filters-section {
+        position: relative;
+        z-index: 2;
+        display: grid;
+        grid-template-columns: 1fr;
         gap: 16px;
-        align-items: flex-end;
-        margin-bottom: 16px;
     }
 
-    .date-filter-container {
-        display: flex;
-        gap: 8px;
-        align-items: flex-end;
+    .filter-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        align-items: end;
     }
 
     .filter-group {
         display: flex;
         flex-direction: column;
+        gap: 8px;
     }
 
     .filter-label {
-        font-weight: 500;
-        color: white;
-        margin-bottom: 4px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
 
-    .actions-container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+    .actions-row {
+        display: grid;
+        grid-template-columns: 1fr auto auto;
         gap: 16px;
+        align-items: center;
     }
 
     .search-container {
-        flex-grow: 1;
-        max-width: 300px;
+        min-width: 0; /* Permite que se contraiga */
     }
 
-    .add-button {
-        background-color: #4CAF50 !important;
-        border-color: #438E46 !important;
-        color: white !important;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* Botones modernos */
+    .modern-button {
         height: 40px;
-        padding: 0 20px;
-        font-weight: 500;
+        border-radius: 8px;
+        font-weight: 600;
         display: flex;
         align-items: center;
         gap: 8px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
     }
 
+    .add-button {
+        background: linear-gradient(135deg, var(--success-color) 0%, var(--success-dark) 100%);
+        border: none;
+        color: white;
+        box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+        padding: 0 20px;
+    }
+
+        .add-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+        }
+
+    /* Badge de notificaciones */
     .notification-badge {
-        margin-left: 16px;
-        cursor: pointer;
+        position: relative;
     }
 
+    .notification-button {
+        background: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: white;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+    }
+
+        .notification-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+    /* Tabla responsive */
+    .table-container {
+        padding: 0;
+        overflow: hidden;
+    }
+
+    /* Estados de licencia */
     .status-badge {
-        padding: 4px 12px;
-        border-radius: 16px;
-        font-weight: 500;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-weight: 600;
         text-align: center;
-        display: inline-block;
-        min-width: 100px;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
 
     .status-approved {
-        background-color: #E6F7E9;
-        color: #2E7D32;
+        background: var(--approved-light);
+        color: var(--approved-color);
     }
 
     .status-pending {
-        background-color: #FFF8E1;
-        color: #F57F17;
+        background: var(--warning-light);
+        color: var(--warning-color);
     }
 
     .status-rejected {
-        background-color: #FFEBEE;
-        color: #C62828;
+        background: var(--error-light);
+        color: var(--error-color);
     }
 
     .duration-badge {
-        padding: 4px 12px;
-        border-radius: 4px;
+        padding: 4px 10px;
+        border-radius: 6px;
         font-weight: 500;
-        text-align: center;
-        display: inline-block;
-        min-width: 80px;
+        font-size: 0.85rem;
     }
 
-    .modal-footer {
-        margin-top: 24px;
-        display: flex;
-        justify-content: flex-end;
-        gap: 12px;
+    /* Filas de tabla con colores de estado */
+    :deep(.ant-table-tbody > tr.Aprobada > td) {
+        background-color: rgba(46, 125, 50, 0.02) !important;
+        border-left: 3px solid var(--approved-color);
     }
 
-    .cancel-button {
-        background-color: #f5f5f5;
-        border: 1px solid #d9d9d9;
+    :deep(.ant-table-tbody > tr.Pendiente > td) {
+        background-color: rgba(245, 127, 23, 0.02) !important;
+        border-left: 3px solid var(--warning-color);
     }
 
-    /* Color de fondo para filas según estado */
-    .ant-table-tbody > tr.ant-table-row.Aprobada > td {
-        background-color: rgba(46, 125, 50, 0.05) !important;
+    :deep(.ant-table-tbody > tr.Rechazada > td) {
+        background-color: rgba(198, 40, 40, 0.02) !important;
+        border-left: 3px solid var(--error-color);
     }
 
-    .ant-table-tbody > tr.ant-table-row.Pendiente > td {
-        background-color: rgba(245, 127, 23, 0.05) !important;
-    }
-
-    .ant-table-tbody > tr.ant-table-row.Rechazada > td {
-        background-color: rgba(198, 40, 40, 0.05) !important;
-    }
-
-    /* Estilo para filas clickeables */
-    .ant-table-tbody > tr.ant-table-row:hover {
-        background-color: rgba(166, 51, 51, 0.1) !important;
+    :deep(.ant-table-tbody > tr:hover > td) {
+        background-color: rgba(166, 51, 51, 0.05) !important;
         cursor: pointer;
+        transform: translateX(4px);
+        transition: all 0.2s ease;
     }
 
-    /* Estilos para el modal de detalle */
-    .detalle-container {
+    /* Estilos de tabla personalizados */
+    :deep(.ant-table-thead > tr > th) {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+        color: white;
+        font-weight: 600;
+        border: none;
+        padding: 16px;
+    }
+
+    :deep(.ant-table-cell) {
+        padding: 16px !important;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    :deep(.ant-table) {
+        border-radius: 0;
+    }
+
+    /* Modal responsivo */
+    .modal-content {
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .form-row {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 20px;
-        margin-bottom: 20px;
+        gap: 16px;
     }
 
-    .detalle-item {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-    }
-
-    .detalle-label {
-        font-weight: 600;
-        color: #A63333;
-        font-size: 14px;
-        text-transform: uppercase;
-    }
-
-    .detalle-value {
-        font-size: 16px;
-        color: #333;
-        padding: 8px 12px;
-        background-color: #f8f9fa;
-        border-radius: 4px;
-        border: 1px solid #e9ecef;
-    }
-
-    .detalle-descripcion {
+    .form-full-width {
         grid-column: 1 / -1;
     }
 
-        .detalle-descripcion .detalle-value {
-            min-height: 80px;
+    /* Detalles del modal */
+    .detail-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-bottom: 24px;
+    }
+
+    .detail-item {
+        background: #f8f9fa;
+        padding: 16px;
+        border-radius: 8px;
+        border: 1px solid #e9ecef;
+        transition: all 0.3s ease;
+    }
+
+        .detail-item:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
         }
 
-    /* Responsive */
-    @@media (max-width: 768px) {
-        .filters-container {
+    .detail-label {
+        font-weight: 700;
+        color: var(--primary-color);
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 8px;
+    }
+
+    .detail-value {
+        font-size: 1rem;
+        color: #333;
+        word-break: break-word;
+    }
+
+    .detail-description {
+        grid-column: 1 / -1;
+    }
+
+        .detail-description .detail-value {
+            min-height: 60px;
+            line-height: 1.5;
+        }
+
+    /* Responsive breakpoints */
+
+    /* Tablets grandes (1200px - 1599px) */
+    @@media (max-width: 1599px) and (min-width: 1200px) {
+        .main-title {
+            font-size: 2.2rem;
+        }
+
+        .filter-row {
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        }
+    }
+
+    /* Tablets (768px - 1199px) */
+    @@media (max-width: 1199px) {
+        .licenses-container {
+            padding: 8px;
+        }
+
+        .header-section {
+            padding: 20px;
+        }
+
+        .main-title {
+            font-size: 2rem;
             flex-direction: column;
-            align-items: stretch;
+            text-align: center;
+            gap: 8px;
         }
 
-        .date-filter-container {
-            flex-direction: column;
-            align-items: stretch;
+        .filter-row {
+            grid-template-columns: 1fr;
         }
 
-        .actions-container {
-            flex-direction: column;
-            align-items: stretch;
+        .actions-row {
+            grid-template-columns: 1fr;
+            gap: 12px;
         }
 
-        .search-container {
-            max-width: 100%;
-            margin-bottom: 12px;
+        .form-row {
+            grid-template-columns: 1fr;
         }
 
-        .add-button {
-            width: 100%;
-            justify-content: center;
-        }
-
-        .notification-badge {
-            margin-left: 0;
-            align-self: flex-end;
-        }
-
-        .detalle-container {
+        .detail-grid {
             grid-template-columns: 1fr;
         }
     }
 
-    .Licencia-titulo h2 {
-        font-family: 'Bebas Neue', 'Fjalla One', sans-serif;
-        font-size: 2.5rem;
-        letter-spacing: 2px;
-        color: #ffffff;
-        position: relative;
-        margin-right: 950px;
-        padding-bottom: 6px;
+    /* Móviles grandes (576px - 767px) */
+    @@media (max-width: 767px) {
+        .licenses-container {
+            padding: 4px;
+        }
+
+        .header-section {
+            padding: 16px;
+        }
+
+        .main-title {
+            font-size: 1.8rem;
+            letter-spacing: 2px;
+        }
+
+        .title-icon {
+            font-size: 1.5rem;
+        }
+
+        .filters-section {
+            gap: 12px;
+        }
+
+        .filter-row {
+            gap: 12px;
+        }
+
+        .actions-row {
+            gap: 8px;
+        }
+        /* Ocultar columnas menos importantes en móvil */
+        :deep(.ant-table-cell:nth-child(3)),
+        :deep(.ant-table-cell:nth-child(4)) {
+            display: none;
+        }
+    }
+
+    /* Móviles pequeños (hasta 575px) */
+    @@media (max-width: 575px) {
+        .main-title {
+            font-size: 1.5rem;
+        }
+
+        .header-section {
+            padding: 12px;
+        }
+
+        .modern-button {
+            height: 36px;
+            padding: 0 12px;
+        }
+        /* Solo mostrar columnas esenciales */
+        :deep(.ant-table-cell:nth-child(n+4)) {
+            display: none;
+        }
+
+        :deep(.ant-table-cell:nth-child(1)),
+        :deep(.ant-table-cell:nth-child(2)),
+        :deep(.ant-table-cell:nth-child(6)) {
+            display: table-cell;
+        }
+    }
+
+    /* Mejoras de UX */
+    :deep(.ant-picker), :deep(.ant-select-selector), :deep(.ant-input) {
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        transition: all 0.3s ease;
+    }
+
+    :deep(.ant-picker:hover), :deep(.ant-select-selector:hover), :deep(.ant-input:hover) {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    :deep(.ant-picker-input > input), :deep(.ant-select-selection-item), :deep(.ant-input::placeholder) {
+        color: white !important;
+    }
+
+    /* Loading states */
+    .loading-spinner {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 40px;
+        font-size: 1.2rem;
+        color: var(--primary-color);
+    }
+
+    /* Animaciones */
+    .fade-in {
+        animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Mejoras para la accesibilidad */
+    :focus-visible {
+        outline: 2px solid var(--gold-color);
+        outline-offset: 2px;
     }
 </style>
 
-<div class="template">
-    <Table DataSource="LicenciasVM"
-           PageSize="5"
-           Responsive
-           TItem="LicenciaViewModel"
-           RowClassName="@(c => c.Data.EstadoLicencia.ToString())"
-           OnRow="@OnRowClick">
+<div class="licenses-container fade-in">
+    <Card Class="main-card">
+        <div class="header-section">
+            <div class="title-container">
+                <h1 class="main-title">
+                    <Icon Type="key" Class="title-icon" />
+                    GESTIÓN DE LICENCIAS
+                </h1>
+            </div>
 
-        <TitleTemplate>
-            <div style="background-color: #A63333; color: white; padding: 16px; border-radius: 8px;">
-                <div class="Licencia-titulo">
-                    <h2 style="margin-bottom: 0;"><Icon Type="key" style="color: #FFD700;" />LICENCIAS</h2>
-                </div>
-                <div class="filters-container">
-                    <div class="date-filter-container">
-                        <div class="filter-group">
-                            <label class="filter-label">Desde:</label>
-                            <DatePicker TValue="DateTime"
-                                        DefaultValue="@DateTime.Now.AddDays(-7)"
-                                        @bind-Value="@FechaBuscarI"
-                                        Size="InputSize.Large"
-                                        Style="min-width: 150px;" />
-                        </div>
-                        <div class="filter-group">
-                            <label class="filter-label">Hasta:</label>
-                            <DatePicker TValue="DateTime"
-                                        DefaultValue="@DateTime.Now.AddDays(7)"
-                                        @bind-Value="@FechaBuscarF"
-                                        Size="InputSize.Large"
-                                        Style="min-width: 150px;" />
-                        </div>
-                    </div>
-
-                    <div class="actions-container">
-                        <div class="search-container">
-                            <Search Placeholder="Buscar licencias..."
-                                    AllowClear
-                                    EnterButton="true"
+            <div class="filters-section">
+                <div class="filter-row">
+                    <div class="filter-group">
+                        <label class="filter-label">📅 Fecha Desde</label>
+                        <DatePicker TValue="DateTime"
+                                    DefaultValue="@DateTime.Now.AddDays(-30)"
+                                    @bind-Value="@FechaBuscarI"
                                     Size="InputSize.Large"
-                                    OnSearch="@(() => LicenciasVM = FiltrarLicencias())"
-                                    @bind-Value="Busqueda" />
-                        </div>
-
-                        <div style="display: flex; align-items: center;">
-                            <Button Class="add-button"
-                                    OnClick="@(() => _modalAñadirVisible = true)"
-                                    Icon="plus">
-                                Nueva Licencia
-                            </Button>
-
-                            <Dropdown Trigger="@(new Trigger[] { Trigger.Click })"
-                                      Placement="Placement.BottomRight"
-                                      Arrow
-                                      Class="notification-badge">
-                                <Overlay>
-                                    <Menu Style="min-width:520px; max-width:1000px;">
-                                        <LicenciasAprobar OnCompleted="@Init" />
-                                    </Menu>
-                                </Overlay>
-                                <ChildContent>
-                                    <Badge Count="LicenciasVM_PendientesDeAprobacion" Style="font-size: 14px;">
-                                        <Button Shape="ButtonShape.Circle" Icon="bell" Size="ButtonSize.Large" />
-                                    </Badge>
-                                </ChildContent>
-                            </Dropdown>
-                        </div>
+                                    Placeholder="@("Seleccionar fecha")" />
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">📅 Fecha Hasta</label>
+                        <DatePicker TValue="DateTime"
+                                    DefaultValue="@DateTime.Now.AddDays(30)"
+                                    @bind-Value="@FechaBuscarF"
+                                    Size="InputSize.Large"
+                                    Placeholder="@("Seleccionar fecha")" />
                     </div>
                 </div>
-            </div>
-        </TitleTemplate>
 
-        <ColumnDefinitions Context="licencia">
-            <PropertyColumn Title="Apellido y Nombre"
-                            Property="c => c.ApellidoYNombre"
-                            Sortable
-                            Width="250px" />
+                <div class="actions-row">
+                    <div class="search-container">
+                        <Search Placeholder="🔍 Buscar por nombre, legajo o descripción..."
+                                AllowClear
+                                EnterButton="true"
+                                Size="InputSize.Large"
+                                OnSearch="@(() => LicenciasVM = FiltrarLicencias())"
+                                @bind-Value="Busqueda" />
+                    </div>
 
-            <PropertyColumn Title="Desde"
-                            Property="c => c.Desde"
-                            Format="dd/MM/yyyy"
-                            Sortable
-                            DefaultSortOrder="SortDirection.Descending"
-                            Width="130px" />
+                    <Button Class="modern-button add-button"
+                            OnClick="@(() => _modalAñadirVisible = true)"
+                            Icon="plus"
+                            Size="ButtonSize.Large">
+                        Nueva Licencia
+                    </Button>
 
-            <PropertyColumn Title="Hasta"
-                            Property="c => c.Hasta"
-                            Format="dd/MM/yyyy"
-                            Sortable
-                            Width="130px" />
-
-            <PropertyColumn Title="Duración"
-                            Property="c => c.DuracionEnDias"
-                            Sortable
-                            Width="120px">
-                <Template>
-                    @{
-                        string bgColor;
-                        string textColor;
-
-                        if (licencia.EstadoLicencia == TipoEstadoLicencia.Rechazada)
-                        {
-                            bgColor = "#FFEBEE";
-                            textColor = "#C62828";
-                        }
-                        else if (licencia.EstadoLicencia == TipoEstadoLicencia.Aprobada)
-                        {
-                            bgColor = "#E6F7E9";
-                            textColor = "#2E7D32";
-                        }
-                        else
-                        {
-                            bgColor = "#FFF8E1";
-                            textColor = "#F57F17";
-                        }
-                    }
-                    <span class="duration-badge" style="background-color:@bgColor; color:@textColor;">
-                        @licencia.DuracionEnDias días
-                    </span>
-                </Template>
-            </PropertyColumn>
-
-            <PropertyColumn Title="Tipo"
-                            Property="@(c => c.TipoLicencia.GetDisplayName())"
-                            Sortable="true"
-                            Width="200px" />
-
-            <PropertyColumn Title="Estado"
-                            Property="c => c.EstadoLicencia"
-                            Sortable
-                            Filterable
-                            Width="150px">
-                <Template>
-                    @{
-                        string statusClass = licencia.EstadoLicencia switch
-                        {
-                            TipoEstadoLicencia.Rechazada => "status-rejected",
-                            TipoEstadoLicencia.Aprobada => "status-approved",
-                            _ => "status-pending"
-                        };
-                    }
-                    <span class="status-badge @statusClass">
-                        @licencia.EstadoLicencia.ToString()
-                    </span>
-                </Template>
-            </PropertyColumn>
-        </ColumnDefinitions>
-    </Table>
-</div>
-
-@*Modal para el añadir Licencia*@
-<Modal @bind-Visible="_modalAñadirVisible" Title="Añadir Licencia" OkText="@("Cargar")" CancelText="@("Cancelar")" OnOk="@AddLicencia">
-    <Form Model="nuevaLicencia">
-        <FormItem Label="Nombre del Bombero">
-            <Select TItem="BomberoViweModel"
-                    TItemValue="int"
-                    DataSource="@BomberosVM"
-                    Value="nuevaLicencia.PersonaId"
-                    ValueChanged="OnBomberoChanged"
-                    ValueExpression="() => nuevaLicencia.PersonaId"
-                    LabelName="@nameof(BomberoViweModel.NombreYApellido)"
-                    ValueName="@nameof(BomberoViweModel.Id)"
-                    Placeholder="Seleccione el bombero"
-                    DefaultActiveFirstOption="false"
-                    AllowClear="true"
-                    EnableSearch>
-            </Select>
-        </FormItem>
-
-        <FormItem Label="Numero Legajo">
-            <AntDesign.InputNumber @bind-Value="nuevaLicencia.NumeroLegajo" Disabled />
-        </FormItem>
-
-        <FormItem Label="Tipo Licencia">
-            <EnumSelect TEnum="TipoLicencia?"
-                        @bind-Value="@nuevaLicencia.TipoLicencia"
-                        AllowClear
-                        Placeholder="Seleccione el tipo de licencia" />
-        </FormItem>
-
-        @if (nuevaLicencia.TipoLicencia == TipoLicencia.RazonesDeSalud)
-        {
-            <FormItem Label="Adjuntar Certificado Médico">
-                <InputFile />
-            </FormItem>
-        }
-
-        <FormItem Label="Descripcion">
-            <TextArea @bind-Value="@nuevaLicencia.Descripcion"
-                      Placeholder="Ingrese una descripción"
-                      Rows="4" />
-        </FormItem>
-
-        <FormItem Label="Fecha inicio">
-            <DatePicker TValue="DateTime"
-                        DefaultValue="DateTime.Now"
-                        @bind-Value="@nuevaLicencia.Desde"
-                        DisabledDate="@(date => date < DateTime.Today)"
-                        Placeholder="@("Seleccione la fecha de inicio")" />
-        </FormItem>
-
-        <FormItem Label="Fecha finalizacion">
-            <DatePicker TValue="DateTime"
-                        DefaultValue="DateTime.Now"
-                        @bind-Value="@nuevaLicencia.Hasta"
-                        DisabledDate="@(date => date < nuevaLicencia.Desde)"
-                        Placeholder="@("Seleccione la fecha de finalización")" />
-        </FormItem>
-
-        <FormItem Label="Duración en días">
-            <Input Value="@nuevaLicencia.DuracionEnDias.ToString()" ReadOnly />
-        </FormItem>
-    </Form>
-
-</Modal>
-
-@*Modal para el Detalle de la Licencia*@
-<Modal @bind-Visible="_modalDetalleVisible"
-       Title="@($"Detalle de Licencia - {licenciaSeleccionada?.ApellidoYNombre}")"
-       Footer="null"
-       Width="800">
-    @if (licenciaSeleccionada != null)
-    {
-        <div class="detalle-container">
-            <div class="detalle-item">
-                <div class="detalle-label">Bombero</div>
-                <div class="detalle-value">@licenciaSeleccionada.ApellidoYNombre</div>
-            </div>
-
-            <div class="detalle-item">
-                <div class="detalle-label">Número de Legajo</div>
-                <div class="detalle-value">@licenciaSeleccionada.NumeroLegajo</div>
-            </div>
-
-            <div class="detalle-item">
-                <div class="detalle-label">Tipo de Licencia</div>
-                <div class="detalle-value">@licenciaSeleccionada.TipoLicencia?.GetDisplayName()</div>
-            </div>
-
-            <div class="detalle-item">
-                <div class="detalle-label">Estado</div>
-                <div class="detalle-value">
-                    @{
-                        string statusClass = licenciaSeleccionada.EstadoLicencia switch
-                        {
-                            TipoEstadoLicencia.Rechazada => "status-rejected",
-                            TipoEstadoLicencia.Aprobada => "status-approved",
-                            _ => "status-pending"
-                        };
-                    }
-                    <span class="status-badge @statusClass">
-                        @licenciaSeleccionada.EstadoLicencia.ToString()
-                    </span>
+                    <Dropdown Trigger="@(new Trigger[] { Trigger.Click })"
+                              Placement="Placement.BottomRight"
+                              Arrow>
+                        <Overlay>
+                            <div style="min-width: 520px; max-width: 90vw;">
+                                <LicenciasAprobar OnCompleted="@Init" />
+                            </div>
+                        </Overlay>
+                        <ChildContent>
+                            <Badge Count="@LicenciasVM_PendientesDeAprobacion" ShowZero="false">
+                                <Button Class="notification-button" Shape="ButtonShape.Circle" Size="ButtonSize.Large">
+                                    <Icon Type="bell" />
+                                </Button>
+                            </Badge>
+                        </ChildContent>
+                    </Dropdown>
                 </div>
             </div>
-
-            <div class="detalle-item">
-                <div class="detalle-label">Fecha de Inicio</div>
-                <div class="detalle-value">@licenciaSeleccionada.Desde.ToString("dd/MM/yyyy")</div>
-            </div>
-
-            <div class="detalle-item">
-                <div class="detalle-label">Fecha de Finalización</div>
-                <div class="detalle-value">@licenciaSeleccionada.Hasta.ToString("dd/MM/yyyy")</div>
-            </div>
-
-            <div class="detalle-item">
-                <div class="detalle-label">Duración</div>
-                <div class="detalle-value">@licenciaSeleccionada.DuracionEnDias días</div>
-            </div>
-
-            <div class="detalle-item">
-                <div class="detalle-label">Días Restantes/Transcurridos</div>
-                <div class="detalle-value">
-                    @{
-                        var hoy = DateTime.Today;
-                        var diasRestantes = (licenciaSeleccionada.Hasta - hoy).Days;
-                        var estaVigente = hoy >= licenciaSeleccionada.Desde && hoy <= licenciaSeleccionada.Hasta;
-
-                        string mensaje;
-                        if (estaVigente)
-                        {
-                            mensaje = diasRestantes > 0 ? $"{diasRestantes} días restantes" : "Último día";
-                        }
-                        else if (hoy < licenciaSeleccionada.Desde)
-                        {
-                            var diasParaInicio = (licenciaSeleccionada.Desde - hoy).Days;
-                            mensaje = $"Inicia en {diasParaInicio} días";
-                        }
-                        else
-                        {
-                            var diasTranscurridos = Math.Abs(diasRestantes);
-                            mensaje = $"Finalizó hace {diasTranscurridos} días";
-                        }
-                    }
-                    @mensaje
-                </div>
-            </div>
-
-            @if (!string.IsNullOrWhiteSpace(licenciaSeleccionada.Descripcion))
-            {
-                <div class="detalle-item detalle-descripcion">
-                    <div class="detalle-label">Descripción</div>
-                    <div class="detalle-value">@licenciaSeleccionada.Descripcion</div>
-                </div>
-            }
         </div>
 
-        <div class="modal-footer">
-            <Button OnClick="@(() => _modalDetalleVisible = false)">
-                Cerrar
-            </Button>
+        <div class="table-container">
+            <Table DataSource="LicenciasVM"
+                   PageSize="10"
+                   Responsive
+                   TItem="LicenciaViewModel"
+                   RowClassName="@(c => c.Data.EstadoLicencia.ToString())"
+                   OnRow="@OnRowClick"
+                   Loading="@_loading"
+                   ScrollX="800px">
+
+                <ColumnDefinitions Context="licencia">
+                    <PropertyColumn Title="👤 Bombero"
+                                    Property="c => c.ApellidoYNombre"
+                                    Sortable
+                                    Width="250px"
+                                    Fixed="ColumnFixPlacement.Left" />
+
+                    <PropertyColumn Title="📋 Legajo"
+                                    Property="c => c.NumeroLegajo"
+                                    Sortable
+                                    Width="100px" />
+
+                    <PropertyColumn Title="📅 Inicio"
+                                    Property="c => c.Desde"
+                                    Format="dd/MM/yyyy"
+                                    Sortable
+                                    DefaultSortOrder="SortDirection.Descending"
+                                    Width="120px" />
+
+                    <PropertyColumn Title="📅 Fin"
+                                    Property="c => c.Hasta"
+                                    Format="dd/MM/yyyy"
+                                    Sortable
+                                    Width="120px" />
+
+                    <PropertyColumn Title="⏱️ Duración"
+                                    Property="c => c.DuracionEnDias"
+                                    Sortable
+                                    Width="120px">
+                        <Template>
+                            @{
+                                string bgColor = licencia.EstadoLicencia switch
+                                {
+                                    TipoEstadoLicencia.Rechazada => "var(--error-light)",
+                                    TipoEstadoLicencia.Aprobada => "var(--approved-light)",
+                                    _ => "var(--warning-light)"
+                                };
+                                string textColor = licencia.EstadoLicencia switch
+                                {
+                                    TipoEstadoLicencia.Rechazada => "var(--error-color)",
+                                    TipoEstadoLicencia.Aprobada => "var(--approved-color)",
+                                    _ => "var(--warning-color)"
+                                };
+                            }
+                            <Tag Color="@textColor" Style="@($"background-color: {bgColor}; border-color: {textColor}; font-weight: 600;")">
+                                @licencia.DuracionEnDias días
+                            </Tag>
+                        </Template>
+                    </PropertyColumn>
+
+                    <PropertyColumn Title="🏷️ Tipo"
+                                    Property="@(c => c.TipoLicencia.GetDisplayName())"
+                                    Sortable
+                                    Width="200px" />
+
+                    <PropertyColumn Title="📊 Estado"
+                                    Property="c => c.EstadoLicencia"
+                                    Sortable
+                                    Width="150px"
+                                    Fixed="ColumnFixPlacement.Right">
+                        <Template>
+                            @{
+                                string statusClass = licencia.EstadoLicencia switch
+                                {
+                                    TipoEstadoLicencia.Rechazada => "status-rejected",
+                                    TipoEstadoLicencia.Aprobada => "status-approved",
+                                    _ => "status-pending"
+                                };
+                                string icon = licencia.EstadoLicencia switch
+                                {
+                                    TipoEstadoLicencia.Rechazada => "close-circle",
+                                    TipoEstadoLicencia.Aprobada => "check-circle",
+                                    _ => "clock-circle"
+                                };
+                            }
+                            <Space>
+                                <Icon Type="@icon" />
+                                <span class="status-badge @statusClass">
+                                    @licencia.EstadoLicencia.ToString()
+                                </span>
+                            </Space>
+                        </Template>
+                    </PropertyColumn>
+                </ColumnDefinitions>
+            </Table>
+        </div>
+    </Card>
+</div>
+
+@* Modal para añadir licencia - Rediseñado responsivo *@
+<Modal @bind-Visible="_modalAñadirVisible"
+       Title="➕ Nueva Licencia"
+       Width="@("90%")"
+       Style="max-width: 800px;"
+       OkText="@("Crear Licencia")"
+       CancelText="@("Cancelar")"
+       OnOk="@AddLicencia"
+       DestroyOnClose>
+    <div class="modal-content">
+        <Form Model="nuevaLicencia" Layout="FormLayout.Vertical">
+            <div class="form-grid">
+                <div class="form-row">
+                    <FormItem Label="👤 Bombero" Required>
+                        <Select TItem="BomberoViweModel"
+                                TItemValue="int"
+                                DataSource="@BomberosVM"
+                                Value="nuevaLicencia.PersonaId"
+                                ValueChanged="OnBomberoChanged"
+                                LabelName="@nameof(BomberoViweModel.NombreYApellido)"
+                                ValueName="@nameof(BomberoViweModel.Id)"
+                                Placeholder="Seleccione el bombero"
+                                AllowClear
+                                EnableSearch
+                                Size="InputSize.Large" />
+                    </FormItem>
+
+                    <FormItem Label="📋 Número Legajo">
+                        <AntDesign.InputNumber @bind-Value="nuevaLicencia.NumeroLegajo"
+                                               Disabled
+                                               Size="InputSize.Large" />
+                    </FormItem>
+                </div>
+
+                <FormItem Label="🏷️ Tipo de Licencia" Required>
+                    <EnumSelect TEnum="TipoLicencia?"
+                                @bind-Value="@nuevaLicencia.TipoLicencia"
+                                AllowClear
+                                Placeholder="Seleccione el tipo de licencia"
+                                Size="InputSize.Large" />
+                </FormItem>
+
+                @if (nuevaLicencia.TipoLicencia == TipoLicencia.RazonesDeSalud)
+                {
+                    <FormItem Label="📎 Certificado Médico">
+                        <Upload Accept=".pdf,.jpg,.png,.jpeg"
+                                MaxCount="1"
+                                ShowUploadList>
+                            <Button Icon="upload">Adjuntar Certificado</Button>
+                        </Upload>
+                    </FormItem>
+                }
+
+                <FormItem Label="📝 Descripción" Class="form-full-width">
+                    <TextArea @bind-Value="@nuevaLicencia.Descripcion"
+                              Placeholder="Ingrese una descripción detallada de la licencia"
+                              Rows="4"
+                              ShowCount
+                              MaxLength="500" />
+                </FormItem>
+
+                <div class="form-row">
+                    <FormItem Label="📅 Fecha de Inicio" Required>
+                        <DatePicker TValue="DateTime"
+                                    @bind-Value="@nuevaLicencia.Desde"
+                                    DefaultValue="DateTime.Today"
+                                    DisabledDate="@(date => date < DateTime.Today)"
+                                    Placeholder="@("Seleccione fecha de inicio")"
+                                    Size="InputSize.Large" />
+                    </FormItem>
+
+                    <FormItem Label="📅 Fecha de Finalización" Required>
+                        <DatePicker TValue="DateTime"
+                                    @bind-Value="@nuevaLicencia.Hasta"
+                                    DefaultValue="@(DateTime.Today.AddDays(1))"
+                                    DisabledDate="@(date => date < nuevaLicencia.Desde)"
+                                    Placeholder="@("Seleccione fecha de fin")"
+                                    Size="InputSize.Large" />
+                    </FormItem>
+                </div>
+
+                <FormItem Label="⏱️ Duración">
+                    <Input Value="@($"{nuevaLicencia.DuracionEnDias} días")"
+                           ReadOnly
+                           Size="InputSize.Large" />
+                </FormItem>
+            </div>
+        </Form>
+    </div>
+</Modal>
+
+@* Modal de detalle - Rediseñado responsivo *@
+<Modal @bind-Visible="_modalDetalleVisible"
+       Title="@($"📋 Detalle de Licencia - {licenciaSeleccionada?.ApellidoYNombre}")"
+       Footer="null"
+       Width="@("90%")"
+       Style="max-width: 1000px;">
+    @if (licenciaSeleccionada != null)
+    {
+        <div class="modal-content">
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <div class="detail-label">👤 Bombero</div>
+                    <div class="detail-value">@licenciaSeleccionada.ApellidoYNombre</div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">📋 Legajo</div>
+                    <div class="detail-value">@licenciaSeleccionada.NumeroLegajo</div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">🏷️ Tipo</div>
+                    <div class="detail-value">@licenciaSeleccionada.TipoLicencia?.GetDisplayName()</div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">📊 Estado</div>
+                    <div class="detail-value">
+                        @{
+                            string statusClass = licenciaSeleccionada.EstadoLicencia switch
+                            {
+                                TipoEstadoLicencia.Rechazada => "status-rejected",
+                                TipoEstadoLicencia.Aprobada => "status-approved",
+                                _ => "status-pending"
+                            };
+                        }
+                        <span class="status-badge @statusClass">
+                            @licenciaSeleccionada.EstadoLicencia.ToString()
+                        </span>
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">📅 Inicio</div>
+                    <div class="detail-value">@licenciaSeleccionada.Desde.ToString("dddd, dd MMMM yyyy")</div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">📅 Fin</div>
+                    <div class="detail-value">@licenciaSeleccionada.Hasta.ToString("dddd, dd MMMM yyyy")</div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">⏱️ Duración</div>
+                    <div class="detail-value">
+                        <Tag Color="TagColor.Processing" Style="font-size: 1rem; padding: 4px 12px;">
+                            @licenciaSeleccionada.DuracionEnDias días
+                        </Tag>
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">📊 Estado Temporal</div>
+                    <div class="detail-value">
+                        @{
+                            var hoy = DateTime.Today;
+                            var diasRestantes = (licenciaSeleccionada.Hasta - hoy).Days;
+                            var estaVigente = hoy >= licenciaSeleccionada.Desde && hoy <= licenciaSeleccionada.Hasta;
+
+                            string mensaje;
+                            string colorTag;
+                            if (estaVigente)
+                            {
+                                mensaje = diasRestantes > 0 ? $"⏰ {diasRestantes} días restantes" : "⚡ Último día";
+                                colorTag = "processing";
+                            }
+                            else if (hoy < licenciaSeleccionada.Desde)
+                            {
+                                var diasParaInicio = (licenciaSeleccionada.Desde - hoy).Days;
+                                mensaje = $"🔜 Inicia en {diasParaInicio} días";
+                                colorTag = "default";
+                            }
+                            else
+                            {
+                                var diasTranscurridos = Math.Abs(diasRestantes);
+                                mensaje = $"✅ Finalizó hace {diasTranscurridos} días";
+                                colorTag = "success";
+                            }
+                        }
+                        <Tag Color="@colorTag" Style="font-size: 1rem; padding: 4px 12px;">
+                            @mensaje
+                        </Tag>
+                    </div>
+                </div>
+
+                @if (!string.IsNullOrWhiteSpace(licenciaSeleccionada.Descripcion))
+                {
+                    <div class="detail-item detail-description">
+                        <div class="detail-label">📝 Descripción</div>
+                        <div class="detail-value">@licenciaSeleccionada.Descripcion</div>
+                    </div>
+                }
+            </div>
+
+            <div style="display: flex; justify-content: center; margin-top: 24px;">
+                <Button Type="ButtonType.Primary"
+                        Size="ButtonSize.Large"
+                        OnClick="@(() => _modalDetalleVisible = false)">
+                    Cerrar
+                </Button>
+            </div>
         </div>
     }
 </Modal>
-
-@*Modal para el Historial de la Licencia*@
 
 @code {
     // Variables para la búsqueda de licencias
     DateTime FechaBuscarI;
     DateTime FechaBuscarF;
     string? Busqueda;
+    bool _loading = false;
 
     // Contador de licencias pendientes de aprobación
-    int LicenciasVM_PendientesDeAprobacion => LicenciasVM.Count(l => l.EstadoLicencia == TipoEstadoLicencia.Pendiente);
+    int LicenciasVM_PendientesDeAprobacion => LicenciasVM?.Count(l => l.EstadoLicencia == TipoEstadoLicencia.Pendiente) ?? 0;
 
     // Lista de licencias
     List<LicenciaViewModel> LicenciasVM = new();
@@ -593,7 +886,7 @@
     // Lista de bomberos para el select
     List<BomberoViweModel> BomberosVM = new();
 
-    // Variables para el modal de añadir licencia
+    // Variables para modales
     private bool _modalAñadirVisible = false;
     private bool _modalDetalleVisible = false;
 
@@ -625,32 +918,46 @@
     // Función para inicializar los datos de la página
     private async Task Init()
     {
-        // Obtener todas las licencias y bomberos de la base de datos mediante los servicios
-        var licencias = await LicenciaService.ObtenerTodasLasLicencias();
-        var bomberos = await BomberoService.ObtenerTodosLosBomberosAsync();
+        _loading = true;
+        StateHasChanged();
 
-        // Mapeo de licencias a ViewModel
-        LicenciasVM_SinFiltro = LicenciasToViewModel(licencias).ToList();
+        try
+        {
+            // Obtener todas las licencias y bomberos de la base de datos mediante los servicios
+            var licencias = await LicenciaService.ObtenerTodasLasLicencias();
+            var bomberos = await BomberoService.ObtenerTodosLosBomberosAsync();
 
-        // Mapeo de bomberos a ViewModel
-        BomberosVM = bomberos.ToBomberoViewModelList();
+            // Mapeo de licencias a ViewModel
+            LicenciasVM_SinFiltro = LicenciasToViewModel(licencias).ToList();
 
-        // Filtrar las licencias según la fecha y búsqueda de texto
-        LicenciasVM = FiltrarLicencias();
+            // Mapeo de bomberos a ViewModel
+            BomberosVM = bomberos.ToBomberoViewModelList();
+
+            // Filtrar las licencias según la fecha y búsqueda de texto
+            LicenciasVM = FiltrarLicencias();
+        }
+        finally
+        {
+            _loading = false;
+            StateHasChanged();
+        }
     }
 
     private List<LicenciaViewModel> FiltrarLicencias()
     {
         // Filtrar por fecha y búsqueda de texto
-        return LicenciasVM_SinFiltro
+        var filtered = LicenciasVM_SinFiltro
             .Where(l => (FechaBuscarI == default || l.Desde >= FechaBuscarI) &&
                         (FechaBuscarF == default || l.Hasta <= FechaBuscarF) &&
                         (string.IsNullOrWhiteSpace(Busqueda) ||
-                         l.ApellidoYNombre.Contains(Busqueda, StringComparison.OrdinalIgnoreCase)))
+                         l.ApellidoYNombre.Contains(Busqueda, StringComparison.OrdinalIgnoreCase) ||
+                         l.NumeroLegajo.ToString().Contains(Busqueda) ||
+                         (!string.IsNullOrEmpty(l.Descripcion) && l.Descripcion.Contains(Busqueda, StringComparison.OrdinalIgnoreCase))))
             .OrderBy(l => Math.Abs((l.Desde - DateTime.Today).TotalDays))
             .ToList();
 
         StateHasChanged();
+        return filtered;
     }
 
     // Función para mapear las licencias a ViewModel
@@ -666,7 +973,7 @@
                 TipoLicencia = l.TipoLicencia,
                 NumeroLegajo = l.BomberoAfectado?.NumeroLegajo ?? 0,
                 PersonaId = l.PersonalId,
-                PersonalAfectado = l.BomberoAfectado.ToBomberoViewModel(),
+                PersonalAfectado = l.BomberoAfectado?.ToBomberoViewModel(),
                 ApellidoYNombre = l.BomberoAfectado != null
                     ? $"{l.BomberoAfectado.Apellido}, {l.BomberoAfectado.Nombre}"
                     : string.Empty,
@@ -709,46 +1016,40 @@
         // El modal se cierra cuando se hace clic en "Cargar" asi que lo volvemos a abrir
         _modalAñadirVisible = true;
 
-        // Validaciones
+        // Validaciones mejoradas
         if (string.IsNullOrWhiteSpace(nuevaLicencia.ApellidoYNombre) ||
            nuevaLicencia.NumeroLegajo <= 0 ||
            nuevaLicencia.TipoLicencia == null ||
            nuevaLicencia.Desde == default ||
            nuevaLicencia.Hasta == default)
         {
-            await MessageService.ErrorAsync("Por favor, complete todos los campos obligatorios.");
+            await MessageService.ErrorAsync("⚠️ Por favor, complete todos los campos obligatorios.");
             return;
         }
 
         if (!BomberosVM.Any(b => b.Id == nuevaLicencia.PersonaId))
         {
-            await MessageService.ErrorAsync("El bombero seleccionado no es válido.");
+            await MessageService.ErrorAsync("❌ El bombero seleccionado no es válido.");
             return;
         }
 
         if (nuevaLicencia.Desde > nuevaLicencia.Hasta)
         {
-            await MessageService.ErrorAsync("La fecha de inicio no puede ser mayor que la fecha de finalización.");
+            await MessageService.ErrorAsync("⚠️ La fecha de inicio no puede ser mayor que la fecha de finalización.");
             return;
         }
 
         if (nuevaLicencia.Desde < DateTime.Today)
         {
-            await MessageService.ErrorAsync("La fecha de inicio no puede ser anterior a hoy.");
+            await MessageService.ErrorAsync("⚠️ La fecha de inicio no puede ser anterior a hoy.");
             return;
         }
-
-        @*if (nuevaLicencia.TipoLicencia == TipoLicencia.RazonesDeSalud && (archivoCertificado == null || archivoCertificado.Length == 0))
-        {
-            await MessageService.ErrorAsync("Debe adjuntar el certificado médico para licencias por razones de salud.");
-            return;
-        } <-- Arreglar en algun momento el tema del certificado medico*@
 
         var bombero = await BomberoService.ObtenerBomberoPorIdAsync(nuevaLicencia.PersonaId);
 
         if (bombero == null)
         {
-            await MessageService.ErrorAsync("No se encontró el bombero seleccionado.");
+            await MessageService.ErrorAsync("❌ No se encontró el bombero seleccionado.");
             return;
         }
 
@@ -757,29 +1058,36 @@
 
         if (nuevaLicencia.DuracionEnDias != duracionCalculada)
         {
-            await MessageService.ErrorAsync("La duración en días no coincide con las fechas seleccionadas.");
+            await MessageService.ErrorAsync("⚠️ La duración en días no coincide con las fechas seleccionadas.");
             return;
         }
 
-        var nuevaLicenciaModel = new Licencia
+        try
         {
-            TipoLicencia = nuevaLicencia.TipoLicencia!.Value,
-            PersonalId = nuevaLicencia.PersonaId,
-            Descripcion = nuevaLicencia.Descripcion,
-            Desde = nuevaLicencia.Desde,
-            Hasta = nuevaLicencia.Hasta,
-            EstadoLicencia = TipoEstadoLicencia.Pendiente,
-            BomberoAfectado = bombero,
-        };
+            var nuevaLicenciaModel = new Licencia
+            {
+                TipoLicencia = nuevaLicencia.TipoLicencia!.Value,
+                PersonalId = nuevaLicencia.PersonaId,
+                Descripcion = nuevaLicencia.Descripcion,
+                Desde = nuevaLicencia.Desde,
+                Hasta = nuevaLicencia.Hasta,
+                EstadoLicencia = TipoEstadoLicencia.Pendiente,
+                BomberoAfectado = bombero,
+            };
 
-        // Si todo es válido, guardar la nueva licencia en la base de datos mediante el servicio
-        await LicenciaService.AgregarLicencia(nuevaLicenciaModel);
+            // Guardar en la base de datos
+            await LicenciaService.AgregarLicencia(nuevaLicenciaModel);
 
-        // Cerrar el modal y limpiar el formulario
-        _modalAñadirVisible = false;
-        nuevaLicencia = new LicenciaViewModel();
+            // Cerrar modal y limpiar formulario
+            _modalAñadirVisible = false;
+            nuevaLicencia = new LicenciaViewModel();
 
-        // Recargamos la pagina para mostrar la nueva licencia
-        await Init();
+            await MessageService.SuccessAsync("✅ Licencia creada exitosamente y enviada para aprobación.");
+            await Init();
+        }
+        catch (Exception ex)
+        {
+            await MessageService.ErrorAsync($"❌ Error al crear la licencia: {ex.Message}");
+        }
     }
 }

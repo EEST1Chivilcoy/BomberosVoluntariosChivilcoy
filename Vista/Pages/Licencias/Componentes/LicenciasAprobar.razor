@@ -8,62 +8,397 @@
 @inject IMessageService message
 
 <style>
-    .ant-table-row > td {
-        color: black;
+    /* Variables para consistencia con el componente principal */
+    :root {
+        --primary-color: #A63333;
+        --primary-dark: #732D2D;
+        --success-color: #4CAF50;
+        --success-dark: #438E46;
+        --warning-color: #F57F17;
+        --warning-light: #FFF8E1;
+        --error-color: #C62828;
+        --error-light: #FFEBEE;
+        --approved-color: #2E7D32;
+        --approved-light: #E6F7E9;
+        --gold-color: #FFD700;
+    }
+
+    .approval-container {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        border: 1px solid #f0f0f0;
+    }
+
+    .approval-header {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+        padding: 16px 20px;
+        color: white;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .approval-title {
+        font-weight: 700;
+        font-size: 1.1rem;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .approval-content {
+        padding: 0;
+        max-height: 70vh;
+        overflow-y: auto;
+    }
+
+    .empty-state {
+        padding: 40px 20px;
+        text-align: center;
+        color: #666;
+    }
+
+    .empty-icon {
+        font-size: 3rem;
+        color: var(--primary-color);
+        margin-bottom: 16px;
+    }
+
+    .empty-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 8px;
+    }
+
+    .empty-description {
+        color: #666;
+        font-size: 0.95rem;
+    }
+
+    /* Responsive table styling */
+    :deep(.ant-table) {
+        font-size: 0.9rem;
+    }
+
+    :deep(.ant-table-thead > tr > th) {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+        color: white;
+        font-weight: 600;
+        border: none;
+        padding: 12px 8px;
+        font-size: 0.85rem;
+    }
+
+    :deep(.ant-table-tbody > tr > td) {
+        padding: 12px 8px;
+        border-bottom: 1px solid #f0f0f0;
+        color: #333;
         background-color: white;
+        transition: all 0.3s ease;
     }
 
-    .ant-table-row:hover > td {
-        background-color: white !important;
+    :deep(.ant-table-tbody > tr:hover > td) {
+        background-color: rgba(166, 51, 51, 0.05) !important;
+        transform: translateX(2px);
     }
 
-    .delete {
-        text-align: right;
+    /* Action buttons styling */
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        align-items: center;
+    }
+
+    .approve-button {
+        color: var(--success-color);
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        padding: 8px;
+        border-radius: 50%;
+        background: rgba(76, 175, 80, 0.1);
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .approve-button:hover {
+        color: white;
+        background: var(--success-color);
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+    }
+
+    .reject-button {
+        color: var(--error-color);
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        padding: 8px;
+        border-radius: 50%;
+        background: rgba(198, 40, 40, 0.1);
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .reject-button:hover {
+        color: white;
+        background: var(--error-color);
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(198, 40, 40, 0.3);
+    }
+
+    .status-badge {
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        background: var(--warning-light);
+        color: var(--warning-color);
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    /* Responsive design */
+    @@media (max-width: 768px) {
+        .approval-header {
+            padding: 12px 16px;
+        }
+        
+        .approval-title {
+            font-size: 1rem;
+        }
+
+        :deep(.ant-table-thead > tr > th),
+        :deep(.ant-table-tbody > tr > td) {
+            padding: 8px 4px;
+            font-size: 0.8rem;
+        }
+
+        .action-buttons {
+            gap: 8px;
+        }
+
+        .approve-button,
+        .reject-button {
+            width: 32px;
+            height: 32px;
+            font-size: 1rem;
+        }
+
+        /* Hide less important columns on mobile */
+        :deep(.ant-table-cell:nth-child(3)),
+        :deep(.ant-table-cell:nth-child(4)) {
+            display: none;
+        }
+    }
+
+    @@media (max-width: 480px) {
+        .approval-content {
+            max-height: 50vh;
+        }
+
+        :deep(.ant-table-cell:nth-child(5)) {
+            display: none;
+        }
+    }
+
+    /* Loading state */
+    .loading-container {
+        padding: 40px 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+        color: var(--primary-color);
+    }
+
+    /* Enhanced popconfirm styling */
+    :deep(.ant-popconfirm .ant-popconfirm-message) {
+        font-weight: 500;
+    }
+
+    :deep(.ant-popconfirm .ant-btn-primary) {
+        background: var(--success-color);
+        border-color: var(--success-color);
+    }
+
+    :deep(.ant-popconfirm .ant-btn-primary:hover) {
+        background: var(--success-dark);
+        border-color: var(--success-dark);
     }
 </style>
 
-<div>
-    <Table DataSource="LicenciasVM_PendientesDeAprobacion" Bordered Responsive Size="TableSize.Small">
+<div class="approval-container">
+    <div class="approval-header">
+        <h3 class="approval-title">
+            <Icon Type="audit" />
+            Licencias Pendientes de Aprobación
+            @if (LicenciasVM_PendientesDeAprobacion.Any())
+            {
+                <Badge Count="@LicenciasVM_PendientesDeAprobacion.Count" 
+                       Style="background: var(--gold-color); color: var(--primary-color); font-weight: bold;" />
+            }
+        </h3>
+    </div>
 
-        <PropertyColumn Title="Apellido y Nombre" Property="c => c.ApellidoYNombre"></PropertyColumn>
+    <div class="approval-content">
+        @if (_loading)
+        {
+            <div class="loading-container">
+                <Spin Size="SpinSize.Large" />
+                <span>Cargando licencias pendientes...</span>
+            </div>
+        }
+        else if (!LicenciasVM_PendientesDeAprobacion.Any())
+        {
+            <div class="empty-state">
+                <div class="empty-icon">✅</div>
+                <div class="empty-title">¡Todo al día!</div>
+                <div class="empty-description">
+                    No hay licencias pendientes de aprobación en este momento.
+                </div>
+            </div>
+        }
+        else
+        {
+            <Table DataSource="LicenciasVM_PendientesDeAprobacion" 
+                   Bordered 
+                   Responsive 
+                   Size="TableSize.Small"
+                   PageSize="5"
+                   HidePagination="@(LicenciasVM_PendientesDeAprobacion.Count > 5)"
+                   ScrollX="600px">
 
-        <PropertyColumn Property="c => c.Desde" Format="dd/MM/yyyy"></PropertyColumn>
+                <ColumnDefinitions Context="licencia">
+                    <PropertyColumn Title="👤 Bombero" 
+                                    Property="c => c.ApellidoYNombre"
+                                    Width="200px"
+                                    Fixed="ColumnFixPlacement.Left">
+                        <Template>
+                            <div style="font-weight: 600; color: #333;">
+                                @licencia.ApellidoYNombre
+                            </div>
+                            <div style="font-size: 0.8rem; color: #666;">
+                                Legajo: @licencia.NumeroLegajo
+                            </div>
+                        </Template>
+                    </PropertyColumn>
 
-        <PropertyColumn Property="c => c.Hasta" Format="dd/MM/yyyy"></PropertyColumn>
+                    <PropertyColumn Title="📅 Desde" 
+                                    Property="c => c.Desde" 
+                                    Format="dd/MM/yyyy"
+                                    Width="100px">
+                        <Template>
+                            <Tag Color="TagColor.Processing" Style="font-size: 0.75rem;">
+                                @licencia.Desde.ToString("dd/MM")
+                            </Tag>
+                        </Template>
+                    </PropertyColumn>
 
-        <PropertyColumn Title="Duración en Días" Property="c => c.DuracionEnDias"></PropertyColumn>
+                    <PropertyColumn Title="📅 Hasta" 
+                                    Property="c => c.Hasta" 
+                                    Format="dd/MM/yyyy"
+                                    Width="100px">
+                        <Template>
+                            <Tag Color="TagColor.Processing" Style="font-size: 0.75rem;">
+                                @licencia.Hasta.ToString("dd/MM")
+                            </Tag>
+                        </Template>
+                    </PropertyColumn>
 
-        <PropertyColumn Title="Tipo"
-                        Property="@(c => c.TipoLicencia.GetDisplayName())" />
+                    <PropertyColumn Title="⏱️ Días" 
+                                    Property="c => c.DuracionEnDias"
+                                    Width="80px">
+                        <Template>
+                            <div style="text-align: center; font-weight: 600; color: var(--warning-color);">
+                                @licencia.DuracionEnDias
+                            </div>
+                        </Template>
+                    </PropertyColumn>
 
-        <PropertyColumn Title="Estado" Property="c => c.EstadoLicencia"></PropertyColumn>
+                    <PropertyColumn Title="🏷️ Tipo"
+                                    Property="@(c => c.TipoLicencia.GetDisplayName())"
+                                    Width="150px">
+                        <Template>
+                            <div style="font-size: 0.85rem; color: #333;">
+                                @licencia.TipoLicencia?.GetDisplayName()
+                            </div>
+                        </Template>
+                    </PropertyColumn>
 
-        <ActionColumn Title="Acciones" Style="display:flex;justify-content:space-around;">
-            <Popconfirm Title="¿Quiere aprobar esta licencia?"
-                        OnConfirm="()=> AprobarLicencia(context.Id)"
-                        OkText="Si"
-                        CancelText="No">
-                <i class="fa-solid fa-check" style="color: #40c011;cursor: pointer;"></i>
-            </Popconfirm>
-            <Popconfirm Title="Desea Rechazar Licencia?"
-                        OnConfirm="()=> RechazarLicencia(context.Id)"
-                        OkText="Si"
-                        CancelText="No">
-                <i class="fa-solid fa-trash" style="color: red ;cursor: pointer;"></i>
-            </Popconfirm>
-        </ActionColumn>
+                    <PropertyColumn Title="📊 Estado" 
+                                    Property="c => c.EstadoLicencia"
+                                    Width="100px">
+                        <Template>
+                            <div class="status-badge">
+                                <Icon Type="clock-circle" />
+                                Pendiente
+                            </div>
+                        </Template>
+                    </PropertyColumn>
 
-    </Table>
+                    <ActionColumn Title="⚙️ Acciones" 
+                                  Fixed="ColumnFixPlacement.Right"
+                                  Width="120px">
+                        <Template>
+                            <div class="action-buttons">
+                                <Tooltip Title="Aprobar licencia">
+                                    <Popconfirm Title="¿Confirma que desea aprobar esta licencia?"
+                                                OnConfirm="() => AprobarLicencia(licencia.Id)"
+                                                OkText="✅ Aprobar"
+                                                CancelText="❌ Cancelar"
+                                                Icon="@IconType.Outline.CheckCircle">
+                                        <div class="approve-button">
+                                            <Icon Type="check" />
+                                        </div>
+                                    </Popconfirm>
+                                </Tooltip>
+
+                                <Tooltip Title="Rechazar licencia">
+                                    <Popconfirm Title="¿Confirma que desea rechazar esta licencia?"
+                                                OnConfirm="() => RechazarLicencia(licencia.Id)"
+                                                OkText="❌ Rechazar"
+                                                CancelText="↩️ Cancelar"
+                                                Icon="@IconType.Outline.CloseCircle">
+                                        <div class="reject-button">
+                                            <Icon Type="close" />
+                                        </div>
+                                    </Popconfirm>
+                                </Tooltip>
+                            </div>
+                        </Template>
+                    </ActionColumn>
+                </ColumnDefinitions>
+            </Table>
+        }
+    </div>
 </div>
 
 @code {
-    [Parameter, EditorRequired] public EventCallback OnCompleted { get; set; } // Evento para notificar que se aprobó o rechazó una licencia (esto es para actualizar la vista padre)
+    [Parameter, EditorRequired] public EventCallback OnCompleted { get; set; }
 
     // Lista para almacenar las licencias pendientes de aprobación
     private List<LicenciaViewModel> LicenciasVM_PendientesDeAprobacion = new();
 
-    // Lista para almacenar todas las licencias sin ningun tipo de filtro (osea todas las licencias)
+    // Lista para almacenar todas las licencias sin ningun tipo de filtro
     private List<LicenciaViewModel> LicenciasVM_SinFiltro = new();
+
+    // Estado de carga
+    private bool _loading = false;
 
     // Método que se ejecuta al inicializar el componente
     protected override async Task OnInitializedAsync()
@@ -74,16 +409,29 @@
     // Carga inicial de datos
     private async Task Init()
     {
-        // Cargamos todas las licencias de la base de datos mediante el servicio
-        var licencias = await LicenciaService.ObtenerTodasLasLicencias();
-
-        // Mapeo de licencias a ViewModel
-        LicenciasVM_SinFiltro = LicenciasToViewModel(licencias).ToList();
-
-        // Filtramos las licencias que están pendientes de aprobación
-        LicenciasVM_PendientesDeAprobacion = CargarLicenciasPendientes(LicenciasVM_SinFiltro);
-
+        _loading = true;
         StateHasChanged();
+
+        try
+        {
+            // Cargamos todas las licencias de la base de datos mediante el servicio
+            var licencias = await LicenciaService.ObtenerTodasLasLicencias();
+
+            // Mapeo de licencias a ViewModel
+            LicenciasVM_SinFiltro = LicenciasToViewModel(licencias).ToList();
+
+            // Filtramos las licencias que están pendientes de aprobación
+            LicenciasVM_PendientesDeAprobacion = CargarLicenciasPendientes(LicenciasVM_SinFiltro);
+        }
+        catch (Exception ex)
+        {
+            await message.ErrorAsync($"Error al cargar las licencias: {ex.Message}");
+        }
+        finally
+        {
+            _loading = false;
+            StateHasChanged();
+        }
     }
 
     // Mapea las licencias del modelo de datos al ViewModel
@@ -99,7 +447,7 @@
                 TipoLicencia = l.TipoLicencia,
                 NumeroLegajo = l.BomberoAfectado?.NumeroLegajo ?? 0,
                 PersonaId = l.PersonalId,
-                PersonalAfectado = l.BomberoAfectado.ToBomberoViewModel(),
+                PersonalAfectado = l.BomberoAfectado?.ToBomberoViewModel(),
                 ApellidoYNombre = l.BomberoAfectado != null
                     ? $"{l.BomberoAfectado.Apellido}, {l.BomberoAfectado.Nombre}"
                     : string.Empty,
@@ -120,28 +468,43 @@
     {
         return licencias
             .Where(l => l.EstadoLicencia == TipoEstadoLicencia.Pendiente)
+            .OrderBy(l => l.Desde) // Ordenar por fecha de inicio
             .ToList();
     }
 
     // Aprueba la licencia que esta en pendiente
     private async Task AprobarLicencia(int IdLicencia)
     {
-        // Llamamos al servicio para aprobar la licencia
-        await LicenciaService.CambiarEstadoLicencia(IdLicencia, TipoEstadoLicencia.Aprobada);
+        try
+        {
+            // Llamamos al servicio para aprobar la licencia
+            await LicenciaService.CambiarEstadoLicencia(IdLicencia, TipoEstadoLicencia.Aprobada);
 
-        await Init();
-        await message.SuccessAsync("Licencia Aprobada!");
-        await OnCompleted.InvokeAsync(); // Notificamos que se completó la acción
+            await Init();
+            await message.SuccessAsync("✅ ¡Licencia aprobada exitosamente!");
+            await OnCompleted.InvokeAsync(); // Notificamos que se completó la acción
+        }
+        catch (Exception ex)
+        {
+            await message.ErrorAsync($"❌ Error al aprobar la licencia: {ex.Message}");
+        }
     }
 
-    // Elimina la licencia que esta en pendiente
+    // Rechaza la licencia que esta en pendiente
     private async Task RechazarLicencia(int IdLicencia)
     {
-        // Llamamos al servicio para rechazar la licencia
-        await LicenciaService.CambiarEstadoLicencia(IdLicencia, TipoEstadoLicencia.Rechazada);
+        try
+        {
+            // Llamamos al servicio para rechazar la licencia
+            await LicenciaService.CambiarEstadoLicencia(IdLicencia, TipoEstadoLicencia.Rechazada);
 
-        await Init();
-        await message.SuccessAsync("Licencia Rechazada!");
-        await OnCompleted.InvokeAsync(); // Notificamos que se completó la acción
+            await Init();
+            await message.WarningAsync("⚠️ Licencia rechazada.");
+            await OnCompleted.InvokeAsync(); // Notificamos que se completó la acción
+        }
+        catch (Exception ex)
+        {
+            await message.ErrorAsync($"❌ Error al rechazar la licencia: {ex.Message}");
+        }
     }
 }
