@@ -7,107 +7,256 @@
 @*Servicios Utilizados*@
 @using Vista.Services
 @inject IMessageService MessageService
+@inject IVehiculoSalidaService VehiculoSalidaService
 
 <Form Model="movilSalidaView">
 
-    <FormItem Label="Seleccione al Chofer">
-        <Select TItem="BomberoViweModel"
-                TItemValue="BomberoViweModel"
-                DataSource="@bomberoChoferesSalir"
-                @bind-Value="@movilSalidaView.Chofer"
-                LabelName="@nameof(BomberoViweModel.ApellidoYNombre)"
-                Placeholder="Selecione a un bombero"
-                DefaultActiveFirstOption="false"
-                AllowClear="true"
-                EnableSearch>
-        </Select>
-    </FormItem>
+    @*Sección Datos del Vehículo*@
+    <div style="margin-bottom: 24px;">
+        <div style="border-bottom: 2px solid #fa8c16; padding-bottom: 8px; margin-bottom: 16px;">
+            <h4 style="color: #fa8c16; margin: 0; font-weight: 600;">Datos del Vehículo</h4>
+        </div>
 
-    <FormItem Label="Numero de Movil">
-        <Select TItem="Movil"
-                TItemValue="string"
-                DataSource="@Moviles"
-                @bind-Value="@movilSalidaView.NumeroMovil"
-                LabelName="@nameof(Movil.NumeroMovil)"
-                ValueName="@nameof(Movil.NumeroMovil)"
-                Placeholder="Selecione el movil"
-                DefaultActiveFirstOption="false"
-                AllowClear="true"
-                EnableSearch>
-        </Select>
-    </FormItem>
+        <Row Gutter="16">
+            <Col Xs="24" Sm="12" Md="12" Lg="12">
+            <FormItem Label="Seleccione al Chofer" Required>
+                <Select TItem="BomberoViweModel"
+                        TItemValue="BomberoViweModel"
+                        DataSource="@bomberoChoferesSalir"
+                        @bind-Value="@movilSalidaView.Chofer"
+                        LabelName="@nameof(BomberoViweModel.ApellidoYNombre)"
+                        Placeholder="Seleccione a un bombero"
+                        DefaultActiveFirstOption="false"
+                        AllowClear="true"
+                        EnableSearch>
+                </Select>
+            </FormItem>
+            </Col>
+            <Col Xs="24" Sm="12" Md="12" Lg="12">
+            <FormItem Label="Número de Móvil" Required>
+                <Select TItem="Movil"
+                        TItemValue="string"
+                        DataSource="@Moviles"
+                        @bind-Value="@movilSalidaView.NumeroMovil"
+                        LabelName="@nameof(Movil.NumeroMovil)"
+                        ValueName="@nameof(Movil.NumeroMovil)"
+                        Placeholder="Seleccione el móvil"
+                        DefaultActiveFirstOption="false"
+                        AllowClear="true"
+                        EnableSearch>
+                </Select>
+            </FormItem>
+            </Col>
+        </Row>
 
-    @if (movilSalidaView.NumeroMovil is not null)
-    {
-        movilSalidaView.KmSalida = Moviles.FirstOrDefault(m => m.NumeroMovil == movilSalidaView.NumeroMovil)?.Kilometraje ?? 0;
-    }
+        @if (movilSalidaView.NumeroMovil is not null)
+        {
+            movilSalidaView.KmSalida = Moviles.FirstOrDefault(m => m.NumeroMovil == movilSalidaView.NumeroMovil)?.Kilometraje ?? 0;
+        }
 
-    <FormItem Label="Kilometraje Actual">
-        <Input @bind-Value="movilSalidaView.KmSalida" Disabled>
-        <Suffix>Km</Suffix>
-        </Input>
-    </FormItem>
+        <Row Gutter="16">
+            <Col Xs="24" Sm="12" Md="8" Lg="8">
+            <FormItem Label="Kilometraje Actual">
+                <Input @bind-Value="movilSalidaView.KmSalida" Disabled>
+                <Suffix>Km</Suffix>
+                </Input>
+            </FormItem>
+            </Col>
+            <Col Xs="24" Sm="12" Md="8" Lg="8">
+            <FormItem Label="Kilometraje de Llegada" Required>
+                <Input @bind-Value="movilSalidaView.KmLlegada"
+                       Placeholder="Ingrese el kilometraje de llegada">
+                <Suffix>Km</Suffix>
+                </Input>
+            </FormItem>
+            </Col>
+            <Col Xs="24" Sm="24" Md="8" Lg="8">
+            <FormItem Label="¿Cargó Combustible?">
+                <div style="padding-top: 4px;">
+                    <Switch @bind-Checked="switchMoviles" OnChange="@OnChangeSwitch" />
+                    <span style="margin-left: 8px; color: #666;">
+                        @(switchMoviles ? "Sí" : "No")
+                    </span>
+                </div>
+            </FormItem>
+            </Col>
+        </Row>
 
-    <FormItem Label="Kilometraje de Llegada">
-        <Input @bind-Value="movilSalidaView.KmLlegada" Placeholder="Ingrese el kilometraje de llegada">
-        <Suffix>Km</Suffix>
-        </Input>
-    </FormItem>
-
-    <FormItem Label="¿Cargo Combustible?">
-        <Switch @bind-Checked="switchMoviles" Style="width: 10px!important;" OnChange="@OnChangeSwitch" />
-    </FormItem>
-
-    <Button OnClick="@AgregarMovilSalida">Cargar movil</Button>
+        <Row Justify="RowJustify.End" style="margin-top: 16px;">
+            <Col>
+            <Button Type="@ButtonType.Primary"
+                    OnClick="@AgregarMovilSalida"
+                    Icon="plus"
+                    Style="background-color: #fa8c16; border-color: #fa8c16;">
+                Cargar Móvil
+            </Button>
+            </Col>
+        </Row>
+    </div>
 </Form>
 
 @*Modal para los Datos de la Carga de Combustible*@
-<Modal Title="Datos de la carga de combustible" Visible="@_visible" OnCancel="@HandleCancelMovil" OkText=@("Cargar Movil") CancelText="@("Cancelar")">
+<Modal Title="Datos de la Carga de Combustible"
+       Visible="@_visible"
+       OnCancel="@HandleCancelMovil"
+       OkText="@("Cargar Móvil")"
+       CancelText="@("Cancelar")"
+       Width="600">
     <Form Model="@movilSalidaView">
-        <FormItem Label="Número de Remito">
-            <Input @bind-Value="@movilSalidaView.NumeroFactura" />
-        </FormItem>
-        <FormItem Label="Fecha de la Factura">
-            <DatePicker TValue="DateTime?" @bind-Value="@movilSalidaView.FechaFactura" />
-        </FormItem>
-        <FormItem Label="Tipo de Combustible">
-            <Input @bind-Value="@movilSalidaView.TipoConbustible" />
-        </FormItem>
-        <FormItem Label="Cantidad de Litros">
-            <Input @bind-Value="@movilSalidaView.CantidadLitros" />
-        </FormItem>
-        <FormItem Label="Quien lleno">
-            <Select TItem="BomberoViweModel"
-                    TItemValue="BomberoViweModel"
-                    DataSource="@bomberoChoferes"
-                    @bind-Value="@movilSalidaView.QuienLleno"
-                    LabelName="@nameof(BomberoViweModel.ApellidoYNombre)"
-                    ValueName="@nameof(BomberoViweModel.Nombre)"
-                    Placeholder="Seleccione a un bombero"
-                    DefaultActiveFirstOption="false"
-                    AllowClear="true"
-                    EnableSearch>
-            </Select>
-        </FormItem>
+        <div style="margin-bottom: 16px;">
+            <div style="border-bottom: 1px solid #fa8c16; padding-bottom: 8px; margin-bottom: 16px;">
+                <h5 style="color: #fa8c16; margin: 0; font-weight: 500;">Información del Combustible</h5>
+            </div>
+
+            <Row Gutter="16">
+                <Col Xs="24" Sm="12">
+                <FormItem Label="Número de Remito" Required>
+                    <Input @bind-Value="@movilSalidaView.NumeroFactura"
+                           Placeholder="Ingrese el número de remito" />
+                </FormItem>
+                </Col>
+                <Col Xs="24" Sm="12">
+                <FormItem Label="Fecha de la Factura" Required>
+                    <DatePicker TValue="DateTime?"
+                                @bind-Value="@movilSalidaView.FechaFactura"
+                                Placeholder="@("Seleccione la fecha")" />
+                </FormItem>
+                </Col>
+            </Row>
+
+            <Row Gutter="16">
+                <Col Xs="24" Sm="12">
+                <FormItem Label="Tipo de Combustible" Required>
+                    <Input @bind-Value="@movilSalidaView.TipoConbustible"
+                           Placeholder="Ej: Nafta Super, Gasoil" />
+                </FormItem>
+                </Col>
+                <Col Xs="24" Sm="12">
+                <FormItem Label="Cantidad de Litros" Required>
+                    <Input @bind-Value="@movilSalidaView.CantidadLitros"
+                           Placeholder="Cantidad en litros">
+                    <Suffix>L</Suffix>
+                    </Input>
+                </FormItem>
+                </Col>
+            </Row>
+
+            <Row>
+                <Col Span="24">
+                <FormItem Label="Quien llenó el tanque" Required>
+                    <Select TItem="BomberoViweModel"
+                            TItemValue="BomberoViweModel"
+                            DataSource="@bomberoChoferes"
+                            @bind-Value="@movilSalidaView.QuienLleno"
+                            LabelName="@nameof(BomberoViweModel.ApellidoYNombre)"
+                            ValueName="@nameof(BomberoViweModel.Nombre)"
+                            Placeholder="Seleccione a un bombero"
+                            DefaultActiveFirstOption="false"
+                            AllowClear="true"
+                            EnableSearch>
+                    </Select>
+                </FormItem>
+                </Col>
+            </Row>
+        </div>
     </Form>
 </Modal>
 
+@*Sección Móviles Asignados*@
 @if (Model.Moviles != null && Model.Moviles.Any())
 {
-    <div>
-        <Table Size="TableSize.Small" PageSize="4" Context="MovilesSalidasL1" DataSource="Model.Moviles" Bordered>
-            <PropertyColumn Property="c => c.Movil.NumeroMovil" Title="Número de Móvil"></PropertyColumn>
-            <PropertyColumn Property="c => c.Chofer.Nombre"></PropertyColumn>
-            <PropertyColumn Property="c => c.Chofer.Apellido"></PropertyColumn>
-            <ActionColumn Title="Acciones">
-                <Popconfirm Title="¿Quieres borrar este movil?"
-                            OnConfirm="()=> DeleteRowMovil(MovilesSalidasL1.Movil.NumeroMovil)"
-                            OkText="Si"
-                            CancelText="No">
-                    <i class="fa-solid fa-trash" style="color: #e90c0c;cursor: pointer;"></i>
-                </Popconfirm>
-            </ActionColumn>
-        </Table>
+    <div style="margin-top: 32px;">
+        <div style="border-bottom: 2px solid #fa8c16; padding-bottom: 8px; margin-bottom: 16px;">
+            <h4 style="color: #fa8c16; margin: 0; font-weight: 600; display: flex; align-items: center;">
+                <Icon Type="car" style="margin-right: 8px;" />
+                Móviles Asignados a la Salida
+                <Badge Count="@Model.Moviles.Count"
+                       Style="margin-left: 12px; background-color: #fa8c16;" />
+            </h4>
+        </div>
+
+        <div style="overflow-x: auto;">
+            <Table Size="TableSize.Small"
+                   PageSize="10"
+                   Context="MovilesSalidasL1"
+                   DataSource="Model.Moviles"
+                   Bordered
+                   Style="min-width: 600px;">
+
+                <PropertyColumn Property="c => c.Movil.NumeroMovil"
+                                Title="Número de Móvil"
+                                Sortable="true">
+                    <Template>
+                        <Tag Color="@TagColor.Blue">@MovilesSalidasL1.Movil.NumeroMovil</Tag>
+                    </Template>
+                </PropertyColumn>
+
+                <PropertyColumn Property="c => c.Chofer.Nombre"
+                                Title="Chofer">
+                    <Template>
+                        <div>
+                            <strong>@($"{MovilesSalidasL1.Chofer.Apellido}, {MovilesSalidasL1.Chofer.Nombre}")</strong>
+                            <br />
+                            <small style="color: #666;">Legajo: @MovilesSalidasL1.Chofer.NumeroLegajo</small>
+                        </div>
+                    </Template>
+                </PropertyColumn>
+
+                <PropertyColumn Property="c => c.KmLlegada"
+                                Title="Kilometraje">
+                    <Template>
+                        <div style="text-align: center;">
+                            <div><small>Llegada:</small> <strong>@MovilesSalidasL1.KmLlegada km</strong></div>
+                        </div>
+                    </Template>
+                </PropertyColumn>
+
+                <PropertyColumn Property="c => c.CargoCombustible"
+                                Title="Combustible">
+                    <Template>
+                        @if (MovilesSalidasL1.CargoCombustible)
+                        {
+                            <Tag Color="TagColor.Green">
+                                <Icon Type="check-circle" /> Cargó
+                            </Tag>
+                            @if (!string.IsNullOrEmpty(MovilesSalidasL1.CantidadLitros))
+                            {
+                                <div><small>@MovilesSalidasL1.CantidadLitros L</small></div>
+                            }
+                        }
+                        else
+                        {
+                            <Tag Color="default">
+                                <Icon Type="close-circle" /> No cargó
+                            </Tag>
+                        }
+                    </Template>
+                </PropertyColumn>
+
+                <ActionColumn Title="Acciones" Width="80">
+                    <Template>
+                        <Popconfirm Title="¿Está seguro de eliminar este móvil?"
+                                    OnConfirm="()=> DeleteRowMovil(MovilesSalidasL1.Movil.NumeroMovil)"
+                                    OkText="Sí, eliminar"
+                                    CancelText="Cancelar">
+                            <Button Type="@ButtonType.Text"
+                                    Danger
+                                    Size="@ButtonSize.Small"
+                                    Icon="delete">
+                            </Button>
+                        </Popconfirm>
+                    </Template>
+                </ActionColumn>
+            </Table>
+        </div>
+    </div>
+}
+else
+{
+    <div style="margin-top: 32px; text-align: center; padding: 24px; background-color: #fafafa; border-radius: 8px; border: 1px dashed #d9d9d9;">
+        <Icon Type="car" style="font-size: 48px; color: #fa8c16; margin-bottom: 16px;" />
+        <h5 style="color: #666; margin: 0;">No hay móviles asignados</h5>
+        <p style="color: #999; margin: 8px 0 0 0;">Complete el formulario superior para agregar móviles a la salida</p>
     </div>
 }
 
@@ -119,6 +268,7 @@
     private List<BomberoViweModel> bomberoChoferes { get; set; } = new();
     private List<BomberoViweModel> bomberoChoferesSalir { get; set; } = new();
     private List<BomberoViweModel> BomberosViewModelTodos { get; set; } = null!;
+
     private List<Movil> Moviles { get; set; } = new();
 
     private MovilSalidaViewModels movilSalidaView = new MovilSalidaViewModels();
@@ -219,29 +369,8 @@
         // Filtra los choferes y crea copias independientes de cada objeto
         var choferes = bomberos
             .Where(b => b.EsChofer)
-            .Select(b => new BomberoViweModel
-            {
-                Id = b.Id,
-                FechaNacimiento = b.FechaNacimiento,
-                Sexo = b.Sexo,
-                Nombre = b.Nombre,
-                Apellido = b.Apellido,
-                Documento = b.Documento,
-                NumeroLegajo = b.NumeroLegajo,
-                NumeroIoma = b.NumeroIoma,
-                LugarNacimiento = b.LugarNacimiento,
-                Grado = b.Grado,
-                Dotacion = b.Dotacion,
-                Estado = b.Estado,
-                EsChofer = b.EsChofer,
-                VencimientoRegistro = b.VencimientoRegistro,
-                Direccion = b.Direccion,
-                Observaciones = b.Observaciones,
-                Profesion = b.Profesion,
-                NivelEstudios = b.NivelEstudios,
-                FechaAceptacion = b.FechaAceptacion,
-            })
             .ToList();
+
 
         if (!choferes.Any())
         {
@@ -267,7 +396,7 @@
             var chofer = movilToDelete.Chofer;
             var movil = movilToDelete.Movil;
 
-            var choferview = BomberosViewModelTodos.FirstOrDefault(b => b.NumeroLegajo == movilSalidaView.Chofer.NumeroLegajo);
+            var choferview = BomberosViewModelTodos.FirstOrDefault(b => b.NumeroLegajo == movilSalidaView.Chofer?.NumeroLegajo);
 
             // Eliminar el móvil de la lista
             Model.Moviles.Remove(movilToDelete);
@@ -328,18 +457,12 @@
             // Añade el MovilSalida a la Salida
             Model.Moviles.Add(m);
 
-            //Limpia las casillas
-            movilSalidaView.KmSalida = 0;
-            movilSalidaView.KmLlegada = 0;
+            // Limpiar el formulario
+            movilSalidaView = new MovilSalidaViewModels();
             switchMoviles = false;
-            movilSalidaView.NumeroFactura = null;
-            movilSalidaView.FechaFactura = null;
-            movilSalidaView.TipoConbustible = null;
-            movilSalidaView.CantidadLitros = null;
-            movilSalidaView.QuienLleno = null;
 
             StateHasChanged(); // Notifica el Cambio y Actualiza
-            await MessageService.SuccessAsync("Movil añadido Correctamente");
+            await MessageService.SuccessAsync("Móvil añadido correctamente");
         }
         catch (Exception e)
         {
