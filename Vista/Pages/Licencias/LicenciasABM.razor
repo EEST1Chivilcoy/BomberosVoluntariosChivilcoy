@@ -1,4 +1,5 @@
-﻿@using Vista.Data.Models.Personas.Personal
+﻿@using AntDesign.TableModels
+@using Vista.Data.Models.Personas.Personal
 @using Vista.Data.Models.Personas.Personal.Componentes
 @using Vista.Data.Mappers;
 
@@ -14,202 +15,249 @@
 <link rel="stylesheet" href="css/Licencias.css" />
 
 <style>
-	.template {
-		width: 100%;
-		height: 100%;
-		max-width: 97%;
-		min-width: 400px;
-		max-height: 100vh;
-		border-radius: 10px;
-		box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-		background: #fff;
-		display: flex;
-		flex-direction: column;
-		margin: 1em;
-		padding: 10px;
-		overflow: auto;
-	}
+    .template {
+        width: 100%;
+        height: 100%;
+        max-width: 97%;
+        min-width: 400px;
+        max-height: 100vh;
+        border-radius: 10px;
+        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+        background: #fff;
+        display: flex;
+        flex-direction: column;
+        margin: 1em;
+        padding: 10px;
+        overflow: auto;
+    }
 
-	.ant-table {
-		width: 100%;
-		background-color: white;
-		border-radius: 8px;
-		overflow: hidden;
-	}
+    .ant-table {
+        width: 100%;
+        background-color: white;
+        border-radius: 8px;
+        overflow: hidden;
+    }
 
-	.ant-table-title {
-		background-color: #A63333;
-		padding: 16px !important;
-		border-top-left-radius: 8px;
-		border-top-right-radius: 8px;
-	}
+    .ant-table-title {
+        background-color: #A63333;
+        padding: 16px !important;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+    }
 
-	.ant-table-thead .ant-table-cell {
-		background-color: #A63333 !important;
-		color: white !important;
-		font-weight: bold;
-	}
+    .ant-table-thead .ant-table-cell {
+        background-color: #A63333 !important;
+        color: white !important;
+        font-weight: bold;
+    }
 
-	.ant-table-cell {
-		padding: 16px !important;
-	}
+    .ant-table-cell {
+        padding: 16px !important;
+    }
 
-	.filters-container {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 16px;
-		align-items: flex-end;
-		margin-bottom: 16px;
-	}
+    .filters-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        align-items: flex-end;
+        margin-bottom: 16px;
+    }
 
-	.date-filter-container {
-		display: flex;
-		gap: 8px;
-		align-items: flex-end;
-	}
+    .date-filter-container {
+        display: flex;
+        gap: 8px;
+        align-items: flex-end;
+    }
 
-	.filter-group {
-		display: flex;
-		flex-direction: column;
-	}
+    .filter-group {
+        display: flex;
+        flex-direction: column;
+    }
 
-	.filter-label {
-		font-weight: 500;
-		color: white;
-		margin-bottom: 4px;
-	}
+    .filter-label {
+        font-weight: 500;
+        color: white;
+        margin-bottom: 4px;
+    }
 
-	.actions-container {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		gap: 16px;
-	}
+    .actions-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+    }
 
-	.search-container {
-		flex-grow: 1;
-		max-width: 300px;
-	}
+    .search-container {
+        flex-grow: 1;
+        max-width: 300px;
+    }
 
-	.add-button {
-		background-color: #4CAF50 !important;
-		border-color: #438E46 !important;
-		color: white !important;
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-		height: 40px;
-		padding: 0 20px;
-		font-weight: 500;
-		display: flex;
-		align-items: center;
-		gap: 8px;
-	}
+    .add-button {
+        background-color: #4CAF50 !important;
+        border-color: #438E46 !important;
+        color: white !important;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        height: 40px;
+        padding: 0 20px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
 
-	.notification-badge {
-		margin-left: 16px;
-		cursor: pointer;
-	}
+    .notification-badge {
+        margin-left: 16px;
+        cursor: pointer;
+    }
 
-	.status-badge {
-		padding: 4px 12px;
-		border-radius: 16px;
-		font-weight: 500;
-		text-align: center;
-		display: inline-block;
-		min-width: 100px;
-	}
+    .status-badge {
+        padding: 4px 12px;
+        border-radius: 16px;
+        font-weight: 500;
+        text-align: center;
+        display: inline-block;
+        min-width: 100px;
+    }
 
-	.status-approved {
-		background-color: #E6F7E9;
-		color: #2E7D32;
-	}
+    .status-approved {
+        background-color: #E6F7E9;
+        color: #2E7D32;
+    }
 
-	.status-pending {
-		background-color: #FFF8E1;
-		color: #F57F17;
-	}
+    .status-pending {
+        background-color: #FFF8E1;
+        color: #F57F17;
+    }
 
-	.status-rejected {
-		background-color: #FFEBEE;
-		color: #C62828;
-	}
+    .status-rejected {
+        background-color: #FFEBEE;
+        color: #C62828;
+    }
 
-	.duration-badge {
-		padding: 4px 12px;
-		border-radius: 4px;
-		font-weight: 500;
-		text-align: center;
-		display: inline-block;
-		min-width: 80px;
-	}
+    .duration-badge {
+        padding: 4px 12px;
+        border-radius: 4px;
+        font-weight: 500;
+        text-align: center;
+        display: inline-block;
+        min-width: 80px;
+    }
 
-	.modal-footer {
-		margin-top: 24px;
-		display: flex;
-		justify-content: flex-end;
-		gap: 12px;
-	}
+    .modal-footer {
+        margin-top: 24px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+    }
 
-	.cancel-button {
-		background-color: #f5f5f5;
-		border: 1px solid #d9d9d9;
-	}
+    .cancel-button {
+        background-color: #f5f5f5;
+        border: 1px solid #d9d9d9;
+    }
 
-	/* Color de fondo para filas según estado */
-	.ant-table-tbody > tr.ant-table-row.Aprobada > td {
-		background-color: rgba(46, 125, 50, 0.05) !important;
-	}
+    /* Color de fondo para filas según estado */
+    .ant-table-tbody > tr.ant-table-row.Aprobada > td {
+        background-color: rgba(46, 125, 50, 0.05) !important;
+    }
 
-	.ant-table-tbody > tr.ant-table-row.Pendiente > td {
-		background-color: rgba(245, 127, 23, 0.05) !important;
-	}
+    .ant-table-tbody > tr.ant-table-row.Pendiente > td {
+        background-color: rgba(245, 127, 23, 0.05) !important;
+    }
 
-	.ant-table-tbody > tr.ant-table-row.Rechazada > td {
-		background-color: rgba(198, 40, 40, 0.05) !important;
-	}
+    .ant-table-tbody > tr.ant-table-row.Rechazada > td {
+        background-color: rgba(198, 40, 40, 0.05) !important;
+    }
 
-	/* Responsive */
-	@@media (max-width: 768px) {
-		.filters-container {
-			flex-direction: column;
-			align-items: stretch;
-		}
+    /* Estilo para filas clickeables */
+    .ant-table-tbody > tr.ant-table-row:hover {
+        background-color: rgba(166, 51, 51, 0.1) !important;
+        cursor: pointer;
+    }
 
-		.date-filter-container {
-			flex-direction: column;
-			align-items: stretch;
-		}
+    /* Estilos para el modal de detalle */
+    .detalle-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
 
-		.actions-container {
-			flex-direction: column;
-			align-items: stretch;
-		}
+    .detalle-item {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
 
-		.search-container {
-			max-width: 100%;
-			margin-bottom: 12px;
-		}
+    .detalle-label {
+        font-weight: 600;
+        color: #A63333;
+        font-size: 14px;
+        text-transform: uppercase;
+    }
 
-		.add-button {
-			width: 100%;
-			justify-content: center;
-		}
+    .detalle-value {
+        font-size: 16px;
+        color: #333;
+        padding: 8px 12px;
+        background-color: #f8f9fa;
+        border-radius: 4px;
+        border: 1px solid #e9ecef;
+    }
 
-		.notification-badge {
-			margin-left: 0;
-			align-self: flex-end;
-		}
-	}
+    .detalle-descripcion {
+        grid-column: 1 / -1;
+    }
 
-	 .Licencia-titulo h2 {
-    font-family: 'Bebas Neue', 'Fjalla One', sans-serif;
-    font-size: 2.5rem;
-    letter-spacing: 2px;
-
-    color: #ffffff;
-    position: relative;
-    margin-right: 950px;
-    padding-bottom: 6px;
+        .detalle-descripcion .detalle-value {
+            min-height: 80px;
         }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .filters-container {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .date-filter-container {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .actions-container {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .search-container {
+            max-width: 100%;
+            margin-bottom: 12px;
+        }
+
+        .add-button {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .notification-badge {
+            margin-left: 0;
+            align-self: flex-end;
+        }
+
+        .detalle-container {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .Licencia-titulo h2 {
+        font-family: 'Bebas Neue', 'Fjalla One', sans-serif;
+        font-size: 2.5rem;
+        letter-spacing: 2px;
+        color: #ffffff;
+        position: relative;
+        margin-right: 950px;
+        padding-bottom: 6px;
+    }
 </style>
 
 <div class="template">
@@ -217,13 +265,14 @@
            PageSize="5"
            Responsive
            TItem="LicenciaViewModel"
-           RowClassName="@(c => c.Data.EstadoLicencia.ToString())">
+           RowClassName="@(c => c.Data.EstadoLicencia.ToString())"
+           OnRow="@OnRowClick">
 
         <TitleTemplate>
             <div style="background-color: #A63333; color: white; padding: 16px; border-radius: 8px;">
-                		<div class="Licencia-titulo">
-              		  <h2 style="margin-bottom: 0;"><Icon Type="key" style="color: #FFD700;"/>LICENCIAS</h2>
-					</div>
+                <div class="Licencia-titulo">
+                    <h2 style="margin-bottom: 0;"><Icon Type="key" style="color: #FFD700;" />LICENCIAS</h2>
+                </div>
                 <div class="filters-container">
                     <div class="date-filter-container">
                         <div class="filter-group">
@@ -426,6 +475,106 @@
 
 </Modal>
 
+@*Modal para el Detalle de la Licencia*@
+<Modal @bind-Visible="_modalDetalleVisible"
+       Title="@($"Detalle de Licencia - {licenciaSeleccionada?.ApellidoYNombre}")"
+       Footer="null"
+       Width="800">
+    @if (licenciaSeleccionada != null)
+    {
+        <div class="detalle-container">
+            <div class="detalle-item">
+                <div class="detalle-label">Bombero</div>
+                <div class="detalle-value">@licenciaSeleccionada.ApellidoYNombre</div>
+            </div>
+
+            <div class="detalle-item">
+                <div class="detalle-label">Número de Legajo</div>
+                <div class="detalle-value">@licenciaSeleccionada.NumeroLegajo</div>
+            </div>
+
+            <div class="detalle-item">
+                <div class="detalle-label">Tipo de Licencia</div>
+                <div class="detalle-value">@licenciaSeleccionada.TipoLicencia?.GetDisplayName()</div>
+            </div>
+
+            <div class="detalle-item">
+                <div class="detalle-label">Estado</div>
+                <div class="detalle-value">
+                    @{
+                        string statusClass = licenciaSeleccionada.EstadoLicencia switch
+                        {
+                            TipoEstadoLicencia.Rechazada => "status-rejected",
+                            TipoEstadoLicencia.Aprobada => "status-approved",
+                            _ => "status-pending"
+                        };
+                    }
+                    <span class="status-badge @statusClass">
+                        @licenciaSeleccionada.EstadoLicencia.ToString()
+                    </span>
+                </div>
+            </div>
+
+            <div class="detalle-item">
+                <div class="detalle-label">Fecha de Inicio</div>
+                <div class="detalle-value">@licenciaSeleccionada.Desde.ToString("dd/MM/yyyy")</div>
+            </div>
+
+            <div class="detalle-item">
+                <div class="detalle-label">Fecha de Finalización</div>
+                <div class="detalle-value">@licenciaSeleccionada.Hasta.ToString("dd/MM/yyyy")</div>
+            </div>
+
+            <div class="detalle-item">
+                <div class="detalle-label">Duración</div>
+                <div class="detalle-value">@licenciaSeleccionada.DuracionEnDias días</div>
+            </div>
+
+            <div class="detalle-item">
+                <div class="detalle-label">Días Restantes/Transcurridos</div>
+                <div class="detalle-value">
+                    @{
+                        var hoy = DateTime.Today;
+                        var diasRestantes = (licenciaSeleccionada.Hasta - hoy).Days;
+                        var estaVigente = hoy >= licenciaSeleccionada.Desde && hoy <= licenciaSeleccionada.Hasta;
+
+                        string mensaje;
+                        if (estaVigente)
+                        {
+                            mensaje = diasRestantes > 0 ? $"{diasRestantes} días restantes" : "Último día";
+                        }
+                        else if (hoy < licenciaSeleccionada.Desde)
+                        {
+                            var diasParaInicio = (licenciaSeleccionada.Desde - hoy).Days;
+                            mensaje = $"Inicia en {diasParaInicio} días";
+                        }
+                        else
+                        {
+                            var diasTranscurridos = Math.Abs(diasRestantes);
+                            mensaje = $"Finalizó hace {diasTranscurridos} días";
+                        }
+                    }
+                    @mensaje
+                </div>
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(licenciaSeleccionada.Descripcion))
+            {
+                <div class="detalle-item detalle-descripcion">
+                    <div class="detalle-label">Descripción</div>
+                    <div class="detalle-value">@licenciaSeleccionada.Descripcion</div>
+                </div>
+            }
+        </div>
+
+        <div class="modal-footer">
+            <Button OnClick="@(() => _modalDetalleVisible = false)">
+                Cerrar
+            </Button>
+        </div>
+    }
+</Modal>
+
 @*Modal para el Historial de la Licencia*@
 
 @code {
@@ -446,7 +595,26 @@
 
     // Variables para el modal de añadir licencia
     private bool _modalAñadirVisible = false;
+    private bool _modalDetalleVisible = false;
+
     private LicenciaViewModel nuevaLicencia = new LicenciaViewModel();
+    private LicenciaViewModel? licenciaSeleccionada;
+
+    // Función para manejar el clic en una fila de la tabla
+    private Dictionary<string, object> OnRowClick(RowData<LicenciaViewModel> rowData)
+    {
+        return new Dictionary<string, object>
+        {
+            ["onclick"] = Microsoft.AspNetCore.Components.EventCallback.Factory.Create<Microsoft.AspNetCore.Components.Web.MouseEventArgs>(this, () => MostrarDetalleLicencia(rowData.Data))
+        };
+    }
+
+    // Función para mostrar el detalle de la licencia seleccionada
+    private void MostrarDetalleLicencia(LicenciaViewModel licencia)
+    {
+        licenciaSeleccionada = licencia;
+        _modalDetalleVisible = true;
+    }
 
     // Funciones para el inicio de la página y la inicialización de datos
     protected override async Task OnInitializedAsync()
