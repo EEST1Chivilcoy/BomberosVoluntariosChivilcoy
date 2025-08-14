@@ -2,12 +2,12 @@
 @using Vista.Data.ViewModels.Personal
 @using Vista.Data.Models.Vehiculos.Flota
 @using Vista.Data.Models.Personas.Personal
+@using Vista.Data.Mappers
 
 @*Servicios Utilizados*@
 @using Vista.Services
 @inject IMessageService MessageService
 
-@*
 <Form Model="movilSalidaView">
 
     <FormItem Label="Seleccione al Chofer">
@@ -61,7 +61,7 @@
     <Button OnClick="@AgregarMovilSalida">Cargar movil</Button>
 </Form>
 
-@*Modal para los Datos de la Carga de Combustible
+@*Modal para los Datos de la Carga de Combustible*@
 <Modal Title="Datos de la carga de combustible" Visible="@_visible" OnCancel="@HandleCancelMovil" OkText=@("Cargar Movil") CancelText="@("Cancelar")">
     <Form Model="@movilSalidaView">
         <FormItem Label="Número de Remito">
@@ -119,7 +119,7 @@
     private List<BomberoViweModel> bomberoChoferes { get; set; } = new();
     private List<BomberoViweModel> bomberoChoferesSalir { get; set; } = new();
     private List<BomberoViweModel> BomberosViewModelTodos { get; set; } = null!;
-
+    private List<Movil> Moviles { get; set; } = new();
 
     private MovilSalidaViewModels movilSalidaView = new MovilSalidaViewModels();
 
@@ -136,7 +136,10 @@
         }
 
         // Clonar la lista para que el componente hijo trabaje con una copia
-        BomberosViewModelTodos = (await MapBomberosViewModelAsync(BomberosTodos)).ToList();
+        BomberosViewModelTodos = BomberosTodos.ToBomberoViewModelList().ToList();
+
+        // Filtrar los moviles de la flota
+        Moviles = Flota.OfType<Movil>().ToList();
 
         // Obtener las listas de bomberos choferes y móviles
         bomberoChoferes = await FiltrarBomberosChoferesAsync(BomberosViewModelTodos);
@@ -344,40 +347,4 @@
             await MessageService.ErrorAsync(e.InnerException?.Message ?? e.Message, 5);
         }
     }
-
-    private async Task<List<BomberoViweModel>> MapBomberosViewModelAsync(List<Bombero> bomberos)
-    {
-        if (bomberos == null || !bomberos.Any())
-        {
-            await MessageService.ErrorAsync("No hay bomberos disponibles para mapear.");
-            return new List<BomberoViweModel>();
-        }
-
-        var bomberosViewModel = bomberos.Select(b => new BomberoViweModel
-        {
-            Id = b.PersonaId,
-            FechaNacimiento = b.FechaNacimiento,
-            Sexo = b.Sexo,
-            Nombre = b.Nombre,
-            Apellido = b.Apellido,
-            Documento = b.Documento,
-            NumeroLegajo = b.NumeroLegajo,
-            NumeroIoma = b.NumeroIoma,
-            LugarNacimiento = b.LugarNacimiento,
-            Grado = b.Grado,
-            Dotacion = b.Dotacion,
-            Estado = b.Estado,
-            EsChofer = b.Chofer,
-            VencimientoRegistro = b.VencimientoRegistro,
-            Direccion = b.Direccion,
-            Observaciones = b.Observaciones,
-            Profesion = b.Profesion,
-            NivelEstudios = b.NivelEstudios,
-            FechaAceptacion = b.FechaAceptacion,
-        }).ToList();
-
-        await MessageService.SuccessAsync("Bomberos mapeados correctamente.");
-        return bomberosViewModel;
-    }
 }
-*@
