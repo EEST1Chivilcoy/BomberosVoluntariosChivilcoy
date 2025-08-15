@@ -12,6 +12,7 @@
 @inject IBomberoService BomberoService
 @inject IVehiculoSalidaService VehiculoSalidaService
 @inject INavigationInterception NavigationInterception
+@inject IFuerzaIntervinienteService FuerzaIntervinienteService
 
 @*Componentes Generales*@
 @using Vista.Components.Forms.Salidas.General;
@@ -74,10 +75,24 @@
                     <Participantes Model="@PersonaViewModel" OnCompleted="@((bool done) => _parte2Completa = done)" isUnlocked="@_parte1Completa" />
                 </div>
 
-                <!-- Nueva Sección Damnificados -->
+                <!-- Nueva Sección Fuerzas Intervinientes -->
+                <div class="section-card fuerzas-intervinientes">
+                    <h3 class="section-title">
+                        <span class="section-number" style="background: #f5222d;">3</span>
+                        Fuerzas Intervinientes
+                    </h3>
+                    @*
+                    <FuerzasIntervinientes Model="@PersonaViewModel" />
+                    Componente pendiente*@
+                </div>
+            </div>
+
+            <!-- Grid de 2 columnas para secciones medianas -->
+            <div class="two-column-grid">
+                <!-- Sección Damnificados (ahora es la número 4) -->
                 <div class="section-card damnificados">
                     <h3 class="section-title">
-                        <span class="section-number" style="background: #13c2c2;">3</span>
+                        <span class="section-number" style="background: #13c2c2;">4</span>
                         Datos Damnificados
                     </h3>
                     <Damnificados Model="@PersonaViewModel" />
@@ -86,29 +101,29 @@
 
             <!-- Grid de 2 columnas para Unidades y Personal -->
             <div class="two-column-grid">
-                <!-- Unidades Section -->
+                <!-- Unidades Section (ahora es la número 5) -->
                 <div class="section-card vehiculos">
                     <h3 class="section-title">
-                        <span class="section-number" style="background: #fa8c16;">4</span>
+                        <span class="section-number" style="background: #fa8c16;">5</span>
                         Datos Unidades
                     </h3>
                     <Vehiculos Model="@PersonaViewModel" BomberosTodos="@BomberosTodos" Flota="@MovilesTodos" />
                 </div>
 
-                <!-- Personal Section -->
+                <!-- Personal Section (ahora es la número 6) -->
                 <div class="section-card personal">
                     <h3 class="section-title">
-                        <span class="section-number" style="background: #722ed1;">5</span>
+                        <span class="section-number" style="background: #722ed1;">6</span>
                         Datos Personal
                     </h3>
                     <Personal Model="@PersonaViewModel" BomberosTodos="@BomberosTodos" />
                 </div>
             </div>
 
-            <!-- Tipo de Servicio Section - Ancho completo -->
+            <!-- Tipo de Servicio Section - Ancho completo (ahora es la número 7) -->
             <div class="section-card tipo-servicio">
                 <h3 class="section-title">
-                    <span class="section-number" style="background: #eb2f96;">6</span>
+                    <span class="section-number" style="background: #eb2f96;">7</span>
                     Datos Tipo de Servicio
                 </h3>
                 <TipoDeServicio Model="@PersonaViewModel" />
@@ -328,6 +343,10 @@
         border-left: 4px solid #52c41a;
     }
 
+    .fuerzas-intervinientes {
+        border-left: 4px solid #f5222d;
+    }
+
     .damnificados {
         border-left: 4px solid #13c2c2;
     }
@@ -360,6 +379,10 @@
 
     .participantes .section-title {
         color: #52c41a;
+    }
+
+    .fuerzas-intervinientes .section-title {
+        color: #f5222d;
     }
 
     .damnificados .section-title {
