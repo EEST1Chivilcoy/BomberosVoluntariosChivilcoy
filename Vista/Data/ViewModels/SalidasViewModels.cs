@@ -8,27 +8,60 @@ using Vista.DTOs.Nominatim;
 
 namespace Vista.Data.ViewModels
 {
+    /// <summary>
+    /// ViewModel base para todas las salidas.
+    /// </summary>
     public abstract class SalidasViewModels
     {
+        /// <summary>
+        /// Identificador único de la salida.
+        /// </summary>
+        public int SalidaId { get; set; }
+
+        // Sección de Datos pasados por Parametros.
+
+        /// <summary>
+        /// Numero de salida único. (Del año actual).
+        /// </summary>
         public int NumeroParte { get; set; }
+
+        /// <summary>
+        /// Año del número de parte.
+        /// </summary>
         public int AnioNumeroParte { get; set; }
 
-        // Otras propiedades
+        // Sección de Datos Generales de la Salida.
 
-        //Fechas y Tiempo
+        /// <summary>
+        /// Fecha de la salida. (Obligatoria) (Debería ser la fecha de la salida del cuartel).
+        /// </summary>
         public DateTime FechaSalida { get; set; }
+
+        /// <summary>
+        /// Fecha de llegada. (Obligatoria) (Debería ser la fecha de llegada al cuartel).
+        /// </summary>
         public DateTime FechaLlegada
         {
             get
             {
-                // Si TimeLlegada es menor que TimeSalida, se añade un día a la fecha de salida.
+                // Calcula la fecha de llegada basándose en la fecha de salida y las horas de llegada y salida.
                 return TimeLlegada < TimeSalida ? FechaSalida.AddDays(1) : FechaSalida;
             }
         }
+
+        /// <summary>
+        /// Hora de salida del cuartel.
+        /// </summary>
         public TimeOnly TimeSalida { get; set; }
+
+        /// <summary>
+        /// Hora de llegada al cuartel.
+        /// </summary>
         public TimeOnly TimeLlegada { get; set; }
 
-        // HoraSalida - HoraLLegada Completas (Fecha y Hora)
+        /// <summary>
+        /// Representa la hora de salida combinando la fecha de salida y la hora de salida.
+        /// </summary>
         public DateTime HoraSalida
         {
             get
@@ -38,6 +71,9 @@ namespace Vista.Data.ViewModels
             }
         }
 
+        /// <summary>
+        /// Representa la hora de llegada combinando la fecha de llegada y la hora de llegada.
+        /// </summary>
         public DateTime HoraLLegada
         {
             get
@@ -47,25 +83,97 @@ namespace Vista.Data.ViewModels
             }
         }
 
+        // Pendiente de revisar por cambios en la funcionalidad.
         public Direccion Direccion { get; set; }
 
+        /// <summary>
+        /// Guardia que está a cargo de la salida.
+        /// Esta propiedad representa la guardia seleccionada para la salida. (Si se convocó a una guardia específica).
+        /// </summary>
+        public Guardia GuardiaSelecionada { get; set; }
 
+        /// <summary>
+        /// Descripción del incidente o motivo de la salida.
+        /// </summary>
         [Required, StringLength(255)]
-        public string Descripcion { get; set; }
+        public string Descripcion { get; set; } = null!;
+
+        /// <summary>
+        /// Nombre de la calle o ruta donde ocurrió el incidente.
+        /// </summary>
         [StringLength(255)]
         public string CalleORuta { get; set; }
+
+        // Datos por si es en un edificio. (Opcional) (Apartamento, Piso, etc.)
+
+        /// <summary>
+        /// Piso donde ocurrió el incidente.
+        /// </summary>
         [StringLength(255)]
         public string? PisoNumero { get; set; }
+
+        /// <summary>
+        /// Departamento o unidad dentro del edificio donde ocurrió el incidente.
+        /// </summary>
         [StringLength(255)]
         public string? Depto { get; set; }
+
+        /// <summary>
+        /// Tipo de zona donde ocurrió el incidente.
+        /// Puede ser Urbana, Rural.
+        /// </summary>
         public TipoZona TipoZona { get; set; }
 
-        public string NombreSolicitante { get; set; }
-        public string ApellidoSolicitante { get; set; }
-        public string DniSolicitante { get; set; }
-        public string TelefonoSolicitante { get; set; }
+        /// <summary>
+        /// Cuartel o región donde ocurrió el incidente.
+        /// </summary>
         public CuartelRegionChivilcoy CuartelRegion { get; set; }
 
+        // Ubicación <-- Esto para hacer estadística (No es obligatorio por que faltan calles) (La API Nominatim devuelve la ubicación)
+
+        /// <summary>
+        /// Latitud de la ubicación del incidente o lugar de la salida.
+        /// </summary>
+        public double Latitud { get; set; }
+
+        /// <summary>
+        /// Longitud de la ubicación del incidente o lugar de la salida.
+        /// </summary>
+        public double Longitud { get; set; }
+
+        // Sección de Datos del Solicitante y Receptor. (Datos telefónicos)
+
+        // Datos del solicitante de la salida.
+
+        /// <summary>
+        /// Nombre del solicitante de la salida. (Del que llamó y aviso del incidente).
+        /// Debería ser obligatorio.
+        /// </summary>
+        public string NombreSolicitante { get; set; } = null!;
+
+        /// <summary>
+        /// Apellido del solicitante de la salida. (Del que llamó y aviso del incidente).
+        /// Debería ser obligatorio.
+        /// </summary>
+        public string ApellidoSolicitante { get; set; } = null!;
+
+        /// <summary>
+        /// Documento Nacional de Identidad del solicitante. (DNI) (Del que llamó y aviso del incidente).
+        /// No es obligatorio, pero se recomienda.
+        /// </summary>
+        public string? DniSolicitante { get; set; }
+
+        /// <summary>
+        /// Telefono del solicitante de la salida. (Del que llamó y aviso del incidente).
+        /// Debería ser obligatorio.
+        /// </summary>
+        public string TelefonoSolicitante { get; set; } = null!;
+
+        // Datos del receptor de la salida.
+
+        /// <summary>
+        /// Nombre y apellido del receptor de la salida.
+        /// </summary>
         public string? NombreYApellidoReceptor
         {
             get
@@ -78,9 +186,15 @@ namespace Vista.Data.ViewModels
             }
         }
 
+        /// <summary>
+        /// Nombre del receptor de la salida.
+        /// </summary>
         public string? NombreReceptor { get; set; }
+
+        /// <summary>
+        /// Apellido del receptor de la salida.
+        /// </summary>
         public string? ApellidoReceptor { get; set; }
-        public int LegajoReceptor { get; set; }
 
         public List<Damnificado_Salida>? Damnificados { get; set; }
         public List<VehiculoAfectadoIncendio> VehiculosAfectadosIncendios { get; set; }
@@ -107,11 +221,6 @@ namespace Vista.Data.ViewModels
         public TipoServicioSalida TipoServicio { get; set; }
 
         public TipoServicioRepresentaciones TipoRepresentacion { get; set; }
-        public Guardia GuardiaSelecionada { get; set; }
 
-        [Required]
-        public double Latitud { get; set; }
-        [Required]
-        public double Longitud { get; set; }
     }
 }

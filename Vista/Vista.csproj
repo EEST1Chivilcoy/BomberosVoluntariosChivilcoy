@@ -7,15 +7,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Areas\**" />
+    <Compile Remove="Data\ViewModels\APIResponse\**" />
     <Compile Remove="Data\ViewModel\**" />
     <Compile Remove="wwwroot\Moviles\**" />
     <Content Remove="Areas\**" />
+    <Content Remove="Data\ViewModels\APIResponse\**" />
     <Content Remove="Data\ViewModel\**" />
     <Content Remove="wwwroot\Moviles\**" />
     <EmbeddedResource Remove="Areas\**" />
+    <EmbeddedResource Remove="Data\ViewModels\APIResponse\**" />
     <EmbeddedResource Remove="Data\ViewModel\**" />
     <EmbeddedResource Remove="wwwroot\Moviles\**" />
     <None Remove="Areas\**" />
+    <None Remove="Data\ViewModels\APIResponse\**" />
     <None Remove="Data\ViewModel\**" />
     <None Remove="wwwroot\Moviles\**" />
   </ItemGroup>
@@ -57,8 +61,5 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Data\ViewModels\APIResponse\" />
   </ItemGroup>
 </Project>
