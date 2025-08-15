@@ -29,9 +29,9 @@ services:
       DOTNET_RUNNING_IN_CONTAINER: "true"
       ConnectionString: "Server=db;Port=3306;Database=bomberos;User=devuser;Password=devpass;"
     volumes:
-      - ./Vista:/app
+      - ./Vista:/app/Vista:cached
     working_dir: /app
-    command: [ "dotnet", "watch", "run", "--urls", "http://0.0.0.0:5000" ]
+    command: [ "dotnet", "watch", "run", "--project", "Vista/Vista.csproj", "--urls", "http://0.0.0.0:5000" ]
 
 volumes:
   db_data:

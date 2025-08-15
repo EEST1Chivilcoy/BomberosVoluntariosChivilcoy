@@ -1,17 +1,20 @@
-# Imagen SDK de .NET 8 para desarrollo local
-FROM mcr.microsoft.com/dotnet/sdk:8.0
+# Etapa base para desarrollo con SDK completo
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS dev
 WORKDIR /app
 
-# Copiamos todo el repo
+# Copiar solo archivos de proyecto y solución para cachear dependencias
+COPY Vista/*.csproj ./Vista/
+COPY BlazorApp1.sln ./
+RUN dotnet restore ./Vista/Vista.csproj
+
+# Copiar el resto del código
 COPY . .
 
-# Restauramos dependencias
-RUN dotnet restore ./Vista/Vista.sln
-
+# Ir al directorio del proyecto
 WORKDIR /app/Vista
 
 # Exponer puerto para Blazor Server
 EXPOSE 5000
 
-# Ejecutar Blazor Server con hot reload
+# Hot reload en desarrollo
 CMD ["dotnet", "watch", "run", "--urls", "http://0.0.0.0:5000"]
