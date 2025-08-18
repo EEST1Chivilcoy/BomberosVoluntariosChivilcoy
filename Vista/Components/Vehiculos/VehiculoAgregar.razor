@@ -8,6 +8,7 @@
 @inject IMessageService message
 @inject IJSRuntime jsRuntime
 
+
 <link rel="stylesheet" href="css/AgregarVehiculosEstilos.css">
 
 @if (movilView is not null)
@@ -50,101 +51,127 @@
                     {
                         <div class="form-section">
                             <div class="inpt-container">
-                                <Input Size="InputSize.Large" Placeholder="Marca" @bind-Value="@vehiculoView.Marca"
-                                        AllowClear />
+                                <label for="numero-movil-input">Marca</label>
+                                <Input Size="InputSize.Large" Placeholder="Marca" @bind-Value="@vehiculoView.Marca" AllowClear />
                             </div>
-
                             <div class="inpt-container">
-                                <Input Size="InputSize.Large" Placeholder="Modelo" @bind-Value="@vehiculoView.Modelo"
-                                        AllowClear />
+                                <label for="numero-movil-input">Modelo</label>
+                                <Input Size="InputSize.Large" Placeholder="Modelo" @bind-Value="@vehiculoView.Modelo" AllowClear />
                             </div>
-
                             <div class="inpt-container">
-                                <Input Size="InputSize.Large" Placeholder="Año" @bind-Value="@vehiculoView.Año"Min="1900" Max="@DateTime.Now.Year"
-                                         AllowClear />
+                                <label for="numero-movil-input">Año</label>
+                                <Input Size="InputSize.Large" Placeholder="Año" @bind-Value="@vehiculoView.Año" Min="1900" Max="@DateTime.Now.Year" AllowClear />
                             </div>
-
                             <div class="inpt-container">
-                                <Input Size="InputSize.Large" Placeholder="Patente" @bind-Value="@vehiculoView.Patente"
-                                         AllowClear />
+                                <label for="numero-movil-input">Patente</label>
+                                <Input Size="InputSize.Large" Placeholder="Patente" @bind-Value="@vehiculoView.Patente" AllowClear />
                             </div>
-
                             <div class="inpt-container">
-                                <Input Size="InputSize.Large" Placeholder="Tipo" @bind-Value="@vehiculoView.Tipo"
-                                         AllowClear />
+                                <label for="numero-movil-input">Tipo</label>
+                                <Input Size="InputSize.Large" Placeholder="Tipo" @bind-Value="@vehiculoView.Tipo" AllowClear />
                             </div>
+                            <div class="inpt-container">
+                                <label for="combustible-input">Combustible</label>
+                                <Input Size="InputSize.Large" Placeholder="Combustible" @bind-Value="@vehiculoView.Combustible" AllowClear id="combustible-input" />
                             </div>
+                            <div>
+                                <label for="fecha-ultimo-service-date-picker">Fecha del último service</label>
+                                <DatePicker Size="InputSize.Large" Placeholder="@("Fecha del último service")" @bind-Value="@vehiculoView.FechaUltimoService" id="fecha-ultimo-service-date-picker" />
+                            </div>
+                            <div>
+                                <label for="fecha-proximo-service-date-picker">Fecha del próximo service</label>
+                                <DatePicker Size="InputSize.Large" Placeholder="@("Fecha del próximo service")" @bind-Value="@vehiculoView.FechaProximoService" id="fecha-proximo-service-date-picker" />
+                            </div>
+                            <div class="inpt-container">
+                                <label for="observaciones-textarea">Observaciones</label>
+                                <TextArea Size="InputSize.Large" Placeholder="Observaciones" @bind-Value="@vehiculoView.Observaciones" AllowClear id="observaciones-textarea" />
+                            </div>
+                        </div>
                     }
                     else if (current == 1)
                     {
                         <div class="form-section">
                             <div class="inpt-container">
-                                <Input Size="InputSize.Large" Placeholder="Nº Móvil" @bind-Value="@vehiculoView.NumeroMovil"
-                                        AllowClear />
+                                <label for="numero-movil-input">Nº Móvil</label>
+                                <Input Size="InputSize.Large" Placeholder="Nº Móvil" @bind-Value="@vehiculoView.NumeroMovil" AllowClear id="numero-movil-input" />
                             </div>
-
-                            <div class="inpt-container">
-                                <Space>
-                                    <SpaceItem>Es una Embarcación:</SpaceItem>
-                                    <SpaceItem>
-                                        <Switch @bind-Checked="@EsEmbarcacion"
-                                                 CheckedChildren="Sí"
-                                                 UnCheckedChildren="No" />
-                                    </SpaceItem>
-                                </Space>
+                            <div class="inpt-container" style="display: flex; flex-direction: column;">
+                                    <div style="display: flex; flex-direction: column; justify-content: flex-end; align-items: center; white-space: nowrap; margin-bottom: 2px;">
+                                        <span>Es una Embarcación:</span>
+                                        <Switch @bind-Checked="@EsEmbarcacion" CheckedChildren="Sí" UnCheckedChildren="No" />
+                                    </div>
                             </div>
                             
-                            @if (EsEmbarcacion)
+                            @if (!EsEmbarcacion)
                             {
                                 <div class="inpt-container">
-                                    <Input Size="InputSize.Large" Placeholder="Nº Motor" @bind-Value="@movilView.NumeroMotor" AllowClear />
+                                    <label for="numero-motor-input">Nº Motor</label>
+                                    <Input Size="InputSize.Large" Placeholder="Nº Motor" @bind-Value="@movilView.NumeroMotor" AllowClear id="numero-motor-input" />
                                 </div>
                                 <div class="inpt-container">
-                                    <Input Size="InputSize.Large" Placeholder="Nº Chasis" @bind-Value="@movilView.NumeroChasis" AllowClear />
+                                    <label for="numero-chasis-input">Nº Chasis</label>
+                                    <Input Size="InputSize.Large" Placeholder="Nº Chasis" @bind-Value="@movilView.NumeroChasis" AllowClear id="numero-chasis-input" />
                                 </div>
                                 <div class="inpt-container">
-                                    <Input Size="InputSize.Large" Placeholder="Modelo de bomba" @bind-Value="@movilView.ModeloBomba" AllowClear />
+                                    <label for="modelo-bomba-input">Modelo de bomba</label>
+                                    <Input Size="InputSize.Large" Placeholder="Modelo de bomba" @bind-Value="@movilView.ModeloBomba" AllowClear id="modelo-bomba-input" />
                                 </div>
                                 <div class="inpt-container">
-                                    <AntDesign.InputNumber Size="InputSize.Large" Placeholder="Cantidad de litros" @bind-Value="@movilView.CantidadLitros" Min="0"></AntDesign.InputNumber>
+                                    <label for="cantidad-litros-input">Cantidad de litros</label>
+                                    <AntDesign.InputNumber Size="InputSize.Large" Placeholder="Cantidad de litros" @bind-Value="@movilView.CantidadLitros" Min="0" id="cantidad-litros-input"></AntDesign.InputNumber>
                                 </div>
                                 <div class="inpt-container">
-                                    <AntDesign.InputNumber Size="InputSize.Large" Placeholder="Modelo de Filtro de Aire" @bind-Value="@movilView.ModeloFiltroAire" AllowClear />
+                                    <label for="tipo-aceite-input">Tipo de aceite</label>
+                                    <Input Size="InputSize.Large" Placeholder="Tipo de aceite" @bind-Value="@movilView.TipoAceite" AllowClear id="tipo-aceite-input" />
                                 </div>
                                 <div class="inpt-container">
-                                    <AntDesign.InputNumber Size="InputSize.Large" Placeholder="Medidas de Cubiertas" @bind-Value="@movilView.MedidasCubiertas" AllowClear />
+                                    <label for="marca-aceite-input">Marca de aceite</label>
+                                    <Input Size="InputSize.Large" Placeholder="Marca de aceite" @bind-Value="@movilView.MarcaAceite" AllowClear id="marca-aceite-input" />
                                 </div>
                                 <div class="inpt-container">
-                                    <AntDesign.InputNumber Size="InputSize.Large" Placeholder="Libras de Cubiertas" @bind-Value="@movilView.LibrasCubiertas" AllowClear />
+                                    <label for="cantidad-aceite-input">Cantidad de aceite</label>
+                                    <AntDesign.InputNumber Size="InputSize.Large" Placeholder="Cantidad de aceite" @bind-Value="@movilView.CantidadAceite" Min="0" id="cantidad-aceite-input"></AntDesign.InputNumber>
                                 </div>
                                 <div class="inpt-container">
-                                    <EnumSelect TEnum="TipoTension" Size="InputSize.Large" Placeholder="Tensión C. Eléctrico" @bind-Value="movilView.TensionCElectrico" AllowClear />
+                                    <label for="modelo-filtro-aire-input">Modelo de filtro de aire</label>
+                                    <Input Size="InputSize.Large" Placeholder="Modelo de filtro de aire" @bind-Value="@movilView.ModeloFiltroAire" AllowClear id="modelo-filtro-aire-input" />
                                 </div>
                                 <div class="inpt-container">
-                                    <EnumSelect TEnum="TipoDireccionUnidades"  Size="InputSize.Large" Placeholder="Tipo de Dirección" @bind-Value="movilView.TipoDireccion" AllowClear />
+                                    <label for="medidas-cubiertas-input">Medidas de cubiertas</label>
+                                    <Input Size="InputSize.Large" Placeholder="Medidas de cubiertas" @bind-Value="@movilView.MedidasCubiertas" AllowClear id="medidas-cubiertas-input" />
                                 </div>
                                 <div class="inpt-container">
-                                    <AntDesign.InputNumber Size="InputSize.Large" Placeholder="Marca de Batería" @bind-Value="@movilView.MarcaBateria" AllowClear />
+                                    <label for="libras-cubiertas-input">Libras de cubiertas</label>
+                                    <Input Size="InputSize.Large" Placeholder="Libras de cubiertas" @bind-Value="@movilView.LibrasCubiertas" AllowClear id="libras-cubiertas-input" />
                                 </div>
                                 <div class="inpt-container">
-                                    <AntDesign.InputNumber Size="InputSize.Large" Placeholder="Fecha Último Cambio de Batería" @bind-Value="@movilView.FechaUltimoCambioBateria" AllowClear />
+                                    <label for="caja-velocidades-select">Caja de velocidades</label>
+                                    <EnumSelect TEnum="TipoCajaVelocidades" Size="InputSize.Large" Placeholder="Seleccione tipo de caja de velocidades" @bind-Value="movilView.CajaVelocidades" id="caja-velocidades-select" />
+                                </div>
+                                <div class="inpt-container">
+                                    <label for="tension-electrica-select">Tensión eléctrica</label>
+                                    <EnumSelect TEnum="TipoTension" Size="InputSize.Large" Placeholder="Seleccione tipo de tensión eléctrica" @bind-Value="movilView.TensionCElectrico" id="tension-electrica-select" />
+                                </div>
+                                <div class="inpt-container">
+                                    <label for="tipo-direccion-select">Tipo de dirección</label>
+                                    <EnumSelect TEnum="TipoDireccionUnidades" Size="InputSize.Large" Placeholder="Seleccione tipo de dirección" @bind-Value="movilView.TipoDireccion" id="tipo-direccion-select" />
+                                </div>
+                                <div class="inpt-container">
+                                    <label for="marca-bateria-input">Marca de batería</label>
+                                    <Input Size="InputSize.Large" Placeholder="Marca de batería" @bind-Value="@movilView.MarcaBateria" AllowClear id="marca-bateria-input" />
+                                </div>
+                                <div class="inpt-container">
+                                    <label for="fecha-cambio-bateria-date-picker">Fecha del último cambio de batería</label>
+                                    <DatePicker Size="InputSize.Large" Placeholder="@("Fecha del último cambio de batería")" @bind-Value="@movilView.FechaUltimoCambioBateria" id="fecha-cambio-bateria-date-picker" />
                                 </div>
                             }
                             <div class="inpt-container">
-                                <EnumSelect TEnum="TipoEstadoMovil" Size="InputSize.Large" Placeholder="Seleccione estado del vehículo" @bind-Value="vehiculoView.Estado" />
+                                <label for="estado-select">Estado del vehículo</label>
+                                <EnumSelect TEnum="TipoEstadoMovil" Size="InputSize.Large" Placeholder="Seleccione estado del vehículo" @bind-Value="vehiculoView.Estado" id="estado-select" />
                             </div>
                             <div class="inpt-container">
-                                <Select TItem="BomberoViewModel"
-                                         TItemValue="int"
-                                         DataSource="@ListaBomberos"
-                                         @bind-Value="@vehiculoView.EncargadoId"
-                                         LabelName="@nameof(BomberoViewModel.NombreYApellido)"
-                                         ValueName="@nameof(BomberoViewModel.PersonaId)"
-                                         Placeholder="Seleccione el bombero encargado"
-                                         Size="InputSize.Large"
-                                         DefaultActiveFirstOption="false"
-                                         AllowClear
-                                         EnableSearch>
+                                <label for="bombero-encargado-select">Bombero encargado</label>
+                                <Select TItem="BomberoViewModel" TItemValue="int" DataSource="@ListaBomberos" @bind-Value="@vehiculoView.EncargadoId" LabelName="@nameof(BomberoViewModel.NombreYApellido)" ValueName="@nameof(BomberoViewModel.PersonaId)" Placeholder="Seleccione el bombero encargado" Size="InputSize.Large" DefaultActiveFirstOption="false" AllowClear EnableSearch id="bombero-encargado-select">
                                 </Select>
                             </div>
                         </div>
@@ -153,23 +180,17 @@
                 <div class="steps-action">
                     @if (current > 0)
                     {
-                        <Button Class="boton_p" OnClick="OnPreClick">
-                            <Icon Type="left" /> Anterior
-                        </Button>
+                        <Button Class="btn-secondary" OnClick="OnPreClick"><Icon Type="left" /> Anterior </Button>
                     }
 
                     @if (current < steps.Length - 1)
                     {
-                        <Button Class="boton_p" OnClick="OnNextClick">
-                            Siguiente <Icon Type="right" />
-                        </Button>
+                        <Button Class="btn-primary" OnClick="OnNextClick"><Icon Type="right" /> Siguiente </Button>
                     }
 
                     @if (current == steps.Length - 1)
                     {
-                        <Button Class="boton_guardar" OnClick="SubirVehiculo"
-                                 Loading="@isLoading">
-                            <Icon Type="save" /> Guardar Vehículo
+                        <Button Class="btn-success" OnClick="SubirVehiculo" Loading="@isLoading"> <Icon Type="save" /> Guardar Vehículo
                         </Button>
                     }
                 </div>
@@ -177,7 +198,6 @@
         </div>
     </div>
 }
-
 @code {
     [Parameter] public EventCallback OnClose { get; set; }
     BomberosDbContext Context { get; set; }
@@ -228,7 +248,7 @@
         public string? Combustible { get; set;}
         public DateTime? FechaUltimoService { get; set; }
         public DateTime? FechaProximoService { get; set; }
-        public string? Obsercaciones { get; set; }
+        public string? Observaciones { get; set; }
     }
 
     public class MovilViewModel
@@ -341,7 +361,7 @@
                         Combustible = vehiculoView.Combustible,
                         FechaUltimoService = vehiculoView.FechaUltimoService,
                         FechaProximoService = vehiculoView.FechaProximoService,
-                        Observaciones = vehiculoView.Obsercaciones,
+                        Observaciones = vehiculoView.Observaciones,
                         Imagen = string.IsNullOrEmpty(imagenView.Base64) ? null : new()
                         {
                             NombreImagen = imagenView.Nombre,

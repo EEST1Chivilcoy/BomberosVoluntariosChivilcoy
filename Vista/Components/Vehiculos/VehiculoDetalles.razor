@@ -56,6 +56,12 @@
                 </AntDesign.Col>
                 <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
                     <div class="detail-item">
+                        <span class="detail-label">Combustible:</span>
+                        <span class="detail-value">@vehiculoView.Combustible</span>
+                    </div>
+                </AntDesign.Col>
+                <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
+                    <div class="detail-item">
                         <span class="detail-label">Encargado:</span>
                         <span class="detail-value">@vehiculoView.Encargado</span>
                     </div>
@@ -66,6 +72,25 @@
                         <span class="detail-value">@vehiculoView.Estado</span>
                     </div>
                 </AntDesign.Col>
+                <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
+                    <div class="detail-item">
+                        <span class="detail-label">Fecha Último Service:</span>
+                        <span class="detail-value">@vehiculoView.FechaUltimoService</span>
+                    </div>
+                </AntDesign.Col>
+                <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
+                    <div class="detail-item">
+                        <span class="detail-label">Fecha Próximo Service:</span>
+                        <span class="detail-value">@vehiculoView.FechaProximoService</span>
+                    </div>
+                </AntDesign.Col>
+                <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
+                    <div class="detail-item">
+                        <span class="detail-label">Observaciones:</span>
+                        <span class="detail-value">@vehiculoView.Observaciones</span>
+                    </div>
+                </AntDesign.Col>
+            
             </Row>
 
             @if (vehiculo is Movil)
@@ -117,12 +142,6 @@
                         </AntDesign.Col>
                         <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
                             <div class="detail-item">
-                                <span class="detail-label">Combustible:</span>
-                                <span class="detail-value">@vehiculoView.Combustible</span>
-                            </div>
-                        </AntDesign.Col>
-                        <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
-                            <div class="detail-item">
                                 <span class="detail-label">Fecha Ultimo Service:</span>
                                 <span class="detail-value">@vehiculoView.FechaUltimoService</span>
                             </div>
@@ -131,6 +150,54 @@
                             <div class="detail-item">
                                 <span class="detail-label">Fecha Proximo Service:</span>
                                 <span class="detail-value">@vehiculoView.FechaProximoService</span>
+                            </div>
+                        </AntDesign.Col>
+                        <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
+                            <div class="detail-item">
+                                <span class="detail-label">Modelo Filtro Aire:</span>
+                                <span class="detail-value">@vehiculoView.ModeloFiltroAire</span>
+                            </div>
+                        </AntDesign.Col>
+                        <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
+                            <div class="detail-item">
+                                <span class="detail-label">Medidas Cubiertas:</span>
+                                <span class="detail-value">@vehiculoView.MedidasCubiertas</span>
+                            </div>
+                        </AntDesign.Col>
+                        <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
+                            <div class="detail-item">
+                                <span class="detail-label">Libras Cubiertas:</span>
+                                <span class="detail-value">@vehiculoView.LibrasCubiertas</span>
+                            </div>
+                        </AntDesign.Col>
+                        <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
+                            <div class="detail-item">
+                                <span class="detail-label">Cajas de Velocidades:</span>
+                                <span class="detail-value">@vehiculoView.CajasVelocidades</span>
+                            </div>
+                        </AntDesign.Col>
+                        <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
+                            <div class="detail-item">
+                                <span class="detail-label">Tensión C. Eléctrico:</span>
+                                <span class="detail-value">@vehiculoView.TensionCElectrico</span>
+                            </div>
+                        </AntDesign.Col>
+                        <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
+                            <div class="detail-item">
+                                <span class="detail-label">Tipo Dirección:</span>
+                                <span class="detail-value">@vehiculoView.TipoDireccion</span>
+                            </div>
+                        </AntDesign.Col>
+                        <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
+                            <div class="detail-item">
+                                <span class="detail-label">Marca Batería:</span>
+                                <span class="detail-value">@vehiculoView.MarcaBateria</span>
+                            </div>
+                        </AntDesign.Col>
+                        <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6">
+                            <div class="detail-item">
+                                <span class="detail-label">Fecha Último Cambio Batería:</span>
+                                <span class="detail-value">@vehiculoView.FechaUltimoCambioBateria</span>
                             </div>
                         </AntDesign.Col>
                     </Row>

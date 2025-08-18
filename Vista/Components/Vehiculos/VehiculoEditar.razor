@@ -10,7 +10,6 @@
 
 <link rel="stylesheet" href="css/EditarMovilEstilos.css">
 
-
 <div class="edit-unit-modal-v2">
     <div class="modal-header">
         <h3 class="modal-title">Editar Unidad Móvil</h3>
@@ -18,12 +17,6 @@
 
     <div class="modal-body-content">
         <div class="modal-left-panel">
-            <Steps Current="current">
-                @foreach (var item in steps)
-                {
-                    <Step Title="@item.Title" />
-                }
-            </Steps>
             <div class="image-preview-card">
                 @if (!string.IsNullOrEmpty(imagenView.Base64))
                 {
@@ -43,16 +36,23 @@
                     }
                 </div>
             </div>
+            <div class="upload-container">
+                <label for="fotoMovil" class="upload-btn">
+                    <Icon Type="cloud-upload" Theme="IconThemeType.Outline" /> Cargar foto del móvil
+                </label>
+                <InputFile OnChange="SubirFoto" id="fotoMovil" accept=".jpg,.jpeg,.png" style="display: none;" />
+            </div>
         </div>
 
         <div class="modal-right-panel">
-            <div class="form-content-container">
+            <Steps Current="current">
+                <Step Title="Datos Básicos del Vehículo" />
+                <Step Title="Asignación de Detalles del Vehículo" />
+            </Steps>
 
+            <div class="form-content-container">
                 @if (current == 0)
                 {
-                    <div class="form-section-title">
-                        <h4>Datos Básicos del Vehículo</h4>
-                    </div>
                     <div class="form-grid-2-col">
                         <div class="input-group">
                             <label>Marca</label>
@@ -86,25 +86,20 @@
                             <label>Fecha del próximo service</label>
                             <InputDate @bind-Value="vehiculoView.FechaProximoService" />
                         </div>
-                    </div>
-                    <div class="upload-container">
-                        <label for="fotoMovil" class="upload-btn">
-                            <Icon Type="cloud-upload" Theme="IconThemeType.Outline" /> Cargar foto del móvil
-                        </label>
-                        <InputFile OnChange="SubirFoto" id="fotoMovil" accept=".jpg,.jpeg,.png" style="display: none;" />
+                        <div class="input-group full-width">
+                            <label>Observaciones</label>
+                            <textarea @bind="vehiculoView.Observaciones" placeholder="Observaciones"></textarea>
+                        </div>
                     </div>
                 }
                 else if (current == 1)
                 {
-                    <div class="form-section-title">
-                        <h4>Detalles Adicionales</h4>
-                    </div>
                     <div class="form-grid-2-col-compact">
-                        <div class="input-group full-width">
+                        <div class="input-group">
                             <label>Nº del Móvil</label>
                             <input type="text" @bind="vehiculoView.NumeroMovil" placeholder="Número del móvil" />
                         </div>
-                        <div class="input-group full-width switch-group">
+                        <div class="input-group switch-group">
                             <label>Es una embarcación:</label>
                             <Switch @bind-Checked="@EsEmbarcacion" />
                         </div>
@@ -138,10 +133,54 @@
                                 <label>Cantidad de aceite</label>
                                 <AntDesign.InputNumber @bind-Value="@movilView.CantidadAceite" Min="0" placeholder="Cantidad de aceite" />
                             </div>
+                            <div class="input-group">
+                                <label>Modelo de filtro de aire</label>
+                                <input type="text" @bind="movilView.ModeloFiltroAire" placeholder="Modelo de filtro de aire" />
+                            </div>
+                            <div class="input-group">
+                                <label>Medidas de las cubiertas</label>
+                                <input type="text" @bind="movilView.MedidasCubiertas" placeholder="Medidas de las cubiertas" />
+                            </div>
+                            <div class="input-group">
+                                <label>Libras de las cubiertas</label>
+                                <input type="text" @bind="movilView.LibrasCubiertas" placeholder="Libras de las cubiertas" />
+                            </div>
+                            <div class="input-group">
+                                <label>Caja de velocidades</label>
+                                <select @bind="movilView.CajaVelocidades" class="select-field">
+                                    <option value="" selected disabled hidden>Seleccione caja de velocidades</option>
+                                    <option value="@TipoCajaVelocidades.Manual">Manual</option>
+                                    <option value="@TipoCajaVelocidades.Automatica">Automática</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Tensión del sistema eléctrico</label>
+                                <select @bind="movilView.TensionCElectrico" class="select-field">
+                                    <option value="" selected disabled hidden>Seleccione tensión</option>
+                                    <option value="@((int)TipoTension.DoceVolts)">12V</option>
+                                    <option value="@((int)TipoTension.VeintiCuatroVolts)">24V</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Tipo de dirección</label>
+                                <select @bind="movilView.TipoDireccion" class="select-field">
+                                    <option value="" selected disabled hidden>Seleccione tipo de dirección</option>
+                                    <option value="@((int)TipoDireccionUnidades.Mecanica)">Mecánica</option>
+                                    <option value="@((int)TipoDireccionUnidades.Hidraulica)">Hidráulica</option>
+                                    <option value="@((int)TipoDireccionUnidades.Electrica)">Eléctrica</option>
+
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Marca de batería</label>
+                                <input type="text" @bind="movilView.MarcaBateria" placeholder="Marca de batería" />
+                            </div>
+                            <div class="input-group">
+                                <label>Fecha del último cambio de batería</label>
+                                <InputDate @bind-Value="movilView.FechaUltimoCambioBateria" />
+                            </div>
                         }
-                    </div>
-                    <div class="form-grid-2-col-compact mt-20">
-                        <div class="input-group full-width">
+                        <div class="input-group">
                             <label>Estado del Vehículo</label>
                             <select @bind="vehiculoView.Estado" class="select-field">
                                 <option value="@TipoEstadoMovil.Estado" selected disabled hidden>Seleccione estado</option>
@@ -151,7 +190,7 @@
                                 <option value="@TipoEstadoMovil.Limpieza">Limpieza</option>
                             </select>
                         </div>
-                        <div class="input-group full-width">
+                        <div class="input-group">
                             <label>Bombero Encargado</label>
                             <Select TItem="BomberoViewModel"
                                     TItemValue="int"
@@ -165,6 +204,7 @@
                     </div>
                 }
             </div>
+            
             <div class="modal-footer">
                 @if (current > 0)
                 {
