@@ -60,14 +60,13 @@ namespace Vista.Data.Models.Vehiculos.Flota
         public int? CantidadAceite { get; set; }
 
         /// <summary>
-        /// Modelo del filtro de aire
+        /// Modelo del filtro de aire.
         /// </summary>
         [StringLength(255)]
         public string? ModeloFiltroAire { get; set; }
 
         /// <summary>
         /// Medidas de las cubiertas.
-        /// Este campo es de tipo String
         /// </summary>
         [StringLength(255)]
         public string? MedidasCubiertas { get; set; }
@@ -80,19 +79,18 @@ namespace Vista.Data.Models.Vehiculos.Flota
         
         /// <summary>
         /// Tension del Circuito Electrico, 12V o 24v.
-        /// Trabaja con un Enum.
         /// </summary>
         public TipoTension? TensionCElectrico { get; set; }
 
         /// <summary>
-        /// Tipo de direccion.
-        /// Trabaja con un Enum.
+        /// Tipo de Dirección.
+        /// (por ejemplo, Hidráulica, Mecánica, Electrica).
         /// </summary>
         public TipoDireccionUnidades? TipoDireccion { get; set; }
 
         /// <summary>
-        /// Tipo de Cajas de Velocidades.
-        /// Trabaja con un Enum.
+        /// Tipo de Caja de Velocidades.
+        /// (por ejemplo, Manual, Automática, Semi-Automática).
         /// </summary>
         public TipoCajaVelocidades? CajaVelocidades { get; set; }
 

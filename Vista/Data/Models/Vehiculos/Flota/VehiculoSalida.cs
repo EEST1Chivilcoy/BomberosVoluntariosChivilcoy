@@ -12,16 +12,55 @@ namespace Vista.Data.Models.Vehiculos.Flota
 {
     public abstract class VehiculoSalida : Vehiculo
     {
+        /// <summary>
+        /// Numero movil del vehiculo.
+        /// Puede ser tambien un identificador unico para el vehiculo dentro de la flota.
+        /// Este campo es obligatorio y debe ser unico.
+        /// Se asigna a las embarcaciones, y a los vehiculos (moviles) de la institucion.
+        /// </summary>
         [StringLength(255)]
         public string? NumeroMovil { get; set; }
+
+        /// <summary>
+        /// Foreanea para el bombero encargado del vehículo.
+        /// </summary>
         public int? EncargadoId { get; set; }
+
+        /// <summary>
+        /// Bombero encargado del vehículo.
+        /// </summary>
         [ForeignKey("EncargadoId")]
         public Bombero? Encargado { get; set; }
+
+        /// <summary>
+        /// Estado del vehículo móvil.
+        /// (Por ejemplo, Activo, Inactivo, En Mantenimiento, etc.)
+        /// </summary>
         public TipoEstadoMovil Estado { get; set; }
+
+        /// <summary>
+        /// Firmas asociadas al vehículo.
+        /// </summary>
         public List<Firma> Firmas { get; set; } = new();
+
+        /// <summary>
+        /// Incidentes asociados al vehículo.
+        /// </summary>
         public List<Incidente> Incidentes { get; set; } = new();
+
+        /// <summary>
+        /// Foranea para la imagen del vehículo.
+        /// </summary>
         public int? ImagenId { get; set; }
+
+        /// <summary>
+        /// Imagen asociada al vehículo.
+        /// </summary>
         public Imagen_VehiculoSalida? Imagen { get; set; }
+
+        /// <summary>
+        /// Lista de novedades asociadas al vehículo.
+        /// </summary>
         public List<NovedadVehiculo>? Novedades { get; set; }
 
         /// <summary>
@@ -40,6 +79,9 @@ namespace Vista.Data.Models.Vehiculos.Flota
         /// </summary>
         public DateTime? FechaProximoService { get; set; }
 
+        /// <summary>
+        /// Observaciones adicionales sobre el vehículo.
+        /// </summary>
         public string? Observaciones { get; set; }
     }
 }

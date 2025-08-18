@@ -333,6 +333,25 @@ namespace Vista.Data
                 .HasForeignKey(bs => bs.SalidaId);
 
             // Enum Conversiones a String - INT
+
+            modelBuilder
+                .Entity<Movil>()
+                .Property(m => m.TipoDireccion)
+                .HasConversion<string>()
+                .HasMaxLength(255);
+
+            modelBuilder
+                .Entity<Movil>()
+                .Property(m => m.TensionCElectrico)
+                .HasConversion<string>()
+                .HasMaxLength(255);
+
+            modelBuilder
+                .Entity<Movil>()
+                .Property(m => m.CajaVelocidades)
+                .HasConversion<string>()
+                .HasMaxLength(255);
+
             modelBuilder
                 .Entity<Persona>()
                 .Property(p => p.Sexo)
