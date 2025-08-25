@@ -9,7 +9,7 @@
 @inject NavigationManager navigationManager
 @inject IVehiculoSalidaService VehiculoSalidaService
 
-@page "/unidades"
+@page "/unidades/{Estado?}"
 
 <div class="container">
     <Content Style="padding: 16px;">
@@ -18,20 +18,33 @@
             <div class="header-container" style="display: flex; justify-content: space-between; align-items: center;">
                 <div>
                     <h2 style="margin-bottom: 0;"><Icon Type="Car" />UNIDADES</h2>
-                    <p style="margin-top: 4px; color: #666;">@vehiculos?.Count() unidades activas</p>
+                    <p style="margin-top: 4px; color: #666;">
+                        @vehiculos?.Count() unidades @(Estado.ToLower() == "activas" ? "activas" : "de baja")
+                    </p>
                 </div>
                 <Space>
-                    <Button Type="ButtonType.Primary"
-                            OnClick="@(() => navigationManager.NavigateTo("/unidades/unidades-baja"))"
-                            Style="margin-right: 12px;  background: #d32f2f; color: white; border-radius: 8px; font-weight: 600;">
-                        <Icon Type="folder" /> Unidades de baja
-                    </Button>
+                    @if (Estado.ToLower() == "activas")
+                    {
+                        <Button Type="ButtonType.Primary"
+                                OnClick="@(() => navigationManager.NavigateTo("/unidades/baja", true))"
+                                Style="margin-right: 12px;  background: #d32f2f; color: white; border-radius: 8px; font-weight: 600;">
+                            <Icon Type="folder" /> Unidades de baja
+                        </Button>
 
-                    <Button Type="ButtonType.Primary"
-                            OnClick="@(() => AgregarVisible = true)"
-                            Style="border-radius: 8px; font-size: 14px; background: #4CAF50">
-                        <Icon Type="plus" />Nueva Unidad
-                    </Button>
+                        <Button Type="ButtonType.Primary"
+                                OnClick="@(() => AgregarVisible = true)"
+                                Style="border-radius: 8px; font-size: 14px; background: #4CAF50">
+                            <Icon Type="plus" />Nueva Unidad
+                        </Button>
+                    }
+                    else
+                    {
+                        <Button class="btn-volver-unidades"
+                                OnClick="@(() => navigationManager.NavigateTo("/unidades/activas", true))"
+                                Style="border-radius: 8px; font-size: 14px;">
+                            <Icon Type="folder-open" />Volver a Unidades activas
+                        </Button>
+                    }
                 </Space>
             </div>
 
@@ -65,6 +78,9 @@
 </div>
 
 @code {
+    [Parameter]
+    public string Estado { get; set; } = "activas";
+
     RenderFragment LoadingIcon => @<Icon Type="loading" Theme="IconThemeType.Outline" Style="font-size: 24px; color: rgb(62, 24, 24);" Spin />;
     bool AgregarVisible { get; set; }
 
@@ -91,7 +107,26 @@
 
     private async Task Init()
     {
-        var flota = await VehiculoSalidaService.ObtenerVehiculosSalidasPorEstadoAsync(TipoEstadoMovil.Activo);
+        List<VehiculoSalida> flota = new();
+
+        if (string.IsNullOrWhiteSpace(Estado))
+        {
+            Estado = "activas";
+        }
+
+        if (Estado.ToLower() == "activas")
+        {
+            flota = await VehiculoSalidaService.ObtenerVehiculosSalidasPorEstadoAsync(TipoEstadoMovil.Activo);
+        }
+        else if (Estado.ToLower() == "baja")
+        {
+            flota = await VehiculoSalidaService.ObtenerVehiculosSalidasPorEstadoAsync(TipoEstadoMovil.Inactivo);
+        }
+        else
+        {
+            navigationManager.NavigateTo("/unidades");
+            return;
+        }
 
         if (flota != null && flota.Any())
         {
