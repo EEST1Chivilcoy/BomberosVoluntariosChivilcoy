@@ -1,0 +1,71 @@
+
+.avatar-container {
+    position: absolute; 
+    top: -90px; 
+    left: 50%; 
+    transform: translateX(-50%);
+    z-index: 10; 
+}
+
+.ant-avatar {
+    border-radius: 50% !important;
+}
+
+.name-box {
+    display: inline-block;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+    border-radius: 6px;
+}
+
+.subtitle-text {
+    font-size: 1.2em; 
+    color: #6e6e6e ;
+    font-weight: 700; 
+}
+
+.info-block {
+    margin-bottom: 25px;
+}
+
+.info-block .label {
+    color: #555;
+    margin-bottom: 3px;
+    font-weight: bold; 
+}
+
+.ant-input[disabled], .ant-input-disabled {
+    color: #7c7c7c !important; 
+    border: 1px solid #e0e0e0 !important; 
+    
+    border-radius: 8px !important; 
+    
+    font-weight: bold !important; 
+    
+    height: 30px !important; 
+    line-height: 30px !important;
+    cursor: default;
+}
+
+.value-box {
+    background-color: white; 
+    font-weight: bold; 
+    
+    border: 1px solid #e0e0e0; 
+    border-radius: 8px; 
+    
+    padding: 6px 11px;
+    color: #7c7c7c ; 
+    font-size: 14px;
+}
+
+.ant-statistic-content {
+    font-weight: bold !important;
+}
+
+.ant-statistic-title {
+    text-transform: uppercase;
+    font-size: 0.8em !important; 
+    font-weight: bold !important; 
+    color: #333; 
+}
