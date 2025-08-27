@@ -92,7 +92,7 @@ namespace Vista.Data
         // Fuerzas
 
         public DbSet<FuerzaInterviniente> Fuerzas { get; set; }
-        public DbSet<Salida_FuerzaInterviniente> fuerzaIntervinientes { get; set; }
+        public DbSet<FuerzaInterviniente_Salida> fuerzaInterviniente_Salidas { get; set; }
 
         // Brigada
 

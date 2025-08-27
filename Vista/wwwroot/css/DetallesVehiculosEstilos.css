@@ -1,206 +1,24 @@
-.vehiculo-detalles-completo-container {
-    display: flex;
-    flex-direction: row; 
-    align-items: flex-start;
-    gap: 2.5rem;
-    padding: 2.5rem;
-    background-color: #f0f2f5; 
-    border-radius: 1rem;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-    max-width: 1200px;
-    width: 100%;
-    font-family: 'Inter', sans-serif; 
-    flex-direction: row;
-    align-items: flex-start;
-    gap: 2rem;
-    padding: 2rem;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+/* Estilos mínimos para VehiculoDetalles - Optimizado para Ant Design */
 
+/* Solo sobrescribir comportamientos específicos cuando sea necesario */
+@media (max-width: 768px) {
+    /* Ajustar padding en pantallas pequeñas */
+    .ant-descriptions-item-label,
+    .ant-descriptions-item-content {
+        padding: 6px 8px !important;
+        font-size: 14px;
+    }
+    
+    /* Mejorar el layout del avatar en móviles */
+    .ant-avatar {
+        max-width: 100px !important;
+        max-height: 100px !important;
+    }
 }
 
-.image-container-completo {
-    flex-shrink: 0;
-
-    width: 320px;
-    height: auto;
-    border-radius: 0.75rem;
-    overflow: hidden;
-    background-color: #e2e8f0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 1.5rem;
-    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
-}
-
-.vehiculo-image-completo {
-    max-width: 100%;
-    height: auto;
-    object-fit: contain;
-    border-radius: 0.5rem;
-
-    width: 250px; 
-    height: auto;
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-.vehiculo-image-completo {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-
-}
-
-.info-completo-container {
-    flex-grow: 1;
-    min-width: 0;
-}
-
-.section-title {
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: #000000; 
-    margin-bottom: 1.5rem;
-}
-
-.detail-grid .ant-row {
-    margin-left: -12px !important;
-    margin-right: -12px !important;
-}
-
-.detail-grid .ant-col {
-    padding-left: 12px !important;
-    padding-right: 12px !important;
-    margin-bottom: 1.5rem;
-}
-
-.detail-item {
-    display: flex;
-    flex-direction: column;
-    background-color: #ffffff; 
-    padding: 0.75rem 1rem;
-    border-radius: 0.5rem;
-    border: 1px solid #707070; 
-    height: 100%;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
-    min-height: 75px; 
-    justify-content: space-between;
-}
-
-.detail-label {
-    font-weight: 600;
-    color: #475569; 
-    font-size: 0.875rem;
-}
-
-.detail-value {
-    color: #1a202c;
-    font-size: 1rem;
+/* Mejora específica para el contenido de observaciones */
+.ant-descriptions-item-content p {
+    margin-bottom: 0;
     word-wrap: break-word;
-}
-
-.technical-details-section {
-    margin-top: 3rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid #797777; 
-}
-
-.loading-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 80vh;
-}
-
-.ant-modal-mask {
-    background-color: transparent !important; 
-    z-index: 1000;
-}
-
-.ant-modal-wrap {
-    z-index: 1001;
-    overflow: auto;
-}
-
-.ant-modal-content {
-    border-radius: 1rem;
-    background-color: #f0f2f5 !important; 
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15); 
-}
-
-body.ant-scrolling-effect {
-    overflow: hidden !important; 
-}
-
-.detalles-adicionales-completo {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-top: 1rem;
-}
-
-.ant-table {
-    width: 100%;
-    margin-top: 1rem;
-}
-
-.ant-table-thead > tr > th {
-    background-color: #f0f2f5;
-    font-weight: bold;
-    white-space: nowrap;
-
-}
-
-@media (max-width: 900px) {
-    .vehiculo-detalles-completo-container {
-        flex-direction: column;
-
-        padding: 1.5rem;
-        gap: 1.5rem;
-    }
-    .image-container-completo {
-        width: 100%;
-        max-height: 250px;
-    }
-    .image-container-completo {
-        width: 100%;
-        max-height: 250px; 
-    }
-}
-.info-completo-container h4.mt-4 {
-    margin-top: 1.5rem; 
-    margin-bottom: 1rem;
-}
-
-.image-and-number-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center; 
-    text-align: center;
-    gap: 2rem; 
-}
-
-.image-container-completo {
-    width: 320px;
-    height: auto;
-}
-
-.movil-number-container {
-    font-size: 2.0rem; 
-    font-weight: bold;
-    color: #000000;
-    margin-top: -1.5rem; 
-}
-
-@media (max-width: 900px) {
-    .vehiculo-detalles-completo-container {
-        flex-direction: column;
-    }
-    .image-and-number-wrapper {
-        width: 100%;
-    }
+    overflow-wrap: break-word;
 }

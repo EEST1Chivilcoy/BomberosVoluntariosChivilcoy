@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql_local
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: bomberos
+      MYSQL_USER: devuser
+      MYSQL_PASSWORD: devpass
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  vista:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vista_local
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    environment:
+      DOTNET_USE_POLLING_FILE_WATCHER: "1"
+      DOTNET_RUNNING_IN_CONTAINER: "true"
+      ConnectionString: "Server=db;Port=3306;Database=bomberos;User=devuser;Password=devpass;"
+    volumes:
+      - ./Vista:/app/Vista:cached
+    working_dir: /app
+    command: [ "dotnet", "watch", "run", "--project", "Vista/Vista.csproj", "--urls", "http://0.0.0.0:5000" ]
+
+volumes:
+  db_data:

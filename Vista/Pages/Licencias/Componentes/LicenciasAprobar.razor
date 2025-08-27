@@ -1,0 +1,511 @@
+﻿@using Vista.Data.Models.Personas.Personal
+@using Vista.Data.Models.Personas.Personal.Componentes
+@using Vista.Data.Mappers
+
+@*Servicios utilizados*@
+@using Vista.Services
+@inject ILicenciaService LicenciaService
+@inject IMessageService message
+
+<style>
+    /* Variables CSS específicas para el componente de aprobación con prefijo único */
+    .licencias-aprobar {
+        --apr-primary-color: #A63333;
+        --apr-primary-dark: #732D2D;
+        --apr-success-color: #4CAF50;
+        --apr-success-dark: #438E46;
+        --apr-warning-color: #F57F17;
+        --apr-warning-light: #FFF8E1;
+        --apr-error-color: #C62828;
+        --apr-error-light: #FFEBEE;
+        --apr-approved-color: #2E7D32;
+        --apr-approved-light: #E6F7E9;
+        --apr-gold-color: #FFD700;
+    }
+
+        .licencias-aprobar .approval-container {
+            background: white !important;
+            border-radius: 12px !important;
+            overflow: hidden !important;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
+            border: 1px solid #f0f0f0 !important;
+        }
+
+        .licencias-aprobar .approval-header {
+            background: linear-gradient(135deg, var(--apr-primary-color) 0%, var(--apr-primary-dark) 100%) !important;
+            padding: 16px 20px !important;
+            color: white !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 12px !important;
+        }
+
+        .licencias-aprobar .approval-title {
+            font-weight: 700 !important;
+            font-size: 1.1rem !important;
+            margin: 0 !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+        }
+
+        .licencias-aprobar .approval-content {
+            padding: 0 !important;
+            max-height: 70vh !important;
+            overflow-y: auto !important;
+        }
+
+        .licencias-aprobar .empty-state {
+            padding: 40px 20px !important;
+            text-align: center !important;
+            color: #666 !important;
+        }
+
+        .licencias-aprobar .empty-icon {
+            font-size: 3rem !important;
+            color: var(--apr-primary-color) !important;
+            margin-bottom: 16px !important;
+        }
+
+        .licencias-aprobar .empty-title {
+            font-size: 1.2rem !important;
+            font-weight: 600 !important;
+            color: #333 !important;
+            margin-bottom: 8px !important;
+        }
+
+        .licencias-aprobar .empty-description {
+            color: #666 !important;
+            font-size: 0.95rem !important;
+        }
+
+        /* Estilos específicos para la tabla de aprobación */
+        .licencias-aprobar :deep(.ant-table) {
+            font-size: 0.9rem !important;
+        }
+
+        .licencias-aprobar :deep(.ant-table-thead > tr > th) {
+            background: linear-gradient(135deg, var(--apr-primary-color) 0%, var(--apr-primary-dark) 100%) !important;
+            color: white !important;
+            font-weight: 600 !important;
+            border: none !important;
+            padding: 12px 8px !important;
+            font-size: 0.85rem !important;
+        }
+
+        .licencias-aprobar :deep(.ant-table-tbody > tr > td) {
+            padding: 12px 8px !important;
+            border-bottom: 1px solid #f0f0f0 !important;
+            color: #333 !important;
+            background-color: white !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .licencias-aprobar :deep(.ant-table-tbody > tr:hover > td) {
+            background-color: rgba(166, 51, 51, 0.05) !important;
+            transform: translateX(2px) !important;
+        }
+
+        /* Botones de acción específicos para aprobación */
+        .licencias-aprobar .action-buttons {
+            display: flex !important;
+            justify-content: center !important;
+            gap: 12px !important;
+            align-items: center !important;
+        }
+
+        .licencias-aprobar .approve-button {
+            color: var(--apr-success-color) !important;
+            font-size: 1.2rem !important;
+            cursor: pointer !important;
+            transition: all 0.3s ease !important;
+            padding: 8px !important;
+            border-radius: 50% !important;
+            background: rgba(76, 175, 80, 0.1) !important;
+            width: 36px !important;
+            height: 36px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+
+            .licencias-aprobar .approve-button:hover {
+                color: white !important;
+                background: var(--apr-success-color) !important;
+                transform: scale(1.1) !important;
+                box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3) !important;
+            }
+
+        .licencias-aprobar .reject-button {
+            color: var(--apr-error-color) !important;
+            font-size: 1.2rem !important;
+            cursor: pointer !important;
+            transition: all 0.3s ease !important;
+            padding: 8px !important;
+            border-radius: 50% !important;
+            background: rgba(198, 40, 40, 0.1) !important;
+            width: 36px !important;
+            height: 36px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+
+            .licencias-aprobar .reject-button:hover {
+                color: white !important;
+                background: var(--apr-error-color) !important;
+                transform: scale(1.1) !important;
+                box-shadow: 0 4px 12px rgba(198, 40, 40, 0.3) !important;
+            }
+
+        .licencias-aprobar .status-badge {
+            padding: 4px 10px !important;
+            border-radius: 12px !important;
+            font-weight: 600 !important;
+            font-size: 0.8rem !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+            background: var(--apr-warning-light) !important;
+            color: var(--apr-warning-color) !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 4px !important;
+        }
+
+    /* Responsive design específico para aprobación */
+    @@media (max-width: 768px) {
+        .licencias-aprobar .approval-header {
+            padding: 12px 16px !important;
+        }
+
+        .licencias-aprobar .approval-title {
+            font-size: 1rem !important;
+        }
+
+        .licencias-aprobar :deep(.ant-table-thead > tr > th),
+        .licencias-aprobar :deep(.ant-table-tbody > tr > td) {
+            padding: 8px 4px !important;
+            font-size: 0.8rem !important;
+        }
+
+        .licencias-aprobar .action-buttons {
+            gap: 8px !important;
+        }
+
+        .licencias-aprobar .approve-button,
+        .licencias-aprobar .reject-button {
+            width: 32px !important;
+            height: 32px !important;
+            font-size: 1rem !important;
+        }
+        /* Hide less important columns on mobile */
+        .licencias-aprobar :deep(.ant-table-cell:nth-child(3)),
+        .licencias-aprobar :deep(.ant-table-cell:nth-child(4)) {
+            display: none !important;
+        }
+    }
+
+    @@media (max-width: 480px) {
+        .licencias-aprobar .approval-content {
+            max-height: 50vh !important;
+        }
+
+        .licencias-aprobar :deep(.ant-table-cell:nth-child(5)) {
+            display: none !important;
+        }
+    }
+
+    /* Loading state */
+    .licencias-aprobar .loading-container {
+        padding: 40px 20px !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        gap: 12px !important;
+        color: var(--apr-primary-color) !important;
+    }
+
+    /* Enhanced popconfirm styling específicos para aprobación */
+    .licencias-aprobar :deep(.ant-popconfirm .ant-popconfirm-message) {
+        font-weight: 500 !important;
+    }
+
+    .licencias-aprobar :deep(.ant-popconfirm .ant-btn-primary) {
+        background: var(--apr-success-color) !important;
+        border-color: var(--apr-success-color) !important;
+    }
+
+    .licencias-aprobar :deep(.ant-popconfirm .ant-btn-primary:hover) {
+        background: var(--apr-success-dark) !important;
+        border-color: var(--apr-success-dark) !important;
+    }
+</style>
+
+<div class="licencias-aprobar">
+    <div class="approval-container">
+        <div class="approval-header">
+            <h3 class="approval-title">
+                <Icon Type="audit" />
+                Licencias Pendientes de Aprobación
+                @if (LicenciasVM_PendientesDeAprobacion.Any())
+                {
+                    <Badge Count="@LicenciasVM_PendientesDeAprobacion.Count"
+                           Style="background: var(--apr-gold-color); color: var(--apr-primary-color); font-weight: bold;" />
+                }
+            </h3>
+        </div>
+
+        <div class="approval-content">
+            @if (_loading)
+            {
+                <div class="loading-container">
+                    <Spin Size="SpinSize.Large" />
+                    <span>Cargando licencias pendientes...</span>
+                </div>
+            }
+            else if (!LicenciasVM_PendientesDeAprobacion.Any())
+            {
+                <div class="empty-state">
+                    <div class="empty-icon">✅</div>
+                    <div class="empty-title">¡Todo al día!</div>
+                    <div class="empty-description">
+                        No hay licencias pendientes de aprobación en este momento.
+                    </div>
+                </div>
+            }
+            else
+            {
+                <Table DataSource="LicenciasVM_PendientesDeAprobacion"
+                       Bordered
+                       Responsive
+                       Size="TableSize.Small"
+                       PageSize="5"
+                       HidePagination="@(LicenciasVM_PendientesDeAprobacion.Count > 5)"
+                       ScrollX="600px">
+
+                    <ColumnDefinitions Context="licencia">
+                        <PropertyColumn Title="👤 Bombero"
+                                        Property="c => c.ApellidoYNombre"
+                                        Width="200px"
+                                        Fixed="ColumnFixPlacement.Left">
+                            <Template>
+                                <div style="font-weight: 600; color: #333;">
+                                    @licencia.ApellidoYNombre
+                                </div>
+                                <div style="font-size: 0.8rem; color: #666;">
+                                    Legajo: @licencia.NumeroLegajo
+                                </div>
+                            </Template>
+                        </PropertyColumn>
+
+                        <PropertyColumn Title="📅 Desde"
+                                        Property="c => c.Desde"
+                                        Format="dd/MM/yyyy"
+                                        Width="100px">
+                            <Template>
+                                <Tag Color="TagColor.Processing" Style="font-size: 0.75rem;">
+                                    @licencia.Desde.ToString("dd/MM")
+                                </Tag>
+                            </Template>
+                        </PropertyColumn>
+
+                        <PropertyColumn Title="📅 Hasta"
+                                        Property="c => c.Hasta"
+                                        Format="dd/MM/yyyy"
+                                        Width="100px">
+                            <Template>
+                                <Tag Color="TagColor.Processing" Style="font-size: 0.75rem;">
+                                    @licencia.Hasta.ToString("dd/MM")
+                                </Tag>
+                            </Template>
+                        </PropertyColumn>
+
+                        <PropertyColumn Title="⏱️ Días"
+                                        Property="c => c.DuracionEnDias"
+                                        Width="80px">
+                            <Template>
+                                <div style="text-align: center; font-weight: 600; color: var(--apr-warning-color);">
+                                    @licencia.DuracionEnDias
+                                </div>
+                            </Template>
+                        </PropertyColumn>
+
+                        <PropertyColumn Title="🏷️ Tipo"
+                                        Property="@(c => c.TipoLicencia.GetDisplayName())"
+                                        Width="150px">
+                            <Template>
+                                <div style="font-size: 0.85rem; color: #333;">
+                                    @licencia.TipoLicencia?.GetDisplayName()
+                                </div>
+                            </Template>
+                        </PropertyColumn>
+
+                        <PropertyColumn Title="📊 Estado"
+                                        Property="c => c.EstadoLicencia"
+                                        Width="100px">
+                            <Template>
+                                <div class="status-badge">
+                                    <Icon Type="clock-circle" />
+                                    Pendiente
+                                </div>
+                            </Template>
+                        </PropertyColumn>
+
+                        <ActionColumn Title="⚙️ Acciones"
+                                      Fixed="ColumnFixPlacement.Right"
+                                      Width="120px">
+                            <Template>
+                                <div class="action-buttons">
+                                    <Tooltip Title="Aprobar licencia">
+                                        <Popconfirm Title="¿Confirma que desea aprobar esta licencia?"
+                                                    OnConfirm="() => AprobarLicencia(licencia.Id)"
+                                                    OkText="✅ Aprobar"
+                                                    CancelText="❌ Cancelar"
+                                                    Icon="@IconType.Outline.CheckCircle">
+                                            <div class="approve-button">
+                                                <Icon Type="check" />
+                                            </div>
+                                        </Popconfirm>
+                                    </Tooltip>
+
+                                    <Tooltip Title="Rechazar licencia">
+                                        <Popconfirm Title="¿Confirma que desea rechazar esta licencia?"
+                                                    OnConfirm="() => RechazarLicencia(licencia.Id)"
+                                                    OkText="❌ Rechazar"
+                                                    CancelText="↩️ Cancelar"
+                                                    Icon="@IconType.Outline.CloseCircle">
+                                            <div class="reject-button">
+                                                <Icon Type="close" />
+                                            </div>
+                                        </Popconfirm>
+                                    </Tooltip>
+                                </div>
+                            </Template>
+                        </ActionColumn>
+                    </ColumnDefinitions>
+                </Table>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired] public EventCallback OnCompleted { get; set; }
+
+    // Lista para almacenar las licencias pendientes de aprobación
+    private List<LicenciaViewModel> LicenciasVM_PendientesDeAprobacion = new();
+
+    // Lista para almacenar todas las licencias sin ningun tipo de filtro
+    private List<LicenciaViewModel> LicenciasVM_SinFiltro = new();
+
+    // Estado de carga
+    private bool _loading = false;
+
+    // Método que se ejecuta al inicializar el componente
+    protected override async Task OnInitializedAsync()
+    {
+        await Init();
+    }
+
+    // Carga inicial de datos
+    private async Task Init()
+    {
+        _loading = true;
+        StateHasChanged();
+
+        try
+        {
+            // Cargamos todas las licencias de la base de datos mediante el servicio
+            var licencias = await LicenciaService.ObtenerTodasLasLicencias();
+
+            // Mapeo de licencias a ViewModel
+            LicenciasVM_SinFiltro = LicenciasToViewModel(licencias).ToList();
+
+            // Filtramos las licencias que están pendientes de aprobación
+            LicenciasVM_PendientesDeAprobacion = CargarLicenciasPendientes(LicenciasVM_SinFiltro);
+        }
+        catch (Exception ex)
+        {
+            await message.ErrorAsync($"Error al cargar las licencias: {ex.Message}");
+        }
+        finally
+        {
+            _loading = false;
+            StateHasChanged();
+        }
+    }
+
+    // Mapea las licencias del modelo de datos al ViewModel
+    private List<LicenciaViewModel> LicenciasToViewModel(List<Licencia> licencias)
+    {
+        var licenciasVM = new List<LicenciaViewModel>();
+
+        foreach (var l in licencias)
+        {
+            var licVm = new LicenciaViewModel
+            {
+                Id = l.LicenciaId,
+                TipoLicencia = l.TipoLicencia,
+                NumeroLegajo = l.BomberoAfectado?.NumeroLegajo ?? 0,
+                PersonaId = l.PersonalId,
+                PersonalAfectado = l.BomberoAfectado?.ToBomberoViewModel(),
+                ApellidoYNombre = l.BomberoAfectado != null
+                    ? $"{l.BomberoAfectado.Apellido}, {l.BomberoAfectado.Nombre}"
+                    : string.Empty,
+                Descripcion = l.Descripcion,
+                Desde = l.Desde,
+                Hasta = l.Hasta,
+                EstadoLicencia = l.EstadoLicencia
+            };
+
+            licenciasVM.Add(licVm);
+        }
+
+        return licenciasVM;
+    }
+
+    // Filtra las licencias que están en estado pendiente
+    private List<LicenciaViewModel> CargarLicenciasPendientes(List<LicenciaViewModel> licencias)
+    {
+        return licencias
+            .Where(l => l.EstadoLicencia == TipoEstadoLicencia.Pendiente)
+            .OrderBy(l => l.Desde) // Ordenar por fecha de inicio
+            .ToList();
+    }
+
+    // Aprueba la licencia que esta en pendiente
+    private async Task AprobarLicencia(int IdLicencia)
+    {
+        try
+        {
+            // Llamamos al servicio para aprobar la licencia
+            await LicenciaService.CambiarEstadoLicencia(IdLicencia, TipoEstadoLicencia.Aprobada);
+
+            await Init();
+            await message.SuccessAsync("✅ ¡Licencia aprobada exitosamente!");
+            await OnCompleted.InvokeAsync(); // Notificamos que se completó la acción
+        }
+        catch (Exception ex)
+        {
+            await message.ErrorAsync($"❌ Error al aprobar la licencia: {ex.Message}");
+        }
+    }
+
+    // Rechaza la licencia que esta en pendiente
+    private async Task RechazarLicencia(int IdLicencia)
+    {
+        try
+        {
+            // Llamamos al servicio para rechazar la licencia
+            await LicenciaService.CambiarEstadoLicencia(IdLicencia, TipoEstadoLicencia.Rechazada);
+
+            await Init();
+            await message.WarningAsync("⚠️ Licencia rechazada.");
+            await OnCompleted.InvokeAsync(); // Notificamos que se completó la acción
+        }
+        catch (Exception ex)
+        {
+            await message.ErrorAsync($"❌ Error al rechazar la licencia: {ex.Message}");
+        }
+    }
+}
