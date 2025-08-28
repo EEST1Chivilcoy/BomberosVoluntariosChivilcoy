@@ -11,7 +11,7 @@ namespace Vista.Data.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            /*migrationBuilder.AddColumn<string>(
+            migrationBuilder.AddColumn<string>(
                 name: "CajaVelocidades",
                 table: "Vehiculo",
                 type: "varchar(255)",
@@ -78,7 +78,7 @@ namespace Vista.Data.Migrations
                 type: "varchar(255)",
                 maxLength: 255,
                 nullable: true)
-                .Annotation("MySql:CharSet", "utf8mb4");*/
+                .Annotation("MySql:CharSet", "utf8mb4");
         }
 
         /// <inheritdoc />
