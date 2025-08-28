@@ -84,7 +84,7 @@
                 }
                 else if (current == 1)
                 {
-                     <div class="form-grid-2-col-compact">
+                    <div class="form-grid-2-col-compact">
                             <FormItem Label="Nº del Móvil">
                                 <Input @bind-Value="vehiculoView.NumeroMovil" Placeholder="Número del móvil" />
                             </FormItem>
@@ -92,6 +92,7 @@
                         <FormItem Label="Estado del Vehículo">
                             <EnumSelect TEnum="TipoEstadoMovil" @bind-Value="vehiculoView.Estado" Placeholder="Seleccione estado" AllowClear />
                         </FormItem>
+
                         <FormItem Label="Bombero Encargado">
                             <Select TItem="BomberoViewModel"
                                     TItemValue="int"

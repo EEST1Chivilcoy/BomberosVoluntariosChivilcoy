@@ -1,126 +1,86 @@
+.ant-modal-content {
+    width: 1200px !important;
+    position: absolute; 
+    top: 1200%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    
+}
 
-	/* Estilos generales */
-	.container {
-		padding: 24px;
-		min-height: 100vh;
-	}
+.modal-body-content {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 20px;
+    padding: 20px;
+}
 
-	.page-title {
-		font-size: 24px;
-		font-weight: 600;
-		color: #1f1f1f;
-		margin-bottom: 24px;
-		display: flex;
-		align-items: center;
-	}
+.modal-left-panel {
+    flex: 0 0 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
 
-	.page-title-icon {
-		margin-right: 12px;
-		color: #c43a3a;
-	}
+.modal-right-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
 
-	.card {
-		background-color: white;
-		border-radius: 8px;
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-		padding: 24px;
-		margin-bottom: 24px;
-	}
+.form-grid-2-col,
+.form-grid-2-col-compact {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
 
-	.card-title {
-		font-size: 18px;
-		font-weight: 500;
-		color: #434343;
-		margin-bottom: 16px;
-		padding-bottom: 12px;
-		border-bottom: 1px solid #f0f0f0;
-	}
+.input-group label {
+    font-weight: 500;
+    color: #555;
+}
 
-	/* Estilos de la foto */
-	.profile-photo-container {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		padding: 16px;
-	}
+.full-width {
+    grid-column: 1 / -1;
+}
 
-	.photo-preview {
-		width: 150px;
-		height: 150px;
-		border-radius: 50%;
-		overflow: hidden;
-		margin-bottom: 16px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
+.switch-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
 
-	.upload-actions {
-		display: flex;
-		gap: 8px;
-	}
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 15px 20px;
+    border-top: 1px solid #e8e8e8;
+    gap: 8px;
+}
 
-	/* Estilo para las secciones del formulario */
-	.form-section {
-		margin-bottom: 24px;
-	}
+@media (max-width: 768px) {
+    .modal-body-container {
+        flex-direction: column;
+    }
 
-	/* Estilo para los botones de acción */
-	.action-buttons {
-		display: flex;
-		justify-content: flex-end;
-		gap: 12px;
-		margin-top: 24px;
-	}
+    .modal-left-panel,
+    .modal-right-panel {
+        flex: none;
+        width: 100%;
+    }
 
-	/* Estilo para los campos */
-	:deep(.ant-form-item) {
-		margin-bottom: 16px;
-	}
+    .form-grid-2-col,
+    .form-grid-2-col-compact {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+    }
 
-	:deep(.ant-form-item-label > label) {
-		color: #595959;
-		font-weight: 500;
-	}
+    .ant-modal-content {
+        width: 95% !important;
+    }
+}
 
-	:deep(.ant-input),
-	:deep(.ant-select:not(.ant-select-customize-input) .ant-select-selector),
-	:deep(.ant-picker),
-	:deep(.ant-input-number) {
-		border-radius: 4px;
-		border: 1px solid #d9d9d9;
-	}
-
-	:deep(.ant-input:hover),
-	:deep(.ant-select:not(.ant-select-customize-input) .ant-select-selector:hover),
-	:deep(.ant-picker:hover),
-	:deep(.ant-input-number:hover) {
-		border-color: #c43a3a;
-	}
-
-	:deep(.ant-input:focus),
-	:deep(.ant-select-focused:not(.ant-select-customize-input) .ant-select-selector),
-	:deep(.ant-picker-focused),
-	:deep(.ant-input-number-focused) {
-		border-color: #c43a3a;
-		box-shadow: 0 0 0 2px rgba(196, 58, 58, 0.2);
-	}
-
-	/* Ajuste visual para el switch */
-	:deep(.ant-switch-checked) {
-		background-color: #c43a3a;
-	}
-
-	/* Estilo para campos requeridos */
-	.required-field::after {
-		content: '*';
-		color: #c43a3a;
-		margin-left: 4px;
-	}
-
-	/* Estilo para el campo condicional de chofer */
-	.conditional-field {
-		margin-top: 12px;
-		padding-top: 12px;
-		border-top: 1px dashed #f0f0f0;
-	}
+.ant-form-item {
+    margin-bottom: 6px !important;
+}
