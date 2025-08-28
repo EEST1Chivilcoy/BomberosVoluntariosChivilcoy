@@ -1,12 +1,14 @@
-﻿@using Vista.Services
-@using System.Reflection
+﻿@using System.Reflection
 @using Vista.Data.Models.Personas.Personal
 @using Vista.Data.Models.Personas.Personal.Componentes
 @using Vista.Data.Models.Vehiculos.Flota
-@implements IDisposable
-@inject IVehiculoService VehiculoService
-@inject IDbContextFactory<BomberosDbContext> DbFactory
+
+@*Servicios utilizados*@
+
+@using Vista.Services
 @inject IMessageService message
+@inject IVehiculoSalidaService VehiculoSalidaService
+@inject IBomberoService BomberoService
 
 <link rel="stylesheet" href="css/EditarMovilEstilos.css">
 
@@ -244,7 +246,7 @@
     private async Task CargarMovil()
     {
 
-        vehiculo = await Context.Set<VehiculoSalida>().SingleOrDefaultAsync(v => v.VehiculoId == VehiculoId);
+        vehiculo = await VehiculoSalidaService.ObtenerVehiculoSalidaPorIdAsync(VehiculoId);
 
         if (vehiculo is not null)
         {
@@ -296,18 +298,26 @@
         {
             if (vehiculoView.NumeroMovil is not null)
             {
-                VehiculoSalida? comprobante = await Context.Set<VehiculoSalida>().SingleOrDefaultAsync(v => v.NumeroMovil == vehiculoView.NumeroMovil);
-                Bombero? EncargadoNew = await Context.Bomberos.SingleOrDefaultAsync(b => b.PersonaId == vehiculoView.EncargadoId);
+                VehiculoSalida? comprobante = await VehiculoSalidaService.ObtenerVehiculoSalidaPorNumeroMovilAsync(vehiculoView.NumeroMovil); // Verifica si ya existe un movil con ese numero
+                Bombero? EncargadoNew = await BomberoService.ObtenerBomberoPorIdAsync(vehiculoView.EncargadoId); // Verifica si existe el bombero encargado
 
-                if (comprobante != null && vehiculoView.NumeroMovil != vehiculo.NumeroMovil)
+                if (comprobante != null && vehiculoView.NumeroMovil != vehiculo.NumeroMovil) // Si encuentra un movil con ese numero y no es el mismo que se esta editando
                 {
-                    message.Error("Existe un vehiculo con el mismo Nº Móvil");
+                    await message.ErrorAsync("Existe un vehiculo con el mismo Nº Móvil");
                     return;
                 }
-                if (string.IsNullOrEmpty(imagenView.Base64))
+
+                if (string.IsNullOrEmpty(imagenView.Base64)) // Avisar si no se cargo una imagen
                 {
                     message.Warning("No se ingreso una foto del vehiculo");
                 }
+
+                if(EncargadoNew == null) // Avisar si no se encontro el bombero encargado
+                {
+                    await message.ErrorAsync("No se encontro el bombero encargado");
+                    return;
+                }
+
                 Embarcacion vehiculoNew = new Embarcacion()
                 {
                     VehiculoId = VehiculoId,
@@ -350,11 +360,11 @@
                     movil.TipoDireccion = movilView.TipoDireccion;
                     movil.MarcaBateria = movilView.MarcaBateria;
                     movil.FechaUltCambioBateria = movilView.FechaUltimoCambioBateria;
-                    await VehiculoService.EditarVehiculo(movil);
+                    await VehiculoSalidaService.EditarVehiculo(movil);
                 }
                 else
                 {
-                    await VehiculoService.EditarVehiculo(vehiculoNew);
+                    await VehiculoSalidaService.EditarVehiculo(vehiculoNew);
                 }
                 StateHasChanged();
                 await Init();
@@ -465,13 +475,8 @@
     {
         movilView = new();
         imagenView = new();
-        Context = DbFactory.CreateDbContext();
 
         await CargarMovil();
         await CargarBomberosView();
-    }
-    public void Dispose()
-    {
-        Context?.Dispose();
     }
 }
