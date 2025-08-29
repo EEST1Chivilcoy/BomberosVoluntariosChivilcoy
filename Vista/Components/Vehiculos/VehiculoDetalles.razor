@@ -6,125 +6,193 @@
 @using Vista.Data.Models.Vehiculos.Flota
 @using AntDesign;
 
+<link rel="stylesheet" href="css/DetallesVehiculosEstilos.css" />
+
 @if (vehiculo != null)
 {
-    <div style="padding: 16px;">
-        <!-- Header con imagen y número de móvil -->
-        <Card Style="margin-bottom: 24px; text-align: center;" Bordered="false">
+        <Card class="main-details-card" Bordered="true">
             <Body>
-                <div style="display: flex; flex-direction: column; align-items: center; gap: 16px;">
-                    <div style="display: flex; justify-content: center;">
-                        <Avatar Shape="AvatarShape.Square" 
-                                Size="@GetAvatarSize()" 
-                                Src="@CargarImage()" 
-                                Alt="Imagen de la Unidad"
-                                Style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" />
-                    </div>
-                    <Title Level="2" Style="margin: 0; color: #1890ff; text-align: center;">
+                <div class="header-content">
+                    <Avatar Shape="AvatarShape.Square"
+                            Size="@GetAvatarSize()"
+                            Src="@CargarImage()"
+                            Alt="Imagen de la Unidad"
+                            class="avatar-image" />
+                    <Title Level="2" class="titulo-unidad">
                         Unidad N° @vehiculoView.NumeroMovil
                     </Title>
+                    <Paragraph class="subtitulo">Detalles y datos técnicos del vehículo</Paragraph>
                 </div>
+
+                <h3 class="section-title">Detalles del Vehículo</h3>
+                <Row Gutter="(16, 16)">
+                    <AntDesign.Col Span="24" Lg="8" Md="12">
+                        <div class="detail-item-compact">
+                            <span class="detail-label">Marca:</span>
+                            <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.Marca) ? "—" : vehiculoView.Marca)</span>
+                        </div>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="24" Lg="8" Md="12">
+                        <div class="detail-item-compact">
+                            <span class="detail-label">Modelo:</span>
+                            <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.Modelo) ? "—" : vehiculoView.Modelo)</span>
+                        </div>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="24" Lg="8" Md="12">
+                        <div class="detail-item-compact">
+                            <span class="detail-label">Año:</span>
+                            <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.Año) ? "—" : vehiculoView.Año)</span>
+                        </div>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="24" Lg="8" Md="12">
+                        <div class="detail-item-compact">
+                            <span class="detail-label">Patente:</span>
+                            <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.Patente) ? "—" : vehiculoView.Patente)</span>
+                        </div>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="24" Lg="8" Md="12">
+                        <div class="detail-item-compact">
+                            <span class="detail-label">Tipo:</span>
+                            <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.Tipo) ? "—" : vehiculoView.Tipo)</span>
+                        </div>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="24" Lg="8" Md="12">
+                        <div class="detail-item-compact">
+                            <span class="detail-label">Combustible:</span>
+                            <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.Combustible) ? "—" : vehiculoView.Combustible)</span>
+                        </div>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="24" Lg="8" Md="12">
+                        <div class="detail-item-compact">
+                            <span class="detail-label">Encargado:</span>
+                            <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.Encargado) ? "—" : vehiculoView.Encargado)</span>
+                        </div>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="24" Lg="8" Md="12">
+                        <div class="detail-item-compact">
+                            <span class="detail-label">Estado:</span>
+                            <Tag Color="@GetEstadoColor()" class="estado-tag">@(string.IsNullOrEmpty(vehiculoView.Estado) ? "—" : vehiculoView.Estado)</Tag>
+                        </div>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="24" Lg="8" Md="12">
+                        <div class="detail-item-compact">
+                            <span class="detail-label">Fecha Último Service:</span>
+                            <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.FechaUltimoService) ? "—" : vehiculoView.FechaUltimoService)</span>
+                        </div>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="24" Lg="8" Md="12">
+                        <div class="detail-item-compact">
+                            <span class="detail-label">Fecha Próximo Service:</span>
+                            <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.FechaProximoService) ? "—" : vehiculoView.FechaProximoService)</span>
+                        </div>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="24">
+                        <div class="detail-item-compact">
+                            <span class="detail-label">Observaciones:</span>
+                            <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.Observaciones) ? "—" : vehiculoView.Observaciones)</span>
+                        </div>
+                    </AntDesign.Col>
+                </Row>
+
+                @if (vehiculo is Movil)
+                {
+                    <h3 class="section-title" style="margin-top: 24px;">Datos Técnicos</h3>
+                    <Row Gutter="(16, 16)">
+                        <AntDesign.Col Span="24" Lg="8" Md="12">
+                            <div class="detail-item-compact">
+                                <span class="detail-label">N° Motor:</span>
+                                <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.NumeroMotor) ? "—" : vehiculoView.NumeroMotor)</span>
+                            </div>
+                        </AntDesign.Col>
+                        <AntDesign.Col Span="24" Lg="8" Md="12">
+                            <div class="detail-item-compact">
+                                <span class="detail-label">N° Chasis:</span>
+                                <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.NumeroChasis) ? "—" : vehiculoView.NumeroChasis)</span>
+                            </div>
+                        </AntDesign.Col>
+                        <AntDesign.Col Span="24" Lg="8" Md="12">
+                            <div class="detail-item-compact">
+                                <span class="detail-label">Modelo Bomba:</span>
+                                <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.ModeloBomba) ? "—" : vehiculoView.ModeloBomba)</span>
+                            </div>
+                        </AntDesign.Col>
+                        <AntDesign.Col Span="24" Lg="8" Md="12">
+                            <div class="detail-item-compact">
+                                <span class="detail-label">Cantidad de Litros:</span>
+                                <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.CantidadLitros) ? "—" : vehiculoView.CantidadLitros + " L")</span>
+                            </div>
+                        </AntDesign.Col>
+                        <AntDesign.Col Span="24" Lg="8" Md="12">
+                            <div class="detail-item-compact">
+                                <span class="detail-label">Tipo de Aceite:</span>
+                                <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.TipoAceite) ? "—" : vehiculoView.TipoAceite)</span>
+                            </div>
+                        </AntDesign.Col>
+                        <AntDesign.Col Span="24" Lg="8" Md="12">
+                            <div class="detail-item-compact">
+                                <span class="detail-label">Marca de Aceite:</span>
+                                <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.MarcaAceite) ? "—" : vehiculoView.MarcaAceite)</span>
+                            </div>
+                        </AntDesign.Col>
+                        <AntDesign.Col Span="24" Lg="8" Md="12">
+                            <div class="detail-item-compact">
+                                <span class="detail-label">Cantidad de Aceite:</span>
+                                <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.CantidadAceite) ? "—" : vehiculoView.CantidadAceite + " L")</span>
+                            </div>
+                        </AntDesign.Col>
+                        <AntDesign.Col Span="24" Lg="8" Md="12">
+                            <div class="detail-item-compact">
+                                <span class="detail-label">Modelo Filtro Aire:</span>
+                                <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.ModeloFiltroAire) ? "—" : vehiculoView.ModeloFiltroAire)</span>
+                            </div>
+                        </AntDesign.Col>
+                        <AntDesign.Col Span="24" Lg="8" Md="12">
+                            <div class="detail-item-compact">
+                                <span class="detail-label">Medidas Cubiertas:</span>
+                                <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.MedidasCubiertas) ? "—" : vehiculoView.MedidasCubiertas)</span>
+                            </div>
+                        </AntDesign.Col>
+                        <AntDesign.Col Span="24" Lg="8" Md="12">
+                            <div class="detail-item-compact">
+                                <span class="detail-label">Libras Cubiertas:</span>
+                                <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.LibrasCubiertas) ? "—" : vehiculoView.LibrasCubiertas)</span>
+                            </div>
+                        </AntDesign.Col>
+                        <AntDesign.Col Span="24" Lg="8" Md="12">
+                            <div class="detail-item-compact">
+                                <span class="detail-label">Cajas de Velocidades:</span>
+                                <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.CajasVelocidades) ? "—" : vehiculoView.CajasVelocidades)</span>
+                            </div>
+                        </AntDesign.Col>
+                        <AntDesign.Col Span="24" Lg="8" Md="12">
+                            <div class="detail-item-compact">
+                                <span class="detail-label">Tensión C. Eléctrico:</span>
+                                <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.TensionCElectrico) ? "—" : vehiculoView.TensionCElectrico)</span>
+                            </div>
+                        </AntDesign.Col>
+                        <AntDesign.Col Span="24" Lg="8" Md="12">
+                            <div class="detail-item-compact">
+                                <span class="detail-label">Tipo Dirección:</span>
+                                <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.TipoDireccion) ? "—" : vehiculoView.TipoDireccion)</span>
+                            </div>
+                        </AntDesign.Col>
+                        <AntDesign.Col Span="24" Lg="8" Md="12">
+                            <div class="detail-item-compact">
+                                <span class="detail-label">Marca Batería:</span>
+                                <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.MarcaBateria) ? "—" : vehiculoView.MarcaBateria)</span>
+                            </div>
+                        </AntDesign.Col>
+                        <AntDesign.Col Span="24" Lg="8" Md="12">
+                            <div class="detail-item-compact">
+                                <span class="detail-label">Fecha Último Cambio Batería:</span>
+                                <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.FechaUltimoCambioBateria) ? "—" : vehiculoView.FechaUltimoCambioBateria)</span>
+                            </div>
+                        </AntDesign.Col>
+                    </Row>
+                }
             </Body>
         </Card>
-
-        <!-- Detalles básicos del vehículo -->
-        <Card Title="Detalles del Vehículo" Style="margin-bottom: 24px;" Bordered="true">
-            <Body>
-                <Descriptions Bordered Size="DescriptionsSize.Small" Column="@GetResponsiveColumns()">
-                    <DescriptionsItem Title="Marca">
-                        @(string.IsNullOrEmpty(vehiculoView.Marca) ? "No especificado" : vehiculoView.Marca)
-                    </DescriptionsItem>
-                    <DescriptionsItem Title="Modelo">
-                        @(string.IsNullOrEmpty(vehiculoView.Modelo) ? "No especificado" : vehiculoView.Modelo)
-                    </DescriptionsItem>
-                    <DescriptionsItem Title="Año">
-                        @(string.IsNullOrEmpty(vehiculoView.Año) ? "No especificado" : vehiculoView.Año)
-                    </DescriptionsItem>
-                    <DescriptionsItem Title="Patente">
-                        @(string.IsNullOrEmpty(vehiculoView.Patente) ? "No especificado" : vehiculoView.Patente)
-                    </DescriptionsItem>
-                    <DescriptionsItem Title="Tipo">
-                        @(string.IsNullOrEmpty(vehiculoView.Tipo) ? "No especificado" : vehiculoView.Tipo)
-                    </DescriptionsItem>
-                    <DescriptionsItem Title="Combustible">
-                        @(string.IsNullOrEmpty(vehiculoView.Combustible) ? "No especificado" : vehiculoView.Combustible)
-                    </DescriptionsItem>
-                    <DescriptionsItem Title="Encargado">
-                        @(string.IsNullOrEmpty(vehiculoView.Encargado) ? "Sin asignar" : vehiculoView.Encargado)
-                    </DescriptionsItem>
-                    <DescriptionsItem Title="Estado">
-                        <Tag Color="@GetEstadoColor()">@vehiculoView.Estado</Tag>
-                    </DescriptionsItem>
-                    <DescriptionsItem Title="Fecha Último Service">@vehiculoView.FechaUltimoService</DescriptionsItem>
-                    <DescriptionsItem Title="Fecha Próximo Service">@vehiculoView.FechaProximoService</DescriptionsItem>
-                    <DescriptionsItem Title="Observaciones" Span="@GetObservacionesSpan()">
-                        @if (!string.IsNullOrEmpty(vehiculoView.Observaciones))
-                        {
-                            <Paragraph Style="margin: 0; word-break: break-word;">@vehiculoView.Observaciones</Paragraph>
-                        }
-                        else
-                        {
-                            <span style="color: #8c8c8c; font-style: italic;">Sin observaciones</span>
-                        }
-                    </DescriptionsItem>
-                </Descriptions>
-            </Body>
-        </Card>
-
-        <!-- Datos técnicos (solo para móviles) -->
-        @if (vehiculo is Movil)
-        {
-            <Card Title="Datos Técnicos" Bordered="true">
-                <Body>
-                    <Descriptions Bordered Size="DescriptionsSize.Small" Column="@GetResponsiveColumns()">
-                        <DescriptionsItem Title="N° Motor">
-                            @(string.IsNullOrEmpty(vehiculoView.NumeroMotor) ? "No especificado" : vehiculoView.NumeroMotor)
-                        </DescriptionsItem>
-                        <DescriptionsItem Title="N° Chasis">
-                            @(string.IsNullOrEmpty(vehiculoView.NumeroChasis) ? "No especificado" : vehiculoView.NumeroChasis)
-                        </DescriptionsItem>
-                        <DescriptionsItem Title="Modelo Bomba">
-                            @(string.IsNullOrEmpty(vehiculoView.ModeloBomba) ? "No especificado" : vehiculoView.ModeloBomba)
-                        </DescriptionsItem>
-                        <DescriptionsItem Title="Cantidad de Litros">
-                            @(string.IsNullOrEmpty(vehiculoView.CantidadLitros) ? "No especificado" : vehiculoView.CantidadLitros + " L")
-                        </DescriptionsItem>
-                        <DescriptionsItem Title="Tipo de Aceite">
-                            @(string.IsNullOrEmpty(vehiculoView.TipoAceite) ? "No especificado" : vehiculoView.TipoAceite)
-                        </DescriptionsItem>
-                        <DescriptionsItem Title="Marca de Aceite">
-                            @(string.IsNullOrEmpty(vehiculoView.MarcaAceite) ? "No especificado" : vehiculoView.MarcaAceite)
-                        </DescriptionsItem>
-                        <DescriptionsItem Title="Cantidad de Aceite">
-                            @(string.IsNullOrEmpty(vehiculoView.CantidadAceite) ? "No especificado" : vehiculoView.CantidadAceite + " L")
-                        </DescriptionsItem>
-                        <DescriptionsItem Title="Modelo Filtro Aire">
-                            @(string.IsNullOrEmpty(vehiculoView.ModeloFiltroAire) ? "No especificado" : vehiculoView.ModeloFiltroAire)
-                        </DescriptionsItem>
-                        <DescriptionsItem Title="Medidas Cubiertas">
-                            @(string.IsNullOrEmpty(vehiculoView.MedidasCubiertas) ? "No especificado" : vehiculoView.MedidasCubiertas)
-                        </DescriptionsItem>
-                        <DescriptionsItem Title="Libras Cubiertas">
-                            @(string.IsNullOrEmpty(vehiculoView.LibrasCubiertas) ? "No especificado" : vehiculoView.LibrasCubiertas)
-                        </DescriptionsItem>
-                        <DescriptionsItem Title="Cajas de Velocidades">
-                            @(string.IsNullOrEmpty(vehiculoView.CajasVelocidades) ? "No especificado" : vehiculoView.CajasVelocidades)
-                        </DescriptionsItem>
-                        <DescriptionsItem Title="Tensión C. Eléctrico">
-                            @(string.IsNullOrEmpty(vehiculoView.TensionCElectrico) ? "No especificado" : vehiculoView.TensionCElectrico + " V")
-                        </DescriptionsItem>
-                        <DescriptionsItem Title="Tipo Dirección">
-                            @(string.IsNullOrEmpty(vehiculoView.TipoDireccion) ? "No especificado" : vehiculoView.TipoDireccion)
-                        </DescriptionsItem>
-                        <DescriptionsItem Title="Marca Batería">
-                            @(string.IsNullOrEmpty(vehiculoView.MarcaBateria) ? "No especificado" : vehiculoView.MarcaBateria)
-                        </DescriptionsItem>
-                        <DescriptionsItem Title="Fecha Último Cambio Batería">@vehiculoView.FechaUltimoCambioBateria</DescriptionsItem>
-                    </Descriptions>
-                </Body>
-            </Card>
-        }
-    </div>
+    
 }
 else
 {
