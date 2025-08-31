@@ -12,7 +12,7 @@ namespace Vista.Services
         Task<List<VehiculoSalida>> ObtenerTodosLosVehiculosSalidasAsync();
         Task<VehiculoSalida?> ObtenerVehiculoSalidaPorNumeroMovilAsync(string numeromovil);
         Task<List<VehiculoSalida>> ObtenerVehiculosSalidasPorEstadoAsync(TipoEstadoMovil estado);
-        Task<VehiculoSalida?> ObtenerVehiculoSalidaPorIdAsync(int id);
+        Task<VehiculoSalida?> ObtenerVehiculoSalidaPorIdAsync(int id, bool asnotracking = true);
         Task<VehiculoSalida?> ObtenerVehiculoSalidaSinRelacionesPorIdAsync(int id);
         Task CambiarEstadoAsync(int id, TipoEstadoMovil estado);
         Task<VehiculoSalida> AgregarVehiculoSalidaAsync(VehiculoSalida vehiculo, Imagen? imagen = null);
@@ -47,20 +47,30 @@ namespace Vista.Services
                 .ToListAsync();
         }
 
-        public async Task<VehiculoSalida?> ObtenerVehiculoSalidaPorIdAsync(int id)
+        public async Task<VehiculoSalida?> ObtenerVehiculoSalidaPorIdAsync(int id, bool asnotracking = true)
         {
-            return await _context.VehiculoSalidas
+            if (asnotracking)
+            {
+                return await _context.VehiculoSalidas
+                    .Include(v => v.Encargado)
+                    .Include(v => v.Imagen)
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(v => v.VehiculoId == id);
+            }
+            else
+            {
+                return await _context.VehiculoSalidas
                 .Include(v => v.Encargado)
                 .Include(v => v.Imagen)
-                .AsNoTracking()
                 .FirstOrDefaultAsync(v => v.VehiculoId == id);
+            }
         }
 
         public async Task<VehiculoSalida?> ObtenerVehiculoSalidaSinRelacionesPorIdAsync(int id)
         {
             return await _context.VehiculoSalidas
                 .FirstOrDefaultAsync(v => v.VehiculoId == id);
-        }   
+        }
 
         public async Task<VehiculoSalida?> ObtenerVehiculoSalidaPorNumeroMovilAsync(string numeromovil)
         {
@@ -73,7 +83,7 @@ namespace Vista.Services
 
         public async Task CambiarEstadoAsync(int id, TipoEstadoMovil estado)
         {
-            VehiculoSalida? vehiculo = await ObtenerVehiculoSalidaPorIdAsync(id);
+            VehiculoSalida? vehiculo = await ObtenerVehiculoSalidaPorIdAsync(id, false);
 
             if (vehiculo != null)
             {
