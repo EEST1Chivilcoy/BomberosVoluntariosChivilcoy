@@ -1,7 +1,9 @@
 ﻿@using System.Reflection
 @using Vista.Data.Models.Personas.Personal
 @using Vista.Data.Models.Personas.Personal.Componentes
+@using Vista.Data.Models.Imagenes
 @using Vista.Data.Models.Vehiculos.Flota
+@using Vista.Data.Mappers
 
 @*Servicios utilizados*@
 
@@ -17,6 +19,7 @@
     <div class="modal-left-panel">
         <Card Style="border: 1px solid #d9d9d9; border-radius: 20px;">
             <div style="text-align: center;">
+
                 @if (!string.IsNullOrEmpty(imagenView.Base64))
                 {
                     <img src="data:@imagenView.TipoImagen;base64,@imagenView.Base64" alt="Foto del vehículo" style="width: 100%; max-height: 150px; object-fit: contain;" />
@@ -28,12 +31,15 @@
                         <span>Ninguna foto seleccionada</span>
                     </div>
                 }
+
             </div>
             <div style="font-weight: 500; margin-top: 10px; text-align: center;">
+
                 @if (!string.IsNullOrEmpty(vehiculoView.NumeroMovil))
                 {
                     <span>Nº Unidad @vehiculoView.NumeroMovil</span>
                 }
+
             </div>
         </Card>
         <div style="text-align: center; margin-top: 10px;">
@@ -96,13 +102,13 @@
                         </FormItem>
 
                         <FormItem Label="Bombero Encargado">
-                            <Select TItem="BomberoViewModel"
+                            <Select TItem="BomberoViweModel"
                                     TItemValue="int"
                                     DataSource="@ListaBomberos"
                                     Placeholder="Seleccione Bombero Encargado"
                                     @bind-Value="@vehiculoView.EncargadoId"
-                                    LabelName="@nameof(BomberoViewModel.NombreYApellido)"
-                                    ValueName="@nameof(BomberoViewModel.PersonaId)">
+                                    LabelName="@nameof(BomberoViweModel.NombreYApellido)"
+                                    ValueName="@nameof(BomberoViweModel.Id)">
                             </Select>
                         </FormItem>
                         <div class="full-width">
@@ -184,15 +190,16 @@
 @code {
     [Parameter] public int VehiculoId { get; set; }
     [Parameter] public EventCallback OnClose { get; set; }
-    BomberosDbContext? Context { get; set; }
-    public VehiculoSalida vehiculo { get; set; }
+
+    public VehiculoSalida? vehiculo { get; set; }
     public VehiculoViewModel vehiculoView { get; set; } = new();
     public MovilViewModel movilView { get; set; } = new();
     public ImagenViewModel imagenView { get; set; } = new();
-    public List<BomberoViewModel> ListaBomberos = new();
+    public List<BomberoViweModel> ListaBomberos = new();
     bool EsEmbarcacion = false;
 
     // View Models
+
     public class VehiculoViewModel
     {
         public string? Marca { get; set; }
@@ -209,6 +216,7 @@
         public DateTime? FechaProximoService { get; set; }
         public string? Observaciones { get; set; }
     }
+
     public class MovilViewModel
     {
         public string? NumeroMotor { get; set; }
@@ -227,18 +235,12 @@
         public string? MarcaBateria { get; set; }
         public DateTime? FechaUltimoCambioBateria { get; set; }
     }
+
     public class ImagenViewModel
     {
         public string? Base64 { get; set; }
         public string? TipoImagen { get; set; }
         public string? Nombre { get; set; }
-    }
-    public class BomberoViewModel
-    {
-        public string? Nombre { get; set; }
-        public string? Apellido { get; set; }
-        public string NombreYApellido { get { return Nombre + " " + Apellido; } }
-        public int PersonaId { get; set; }
     }
 
     // Carga de datos
@@ -246,7 +248,7 @@
     private async Task CargarMovil()
     {
 
-        vehiculo = await VehiculoSalidaService.ObtenerVehiculoSalidaPorIdAsync(VehiculoId);
+        vehiculo = await VehiculoSalidaService.ObtenerVehiculoSalidaPorIdAsync(VehiculoId, false);
 
         if (vehiculo is not null)
         {
@@ -260,6 +262,7 @@
             vehiculoView.FechaProximoService = vehiculo.FechaProximoService;
             vehiculoView.NumeroMovil = vehiculo.NumeroMovil;
             vehiculoView.Observaciones = vehiculo.Observaciones;
+
             if (vehiculo is Movil)
             {
                 EsEmbarcacion = false;
@@ -280,14 +283,18 @@
                 movilView.MarcaBateria = movil.MarcaBateria;
                 movilView.FechaUltimoCambioBateria = movil.FechaUltCambioBateria;
             }
+
             vehiculoView.Estado = vehiculo.Estado;
-            if (!string.IsNullOrEmpty(imagenView.Base64))
+
+            if (vehiculo.Imagen != null)
             {
                 imagenView.Nombre = vehiculo.Imagen.NombreImagen;
                 imagenView.TipoImagen = vehiculo.Imagen.TipoImagen;
                 imagenView.Base64 = vehiculo.Imagen.Base64Imagen;
             }
+
             vehiculoView.NombreYApellido = vehiculo.Encargado != null ? vehiculo.Encargado.Nombre + " " + vehiculo.Encargado.Apellido : "";
+
             StateHasChanged();
         }
     }
@@ -318,6 +325,13 @@
                     return;
                 }
 
+                Imagen_VehiculoSalida? imagen = string.IsNullOrEmpty(imagenView.Base64) ? null : new()
+                    {
+                        NombreImagen = imagenView.Nombre,
+                        TipoImagen = imagenView.TipoImagen,
+                        Base64Imagen = imagenView.Base64
+                    };
+
                 Embarcacion vehiculoNew = new Embarcacion()
                 {
                     VehiculoId = VehiculoId,
@@ -331,16 +345,11 @@
                     FechaProximoService = vehiculoView.FechaProximoService,
                     Observaciones = vehiculoView.Observaciones,
                     Encargado = EncargadoNew != null ? EncargadoNew : vehiculo.Encargado,
-                    Imagen = string.IsNullOrEmpty(imagenView.Base64) ? null : new()
-                    {
-                        NombreImagen = imagenView.Nombre,
-                        TipoImagen = imagenView.TipoImagen,
-                        Base64Imagen = imagenView.Base64
-                    },
                     NumeroMovil = vehiculoView.NumeroMovil,
                     Estado = vehiculoView.Estado,
                     Discriminador = Data.Enums.Discriminadores.TipoVehiculo.Embarcacion,
                 };
+
                 if (EsEmbarcacion == false)
                 {
                     Movil movil = Convertir<Movil>(vehiculoNew);
@@ -360,11 +369,11 @@
                     movil.TipoDireccion = movilView.TipoDireccion;
                     movil.MarcaBateria = movilView.MarcaBateria;
                     movil.FechaUltCambioBateria = movilView.FechaUltimoCambioBateria;
-                    await VehiculoSalidaService.EditarVehiculo(movil);
+                    await VehiculoSalidaService.EditarVehiculo(movil, imagen);
                 }
                 else
                 {
-                    await VehiculoSalidaService.EditarVehiculo(vehiculoNew);
+                    await VehiculoSalidaService.EditarVehiculo(vehiculoNew, imagen);
                 }
                 StateHasChanged();
                 await Init();
@@ -407,21 +416,6 @@
         StateHasChanged();
     }
 
-    private async Task CargarBomberosView()
-    {
-        ListaBomberos = new();
-        var bomberos = await Context.Bomberos.ToListAsync();
-
-        foreach (Bombero b in bomberos)
-        {
-            BomberoViewModel Bvm = new()
-            {
-                Apellido = b.Apellido,
-                Nombre = b.Nombre
-            };
-            ListaBomberos.Add(Bvm);
-        }
-    }
     public class StepItem
     {
         public string Title { get; set; }
@@ -477,6 +471,13 @@
         imagenView = new();
 
         await CargarMovil();
-        await CargarBomberosView();
+        await CargarBomberos();
+    }
+
+    private async Task CargarBomberos()
+    {
+        var BomberosObjectList = await BomberoService.ObtenerTodosLosBomberosAsync();
+
+        ListaBomberos = BomberosObjectList.ToBomberoViewModelList().ToList();
     }
 }

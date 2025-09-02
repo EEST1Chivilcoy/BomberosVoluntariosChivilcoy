@@ -53,9 +53,7 @@
 @if (EditarVisible)
 {
     <Modal Footer="null" Title="Editar" OnCancel="() => EditarVisible = false" Visible="@EditarVisible">
-        @*
-            @<VehiculoEditar VehiculoId="@VehiculoId" OnClose="HandleCancelEditar" />
-        *@
+        <VehiculoEditar VehiculoId="@Vehiculo.Id" OnClose="HandleCancelEditar" />
     </Modal>
 }
 

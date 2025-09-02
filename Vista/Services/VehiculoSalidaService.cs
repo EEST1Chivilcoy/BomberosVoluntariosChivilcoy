@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Vista.Data.Models.Imagenes;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using DocumentFormat.OpenXml.Office2016.Drawing.Command;
+using Microsoft.EntityFrameworkCore;
 using Vista.Data;
 using Vista.Data.Enums;
+using Vista.Data.Models.Imagenes;
 using Vista.Data.Models.Vehiculos.Flota;
 
 namespace Vista.Services
@@ -16,6 +18,7 @@ namespace Vista.Services
         Task<VehiculoSalida?> ObtenerVehiculoSalidaSinRelacionesPorIdAsync(int id);
         Task CambiarEstadoAsync(int id, TipoEstadoMovil estado);
         Task<VehiculoSalida> AgregarVehiculoSalidaAsync(VehiculoSalida vehiculo, Imagen? imagen = null);
+        Task<bool> EditarVehiculo(VehiculoSalida vehiculo, Imagen? imagen = null);
     }
 
     public class VehiculoSalidaService : IVehiculoSalidaService
@@ -132,6 +135,119 @@ namespace Vista.Services
             }
 
             return vehiculo;
+        }
+
+        public async Task<bool> EditarVehiculo(VehiculoSalida vehiculo, Imagen? imagen = null)
+        {
+            if (vehiculo is null) return false;
+
+            var existente = await ObtenerVehiculoSalidaPorIdAsync(vehiculo.VehiculoId, false)
+                ?? throw new KeyNotFoundException($"Vehículo con ID {vehiculo.VehiculoId} no encontrado.");
+
+            bool cambioDeTipo = (existente is Movil && vehiculo is Embarcacion) || (existente is Embarcacion && vehiculo is Movil);
+
+            if (cambioDeTipo)
+            {
+                await ReemplazarVehiculoPorTipoNuevoAsync(existente, vehiculo, imagen);
+            }
+            else
+            {
+                ActualizarPropiedadesEscalares(existente, vehiculo);
+                await SetEncargadoAsync(existente, vehiculo);
+                await ProcesarImagenAsync(existente, vehiculo.Imagen);
+                await _context.SaveChangesAsync();
+            }
+
+            return true;
+        }
+
+        private async Task SetEncargadoAsync(VehiculoSalida destino, VehiculoSalida origen)
+        {
+            var id = origen.Encargado?.PersonaId ?? origen.EncargadoId;
+            if (id.HasValue)
+            {
+                var enc = await _bomberosService.ObtenerBomberoPorIdAsync(id.Value);
+                destino.Encargado = enc;
+                destino.EncargadoId = enc?.PersonaId;
+            }
+        }
+
+        private void ActualizarPropiedadesEscalares(VehiculoSalida destino, VehiculoSalida origen)
+        {
+            var ignoradas = new[] { nameof(VehiculoSalida.Encargado), nameof(VehiculoSalida.EncargadoId), nameof(VehiculoSalida.Imagen), nameof(VehiculoSalida.ImagenId) };
+            foreach (var prop in origen.GetType().GetProperties().Where(p => !ignoradas.Contains(p.Name)))
+            {
+                var destinoProp = destino.GetType().GetProperty(prop.Name);
+                if (destinoProp?.CanWrite == true)
+                {
+                    var valor = prop.GetValue(origen);
+                    if (valor is not null) destinoProp.SetValue(destino, valor);
+                }
+            }
+        }
+
+        private async Task ProcesarImagenAsync(VehiculoSalida vehiculo, Imagen? imagen)
+        {
+            if (imagen is Imagen_VehiculoSalida imgVehiculo)
+            {
+                imgVehiculo.VehiculoId = vehiculo.VehiculoId;
+
+                if (vehiculo.ImagenId.HasValue)
+                {
+                    imgVehiculo.ImagenId = vehiculo.ImagenId.Value;
+                    await _imagenService.EditarImagenAsync(imgVehiculo);
+                }
+                else
+                {
+                    await _imagenService.GuardarImagenAsync(imgVehiculo);
+                    vehiculo.ImagenId = imgVehiculo.ImagenId;
+                }
+            }
+        }
+
+        private async Task ReemplazarVehiculoPorTipoNuevoAsync(VehiculoSalida existente, VehiculoSalida nuevo, Imagen? imagen)
+        {
+            int? imagenIdExistente = existente.ImagenId;
+
+            _context.Set<VehiculoSalida>().Remove(existente);
+            await _context.SaveChangesAsync();
+
+            await SetEncargadoAsync(nuevo, nuevo);
+
+            if (imagen is null && imagenIdExistente.HasValue)
+            {
+                var img = await _context.ImagenesVehiculo.FirstOrDefaultAsync(i => i.ImagenId == imagenIdExistente.Value);
+                if (img is not null)
+                {
+                    nuevo.Imagen = img;
+                    nuevo.ImagenId = img.ImagenId;
+                }
+            }
+
+            switch (nuevo)
+            {
+                case Movil m: _context.Moviles.Add(m); break;
+                case Embarcacion e: _context.Embarcacion.Add(e); break;
+                default: throw new InvalidOperationException("Tipo de vehículo no soportado.");
+            }
+
+            await _context.SaveChangesAsync();
+
+            if (imagen is not null)
+            {
+                if (imagenIdExistente.HasValue)
+                {
+                    imagen.ImagenId = imagenIdExistente.Value;
+                    await _imagenService.EditarImagenAsync(imagen);
+                    nuevo.ImagenId = imagen.ImagenId;
+                }
+                else
+                {
+                    await ProcesarImagenAsync(nuevo, imagen);
+                }
+
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }
