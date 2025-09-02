@@ -7,76 +7,84 @@
 @*Servicios utilizados*@
 @inject IMessageService MessageService
 
-<Form Model="Model">
-    @*Sección Solicitante*@
-    <div style="margin-bottom: 24px;">
-        <div style="border-bottom: 2px solid #52c41a; padding-bottom: 8px; margin-bottom: 16px;">
-            <h4 style="color: #52c41a; margin: 0; font-weight: 600;">Datos del Solicitante</h4>
+<style>
+    
+   .participantes {
+        border: 2px solid #52c41a;
+    background: #f6ffed;
+    box-shadow: 0 2px 8px rgba(82,196,26,0.08);
+    border-radius: 10px;
+    margin-bottom: 2rem;
+    padding: 2rem 1.5rem;
+    }
+
+</style>
+
+<div class="participantes">
+    <Form Model="Model">
+        @*Sección Solicitante*@
+        <div style="margin-bottom: 24px;">
+            <div style="border-bottom: 2px solid #52c41a; padding-bottom: 8px; margin-bottom: 16px;">
+                <h4 style="color: #52c41a; margin: 0; font-weight: 600;">Datos del Solicitante</h4>
+            </div>
+
+            <Row Gutter="16">
+                <Col Span="12">
+                    <FormItem Label="Nombre" Required>
+                        <Input @bind-Value="@Model.NombreSolicitante"
+                               Placeholder="Ingrese el nombre" />
+                    </FormItem>
+                </Col>
+                <AntDesign.Col Span="12">
+                    <FormItem Label="Apellido" Required>
+                        <Input @bind-Value="@Model.ApellidoSolicitante"
+                               Placeholder="Ingrese el apellido" />
+                    </FormItem>
+                </AntDesign.Col>
+            </Row>
+
+            <Row Gutter="16">
+                <Col Span="12">
+                    <FormItem Label="Documento">
+                        <Input @bind-Value="@Model.DniSolicitante"
+                               Placeholder="Número de documento" />
+                    </FormItem>
+                </Col>
+                <Col Span="12">
+                    <FormItem Label="Teléfono" Required>
+                        <Input @bind-Value="@Model.TelefonoSolicitante"
+                               Placeholder="Número de teléfono" />
+                    </FormItem>
+                </Col>
+            </Row>
         </div>
 
-        <Row Gutter="16">
-            <Col Span="12">
-                <FormItem Label="Nombre" Required>
-                    <Input @bind-Value="@Model.NombreSolicitante"
-                           Disabled="@(!isUnlocked)"
-                           Placeholder="Ingrese el nombre" />
-                </FormItem>
-            </Col>
-            <AntDesign.Col Span="12">
-                <FormItem Label="Apellido" Required>
-                    <Input @bind-Value="@Model.ApellidoSolicitante"
-                           Disabled="@(!isUnlocked)"
-                           Placeholder="Ingrese el apellido" />
-                </FormItem>
-            </AntDesign.Col>
-        </Row>
+        @*Sección Receptor*@
+        <div style="margin-bottom: 24px;">
+            <div style="border-bottom: 2px solid #52c41a; padding-bottom: 8px; margin-bottom: 16px;">
+                <h4 style="color: #52c41a; margin: 0; font-weight: 600;">Datos del Receptor</h4>
+            </div>
 
-        <Row Gutter="16">
-            <Col Span="12">
-                <FormItem Label="Documento">
-                    <Input @bind-Value="@Model.DniSolicitante"
-                           Disabled="@(!isUnlocked)"
-                           Placeholder="Número de documento" />
-                </FormItem>
-            </Col>
-            <Col Span="12">
-                <FormItem Label="Teléfono" Required>
-                    <Input @bind-Value="@Model.TelefonoSolicitante"
-                           Disabled="@(!isUnlocked)"
-                           Placeholder="Número de teléfono" />
-                </FormItem>
-            </Col>
-        </Row>
-    </div>
-
-    @*Sección Receptor*@
-    <div style="margin-bottom: 24px;">
-        <div style="border-bottom: 2px solid #52c41a; padding-bottom: 8px; margin-bottom: 16px;">
-            <h4 style="color: #52c41a; margin: 0; font-weight: 600;">Datos del Receptor</h4>
+            <Row Gutter="16">
+                <Col Span="12">
+                    <FormItem Label="Nombre" Required>
+                        <Input @bind-Value="@Model.NombreReceptor"
+                               Placeholder="Ingrese el nombre" />
+                    </FormItem>
+                </Col>
+                <Col Span="12">
+                    <FormItem Label="Apellido" Required>
+                        <Input @bind-Value="@Model.ApellidoReceptor"
+                               Placeholder="Ingrese el apellido" />
+                    </FormItem>
+                </Col>
+            </Row>
         </div>
-
-        <Row Gutter="16">
-            <Col Span="12">
-                <FormItem Label="Nombre" Required>
-                    <Input @bind-Value="@Model.NombreReceptor"
-                           Disabled="@(!isUnlocked)"
-                           Placeholder="Ingrese el nombre" />
-                </FormItem>
-            </Col>
-            <Col Span="12">
-                <FormItem Label="Apellido" Required>
-                    <Input @bind-Value="@Model.ApellidoReceptor"
-                           Disabled="@(!isUnlocked)"
-                           Placeholder="Ingrese el apellido" />
-                </FormItem>
-            </Col>
-        </Row>
-    </div>
-</Form>
+    </Form>
+</div>
 
 @code {
     [Parameter, EditorRequired] public SalidasViewModels Model { get; set; } = null!;
-    [Parameter, EditorRequired] public bool isUnlocked { get; set; } = false;
     [Parameter, EditorRequired] public EventCallback<bool> OnCompleted { get; set; } // Evento para notificar que se ha completado el formulario
 
     // Variable del Formulario utilizada para la validación

@@ -25,180 +25,186 @@
             height: auto;
         }
     }
+
+      .datos-generales {
+        border: 2px solid #40a9ff;
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 4px 16px rgba(24,144,255,0.08);
+        padding: 2.5rem 2rem 2rem 2rem;
+        margin-bottom: 2rem;
+        transition: box-shadow 0.2s;
+    }
+    .datos-generales .section-title {
+        color: #1890ff;
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+    }
 </style>
 
-<Form Model="Model" OnFieldChanged="@ValidateForm">
+<div class="datos-generales">
+    <Form Model="Model" OnFieldChanged="@ValidateForm">
 
-    @* 🕒 Información Temporal *@
-    <div style="margin-bottom: 24px;">
-        <div style="border-bottom: 2px solid #1890ff; padding-bottom: 8px; margin-bottom: 16px;">
-            <h4 style="color: #1890ff; margin: 0; font-weight: 600;">🕒 Información Temporal</h4>
-        </div>
-        @if (Model.TimeLlegada < Model.TimeSalida)
-        {
-            <FormItem Label="Fechas" Required>
-                <RangePicker TValue="DateTime[]" Disabled="new bool[] { false, true }"
-                             @bind-Value="@FechaRange" />
-            </FormItem>
-        }
-        else
-        {
-            <FormItem Label="Fecha" Required>
-                <DatePicker TValue="DateTime" Picker="@DatePickerType.Date" @bind-Value="@Model.FechaSalida" />
-            </FormItem>
-        }
-
-        <Row Gutter="16">
-            <AntDesign.Col Span="12">
-                <FormItem Label="Hora Salida" Required>
-                    <TimePicker @bind-Value="@Model.TimeSalida" Format="HH:mm" />
-                </FormItem>
-            </AntDesign.Col>
-            <AntDesign.Col Span="12">
-                <FormItem Label="Hora Llegada" Required>
-                    <TimePicker @bind-Value="@Model.TimeLlegada" Format="HH:mm" />
-                </FormItem>
-            </AntDesign.Col>
-        </Row>
-    </div>
-
-    @* 📍 Ubicación *@
-    <div style="margin-bottom: 24px;">
-        <div style="border-bottom: 2px solid #1890ff; padding-bottom: 8px; margin-bottom: 16px;">
-            <h4 style="color: #1890ff; margin: 0; font-weight: 600;">📍 Ubicación</h4>
-        </div>
-        <FormItem Label="Tipo Zona" Required>
-            <EnumSelect TEnum="TipoZona" @bind-Value="@Model.TipoZona" />
-        </FormItem>
-
-        <FormItem Label="Región Cuartel" Required>
-            <EnumSelect TEnum="CuartelRegionChivilcoy" @bind-Value="@Model.CuartelRegion" DefaultActiveFirstOption="false" />
-        </FormItem>
-
-        @if (Model.TipoZona == TipoZona.Urbana)
-        {
-            <FormItem Label="Dirección" Required>
-                @if (isApiAvailable)
-                {
-                    <Select TItem="Direccion"
-                            TItemValue="Direccion"
-                            DataSource="@direcciones"
-                            @bind-Value="@Model.Direccion"
-                            Placeholder="Seleccione una calle"
-                            LabelName="@nameof(Direccion.NombreYAltura)"
-                            OnSearch="OnSearch"
-                            SearchDebounceMilliseconds="350"
-                            EnableSearch
-                            Loading="@_loading"
-                            OnSelectedItemChanged="OnStreetSelected">
-                    </Select>
-                }
-                else
-                {
-                    <Input @bind-Value="@Model.CalleORuta" Placeholder="Ingrese dirección" />
-                }
-            </FormItem>
-
-            <Row Gutter="16">
-                <AntDesign.Col Span="12">
-                    <FormItem Label="Latitud">
-                        <Input @bind-Value="@Model.Latitud" Disabled="@isApiAvailable" />
-                    </FormItem>
-                </AntDesign.Col>
-                <AntDesign.Col Span="12">
-                    <FormItem Label="Longitud">
-                        <Input @bind-Value="@Model.Longitud" Disabled="@isApiAvailable" />
-                    </FormItem>
-                </AntDesign.Col>
-            </Row>
-        }
-        else
-        {
-            <Row Gutter="16">
-                <AntDesign.Col Span="12">
-                    <FormItem Label="Latitud" Required>
-                        <Input @bind-Value="@Model.Latitud" Placeholder="Coordenada latitud" />
-                    </FormItem>
-                </AntDesign.Col>
-                <AntDesign.Col Span="12">
-                    <FormItem Label="Longitud" Required>
-                        <Input @bind-Value="@Model.Longitud" Placeholder="Coordenada longitud" />
-                    </FormItem>
-                </AntDesign.Col>
-            </Row>
-        }
-
-        @if (Model.Latitud != 0.0 && Model.Longitud != 0.0)
-        {
-            <div class="map-container">
-                <iframe width="300"
-                        height="300"
-                        style="border:0;"
-                        src="@GetOpenStreetMapUrl(Model.Latitud, Model.Longitud)"
-                        frameborder="0" allowfullscreen></iframe>
-            </div>
-        }
-    </div>
-
-    @* 🏢 Detalles del Lugar *@
-    @if (!esSoloDireccion && MostrarOpcionDepartamento)
-    {
+        @* 🕒 Información Temporal *@
         <div style="margin-bottom: 24px;">
             <div style="border-bottom: 2px solid #1890ff; padding-bottom: 8px; margin-bottom: 16px;">
-                <h4 style="color: #1890ff; margin: 0; font-weight: 600;">🏢 Detalles del Lugar</h4>
+                <h4 style="color: #1890ff; margin: 0; font-weight: 600;">🕒 Información Temporal</h4>
             </div>
-            <FormItem Label="¿Es Departamento?">
-                <Switch @bind-Checked="@esDepartamento" />
-            </FormItem>
-
-            @if (esDepartamento)
+            @if (Model.TimeLlegada < Model.TimeSalida)
             {
-                <Row Gutter="16">
-                    <AntDesign.Col Span="12">
-                        <FormItem Label="Piso">
-                            <Input @bind-Value="@Model.PisoNumero" Placeholder="Número de piso" />
-                        </FormItem>
-                    </AntDesign.Col>
-                    <AntDesign.Col Span="12">
-                        <FormItem Label="Departamento">
-                            <Input @bind-Value="@Model.Depto" Placeholder="Nro. de depto." />
-                        </FormItem>
-                    </AntDesign.Col>
-                </Row>
+                <FormItem Label="Fechas" Required>
+                    <RangePicker TValue="DateTime[]" Disabled="new bool[] { false, true }"
+                                 @bind-Value="@FechaRange" />
+                </FormItem>
+            }
+            else
+            {
+                <FormItem Label="Fecha" Required>
+                    <DatePicker TValue="DateTime" Picker="@DatePickerType.Date" @bind-Value="@Model.FechaSalida" />
+                </FormItem>
+            }
+
+            <Row Gutter="16">
+                <AntDesign.Col Span="12">
+                    <FormItem Label="Hora Salida" Required>
+                        <TimePicker @bind-Value="@Model.TimeSalida" Format="HH:mm" />
+                    </FormItem>
+                </AntDesign.Col>
+                <AntDesign.Col Span="12">
+                    <FormItem Label="Hora Llegada" Required>
+                        <TimePicker @bind-Value="@Model.TimeLlegada" Format="HH:mm" />
+                    </FormItem>
+                </AntDesign.Col>
+            </Row>
+        </div>
+
+        @* 📍 Ubicación *@
+        <div style="margin-bottom: 14px;">
+            <div style="border-bottom: 2px solid #1890ff; padding-bottom: 4px; margin-bottom: 8px;">
+                <h4 style="color: #1890ff; margin: 0; font-weight: 600; font-size: 1.08rem;">📍 Ubicación</h4>
+            </div>
+            <Row Gutter="16">
+                <AntDesign.Col Span="12">
+                    <FormItem Label="Tipo Zona" Required>
+                        <EnumSelect TEnum="TipoZona" @bind-Value="@Model.TipoZona" />
+                    </FormItem>
+                </AntDesign.Col>
+                <AntDesign.Col Span="12">
+                    <FormItem Label="Región Cuartel" Required>
+                        <EnumSelect TEnum="CuartelRegionChivilcoy" @bind-Value="@Model.CuartelRegion" DefaultActiveFirstOption="false" />
+                    </FormItem>
+                </AntDesign.Col>
+            </Row>
+
+            <Row Gutter="16">
+                <AntDesign.Col Span="12">
+                    <FormItem Label="Dirección" Required>
+                        @if (isApiAvailable)
+                        {
+                            <Select TItem="Direccion"
+                                    TItemValue="Direccion"
+                                    DataSource="@direcciones"
+                                    @bind-Value="@Model.Direccion"
+                                    Placeholder="Seleccione una calle"
+                                    LabelName="@nameof(Direccion.NombreYAltura)"
+                                    OnSearch="OnSearch"
+                                    SearchDebounceMilliseconds="350"
+                                    EnableSearch
+                                    Loading="@_loading"
+                                    OnSelectedItemChanged="OnStreetSelected">
+                            </Select>
+                        }
+                        else
+                        {
+                            <Input @bind-Value="@Model.CalleORuta" Placeholder="Ingrese dirección" />
+                        }
+                    </FormItem>
+                </AntDesign.Col>
+                <AntDesign.Col Span="6">
+                    <FormItem Label="Latitud" Required>
+                        <Input @bind-Value="@Model.Latitud" Disabled="@isApiAvailable" Placeholder="Latitud" />
+                    </FormItem>
+                </AntDesign.Col>
+                <AntDesign.Col Span="6">
+                    <FormItem Label="Longitud" Required>
+                        <Input @bind-Value="@Model.Longitud" Disabled="@isApiAvailable" Placeholder="Longitud" />
+                    </FormItem>
+                </AntDesign.Col>
+            </Row>
+
+            @if (Model.Latitud != 0.0 && Model.Longitud != 0.0)
+            {
+                <div class="map-container">
+                    <iframe width="220"
+                            height="220"
+                            style="border:0;"
+                            src="@GetOpenStreetMapUrl(Model.Latitud, Model.Longitud)"
+                            frameborder="0" allowfullscreen></iframe>
+                </div>
             }
         </div>
-    }
 
-    @* 🚒 Información Operativa *@
-    <div style="margin-bottom: 24px;">
-        <div style="border-bottom: 2px solid #1890ff; padding-bottom: 8px; margin-bottom: 16px;">
-            <h4 style="color: #1890ff; margin: 0; font-weight: 600;">🚒 Información Operativa</h4>
-        </div>
-        <FormItem Label="¿Se convoca guardia?">
-            <Switch @bind-Checked="@SeConvocoGuardia" />
-        </FormItem>
-
-        @if (SeConvocoGuardia)
+        @* 🏢 Detalles del Lugar *@
+        @if (!esSoloDireccion && MostrarOpcionDepartamento)
         {
-            <FormItem Label="Guardia">
-                <EnumSelect TEnum="Guardia" @bind-Value="@Model.GuardiaSelecionada" />
-            </FormItem>
+            <div style="margin-bottom: 24px;">
+                <div style="border-bottom: 2px solid #1890ff; padding-bottom: 8px; margin-bottom: 16px;">
+                    <h4 style="color: #1890ff; margin: 0; font-weight: 600;">🏢 Detalles del Lugar</h4>
+                </div>
+                <FormItem Label="¿Es Departamento?">
+                    <Switch @bind-Checked="@esDepartamento" />
+                </FormItem>
+
+                @if (esDepartamento)
+                {
+                    <Row Gutter="16">
+                        <AntDesign.Col Span="12">
+                            <FormItem Label="Piso">
+                                <Input @bind-Value="@Model.PisoNumero" Placeholder="Número de piso" />
+                            </FormItem>
+                        </AntDesign.Col>
+                        <AntDesign.Col Span="12">
+                            <FormItem Label="Departamento">
+                                <Input @bind-Value="@Model.Depto" Placeholder="Nro. de depto." />
+                            </FormItem>
+                        </AntDesign.Col>
+                    </Row>
+                }
+            </div>
         }
-    </div>
 
-    @* 📝 Descripción *@
-    <div style="margin-bottom: 24px;">
-        <div style="border-bottom: 2px solid #1890ff; padding-bottom: 8px; margin-bottom: 16px;">
-            <h4 style="color: #1890ff; margin: 0; font-weight: 600;">📝 Descripción</h4>
+        @* 🚒 Información Operativa *@
+        <div style="margin-bottom: 24px;">
+            <div style="border-bottom: 2px solid #1890ff; padding-bottom: 8px; margin-bottom: 16px;">
+                <h4 style="color: #1890ff; margin: 0; font-weight: 600;">🚒 Información Operativa</h4>
+            </div>
+            <FormItem Label="¿Se convoca guardia?">
+                <Switch @bind-Checked="@SeConvocoGuardia" />
+            </FormItem>
+
+            @if (SeConvocoGuardia)
+            {
+                <FormItem Label="Guardia">
+                    <EnumSelect TEnum="Guardia" @bind-Value="@Model.GuardiaSelecionada" />
+                </FormItem>
+            }
         </div>
-        <FormItem Label="Descripción" Required>
-            <TextArea Placeholder="Describa la situación o evento..."
-                      @bind-Value="@Model.Descripcion"
-                      Rows="4" />
-        </FormItem>
-    </div>
 
-</Form>
+        @* 📝 Descripción *@
+        <div style="margin-bottom: 24px;">
+            <div style="border-bottom: 2px solid #1890ff; padding-bottom: 8px; margin-bottom: 16px;">
+                <h4 style="color: #1890ff; margin: 0; font-weight: 600;">📝 Descripción</h4>
+            </div>
+            <FormItem Label="Descripción" Required>
+                <TextArea Placeholder="Describa la situación o evento..."
+                          @bind-Value="@Model.Descripcion"
+                          Rows="4" />
+            </FormItem>
+        </div>
+
+    </Form>
+</div>
 
 @code {
     [Parameter, EditorRequired] public required SalidasViewModels Model { get; set; }
