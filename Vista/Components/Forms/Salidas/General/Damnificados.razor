@@ -7,96 +7,57 @@
 @inject IMessageService MessageService
 
 <style>
+
+      .damnificados {
+    border: 2px solid #ffb366 !important;
+    background: linear-gradient(180deg, #fffdf9 0%, #fff7f0 100%);
+    box-shadow: 0 4px 12px rgba(255, 163, 77, 0.15);
+    border-radius: 16px;
+    margin-bottom: 2rem;
+    padding: 2.5rem 2rem 2rem 2rem;
+    transition: box-shadow 0.25s ease, transform 0.2s ease;
+    }
+    
+    
+
     .damnificados-componente .ant-table {
-        width: 100%;
-        background-color: white;
-        border-radius: 8px;
-        overflow: hidden;
+        background: #fff8f0;
+        color: #ff6a33;
+        font-weight: 700;
+        font-size: 1.05rem;
+        text-align: left;
+        padding: 0.75rem 1rem;
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+        border-bottom: 1px solid #ffd6b3;
     }
-
-    .damnificados-componente .ant-table-title {
-        background-color: #A63333;
-    }
-
     .damnificados-componente .ant-table-thead .ant-table-cell {
-        background-color: #A63333 !important;
-        color: white !important;
-        font-weight: bold;
+        background: linear-gradient(135deg, #ff944d, #ff7a45) !important; 
+        color: #fff !important;
+        font-weight: 600;
+        text-align: center;
+        border-bottom: 2px solid #ffe0cc; 
+        letter-spacing: 0.3px;
     }
-
+    .damnificados-componente .ant-table-title {
+    background: #fff8f0;
+        color: #ff6a33;
+        font-weight: 700;
+        font-size: 1.05rem;
+        text-align: left;
+        padding: 0.75rem 1rem;
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+        border-bottom: 1px solid #ffd6b3; 
+    }
     .damnificados-componente .ant-table-cell {
-        padding: 16px !important;
-    }
-
-    .damnificados-componente .title-template-container {
-        background-color: #A63333;
-        padding: 16px;
-        border-top-left-radius: 8px;
-        border-top-right-radius: 8px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .damnificados-componente .add-button {
-        background-color: #4CAF50 !important;
-        border-color: #438E46 !important;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .damnificados-componente .boton_p {
-        background-color: #732D2D !important;
-        color: white !important;
-        border: none;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    @@media (max-width: 960px) {
-        .damnificados-componente .title-template-container {
-            flex-direction: column;
-            align-items: stretch;
-        }
-    }
-
-    .damnificados-componente .ant-form-horizontal .ant-form-item-label {
-        flex-grow: 1;
-        background: #A63333;
-    }
-
-        .damnificados-componente .ant-form-horizontal .ant-form-item-label > label {
-            color: #FFFFFF;
-            padding: 2px 4px;
-        }
-
-    .damnificados-componente .ant-form-item {
-        box-sizing: border-box;
-        margin: 0;
-        margin-bottom: 0px;
-        padding: 0;
-        color: rgba(0, 0, 0, 0.85);
-        font-size: 14px;
-        line-height: 1.5715;
-        list-style: none;
-        font-feature-settings: 'tnum';
-        margin-bottom: 8px !important;
-        vertical-align: top;
-        font-weight: bold;
-    }
-
-    .damnificados-componente .ant-modal-content {
-        position: relative;
-        background-color: #fff;
-        background-clip: padding-box;
-        border: 0;
-        border-radius: 2px;
-        box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
-        pointer-events: auto;
-        border: 1px solid red !important;
+        background: #fff !important;
+        color: #333 !important;
     }
 </style>
 
 
-<div class="damnificados-componente">
+<div class="damnificados damnificados-componente">
 
     <Table Context="Damnificados" DataSource="Model.Damnificados" Bordered>
         <TitleTemplate>
