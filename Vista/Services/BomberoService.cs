@@ -21,7 +21,7 @@ namespace Vista.Services
         Task<Bombero> CambiarEstado(Bombero bombero);
         Task<AscensoBombero> AscenderBombero(AscensoBombero ascenso);
         Task<List<Bombero>> ObtenerTodosLosBomberosAsync(bool ConImagenes = false, bool ConTodasLasDemasRelaciones = false);
-        Task<Bombero> ObtenerBomberoPorIdAsync(int id);
+        Task<Bombero> ObtenerBomberoPorIdAsync(int id, bool asnotracking = false, bool conRelaciones = true);
         Task<Bombero> ObtenerBomberoObjetoPorLegajoAsync(int numeroLegajo);
     }
 
@@ -34,17 +34,30 @@ namespace Vista.Services
             _context = context;
         }
 
-        public async Task<Bombero> ObtenerBomberoPorIdAsync(int id)
+        public async Task<Bombero> ObtenerBomberoPorIdAsync(int id, bool asNoTracking = false, bool conRelaciones = true)
         {
-            var bombero = await _context.Bomberos
-                .Include(b => b.Imagen)
-                .Include(b => b.Brigadas)
-                .Include(b => b.Contacto)
-                .FirstOrDefaultAsync(b => b.PersonaId == id);
-            if (bombero == null)
+            IQueryable<Bombero> query = _context.Bomberos;
+
+            if (conRelaciones)
+            {
+                query = query
+                    .Include(b => b.Imagen)
+                    .Include(b => b.Brigadas)
+                    .Include(b => b.Contacto);
+            }
+
+            if (asNoTracking)
+            {
+                query = query.AsNoTracking();
+            }
+
+            var bombero = await query.FirstOrDefaultAsync(b => b.PersonaId == id);
+
+            if (bombero is null)
             {
                 throw new KeyNotFoundException($"No se encontró un bombero con el ID {id}.");
             }
+
             return bombero;
         }
 
