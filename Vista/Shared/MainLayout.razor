@@ -1,4 +1,4 @@
-﻿@inherits LayoutComponentBase
+@inherits LayoutComponentBase
 @inject IconService iconService
 @inject NavigationManager navigationManager
 
@@ -10,15 +10,72 @@
 <Layout>
     <Header class="main-header">
         <div class="header-content">
+            <a href="/" class="brand-link">
+                <img class="brand-logo brand-logo-large" src="/Imagenes/Logos.png" alt="Logo" />
+            </a>
             <Button class="menu-toggle" Type="ButtonType.Primary" OnClick="ToggleCollapsed">
                 <Icon Type="@(collapsedMenu ? "menu-unfold" : "menu-fold")" Theme="IconThemeType.Outline" />
             </Button>
-            <a class="brand-link" href="/">
-                <img class="brand-logo" src="/Imagenes/Logo.svg" alt="Logo" />
-                <span class="brand-text">Bomberos Voluntarios Chivilcoy</span>
-            </a>
+            <Menu Mode="MenuMode.Horizontal" Theme="MenuTheme.Light" class="top-menu"
+                  SelectedKeys="@GetSelectedMenuKeys()">
+                <MenuItem Key="home" OnClick="@(() => navigationManager.NavigateTo("/"))">
+                    <i class="fa-solid fa-house"></i> Home
+                </MenuItem>
+                <MenuItem Key="legajo" OnClick="@(() => navigationManager.NavigateTo("/Bomberos/Legajo"))">
+                    <i class="fa-solid fa-id-card"></i> Legajo
+                </MenuItem>
+                <MenuItem Key="licencias" OnClick="@(() => navigationManager.NavigateTo("/licencias"))">
+                    <i class="fa-solid fa-file-alt"></i> Licencias
+                </MenuItem>
+                <MenuItem Key="moviles" OnClick="@(() => navigationManager.NavigateTo("/unidades"))">
+                    <i class="fa-solid fa-car"></i> Móviles
+                </MenuItem>
+                <MenuItem Key="personal" OnClick="@(() => navigationManager.NavigateTo("/bomberos"))">
+                    <i class="fa-solid fa-user"></i> Personal
+                </MenuItem>
+                <MenuItem Key="salidas" OnClick="@(() => navigationManager.NavigateTo("/salidas"))">
+                    <i class="fa-solid fa-sign-out-alt"></i> Salidas
+                </MenuItem>
+                <MenuItem Key="firmas" OnClick="@(() => navigationManager.NavigateTo("/incidentes-vehiculos"))">
+                    <i class="fa-solid fa-signature"></i> Firmas
+                </MenuItem>
+                <SubMenu Key="reportes" TitleTemplate="@reportesTitle">
+                    <MenuItem Key="reportes-salidas" OnClick="@(() => navigationManager.NavigateTo("/Reportes/HistorialSalidas"))">
+                        Historial Salidas
+                    </MenuItem>
+                    <MenuItem Key="reportes-bomberos" OnClick="@(() => navigationManager.NavigateTo("/Reportes/HistorialBomberos"))">
+                        Historial Bomberos
+                    </MenuItem>
+                    <MenuItem Key="reportes-choferes" OnClick="@(() => navigationManager.NavigateTo("/Reportes/Reportes_Choferes"))">
+                        Choferes
+                    </MenuItem>
+                    <MenuItem Key="reportes-moviles" OnClick="@(() => navigationManager.NavigateTo("/Reportes/HistorialMoviles"))">
+                        Móviles
+                    </MenuItem>
+                </SubMenu>
+                <SubMenu Key="herramientas" TitleTemplate="@herramientasTitle">
+                    <MenuItem Key="brigadas" OnClick="@(() => navigationManager.NavigateTo("/Brigadas"))">
+                        Brigadas
+                    </MenuItem>
+                    <MenuItem Key="comunicacion" OnClick="@(() => navigationManager.NavigateTo("/Dependencias/Comunicacion"))">
+                        Comunicación
+                    </MenuItem>
+                    <MenuItem Key="deposito" OnClick="@(() => navigationManager.NavigateTo("/Dependencias/Deposito"))">
+                        Depósito
+                    </MenuItem>
+                </SubMenu>
+                <SubMenu Key="etica" TitleTemplate="@eticaTitle">
+                    <MenuItem Key="sanciones" OnClick="@(() => navigationManager.NavigateTo("/bomberos/sancionados"))">
+                        Sanciones
+                    </MenuItem>
+                    <MenuItem Key="ascensos" OnClick="@(() => navigationManager.NavigateTo("/bomberos/ascenso"))">
+                        Ascensos
+                    </MenuItem>
+                </SubMenu>
+            </Menu>
         </div>
     </Header>
+
 
     <Layout class="main-layout">
         <Sider class="main-sider" @bind-Collapsed="@collapsedMenu" NoTrigger OnCollapse="OnCollapse">
@@ -190,22 +247,78 @@
         Console.WriteLine($"Collapsed: {isCollapsed}");
     }
 
+    string GetHeaderTitle()
+    {
+        var uri = navigationManager.Uri.ToLower();
+        if (uri.Contains("/bomberos/legajo"))
+            return "LEGAJO";
+        if (uri.Contains("/licencias"))
+            return "LICENCIAS";
+        if (uri.Contains("/unidades"))
+            return "MÓVILES";
+        if (uri.Contains("/bomberos") && !uri.Contains("/legajo"))
+            return "PERSONAL";
+        if (uri.Contains("/salidas"))
+            return "SALIDAS";
+        if (uri.Contains("/incidentes-vehiculos"))
+            return "FIRMAS";
+        if (uri.Contains("/reportes/historialsalidas"))
+            return "HISTORIAL SALIDAS";
+        if (uri.Contains("/reportes/historialbomberos"))
+            return "HISTORIAL BOMBEROS";
+        if (uri.Contains("/reportes/reportes_choferes"))
+            return "CHOFERES";
+        if (uri.Contains("/reportes/historialmoviles"))
+            return "HISTORIAL MÓVILES";
+        if (uri.Contains("/brigadas"))
+            return "BRIGADAS";
+        if (uri.Contains("/dependencias/comunicacion"))
+            return "COMUNICACIÓN";
+        if (uri.Contains("/dependencias/deposito"))
+            return "DEPÓSITO";
+        if (uri.Contains("/bomberos/sancionados"))
+            return "SANCIONES";
+        if (uri.Contains("/bomberos/ascenso"))
+            return "ASCENSOS";
+
+        return "";
+    }
+
+    bool IsHome()
+    {
+        var uri = navigationManager.Uri.ToLower();
+        return uri.TrimEnd('/').Equals(navigationManager.BaseUri.TrimEnd('/').ToLower());
+    }
+
+    string[] GetSelectedMenuKeys()
+    {
+        var uri = navigationManager.Uri.ToLower();
+        if (uri.Contains("/bomberos/legajo"))
+            return new[] { "legajo" };
+        if (uri.Contains("/licencias"))
+            return new[] { "licencias" };
+        if (uri.Contains("/unidades"))
+            return new[] { "moviles" };
+        if (uri.Contains("/bomberos") && !uri.Contains("/legajo"))
+            return new[] { "personal" };
+        if (uri.Contains("/salidas"))
+            return new[] { "salidas" };
+        return Array.Empty<string>();
+    }
+
     RenderFragment reportesTitle =
         @<span class="submenu-title">
-        <i class="fa-solid fa-file-waveform submenu-title-icon"></i>
-        <span class="submenu-title-text">Reportes</span>
+        <span class="submenu-title-text"><i class="fa-solid fa-file-lines"></i>Reportes</span>
     </span>;
 
     RenderFragment herramientasTitle =
         @<span class="submenu-title">
-        <i class="fa-solid fa-wrench submenu-title-icon"></i>
-        <span class="submenu-title-text">Herramientas</span>
+        <span class="submenu-title-text"><i class="fa-solid fa-tools"></i>Herramientas  </span>
     </span>;
 
     RenderFragment eticaTitle =
         @<span class="submenu-title">
-        <i class="fa-solid fa-book-bookmark submenu-title-icon"></i>
-        <span class="submenu-title-text">Ética</span>
+        <span class="submenu-title-text"><i class="fa-solid fa-gavel"></i>Ética</span>
     </span>;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)

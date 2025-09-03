@@ -1,8 +1,6 @@
-﻿/* ==========================================================================  
-   Layout Principal - Bomberos Chivilcoy  
-   ========================================================================== */
-
-/* Variables CSS */
+﻿/* =========================================================
+   VARIABLES GLOBALES
+   ========================================================= */
 :root {
     --primary-color: #820014 !important;
     --primary-light: #a8071a !important;
@@ -10,35 +8,25 @@
     --text-light: #ffffff !important;
     --bg-light: #f5f5f5 !important;
     --bg-selected: #e6e6e6 !important;
-    --header-height: 80px !important;
+    --header-height: 120px !important;
     --sidebar-width: 260px !important;
     --sidebar-collapsed-width: 80px !important;
     --shadow-light: rgba(0, 0, 0, 0.1) !important;
+    --gold-color: #ffd700 !important;
+    --gold-glow: 0 0 8px 2px #ffd70055;
 }
 
-/* ==========================================================================  
-   Header  
-   ========================================================================== */
-
+/* =========================================================
+   HEADER Y BRAND
+   ========================================================= */
 .main-header {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
     height: var(--header-height) !important;
+    position: relative;
+    overflow: visible;
     background-color: var(--primary-color) !important;
     box-shadow: 0 2px 8px var(--shadow-light) !important;
     z-index: 1000 !important;
     padding: 0 !important;
-}
-
-.header-content {
-    display: flex !important;
-    align-items: center !important;
-    height: 100% !important;
-    padding: 0 20px !important;
-    gap: 15px !important;
-    font-family: 'Fjalla One', sans-serif !important;
 }
 
 .menu-toggle {
@@ -64,34 +52,191 @@
     text-decoration: none !important;
     font-size: 18px !important;
     font-weight: 500 !important;
+    height: 100% !important;
 }
 
-    .brand-link:hover {
-        color: var(--text-light) !important;
-        text-decoration: none !important;
-    }
-
+/* Logo grande y centrado verticalmente */
 .brand-logo {
-    max-width: 50px !important;
-    max-height: 50px !important;
+    display: block !important;
+    max-width: 110px !important;
+    max-height: 110px !important;
+    width: auto !important;
+    height: auto !important;
+    object-fit: contain !important;
+    margin-right: 8px !important;
+    margin-top: 16px !important;
+    margin-bottom: 16px !important;
 }
 
-.brand-text {
-    white-space: nowrap !important;
+/* =========================================================
+   TOP MENU (principal y submenús)
+   ========================================================= */
+.top-menu {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
 }
 
-/* ==========================================================================  
-   Layout Principal  
-   ========================================================================== */
-
-.main-layout {
-    background: var(--bg-light) !important;
-    margin-top: var(--header-height) !important;
-    height: calc(100vh - var(--header-height)) !important;
+.top-menu .ant-menu-item,
+.top-menu .ant-menu-submenu,
+.top-menu .ant-menu-submenu-title {
+    flex: 1 1 0 !important;
+    min-width: 120px !important;
+    max-width: 200px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 56px !important;
+    line-height: 56px !important;
+    margin: 0 !important;
+    padding: 0 14px !important;
+    color: var(--text-light) !important;
+    font-family: 'Fjalla One', sans-serif !important;
+    font-size: 1.3rem !important;
+    font-weight: 600 !important;
+    background: transparent !important;
+    border-radius: 0 !important;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    text-align: center !important;
+    transition:
+        color 0.25s cubic-bezier(.4,0,.2,1),
+        background 0.25s cubic-bezier(.4,0,.2,1),
+        box-shadow 0.25s cubic-bezier(.4,0,.2,1),
+        transform 0.18s cubic-bezier(.4,0,.2,1);
+    box-shadow: none !important;
 }
 
-/* ==========================================================================  
-   Sidebar  
+.top-menu .ant-menu-item:hover,
+.top-menu .ant-menu-item-active,
+.top-menu .ant-menu-item-selected,
+.top-menu .ant-menu-submenu-title:hover,
+.top-menu .ant-menu-submenu-active,
+.top-menu .ant-menu-submenu-selected {
+    color: var(--gold-color) !important;
+    background: rgba(255, 215, 0, 0.13) !important;
+    box-shadow: 0 0 16px 2px #ffd70099 !important;
+    transform: scale(1.07);
+    z-index: 2;
+    animation: gold-glow-pulse 1.2s infinite;
+}
+
+@keyframes gold-glow-pulse {
+    0% { box-shadow: 0 0 16px 2px #ffd70055; }
+    50% { box-shadow: 0 0 24px 6px #ffd70099; }
+    100% { box-shadow: 0 0 16px 2px #ffd70055; }
+}
+
+.top-menu .ant-menu-item:hover > span,
+.top-menu .ant-menu-item-active > span,
+.top-menu .ant-menu-item-selected > span,
+.top-menu .ant-menu-submenu-title:hover > span,
+.top-menu .ant-menu-submenu-active > span,
+.top-menu .ant-menu-submenu-selected > span {
+    background: linear-gradient(90deg, #fffbe6 0%, #ffd700 40%, #fffbe6 100%);
+    background-size: 220px 100%;
+    background-repeat: no-repeat;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent !important;
+    -webkit-text-fill-color: transparent;
+    animation: gold-shine 0.7s 1;
+    filter: drop-shadow(0 0 6px #ffd70088);
+}
+
+@keyframes gold-shine {
+    0% { background-position: -120px; }
+    60% { background-position: 220px; }
+    100% { background-position: 220px; }
+}
+
+@keyframes menu-bounce {
+    0%   { transform: scale(1);}
+    40%  { transform: scale(1.10);}
+    60%  { transform: scale(0.97);}
+    100% { transform: scale(1.04);}
+}
+
+@keyframes gold-pulse {
+    0% { box-shadow: 0 0 0 0 #ffd70055; }
+    70% { box-shadow: 0 0 16px 8px #ffd70033; }
+    100% { box-shadow: 0 0 0 0 #ffd70000; }
+}
+
+
+.top-menu .ant-menu-item-selected,
+.top-menu .ant-menu-item-active,
+.top-menu .ant-menu-item:hover,
+.top-menu .ant-menu-submenu-active,
+.top-menu .ant-menu-submenu-selected,
+.top-menu .ant-menu-submenu-title:hover {
+    border-bottom: none !important;
+    box-shadow: none !important;
+    color: #ffd700 !important;
+}
+
+.top-menu .ant-menu-item::after,
+.top-menu .ant-menu-submenu::after,
+.top-menu .ant-menu-submenu-title::after {
+    border-bottom: none !important;
+    box-shadow: none !important;
+    content: none !important;
+}
+
+.top-menu .ant-menu-submenu-popup {
+    background: var(--primary-color) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 6px 24px 0 rgba(0,0,0,0.18);
+    padding: 6px 0 !important;
+    animation: submenuFadeIn 0.25s cubic-bezier(.4,0,.2,1);
+    backdrop-filter: blur(8px) saturate(1.2);
+    background: linear-gradient(120deg, rgba(130,0,20,0.92) 60%, rgba(255,215,0,0.10) 100%) !important;
+    border: 1px solid rgba(255,215,0,0.13);
+}
+@keyframes submenuFadeIn {
+    from { opacity: 0; transform: translateY(-10px);}
+    to   { opacity: 1; transform: translateY(0);}
+}
+
+.top-menu .ant-menu-submenu-popup {
+    animation: submenuSlideFadeIn 0.18s cubic-bezier(.4,0,.2,1);
+}
+@keyframes submenuSlideFadeIn {
+    0% { opacity: 0; transform: translateY(-18px) scale(0.98);}
+    60% { opacity: 0.7; }
+    100% { opacity: 1; transform: translateY(0) scale(1);}
+}
+
+.top-menu .ant-menu-submenu-popup .ant-menu-item {
+    color: var(--text-light) !important;
+    border-radius: 6px !important;
+    transition:
+        color 0.22s cubic-bezier(.4,0,.2,1),
+        background 0.22s cubic-bezier(.4,0,.2,1),
+        box-shadow 0.22s cubic-bezier(.4,0,.2,1),
+        transform 0.15s cubic-bezier(.4,0,.2,1);
+}
+.top-menu .ant-menu-submenu-popup .ant-menu-item:hover,
+.top-menu .ant-menu-submenu-popup .ant-menu-item-active,
+.top-menu .ant-menu-submenu-popup .ant-menu-item-selected {
+    color: var(--gold-color) !important;
+    background: rgba(255, 215, 0, 0.13) !important;
+    box-shadow: var(--gold-glow) !important;
+    transform: scale(1.06);
+}
+
+/* ==========================================================================
+   Sidebar
    ========================================================================== */
 
 .main-sider {
@@ -115,8 +260,8 @@
         flex: 0 0 var(--sidebar-collapsed-width) !important;
     }
 
-/* ==========================================================================  
-   Menú  
+/* ==========================================================================
+   Menú
    ========================================================================== */
 
 .main-menu {
@@ -189,8 +334,8 @@
         text-decoration: none !important;
     }
 
-/* ==========================================================================  
-   Submenús  
+/* ==========================================================================
+   Submenús
    ========================================================================== */
 
 .main-menu .ant-menu-submenu-title {
@@ -263,8 +408,8 @@
     text-align: center !important;
 }
 
-/* ==========================================================================  
-   Contenido Principal  
+/* ==========================================================================
+   Contenido Principal
    ========================================================================== */
 
 .main-content {
@@ -274,7 +419,7 @@
     min-height: calc(100vh - var(--header-height)) !important;
 }
 
-/* ==========================================================================  
+/* ==========================================================================
    Menú Colapsado - Fix para centrar iconos
    ========================================================================== */
 
@@ -288,12 +433,12 @@
     flex-direction: column !important;
 }
 
-/* Resetear los items para que no usen flex horizontal */
+
 .main-menu.ant-menu-inline-collapsed .ant-menu-item {
     gap: 0 !important;
 }
 
-    /* Contenedor principal del icono */
+
     .main-menu.ant-menu-inline-collapsed .ant-menu-item > span:first-child,
     .main-menu.ant-menu-inline-collapsed .ant-menu-submenu-title > span:first-child {
         display: flex !important;
@@ -303,7 +448,7 @@
         margin: 0 !important;
     }
 
-/* Todos los iconos del menú */
+
 .main-menu.ant-menu-inline-collapsed .menu-icon,
 .main-menu.ant-menu-inline-collapsed .submenu-title-icon {
     margin: 0 !important;
@@ -315,7 +460,7 @@
     height: auto !important;
 }
 
-    /* Específico para Font Awesome */
+
     .main-menu.ant-menu-inline-collapsed .menu-icon.fa-solid,
     .main-menu.ant-menu-inline-collapsed .submenu-title-icon.fa-solid {
         display: flex !important;
@@ -324,7 +469,6 @@
         width: 100% !important;
     }
 
-/* Para iconos de Ant Design */
 .main-menu.ant-menu-inline-collapsed .anticon {
     display: flex !important;
     align-items: center !important;
@@ -335,7 +479,6 @@
     font-size: 18px !important;
 }
 
-/* Forzar color en iconos de submenús */
 .main-menu.ant-menu-inline-collapsed .submenu-title-icon,
 .main-menu.ant-menu-inline-collapsed .submenu-title .anticon {
     color: var(--text-dark) !important;
@@ -346,7 +489,6 @@
     font-size: 18px !important;
 }
 
-/* Asegurar que los iconos SVG también tengan color */
 .main-menu.ant-menu-inline-collapsed .anticon svg {
     color: var(--text-dark) !important;
     fill: var(--text-dark) !important;
@@ -354,23 +496,20 @@
     height: 18px !important;
 }
 
-/* Ocultar completamente el texto */
 .main-menu.ant-menu-inline-collapsed .menu-link,
 .main-menu.ant-menu-inline-collapsed .submenu-title-text {
     display: none !important;
 }
 
-/* Ocultar el segundo span que contiene el texto */
 .main-menu.ant-menu-inline-collapsed .ant-menu-item > span:last-child {
     display: none !important;
 }
 
-/* Para submenús - mostrar solo el primer elemento (el icono) */
 .main-menu.ant-menu-inline-collapsed .ant-menu-submenu-title > span:last-child {
     display: none !important;
 }
 
-/* Forzar que el span del submenu-title se vea */
+
 .main-menu.ant-menu-inline-collapsed .ant-menu-submenu-title > span:first-child {
     display: flex !important;
     align-items: center !important;
@@ -378,7 +517,7 @@
     width: 100% !important;
 }
 
-/* Ajuste para el submenu-title */
+
 .main-menu.ant-menu-inline-collapsed .submenu-title {
     display: flex !important;
     align-items: center !important;
@@ -386,7 +525,6 @@
     width: 100% !important;
 }
 
-    /* MOSTRAR solo el icono en submenús colapsados */
     .main-menu.ant-menu-inline-collapsed .submenu-title > .submenu-title-icon {
         display: flex !important;
         align-items: center !important;
@@ -395,7 +533,6 @@
         color: var(--text-dark) !important;
     }
 
-    /* MOSTRAR iconos de Ant Design en submenús */
     .main-menu.ant-menu-inline-collapsed .submenu-title > .anticon {
         display: flex !important;
         align-items: center !important;
@@ -404,18 +541,18 @@
         color: var(--text-dark) !important;
     }
 
-    /* OCULTAR el texto de los submenús */
+
     .main-menu.ant-menu-inline-collapsed .submenu-title > .submenu-title-text {
         display: none !important;
     }
 
-/* Forzar centrado en todos los elementos hijos */
+
 .main-menu.ant-menu-inline-collapsed .ant-menu-item *,
 .main-menu.ant-menu-inline-collapsed .ant-menu-submenu-title * {
     text-align: center !important;
 }
 
-/* Específico para el IconTemplate de Blazor */
+
 .main-menu.ant-menu-inline-collapsed .ant-menu-item > span > i,
 .main-menu.ant-menu-inline-collapsed .ant-menu-submenu-title > span > i {
     display: flex !important;
@@ -425,7 +562,7 @@
     margin: 0 !important;
 }
 
-/* Estados hover y selected para submenús colapsados */
+
 .main-menu.ant-menu-inline-collapsed .ant-menu-submenu-title:hover .anticon,
 .main-menu.ant-menu-inline-collapsed .ant-menu-submenu-title:hover .submenu-title-icon {
     color: var(--primary-light) !important;
@@ -446,11 +583,32 @@
         fill: var(--text-light) !important;
     }
 
-/* ==========================================================================  
-   Responsive  
-   ========================================================================== */
+/* =========================================================
+   MEDIA QUERIES
+   ========================================================= */
 
+/* ------------------ PC ------------------ */
+@media (min-width: 1025px) {
+    .main-sider { display: none !important; }
+    .menu-toggle { display: none !important; }
+    .top-menu { display: flex !important; }
+}
+
+/* ----------- CELULAR/TABLET ----------- */
 @media screen and (max-width: 768px) {
+    .main-header {
+        --header-height: 80px !important;
+    }
+
+    .header-content {
+        display: flex !important;
+        align-items: center !important;
+        height: 100% !important;
+        padding: 0 20px !important;
+        gap: 15px !important;
+        font-family: 'Fjalla One', sans-serif !important;
+    }
+
     .brand-text {
         font-size: 16px !important;
     }
@@ -472,8 +630,15 @@
         margin-left: 0 !important;
         padding: 15px !important;
     }
+
+
+    .menu-toggle {
+        color: #fff !important;
+    }
+
 }
 
+/* ----------- CELULAR ----------- */
 @media screen and (max-width: 480px) {
     .header-content {
         padding: 0 15px !important;
@@ -492,50 +657,56 @@
     .main-content {
         padding: 10px !important;
     }
+
+    .top-menu { display: none !important; }
 }
 
-/* ==========================================================================  
-   Tooltips (ocultarlos cuando no se necesiten)  
-   ========================================================================== */
+/* =========================================================
+   EFECTOS Y TRANSICIONES
+   ========================================================= */
+.ant-tooltip { display: none !important; }
+.main-menu.ant-menu-inline-collapsed .ant-tooltip { display: block !important; }
 
-.ant-tooltip {
-    display: none !important;
-}
-
-.main-menu.ant-menu-inline-collapsed .ant-tooltip {
-    display: block !important;
-}
-
-/* ==========================================================================  
-   Animaciones  
-   ========================================================================== */
-
-.main-sider {
-    transition: all 0.2s ease !important;
-}
-
+.main-sider { transition: all 0.2s ease !important; }
 .main-menu .ant-menu-item,
-.main-menu .ant-menu-submenu-title {
-    transition: all 0.2s ease !important;
+.main-menu .ant-menu-submenu-title { transition: all 0.2s ease !important; }
+
+.menu-icon, .submenu-icon, .submenu-title-icon,
+.menu-link { transition: color 0.2s ease !important; }
+
+.top-menu .ant-menu-item,
+.top-menu .ant-menu-submenu,
+.top-menu .ant-menu-submenu-title {
+    flex: 1 1 0 !important;
+    min-width: 120px !important;
+    max-width: 200px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 56px !important;
+    line-height: 56px !important;
+    margin: 0 !important;
+    padding: 0 14px !important;
+    color: var(--text-light) !important;
+    font-family: 'Fjalla One', sans-serif !important;
+    font-size: 1.3rem !important;
+    font-weight: 600 !important;
+    background: transparent !important;
+    border-radius: 0 !important;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    text-align: center !important;
+    transition:
+        color 0.25s cubic-bezier(.4,0,.2,1),
+        background 0.25s cubic-bezier(.4,0,.2,1),
+        box-shadow 0.25s cubic-bezier(.4,0,.2,1),
+        transform 0.18s cubic-bezier(.4,0,.2,1);
+    box-shadow: none !important;
 }
 
-.menu-icon,
-.submenu-icon,
-.submenu-title-icon {
-    transition: color 0.2s ease !important;
-}
-
-.menu-link {
-    transition: color 0.2s ease !important;
-}
-
-/* Ajuste cuando el menú está colapsado en móvil */
-@media screen and (max-width: 768px) {
-    .main-layout {
-        margin-left: 0 !important;
-    }
-
-    .main-sider.ant-layout-sider-collapsed ~ .main-layout {
-        margin-left: 0 !important;
-    }
+.top-menu .ant-menu-submenu-title .submenu-title-text,
+.top-menu .ant-menu-submenu-title .submenu-title-icon,
+.top-menu .ant-menu-submenu-title i {
+    color: var(--text-light) !important;
 }
