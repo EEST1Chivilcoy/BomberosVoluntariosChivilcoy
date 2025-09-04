@@ -221,6 +221,6 @@ namespace Vista.Data.ViewModels
         public TipoServicioSalida TipoServicio { get; set; }
 
         public TipoServicioRepresentaciones TipoRepresentacion { get; set; }
-
+        public TipoReceptoria TipoReceptoria { get; set; } = TipoReceptoria.Casero;
     }
 }

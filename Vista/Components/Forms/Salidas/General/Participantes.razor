@@ -1,6 +1,7 @@
 ﻿@using Vista.Data.ViewModels;
 @using Vista.Data.ViewModels.Personal;
 @using Vista.Data.Models.Salidas;
+@using Vista.Data.Enums.Salidas;
 @using Vista.Data.Models.Personas;
 @using System.Linq;
 
@@ -62,7 +63,7 @@
         @*Sección Receptor*@
         <div style="margin-bottom: 24px;">
             <div style="border-bottom: 2px solid #52c41a; padding-bottom: 8px; margin-bottom: 16px;">
-                <h4 style="color: #52c41a; margin: 0; font-weight: 600;">Datos del Receptor</h4>
+                <h4 style="color: #52c41a; margin: 0; font-weight: 600;">Datos de Receptoria</h4>
             </div>
 
             <Row Gutter="16">
@@ -76,6 +77,11 @@
                     <FormItem Label="Apellido" Required>
                         <Input @bind-Value="@Model.ApellidoReceptor"
                                Placeholder="Ingrese el apellido" />
+                    </FormItem>
+                </Col>
+                <Col Span="12">
+                    <FormItem Label="Tipo" Required>
+                        <EnumSelect TEnum="TipoReceptoria" @bind-Value="@Model.TipoReceptoria" DefaultActiveFirstOption="false" />
                     </FormItem>
                 </Col>
             </Row>
