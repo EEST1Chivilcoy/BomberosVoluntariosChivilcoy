@@ -127,7 +127,6 @@
         gap: 16px !important;
         margin-top: 16px !important;
     }
-
     .salidas-abm .table-container {
         padding: 0 !important;
         overflow: hidden !important;
@@ -147,7 +146,75 @@
     .ant-table-cell {
         padding: 16px !important;
     }
-
+    .title-template-container {
+        background-color: #A63333;
+        padding: 16px;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .search-input {
+        width: 250px;
+    }
+    .search-input input {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: white;
+        border: none;
+    }
+    .search-input input::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+    }
+    .add-button {
+        background-color: #4CAF50 !important;
+        border-color: #438E46 !important;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .boton_p {
+        background-color: #732D2D !important;
+        color: white !important;
+        border: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    @@media (max-width: 960px) {
+        .title-template-container {
+            flex-direction: column;
+            align-items: stretch;
+        }
+    }
+    .ant-form-horizontal .ant-form-item-label {
+        flex-grow: 1;
+        background: #A63333;
+    }
+    .ant-form-horizontal .ant-form-item-label > label {
+        color: #FFFFFF;
+        padding: 2px 4px;
+    }
+    .ant-form-item {
+        box-sizing: border-box;
+        margin: 0;
+        margin-bottom: 0px;
+        padding: 0;
+        color: rgba(0, 0, 0, 0.85);
+        font-size: 14px;
+        line-height: 1.5715;
+        list-style: none;
+        font-feature-settings: 'tnum';
+        margin-bottom: 8px !important;
+        vertical-align: top;
+        font-weight: bold;
+    }
+    .ant-modal-content {
+        position: relative;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 0;
+        border-radius: 2px;
+        box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+        pointer-events: auto;
+        border: 1px solid red !important;
+    }
 </style>
 
 @*Servicios Utilizados*@
