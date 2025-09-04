@@ -95,7 +95,7 @@ jobs:
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
 
-          branches=("Oses-Emiliano" "Tobi" "fran")
+          branches=("Oses-Emiliano" "Tobi" "fran" "Antonio")
 
           for branch in "${branches[@]}"; do
             echo "🔁 Actualizando $branch desde master"
