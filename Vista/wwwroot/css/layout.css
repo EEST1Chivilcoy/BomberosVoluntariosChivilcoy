@@ -55,19 +55,6 @@
     height: 100% !important;
 }
 
-/* Logo grande y centrado verticalmente */
-.brand-logo {
-    display: block !important;
-    max-width: 110px !important;
-    max-height: 110px !important;
-    width: auto !important;
-    height: auto !important;
-    object-fit: contain !important;
-    margin-right: 8px !important;
-    margin-top: 16px !important;
-    margin-bottom: 16px !important;
-}
-
 /* =========================================================
    TOP MENU (principal y submenús)
    ========================================================= */
@@ -647,11 +634,6 @@
 
     .brand-text {
         font-size: 14px !important;
-    }
-
-    .brand-logo {
-        max-width: 40px !important;
-        max-height: 40px !important;
     }
 
     .main-content {
