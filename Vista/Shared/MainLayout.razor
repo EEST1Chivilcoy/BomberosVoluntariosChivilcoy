@@ -247,14 +247,24 @@
     string GetHeaderTitle()
     {
         var uri = navigationManager.Uri.ToLower();
+
+        // Verificar primero si es la página de inicio
+        if (IsHome())
+            return "INICIO";
+
+        // Verificar rutas específicas primero (más específicas antes que las generales)
         if (uri.Contains("/bomberos/legajo"))
             return "LEGAJO";
+        if (uri.Contains("/bomberos/sancionados"))
+            return "SANCIONES";
+        if (uri.Contains("/bomberos/ascenso"))
+            return "ASCENSOS";
+        if (uri.Contains("/bomberos") && !uri.Contains("/legajo") && !uri.Contains("/sancionados") && !uri.Contains("/ascenso"))
+            return "PERSONAL";
         if (uri.Contains("/licencias"))
             return "LICENCIAS";
         if (uri.Contains("/unidades"))
             return "MÓVILES";
-        if (uri.Contains("/bomberos") && !uri.Contains("/legajo"))
-            return "PERSONAL";
         if (uri.Contains("/salidas"))
             return "SALIDAS";
         if (uri.Contains("/incidentes-vehiculos"))
@@ -273,12 +283,10 @@
             return "COMUNICACIÓN";
         if (uri.Contains("/dependencias/deposito"))
             return "DEPÓSITO";
-        if (uri.Contains("/bomberos/sancionados"))
-            return "SANCIONES";
-        if (uri.Contains("/bomberos/ascenso"))
-            return "ASCENSOS";
+        if (uri.Contains("/bomberos/sancionados") || uri.Contains("/bomberos/ascenso"))
+            return "ÉTICA";
 
-        return "";
+        return "INICIO";
     }
 
     bool IsHome()
@@ -290,16 +298,45 @@
     string[] GetSelectedMenuKeys()
     {
         var uri = navigationManager.Uri.ToLower();
+
+        // Verificar primero si es la página de inicio
+        if (IsHome())
+            return new[] { "home" };
+
+        // Verificar rutas específicas primero (más específicas antes que las generales)
         if (uri.Contains("/bomberos/legajo"))
             return new[] { "legajo" };
+        if (uri.Contains("/bomberos") && !uri.Contains("/legajo") && !uri.Contains("/sancionados") && !uri.Contains("/ascenso"))
+            return new[] { "personal" };
         if (uri.Contains("/licencias"))
             return new[] { "licencias" };
         if (uri.Contains("/unidades"))
             return new[] { "moviles" };
-        if (uri.Contains("/bomberos") && !uri.Contains("/legajo"))
-            return new[] { "personal" };
         if (uri.Contains("/salidas"))
             return new[] { "salidas" };
+        if (uri.Contains("/incidentes-vehiculos"))
+            return new[] { "firmas" };
+        if (uri.Contains("/reportes/historialsalidas"))
+            return new[] { "reportes-salidas" };
+        if (uri.Contains("/reportes/historialbomberos"))
+            return new[] { "reportes-bomberos" };
+        if (uri.Contains("/reportes/reportes_choferes"))
+            return new[] { "reportes-choferes" };
+        if (uri.Contains("/reportes/historialmoviles"))
+            return new[] { "reportes-moviles" };
+        if (uri.Contains("/reportes"))
+            return new[] { "reportes" };
+        if (uri.Contains("/brigadas"))
+            return new[] { "brigadas" };
+        if (uri.Contains("/dependencias/comunicacion"))
+            return new[] { "comunicacion" };
+        if (uri.Contains("/dependencias/deposito"))
+            return new[] { "deposito" };
+        if (uri.Contains("/brigadas") || uri.Contains("/dependencias"))
+            return new[] { "herramientas" };
+        if (uri.Contains("/bomberos/sancionados") || uri.Contains("/bomberos/ascenso"))
+            return new[] { "etica" };
+
         return Array.Empty<string>();
     }
 
