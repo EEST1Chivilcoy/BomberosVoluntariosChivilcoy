@@ -3,20 +3,134 @@
 @using Data.Enums.Salidas
 
 <style>
-    .template {
-        width: 100%;
-        height: 100%;
-        max-width: 97%;
-        min-width: 400px;
-        max-height: 100vh;
-        border-radius: 10px;
-        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-        background: #fff;
-        display: flex;
-        flex-direction: column;
-        margin: 1em;
-        padding: 10px;
-        overflow: auto;
+
+    .salidas-abm {
+        --abm-primary-color: #A63333;
+        --abm-primary-dark: #732D2D;
+        --abm-warning-color: #F9A825;
+        --abm-accent-color: #FFD54F;
+    }
+    .salidas-abm .main-card {
+        background: rgba(255, 255, 255, 0.92) !important;
+        backdrop-filter: blur(12px) !important;
+        border-radius: 18px !important;
+        box-shadow: 0 6px 24px rgba(130, 0, 20, 0.25), 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+        border: 1px solid rgba(130, 0, 20, 0.15) !important;
+        overflow: hidden !important;
+        margin-bottom: 32px !important;
+    }
+    .salidas-abm .header-section {
+        background: linear-gradient(135deg, var(--abm-primary-color) 0%, var(--abm-primary-dark) 100%) !important;
+        color: white !important;
+        padding: 28px !important;
+        position: relative !important;
+        overflow: hidden !important;
+    }
+    .salidas-abm .header-section::before {
+        content: '';
+        display: none;
+    }
+    .salidas-abm .header-section .lava-bubbles {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        pointer-events: none;
+        z-index: 1;
+        overflow: hidden;
+    }
+    .salidas-abm .header-section .lava-bubble {
+        position: absolute;
+        border-radius: 50%;
+        opacity: 0.45;
+        background: radial-gradient(circle at 60% 40%, #FFD54F 0%, #F9A825 80%, transparent 100%);
+        animation: lava-bubble-move 8s linear infinite;
+        filter: blur(1.5px);
+        mix-blend-mode: lighten;
+    }
+    .salidas-abm .header-section .lava-bubble.b1 {
+        left: 10%; width: 60px; height: 60px; bottom: -70px;
+        animation-delay: 0s;
+        animation-duration: 7.5s;
+    }
+    .salidas-abm .header-section .lava-bubble.b2 {
+        left: 35%; width: 90px; height: 90px; bottom: -100px;
+        animation-delay: 2s;
+        animation-duration: 9s;
+        background: radial-gradient(circle at 60% 40%, #FFEB3B 0%, #FFD54F 80%, transparent 100%);
+    }
+    .salidas-abm .header-section .lava-bubble.b3 {
+        left: 65%; width: 50px; height: 50px; bottom: -60px;
+        animation-delay: 1.5s;
+        animation-duration: 6.5s;
+        background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #FFD54F 80%, transparent 100%);
+    }
+    .salidas-abm .header-section .lava-bubble.b4 {
+        left: 80%; width: 70px; height: 70px; bottom: -80px;
+        animation-delay: 3.2s;
+        animation-duration: 8.5s;
+        background: radial-gradient(circle at 60% 40%, #F9A825 0%, #FFD54F 80%, transparent 100%);
+    }
+    .salidas-abm .header-section .lava-bubble.b5 {
+        left: 55%; width: 40px; height: 40px; bottom: -50px;
+        animation-delay: 5s;
+        animation-duration: 7.2s;
+        background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #F9A825 80%, transparent 100%);
+    }
+    @@keyframes lava-bubble-move {
+        0% {
+            transform: translateY(0) scale(1) rotate(0deg);
+            opacity: 0.45;
+        }
+        60% {
+            opacity: 0.7;
+            filter: blur(2.5px);
+        }
+        80% {
+            transform: translateY(-220px) scale(1.15) rotate(10deg);
+            opacity: 0.6;
+        }
+        100% {
+            transform: translateY(-320px) scale(0.95) rotate(-8deg);
+            opacity: 0;
+        }
+    }
+    .salidas-abm .main-title {
+        font-family: 'Poppins', 'Fjalla One', sans-serif !important;
+        font-size: 2.2rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 1px !important;
+        margin: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 12px !important;
+        animation: text-glow 2.5s ease-in-out infinite alternate !important;
+        position: relative !important;
+        z-index: 2 !important;
+    }
+    .salidas-abm .title-icon {
+        color: var(--abm-accent-color) !important;
+        font-size: 2rem !important;
+        filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25)) !important;
+    }
+    @@keyframes text-glow {
+        0%, 100% { text-shadow: 0 0 5px var(--abm-warning-color), 0 0 10px var(--abm-accent-color); }
+        50% { text-shadow: 0 0 12px var(--abm-warning-color), 0 0 22px var(--abm-accent-color); }
+    }
+    .salidas-abm .title-container {
+        position: relative !important;
+        z-index: 2 !important;
+        margin-bottom: 20px !important;
+    }
+    .salidas-abm .actions-row {
+        display: flex !important;
+        justify-content: flex-end !important;
+        align-items: center !important;
+        gap: 16px !important;
+        margin-top: 16px !important;
+    }
+
+    .salidas-abm .table-container {
+        padding: 0 !important;
+        overflow: hidden !important;
     }
 
     .ant-table {
@@ -25,100 +139,15 @@
         border-radius: 8px;
         overflow: hidden;
     }
-
-    .ant-table-title {
-        background-color: #A63333
-    }
-
     .ant-table-thead .ant-table-cell {
         background-color: #A63333 !important;
         color: white !important;
         font-weight: bold;
     }
-
     .ant-table-cell {
         padding: 16px !important;
     }
 
-    .title-template-container {
-        background-color: #A63333;
-        padding: 16px;
-        border-top-left-radius: 8px;
-        border-top-right-radius: 8px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .search-input {
-        width: 250px;
-    }
-
-        .search-input input {
-            background-color: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: none;
-        }
-
-            .search-input input::placeholder {
-                color: rgba(255, 255, 255, 0.7);
-            }
-
-    .add-button {
-        background-color: #4CAF50 !important;
-        border-color: #438E46 !important;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .boton_p {
-        background-color: #732D2D !important;
-        color: white !important;
-        border: none;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    @@media (max-width: 960px) {
-        .title-template-container {
-            flex-direction: column;
-            align-items: stretch;
-        }
-    }
-
-    .ant-form-horizontal .ant-form-item-label {
-        flex-grow: 1;
-        background: #A63333;
-    }
-
-        .ant-form-horizontal .ant-form-item-label > label {
-            color: #FFFFFF;
-            padding: 2px 4px;
-        }
-
-    .ant-form-item {
-        box-sizing: border-box;
-        margin: 0;
-        margin-bottom: 0px;
-        padding: 0;
-        color: rgba(0, 0, 0, 0.85);
-        font-size: 14px;
-        line-height: 1.5715;
-        list-style: none;
-        font-feature-settings: 'tnum';
-        margin-bottom: 8px !important;
-        vertical-align: top;
-        font-weight: bold;
-    }
-
-    .ant-modal-content {
-        position: relative;
-        background-color: #fff;
-        background-clip: padding-box;
-        border: 0;
-        border-radius: 2px;
-        box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
-        pointer-events: auto;
-        border: 1px solid red !important;
-    }
 </style>
 
 @*Servicios Utilizados*@
@@ -127,60 +156,68 @@
 @inject IMessageService MessageService
 @inject NavigationManager NavigationManager
 
-<div class="template">
-    <Table TItem="SalidaViewModelTable"
-           DataSource="SalidaViewModels"
-           @bind-PageIndex="_pageIndex"
-           @bind-PageSize="_pageSize"
-           Title="Salidas"
-           Responsive>
-        <TitleTemplate>
-            <GridRow>
-                <GridCol Span="12">
-                    <Title Level="3" Style="color: white;">Salidas</Title>
-                </GridCol>
-                <GridCol Span="12" Style="text-align: right;">
+<div class="salidas-abm">
+    <div style="padding:16px; min-height:100vh; background:linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%)">
+        <Card Class="main-card">
+            <div class="header-section">
+                <div class="lava-bubbles">
+                    <div class="lava-bubble b1"></div>
+                    <div class="lava-bubble b2"></div>
+                    <div class="lava-bubble b3"></div>
+                    <div class="lava-bubble b4"></div>
+                    <div class="lava-bubble b5"></div>
+                </div>
+                <div class="title-container">
+                    <h1 class="main-title">
+                        <Icon Type="car" Class="title-icon" />
+                        GESTIÓN DE SALIDAS
+                    </h1>
+                </div>
+                <div class="actions-row">
                     <Button Type="ButtonType.Primary" OnClick="() => VerAñadirSalida()">
                         <Icon Type="plus" /> Nueva
                     </Button>
-                </GridCol>
-            </GridRow>
-        </TitleTemplate>
-        <ColumnDefinitions>
-
-            <PropertyColumn Title="Número Parte" Property="s => s.Numero" Sortable />
-
-            <PropertyColumn Title="Tipo de Salida" Property="s => s.TipoSalida" Sortable />
-
-            <PropertyColumn Title="Dirección" Property="s => s.Direccion" Sortable />
-
-            <ActionColumn Title="Acciones" Align=ColumnAlign.Center>
-                <Space>
-                    <SpaceItem>
-                        <Button OnClick="() => VerUbicacionSalida(context.Longitud, context.Latitud)">
-                            <Icon Type="aim" />
-                        </Button>
-                    </SpaceItem>
-                    <SpaceItem>
-                        <Popconfirm Title="¿Eliminar esta salida?"
-                                    OnConfirm="() => BorrarSalida(context.Id)"
-                                    OkText="Si"
-                                    CancelText="No">
-                            <Button Danger>
-                                <Icon Type="delete" />
-                            </Button>
-                        </Popconfirm>
-                    </SpaceItem>
-                    <SpaceItem>
-                        <Button Type="@ButtonType.Primary" OnClick="() => VerEditarSalida(context.Id)" Ghost>
-                            <Icon Type="edit" />
-                        </Button>
-                    </SpaceItem>
-                </Space>
-            </ActionColumn>
-
-        </ColumnDefinitions>
-    </Table>
+                </div>
+            </div>
+            <div class="table-container">
+                <Table TItem="SalidaViewModelTable"
+                       DataSource="SalidaViewModels"
+                       @bind-PageIndex="_pageIndex"
+                       @bind-PageSize="_pageSize"
+                       Responsive>
+                    <ColumnDefinitions>
+                        <PropertyColumn Title="Número Parte" Property="s => s.Numero" Sortable />
+                        <PropertyColumn Title="Tipo de Salida" Property="s => s.TipoSalida" Sortable />
+                        <PropertyColumn Title="Dirección" Property="s => s.Direccion" Sortable />
+                        <ActionColumn Title="Acciones" Align=ColumnAlign.Center>
+                            <Space>
+                                <SpaceItem>
+                                    <Button OnClick="() => VerUbicacionSalida(context.Longitud, context.Latitud)">
+                                        <Icon Type="aim" />
+                                    </Button>
+                                </SpaceItem>
+                                <SpaceItem>
+                                    <Popconfirm Title="¿Eliminar esta salida?"
+                                                OnConfirm="() => BorrarSalida(context.Id)"
+                                                OkText="Si"
+                                                CancelText="No">
+                                        <Button Danger>
+                                            <Icon Type="delete" />
+                                        </Button>
+                                    </Popconfirm>
+                                </SpaceItem>
+                                <SpaceItem>
+                                    <Button Type="@ButtonType.Primary" OnClick="() => VerEditarSalida(context.Id)" Ghost>
+                                        <Icon Type="edit" />
+                                    </Button>
+                                </SpaceItem>
+                            </Space>
+                        </ActionColumn>
+                    </ColumnDefinitions>
+                </Table>
+            </div>
+        </Card>
+    </div>
 </div>
 
 @*Modal para Crear Salida*@
@@ -217,7 +254,6 @@
     </Form>
 </Modal>
 
-
 @code {
     private List<SalidaViewModelTable> SalidaViewModels = new();
     private SalidaCrearViewModel newSalida = new();
@@ -231,7 +267,6 @@
 
     // Variables de Modal
     bool _modalAñadirVisible = false;
-
 
     public class SalidaViewModelTable
     {
