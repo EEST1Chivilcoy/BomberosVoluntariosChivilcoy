@@ -16,7 +16,7 @@ env:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: 📥 Clonar repositorio
@@ -109,3 +109,4 @@ jobs:
 
             git push origin $branch
           done
+

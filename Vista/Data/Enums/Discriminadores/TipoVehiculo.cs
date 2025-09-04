@@ -31,7 +31,7 @@ namespace Vista.Data.Enums.Discriminadores
         /// <summary>
         /// Vehículo móvil utilizado en situaciones de emergencia.
         /// </summary>
-        [Display(Name = "Vehículo Móvil")]
+        [Display(Name = "Móvil")]
         Movil = 5,
 
         /// <summary>

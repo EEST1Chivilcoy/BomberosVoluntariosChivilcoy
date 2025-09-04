@@ -62,4 +62,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Pages\Firmas\Departamentos\" />
+  </ItemGroup>
 </Project>
