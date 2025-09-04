@@ -23,17 +23,121 @@
         padding: 32px 16px !important;
     }
 
-    .abm-header {
-        background-color: #A63333 !important;
-        padding: 32px 24px !important;
-        text-align: center !important;
+    /* Card principal tipo Incidentes */
+    .abm-main-card {
+        background: rgba(255, 255, 255, 0.92) !important;
+        backdrop-filter: blur(12px) !important;
+        border-radius: 18px !important;
+        box-shadow: 0 6px 24px rgba(130, 0, 20, 0.25), 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+        border: 1px solid rgba(130, 0, 20, 0.15) !important;
+        overflow: hidden !important;
+        margin-bottom: 32px !important;
     }
 
-    .abm-title {
-        font-size: 28px !important;
-        font-weight: bold !important;
-        color: #ffffff !important;
-        margin-bottom: 24px !important;
+    /* Header animado tipo Incidentes/Licencias */
+    .abm-header-section {
+        background: linear-gradient(135deg, #A63333 0%, #732D2D 100%) !important;
+        color: white !important;
+        padding: 28px !important;
+        position: relative !important;
+        overflow: hidden !important;
+        margin-bottom: 0 !important;
+    }
+    .abm-header-section::before {
+        content: '';
+        display: none;
+    }
+    .abm-header-section .lava-bubbles {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        pointer-events: none;
+        z-index: 1;
+        overflow: hidden;
+    }
+    .abm-header-section .lava-bubble {
+        position: absolute;
+        border-radius: 50%;
+        opacity: 0.45;
+        background: radial-gradient(circle at 60% 40%, #FFD54F 0%, #F9A825 80%, transparent 100%);
+        animation: lava-bubble-move 8s linear infinite;
+        filter: blur(1.5px);
+        mix-blend-mode: lighten;
+    }
+    .abm-header-section .lava-bubble.b1 {
+        left: 10%; width: 60px; height: 60px; bottom: -70px;
+        animation-delay: 0s;
+        animation-duration: 7.5s;
+    }
+    .abm-header-section .lava-bubble.b2 {
+        left: 35%; width: 90px; height: 90px; bottom: -100px;
+        animation-delay: 2s;
+        animation-duration: 9s;
+        background: radial-gradient(circle at 60% 40%, #FFEB3B 0%, #FFD54F 80%, transparent 100%);
+    }
+    .abm-header-section .lava-bubble.b3 {
+        left: 65%; width: 50px; height: 50px; bottom: -60px;
+        animation-delay: 1.5s;
+        animation-duration: 6.5s;
+        background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #FFD54F 80%, transparent 100%);
+    }
+    .abm-header-section .lava-bubble.b4 {
+        left: 80%; width: 70px; height: 70px; bottom: -80px;
+        animation-delay: 3.2s;
+        animation-duration: 8.5s;
+        background: radial-gradient(circle at 60% 40%, #F9A825 0%, #FFD54F 80%, transparent 100%);
+    }
+    .abm-header-section .lava-bubble.b5 {
+        left: 55%; width: 40px; height: 40px; bottom: -50px;
+        animation-delay: 5s;
+        animation-duration: 7.2s;
+        background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #F9A825 80%, transparent 100%);
+    }
+
+    @@keyframes lava-bubble-move {
+        0% {
+            transform: translateY(0) scale(1) rotate(0deg);
+            opacity: 0.45;
+        }
+        60% {
+            opacity: 0.7;
+            filter: blur(2.5px);
+        }
+        80% {
+            transform: translateY(-220px) scale(1.15) rotate(10deg);
+            opacity: 0.6;
+        }
+        100% {
+            transform: translateY(-320px) scale(0.95) rotate(-8deg);
+            opacity: 0;
+        }
+    }
+
+    .abm-header-section .main-title {
+        font-family: 'Poppins', 'Fjalla One', sans-serif !important;
+        font-size: 2.2rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 1px !important;
+        margin: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 12px !important;
+        animation: text-glow 2.5s ease-in-out infinite alternate !important;
+        position: relative !important;
+        z-index: 2 !important;
+    }
+    .abm-header-section .title-icon {
+        color: #FFD54F !important;
+        font-size: 2rem !important;
+        filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25)) !important;
+    }
+    @@keyframes text-glow {
+        0%, 100% { text-shadow: 0 0 5px #F9A825, 0 0 10px #FFD54F; }
+        50% { text-shadow: 0 0 12px #F9A825, 0 0 22px #FFD54F; }
+    }
+    .abm-header-section .title-container {
+        position: relative !important;
+        z-index: 2 !important;
+        margin-bottom: 20px !important;
     }
 
     .abm-filters {
@@ -168,79 +272,91 @@
 
 <Flex Class="flex-container" Justify="FlexJustify.Center" Align="FlexAlign.Center">
     <div class="abm-container">
-        <div class="abm-header">
-            <div class="abm-title">
-                <h2 style="margin-bottom: 0;"><Icon Type="fire" style="color: #ff5722;"/>Gestión de Bomberos</h2>
-                </div>  
-            <div class="abm-filters">
-                <EnumSelect DefaultValue="EstadoBombero.CuerpoActivo"
-                            ValueChanged="(EstadoBombero estado) => search(searchString, estado)"
-                            TEnum="EstadoBombero" />
-                <Search Placeholder="Buscar Bombero"
-                        @bind-Value="@searchString"
-                        OnSearch="()=>search(searchString, Estado)"
-                        BindOnInput />
-                <Button Type="ButtonType.Primary"
-                        OnClick="@(() => navigationManager.NavigateTo("/bomberos/agregar"))">
-                    <Icon Type="plus" /> Agregar Bombero
-                </Button>
+        <Card Class="abm-main-card">
+            <div class="abm-header-section">
+                <div class="lava-bubbles">
+                    <div class="lava-bubble b1"></div>
+                    <div class="lava-bubble b2"></div>
+                    <div class="lava-bubble b3"></div>
+                    <div class="lava-bubble b4"></div>
+                    <div class="lava-bubble b5"></div>
+                </div>
+                <div class="title-container">
+                    <h1 class="main-title">
+                        <Icon Type="fire" Class="title-icon" />
+                        GESTIÓN DE BOMBEROS
+                    </h1>
+                </div>
+                <div class="abm-filters">
+                    <EnumSelect DefaultValue="EstadoBombero.CuerpoActivo"
+                                ValueChanged="(EstadoBombero estado) => search(searchString, estado)"
+                                TEnum="EstadoBombero" />
+                    <Search Placeholder="Buscar Bombero"
+                            @bind-Value="@searchString"
+                            OnSearch="()=>search(searchString, Estado)"
+                            BindOnInput />
+                    <Button Type="ButtonType.Primary"
+                            OnClick="@(() => navigationManager.NavigateTo("/bomberos/agregar"))">
+                        <Icon Type="plus" /> Agregar Bombero
+                    </Button>
+                </div>
             </div>
-        </div>
 
-        <Table @ref="table"
-               TItem="BomberoViweModel"
-               DataSource="@bomberos"
-               OnChange="OnChange"
-               @bind-PageIndex="_pageIndex"
-               @bind-PageSize="_pageSize"
-               Responsive>
-            <ColumnDefinitions>
-                <Column TData="Bombero" Title="Foto" Width="100">
-                    @if (context.UrlImagen != null)
-                    {
-                        <Avatar Size="AvatarSize.Large" Src="@(context.UrlImagen)" />
-                    }
-                    else
-                    {
-                        <Avatar Size="AvatarSize.Large" Icon="user" />
-                    }
-                </Column>
-                <PropertyColumn Property="@(c => $"{c.Apellido}, {c.Nombre}")" Title="Apellido y Nombre" Sortable />
-                <PropertyColumn Title="Legajo" Property="c => c.NumeroLegajo" Sortable />
-                <PropertyColumn Title="Jerarquía" Property="@(c => c.Grado.GetDisplayName())" Sortable />
-                <PropertyColumn Title="Estado" Property="@(c => c.Estado.GetDisplayName())" Sortable />
-                <ActionColumn Title="Acciones" Align=ColumnAlign.Center>
-                    <div class="abm-action-buttons">
-                        <Button Type="ButtonType.Primary" OnClick="() => DetalleBombero(context.Id)">
-                            <Icon Type="eye" /> Detalles
-                        </Button>
-                        <Button Type="default" OnClick="() => EditarBombero(context.Id)">
-                            <Icon Type="edit" /> Editar
-                        </Button>
-                        @if (context.Estado != EstadoBombero.Baja)
+            <Table @ref="table"
+                   TItem="BomberoViweModel"
+                   DataSource="@bomberos"
+                   OnChange="OnChange"
+                   @bind-PageIndex="_pageIndex"
+                   @bind-PageSize="_pageSize"
+                   Responsive>
+                <ColumnDefinitions>
+                    <Column TData="Bombero" Title="Foto" Width="100">
+                        @if (context.UrlImagen != null)
                         {
-                            <Popconfirm Title="¿Está seguro de dar de baja?"
-                                        OnConfirm="()=>CambiarEstado(context.Id, EstadoBombero.Baja)"
-                                        OkText="Sí" CancelText="No">
-                                <Button Danger>
-                                    <Icon Type="down" /> Baja
-                                </Button>
-                            </Popconfirm>
+                            <Avatar Size="AvatarSize.Large" Src="@(context.UrlImagen)" />
                         }
                         else
                         {
-                            <Popconfirm Title="¿Está seguro de dar de alta?"
-                                        OnConfirm="()=>CambiarEstado(context.Id, EstadoBombero.CuerpoActivo)"
-                                        OkText="Sí" CancelText="No">
-                                <Button Color="Color.Green2">
-                                    <Icon Type="up" /> Alta
-                                </Button>
-                            </Popconfirm>
+                            <Avatar Size="AvatarSize.Large" Icon="user" />
                         }
-                    </div>
-                </ActionColumn>
-            </ColumnDefinitions>
-        </Table>
+                    </Column>
+                    <PropertyColumn Property="@(c => $"{c.Apellido}, {c.Nombre}")" Title="Apellido y Nombre" Sortable />
+                    <PropertyColumn Title="Legajo" Property="c => c.NumeroLegajo" Sortable />
+                    <PropertyColumn Title="Jerarquía" Property="@(c => c.Grado.GetDisplayName())" Sortable />
+                    <PropertyColumn Title="Estado" Property="@(c => c.Estado.GetDisplayName())" Sortable />
+                    <ActionColumn Title="Acciones" Align=ColumnAlign.Center>
+                        <div class="abm-action-buttons">
+                            <Button Type="ButtonType.Primary" OnClick="() => DetalleBombero(context.Id)">
+                                <Icon Type="eye" /> Detalles
+                            </Button>
+                            <Button Type="default" OnClick="() => EditarBombero(context.Id)">
+                                <Icon Type="edit" /> Editar
+                            </Button>
+                            @if (context.Estado != EstadoBombero.Baja)
+                            {
+                                <Popconfirm Title="¿Está seguro de dar de baja?"
+                                            OnConfirm="()=>CambiarEstado(context.Id, EstadoBombero.Baja)"
+                                            OkText="Sí" CancelText="No">
+                                    <Button Danger>
+                                        <Icon Type="down" /> Baja
+                                    </Button>
+                                </Popconfirm>
+                            }
+                            else
+                            {
+                                <Popconfirm Title="¿Está seguro de dar de alta?"
+                                            OnConfirm="()=>CambiarEstado(context.Id, EstadoBombero.CuerpoActivo)"
+                                            OkText="Sí" CancelText="No">
+                                    <Button Color="Color.Green2">
+                                        <Icon Type="up" /> Alta
+                                    </Button>
+                                </Popconfirm>
+                            }
+                        </div>
+                    </ActionColumn>
+                </ColumnDefinitions>
+            </Table>
+        </Card>
     </div>
 </Flex>
 
