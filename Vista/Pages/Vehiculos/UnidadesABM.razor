@@ -11,41 +11,49 @@
 
 @page "/unidades/{Estado?}"
 
-<div class="container">
+
+<div class="container unidades-abm">
     <Content Style="padding: 16px;">
         <Card Bordered="false"
               Style="width: 100%; border-radius: 16px; box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.1); background: #ffffff;">
-            <div class="header-container" style="display: flex; justify-content: space-between; align-items: center;">
-                <div>
-                    <h2 style="margin-bottom: 0;"><Icon Type="Car" />UNIDADES</h2>
-                    <p style="margin-top: 4px; color: #666;">
-                        @vehiculos?.Count() unidades @(Estado.ToLower() == "activas" ? "activas" : "de baja")
-                    </p>
+            <div class="header-section">
+                <div class="lava-bubbles">
+                    <div class="lava-bubble b1"></div>
+                    <div class="lava-bubble b2"></div>
+                    <div class="lava-bubble b3"></div>
+                    <div class="lava-bubble b4"></div>
+                    <div class="lava-bubble b5"></div>
                 </div>
-                <Space>
-                    @if (Estado.ToLower() == "activas")
-                    {
-                        <Button Type="ButtonType.Primary"
-                                OnClick="@(() => navigationManager.NavigateTo("/unidades/baja", true))"
-                                Style="margin-right: 12px;  background: #d32f2f; color: white; border-radius: 8px; font-weight: 600;">
-                            <Icon Type="folder" /> Unidades de baja
-                        </Button>
-
-                        <Button Type="ButtonType.Primary"
-                                OnClick="@(() => AgregarVisible = true)"
-                                Style="border-radius: 8px; font-size: 14px; background: #4CAF50">
-                            <Icon Type="plus" />Nueva Unidad
-                        </Button>
-                    }
-                    else
-                    {
-                        <Button class="btn-volver-unidades"
-                                OnClick="@(() => navigationManager.NavigateTo("/unidades/activas", true))"
-                                Style="border-radius: 8px; font-size: 14px;">
-                            <Icon Type="folder-open" />Volver a Unidades activas
-                        </Button>
-                    }
-                </Space>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div class="title-container">
+                        <h2 class="main-title">
+                            <Icon Type="Car" Class="title-icon" /> UNIDADES
+                        </h2>
+                        <p class="subtitle">
+                            @vehiculos?.Count() unidades @(Estado.ToLower() == "activas" ? "activas" : "de baja")
+                        </p>
+                    </div>
+                    <div class="header-actions">
+                        @if (Estado.ToLower() == "activas")
+                        {
+                            <Button Class="modern-button add-button"
+                                    OnClick="@(() => AgregarVisible = true)">
+                                <Icon Type="plus" />Nueva Unidad
+                            </Button>
+                            <Button Class="modern-button danger-button"
+                                    OnClick="@(() => navigationManager.NavigateTo("/unidades/baja", true))">
+                                <Icon Type="folder" /> Unidades de baja
+                            </Button>
+                        }
+                        else
+                        {
+                            <Button class="modern-button back-button"
+                                    OnClick="@(() => navigationManager.NavigateTo("/unidades/activas", true))">
+                                <Icon Type="folder-open" />Volver a Unidades activas
+                            </Button>
+                        }
+                    </div>
+                </div>
             </div>
 
             <div style="margin-top: 24px;">

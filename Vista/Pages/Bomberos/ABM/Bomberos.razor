@@ -23,7 +23,7 @@
         padding: 32px 16px !important;
     }
 
-    /* Card principal tipo Incidentes */
+
     .abm-main-card {
         background: rgba(255, 255, 255, 0.92) !important;
         backdrop-filter: blur(12px) !important;
@@ -34,7 +34,6 @@
         margin-bottom: 32px !important;
     }
 
-    /* Header animado tipo Incidentes/Licencias */
     .abm-header-section {
         background: linear-gradient(135deg, #A63333 0%, #732D2D 100%) !important;
         color: white !important;
@@ -142,7 +141,7 @@
 
     .abm-filters {
         display: grid !important;
-        grid-template-columns: 1fr 2fr auto !important;
+        grid-template-columns: 2fr 2fr auto !important;
         align-items: center !important;
         gap: 16px !important;
         margin-bottom: 16px !important;
@@ -154,6 +153,11 @@
             width: 100% !important;
             height: 40px !important;
         }
+
+        .abm-select-estado .ant-select-selector {
+    width: 100% !important;
+    height: 40px !important;
+}   
 
         .abm-filters .ant-input-search {
             display: flex !important;
@@ -176,9 +180,14 @@
 
     .ant-table-thead .ant-table-cell {
         background-color: #A63333 !important;
-        color: #ffffff !important;
+        color: #fff !important;
         font-weight: bold !important;
         padding: 16px !important;
+        border: none !important;
+    }
+    .ant-table-thead .ant-table-cell:hover {
+        background: #ececec9d !important;
+        color: #fff !important;
     }
 
     .ant-table-cell {
@@ -268,6 +277,34 @@
     margin-right: 950px;
     padding-bottom: 6px;
         }
+
+
+    .add-button {
+        background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
+        border: none !important;
+        color: white !important;
+        box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3) !important;
+        padding: 0 20px !important;
+        font-weight: 600 !important;
+        border-radius: 8px !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+    .add-button:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4) !important;
+    }
+
+
+    .abm-select-estado {
+        width: 100% !important;
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+        height: 40px !important;
+        font-size: 14px !important;
+
+        display: block !important;
+    }
+
 </style>
 
 <Flex Class="flex-container" Justify="FlexJustify.Center" Align="FlexAlign.Center">
@@ -290,12 +327,14 @@
                 <div class="abm-filters">
                     <EnumSelect DefaultValue="EstadoBombero.CuerpoActivo"
                                 ValueChanged="(EstadoBombero estado) => search(searchString, estado)"
-                                TEnum="EstadoBombero" />
+                                TEnum="EstadoBombero"
+                                Class="abm-select-estado" />
                     <Search Placeholder="Buscar Bombero"
                             @bind-Value="@searchString"
                             OnSearch="()=>search(searchString, Estado)"
                             BindOnInput />
                     <Button Type="ButtonType.Primary"
+                            Class="add-button"
                             OnClick="@(() => navigationManager.NavigateTo("/bomberos/agregar"))">
                         <Icon Type="plus" /> Agregar Bombero
                     </Button>

@@ -7,6 +7,121 @@
  */
 
 /* Contenedor principal */
+
+    /* --- Header Animado estilo Firmas --- */
+    .unidades-abm {
+        --abm-primary-color: #A63333;
+        --abm-primary-dark: #732D2D;
+        --abm-accent-color: #FFD54F;
+        --abm-warning-color: #F9A825;
+    }
+    .unidades-abm .header-section {
+        background: linear-gradient(135deg, var(--abm-primary-color) 0%, var(--abm-primary-dark) 100%) !important;
+        color: white !important;
+        padding: 28px !important;
+        position: relative !important;
+        overflow: hidden !important;
+        border-radius: 18px 18px 0 0;
+        margin-bottom: 0;
+    }
+    .unidades-abm .header-section .lava-bubbles {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        pointer-events: none;
+        z-index: 1;
+        overflow: hidden;
+    }
+    .unidades-abm .header-section .lava-bubble {
+        position: absolute;
+        border-radius: 50%;
+        opacity: 0.45;
+        background: radial-gradient(circle at 60% 40%, #FFD54F 0%, #F9A825 80%, transparent 100%);
+        animation: lava-bubble-move 8s linear infinite;
+        filter: blur(1.5px);
+        mix-blend-mode: lighten;
+    }
+    .unidades-abm .header-section .lava-bubble.b1 {
+        left: 10%; width: 60px; height: 60px; bottom: -70px;
+        animation-delay: 0s;
+        animation-duration: 7.5s;
+    }
+    .unidades-abm .header-section .lava-bubble.b2 {
+        left: 35%; width: 90px; height: 90px; bottom: -100px;
+        animation-delay: 2s;
+        animation-duration: 9s;
+        background: radial-gradient(circle at 60% 40%, #FFEB3B 0%, #FFD54F 80%, transparent 100%);
+    }
+    .unidades-abm .header-section .lava-bubble.b3 {
+        left: 65%; width: 50px; height: 50px; bottom: -60px;
+        animation-delay: 1.5s;
+        animation-duration: 6.5s;
+        background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #FFD54F 80%, transparent 100%);
+    }
+    .unidades-abm .header-section .lava-bubble.b4 {
+        left: 80%; width: 70px; height: 70px; bottom: -80px;
+        animation-delay: 3.2s;
+        animation-duration: 8.5s;
+        background: radial-gradient(circle at 60% 40%, #F9A825 0%, #FFD54F 80%, transparent 100%);
+    }
+    .unidades-abm .header-section .lava-bubble.b5 {
+        left: 55%; width: 40px; height: 40px; bottom: -50px;
+        animation-delay: 5s;
+        animation-duration: 7.2s;
+        background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #F9A825 80%, transparent 100%);
+    }
+    @keyframes lava-bubble-move {
+        0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 0.45; }
+        60% { opacity: 0.7; filter: blur(2.5px);}
+        80% { transform: translateY(-220px) scale(1.15) rotate(10deg); opacity: 0.6;}
+        100% { transform: translateY(-320px) scale(0.95) rotate(-8deg); opacity: 0;}
+    }
+    .unidades-abm .title-container {
+        position: relative !important;
+        z-index: 2 !important;
+        margin-bottom: 10px !important;
+    }
+    .unidades-abm .main-title {
+        font-family: 'Poppins', 'Fjalla One', sans-serif !important;
+        font-size: 2.2rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 1px !important;
+        margin: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 12px !important;
+        animation: text-glow 2.5s ease-in-out infinite alternate !important;
+        position: relative !important;
+        z-index: 2 !important;
+    }
+    .unidades-abm .title-icon {
+        color: var(--abm-accent-color) !important;
+        font-size: 2rem !important;
+        filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25)) !important;
+    }
+    @keyframes text-glow {
+        0%, 100% { text-shadow: 0 0 5px var(--abm-warning-color), 0 0 10px var(--abm-accent-color);}
+        50% { text-shadow: 0 0 12px var(--abm-warning-color), 0 0 22px var(--abm-accent-color);}
+    }
+    .unidades-abm .subtitle {
+        color: #ffe082;
+        font-size: 1.1rem;
+        margin-top: 4px;
+        margin-bottom: 0;
+        font-weight: 500;
+        z-index: 2;
+        position: relative;
+        letter-spacing: 0.5px;
+    }
+    .unidades-abm .header-actions {
+        z-index: 2;
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+
+
 .container {
     min-height: 100vh;
     display: flex;
@@ -258,7 +373,6 @@ button.ant-btn-primary {
     align-items: center;
 }
 
-    /* Estilos para los botones dentro de la cuadrícula de la tarjeta */
     .botones-grid button {
         border-radius: 0 !important;
         width: 100% !important;
@@ -308,3 +422,56 @@ button.ant-btn-primary {
 .botones-grid {
     margin-top: 20px;
 }
+
+/* Botones modernos estilo Licencias */
+.unidades-abm .modern-button {
+    height: 40px !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    position: relative !important;
+    overflow: hidden !important;
+    font-size: 15px !important;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.13) !important;
+    border: none !important;
+}
+
+.unidades-abm .add-button {
+    background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
+    color: white !important;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3) !important;
+    padding: 0 20px !important;
+}
+.unidades-abm .add-button:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4) !important;
+}
+
+.unidades-abm .danger-button {
+    background: linear-gradient(135deg, #d32f2f 0%, #a63333 100%) !important;
+    color: white !important;
+    box-shadow: 0 4px 12px rgba(211, 47, 47, 0.18) !important;
+    padding: 0 20px !important;
+}
+.unidades-abm .danger-button:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(211, 47, 47, 0.28) !important;
+}
+
+.unidades-abm .back-button {
+    background: linear-gradient(135deg, #2fd33f 0%, #1f9d2f 100%) !important;
+    color: white !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    padding: 0 20px !important;
+    box-shadow: 0 4px 12px rgba(47, 211, 63, 0.18) !important;
+}
+.unidades-abm .back-button:hover {
+    background: linear-gradient(135deg, #1f9d2f 0%, #2fd33f 100%) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(47, 211, 63, 0.28) !important;
+}
+

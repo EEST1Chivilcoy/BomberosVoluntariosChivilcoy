@@ -28,14 +28,14 @@
         --abm-gold-color: #FFD700;
     }
 
-        /* Contenedor principal con scope específico */
+
         .licencias-abm .licenses-container {
             padding: 12px !important;
             min-height: 100vh !important;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;
         }
 
-        /* Card principal con efecto glassmorphism */
+
         .licencias-abm .main-card {
             background: rgba(255, 255, 255, 0.95) !important;
             backdrop-filter: blur(10px) !important;
@@ -45,7 +45,7 @@
             overflow: hidden !important;
         }
 
-    /* Header animado tipo Incidentes */
+
     .licencias-abm .header-section {
         background: linear-gradient(135deg, #A63333 0%, #732D2D 100%) !important;
         color: white !important;
@@ -54,7 +54,7 @@
         overflow: hidden !important;
     }
 
-    /* Lava lamp bubbles background for header */
+
     .licencias-abm .header-section::before {
         content: '';
         display: none;
@@ -298,11 +298,16 @@
 
     /* Estilos de tabla personalizados - Scoped */
     .licencias-abm :deep(.ant-table-thead > tr > th) {
-        background: linear-gradient(135deg, var(--abm-primary-color) 0%, var(--abm-primary-dark) 100%) !important;
-        color: white !important;
+        background: #A63333 !important;
+        color: #fff !important;
         font-weight: 600 !important;
         border: none !important;
         padding: 16px !important;
+    }
+
+    .licencias-abm :deep(.ant-table-thead > tr > th):hover {
+        background: #ececec9d !important;
+        color: #fff !important;
     }
 
     .licencias-abm :deep(.ant-table-cell) {
@@ -408,7 +413,20 @@
         }
     }
 
-    /* Mejoras para inputs dentro del ABM */
+
+    .licencias-abm .ant-table-thead > tr > th {
+        background: #A63333 !important;
+        color: #fff !important;
+        font-weight: 600 !important;
+        border: none !important;
+        padding: 16px !important;
+    }
+    .licencias-abm .ant-table-thead > tr > th:hover {
+        background: #ececec9d !important;
+        color: #fff !important;
+    }
+
+
     .licencias-abm :deep(.ant-picker),
     .licencias-abm :deep(.ant-select-selector),
     .licencias-abm :deep(.ant-input) {

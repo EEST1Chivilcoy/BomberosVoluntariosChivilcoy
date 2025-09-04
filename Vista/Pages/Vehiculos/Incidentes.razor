@@ -1,243 +1,677 @@
-@inject NavigationManager navigationManager
-@inject IDbContextFactory<BomberosDbContext> DbFactory
-@inject IMessageService message
 @page "/incidentes-vehiculos"
-@using Vista.Services
-@using Vista.Components.Vehiculos
-@using Vista.Data.Models.Imagenes
-@using Microsoft.AspNetCore.Components.Forms
 @using System.ComponentModel
 @using AntDesign.TableModels
 @using System.Text.Json
-@using Vista.Data.Models.Personas.Personal
-@using Vista.Data.Models.Personas.Personal.Componentes
-@using Vista.Data.Models.Vehiculos.Flota
+
+@* Servicios utilizados *@
+@using Vista.Services;
+
+
+@inject IMessageService MessageService
+@inject IBomberoService BomberoService
 
 <style>
-    .template {
-        margin-top: 20px;
-        width: 100%;
-        max-width: 1200px;
-        padding: 20px;
-        background-color: #f8f8f8;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+    .firmas-abm {
+        --abm-primary-color: #A63333;       
+        --abm-primary-dark: #732D2D;        
+        --abm-success-color: #2E7D32;       
+        --abm-success-dark: #1B5E20;        
+        --abm-warning-color: #F9A825;       
+        --abm-warning-light: #FFFDE7;       
+        --abm-error-color: #C62828;        
+        --abm-error-light: #FFEBEE;         
+        --abm-info-color: #1565C0;         
+        --abm-info-light: #E1F5FE;          
+        --abm-accent-color: #FFD54F;        
     }
 
-    .ant-table {
-        background-color: white;
-        border-radius: 8px;
+    .firmas-abm .licenses-container {
+        padding: 16px !important;
+        min-height: 100vh !important;
+        background: linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%) !important; 
+    }
+
+    .firmas-abm .main-card {
+        background: rgba(255, 255, 255, 0.92) !important;
+        backdrop-filter: blur(12px) !important;
+        border-radius: 18px !important;
+        box-shadow: 0 6px 24px rgba(130, 0, 20, 0.25), 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+        border: 1px solid rgba(130, 0, 20, 0.15) !important;
+        overflow: hidden !important;
+    }
+
+    .firmas-abm .header-section {
+        background: linear-gradient(135deg, var(--abm-primary-color) 0%, var(--abm-primary-dark) 100%) !important;
+        color: white !important;
+        padding: 28px !important;
+        position: relative !important;
+        overflow: hidden !important;
+    }
+
+    .firmas-abm .header-section::before {
+        content: '';
+        display: none; 
+    }
+    .firmas-abm .header-section .lava-bubbles {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        pointer-events: none;
+        z-index: 1;
         overflow: hidden;
     }
-
-    .ant-table-title {
-        background-color: #A63333
+    .firmas-abm .header-section .lava-bubble {
+        position: absolute;
+        border-radius: 50%;
+        opacity: 0.45;
+        background: radial-gradient(circle at 60% 40%, #FFD54F 0%, #F9A825 80%, transparent 100%);
+        animation: lava-bubble-move 8s linear infinite;
+        filter: blur(1.5px);
+        mix-blend-mode: lighten;
+    }
+    .firmas-abm .header-section .lava-bubble.b1 {
+        left: 10%; width: 60px; height: 60px; bottom: -70px;
+        animation-delay: 0s;
+        animation-duration: 7.5s;
+    }
+    .firmas-abm .header-section .lava-bubble.b2 {
+        left: 35%; width: 90px; height: 90px; bottom: -100px;
+        animation-delay: 2s;
+        animation-duration: 9s;
+        background: radial-gradient(circle at 60% 40%, #FFEB3B 0%, #FFD54F 80%, transparent 100%);
+    }
+    .firmas-abm .header-section .lava-bubble.b3 {
+        left: 65%; width: 50px; height: 50px; bottom: -60px;
+        animation-delay: 1.5s;
+        animation-duration: 6.5s;
+        background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #FFD54F 80%, transparent 100%);
+    }
+    .firmas-abm .header-section .lava-bubble.b4 {
+        left: 80%; width: 70px; height: 70px; bottom: -80px;
+        animation-delay: 3.2s;
+        animation-duration: 8.5s;
+        background: radial-gradient(circle at 60% 40%, #F9A825 0%, #FFD54F 80%, transparent 100%);
+    }
+    .firmas-abm .header-section .lava-bubble.b5 {
+        left: 55%; width: 40px; height: 40px; bottom: -50px;
+        animation-delay: 5s;
+        animation-duration: 7.2s;
+        background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #F9A825 80%, transparent 100%);
     }
 
-    .ant-table-thead .ant-table-cell {
-        background-color: #A63333 !important;
+    @@keyframes lava-bubble-move {
+        0% {
+            transform: translateY(0) scale(1) rotate(0deg);
+            opacity: 0.45;
+        }
+        60% {
+            opacity: 0.7;
+            filter: blur(2.5px);
+        }
+        80% {
+            transform: translateY(-220px) scale(1.15) rotate(10deg);
+            opacity: 0.6;
+        }
+        100% {
+            transform: translateY(-320px) scale(0.95) rotate(-8deg);
+            opacity: 0;
+        }
+    }
+
+
+    .firmas-abm .main-title {
+
+        animation: text-glow 2.5s ease-in-out infinite alternate !important;
+        position: relative !important;
+        z-index: 2 !important;
+    }
+
+    .firmas-abm .add-button {
+
+        animation: button-pulse 1.8s infinite;
+    }
+
+
+    @@keyframes button-pulse {
+        0% { box-shadow: 0 4px 14px rgba(249, 168, 37, 0.45); }
+        50% { box-shadow: 0 6px 22px rgba(249, 168, 37, 0.65); }
+        100% { box-shadow: 0 4px 14px rgba(249, 168, 37, 0.45); }
+    }
+
+    @@keyframes text-glow {
+        0%, 100% { text-shadow: 0 0 5px var(--abm-warning-color), 0 0 10px var(--abm-accent-color); }
+        50% { text-shadow: 0 0 12px var(--abm-warning-color), 0 0 22px var(--abm-accent-color); }
+    }
+
+    .firmas-abm .title-container {
+        position: relative !important;
+        z-index: 2 !important;
+        margin-bottom: 20px !important;
+    }
+
+    .firmas-abm .main-title {
+        font-family: 'Poppins', 'Fjalla One', sans-serif !important;
+        font-size: 2.2rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 1px !important;
+        margin: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 12px !important;
+    }
+
+    .firmas-abm .title-icon {
+        color: var(--abm-accent-color) !important;
+        font-size: 2rem !important;
+        filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25)) !important;
+    }
+
+    .firmas-abm .filters-section {
+        position: relative !important;
+        z-index: 2 !important;
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+    }
+
+    .firmas-abm .filter-row {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
+        gap: 16px !important;
+        align-items: end !important;
+    }
+
+    .firmas-abm .filter-label {
+        font-weight: 600 !important;
+        color: rgba(255, 255, 255, 0.85) !important;
+        font-size: 0.85rem !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.4px !important;
+    }
+
+    .firmas-abm .actions-row {
+        display: grid !important;
+        grid-template-columns: 1fr auto !important;
+        gap: 16px !important;
+        align-items: center !important;
+    }
+
+    .firmas-abm .modern-button {
+        height: 42px !important;
+        border-radius: 10px !important;
+        font-weight: 600 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        transition: all 0.25s ease-in-out !important;
+        position: relative !important;
+        overflow: hidden !important;
+    }
+
+    .firmas-abm .add-button {
+        background: linear-gradient(135deg, var(--abm-warning-color) 0%, var(--abm-accent-color) 100%) !important;
+        border: none !important;
         color: white !important;
-        font-weight: bold;
+        box-shadow: 0 4px 14px rgba(249, 168, 37, 0.45) !important;
+        padding: 0 22px !important;
     }
 
-    .ant-table-cell {
+    .firmas-abm .add-button:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 22px rgba(249, 168, 37, 0.55) !important;
+    }
+
+    .firmas-abm .table-container {
+        padding: 0 !important;
+        overflow: hidden !important;
+    }
+
+    .firmas-abm .status-badge {
+        display: inline-block;
+        padding: 4px 10px !important;
+        border-radius: 12px !important;
+        font-weight: 600 !important;
+        font-size: 0.85rem !important;
+        text-transform: uppercase !important;
+    }
+
+    .firmas-abm .status-badge.Aprobada {
+        background: var(--abm-success-dark) !important;
+        color: #fff !important;
+    }
+
+    .firmas-abm .status-badge.Pendiente {
+        background: var(--abm-warning-color) !important;
+        color: #fff !important;
+    }
+
+    .firmas-abm .status-badge.Rechazada {
+        background: var(--abm-error-color) !important;
+        color: #fff !important;
+    }
+
+
+    .firmas-abm .ant-table-tbody > tr {
+        transition: background 0.22s, box-shadow 0.22s;
+        border-bottom: 1px solid #f3e6e6;
+        cursor: pointer;
+    }
+    .firmas-abm .ant-table-tbody > tr:hover {
+        background: #fffbe7 !important;
+        box-shadow: 0 2px 12px rgba(249, 168, 37, 0.08);
+        z-index: 2;
+    }
+
+
+    .firmas-abm .ant-table-tbody > tr > td {
+        border-bottom: 1px solid #f3e6e6 !important;
+    }
+
+
+    .firmas-abm th.ant-table-cell {
+        position: relative;
+        transition: background 0.18s, color 0.18s;
+        cursor: pointer;
+
+        z-index: 1;
+        background: #A63333 !important;
+        color: #fff !important;
+        font-weight: 600 !important;
+        border: none !important;
         padding: 16px !important;
     }
-
-    .title-template-container {
-        background-color: #A63333;
-        padding: 16px;
-        border-top-left-radius: 8px;
-        border-top-right-radius: 8px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+    .firmas-abm th.ant-table-cell:hover {
+        background: #ececec9d !important;
+        color: #fff !important;
     }
+    .firmas-abm th.ant-table-cell .ant-table-column-sorters {
 
-    .search-input {
-        width: 250px;
-    }
-
-        .search-input input {
-            background-color: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: none;
-        }
-
-            .search-input input::placeholder {
-                color: rgba(255, 255, 255, 0.7);
-            }
-
-    .add-button {
-        background-color: #4CAF50 !important;
-        border-color: #438E46 !important;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .boton_p {
-        background-color: #732D2D !important;
-        color: white !important;
-        border: none;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    @@media (max-width: 960px) {
-        .template {
-            padding: 10px;
-        }
-
-        .title-template-container {
-            flex-direction: column;
-            align-items: stretch;
-        }
-
-        .search-input,
-        .add-button {
-            width: 100%;
-            margin-top: 10px;
-        }
-    }
-
-    .flex-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .ant-form-horizontal .ant-form-item-label {
-        flex-grow: 1;
-        background: #A63333;
-    }
-
-        .ant-form-horizontal .ant-form-item-label > label {
-            color: #FFFFFF;
-            padding: 2px 4px;
-        }
-
-    .ant-form-item {
-        box-sizing: border-box;
-        margin: 0;
-        margin-bottom: 0px;
-        padding: 0;
-        color: rgba(0, 0, 0, 0.85);
-        font-size: 14px;
-        font-variant: tabular-nums;
-        line-height: 1.5715;
-        list-style: none;
-        font-feature-settings: 'tnum';
-        margin-bottom: 8px !important;
-        vertical-align: top;
-        font-weight: bold;
-    }
-
-    .ant-modal-content {
+        z-index: 2;
         position: relative;
-        background-color: #fff;
-        background-clip: padding-box;
-        border: 0;
-        border-radius: 2px;
-        box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
-        pointer-events: auto;
-        border: 1px solid red !important;
     }
 
+    .col-unidad {
+        min-width: 220px;
+        flex: 1 1 220px;
+    }
+    .col-departamento {
+        min-width: 220px;
+        flex: 1 1 220px;
+    }
 </style>
 
-<Flex Class="flex-container" Justify="FlexJustify.Center" Align="FlexAlign.Center">
-    <div class="template">
-        <Table TItem="VehiculoSalida"
-               DataSource="@vehiculos"
-               OnChange="OnChange"
-               @bind-PageIndex="_pageIndex"
-               @bind-PageSize="_pageSize"
-               Responsive>
-            <ColumnDefinitions>
-                <Column TData="VehiculoSalida" Title="Foto" Width="100">
-                    <Image Src="@CargarImage(context)" />
-                </Column>
-                <PropertyColumn Title="Número Movil" Property="m => m.NumeroMovil" Sortable />
-                <PropertyColumn Title="Encargado" Property="@(c => CargarEncargado(context))" Sortable />
-                <PropertyColumn Title="Patente" Property="c => c.Patente" Sortable />
-                <ActionColumn Align=ColumnAlign.Center>
-                    <Space>
-                        <SpaceItem>
-                            <Button Danger OnClick="() => IncidentesVista(context.VehiculoId)">
-                                <Icon Type="Schedule" /> Incidentes
-                            </Button>
-                        </SpaceItem>
-                    </Space>
-                </ActionColumn>
-            </ColumnDefinitions>
-        </Table>
-    </div>
-</Flex>
 
-@if (IncidentesVisible == true)
-{
-    <Modal Footer="null" OnCancel="() => IncidentesVisible = false" Visible="@IncidentesVisible" Style="width: 65%!important;">
-        <VehiculoIncidentes VehiculoId="@VehiculoId" OnClose="() => IncidentesVisible = false" />
-    </Modal>
-}
+
+<div class="firmas-abm">
+    <div class="licenses-container fade-in">
+        <Card Class="main-card">
+            <div class="header-section">
+                <div class="lava-bubbles">
+                    <div class="lava-bubble b1"></div>
+                    <div class="lava-bubble b2"></div>
+                    <div class="lava-bubble b3"></div>
+                    <div class="lava-bubble b4"></div>
+                    <div class="lava-bubble b5"></div>
+                </div>
+                <div class="title-container">
+                    <h1 class="main-title">
+                        <Icon Type="solution" Class="title-icon" />
+                        FIRMAS
+                    </h1>
+                </div>
+                <div class="filters-section">
+                    <Row Gutter="16">
+                        <Col Span="3">
+                            <label class="filter-label">📅 Fecha Desde</label>
+                            <DatePicker TValue="DateTime"
+                                        DefaultValue="@FechaBuscarI"
+                                        @bind-Value="@FechaBuscarI"
+                                        Size="InputSize.Large"/>
+                        </Col>
+                        <Col Span="3">
+                            <label class="filter-label">📅 Fecha Hasta</label>
+                            <DatePicker TValue="DateTime"
+                                        DefaultValue="@FechaBuscarF"
+                                        @bind-Value="@FechaBuscarF"
+                                        Size="InputSize.Large" />
+                        </Col>
+                    </Row>
+                    <Row Gutter="16">
+                        <Col Span="10" Class="col-busqueda-bombero">
+                            <Search Placeholder="🔍 Buscar por bombero..."
+                                    AllowClear
+                                    EnterButton="true"
+                                    Size="InputSize.Large"
+                                    OnSearch="@(() => FirmasVM = FiltrarFirmas())"
+                                    @bind-Value="Busqueda" />
+                        </Col>
+                        <Col Span="5" Class="col-unidad">
+                            <Select TItem="string"
+                                    TItemValue="string"
+                                    DataSource="@UnidadesDisponibles"
+                                    Value="UnidadSeleccionada"
+                                    ValueChanged="@(v => { UnidadSeleccionada = v; FirmasVM = FiltrarFirmas(); })"
+                                    Placeholder="Filtrar por unidad"
+                                    AllowClear
+                                    EnableSearch
+                                    Size="InputSize.Large" />
+                        </Col>
+                        <Col Span="5" Class="col-departamento">
+                            <Select TItem="string"
+                                    TItemValue="string"
+                                    DataSource="@DepartamentosDisponibles"
+                                    Value="DepartamentoSeleccionado"
+                                    ValueChanged="@(v => { DepartamentoSeleccionado = v; FirmasVM = FiltrarFirmas(); })"
+                                    Placeholder="Filtrar por departamento"
+                                    AllowClear
+                                    EnableSearch
+                                    Size="InputSize.Large" />
+                        </Col>
+                        <Col Span="4" Class="col-nueva-firma">
+                            <Button Class="modern-button add-button"
+                                    OnClick="@(() => _modalAñadirVisible = true)"
+                                    Icon="plus"
+                                    Size="ButtonSize.Large">
+                                Nueva Firma
+                            </Button>
+                        </Col>
+                    </Row>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <Table DataSource="FirmasVM"
+                       PageSize="10"
+                       Responsive
+                       TItem="FirmaViewModel"
+                       RowClassName="@(c => c.Data.EstadoFirma)"
+                       OnRow="@OnRowClick"
+                       Loading="@_loading">
+
+                    <ColumnDefinitions Context="firma">
+                        <PropertyColumn  Title = "📅 Fecha"
+                                        Property="c => c.Fecha"
+                                        Format="dd/MM/yyyy"
+                                        Sortable
+                                        Width="110px" />
+
+                        <PropertyColumn Title="📝 Descripción"
+                                        Property="c => c.Descripcion"
+                                        Sortable
+                                        Width="160px" />
+
+                        <PropertyColumn Title="🏷️ Tipo de Incidente"
+                                        Property="c => c.TipoIncidente"
+                                        Sortable
+                                        Width="120px" />
+
+                        <PropertyColumn Title="🏢 Unidad"
+                                        Property="c => c.Unidad"
+                                        Sortable
+                                        Width="110px" />
+
+                        <PropertyColumn Title="🏬 Departamento"
+                                        Property="c => c.Departamento"
+                                        Sortable
+                                        Width="120px" />
+
+                        <PropertyColumn Title="👤 Informado por"
+                                        Property="c => c.InformadoPor"
+                                        Sortable
+                                        Width="120px" />
+
+                        <PropertyColumn Title="📊 Estado"
+                                        Property="c => c.EstadoFirma"
+                                        Sortable
+                                        Width="110px">
+                            <Template>
+                                <span class="status-badge">@firma.EstadoFirma</span>
+                            </Template>
+                        </PropertyColumn>
+
+                        <PropertyColumn Title="👤 Bombero"
+                                        Property="c => c.Bombero"
+                                        Sortable
+                                        Width="120px" />
+                    </ColumnDefinitions>
+                </Table>
+            </div>
+        </Card>
+    </div>
+</div>
+
+<Modal @bind-Visible="_modalAñadirVisible"
+       Title="➕ Nueva Firma"
+       Width="@("90%")"
+       Style="max-width: 800px;"
+       OkText="@("Crear Firma")"
+       CancelText="@("Cancelar")"
+       OnOk="@AddFirma"
+       DestroyOnClose>
+    <div class="firmas-abm">
+        <div class="modal-content">
+            <Form Model="nuevaFirma" Layout="FormLayout.Vertical">
+                <div class="form-grid">
+                    <div class="form-row">
+                        <FormItem Label="👤 Bombero" Required>
+                            <Select TItem="BomberoViewModel"
+                                    TItemValue="int"
+                                    DataSource="@BomberosVM"
+                                    Value="nuevaFirma.BomberoId"
+                                    ValueChanged="OnBomberoChanged"
+                                    LabelName="@nameof(BomberoViewModel.NombreYApellido)"
+                                    ValueName="@nameof(BomberoViewModel.Id)"
+                                    Placeholder="Seleccione el bombero"
+                                    AllowClear
+                                    EnableSearch
+                                    Size="InputSize.Large" />
+                        </FormItem>
+                    </div>
+
+                    <FormItem Label="📝 Descripción" Class="form-full-width">
+                        <TextArea @bind-Value="@nuevaFirma.Descripcion"
+                                  Placeholder="Ingrese una descripción del incidente"
+                                  Rows="4"
+                                  ShowCount
+                                  MaxLength="500" />
+                    </FormItem>
+
+                    <div class="form-row">
+                        <FormItem Label="📅 Fecha" Required>
+                            <DatePicker TValue="DateTime"
+                                        @bind-Value="@nuevaFirma.Fecha"
+                                        DefaultValue="DateTime.Today"
+                                        Placeholder="@("Seleccione fecha")"
+                                        Size="InputSize.Large" />
+                        </FormItem>
+                        <FormItem Label="🏷️ Tipo de Incidente" Required>
+                            <Input @bind-Value="nuevaFirma.TipoIncidente"
+                                   Placeholder="Tipo de incidente"
+                                   Size="InputSize.Large" />
+                        </FormItem>
+                    </div>
+
+                    <FormItem Label="👤 Informado por">
+                        <Input @bind-Value="nuevaFirma.InformadoPor"
+                               Placeholder="Nombre de quien informa"
+                               Size="InputSize.Large" />
+                    </FormItem>
+                </div>
+            </Form>
+        </div>
+    </div>
+</Modal>
+
+<Modal @bind-Visible="_modalDetalleVisible"
+       Title="@($"📋 Detalle de Firma - {firmaSeleccionada?.Bombero}")"
+       Footer="null"
+       Width="@("90%")"
+       Style="max-width: 1000px;">
+    @if (firmaSeleccionada != null)
+    {
+        <div class="firmas-abm">
+            <div class="modal-content">
+                <div class="detail-grid">
+                    <div class="detail-item">
+                        <div class="detail-label">📅 Fecha</div>
+                        <div class="detail-value">@firmaSeleccionada.Fecha.ToString("dddd, dd MMMM yyyy")</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">📝 Descripción</div>
+                        <div class="detail-value">@firmaSeleccionada.Descripcion</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">🏷️ Tipo de Incidente</div>
+                        <div class="detail-value">@firmaSeleccionada.TipoIncidente</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">👤 Informado por</div>
+                        <div class="detail-value">@firmaSeleccionada.InformadoPor</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">📊 Estado</div>
+                        <div class="detail-value">
+                            <span class="status-badge">@firmaSeleccionada.EstadoFirma</span>
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">👤 Bomberos</div>
+                        <div class="detail-value">@firmaSeleccionada.Bombero</div>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: center; margin-top: 24px;">
+                    <Button Type="ButtonType.Primary"
+                            Size="ButtonSize.Large"
+                            OnClick="@(() => _modalDetalleVisible = false)">
+                        Cerrar
+                    </Button>
+                </div>
+            </div>
+        </div>
+    }
+</Modal>
 
 @code {
-    List<VehiculoSalida>? vehiculos = new List<VehiculoSalida>();
+    // Variables para la búsqueda de firmas
+    string? Busqueda;
+    bool _loading = false;
 
-    // Variables
-    public int VehiculoId { get; set; }
-    public bool IncidentesVisible { get; set; }
-    int _pageIndex = 1;
-    int _pageSize = 6;
+    // Lista de firmas
+    List<FirmaViewModel> FirmasVM = new();
+    List<FirmaViewModel> FirmasVM_SinFiltro = new();
 
-    //Funciones modal
+    // Lista de bomberos para el select
+    List<BomberoViewModel> BomberosVM = new();
 
-    public async void IncidentesVista(int ID)
+    // Variables para modales
+    private bool _modalAñadirVisible = false;
+    private bool _modalDetalleVisible = false;
+
+    private FirmaViewModel nuevaFirma = new FirmaViewModel();
+    private FirmaViewModel? firmaSeleccionada;
+
+    // Nuevos filtros para Unidad y Departamento
+    string? UnidadSeleccionada;
+    string? DepartamentoSeleccionado;
+
+    // Variables para la búsqueda por fecha
+    DateTime FechaBuscarI;
+    DateTime FechaBuscarF;
+
+    // Listas de opciones para los selects (puedes poblarlas desde el backend o hardcodear para pruebas)
+    List<string> UnidadesDisponibles { get; set; } = new();
+    List<string> DepartamentosDisponibles { get; set; } = new();
+
+    // Función para manejar el clic en una fila de la tabla
+    private Dictionary<string, object> OnRowClick(RowData<FirmaViewModel> rowData)
     {
-        VehiculoId = ID;
-        IncidentesVisible = true;
-    }
-
-    // Init, OnChange y Carga de datos
-    protected override async Task OnInitializedAsync()
-    {
-        using var db = await DbFactory.CreateDbContextAsync();
-        vehiculos = await db.Set<VehiculoSalida>().OrderBy(m => m.NumeroMovil).ToListAsync();
-
-        StateHasChanged();
-    }
-
-    private async Task OnChange(QueryModel<VehiculoSalida> queryModel)
-    {
-        Console.WriteLine(JsonSerializer.Serialize(queryModel));
-        OnInitializedAsync();
-    }
-
-    public string CargarEncargado(VehiculoSalida vehiculo)
-    {
-        var Context = DbFactory.CreateDbContext();
-
-        int? EncargadoId = vehiculo.EncargadoId;
-        if (EncargadoId != null && EncargadoId != 0)
+        return new Dictionary<string, object>
         {
-            Bombero Encargado = Context.Bomberos.Where(b => b.PersonaId == EncargadoId).SingleOrDefault();
-            return (Encargado.Apellido + ", " + Encargado.Nombre);
-        }
-        return "";
+            ["onclick"] = Microsoft.AspNetCore.Components.EventCallback.Factory.Create<Microsoft.AspNetCore.Components.Web.MouseEventArgs>(this, () => MostrarDetalleFirma(rowData.Data))
+        };
     }
 
-
-    public string CargarImage(VehiculoSalida vehiculo)
+    private void MostrarDetalleFirma(FirmaViewModel firma)
     {
-        var Context = DbFactory.CreateDbContext();
+        firmaSeleccionada = firma;
+        _modalDetalleVisible = true;
+    }
 
-        string src = "/";
+    private List<FirmaViewModel> FiltrarFirmas()
+    {
+        var filtered = FirmasVM_SinFiltro
+            .Where(f =>
+                (FechaBuscarI == default || f.Fecha >= FechaBuscarI) &&
+                (FechaBuscarF == default || f.Fecha <= FechaBuscarF) &&
+                (string.IsNullOrWhiteSpace(Busqueda) || (f.Bombero?.Contains(Busqueda, StringComparison.OrdinalIgnoreCase) ?? false)) &&
+                (string.IsNullOrWhiteSpace(UnidadSeleccionada) || f.Unidad == UnidadSeleccionada) &&
+                (string.IsNullOrWhiteSpace(DepartamentoSeleccionado) || f.Departamento == DepartamentoSeleccionado)
+            )
+            .ToList();
 
-        Imagen? imagen = Context.ImagenesVehiculo.Where(i => i.ImagenId == vehiculo.ImagenId).SingleOrDefault();
+        return filtered;
+    }
 
-        if (imagen is not null)
+    protected override void OnInitialized()
+    {
+        FechaBuscarI = DateTime.Today.AddDays(-30);
+        FechaBuscarF = DateTime.Today.AddDays(30);
+    }
+
+    private async Task OnBomberoChanged(int nuevoValor)
+    {
+        nuevaFirma.BomberoId = nuevoValor;
+        var bombero = BomberosVM.FirstOrDefault(b => b.Id == nuevoValor);
+
+        if (bombero != null)
         {
-            src = $"data:{imagen.TipoImagen}; base64,{imagen.Base64Imagen}";
+            nuevaFirma.Bombero = bombero.NombreYApellido;
+        }
+        else
+        {
+            nuevaFirma.Bombero = null;
+        }
+    }
+
+    private async Task AddFirma()
+    {
+        if (string.IsNullOrWhiteSpace(nuevaFirma.Bombero) ||
+            nuevaFirma.BomberoId <= 0 ||
+            nuevaFirma.Fecha == default ||
+            string.IsNullOrWhiteSpace(nuevaFirma.TipoIncidente))
+        {
+            await MessageService.ErrorAsync("⚠️ Por favor, complete todos los campos obligatorios.");
+            return;
         }
 
-        return src;
+        var bombero = BomberosVM.FirstOrDefault(b => b.Id == nuevaFirma.BomberoId);
+
+        if (bombero == null)
+        {
+            await MessageService.ErrorAsync("❌ El bombero seleccionado no es válido.");
+            return;
+        }
+
+    }
+
+    // ViewModels
+    public class FirmaViewModel
+    {
+        public int Id { get; set; }
+        public int BomberoId { get; set; }
+        public string? Bombero { get; set; }
+        public DateTime Fecha { get; set; }
+        public string? Descripcion { get; set; }
+        public string? TipoIncidente { get; set; }
+        public string? Unidad { get; set; }         // NUEVO
+        public string? Departamento { get; set; }   // NUEVO
+        public string? InformadoPor { get; set; }
+        public string? EstadoFirma { get; set; }
+    }
+
+    public class BomberoViewModel
+    {
+        public int Id { get; set; }
+        public string? NombreYApellido { get; set; }
     }
 }
