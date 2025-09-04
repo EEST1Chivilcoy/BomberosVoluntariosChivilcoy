@@ -602,11 +602,12 @@
 
     .main-sider {
         position: fixed !important;
-        top: var(--header-height) !important;
+        top: 80px !important; 
         left: 0 !important;
         bottom: 0 !important;
         z-index: 999 !important;
         transition: transform 0.3s ease !important;
+        margin-top: 0 !important;
     }
 
         .main-sider.ant-layout-sider-collapsed {
@@ -616,6 +617,7 @@
     .main-content {
         margin-left: 0 !important;
         padding: 15px !important;
+        margin-top: 0 !important;
     }
 
 
