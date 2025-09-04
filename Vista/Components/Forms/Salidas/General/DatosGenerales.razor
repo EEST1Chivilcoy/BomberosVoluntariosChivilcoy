@@ -9,7 +9,7 @@
 @inject INominatimService GeorefService
 
 <style>
-    /* Contenedor para el mapa */
+
     .map-container {
         width: 300px;
         height: 300px;
@@ -41,6 +41,18 @@
         align-items: center;
         gap: 0.7rem;
     }
+
+    .hora-row {
+        display: flex;
+        gap: 24px; 
+        align-items: flex-end;
+        margin-bottom: 16px;
+    }
+    .hora-row .ant-form-item {
+        margin-bottom: 0;
+        min-width: 180px;
+    }
+    
 </style>
 
 <div class="datos-generales">
@@ -65,18 +77,14 @@
                 </FormItem>
             }
 
-            <Row Gutter="16">
-                <AntDesign.Col Span="12">
-                    <FormItem Label="Hora Salida" Required>
-                        <TimePicker @bind-Value="@Model.TimeSalida" Format="HH:mm" />
-                    </FormItem>
-                </AntDesign.Col>
-                <AntDesign.Col Span="12">
-                    <FormItem Label="Hora Llegada" Required>
-                        <TimePicker @bind-Value="@Model.TimeLlegada" Format="HH:mm" />
-                    </FormItem>
-                </AntDesign.Col>
-            </Row>
+            <div class="hora-row">
+                <FormItem Label="Hora Salida" Required>
+                    <TimePicker @bind-Value="@Model.TimeSalida" Format="HH:mm" />
+                </FormItem>
+                <FormItem Label="Hora Llegada" Required>
+                    <TimePicker @bind-Value="@Model.TimeLlegada" Format="HH:mm" />
+                </FormItem>
+            </div>
         </div>
 
         @* 📍 Ubicación *@
@@ -119,16 +127,6 @@
                         {
                             <Input @bind-Value="@Model.CalleORuta" Placeholder="Ingrese dirección" />
                         }
-                    </FormItem>
-                </AntDesign.Col>
-                <AntDesign.Col Span="6">
-                    <FormItem Label="Latitud" Required>
-                        <Input @bind-Value="@Model.Latitud" Disabled="@isApiAvailable" Placeholder="Latitud" />
-                    </FormItem>
-                </AntDesign.Col>
-                <AntDesign.Col Span="6">
-                    <FormItem Label="Longitud" Required>
-                        <Input @bind-Value="@Model.Longitud" Disabled="@isApiAvailable" Placeholder="Longitud" />
                     </FormItem>
                 </AntDesign.Col>
             </Row>
@@ -231,8 +229,7 @@
         if (Model.FechaSalida == default ||
             Model.TimeSalida == default ||
             Model.TimeLlegada == default ||
-            string.IsNullOrWhiteSpace(Model.Descripcion) ||
-            Model.Latitud == 0.0 || Model.Longitud == 0.0)
+            string.IsNullOrWhiteSpace(Model.Descripcion))
         {
             esValido = false;
         }

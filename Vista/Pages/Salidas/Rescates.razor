@@ -76,21 +76,19 @@
 
             <TabPane Key="7" Tab="🛠️ Tipo de Servicio">
                 <TipoDeServicio Model="@PersonaViewModel" isUnlocked="true" OnCompleted="@((bool done) => {/* noop */})" />
+                <div class="submit-section-firmas">
+                    <FormItem WrapperColSpan="24" Style="margin: 0;">
+                        <Button HtmlType="submit"
+                                Size="ButtonSize.Large"
+                                class="submit-button-firmas">
+                            <Icon Type="printer" Style="margin-right: 0.5rem;" />
+                            Imprimir Salida
+                        </Button>
+                    </FormItem>
+                </div>
             </TabPane>
 
         </Tabs>
-
-        <!-- Submit Section -->
-        <div class="submit-section">
-            <FormItem WrapperColSpan="24" Style="margin: 0;">
-                <Button HtmlType="submit"
-                        Size="ButtonSize.Large"
-                        class="submit-button">
-                    <Icon Type="printer" Style="margin-right: 0.5rem;" />
-                    Imprimir Salida
-                </Button>
-            </FormItem>
-        </div>
 
         @if (_visible1 == true)
         {
@@ -376,7 +374,7 @@
     }
 
 
-    .submit-section {
+    .submit-section-firmas {
         background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%);
         border-radius: 12px;
         padding: 2rem;
@@ -384,7 +382,7 @@
         margin-top: 1rem;
     }
 
-    .submit-button {
+    .submit-button-firmas {
         background: white !important;
         color: #1890ff !important;
         border: none !important;
@@ -397,10 +395,10 @@
         transition: all 0.3s ease !important;
     }
 
-        .submit-button:hover {
-            transform: translateY(-2px) !important;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2) !important;
-        }
+    .submit-button-firmas:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.2) !important;
+    }
 
 
 
@@ -461,11 +459,11 @@
             font-size: 1.2rem !important;
         }
 
-        .submit-section {
+        .submit-section-firmas {
             padding: 1.5rem !important;
         }
 
-        .submit-button {
+        .submit-button-firmas {
             padding: 0.6rem 2rem !important;
             font-size: 1rem !important;
         }
@@ -520,4 +518,3 @@
         }
     }
 </style>
-

@@ -28,14 +28,14 @@
         --abm-gold-color: #FFD700;
     }
 
-        /* Contenedor principal con scope específico */
+
         .licencias-abm .licenses-container {
             padding: 12px !important;
             min-height: 100vh !important;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;
         }
 
-        /* Card principal con efecto glassmorphism */
+
         .licencias-abm .main-card {
             background: rgba(255, 255, 255, 0.95) !important;
             backdrop-filter: blur(10px) !important;
@@ -45,56 +45,114 @@
             overflow: hidden !important;
         }
 
-        /* Header responsivo */
-        .licencias-abm .header-section {
-            background: linear-gradient(135deg, var(--abm-primary-color) 0%, var(--abm-primary-dark) 100%) !important;
-            color: white !important;
-            padding: 24px !important;
-            position: relative !important;
-            overflow: hidden !important;
-        }
 
-            .licencias-abm .header-section::before {
-                content: '' !important;
-                position: absolute !important;
-                top: -50% !important;
-                right: -50% !important;
-                width: 200% !important;
-                height: 200% !important;
-                background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 50%) !important;
-                animation: abm-rotate 20s linear infinite !important;
-            }
+    .licencias-abm .header-section {
+        background: linear-gradient(135deg, #A63333 0%, #732D2D 100%) !important;
+        color: white !important;
+        padding: 28px !important;
+        position: relative !important;
+        overflow: hidden !important;
+    }
 
-    @@keyframes abm-rotate {
-        from {
-            transform: rotate(0deg);
-        }
 
-        to {
-            transform: rotate(360deg);
+    .licencias-abm .header-section::before {
+        content: '';
+        display: none;
+    }
+    .licencias-abm .header-section .lava-bubbles {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        pointer-events: none;
+        z-index: 1;
+        overflow: hidden;
+    }
+    .licencias-abm .header-section .lava-bubble {
+        position: absolute;
+        border-radius: 50%;
+        opacity: 0.45;
+        background: radial-gradient(circle at 60% 40%, #FFD54F 0%, #F9A825 80%, transparent 100%);
+        animation: lava-bubble-move 8s linear infinite;
+        filter: blur(1.5px);
+        mix-blend-mode: lighten;
+    }
+    .licencias-abm .header-section .lava-bubble.b1 {
+        left: 10%; width: 60px; height: 60px; bottom: -70px;
+        animation-delay: 0s;
+        animation-duration: 7.5s;
+    }
+    .licencias-abm .header-section .lava-bubble.b2 {
+        left: 35%; width: 90px; height: 90px; bottom: -100px;
+        animation-delay: 2s;
+        animation-duration: 9s;
+        background: radial-gradient(circle at 60% 40%, #FFEB3B 0%, #FFD54F 80%, transparent 100%);
+    }
+    .licencias-abm .header-section .lava-bubble.b3 {
+        left: 65%; width: 50px; height: 50px; bottom: -60px;
+        animation-delay: 1.5s;
+        animation-duration: 6.5s;
+        background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #FFD54F 80%, transparent 100%);
+    }
+    .licencias-abm .header-section .lava-bubble.b4 {
+        left: 80%; width: 70px; height: 70px; bottom: -80px;
+        animation-delay: 3.2s;
+        animation-duration: 8.5s;
+        background: radial-gradient(circle at 60% 40%, #F9A825 0%, #FFD54F 80%, transparent 100%);
+    }
+    .licencias-abm .header-section .lava-bubble.b5 {
+        left: 55%; width: 40px; height: 40px; bottom: -50px;
+        animation-delay: 5s;
+        animation-duration: 7.2s;
+        background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #F9A825 80%, transparent 100%);
+    }
+
+    @@keyframes lava-bubble-move {
+        0% {
+            transform: translateY(0) scale(1) rotate(0deg);
+            opacity: 0.45;
         }
+        60% {
+            opacity: 0.7;
+            filter: blur(2.5px);
+        }
+        80% {
+            transform: translateY(-220px) scale(1.15) rotate(10deg);
+            opacity: 0.6;
+        }
+        100% {
+            transform: translateY(-320px) scale(0.95) rotate(-8deg);
+            opacity: 0;
+        }
+    }
+
+    .licencias-abm .main-title {
+        font-family: 'Poppins', 'Fjalla One', sans-serif !important;
+        font-size: 2.2rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 1px !important;
+        margin: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 12px !important;
+        animation: text-glow 2.5s ease-in-out infinite alternate !important;
+        position: relative !important;
+        z-index: 2 !important;
+    }
+
+    .licencias-abm .title-icon {
+        color: #FFD54F !important;
+        font-size: 2rem !important;
+        filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25)) !important;
+    }
+
+    @@keyframes text-glow {
+        0%, 100% { text-shadow: 0 0 5px #F9A825, 0 0 10px #FFD54F; }
+        50% { text-shadow: 0 0 12px #F9A825, 0 0 22px #FFD54F; }
     }
 
     .licencias-abm .title-container {
         position: relative !important;
         z-index: 2 !important;
-        margin-bottom: 24px !important;
-    }
-
-    .licencias-abm .main-title {
-        font-family: 'Bebas Neue', 'Fjalla One', sans-serif !important;
-        font-size: 2.5rem !important;
-        letter-spacing: 3px !important;
-        margin: 0 !important;
-        display: flex !important;
-        align-items: center !important;
-        gap: 12px !important;
-    }
-
-    .licencias-abm .title-icon {
-        color: var(--abm-gold-color) !important;
-        font-size: 2rem !important;
-        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3)) !important;
+        margin-bottom: 20px !important;
     }
 
     /* Filtros responsivos */
@@ -240,11 +298,16 @@
 
     /* Estilos de tabla personalizados - Scoped */
     .licencias-abm :deep(.ant-table-thead > tr > th) {
-        background: linear-gradient(135deg, var(--abm-primary-color) 0%, var(--abm-primary-dark) 100%) !important;
-        color: white !important;
+        background: #A63333 !important;
+        color: #fff !important;
         font-weight: 600 !important;
         border: none !important;
         padding: 16px !important;
+    }
+
+    .licencias-abm :deep(.ant-table-thead > tr > th):hover {
+        background: #ececec9d !important;
+        color: #fff !important;
     }
 
     .licencias-abm :deep(.ant-table-cell) {
@@ -350,7 +413,20 @@
         }
     }
 
-    /* Mejoras para inputs dentro del ABM */
+
+    .licencias-abm .ant-table-thead > tr > th {
+        background: #A63333 !important;
+        color: #fff !important;
+        font-weight: 600 !important;
+        border: none !important;
+        padding: 16px !important;
+    }
+    .licencias-abm .ant-table-thead > tr > th:hover {
+        background: #ececec9d !important;
+        color: #fff !important;
+    }
+
+
     .licencias-abm :deep(.ant-picker),
     .licencias-abm :deep(.ant-select-selector),
     .licencias-abm :deep(.ant-input) {
@@ -455,13 +531,19 @@
     <div class="licenses-container fade-in">
         <Card Class="main-card">
             <div class="header-section">
+                <div class="lava-bubbles">
+                    <div class="lava-bubble b1"></div>
+                    <div class="lava-bubble b2"></div>
+                    <div class="lava-bubble b3"></div>
+                    <div class="lava-bubble b4"></div>
+                    <div class="lava-bubble b5"></div>
+                </div>
                 <div class="title-container">
                     <h1 class="main-title">
                         <Icon Type="key" Class="title-icon" />
                         GESTIÓN DE LICENCIAS
                     </h1>
                 </div>
-
                 <div class="filters-section">
                     <div class="filter-row">
                         <div class="filter-group">
