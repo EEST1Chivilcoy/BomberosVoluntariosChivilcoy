@@ -9,7 +9,7 @@ namespace Vista.Data.Enums
         Salida,
         [Display(Name = "Baja")]
         Baja,
-        [Display(Name = "Entrada Salida")]
+        [Display(Name = "Entrada-Baja")]
         Entrada_Salida,
     }
 }

@@ -7,96 +7,311 @@
 @using Vista.Data.Models.Personas.Personal.Componentes
 
 <style>
-    .template {
-        margin-top: 20px;
-        width: 100%;
-        max-width: 1200px;
-        padding: 20px;
-        background-color: #f8f8f8;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    .sancionados-abm {
+        --sancionados-primary-color: #A63333;
+        --sancionados-primary-dark: #732D2D;
+        --sancionados-accent-color: #FFD54F;
+        --sancionados-warning-color: #F9A825;
+        --sancionados-success-color: #4CAF50;
+        --sancionados-success-dark: #438E46;
     }
 
-    .ant-table {
-        background-color: white;
-        border-radius: 8px;
+    .sancionados-abm .sancionados-container {
+        padding: 12px !important;
+        min-height: 100vh !important;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;
+    }
+
+    .sancionados-abm .main-card {
+        background: rgba(255, 255, 255, 0.95) !important;
+        backdrop-filter: blur(10px) !important;
+        border-radius: 16px !important;
+        box-shadow: 0 8px 32px rgba(166, 51, 51, 0.1), 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        overflow: hidden !important;
+    }
+
+    .sancionados-abm .header-section {
+        background: linear-gradient(135deg, var(--sancionados-primary-color) 0%, var(--sancionados-primary-dark) 100%) !important;
+        color: white !important;
+        padding: 28px !important;
+        position: relative !important;
+        overflow: hidden !important;
+    }
+
+    .sancionados-abm .header-section .lava-bubbles {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        pointer-events: none;
+        z-index: 1;
         overflow: hidden;
     }
-
-    .ant-table-title {
-        background-color: #A63333
+    .sancionados-abm .header-section .lava-bubble {
+        position: absolute;
+        border-radius: 50%;
+        opacity: 0.45;
+        background: radial-gradient(circle at 60% 40%, #FFD54F 0%, #F9A825 80%, transparent 100%);
+        animation: lava-bubble-move 8s linear infinite;
+        filter: blur(1.5px);
+        mix-blend-mode: lighten;
+    }
+    .sancionados-abm .header-section .lava-bubble.b1 {
+        left: 10%; width: 60px; height: 60px; bottom: -70px;
+        animation-delay: 0s;
+        animation-duration: 7.5s;
+    }
+    .sancionados-abm .header-section .lava-bubble.b2 {
+        left: 35%; width: 90px; height: 90px; bottom: -100px;
+        animation-delay: 2s;
+        animation-duration: 9s;
+        background: radial-gradient(circle at 60% 40%, #FFEB3B 0%, #FFD54F 80%, transparent 100%);
+    }
+    .sancionados-abm .header-section .lava-bubble.b3 {
+        left: 65%; width: 50px; height: 50px; bottom: -60px;
+        animation-delay: 1.5s;
+        animation-duration: 6.5s;
+        background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #FFD54F 80%, transparent 100%);
+    }
+    .sancionados-abm .header-section .lava-bubble.b4 {
+        left: 80%; width: 70px; height: 70px; bottom: -80px;
+        animation-delay: 3.2s;
+        animation-duration: 8.5s;
+        background: radial-gradient(circle at 60% 40%, #F9A825 0%, #FFD54F 80%, transparent 100%);
+    }
+    .sancionados-abm .header-section .lava-bubble.b5 {
+        left: 55%; width: 40px; height: 40px; bottom: -50px;
+        animation-delay: 5s;
+        animation-duration: 7.2s;
+        background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #F9A825 80%, transparent 100%);
     }
 
-    .ant-table-thead .ant-table-cell {
-        background-color: #A63333 !important;
+    @@keyframes lava-bubble-move {
+        0% {
+            transform: translateY(0) scale(1) rotate(0deg);
+            opacity: 0.45;
+        }
+        60% {
+            opacity: 0.7;
+            filter: blur(2.5px);
+        }
+        80% {
+            transform: translateY(-220px) scale(1.15) rotate(10deg);
+            opacity: 0.6;
+        }
+        100% {
+            transform: translateY(-320px) scale(0.95) rotate(-8deg);
+            opacity: 0;
+        }
+    }
+
+    .sancionados-abm .main-title {
+        font-family: 'Poppins', 'Fjalla One', sans-serif !important;
+        font-size: 2.2rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 1px !important;
+        margin: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 12px !important;
+        animation: text-glow 2.5s ease-in-out infinite alternate !important;
+        position: relative !important;
+        z-index: 2 !important;
+    }
+    .sancionados-abm .title-icon {
+        color: var(--sancionados-accent-color) !important;
+        font-size: 2rem !important;
+        filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25)) !important;
+    }
+    @@keyframes text-glow {
+        0%, 100% { text-shadow: 0 0 5px var(--sancionados-warning-color), 0 0 10px var(--sancionados-accent-color); }
+        50% { text-shadow: 0 0 12px var(--sancionados-warning-color), 0 0 22px var(--sancionados-accent-color); }
+    }
+    .sancionados-abm .title-container {
+        position: relative !important;
+        z-index: 2 !important;
+        margin-bottom: 20px !important;
+    }
+
+    .sancionados-abm .actions-row {
+        display: flex !important;
+        justify-content: flex-end !important;
+        align-items: center !important;
+        gap: 16px !important;
+        margin-top: 16px !important;
+    }
+
+    .sancionados-abm .table-container {
+        padding: 0 !important;
+        overflow: hidden !important;
+    }
+
+    .sancionados-abm .modern-button {
+        height: 40px !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        position: relative !important;
+        overflow: hidden !important;
+    }
+
+    .sancionados-abm .add-button {
+        background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
+        border: none !important;
         color: white !important;
-        font-weight: bold;
+        box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3) !important;
+        padding: 0 20px !important;
+        font-weight: 600 !important;
+        border-radius: 8px !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+    .sancionados-abm .add-button:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4) !important;
     }
 
-    .ant-table-cell {
+    .sancionados-abm .ant-table-thead .ant-table-cell {
+        background-color: #A63333 !important;
+        color: #fff !important;
+        font-weight: bold !important;
+        padding: 16px !important;
+        border: none !important;
+    }
+
+    .sancionados-abm .ant-table-cell {
         padding: 16px !important;
     }
 
-    .title-template-container {
-        background-color: #A63333;
-        padding: 16px;
-        border-top-left-radius: 8px;
-        border-top-right-radius: 8px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+    @@media (max-width: 960px) {
+        .sancionados-abm .title-template-container {
+            flex-direction: column;
+            align-items: stretch;
+        }
     }
 
-    .flex-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .ant-modal .ant-form-item-label {
+    .sancionados-abm .ant-form-horizontal .ant-form-item-label {
         flex-grow: 1;
         background: #A63333;
     }
 
-        .ant-modal .ant-form-item-label > label {
+        .sancionados-abm .ant-form-horizontal .ant-form-item-label > label {
             color: #FFFFFF;
             padding: 2px 4px;
-            margin-right: 267.2px;
         }
 
+    .sancionados-abm .ant-form-item {
+        box-sizing: border-box;
+        margin: 0;
+        margin-bottom: 0px;
+        padding: 0;
+        color: rgba(0, 0, 0, 0.85);
+        font-size: 14px;
+        line-height: 1.5715;
+        list-style: none;
+        font-feature-settings: 'tnum';
+        margin-bottom: 8px !important;
+        vertical-align: top;
+        font-weight: bold;
+    }
+
+    .sancionados-abm .ant-modal-content {
+        position: relative;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 0;
+        border-radius: 2px;
+        box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+        pointer-events: auto;
+        border: 1px solid red !important;
+    }
 </style>
 
-<Flex Class="flex-container" Justify="FlexJustify.Center" Align="FlexAlign.Center">
-    <div class="template">
-        <Table DataSource="sancionesVM" PageSize="6" Bordered Responsive>
-            <TitleTemplate>
-                <Space Size="@("large")" Style="width: 100%; justify-content: space-between;">
-                    <h4 style="color:white">Sanciones</h4>
-                    <SpaceItem>
-                        <Button OnClick="()=>_visibleCargar = true" Type="ButtonType.Primary"><Icon Type="plus" /> Cargar</Button>
-                    </SpaceItem>
-                </Space>
-            </TitleTemplate>
-            <ColumnDefinitions Context="muestra">
-                <PropertyColumn Property="c=>c.Sancionado"></PropertyColumn>
-                <PropertyColumn Property="c=>c.FechaDesde" Title="Fecha Desde"></PropertyColumn>
-                <PropertyColumn Property="c=>c.FechaHasta" Title="Fecha Hasta"></PropertyColumn>
-                <PropertyColumn Title="Duración de Sancion" Property="c => c.DiasSancion" Sortable>
-                    <Template>
-                        <div style="display: flex; justify-content: center; align-items: center;">
-                            <span style="background-color: #D3D3D3; padding: 0 24px; width: 100px; display: flex; justify-content: center; align-items: center; text-align: center;">
-                                @muestra.DiasSancion
-                            </span>
-                        </div>
-                    </Template>
-                </PropertyColumn>
-                <PropertyColumn Property="c=>c.TipoSancion" Title="Tipo"></PropertyColumn>
-                <PropertyColumn Property="c=>c.SancionArea" Title="Sanción Area"></PropertyColumn>
-                <PropertyColumn Property="c=>c.Observaciones"></PropertyColumn>
-            </ColumnDefinitions>
-        </Table>
+<div class="sancionados-abm">
+    <div class="sancionados-container fade-in">
+        <Card Class="main-card">
+            <div class="header-section">
+                <div class="lava-bubbles">
+                    <div class="lava-bubble b1"></div>
+                    <div class="lava-bubble b2"></div>
+                    <div class="lava-bubble b3"></div>
+                    <div class="lava-bubble b4"></div>
+                    <div class="lava-bubble b5"></div>
+                </div>
+                <div class="title-container">
+                    <h1 class="main-title">
+                        <Icon Type="warning" Class="title-icon" />
+                        SANCIONES
+                    </h1>
+                </div>
+                <div class="actions-row">
+                    <Button Class="modern-button add-button"
+                            OnClick="() => _visibleCargar = true"
+                            Icon="plus"
+                            Size="ButtonSize.Large">
+                        Nueva Sanción
+                    </Button>
+                </div>
+            </div>
+            <div class="table-container">
+                <Table DataSource="sancionesVM"
+                       PageSize="10"
+                       Responsive
+                       TItem="SancionViewModel"
+                       Loading="false"
+                       ScrollX="800px">
+                    <ColumnDefinitions Context="sancion">
+                        <PropertyColumn Title="👤 Sancionado"
+                                        Property="s => s.Sancionado"
+                                        Sortable
+                                        Width="200px"
+                                        Fixed="ColumnFixPlacement.Left">
+                        </PropertyColumn>
+                        <PropertyColumn Title="📅 Desde"
+                                        Property="s => s.FechaDesde"
+                                        Sortable
+                                        Width="120px">
+                        </PropertyColumn>
+                        <PropertyColumn Title="📅 Hasta"
+                                        Property="s => s.FechaHasta"
+                                        Sortable
+                                        Width="120px">
+                        </PropertyColumn>
+                        <PropertyColumn Title="⏱️ Duración"
+                                        Property="s => s.DiasSancion"
+                                        Sortable
+                                        Width="120px">
+                            <Template>
+                                <Tag Color="TagColor.Processing" Style="font-weight:600;">
+                                    <Icon Type="clock-circle" /> @sancion.DiasSancion días
+                                </Tag>
+                            </Template>
+                        </PropertyColumn>
+                        <PropertyColumn Title="🏷️ Tipo"
+                                        Property="s => s.TipoSancion"
+                                        Sortable
+                                        Width="160px">
+                        </PropertyColumn>
+                        <PropertyColumn Title="📊 Área"
+                                        Property="s => s.SancionArea"
+                                        Sortable
+                                        Width="160px">
+
+                        </PropertyColumn>
+                        <PropertyColumn Title="📝 Observaciones"
+                                        Property="s => s.Observaciones"
+                                        Sortable
+                                        Width="220px"
+                                        Fixed="ColumnFixPlacement.Right">
+
+                        </PropertyColumn>
+                    </ColumnDefinitions>
+                </Table>
+            </div>
+        </Card>
     </div>
-</Flex>
+</div>
 
 @if(_visibleCargar == true)
 {

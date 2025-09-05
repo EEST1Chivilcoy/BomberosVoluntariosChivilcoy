@@ -157,6 +157,9 @@
         .abm-select-estado .ant-select-selector {
     width: 100% !important;
     height: 40px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
 }   
 
         .abm-filters .ant-input-search {
@@ -184,10 +187,6 @@
         font-weight: bold !important;
         padding: 16px !important;
         border: none !important;
-    }
-    .ant-table-thead .ant-table-cell:hover {
-        background: #ececec9d !important;
-        color: #fff !important;
     }
 
     .ant-table-cell {
@@ -321,7 +320,7 @@
                 <div class="title-container">
                     <h1 class="main-title">
                         <Icon Type="fire" Class="title-icon" />
-                        GESTIÓN DE BOMBEROS
+                        BOMBEROS
                     </h1>
                 </div>
                 <div class="abm-filters">
@@ -359,11 +358,16 @@
                             <Avatar Size="AvatarSize.Large" Icon="user" />
                         }
                     </Column>
-                    <PropertyColumn Property="@(c => $"{c.Apellido}, {c.Nombre}")" Title="Apellido y Nombre" Sortable />
-                    <PropertyColumn Title="Legajo" Property="c => c.NumeroLegajo" Sortable />
-                    <PropertyColumn Title="Jerarquía" Property="@(c => c.Grado.GetDisplayName())" Sortable />
-                    <PropertyColumn Title="Estado" Property="@(c => c.Estado.GetDisplayName())" Sortable />
-                    <ActionColumn Title="Acciones" Align=ColumnAlign.Center>
+                    <PropertyColumn Property="@(c => $"{c.Apellido}, {c.Nombre}")" Title="👤 Apellido y Nombre" Sortable>
+                    </PropertyColumn>
+                    <PropertyColumn Title="🆔 Legajo" Property="c => c.NumeroLegajo" Sortable>
+                    </PropertyColumn>
+                    <PropertyColumn Title="🎖️ Jerarquía" Property="@(c => c.Grado.GetDisplayName())" Sortable>
+                    </PropertyColumn>
+                    <PropertyColumn Title="📊 Estado" Property="@(c => c.Estado.GetDisplayName())" Sortable>
+
+                    </PropertyColumn>
+                    <ActionColumn Title="⚙️ Acciones" Align=ColumnAlign.Center>
                         <div class="abm-action-buttons">
                             <Button Type="ButtonType.Primary" OnClick="() => DetalleBombero(context.Id)">
                                 <Icon Type="eye" /> Detalles

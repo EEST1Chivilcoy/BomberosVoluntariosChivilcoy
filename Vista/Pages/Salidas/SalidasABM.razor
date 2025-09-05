@@ -145,9 +145,6 @@
         padding: 16px !important;
         border: none !important;
     }
-    .ant-table-thead .ant-table-cell:hover {
-        background: #ececec9d !important;
-        color: #fff !important;
     }
     .ant-table-cell {
         padding: 16px !important;
@@ -243,7 +240,7 @@
                 <div class="title-container">
                     <h1 class="main-title">
                         <Icon Type="car" Class="title-icon" />
-                        GESTIÓN DE SALIDAS
+                        SALIDAS
                     </h1>
                 </div>
                 <div class="actions-row">
@@ -259,10 +256,13 @@
                        @bind-PageSize="_pageSize"
                        Responsive>
                     <ColumnDefinitions>
-                        <PropertyColumn Title="Número Parte" Property="s => s.Numero" Sortable />
-                        <PropertyColumn Title="Tipo de Salida" Property="s => s.TipoSalida" Sortable />
-                        <PropertyColumn Title="Dirección" Property="s => s.Direccion" Sortable />
-                        <ActionColumn Title="Acciones" Align=ColumnAlign.Center>
+                        <PropertyColumn Title="🔢 Número Parte" Property="s => s.Numero" Sortable>
+                        </PropertyColumn>
+                        <PropertyColumn Title="🚨 Tipo de Salida" Property="s => s.TipoSalida" Sortable>
+                        </PropertyColumn>
+                        <PropertyColumn Title="📍 Dirección" Property="s => s.Direccion" Sortable>
+                        </PropertyColumn>
+                        <ActionColumn Title="⚙️ Acciones" Align=ColumnAlign.Center>
                             <Space>
                                 <SpaceItem>
                                     <Button OnClick="() => VerUbicacionSalida(context.Longitud, context.Latitud)">

@@ -8,101 +8,280 @@
 @page "/bomberos/ascenso"
 
 <style>
-    .template {
-        margin-top: 20px;
-        width: 100%;
-        max-width: 1200px;
-        padding: 20px;
-        background-color: #f8f8f8;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    .ascensos-abm {
+        --ascensos-primary-color: #A63333;
+        --ascensos-primary-dark: #732D2D;
+        --ascensos-success-color: #4CAF50;
+        --ascensos-success-dark: #438E46;
+        --ascensos-accent-color: #FFD54F;
+        --ascensos-warning-color: #F9A825;
     }
 
-    .ant-table {
-        background-color: white;
-        border-radius: 8px;
+    .ascensos-abm .ascensos-container {
+        padding: 12px !important;
+        min-height: 100vh !important;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;
+    }
+
+    .ascensos-abm .main-card {
+        background: rgba(255, 255, 255, 0.95) !important;
+        backdrop-filter: blur(10px) !important;
+        border-radius: 16px !important;
+        box-shadow: 0 8px 32px rgba(166, 51, 51, 0.1), 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        overflow: hidden !important;
+    }
+
+    .ascensos-abm .header-section {
+        background: linear-gradient(135deg, var(--ascensos-primary-color) 0%, var(--ascensos-primary-dark) 100%) !important;
+        color: white !important;
+        padding: 28px !important;
+        position: relative !important;
+        overflow: hidden !important;
+    }
+
+    .ascensos-abm .header-section .lava-bubbles {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        pointer-events: none;
+        z-index: 1;
         overflow: hidden;
     }
-
-    .ant-table-title {
-        background-color: #A63333
+    .ascensos-abm .header-section .lava-bubble {
+        position: absolute;
+        border-radius: 50%;
+        opacity: 0.45;
+        background: radial-gradient(circle at 60% 40%, #FFD54F 0%, #F9A825 80%, transparent 100%);
+        animation: lava-bubble-move 8s linear infinite;
+        filter: blur(1.5px);
+        mix-blend-mode: lighten;
+    }
+    .ascensos-abm .header-section .lava-bubble.b1 {
+        left: 10%; width: 60px; height: 60px; bottom: -70px;
+        animation-delay: 0s;
+        animation-duration: 7.5s;
+    }
+    .ascensos-abm .header-section .lava-bubble.b2 {
+        left: 35%; width: 90px; height: 90px; bottom: -100px;
+        animation-delay: 2s;
+        animation-duration: 9s;
+        background: radial-gradient(circle at 60% 40%, #FFEB3B 0%, #FFD54F 80%, transparent 100%);
+    }
+    .ascensos-abm .header-section .lava-bubble.b3 {
+        left: 65%; width: 50px; height: 50px; bottom: -60px;
+        animation-delay: 1.5s;
+        animation-duration: 6.5s;
+        background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #FFD54F 80%, transparent 100%);
+    }
+    .ascensos-abm .header-section .lava-bubble.b4 {
+        left: 80%; width: 70px; height: 70px; bottom: -80px;
+        animation-delay: 3.2s;
+        animation-duration: 8.5s;
+        background: radial-gradient(circle at 60% 40%, #F9A825 0%, #FFD54F 80%, transparent 100%);
+    }
+    .ascensos-abm .header-section .lava-bubble.b5 {
+        left: 55%; width: 40px; height: 40px; bottom: -50px;
+        animation-delay: 5s;
+        animation-duration: 7.2s;
+        background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #F9A825 80%, transparent 100%);
     }
 
-    .ant-table-thead .ant-table-cell {
-        background-color: #A63333 !important;
+    @@keyframes lava-bubble-move {
+        0% {
+            transform: translateY(0) scale(1) rotate(0deg);
+            opacity: 0.45;
+        }
+        60% {
+            opacity: 0.7;
+            filter: blur(2.5px);
+        }
+        80% {
+            transform: translateY(-220px) scale(1.15) rotate(10deg);
+            opacity: 0.6;
+        }
+        100% {
+            transform: translateY(-320px) scale(0.95) rotate(-8deg);
+            opacity: 0;
+        }
+    }
+
+    .ascensos-abm .main-title {
+        font-family: 'Poppins', 'Fjalla One', sans-serif !important;
+        font-size: 2.2rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 1px !important;
+        margin: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 12px !important;
+        animation: text-glow 2.5s ease-in-out infinite alternate !important;
+        position: relative !important;
+        z-index: 2 !important;
+    }
+    .ascensos-abm .title-icon {
+        color: #FFD54F !important;
+        font-size: 2rem !important;
+        filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25)) !important;
+    }
+    @@keyframes text-glow {
+        0%, 100% { text-shadow: 0 0 5px #F9A825, 0 0 10px #FFD54F; }
+        50% { text-shadow: 0 0 12px #F9A825, 0 0 22px #FFD54F; }
+    }
+    .ascensos-abm .title-container {
+        position: relative !important;
+        z-index: 2 !important;
+        margin-bottom: 20px !important;
+    }
+
+    .ascensos-abm .actions-row {
+        display: flex !important;
+        justify-content: flex-end !important;
+        align-items: center !important;
+        gap: 16px !important;
+        margin-top: 16px !important;
+    }
+
+    .ascensos-abm .table-container {
+        padding: 0 !important;
+        overflow: hidden !important;
+    }
+
+    .ascensos-abm .modern-button {
+        height: 40px !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        position: relative !important;
+        overflow: hidden !important;
+    }
+
+    .ascensos-abm .add-button {
+        background: linear-gradient(135deg, var(--ascensos-success-color) 0%, var(--ascensos-success-dark) 100%) !important;
+        border: none !important;
         color: white !important;
-        font-weight: bold;
+        box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3) !important;
+        padding: 0 20px !important;
+        font-weight: 600 !important;
+        border-radius: 8px !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+    .ascensos-abm .add-button:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4) !important;
     }
 
-    .ant-table-cell {
+    .ascensos-abm .ant-table-thead .ant-table-cell {
+        background-color: #A63333 !important;
+        color: #fff !important;
+        font-weight: bold !important;
+        padding: 16px !important;
+        border: none !important;
+    }
+
+    .ascensos-abm .ant-table-cell {
         padding: 16px !important;
     }
-
-    .title-template-container {
-        background-color: #A63333;
-        padding: 16px;
-        border-top-left-radius: 8px;
-        border-top-right-radius: 8px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .flex-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .ant-modal .ant-form-item-label {
-        flex-grow: 1;
-        background: #A63333;
-    }
-
-        .ant-modal .ant-form-item-label > label {
-            color: #FFFFFF;
-            padding: 2px 4px;
-            margin-right: 267.2px;
-        }
 </style>
 
-<Flex Class="flex-container" Justify="FlexJustify.Center" Align="FlexAlign.Center">
-    <div class="template">
-        <Table DataSource="ascensos" PageSize="6" Bordered Responsive>
-            <TitleTemplate>
-                <Space Size="@("large")" Style="width: 100%; justify-content: space-between;">
-                    <h4 style="color:white">Ascensos</h4>
-                    <SpaceItem>
-                        <Button OnClick="()=>_visibleCargar = true" Type="ButtonType.Primary"><Icon Type="plus" /> Cargar</Button>
-                    </SpaceItem>
-                </Space>
-            </TitleTemplate>
-            <ColumnDefinitions>
-                <Column TData="AscensoBombero" Title="Numero de Legajo">
-                    @context.PersonalAfectado.NumeroLegajo
-                </Column>
-                <PropertyColumn Property="b=>b.NombreYApellido" Title="Nombre y Apellido" />
-
-                <PropertyColumn Property="b=>b.FechaAscenso" Title="Fecha de ascenso" />
-
-                <PropertyColumn Property="b=>b.Descripcion" Title="Descripción" />
-
-                <PropertyColumn Title="Grado Anterior"
-                                Property="@(c => c.GradoAntiguo.GetDisplayName())"
-                                Sortable="true" />
-
-                <PropertyColumn Title="Grado Ascendido"
-                                Property="@(c => c.GradoAscenso.GetDisplayName())"
-                                Sortable="true" />
-
-                <PropertyColumn Property="b=>b.NumeroLibro" Title="Numero de libro" />
-
-                <PropertyColumn Property="b=>b.NumeroActa" Title="Numero de acta" />
-
-            </ColumnDefinitions>
-        </Table>
+<div class="ascensos-abm">
+    <div class="ascensos-container fade-in">
+        <Card Class="main-card">
+            <div class="header-section">
+                <div class="lava-bubbles">
+                    <div class="lava-bubble b1"></div>
+                    <div class="lava-bubble b2"></div>
+                    <div class="lava-bubble b3"></div>
+                    <div class="lava-bubble b4"></div>
+                    <div class="lava-bubble b5"></div>
+                </div>
+                <div class="title-container">
+                    <h1 class="main-title">
+                        <Icon Type="rise" Class="title-icon" />
+                        ASCENSOS
+                    </h1>
+                </div>
+                <div class="actions-row">
+                    <Button Class="modern-button add-button"
+                            OnClick="()=>_visibleCargar = true"
+                            Icon="plus"
+                            Size="ButtonSize.Large">
+                        Nuevo Ascenso
+                    </Button>
+                </div>
+            </div>
+            <div class="table-container">
+                <Table DataSource="ascensos" PageSize="6" Responsive>
+                    <ColumnDefinitions Context="ascenso">
+                        <PropertyColumn Title="🆔 Legajo"
+                                        Property="a => a.PersonalAfectado.NumeroLegajo"
+                                        Sortable
+                                        Width="120px"
+                                        Fixed="ColumnFixPlacement.Left">
+                        </PropertyColumn>
+                        <PropertyColumn Title="👤 Nombre y Apellido"
+                                        Property="a => a.NombreYApellido"
+                                        Sortable
+                                        Width="220px">
+                        </PropertyColumn>
+                        <PropertyColumn Title="📅 Fecha de ascenso"
+                                        Property="a => a.FechaAscenso"
+                                        Sortable
+                                        Width="140px">
+                        </PropertyColumn>
+                        <PropertyColumn Title="📝 Descripción"
+                                        Property="a => a.Descripcion"
+                                        Sortable
+                                        Width="180px">
+                        </PropertyColumn>
+                        <PropertyColumn Title="🎖️ Grado Anterior"
+                                        Property="a => a.GradoAntiguo"
+                                        Sortable
+                                        Width="160px">
+                            <Template>
+                                <span>
+                                    <Icon Type="crown" /> @ascenso.GradoAntiguo.GetDisplayName()
+                                </span>
+                            </Template>
+                        </PropertyColumn>
+                        <PropertyColumn Title="🎖️ Grado Ascendido"
+                                        Property="a => a.GradoAscenso"
+                                        Sortable
+                                        Width="160px">
+                            <Template>
+                                <span>
+                                    <Icon Type="crown" /> @ascenso.GradoAscenso.GetDisplayName()
+                                </span>
+                            </Template>
+                        </PropertyColumn>
+                        <PropertyColumn Title="📚 Nº Libro"
+                                        Property="a => a.NumeroLibro"
+                                        Sortable
+                                        Width="120px">
+                            <Template>
+                                <span>
+                                    <Icon Type="book" /> @ascenso.NumeroLibro
+                                </span>
+                            </Template>
+                        </PropertyColumn>
+                        <PropertyColumn Title="📄 Nº Acta"
+                                        Property="a => a.NumeroActa"
+                                        Sortable
+                                        Width="120px">
+                            <Template>
+                                <span>
+                                    <Icon Type="file-text" /> @ascenso.NumeroActa
+                                </span>
+                            </Template>
+                        </PropertyColumn>
+                    </ColumnDefinitions>
+                </Table>
+            </div>
+        </Card>
     </div>
-</Flex>
+</div>
 
 @if (_visibleCargar == true)
 {
