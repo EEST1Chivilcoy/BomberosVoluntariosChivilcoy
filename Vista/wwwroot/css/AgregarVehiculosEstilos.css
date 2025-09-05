@@ -1,134 +1,86 @@
-.modal-content-container {
-    width: 90%;
-    max-width: 1000px;
-    background-color: #fff;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1000;
-    overflow: auto;
-    padding: 16px;
+.ant-modal-content {
+    width: 1200px !important;
+    position: absolute; 
+    top: 1200%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    
 }
 
-.agregar-vehiculo-wrapper {
+.modal-body-content {
     display: flex;
     flex-wrap: nowrap;
-    gap: 20px; 
-    padding: 16px;
-    align-items: flex-start;
+    gap: 20px;
+    padding: 20px;
 }
 
-.image-preview-column {
-    flex-basis: 180px; 
-    flex-grow: 0;
-    flex-shrink: 0;
+.modal-left-panel {
+    flex: 0 0 300px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    padding-top: 0;
+    gap: 15px;
 }
 
-.image-preview-card {
-    width: 100%;
-    height: 300px;
-    background: #f0f2f5;
-    border: 1px dashed #d9d9d9;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    padding: 8px;
-}
-
-.upload-container {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
-
-.lblInputFile {
-    background-color: #e6f7ff;
-    border: 1px solid #1890ff;
-    border-radius: 4px;
-    color: #1890ff;
-    padding: 6px 12px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: all 0.3s;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 12px;
-}
-
-#path {
-    color: #595959;
-    font-style: italic;
-    margin: 0;
-    font-size: 12px;
-}
-
-.steps-and-form-column {
+.modal-right-panel {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 10px;
 }
 
-.form-section {
+.form-grid-2-col,
+.form-grid-2-col-compact {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.input-group label {
+    font-weight: 500;
+    color: #555;
+}
+
+.full-width {
+    grid-column: 1 / -1;
+}
+
+.switch-group {
+    display: flex;
+    align-items: center;
     gap: 8px;
 }
 
-.inpt-container {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-
-.inpt-container label {
-    font-weight: 500;
-    color: rgba(0, 0, 0, 0.85);
-    line-height: 1.3;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-size: 12px;
-}
-
-.form-section .ant-input,
-.form-section .ant-select-selector,
-.form-section .ant-picker,
-.form-section .ant-input-number {
-    width: 100% !important;
-}
-
-.steps-action {
+.modal-footer {
     display: flex;
     justify-content: flex-end;
+    align-items: center;
+    padding: 15px 20px;
+    border-top: 1px solid #e8e8e8;
     gap: 8px;
-    margin-top: 12px;
 }
 
-.steps-content {
-    background: transparent;
-    padding: 0;
+@media (max-width: 768px) {
+    .modal-body-container {
+        flex-direction: column;
+    }
+
+    .modal-left-panel,
+    .modal-right-panel {
+        flex: none;
+        width: 100%;
+    }
+
+    .form-grid-2-col,
+    .form-grid-2-col-compact {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+    }
+
+    .ant-modal-content {
+        width: 95% !important;
+    }
 }
 
-.boton_p, .boton_guardar {
-    padding: 6px 12px;
-    font-size: 12px;
-}
-.switch-container {
-    display: flex;
-    justify-content: flex-end; 
-    align-items: center; 
-    gap: 8px; 
+.ant-form-item {
+    margin-bottom: 6px !important;
 }

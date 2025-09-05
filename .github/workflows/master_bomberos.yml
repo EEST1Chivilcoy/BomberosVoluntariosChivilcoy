@@ -16,7 +16,7 @@ env:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: 📥 Clonar repositorio
@@ -95,7 +95,7 @@ jobs:
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
 
-          branches=("Oses-Emiliano" "Tobi" "fran")
+          branches=("Oses-Emiliano" "Tobi" "fran" "Antonio")
 
           for branch in "${branches[@]}"; do
             echo "🔁 Actualizando $branch desde master"
@@ -109,3 +109,4 @@ jobs:
 
             git push origin $branch
           done
+

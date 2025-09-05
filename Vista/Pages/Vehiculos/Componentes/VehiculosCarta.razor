@@ -1,11 +1,13 @@
-﻿@*Servicios utilizados*@
+﻿@using Vista.Data.Models.Imagenes
+@using Vista.Data.Models.Vehiculos.Flota
+@using Vista.Pages.Vehiculos.ViewModel
+
+@*Servicios utilizados*@
 @using Vista.Services
-@inject IVehiculoSalidaService VehiculoSalidaService
 @inject NavigationManager navigationManager
 @inject IMessageService _message
+@inject IVehiculoSalidaService VehiculoSalidaService
 
-@using Vista.Data.Models.Imagenes
-@using Vista.Data.Models.Vehiculos.Flota
 <link rel="stylesheet" href="css/Unidades.css" />
 
 <card class="vehiculo-card">
@@ -19,11 +21,10 @@
         </div>
 
         <div class="botones-grid">
+
             <Button OnClick="() => DetallesVisible = true">
                 <Icon Type="Menu" Theme="IconThemeType.Outline" />
             </Button>
-
-
 
             <Button OnClick="() => EditarVisible = true">
                 <Icon Type="Edit" Theme="IconThemeType.Outline" />
@@ -52,30 +53,20 @@
 @if (EditarVisible)
 {
     <Modal Footer="null" Title="Editar" OnCancel="() => EditarVisible = false" Visible="@EditarVisible">
-        <VehiculoEditar VehiculoId="@VehiculoId" OnClose="HandleCancelEditar" />
+        <VehiculoEditar VehiculoId="@Vehiculo.Id" OnClose="HandleCancelEditar" />
     </Modal>
 }
 
 @if (DetallesVisible)
 {
     <Modal Footer="null" Title="Detalles" OnCancel="() => DetallesVisible = false" Visible="@DetallesVisible" Class="modal-detalles">
-        <VehiculoDetalles vehiculoId="@VehiculoId" />
+        <VehiculoDetalles vehiculoId="@Vehiculo.Id" />
     </Modal>
 }
 
 @code {
-    [Parameter] public int VehiculoId { get; set; }
+    [Parameter] public UnidadSimpleViewModel Vehiculo { get; set; } = new();
     [Parameter] public EventCallback OnChange { get; set; }
-
-    public class UnidadesViewModel
-    {
-        public int Id { get; set; }
-        public string NumeroMovil { get; set; } = string.Empty;
-        public string? ImageUrl { get; set; } = string.Empty;
-        public TipoEstadoMovil Estado { get; set; }
-    }
-
-    private UnidadesViewModel Vehiculo = new();
 
     bool EditarVisible { get; set; }
     bool DetallesVisible { get; set; }
@@ -94,13 +85,7 @@
 
     private async Task Init()
     {
-        var vehiculo = await VehiculoSalidaService.ObtenerVehiculoSalidaPorIdAsync(VehiculoId);
-
-        if (vehiculo is not null)
-        {
-            Vehiculo = MapearVehiculo(vehiculo);
-        }
-        else
+        if (Vehiculo is null)
         {
             _message.Error("Vehículo no encontrado.");
         }
@@ -108,16 +93,6 @@
         StateHasChanged();
     }
 
-    private UnidadesViewModel MapearVehiculo(VehiculoSalida vehiculo)
-    {
-        return new UnidadesViewModel
-        {
-            Id = vehiculo.VehiculoId,
-            NumeroMovil = vehiculo.NumeroMovil ?? "-",
-            ImageUrl = vehiculo.Imagen != null ? $"/api/imagenes/{vehiculo.Imagen.ImagenId}" : null,
-            Estado = vehiculo.Estado
-        };
-    }
 
     public async void CambiarEstado(int movilid, TipoEstadoMovil estado)
     {

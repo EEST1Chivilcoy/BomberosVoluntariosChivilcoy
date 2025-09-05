@@ -1,6 +1,6 @@
-﻿@using Vista.Components.Vehiculos
-@using Vista.Data.Models.Vehiculos.Flota
-@using AntDesign
+﻿@using Vista.Data.Models.Vehiculos.Flota
+@using Vista.Pages.Vehiculos.Componentes
+@using Vista.Pages.Vehiculos.ViewModel
 
 <link rel="stylesheet" href="css/Unidades.css" />
 
@@ -62,7 +62,7 @@
                     <div class="vehicles-grid">
                         @foreach (var m in vehiculos)
                         {
-                            <VehiculosCarta VehiculoId="m.Id" OnChange="Init" />
+                            <VehiculosCarta Vehiculo="m" OnChange="Init" />
                         }
                     </div>
                 }
@@ -92,14 +92,7 @@
     RenderFragment LoadingIcon => @<Icon Type="loading" Theme="IconThemeType.Outline" Style="font-size: 24px; color: rgb(62, 24, 24);" Spin />;
     bool AgregarVisible { get; set; }
 
-    private List<UnidadesViewModel> vehiculos = new();
-
-    public class UnidadesViewModel
-    {
-        public int Id { get; set; }
-        public string NumeroMovil { get; set; } = string.Empty;
-        public string? ImageUrl { get; set; } = string.Empty;
-    }
+    private List<UnidadSimpleViewModel> vehiculos = new();
 
     private async void CloseVehiculo()
     {
@@ -142,16 +135,17 @@
         }
         else
         {
-            vehiculos = new List<UnidadesViewModel>();
+            vehiculos = new List<UnidadSimpleViewModel>();
         }
     }
 
-    private List<UnidadesViewModel> MapearVehiculos(List<VehiculoSalida> vehiculos)
+    private List<UnidadSimpleViewModel> MapearVehiculos(List<VehiculoSalida> vehiculos)
     {
-        return vehiculos.Select(v => new UnidadesViewModel
+        return vehiculos.Select(v => new UnidadSimpleViewModel
         {
             Id = v.VehiculoId,
             NumeroMovil = v.NumeroMovil ?? "-",
+            Estado = v.Estado,
 
             // Mapeo de Imagen (si existe)
             ImageUrl = v.Imagen != null ? $"/api/imagenes/{v.Imagen.ImagenId}" : null
