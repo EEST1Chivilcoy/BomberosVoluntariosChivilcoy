@@ -18,6 +18,7 @@
         --brigadas-success-color: #4CAF50;
         --brigadas-success-dark: #438E46;
         --brigadas-accent-color: #FFD54F;
+        --brigadas-warning-color: #F9A825;
     }
 
     .brigadas-abm .brigadas-container {
@@ -122,13 +123,13 @@
         z-index: 2 !important;
     }
     .brigadas-abm .title-icon {
-        color: var(--brigadas-accent-color) !important;
+        color: #FFD54F !important;
         font-size: 2rem !important;
         filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25)) !important;
     }
     @@keyframes text-glow {
-        0%, 100% { text-shadow: 0 0 5px var(--brigadas-warning-color), 0 0 10px var(--brigadas-accent-color); }
-        50% { text-shadow: 0 0 12px var(--brigadas-warning-color), 0 0 22px var(--brigadas-accent-color); }
+        0%, 100% { text-shadow: 0 0 5px #F9A825, 0 0 10px #FFD54F; }
+        50% { text-shadow: 0 0 12px #F9A825, 0 0 22px #FFD54F; }
     }
     .brigadas-abm .title-container {
         position: relative !important;
@@ -203,7 +204,7 @@
                 <div class="title-container">
                     <h1 class="main-title">
                         <Icon Type="team" Class="title-icon" />
-                        GESTIÓN DE BRIGADAS
+                        BRIGADAS
                     </h1>
                 </div>
                 <div class="actions-row">
