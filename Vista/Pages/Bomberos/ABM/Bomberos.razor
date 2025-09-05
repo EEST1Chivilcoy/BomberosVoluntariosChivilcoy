@@ -355,11 +355,16 @@
                             <Avatar Size="AvatarSize.Large" Icon="user" />
                         }
                     </Column>
-                    <PropertyColumn Property="@(c => $"{c.Apellido}, {c.Nombre}")" Title="Apellido y Nombre" Sortable />
-                    <PropertyColumn Title="Legajo" Property="c => c.NumeroLegajo" Sortable />
-                    <PropertyColumn Title="Jerarquía" Property="@(c => c.Grado.GetDisplayName())" Sortable />
-                    <PropertyColumn Title="Estado" Property="@(c => c.Estado.GetDisplayName())" Sortable />
-                    <ActionColumn Title="Acciones" Align=ColumnAlign.Center>
+                    <PropertyColumn Property="@(c => $"{c.Apellido}, {c.Nombre}")" Title="👤 Apellido y Nombre" Sortable>
+                    </PropertyColumn>
+                    <PropertyColumn Title="🆔 Legajo" Property="c => c.NumeroLegajo" Sortable>
+                    </PropertyColumn>
+                    <PropertyColumn Title="🎖️ Jerarquía" Property="@(c => c.Grado.GetDisplayName())" Sortable>
+                    </PropertyColumn>
+                    <PropertyColumn Title="📊 Estado" Property="@(c => c.Estado.GetDisplayName())" Sortable>
+
+                    </PropertyColumn>
+                    <ActionColumn Title="⚙️ Acciones" Align=ColumnAlign.Center>
                         <div class="abm-action-buttons">
                             <Button Type="ButtonType.Primary" OnClick="() => DetalleBombero(context.Id)">
                                 <Icon Type="eye" /> Detalles
