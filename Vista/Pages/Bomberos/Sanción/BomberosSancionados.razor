@@ -267,31 +267,16 @@
                                         Sortable
                                         Width="200px"
                                         Fixed="ColumnFixPlacement.Left">
-                            <Template>
-                                <span>
-                                    <Icon Type="user" /> @sancion.Sancionado
-                                </span>
-                            </Template>
                         </PropertyColumn>
                         <PropertyColumn Title="📅 Desde"
                                         Property="s => s.FechaDesde"
                                         Sortable
                                         Width="120px">
-                            <Template>
-                                <span>
-                                    <Icon Type="calendar" /> @sancion.FechaDesde
-                                </span>
-                            </Template>
                         </PropertyColumn>
                         <PropertyColumn Title="📅 Hasta"
                                         Property="s => s.FechaHasta"
                                         Sortable
                                         Width="120px">
-                            <Template>
-                                <span>
-                                    <Icon Type="calendar" /> @sancion.FechaHasta
-                                </span>
-                            </Template>
                         </PropertyColumn>
                         <PropertyColumn Title="⏱️ Duración"
                                         Property="s => s.DiasSancion"
@@ -307,32 +292,19 @@
                                         Property="s => s.TipoSancion"
                                         Sortable
                                         Width="160px">
-                            <Template>
-                                <span>
-                                    <Icon Type="flag" /> @sancion.TipoSancion
-                                </span>
-                            </Template>
                         </PropertyColumn>
                         <PropertyColumn Title="📊 Área"
                                         Property="s => s.SancionArea"
                                         Sortable
                                         Width="160px">
-                            <Template>
-                                <span>
-                                    <Icon Type="apartment" /> @sancion.SancionArea
-                                </span>
-                            </Template>
+
                         </PropertyColumn>
                         <PropertyColumn Title="📝 Observaciones"
                                         Property="s => s.Observaciones"
                                         Sortable
                                         Width="220px"
                                         Fixed="ColumnFixPlacement.Right">
-                            <Template>
-                                <span>
-                                    <Icon Type="file-text" /> @sancion.Observaciones
-                                </span>
-                            </Template>
+
                         </PropertyColumn>
                     </ColumnDefinitions>
                 </Table>
