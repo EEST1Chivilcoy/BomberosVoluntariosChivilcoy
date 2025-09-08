@@ -6,36 +6,30 @@
 
 <Layout>
     <Content>
-        
-
         <div style="padding: 30px;">
-            
-            <Row  Style="margin-bottom: 20px;">
+            <Row Style="margin-bottom: 20px;">
                 <AntDesign.Col>
-                     <Button Type="default" OnClick="CerrarSesion" Style="@($"color: #555; border-color: #ccc;")">
+                    <Button Type="default" OnClick="CerrarSesion" Style="@($"color: #555; border-color: #ccc;")">
                         Cerrar Sesión
                     </Button>
                 </AntDesign.Col>
             </Row>
 
             <Row Gutter="30">
-                <AntDesign.Col Span="6">
+                <AntDesign.Col xs="24" sm="24" md="24" lg="8" xl="6">
                     <div style="position: relative;">
-                        
                         <div class="avatar-container">
-                            <Avatar Src="Imagenes/ROSSI.png" 
-                                    Style="@($"width: 160px; height: 160px; border: 10px solid {ColorAmarilloAcento};")" />
+                            <Avatar Src="Imagenes/rossi.png" 
+                                Style="@($"width: 160px; height: 160px; border: 10px solid {ColorAmarilloAcento};")" />
                         </div>
 
                         <Card Bordered="false" Style="@($"border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); background-color: {ColorGrisFondoTarjeta}; padding-top: 60px;")">
-                            
-                            <div  style="padding-bottom: 20px;">
-                                
+                            <div style="padding-bottom: 20px;">
                                 <div style="text-align: center; margin-bottom: 25px; margin-top: 5px;">
-                                    <div class="name-box" style="@($"background-color: {ColorAmarilloAcento}; color: white; padding: 8px 5px; font-weight: bold; margin-bottom: 5px; font-size: 1.4em;")">AGUSTIN ESTEBAN ROSSI</div>                                    
+                                    <div class="name-box" style="@($"background-color: {ColorAmarilloAcento}; color: white; padding: 8px 5px; font-weight: bold; margin-bottom: 5px; font-size: 1.4em;")">AGUSTIN ESTEBAN ROSSI</div> 
                                     <div class="subtitle-text">AYUDANTE MAYOR</div>
                                 </div>
-        
+    
                                 <div class="info-block">
                                     <div class="label">D.N.I</div>
                                     <Input Value="@("36.997.084")" Disabled />
@@ -52,49 +46,85 @@
                                     <div class="label">FECHA DE INGRESO</div>
                                     <Input Value="@("01/01/25")" Disabled />
                                 </div>
-
                             </div>
                         </Card>
                     </div>
                 </AntDesign.Col>
 
-                <AntDesign.Col Span="16">
-                    <Card Bordered="false" Style="margin-bottom: 30px; background-color: #f7f7f7;">
-                        <div style="display: flex; align-items: center; justify-content: space-between;">
-                            
-                            <div style="display: flex; align-items: center; gap: 20px;">
-                                <div style="@($"background-color: {ColorAmarilloAcento}; padding: 15px 25px; font-size: 2.5em; font-weight: bold; color: {ColorRojo};")">
-                                    55
-                                </div>
-                                <div style="color: @ColorRojo;">
-                                    <div style="font-size: 1.2em; font-weight: bold;">TOTAL DE SERVICIOS EN 2024</div>
+                <AntDesign.Col xs="24" sm="24" md="24" lg="16" xl="18">
+                    <Card Bordered="false" Style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); background-color: {ColorGrisFondoTarjeta};">
+                        <div class="header-servicios">
+                            <div class="banner-container">
+                                <div class="servicios-banner" style="display: flex; align-items: center; flex-wrap: wrap;">
+                                    <div class="banner-image-container">
+                                        <img src="Imagenes/banderin.png" alt="Banderín de servicios" class="banderin-image" />
+                                        <div class="banner-number-overlay">55</div>
+                                    </div>
+                                    <div class="banner-text" style="flex-grow: 1; min-width: 0;">TOTAL DE SERVICIOS EN 2024</div>
                                 </div>
                             </div>
-                            
-                            <Button  Icon="area-chart">
+                            <Button class="report-button">
+                                <i class="fa-solid fa-magnifying-glass report-icon"></i>
                                 Ver Reporte Completo
                             </Button>
                         </div>
 
-                        <div style="display: flex; justify-content: space-around; margin-top: 20px;">
+                        <div class="estadisticas-servicios">
                             <Statistic Title="SERVICIOS INTERVINIENTES" Value="14" ValueStyle="@($"font-size: 2em; color: {ColorRojo}; font-weight: bold;")" />
-                            <Divider Style="height: 60px; margin: 0 40px;" />
+                            <Divider Type="@DividerType.Vertical" Style="border-left: 1px solid #c7c7c7; height: 50px;" />
                             <Statistic Title="SERVICIOS APRESTOS" Value="41" ValueStyle="@($"font-size: 2em; color: {ColorRojo}; font-weight: bold;")" />
-                            <Divider  Style="height: 60px; margin: 0 40px;" />
+                            <Divider Type="@DividerType.Vertical" Style="border-left: 1px solid #c7c7c7; height: 50px;" />
                             <Statistic Title="SERVICIOS CHOFER" Value="0" ValueStyle="@($"font-size: 2em; color: {ColorRojo}; font-weight: bold;")" />
                         </div>
                     </Card>
 
-                    <div>
-                        <div style="font-size: 1.5em; font-weight: bold; margin-bottom: 15px;">HERRAMIENTAS</div>
-                        <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-                            <Button Style="@($"background-color: {ColorAmarilloAcento}; color: {ColorRojo}; border: 1px solid #e0b420;")"> Credencial Digital </Button>
-                            <Button Style="@($"background-color: {ColorAmarilloAcento}; color: {ColorRojo}; border: 1px solid #e0b420;")"> Mi Presentismo </Button>
-                            <Button Style="@($"background-color: {ColorAmarilloAcento}; color: {ColorRojo}; border: 1px solid #e0b420;")"> Mi Intervenciones por mes </Button>
-                            <Button Style="@($"background-color: {ColorAmarilloAcento}; color: {ColorRojo}; border: 1px solid #e0b420;")"> Mis horas trabajadas </Button>
-                            <Button Style="@($"background-color: {ColorAmarilloAcento}; color: {ColorRojo}; border: 1px solid #e0b420;")"> Mis Trabajos </Button>
-                        </div>
-                    </div>
+                    <Card Bordered="false" Style="@($"border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); background-color: {ColorGrisFondoTarjeta}; margin-top: 20px; min-height: 230px;")">
+                        <div style="font-size: 2.5em; font-weight: bold; color: #696969; margin-bottom: 20px;">HERRAMIENTAS</div>
+
+                        <Row Gutter="20">
+                            <AntDesign.Col xs="24" sm="12" md="12" lg="8" xl="6" Style="margin-bottom: 10px;">
+                                <Button style="@($"background-color: {ColorAmarilloAcento}; color: white; border: 1px solid {ColorAmarilloAcento}; font-size: 1.1em; padding: 10px 10px; font-weight: bold; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; text-align: center; border-radius: 12px;")">
+                                    Cantidad de Firmas en el Mes
+                                </Button>
+                            </AntDesign.Col>
+
+                            <AntDesign.Col xs="24" sm="12" md="12" lg="8" xl="6" Style="margin-bottom: 10px;">
+                                <Button style="@($"background-color: {ColorAmarilloAcento}; color: white; border: 1px solid {ColorAmarilloAcento}; font-size: 1.1em; padding: 10px 10px; font-weight: bold; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; text-align: center; border-radius: 12px;")">
+                                    Puntuaje Mensual
+                                </Button>
+                            </AntDesign.Col>
+
+                            <AntDesign.Col xs="24" sm="12" md="12" lg="8" xl="6" Style="margin-bottom: 10px;">
+                                <Button style="@($"background-color: {ColorAmarilloAcento}; color: white; border: 1px solid {ColorAmarilloAcento}; font-size: 1.1em; padding: 10px 10px; font-weight: bold; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; text-align: center; border-radius: 12px;")">
+                                    Puntuaje Anual
+                                </Button>
+                            </AntDesign.Col>
+
+                            <AntDesign.Col xs="24" sm="12" md="12" lg="8" xl="6" Style="margin-bottom: 10px;">
+                                <Button style="@($"background-color: {ColorAmarilloAcento}; color: white; border: 1px solid {ColorAmarilloAcento}; font-size: 1.1em; padding: 10px 10px; font-weight: bold; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; text-align: center; border-radius: 12px;")">
+                                    Licencias Mensuales
+                                </Button>
+                            </AntDesign.Col>
+                            
+                            <AntDesign.Col xs="24" sm="12" md="12" lg="8" xl="6" Style="margin-bottom: 10px;">
+                                <Button style="@($"background-color: {ColorAmarilloAcento}; color: white; border: 1px solid {ColorAmarilloAcento}; font-size: 1.1em; padding: 10px 10px; font-weight: bold; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; text-align: center; border-radius: 12px;")">
+                                    Licencias Anuales
+                                </Button>
+                            </AntDesign.Col>
+
+                            <AntDesign.Col xs="24" sm="12" md="12" lg="8" xl="6" Style="margin-bottom: 10px;">
+                                <Button style="@($"background-color: {ColorAmarilloAcento}; color: white; border: 1px solid {ColorAmarilloAcento}; font-size: 1.1em; padding: 10px 10px; font-weight: bold; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; text-align: center; border-radius: 12px;")">
+                                    Mi Intervenciones por mes
+                                </Button>
+                            </AntDesign.Col>
+                            
+                            <AntDesign.Col xs="24" sm="12" md="12" lg="8" xl="6" Style="margin-bottom: 10px;">
+                                <Button style="@($"background-color: {ColorAmarilloAcento}; color: white; border: 1px solid {ColorAmarilloAcento}; font-size: 1.1em; padding: 10px 10px; font-weight: bold; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; text-align: center; border-radius: 12px;")">
+                                    Mis Trabajos
+                                </Button>
+                            </AntDesign.Col>
+                        </Row>
+                    </Card>
                 </AntDesign.Col>
             </Row>
         </div>

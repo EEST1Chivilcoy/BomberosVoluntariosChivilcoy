@@ -1,86 +1,69 @@
-.ant-modal-content {
-    width: 1200px !important;
-    position: absolute; 
-    top: 1200%; 
-    left: 50%; 
-    transform: translate(-50%, -50%); 
-    
+.page-container {
+    padding: 24px;
+    background-color: #f0f2f5;
 }
 
-.modal-body-content {
-    display: flex;
-    flex-wrap: nowrap;
-    gap: 20px;
-    padding: 20px;
+.header-section {
+    margin-bottom: 24px;
+    text-align: center;
 }
 
-.modal-left-panel {
-    flex: 0 0 300px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.modal-right-panel {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.form-grid-2-col,
-.form-grid-2-col-compact {
+.form-content-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
+    /* Usamos 300px para el ancho de la primera columna, igual que en el de Editar */
+    grid-template-columns: 300px 1fr;
+    gap: 24px;
+    align-items: start;
 }
 
-.input-group label {
-    font-weight: 500;
-    color: #555;
+.form-left-panel {
+    /* Eliminamos la propiedad flex, ya que el grid ahora define el ancho */
+    margin-top: 40px;
+    text-align: center;
+}
+
+.form-right-panel {
+    flex: 1;
+}
+
+.form-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 24px;
+}
+
+.form-grid-4-col {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    column-gap: 30px;
+    row-gap: 5px;
 }
 
 .full-width {
     grid-column: 1 / -1;
 }
 
-.switch-group {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.modal-footer {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    padding: 15px 20px;
-    border-top: 1px solid #e8e8e8;
-    gap: 8px;
-}
-
-@media (max-width: 768px) {
-    .modal-body-container {
-        flex-direction: column;
-    }
-
-    .modal-left-panel,
-    .modal-right-panel {
-        flex: none;
-        width: 100%;
-    }
-
-    .form-grid-2-col,
-    .form-grid-2-col-compact {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 10px;
-    }
-
-    .ant-modal-content {
-        width: 95% !important;
+@media (max-width: 1024px) {
+    .form-grid-4-col {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
-.ant-form-item {
-    margin-bottom: 6px !important;
+@media (max-width: 600px) {
+    .form-content-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-left-panel {
+        display: none;
+    }
+
+    .form-grid-4-col {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+.ant-form-item-label {
+    margin-bottom: 0px !important;
+    padding-bottom: 0px !important;
 }

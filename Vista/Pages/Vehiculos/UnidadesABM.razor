@@ -80,7 +80,7 @@
            Visible="@AgregarVisible"
            OnCancel="@(() => AgregarVisible = false)"
            Footer="null"
-           Style="border-radius: 12px; padding: 16px;">
+           WrapClassName="fullscreen-modal" Style="max-width: unset; width: 100%; top: 0;">
         <VehiculoAgregar OnClose="CloseVehiculo" />
     </Modal>
 </div>
