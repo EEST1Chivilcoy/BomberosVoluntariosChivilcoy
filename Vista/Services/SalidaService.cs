@@ -128,10 +128,11 @@ namespace Vista.Services
                 }
                 salida.Damnificados = damnificadossalida;
                 
-                _context.Set<T>().Add(salida);
-                await _context.SaveChangesAsync();
+                
                 
                 */
+                _context.Set<T>().Add(salida);
+                await _context.SaveChangesAsync();
                 return salida;
             }
             catch (DbUpdateException ex)
