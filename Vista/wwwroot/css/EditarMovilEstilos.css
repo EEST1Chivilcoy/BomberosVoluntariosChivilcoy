@@ -1,68 +1,70 @@
-.page-container {
-    padding: 24px;
+body {
     background-color: #f0f2f5;
+    margin: 0;
+    padding: 0;
 }
 
-.header-section {
-    margin-bottom: 24px;
-    text-align: center;
-}
-
-.form-content-grid {
-    display: grid;
-    grid-template-columns: 300px 1fr;
-    gap: 24px;
-    align-items: start;
-}
-
-.form-left-panel {
-    flex: 0 0 300px;
-    margin-top: 40px;
-    text-align: center;
-}
-
-.form-right-panel {
-    flex: 1;
-}
-
-.form-footer {
+.modal-body-content {
     display: flex;
-    justify-content: flex-end;
-    margin-top: 24px;
+    flex-direction: row;
+    height: calc(100vh - 120px);
+    width: 100%;
+    gap: 24px;
+    padding: 20px;
+}
+
+.modal-left-panel {
+    flex: 0 0 250px;
+    height: 100%;
+}
+
+.modal-right-panel {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 15px;
 }
 
 .form-grid-4-col {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    column-gap: 30px;
-    row-gap: 5px;
+    gap: 16px;
 }
 
-.full-width {
+.full-width-4 {
     grid-column: 1 / -1;
 }
 
-@media (max-width: 1024px) {
-    .form-grid-4-col {
-        grid-template-columns: repeat(2, 1fr);
+@media (max-width: 768px) {
+    .modal-body-content {
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+        height: auto;
     }
-}
 
-@media (max-width: 600px) {
-    .form-content-grid {
+    .modal-left-panel,
+    .modal-right-panel {
+        flex: none;
+        width: 100%;
+    }
+
+    .form-grid-4-col {
         grid-template-columns: 1fr;
-    }
-
-    .form-left-panel {
-        display: none;
-    }
-
-    .form-grid-4-col {
-        grid-template-columns: repeat(1, 1fr);
+        gap: 10px;
     }
 }
 
-.ant-form-item-label {
-    margin-bottom: 0px !important;
-    padding-bottom: 0px !important;
+.modal-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 10px 20px;
+    background: #fff;
+    border-top: 1px solid #d9d9d9;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 100;
 }
