@@ -332,7 +332,9 @@
         {
             Id = b.BrigadaId,
             Nombre = b.NombreBrigada,
-            EncargadoApellidoYNombre = $"{b.Encargado.Apellido}, {b.Encargado.Nombre}"
+            EncargadoApellidoYNombre = b.Encargado != null
+                ? $"{b.Encargado.Apellido}, {b.Encargado.Nombre}"
+                : "Sin Encargado"
         }).ToList());
     }
 
