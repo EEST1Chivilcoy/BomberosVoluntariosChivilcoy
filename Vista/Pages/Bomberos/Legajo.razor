@@ -19,17 +19,17 @@
                 <AntDesign.Col xs="24" sm="24" md="24" lg="8" xl="6">
                     <div style="position: relative;">
                         <div class="avatar-container">
-                            <Avatar Src="Imagenes/rossi.png" 
-                                Style="@($"width: 160px; height: 160px; border: 10px solid {ColorAmarilloAcento};")" />
+                            <Avatar Icon="user"
+                                    Style="@($"width: 160px; height: 160px; border: 10px solid {ColorAmarilloAcento};")" />
                         </div>
 
                         <Card Bordered="false" Style="@($"border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); background-color: {ColorGrisFondoTarjeta}; padding-top: 60px;")">
                             <div style="padding-bottom: 20px;">
                                 <div style="text-align: center; margin-bottom: 25px; margin-top: 5px;">
-                                    <div class="name-box" style="@($"background-color: {ColorAmarilloAcento}; color: white; padding: 8px 5px; font-weight: bold; margin-bottom: 5px; font-size: 1.4em;")">AGUSTIN ESTEBAN ROSSI</div> 
+                                    <div class="name-box" style="@($"background-color: {ColorAmarilloAcento}; color: white; padding: 8px 5px; font-weight: bold; margin-bottom: 5px; font-size: 1.4em;")">AGUSTIN ESTEBAN ROSSI</div>
                                     <div class="subtitle-text">AYUDANTE MAYOR</div>
                                 </div>
-    
+
                                 <div class="info-block">
                                     <div class="label">D.N.I</div>
                                     <Input Value="@("36.997.084")" Disabled />
@@ -105,7 +105,7 @@
                                     Licencias Mensuales
                                 </Button>
                             </AntDesign.Col>
-                            
+
                             <AntDesign.Col xs="24" sm="12" md="12" lg="8" xl="6" Style="margin-bottom: 10px;">
                                 <Button style="@($"background-color: {ColorAmarilloAcento}; color: white; border: 1px solid {ColorAmarilloAcento}; font-size: 1.1em; padding: 10px 10px; font-weight: bold; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; text-align: center; border-radius: 12px;")">
                                     Licencias Anuales
@@ -117,7 +117,7 @@
                                     Mi Intervenciones por mes
                                 </Button>
                             </AntDesign.Col>
-                            
+
                             <AntDesign.Col xs="24" sm="12" md="12" lg="8" xl="6" Style="margin-bottom: 10px;">
                                 <Button style="@($"background-color: {ColorAmarilloAcento}; color: white; border: 1px solid {ColorAmarilloAcento}; font-size: 1.1em; padding: 10px 10px; font-weight: bold; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; text-align: center; border-radius: 12px;")">
                                     Mis Trabajos
@@ -132,9 +132,9 @@
 </Layout>
 
 @code {
-    private const string ColorRojo = "#a51c16"; 
+    private const string ColorRojo = "#a51c16";
     private const string ColorAmarilloAcento = "#edb34d";
-    private const string ColorGrisFondoTarjeta = "#e6e6e6f1"; 
+    private const string ColorGrisFondoTarjeta = "#e6e6e6f1";
 
     private void CerrarSesion()
     {
