@@ -14,188 +14,169 @@
 
 <link rel="stylesheet" href="css/AgregarVehiculosEstilos.css">
 
-@if (movilView is not null)
-{
-    <div class="modal-body-content">
-
-        <div class="modal-left-panel">
-            <Card Style="border: 1px solid #d9d9d9; border-radius: 20px;">
-                <div style="text-align: center;">
-                    @if (!string.IsNullOrEmpty(imagenView.Base64))
-                    {
-                        <img src="data:@imagenView.TipoImagen;base64,@imagenView.Base64"
-                             alt="Preview"
-                             style="width: 100%; max-height: 150px; object-fit: contain;" />
-                    }
-                    else
-                    {
-                        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 120px; background: #f0f2f5; color: #999; border-radius: 4px;">
-                            <Icon Type="picture" Theme="IconThemeType.Outline" Style="font-size: 2em; margin-bottom: 5px;" />
-                            <span>Ninguna foto seleccionada</span>
-                        </div>
-                    }
-                </div>
-            </Card>
-
+<div class="modal-body-content">
+    <div class="modal-left-panel">
+        <Card Style="border: 1px solid #d9d9d9; border-radius: 20px;">
+            <div style="text-align: center;">
+                @if (!string.IsNullOrEmpty(imagenView.Base64))
+                {
+                    <img src="data:@imagenView.TipoImagen;base64,@imagenView.Base64"
+                         alt="Preview"
+                         style="width: 100%; max-height: 150px; object-fit: contain;" />
+                }
+                else
+                {
+                    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 120px; background: #f0f2f5; color: #999; border-radius: 4px;">
+                        <Icon Type="picture" Theme="IconThemeType.Outline" Style="font-size: 2em; margin-bottom: 5px;" />
+                        <span>Ninguna foto seleccionada</span>
+                    </div>
+                }
+            </div>
             <div style="text-align: center; margin-top: 10px;">
                 <label for="fotoMovil">
-                    <Icon Type="cloud-upload" Theme="IconThemeType.Outline" Style="width: 20px; height: 20px;" />
-                    Cargar foto del móvil
-                    <Button Icon="cloud-upload" Type="@ButtonType.Primary">Cargar foto del móvil</Button>
+                     Icon="cloud-upload" Type="@ButtonType.Primary">Cargar foto del móvil
                 </label>
                 <InputFile OnChange="SubirFoto" id="fotoMovil" accept=".jpg,.jpeg,.png" style="display: none;" />
                 <h3 id="path">@imagenView.Nombre</h3>
             </div>
-        </div>
-
-
-        <div class="modal-right-panel">
-            <Steps Current="current" Direction="StepsDirection.Horizontal">
-                @foreach (var item in steps)
-                {
-                    <Step Title="@item.Title" Description="@item.Content" />
-                }
-            </Steps>
-
-            <div style="padding: 15px 0;">
-                <Form Model="vehiculoView" Layout="@FormLayout.Vertical">
-                    @if (current == 0)
-                    {
-                        <div class="form-grid-2-col">
-                            <FormItem Label="Marca">
-                                <Input Size="InputSize.Large" Placeholder="Marca" @bind-Value="@vehiculoView.Marca" AllowClear />
-                            </FormItem>
-                            <FormItem Label="Modelo">
-                                <Input Size="InputSize.Large" Placeholder="Modelo" @bind-Value="@vehiculoView.Modelo" AllowClear />
-                            </FormItem>
-                            <FormItem Label="Año">
-                                <AntDesign.InputNumber @bind-Value="vehiculoView.Año" Placeholder="Año" Style="width: 100%;" Min="1900" Max="@DateTime.Now.Year" AllowClear />
-                            </FormItem>
-                            <FormItem Label="Patente">
-                                <Input Size="InputSize.Large" Placeholder="Patente" @bind-Value="@vehiculoView.Patente" AllowClear />
-                            </FormItem>
-                            <FormItem Label="Tipo">
-                                <Input Size="InputSize.Large" Placeholder="Tipo" @bind-Value="@vehiculoView.Tipo" AllowClear />
-                            </FormItem>
-                            <FormItem Label="Combustible">
-                                <Input Size="InputSize.Large" Placeholder="Combustible" @bind-Value="@vehiculoView.Combustible" AllowClear id="combustible-input" />
-                            </FormItem>
-                            <FormItem Label="Fecha del último service" style="flex: 1;">
-                                <DatePicker Size="InputSize.Large" Placeholder="@("Fecha del último service")" @bind-Value="@vehiculoView.FechaUltimoService" id="fecha-ultimo-service-date-picker" Style="width: 100%" ; />
-                            </FormItem>
-                            <FormItem Label="Fecha del próximo service" style="flex: 1;">
-                                <DatePicker Size="InputSize.Large" Placeholder="@("Fecha del próximo service")" @bind-Value="@vehiculoView.FechaProximoService" id="fecha-proximo-service-date-picker" Style="width: 100%" ; />
-                            </FormItem>
-                            <FormItem Label="Observaciones" Class="full-width">
-                                <TextArea Size="InputSize.Large" Placeholder="Observaciones" @bind-Value="@vehiculoView.Observaciones" AllowClear id="observaciones-textarea" />
-                            </FormItem>
-                        </div>
-                    }
-                    else if (current == 1)
-                    {
-                        <div class="form-grid-2-col-compact">
-                            <FormItem Label="Nº del Móvil">
-                                <Input Size="InputSize.Large" Placeholder="Nº Móvil" @bind-Value="@vehiculoView.NumeroMovil" AllowClear id="numero-movil-input" />
-                            </FormItem>
-                            <FormItem Label="Estado del Vehículo">
-                                <EnumSelect TEnum="TipoEstadoMovil" Size="InputSize.Large" Placeholder="Seleccione estado del vehículo" @bind-Value="vehiculoView.Estado" id="estado-select" />
-                            </FormItem>
-                            <FormItem Label="Estado del Vehículo">
-                                <Select TItem="BomberoViweModel"
-                                        TItemValue="int"
-                                        DataSource="@ListaBomberos" @bind-Value="@vehiculoView.EncargadoId"
-                                        LabelName="@nameof(BomberoViweModel.NombreYApellido)"
-                                        ValueName="@nameof(BomberoViweModel.Id)"
-                                        Placeholder="Seleccione el bombero encargado"
-                                        Size="InputSize.Large"
-                                        DefaultActiveFirstOption="false"
-                                        AllowClear EnableSearch
-                                        id="bombero-encargado-select">
-                                </Select>
-                            </FormItem>
-                            <div class="full-width">
-                                <FormItem Label="Es una embarcación">
-                                    <Switch @bind-Checked="@EsEmbarcacion" CheckedChildren="Sí" UnCheckedChildren="No" />
-                                </FormItem>
-                            </div>
-
-                            @if (!EsEmbarcacion)
-                            {
-                                <FormItem Label="Nº Motor">
-                                    <Input Size="InputSize.Large" Placeholder="Nº Motor" @bind-Value="@movilView.NumeroMotor" AllowClear id="numero-motor-input" />
-                                </FormItem>
-                                <FormItem Label="Nº Chasis">
-                                    <Input Size="InputSize.Large" Placeholder="Nº Chasis" @bind-Value="@movilView.NumeroChasis" AllowClear id="numero-chasis-input" />
-                                </FormItem>
-                                <FormItem Label="Modelo de bomba">
-                                    <Input Size="InputSize.Large" Placeholder="Modelo de bomba" @bind-Value="@movilView.ModeloBomba" AllowClear id="modelo-bomba-input" />
-                                </FormItem>
-                                <FormItem Label="Cantidad de litros">
-                                    <AntDesign.InputNumber Size="InputSize.Large" Placeholder="Cantidad de litros" @bind-Value="@movilView.CantidadLitros" Min="0" id="cantidad-litros-input" Style="width: 100%;"></AntDesign.InputNumber>
-                                </FormItem>
-                                <FormItem Label="Tipo de aceite">
-                                    <Input Size="InputSize.Large" Placeholder="Tipo de aceite" @bind-Value="@movilView.TipoAceite" AllowClear id="tipo-aceite-input" />
-                                </FormItem>
-                                <FormItem Label="Marca de aceite">
-                                    <Input Size="InputSize.Large" Placeholder="Marca de aceite" @bind-Value="@movilView.MarcaAceite" AllowClear id="marca-aceite-input" />
-                                </FormItem>
-                                <FormItem Label="Cantidad de aceite">
-                                    <AntDesign.InputNumber Size="InputSize.Large" Placeholder="Cantidad de aceite" @bind-Value="@movilView.CantidadAceite" Min="0" id="cantidad-aceite-input" Style="width: 100%;"></AntDesign.InputNumber>
-                                </FormItem>
-                                <FormItem Label="Modelo de filtro de aire">
-                                    <Input Size="InputSize.Large" Placeholder="Modelo de filtro de aire" @bind-Value="@movilView.ModeloFiltroAire" AllowClear id="modelo-filtro-aire-input" />
-                                </FormItem>
-                                <FormItem Label="Medidas de cubiertas">
-                                    <Input Size="InputSize.Large" Placeholder="Medidas de cubiertas" @bind-Value="@movilView.MedidasCubiertas" AllowClear id="medidas-cubiertas-input" />
-                                </FormItem>
-                                <FormItem Label="Libras de cubiertas">
-                                    <Input Size="InputSize.Large" Placeholder="Libras de cubiertas" @bind-Value="@movilView.LibrasCubiertas" AllowClear id="libras-cubiertas-input" />
-                                </FormItem>
-                                <FormItem Label="Tipo de caja de velocidades">
-                                    <EnumSelect TEnum="TipoCajaVelocidades" Size="InputSize.Large" Placeholder="Seleccione tipo de caja de velocidades" @bind-Value="movilView.CajaVelocidades" id="caja-velocidades-select" />
-                                </FormItem>
-                                <FormItem Label="Tipo de tensión eléctrica">
-                                    <EnumSelect TEnum="TipoTension" Size="InputSize.Large" Placeholder="Seleccione tipo de tensión eléctrica" @bind-Value="movilView.TensionCElectrico" id="tension-electrica-select" />
-                                </FormItem>
-                                <FormItem Label="Tipo de dirección">
-                                    <EnumSelect TEnum="TipoDireccionUnidades" Size="InputSize.Large" Placeholder="Seleccione tipo de dirección" @bind-Value="movilView.TipoDireccion" id="tipo-direccion-select" />
-                                </FormItem>
-                                <FormItem Label="Marca de batería">
-                                    <Input Size="InputSize.Large" Placeholder="Marca de batería" @bind-Value="@movilView.MarcaBateria" AllowClear id="marca-bateria-input" />
-                                </FormItem>
-                                <FormItem Label="Fecha del último cambio de batería" style="flex: 1;">
-                                    <DatePicker Size="InputSize.Large" Placeholder="@("Fecha del último cambio de batería")" @bind-Value="@movilView.FechaUltimoCambioBateria" id="fecha-cambio-bateria-date-picker" Style="width: 100%;" />
-                                </FormItem>
-                            }
-                        </div>
-                    }
-                </Form>
-            </div>
-        </div>
+        </Card>
     </div>
+    
+    <div class="modal-right-panel">
+        <Form Model="@vehiculoView" Layout="@FormLayout.Vertical">
+            
+            <Card Title="Información Básica" Style="border-radius: 12px; margin-bottom: 20px;">
+                <div class="form-grid-4-col">
+                    <FormItem Label="Nº de la Unidad">
+                        <Input Placeholder="Número del móvil" @bind-Value="@vehiculoView.NumeroMovil" AllowClear />
+                    </FormItem>
+                    <FormItem Label="Estado de la Unidad">
+                        <EnumSelect TEnum="TipoEstadoMovil" Placeholder="Seleccione estado de la Unidad" @bind-Value="vehiculoView.Estado" />
+                    </FormItem>
+                    <FormItem Label="Encargado">
+                        <Select TItem="BomberoViweModel"
+                                TItemValue="int"
+                                DataSource="@ListaBomberos" @bind-Value="@vehiculoView.EncargadoId"
+                                LabelName="@nameof(BomberoViweModel.NombreYApellido)"
+                                ValueName="@nameof(BomberoViweModel.Id)"
+                                Placeholder="Seleccione al Encargado"
+                                AllowClear EnableSearch />
+                    </FormItem>
+                    <FormItem Label="Tipo">
+                        <Input Placeholder="Tipo" @bind-Value="@vehiculoView.Tipo" AllowClear />
+                    </FormItem>
+                    <FormItem Label="Marca">
+                        <Input Placeholder="Marca" @bind-Value="@vehiculoView.Marca" AllowClear />
+                    </FormItem>
+                    <FormItem Label="Modelo de la Bomba">
+                        <Input Placeholder="Modelo de la Bomba" @bind-Value="@vehiculoView.Modelo" AllowClear />
+                    </FormItem>
+                    <FormItem Label="Año">
+                        <AntDesign.InputNumber @bind-Value="vehiculoView.Año" Placeholder="Año" Min="1900" Max="@DateTime.Now.Year" Style="width: 100%;" AllowClear />
+                    </FormItem>
+                    <FormItem Label="Patente">
+                        <Input Placeholder="Patente" @bind-Value="@vehiculoView.Patente" AllowClear />
+                    </FormItem>
+                    <FormItem Label="Observaciones" Class="full-width">
+                        <TextArea Placeholder="Observaciones" @bind-Value="@vehiculoView.Observaciones" Rows="2" AllowClear />
+                    </FormItem>
+                    <FormItem Label="Es una embarcación" Class="full-width">
+                        <Switch @bind-Checked="@EsEmbarcacion" />
+                    </FormItem>
+                </div>
+            </Card>
 
-    <div class="modal-footer">
-        @if (current > 0)
-        {
-            <Button OnClick="OnPreClick"> Anterior </Button>
-        }
+            @if (!EsEmbarcacion)
+            {
+                <Card Title="Ficha Técnica" Style="border-radius: 12px; margin-bottom: 20px;">
+                    <div class="form-grid-4-col">
+                        <FormItem Label="Nº Motor">
+                            <Input Placeholder="Número de motor" @bind-Value="@movilView.NumeroMotor" AllowClear />
+                        </FormItem>
+                        <FormItem Label="Nº Chasis">
+                            <Input Placeholder="Número de chasis" @bind-Value="@movilView.NumeroChasis" AllowClear />
+                        </FormItem>
+                        <FormItem Label="Modelo de bomba">
+                            <Input Placeholder="Modelo de bomba" @bind-Value="@movilView.ModeloBomba" AllowClear />
+                        </FormItem>
+                        <FormItem Label="Tipo de Combustible">
+                            <Input Placeholder="Tipo de Combustible" @bind-Value="@vehiculoView.Combustible" AllowClear />
+                        </FormItem>
+                        <FormItem Label="Litros de Combustible">
+                            <AntDesign.InputNumber @bind-Value="@movilView.CantidadLitros" Placeholder="Litros de Combustible" Min="0" Style="width: 100%;" AllowClear />
+                        </FormItem>
+                        <FormItem Label="Tipo de aceite">
+                            <Input Placeholder="Tipo de aceite" @bind-Value="@movilView.TipoAceite" AllowClear />
+                        </FormItem>
+                        <FormItem Label="Marca de aceite">
+                            <Input Placeholder="Marca de aceite" @bind-Value="@movilView.MarcaAceite" AllowClear />
+                        </FormItem>
+                        <FormItem Label="Litros de aceite">
+                             <AntDesign.InputNumber @bind-Value="@movilView.CantidadAceite" Placeholder="Litros de aceite" Min="0" Style="width: 100%;" AllowClear />
+                        </FormItem>
+                        <FormItem Label="Modelo de filtro de aire">
+                            <Input Placeholder="Modelo de filtro de aire" @bind-Value="@movilView.ModeloFiltroAire" AllowClear />
+                        </FormItem>
+                        <FormItem Label="Medidas de cubiertas">
+                            <Input Placeholder="Medidas de las cubiertas" @bind-Value="@movilView.MedidasCubiertas" AllowClear />
+                        </FormItem>
+                        <FormItem Label="Presión de cubiertas">
+                            <Input Placeholder="Presión de Cubiertas" @bind-Value="@movilView.LibrasCubiertas" AllowClear />
+                        </FormItem>
+                        <FormItem Label="Tipo de caja de velocidades">
+                            <EnumSelect TEnum="TipoCajaVelocidades" Placeholder="Seleccione tipo de caja de velocidades" @bind-Value="movilView.CajaVelocidades" />
+                        </FormItem>
+                        <FormItem Label="Tipo de tensión eléctrica">
+                            <EnumSelect TEnum="TipoTension" Placeholder="Seleccione tipo de tensión eléctrica" @bind-Value="movilView.TensionCElectrico" />
+                        </FormItem>
+                        <FormItem Label="Tipo de dirección">
+                            <EnumSelect TEnum="TipoDireccionUnidades" Placeholder="Seleccione tipo de dirección" @bind-Value="movilView.TipoDireccion" />
+                        </FormItem>
+                        <FormItem Label="Marca de batería">
+                            <Input Placeholder="Marca de batería" @bind-Value="@movilView.MarcaBateria" AllowClear />
+                        </FormItem>
+                        <FormItem Label="Fecha del último cambio de batería">
+                            <DatePicker  @bind-Value="@movilView.FechaUltimoCambioBateria" Style="width: 100%;" />
+                        </FormItem>
+                        <FormItem Label="Fecha del último service">
+                            <DatePicker  @bind-Value="@vehiculoView.FechaUltimoService" Style="width: 100%;" />
+                        </FormItem>
+                        <FormItem Label="Fecha del próximo service">
+                            <DatePicker  @bind-Value="@vehiculoView.FechaProximoService" Style="width: 100%;" />
+                        </FormItem>
+                    </div>
+                </Card>
+            }
 
-        @if (current < steps.Length - 1)
-        {
-            <Button Type="@ButtonType.Primary" OnClick="OnNextClick"> Siguiente </Button>
-        }
-
-        @if (current == steps.Length - 1)
-        {
-            <Button Type="@ButtonType.Primary" OnClick="SubirVehiculoAsync" Loading="@isLoading">
-                Guardar Vehículo
-            </Button>
-        }
+            @if (EsEmbarcacion)
+            {
+                <Card Title="Ficha Técnica" Style="border-radius: 12px; margin-bottom: 20px;">
+                    <div class="form-grid-4-col">
+                        <FormItem Label="Tipo de Combustible">
+                            <Input Placeholder="Tipo de Combustible" @bind-Value="@vehiculoView.Combustible" AllowClear />
+                        </FormItem>
+                        <FormItem Label="Litros de Combustible">
+                            <AntDesign.InputNumber @bind-Value="@movilView.CantidadLitros" Placeholder="Litros de Combustible" Min="0" Style="width: 100%;" AllowClear />
+                        </FormItem>
+                        <FormItem Label="Fecha del último service">
+                            <DatePicker  @bind-Value="@vehiculoView.FechaUltimoService" Style="width: 100%;" />
+                        </FormItem>
+                        <FormItem Label="Fecha del próximo service">
+                            <DatePicker  @bind-Value="@vehiculoView.FechaProximoService" Style="width: 100%;" />
+                        </FormItem>
+                    </div>
+                </Card>
+            }
+        </Form>
     </div>
+</div>
 
+<div class="modal-footer">
+    <Button Type="@ButtonType.Primary" OnClick="SubirVehiculoAsync" Loading="@isLoading">
+        Guardar Vehículo
+    </Button>
+</div>
 
-
-}
 @code {
     [Parameter] public EventCallback OnClose { get; set; }
     public ImagenViewModel imagenView { get; set; } = new();

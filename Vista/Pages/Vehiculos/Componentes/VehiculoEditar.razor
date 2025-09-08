@@ -15,11 +15,9 @@
 <link rel="stylesheet" href="css/EditarMovilEstilos.css">
 
 <div class="modal-body-content">
-
     <div class="modal-left-panel">
         <Card Style="border: 1px solid #d9d9d9; border-radius: 20px;">
             <div style="text-align: center;">
-
                 @if (!string.IsNullOrEmpty(imagenView.Base64))
                 {
                     <img src="data:@imagenView.TipoImagen;base64,@imagenView.Base64" alt="Foto del vehículo" style="width: 100%; max-height: 150px; object-fit: contain;" />
@@ -31,15 +29,12 @@
                         <span>Ninguna foto seleccionada</span>
                     </div>
                 }
-
             </div>
             <div style="font-weight: 500; margin-top: 10px; text-align: center;">
-
                 @if (!string.IsNullOrEmpty(vehiculoView.NumeroMovil))
                 {
                     <span>Nº Unidad @vehiculoView.NumeroMovil</span>
                 }
-
             </div>
         </Card>
         <div style="text-align: center; margin-top: 10px;">
@@ -51,140 +46,142 @@
     </div>
 
     <div class="modal-right-panel">
-        <Steps Current="current">
-            <Step Title="Datos Básicos del Vehículo" />
-            <Step Title="Asignación de Detalles del Vehículo" />
-        </Steps>
+        <Form Model="vehiculoView" Layout="@FormLayout.Vertical">
+            <Card Title="Información Básica" Style="margin-bottom: 24px;">
+                <div class="form-grid-4-col">
+                    <FormItem Label="Nº de la Unidad">
+                        <Input @bind-Value="vehiculoView.NumeroMovil" Placeholder="Número de la Unidad" />
+                    </FormItem>
+                    <FormItem Label="Estado de la Unidad">
+                        <EnumSelect TEnum="TipoEstadoMovil" @bind-Value="vehiculoView.Estado" Placeholder="Seleccione estado" AllowClear />
+                    </FormItem>
+                    <FormItem Label="Encargado">
+                        <Select TItem="BomberoViweModel"
+                                TItemValue="int"
+                                DataSource="@ListaBomberos"
+                                Placeholder="Seleccione al Encargado"
+                                @bind-Value="@vehiculoView.EncargadoId"
+                                LabelName="@nameof(BomberoViweModel.NombreYApellido)"
+                                ValueName="@nameof(BomberoViweModel.Id)">
+                        </Select>
+                    </FormItem>
+                    <FormItem Label="Tipo de Combustible">
+                        <Input @bind-Value="vehiculoView.Tipo" Placeholder="Tipo de Combustible" />
+                    </FormItem>
 
-        <div style="padding: 15px 0;">
-            <Form Model="vehiculoView" Layout="@FormLayout.Vertical">
-                @if (current == 0)
+                    <FormItem Label="Marca">
+                        <Input @bind-Value="vehiculoView.Marca" Placeholder="Marca" />
+                    </FormItem>
+                    <FormItem Label="Modelo de la Bomba">
+                        <Input @bind-Value="vehiculoView.Modelo" Placeholder="Modelo de la Bomba" />
+                    </FormItem>
+                    <FormItem Label="Año">
+                        <AntDesign.InputNumber @bind-Value="vehiculoView.Año" Placeholder="Año" Style="width: 100%;" />
+                    </FormItem>
+                    <FormItem Label="Patente">
+                        <Input @bind-Value="vehiculoView.Patente" Placeholder="Patente" />
+                    </FormItem>
+
+                    <FormItem Label="Observaciones" Class="full-width-4">
+                        <TextArea @bind-Value="vehiculoView.Observaciones" Placeholder="Observaciones" Rows="3" />
+                    </FormItem>
+
+                    <div class="full-width-4">
+                        <FormItem Label="Es una embarcación">
+                            <Switch @bind-Checked="@EsEmbarcacion" />
+                        </FormItem>
+                    </div>
+                </div>
+            </Card>
+
+            <Card Title="Ficha Técnica">
+                @if (EsEmbarcacion == false)
                 {
-                    <div class="form-grid-2-col">
-                        <FormItem Label="Marca">
-                            <Input @bind-Value="vehiculoView.Marca" Placeholder="Marca" />
+                    <div class="form-grid-4-col">
+                        <FormItem Label="Nº Motor">
+                            <Input @bind-Value="movilView.NumeroMotor" Placeholder="Número de motor" />
                         </FormItem>
-                        <FormItem Label="Modelo">
-                            <Input @bind-Value="vehiculoView.Modelo" Placeholder="Modelo" />
+                        <FormItem Label="Nº Chasis">
+                            <Input @bind-Value="movilView.NumeroChasis" Placeholder="Número de chasis" />
                         </FormItem>
-                        <FormItem Label="Año">
-                            <AntDesign.InputNumber @bind-Value="vehiculoView.Año" Placeholder="Año" Style="width: 100%;" />
+                        <FormItem Label="Modelo de bomba">
+                            <Input @bind-Value="movilView.ModeloBomba" Placeholder="Modelo de bomba" />
                         </FormItem>
-                        <FormItem Label="Patente">
-                            <Input @bind-Value="vehiculoView.Patente" Placeholder="Patente" />
-                        </FormItem>
-                        <FormItem Label="Tipo">
-                            <Input @bind-Value="vehiculoView.Tipo" Placeholder="Tipo" />
-                        </FormItem>
-                        <FormItem Label="Combustible">
+                        <FormItem Label="Tipo de combustible">
                             <Input @bind-Value="vehiculoView.Combustible" Placeholder="Combustible" />
                         </FormItem>
-                        <FormItem Label="Fecha del último service" style="flex: 1;">
+
+                        <FormItem Label="Litros de Combustible">
+                            <AntDesign.InputNumber @bind-Value="@movilView.CantidadLitros" Min="0" Placeholder="Cantidad de litros" Style="width: 100%;" />
+                        </FormItem>
+                        <FormItem Label="Tipo de aceite">
+                            <Input @bind-Value="movilView.TipoAceite" Placeholder="Tipo de aceite" />
+                        </FormItem>
+                        <FormItem Label="Marca de aceite">
+                            <Input @bind-Value="movilView.MarcaAceite" Placeholder="Marca de aceite" />
+                        </FormItem>
+                        <FormItem Label="Litros de aceite">
+                            <AntDesign.InputNumber @bind-Value="@movilView.CantidadAceite" Min="0" Placeholder="Cantidad de aceite" Style="width: 100%;" />
+                        </FormItem>
+
+                        <FormItem Label="Modelo de filtro de aire">
+                            <Input @bind-Value="movilView.ModeloFiltroAire" Placeholder="Modelo de filtro de aire" />
+                        </FormItem>
+                        <FormItem Label="Medidas de las cubiertas">
+                            <Input @bind-Value="movilView.MedidasCubiertas" Placeholder="Medidas de las cubiertas" />
+                        </FormItem>
+                        <FormItem Label="Presión de Cubiertas">
+                            <Input @bind-Value="movilView.LibrasCubiertas" Placeholder="Presión de Cubiertas" />
+                        </FormItem>
+                        <FormItem Label="Caja de velocidades">
+                            <EnumSelect TEnum="TipoCajaVelocidades?" @bind-Value="movilView.CajaVelocidades" Placeholder="Seleccione caja de velocidades" AllowClear />
+                        </FormItem>
+
+                        <FormItem Label="Tensión del sistema eléctrico">
+                            <EnumSelect TEnum="TipoTension?" @bind-Value="movilView.TensionCElectrico" Placeholder="Seleccione tensión" AllowClear />
+                        </FormItem>
+                        <FormItem Label="Tipo de dirección">
+                            <EnumSelect TEnum="TipoDireccionUnidades?" @bind-Value="movilView.TipoDireccion" Placeholder="Seleccione dirección" AllowClear />
+                        </FormItem>
+                        <FormItem Label="Marca de batería">
+                            <Input @bind-Value="movilView.MarcaBateria" Placeholder="Marca de batería" />
+                        </FormItem>
+                        <FormItem Label="Fecha del último cambio de batería">
+                            <DatePicker @bind-Value="movilView.FechaUltimoCambioBateria" Style="width: 100%;" />
+                        </FormItem>
+
+                        <FormItem Label="Fecha del último service">
                             <DatePicker @bind-Value="vehiculoView.FechaUltimoService" Style="width: 100%;" />
                         </FormItem>
-                        <FormItem Label="Fecha del próximo service" style="flex: 1;">
+                        <FormItem Label="Fecha del próximo service">
                             <DatePicker @bind-Value="vehiculoView.FechaProximoService" Style="width: 100%;" />
                         </FormItem>
-                        <FormItem Label="Observaciones" Class="full-width">
-                            <TextArea @bind-Value="vehiculoView.Observaciones" Placeholder="Observaciones" Rows="3" />
-                        </FormItem>   
                     </div>
                 }
-                else if (current == 1)
+                else
                 {
-                    <div class="form-grid-2-col-compact">
-                            <FormItem Label="Nº del Móvil">
-                                <Input @bind-Value="vehiculoView.NumeroMovil" Placeholder="Número del móvil" />
-                            </FormItem>
-                        
-                        <FormItem Label="Estado del Vehículo">
-                            <EnumSelect TEnum="TipoEstadoMovil" @bind-Value="vehiculoView.Estado" Placeholder="Seleccione estado" AllowClear />
+                    <div class="form-grid-4-col">
+                        <FormItem Label="Tipo de Combustible">
+                            <Input @bind-Value="vehiculoView.Combustible" Placeholder="Tipo de Combustible" />
                         </FormItem>
-
-                        <FormItem Label="Bombero Encargado">
-                            <Select TItem="BomberoViweModel"
-                                    TItemValue="int"
-                                    DataSource="@ListaBomberos"
-                                    Placeholder="Seleccione Bombero Encargado"
-                                    @bind-Value="@vehiculoView.EncargadoId"
-                                    LabelName="@nameof(BomberoViweModel.NombreYApellido)"
-                                    ValueName="@nameof(BomberoViweModel.Id)">
-                            </Select>
+                        <FormItem Label="Litros de Combustible">
+                            <AntDesign.InputNumber @bind-Value="@movilView.CantidadLitros" Min="0" Placeholder="Litros de Combustible" Style="width: 100%;" />
                         </FormItem>
-                        <div class="full-width">
-                            <FormItem Label="Es una embarcación">
-                                <Switch @bind-Checked="@EsEmbarcacion" />
-                            </FormItem>
-                        </div>
-
-                        @if (EsEmbarcacion == false)
-                        {
-                            <FormItem Label="Nº Motor">
-                                <Input @bind-Value="movilView.NumeroMotor" Placeholder="Número de motor" />
-                            </FormItem>
-                            <FormItem Label="Nº Chasis">
-                                <Input @bind-Value="movilView.NumeroChasis" Placeholder="Número de chasis" />
-                            </FormItem>
-                            <FormItem Label="Modelo de bomba">
-                                <Input @bind-Value="movilView.ModeloBomba" Placeholder="Modelo de bomba" />
-                            </FormItem>
-                            <FormItem Label="Cantidad de litros">
-                                <AntDesign.InputNumber @bind-Value="@movilView.CantidadLitros" Min="0" Placeholder="Cantidad de litros" Style="width: 100%;" />
-                            </FormItem>
-                            <FormItem Label="Tipo de aceite">
-                                <Input @bind-Value="movilView.TipoAceite" Placeholder="Tipo de aceite" />
-                            </FormItem>
-                            <FormItem Label="Marca de aceite">
-                                <Input @bind-Value="movilView.MarcaAceite" Placeholder="Marca de aceite" />
-                            </FormItem>
-                            <FormItem Label="Cantidad de aceite">
-                                <AntDesign.InputNumber @bind-Value="@movilView.CantidadAceite" Min="0" Placeholder="Cantidad de aceite" Style="width: 100%;" />
-                            </FormItem>
-                            <FormItem Label="Modelo de filtro de aire">
-                                <Input @bind-Value="movilView.ModeloFiltroAire" Placeholder="Modelo de filtro de aire" />
-                            </FormItem>
-                            <FormItem Label="Medidas de las cubiertas">
-                                <Input @bind-Value="movilView.MedidasCubiertas" Placeholder="Medidas de las cubiertas" />
-                            </FormItem>
-                            <FormItem Label="Libras de las cubiertas">
-                                <Input @bind-Value="movilView.LibrasCubiertas" Placeholder="Libras de las cubiertas" />
-                            </FormItem>
-                            <FormItem Label="Caja de velocidades">
-                                <EnumSelect TEnum="TipoCajaVelocidades?" @bind-Value="movilView.CajaVelocidades" Placeholder="Seleccione caja de velocidades" AllowClear />
-                            </FormItem>
-                            <FormItem Label="Tensión del sistema eléctrico">
-                                <EnumSelect TEnum="TipoTension?" @bind-Value="movilView.TensionCElectrico" Placeholder="Seleccione tensión" AllowClear />
-                            </FormItem>
-                            <FormItem Label="Tipo de dirección">
-                                <EnumSelect TEnum="TipoDireccionUnidades?" @bind-Value="movilView.TipoDireccion" Placeholder="Seleccione dirección" AllowClear />
-                            </FormItem>
-                            <FormItem Label="Marca de batería">
-                                <Input @bind-Value="movilView.MarcaBateria" Placeholder="Marca de batería" />
-                            </FormItem>
-                            <FormItem Label="Fecha del último cambio de batería">
-                                <DatePicker @bind-Value="movilView.FechaUltimoCambioBateria" Style="width: 100%;" />
-                            </FormItem>
-                        }
+                        <FormItem Label="Fecha del último service">
+                            <DatePicker @bind-Value="vehiculoView.FechaUltimoService" Style="width: 100%;" />
+                        </FormItem>
+                        <FormItem Label="Fecha del próximo service">
+                            <DatePicker @bind-Value="vehiculoView.FechaProximoService" Style="width: 100%;" />
+                        </FormItem>
                     </div>
                 }
-            </Form>
-        </div>
+            </Card>
+        </Form>
     </div>
 </div>
 
 <div class="modal-footer">
-    @if (current > 0)
-    {
-        <Button OnClick="OnPreClick">Anterior</Button>
-    }
-    @if (current < steps.Length - 1)
-    {
-        <Button Type="@ButtonType.Primary" OnClick="OnNextClick">Siguiente</Button>
-    }
-    @if (current == steps.Length - 1)
-    {
-        <Button Type="@ButtonType.Primary" OnClick="EditarMovil">Guardar</Button>
-    }
+    <Button Type="@ButtonType.Primary" OnClick="EditarMovil">Guardar</Button>
 </div>
 
 @code {
