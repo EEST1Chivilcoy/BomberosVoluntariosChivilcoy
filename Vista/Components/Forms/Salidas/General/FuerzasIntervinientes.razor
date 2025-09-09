@@ -110,11 +110,12 @@
                 <h4 style="color: #e53935; margin: 0; font-weight: 600;">Fuerza Interviniente</h4>
             </div>
             <Row Gutter="16">
-                <ant.design.col Xs="24" Sm="8" Md="8" Lg="8">
+                <Col Xs="24" Sm="8" Md="8" Lg="8">
                     <FormItem Label="A cargo de" Required>
                         <Input @bind-Value="fuerzaForm.Encargado" Placeholder="Nombre del encargado" />
                     </FormItem>
-                </ant.design.col>
+
+                </Col>
                 <Col Xs="24" Sm="8" Md="8" Lg="8">
                     <FormItem Label="N° Unidad" Required>
                         <Input @bind-Value="fuerzaForm.NumeroUnidad" Placeholder="Ingrese el número de unidad" />
