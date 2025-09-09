@@ -6,13 +6,13 @@ on:
     branches:
       - master
     tags:
-      - 'break*'
+      - "break*"
   workflow_dispatch:
 
 env:
-  DOTNET_VERSION: '8.0.x'
-  PROJECT_PATH: 'Vista/Vista.csproj'
-  PUBLISH_PATH: './publish'
+  DOTNET_VERSION: "8.0.x"
+  PROJECT_PATH: "Vista/Vista.csproj"
+  PUBLISH_PATH: "./publish"
 
 jobs:
   build:
@@ -26,7 +26,6 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
-          include-prerelease: true
 
       - name: 📦 Cache de paquetes NuGet
         uses: actions/cache@v4
@@ -50,10 +49,10 @@ jobs:
           retention-days: 1
 
   deploy:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     needs: build
     environment:
-      name: 'Production'
+      name: "Production"
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
@@ -67,8 +66,8 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'bomberos'
-          slot-name: 'Production'
+          app-name: "bomberos"
+          slot-name: "Production"
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E5412DC5FC7648B698D15A1D3A7910EF }}
           package: ./app
 
@@ -109,4 +108,3 @@ jobs:
 
             git push origin $branch
           done
-
