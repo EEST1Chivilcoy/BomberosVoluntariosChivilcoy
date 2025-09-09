@@ -256,9 +256,11 @@
                        @bind-PageSize="_pageSize"
                        Responsive>
                     <ColumnDefinitions>
-                        <PropertyColumn Title="🔢 Número Parte" Property="s => s.Numero" Sortable>
+                        <PropertyColumn Title="🔢 Número Parte" Property="s => s.Numero" Sortable Width="200px">
                         </PropertyColumn>
-                        <PropertyColumn Title="🚨 Tipo de Salida" Property="s => s.TipoSalida" Sortable>
+                        <PropertyColumn Title="🚨 Tipo de Salida" Property="s => s.TipoSalida" Sortable Width="200px">
+                        </PropertyColumn>
+                        <PropertyColumn Title="📝 Descripción" Property="s => s.Descripcion" Sortable Width="220px">
                         </PropertyColumn>
                         <PropertyColumn Title="📍 Dirección" Property="s => s.Direccion" Sortable>
                         </PropertyColumn>
@@ -346,6 +348,7 @@
         public int Id { get; set; }
         public string Numero { get; set; } = null!;
         public string TipoSalida { get; set; } = null!;
+        public string Descripcion { get; set; } = null!;
         public string Direccion { get; set; } = null!;
         public string Fecha { get; set; } = null!;
         public string Hora { get; set; } = null!;
@@ -514,6 +517,7 @@
             Id = s.SalidaId,
             Numero = $"{s.NumeroParte}/{s.HoraSalida.Year}",
             TipoSalida = s.TipoEmergencia.GetDisplayName(),
+            Descripcion = string.IsNullOrWhiteSpace(s.Descripcion) ? "Sin descripción" : s.Descripcion,
             Direccion = string.IsNullOrWhiteSpace(s.Direccion) ? "Desconocida" : s.Direccion,
             Fecha = s.HoraSalida.ToString("yyyy-MM-dd"),
             Hora = s.HoraSalida.ToString("HH:mm"),

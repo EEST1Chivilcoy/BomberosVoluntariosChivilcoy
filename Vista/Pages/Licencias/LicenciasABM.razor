@@ -445,7 +445,6 @@
         color: white !important;
     }
 
-    /* Responsive breakpoints específicos para ABM */
     @@media (max-width: 1199px) {
         .licencias-abm .licenses-container {
             padding: 8px !important;
@@ -493,7 +492,6 @@
             font-size: 1.8rem !important;
             letter-spacing: 2px !important;
         }
-        /* Ocultar columnas menos importantes en móvil */
         .licencias-abm :deep(.ant-table-cell:nth-child(3)),
         .licencias-abm :deep(.ant-table-cell:nth-child(4)) {
             display: none !important;
@@ -509,7 +507,6 @@
             height: 36px !important;
             padding: 0 12px !important;
         }
-        /* Solo mostrar columnas esenciales */
         .licencias-abm :deep(.ant-table-cell:nth-child(n+4)) {
             display: none !important;
         }
@@ -520,6 +517,118 @@
             display: table-cell !important;
         }
     }
+
+
+.modal-crear-licencia .ant-modal-content {
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: 4px solid #A63333;
+    margin-top: -50px;
+    margin-bottom: 0px;
+}
+
+.modal-crear-licencia .ant-modal-header {
+    background-color: #f0f2f5;
+    border-bottom: 1px solid #d9d9d9;
+    padding: 16px 24px;
+    border-radius: 9px 9px 0 0;
+}
+
+.modal-crear-licencia-content {
+    padding: 24px;
+}
+
+.modal-crear-licencia-form-item {
+    margin-bottom: 20px;
+    position: relative;
+    padding-left: 10px;
+}
+
+.modal-crear-licencia-form-item::before {
+    content: ''; 
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 3px;
+    border-radius: 5px;
+}
+
+.modal-crear-licencia-form-item .ant-form-item-label > label,
+.modal-crear-licencia-form-full-width .ant-form-item-label > label {
+    font-weight: 600;
+    color: #434343;
+    display: flex; 
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    transition: color 0.3s ease;
+}
+
+.modal-crear-licencia-form-item .ant-form-item-label > label:hover,
+.modal-crear-licencia-form-full-width .ant-form-item-label > label:hover {
+    color: #A63333;
+}
+
+.modal-crear-licencia .ant-input:focus,
+.modal-crear-licencia .ant-input:hover,
+.modal-crear-licencia .ant-select-selector:focus,
+.modal-crear-licencia .ant-select-selector:hover,
+.modal-crear-licencia .ant-picker:focus,
+.modal-crear-licencia .ant-picker:hover,
+.modal-crear-licencia .ant-picker-input > input:focus,
+.modal-crear-licencia .ant-picker-input > input:hover,
+.modal-crear-licencia .ant-input-number-input:focus,
+.modal-crear-licencia .ant-input-number-input:hover,
+.modal-crear-licencia .ant-textarea:focus,
+.modal-crear-licencia .ant-textarea:hover {
+    border-color: #FFD700 !important;
+    box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
+}
+
+.modal-crear-licencia .modal-crear-licencia-label-duracion {
+    background-color: #FFD700;
+    border-radius: 4px;
+    color: #434343;
+    font-weight: 700;
+    border: 2px solid #A63333; 
+    display: inline-block;
+}
+
+.modal-crear-licencia .ant-picker,
+.modal-crear-licencia .ant-input,
+.modal-crear-licencia .ant-select-selector,
+.modal-crear-licencia .ant-input-number,
+.modal-crear-licencia .ant-textarea {
+    border-radius: 8px !important;
+    border: 1px solid #d9d9d9 !important;
+    background: #fff !important;
+    color: #434343 !important;
+    transition: all 0.3s ease !important;
+}
+
+.modal-crear-licencia .modal-crear-licencia-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 18px;
+    margin-bottom: 0px;
+}
+.modal-crear-licencia .ant-btn-primary {
+    background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
+    border: none !important;
+    color: #fff !important;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
+    margin-top:  0;
+    margin-bottom: 0;
+    padding: 0 20px !important;
+}
+.modal-crear-licencia .ant-btn-primary:hover {
+    background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
+    color: #fff !important;
+}
+
 </style>
 
 <div class="licencias-abm">
@@ -698,94 +807,105 @@
 
 @* Modal para añadir licencia - Rediseñado responsivo *@
 <Modal @bind-Visible="_modalAñadirVisible"
-       Title="➕ Nueva Licencia"
-       Width="@("90%")"
+       Title="Nueva Licencia"
+       Width="@("100%")"
        Style="max-width: 800px;"
        OkText="@("Crear Licencia")"
        CancelText="@("Cancelar")"
        OnOk="@AddLicencia"
-       DestroyOnClose>
-    <div class="licencias-abm">
-        <div class="modal-content">
-            <Form Model="nuevaLicencia" Layout="FormLayout.Vertical">
-                <div class="form-grid">
-                    <div class="form-row">
-                        <FormItem Label="👤 Bombero" Required>
-                            <Select TItem="BomberoViweModel"
-                                    TItemValue="int"
-                                    DataSource="@BomberosVM"
-                                    Value="nuevaLicencia.PersonaId"
-                                    ValueChanged="OnBomberoChanged"
-                                    LabelName="@nameof(BomberoViweModel.NombreYApellido)"
-                                    ValueName="@nameof(BomberoViweModel.Id)"
-                                    Placeholder="Seleccione el bombero"
-                                    AllowClear
-                                    EnableSearch
-                                    Size="InputSize.Large" />
-                        </FormItem>
+       DestroyOnClose
+       WrapClassName="modal-crear-licencia">
+    <div class="modal-crear-licencia-content">
+        <Form Model="nuevaLicencia" Layout="FormLayout.Vertical" Class="modal-crear-licencia-form">
 
-                        <FormItem Label="📋 Número Legajo">
-                            <AntDesign.InputNumber @bind-Value="nuevaLicencia.NumeroLegajo"
-                                                   Disabled
-                                                   Size="InputSize.Large" />
-                        </FormItem>
-                    </div>
+            <Row Class="modal-crear-licencia-row" Gutter="16">
+                <AntDesign.Col Span="12">
+                    <FormItem Label="👤 Bombero" Required Class="modal-crear-licencia-form-item">
+                        <Select TItem="BomberoViweModel"
+                                TItemValue="int"
+                                DataSource="@BomberosVM"
+                                Value="nuevaLicencia.PersonaId"
+                                ValueChanged="OnBomberoChanged"
+                                LabelName="@nameof(BomberoViweModel.NombreYApellido)"
+                                ValueName="@nameof(BomberoViweModel.Id)"
+                                Placeholder="Seleccione el bombero"
+                                AllowClear
+                                EnableSearch
+                                Size="InputSize.Large" />
+                    </FormItem>
+                </AntDesign.Col>
 
-                    <FormItem Label="🏷️ Tipo de Licencia" Required>
-                        <EnumSelect TEnum="TipoLicencia?"
-                                    @bind-Value="@nuevaLicencia.TipoLicencia"
-                                    AllowClear
-                                    Placeholder="Seleccione el tipo de licencia"
+                <AntDesign.Col Span="12">
+                    <FormItem Label="📋 Número Legajo" Class="modal-crear-licencia-form-item">
+                        <AntDesign.InputNumber @bind-Value="nuevaLicencia.NumeroLegajo"
+                                               Disabled
+                                               Size="InputSize.Large" />
+                    </FormItem>
+                </AntDesign.Col>
+            </Row>
+
+            <FormItem Label="🏷️ Tipo de Licencia" Required Class="modal-crear-licencia-form-item">
+                <EnumSelect TEnum="TipoLicencia?"
+                            @bind-Value="@nuevaLicencia.TipoLicencia"
+                            AllowClear
+                            Placeholder="Seleccione el tipo de licencia"
+                            Size="InputSize.Large" />
+            </FormItem>
+
+            @if (nuevaLicencia.TipoLicencia == TipoLicencia.RazonesDeSalud)
+            {
+                <FormItem Label="📎 Certificado Médico" Class="modal-crear-licencia-form-item">
+                    <Upload Accept=".pdf,.jpg,.png,.jpeg"
+                            MaxCount="1"
+                            ShowUploadList>
+                        <Button Icon="upload">Adjuntar Certificado</Button>
+                    </Upload>
+                </FormItem>
+            }
+
+            <AntDesign.Col Span="24" Class="modal-crear-licencia-form-full-width">
+                <FormItem Label="📝 Descripción">
+                    <TextArea @bind-Value="@nuevaLicencia.Descripcion"
+                              Placeholder="Ingrese una descripción detallada de la licencia"
+                              Rows="4"
+                              ShowCounts
+                              MaxLength="500" />
+                </FormItem>
+            </AntDesign.Col>
+
+            <Row Class="modal-crear-licencia-row" Gutter="16">
+                <AntDesign.Col Span="9">
+                    <FormItem Label="📅 Fecha de Inicio" Required Class="modal-crear-licencia-form-item">
+                        <DatePicker TValue="DateTime"
+                                    @bind-Value="@nuevaLicencia.Desde"
+                                    DefaultValue="DateTime.Today"
+                                    DisabledDate="@(date => date < DateTime.Today)"
+                                    Placeholder="@("Seleccione fecha de inicio")"
                                     Size="InputSize.Large" />
                     </FormItem>
+                </AntDesign.Col>
 
-                    @if (nuevaLicencia.TipoLicencia == TipoLicencia.RazonesDeSalud)
-                    {
-                        <FormItem Label="📎 Certificado Médico">
-                            <Upload Accept=".pdf,.jpg,.png,.jpeg"
-                                    MaxCount="1"
-                                    ShowUploadList>
-                                <Button Icon="upload">Adjuntar Certificado</Button>
-                            </Upload>
-                        </FormItem>
-                    }
-
-                    <FormItem Label="📝 Descripción" Class="form-full-width">
-                        <TextArea @bind-Value="@nuevaLicencia.Descripcion"
-                                  Placeholder="Ingrese una descripción detallada de la licencia"
-                                  Rows="4"
-                                  ShowCount
-                                  MaxLength="500" />
+                <AntDesign.Col Span="9">
+                    <FormItem Label="📅 Fecha de Finalización" Required Class="modal-crear-licencia-form-item">
+                        <DatePicker TValue="DateTime"
+                                    @bind-Value="@nuevaLicencia.Hasta"
+                                    DefaultValue="@(DateTime.Today.AddDays(1))"
+                                    DisabledDate="@(date => date < nuevaLicencia.Desde)"
+                                    Placeholder="@("Seleccione fecha de fin")"
+                                    Size="InputSize.Large" />
                     </FormItem>
+                </AntDesign.Col>
 
-                    <div class="form-row">
-                        <FormItem Label="📅 Fecha de Inicio" Required>
-                            <DatePicker TValue="DateTime"
-                                        @bind-Value="@nuevaLicencia.Desde"
-                                        DefaultValue="DateTime.Today"
-                                        DisabledDate="@(date => date < DateTime.Today)"
-                                        Placeholder="@("Seleccione fecha de inicio")"
-                                        Size="InputSize.Large" />
-                        </FormItem>
-
-                        <FormItem Label="📅 Fecha de Finalización" Required>
-                            <DatePicker TValue="DateTime"
-                                        @bind-Value="@nuevaLicencia.Hasta"
-                                        DefaultValue="@(DateTime.Today.AddDays(1))"
-                                        DisabledDate="@(date => date < nuevaLicencia.Desde)"
-                                        Placeholder="@("Seleccione fecha de fin")"
-                                        Size="InputSize.Large" />
-                        </FormItem>
-                    </div>
-
-                    <FormItem Label="⏱️ Duración">
+                <AntDesign.Col Span="6">
+                    <FormItem Label="⏱️ Duración" Class="modal-crear-licencia-form-item">
                         <Input Value="@($"{nuevaLicencia.DuracionEnDias} días")"
                                ReadOnly
                                Size="InputSize.Large" />
                     </FormItem>
-                </div>
-            </Form>
-        </div>
+                </AntDesign.Col>
+
+           </Row>
+        </Form>
     </div>
 </Modal>
 
