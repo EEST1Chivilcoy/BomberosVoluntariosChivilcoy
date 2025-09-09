@@ -68,3 +68,17 @@ body {
     box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
     z-index: 100;
 }
+.header-content-details-card {
+    padding: 24px 24px 20px;
+    text-align: center;
+}
+.titulo-unidad {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 0;
+    color: rgba(0, 0, 0, 0.85);
+}
+.subtitulo {
+    color: #8c8c8c;
+    margin-top: 4px;
+}

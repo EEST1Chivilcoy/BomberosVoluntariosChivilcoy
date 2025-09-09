@@ -14,6 +14,13 @@
 
 <link rel="stylesheet" href="css/EditarMovilEstilos.css">
 
+<div class="header-content-details-card">
+            <Title Level="2" class="titulo-unidad">
+                Editar la Unidad
+            </Title>
+            <Paragraph class="subtitulo">Información básica y técnica del vehículo</Paragraph>
+</div>
+
 <div class="modal-body-content">
     <div class="modal-left-panel">
         <Card Style="border: 1px solid #d9d9d9; border-radius: 20px;">
@@ -65,8 +72,8 @@
                                 ValueName="@nameof(BomberoViweModel.Id)">
                         </Select>
                     </FormItem>
-                    <FormItem Label="Tipo de Combustible">
-                        <Input @bind-Value="vehiculoView.Tipo" Placeholder="Tipo de Combustible" />
+                    <FormItem Label="Tipo">
+                        <Input @bind-Value="vehiculoView.Tipo" Placeholder="Tipo" />
                     </FormItem>
 
                     <FormItem Label="Marca">
