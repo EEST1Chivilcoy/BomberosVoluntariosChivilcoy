@@ -52,7 +52,7 @@
 
 @if (EditarVisible)
 {
-    <Modal Footer="null" Title="Editar" OnCancel="() => EditarVisible = false" Visible="@EditarVisible"
+    <Modal Footer="null" Title='' OnCancel="() => EditarVisible = false" Visible="@EditarVisible"
             WrapClassName="fullscreen-modal" Style="max-width: unset; width: 100%; top: 0;" >
         <VehiculoEditar VehiculoId="@Vehiculo.Id" OnClose="HandleCancelEditar" />
     </Modal>
@@ -60,7 +60,7 @@
 
 @if (DetallesVisible)
 {
-    <Modal Footer="null" Title="Detalles" OnCancel="() => DetallesVisible = false" Visible="@DetallesVisible"
+    <Modal Footer="null" Title='' OnCancel="() => DetallesVisible = false" Visible="@DetallesVisible"
             WrapClassName="fullscreen-modal" Style="max-width: unset; width: 100%; top: 0;" >
         <VehiculoDetalles vehiculoId="@Vehiculo.Id" />
     </Modal>
