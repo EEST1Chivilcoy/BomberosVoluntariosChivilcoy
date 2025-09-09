@@ -286,3 +286,12 @@ align-items: center !important;
 .report-icon {
 font-size: 1.2em !important;
 }
+.ant-col-lg-16 .ant-card {
+    background-color: #e6e6e6f1 !important;
+}
+
+@media (max-width: 991px) {
+    .ant-col-lg-16 .ant-card {
+        background-color: #e6e6e6f1 !important;
+    }
+}
