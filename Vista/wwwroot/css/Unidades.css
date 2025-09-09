@@ -235,7 +235,7 @@
 
 /* Card principal Ant Design en UnidadesVista */
 .ant-card {
-    box-shadow: 0 4px 32px rgba(0, 255, 21, 0.1), 0 1.5px 8px rgba(0,0,0,0.04);
+    box-shadow: 0 1.5px 8px rgba(0,0,0,0.04); 
     border-radius: 18px !important;
     transition: box-shadow 0.3s, transform 0.3s;
 }
