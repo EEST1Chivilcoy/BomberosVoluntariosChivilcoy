@@ -7,14 +7,6 @@
 <Layout>
     <Content>
         <div style="padding: 30px;">
-            <Row Style="margin-bottom: 20px;">
-                <AntDesign.Col>
-                    <Button Type="default" OnClick="CerrarSesion" Style="@($"color: #555; border-color: #ccc;")">
-                        Cerrar Sesión
-                    </Button>
-                </AntDesign.Col>
-            </Row>
-
             <Row Gutter="30">
                 <AntDesign.Col xs="24" sm="24" md="24" lg="8" xl="6">
                     <div style="position: relative;">
@@ -135,9 +127,4 @@
     private const string ColorRojo = "#a51c16";
     private const string ColorAmarilloAcento = "#edb34d";
     private const string ColorGrisFondoTarjeta = "#e6e6e6f1";
-
-    private void CerrarSesion()
-    {
-        Console.WriteLine("Sesión Cerrada");
-    }
 }
