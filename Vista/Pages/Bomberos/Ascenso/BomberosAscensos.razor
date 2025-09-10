@@ -285,9 +285,7 @@
 
 @if (_visibleCargar == true)
 {
-    <Modal Footer="null" OnCancel="()=> _visibleCargar = false" Visible="@_visibleCargar" Style="width: 35%!important;">
-        <AgregarAscenso OnClose="OnClose" />
-    </Modal>
+    <AgregarAscenso Visible="_visibleCargar" OnClose="OnClose" />
 }
 
 @code {
