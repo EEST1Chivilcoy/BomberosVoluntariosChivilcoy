@@ -5,15 +5,17 @@
 @using AntDesign.TableModels
 @using System.Text.Json
 @using Vista.Data.Models.Imagenes
+@using Vista.Data.Enums.Personal.ComisionDirectiva
 @using Vista.Data.Models.Personas.Personal
 @using Vista.Data.Models.Personas.Personal.Componentes
 @using Vista.Data.Mappers
 
 @*Servicios utilizados*@
 @using Vista.Services
-@inject IBomberoService BomberoService
 @inject IMessageService message
 @inject NavigationManager navigationManager
+@inject IBomberoService BomberoService
+@inject IComisionDirectivaService ComisionDirectivaService
 
 <style>
     .abm-container {
@@ -353,84 +355,171 @@
                 </div>
                 <div class="title-container">
                     <h1 class="main-title">
-                        <Icon Type="fire" Class="title-icon" />
-                        BOMBEROS
+                        @if (TipoPersonal.ToLower() == "comisiondirectiva")
+                        {
+                            <Icon Type="team" Class="title-icon" />
+                            <span>COMISIÓN DIRECTIVA</span>
+                        }
+                        else if (TipoPersonal.ToLower() == "bomberos")
+                        {
+                            <Icon Type="fire" Class="title-icon" />
+                            <span>BOMBEROS</span>
+                        }
                     </h1>
                 </div>
                 <div class="abm-filters">
-                    <EnumSelect DefaultValue="EstadoBombero.CuerpoActivo"
-                                ValueChanged="(EstadoBombero estado) => search(searchString, estado)"
-                                TEnum="EstadoBombero"
-                                Class="abm-select-estado" />
-                    <Search Placeholder="Buscar Bombero"
-                            @bind-Value="@searchString"
-                            OnSearch="()=>search(searchString, Estado)"
-                            BindOnInput />
-                    <Button Type="ButtonType.Primary"
-                            Class="add-button"
-                            OnClick="@(() => navigationManager.NavigateTo("/bomberos/agregar"))">
-                        <Icon Type="plus" /> Agregar Bombero
-                    </Button>
+                    @if (TipoPersonal.ToLower() == "bomberos")
+                    {
+                        <EnumSelect DefaultValue="EstadoBombero.CuerpoActivo"
+                                    ValueChanged="(EstadoBombero estado) => searchB(searchString, estado)"
+                                    TEnum="EstadoBombero"
+                                    Class="abm-select-estado" />
+                        <Search Placeholder="Buscar Bombero"
+                                @bind-Value="@searchString"
+                                OnSearch="()=>searchB(searchString, EstadoB)"
+                                BindOnInput />
+                        <Button Type="ButtonType.Primary"
+                                Class="add-button"
+                                OnClick="@(() => navigationManager.NavigateTo("/personal/bombero/agregar"))">
+                            <Icon Type="plus" /> Agregar Bombero
+                        </Button>
+                    }
+                    else if (TipoPersonal.ToLower() == "comisiondirectiva")
+                    {
+                        <EnumSelect DefaultValue="EstadoComisionDirectiva.Activo"
+                                    ValueChanged="(EstadoComisionDirectiva estado) => searchCD(searchString, estado)"
+                                    TEnum="EstadoComisionDirectiva"
+                                    Class="abm-select-estado" />
+                        <Search Placeholder="Buscar Miembro"
+                                @bind-Value="@searchString"
+                                OnSearch="()=>searchCD(searchString, EstadoCD)"
+                                BindOnInput />
+                        <Button Type="ButtonType.Primary"
+                                Class="add-button"
+                                OnClick="@(() => navigationManager.NavigateTo("/personal/bombero/agregar"))">
+                            <Icon Type="plus" /> Agregar Comisión Directiva
+                        </Button>
+                    }
                 </div>
             </div>
-
-            <Table @ref="table"
-                   TItem="BomberoViweModel"
-                   DataSource="@bomberos"
-                   OnChange="OnChange"
-                   OnRow="@OnRowClick"
-                   @bind-PageIndex="_pageIndex"
-                   @bind-PageSize="_pageSize"
-                   Responsive>
-                <ColumnDefinitions>
-                    <Column TData="Bombero" Title="Foto" Width="100">
-                        @if (context.UrlImagen != null)
-                        {
-                            <Avatar Size="AvatarSize.Large" Src="@(context.UrlImagen)" />
-                        }
-                        else
-                        {
-                            <Avatar Size="AvatarSize.Large" Icon="user" />
-                        }
-                    </Column>
-                    <PropertyColumn Property="@(c => $"{c.Apellido}, {c.Nombre}")" Title="👤 Apellido y Nombre" Sortable>
-                    </PropertyColumn>
-                    <PropertyColumn Title="🆔 Legajo" Property="c => c.NumeroLegajo" Sortable>
-                    </PropertyColumn>
-                    <PropertyColumn Title="🎖️ Jerarquía" Property="@(c => c.Grado.GetDisplayName())" Sortable>
-                    </PropertyColumn>
-                    <PropertyColumn Title="📊 Estado" Property="@(c => c.Estado.GetDisplayName())" Sortable>
-
-                    </PropertyColumn>
-                    <ActionColumn Title="⚙️ Acciones" Align=ColumnAlign.Center>
-                        <div class="abm-action-buttons">
-                            <Button Type="default" OnClick="() => EditarBombero(context.Id)">
-                                <Icon Type="edit" /> Editar
-                            </Button>
-                            @if (context.Estado != EstadoBombero.Baja)
+            @if (TipoPersonal.ToLower() == "bomberos")
+            {
+                <Table @ref="table"
+                       TItem="BomberoViweModel"
+                       DataSource="@bomberos"
+                       OnRow="@OnRowClick"
+                       @bind-PageIndex="_pageIndex"
+                       @bind-PageSize="_pageSize"
+                       Responsive>
+                    <ColumnDefinitions>
+                        <Column TData="Bombero" Title="Foto" Width="100">
+                            @if (context.UrlImagen != null)
                             {
-                                <Popconfirm Title="¿Está seguro de dar de baja?"
-                                            OnConfirm="()=>CambiarEstado(context.Id, EstadoBombero.Baja)"
-                                            OkText="Sí" CancelText="No">
-                                    <Button Danger>
-                                        <Icon Type="down" /> Baja
-                                    </Button>
-                                </Popconfirm>
+                                <Avatar Size="AvatarSize.Large" Src="@(context.UrlImagen)" />
                             }
                             else
                             {
-                                <Popconfirm Title="¿Está seguro de dar de alta?"
-                                            OnConfirm="()=>CambiarEstado(context.Id, EstadoBombero.CuerpoActivo)"
-                                            OkText="Sí" CancelText="No">
-                                    <Button Color="Color.Green2">
-                                        <Icon Type="up" /> Alta
-                                    </Button>
-                                </Popconfirm>
+                                <Avatar Size="AvatarSize.Large" Icon="user" />
                             }
-                        </div>
-                    </ActionColumn>
-                </ColumnDefinitions>
-            </Table>
+                        </Column>
+                        <PropertyColumn Property="c => c.ApellidoYNombre" Title="👤 Apellido y Nombre" Sortable>
+                        </PropertyColumn>
+                        <PropertyColumn Title="🆔 Legajo" Property="c => c.NumeroLegajo" Sortable>
+                        </PropertyColumn>
+                        <PropertyColumn Title="🎖️ Jerarquía" Property="@(c => c.Grado.GetDisplayName())" Sortable>
+                        </PropertyColumn>
+                        <PropertyColumn Title="📊 Estado" Property="@(c => c.Estado.GetDisplayName())" Sortable>
+
+                        </PropertyColumn>
+                        <ActionColumn Title="⚙️ Acciones" Align=ColumnAlign.Center>
+                            <div class="abm-action-buttons">
+                                <Button Type="default" OnClick="() => EditarBombero(context.Id)">
+                                    <Icon Type="edit" /> Editar
+                                </Button>
+                                @if (context.Estado != EstadoBombero.Baja)
+                                {
+                                    <Popconfirm Title="¿Está seguro de dar de baja?"
+                                                OnConfirm="()=>CambiarEstadoBombero(context.Id, EstadoBombero.Baja)"
+                                                OkText="Sí" CancelText="No">
+                                        <Button Danger>
+                                            <Icon Type="down" /> Baja
+                                        </Button>
+                                    </Popconfirm>
+                                }
+                                else
+                                {
+                                    <Popconfirm Title="¿Está seguro de dar de alta?"
+                                                OnConfirm="()=>CambiarEstadoBombero(context.Id, EstadoBombero.CuerpoActivo)"
+                                                OkText="Sí" CancelText="No">
+                                        <Button Color="Color.Green2">
+                                            <Icon Type="up" /> Alta
+                                        </Button>
+                                    </Popconfirm>
+                                }
+                            </div>
+                        </ActionColumn>
+                    </ColumnDefinitions>
+                </Table>
+            }
+            else if (TipoPersonal.ToLower() == "comisiondirectiva")
+            {
+                <Table @ref="table"
+                       TItem="ComisionDirectivaViewModel"
+                       DataSource="@comisionDirectiva"
+                       OnRow="@OnRowClick"
+                       @bind-PageIndex="_pageIndex"
+                       @bind-PageSize="_pageSize"
+                       Responsive>
+                    <ColumnDefinitions>
+                        <Column TData="ComisionDirectiva" Title="Foto" Width="100">
+                            @if (context.UrlImagen != null)
+                            {
+                                <Avatar Size="AvatarSize.Large" Src="@(context.UrlImagen)" />
+                            }
+                            else
+                            {
+                                <Avatar Size="AvatarSize.Large" Icon="user" />
+                            }
+                        </Column>
+                        <PropertyColumn Property="c => c.ApellidoYNombre" Title="👤 Apellido y Nombre" Sortable>
+                        </PropertyColumn>
+                        <PropertyColumn Title="🆔 Documento" Property="c => c.Documento" Sortable>
+                        </PropertyColumn>
+                        <PropertyColumn Title="🎖️ Jerarquía" Property="@(c => c.Grado.GetDisplayName())" Sortable>
+                        </PropertyColumn>
+                        <PropertyColumn Title="📊 Estado" Property="@(c => c.Estado.GetDisplayName())" Sortable>
+
+                        </PropertyColumn>
+                        <ActionColumn Title="⚙️ Acciones" Align=ColumnAlign.Center>
+                            <div class="abm-action-buttons">
+                                <Button Type="default" OnClick="() => EditarBombero(context.Id)">
+                                    <Icon Type="edit" /> Editar
+                                </Button>
+                                @if (context.Estado != EstadoComisionDirectiva.Baja)
+                                {
+                                    <Popconfirm Title="¿Está seguro de dar de baja?"
+                                                OnConfirm="()=>CambiarEstadoComisionDirectiva(context.Id, EstadoComisionDirectiva.Baja)"
+                                                OkText="Sí" CancelText="No">
+                                        <Button Danger>
+                                            <Icon Type="down" /> Baja
+                                        </Button>
+                                    </Popconfirm>
+                                }
+                                else
+                                {
+                                    <Popconfirm Title="¿Está seguro de dar de alta?"
+                                                OnConfirm="()=>CambiarEstadoComisionDirectiva(context.Id, EstadoComisionDirectiva.Activo)"
+                                                OkText="Sí" CancelText="No">
+                                        <Button Color="Color.Green2">
+                                            <Icon Type="up" /> Alta
+                                        </Button>
+                                    </Popconfirm>
+                                }
+                            </div>
+                        </ActionColumn>
+                    </ColumnDefinitions>
+                </Table>
+            }
         </Card>
     </div>
 </Flex>
@@ -444,13 +533,13 @@
 @if (EditarVisible == true)
 {
     <Modal Footer="null" OnCancel="CloseModals" Visible="@EditarVisible" Centered="@true" DefaultMaximized="@true">
-        <BomberosEditar BomberoId="@BomberoId" OnClose="CloseModals" />
+        <BomberosEditar BomberoId="@PersonalId" OnClose="CloseModals" />
     </Modal>
 }
 @if (DetallesVisible == true)
 {
     <Modal Visible="@DetallesVisible" OnCancel="@CloseModals" Footer="@footer" Centered="@true" DefaultMaximized="@true">
-        <BomberosDetalles BomberoId="@BomberoId" />
+        <BomberosDetalles BomberoId="@PersonalId" />
     </Modal>
 }
 
@@ -462,14 +551,26 @@
     // Referencia a la tabla
     ITable table;
 
+    // Comisión Directiva
+
+    // Listas
+    List<ComisionDirectivaViewModel>? comisionDirectiva = null;
+    List<ComisionDirectivaViewModel>? SinFiltrarCD = null;
+
+    // Estado seleccionado
+    public EstadoComisionDirectiva EstadoCD = EstadoComisionDirectiva.Activo;
+
+    // Filtros de la Tabla de Comisión Directiva
+    private TableFilter<GradoComisionDirectiva>[] GradoComisionDirectivaFilter;
+
     // Bomberos
 
     // Listas
-    List<BomberoViweModel>? bomberos = new();
-    List<BomberoViweModel>? SinFiltrar = new();
+    List<BomberoViweModel>? bomberos = null;
+    List<BomberoViweModel>? SinFiltrarB = null;
 
     // Estado seleccionado
-    public EstadoBombero Estado = EstadoBombero.CuerpoActivo;
+    public EstadoBombero EstadoB = EstadoBombero.CuerpoActivo;
 
     // Filtros de la Tabla de Bomberos
     private TableFilter<EscalafonJerarquico>[] EscalafonJerarquicoFilter;
@@ -479,27 +580,31 @@
     int _pageSize = 6;
 
     // Funciones modal
-    public int BomberoId { get; set; }
+    public int PersonalId { get; set; }
     public bool EditarVisible { get; set; }
     public bool DetallesVisible { get; set; }
 
-    private async Task CambiarEstado(int BomberoId, EstadoBombero estado)
+    private async Task CambiarEstadoBombero(int BomberoId, EstadoBombero estado)
     {
-        var bombero = await BomberoService.ObtenerBomberoPorIdAsync(BomberoId);
-        bombero.Estado = estado;
-        await BomberoService.CambiarEstado(bombero);
+        await BomberoService.CambiarEstado(BomberoId, estado);
+        await RefreshData();
+    }
+
+    private async Task CambiarEstadoComisionDirectiva(int ComisionDirectivaId, EstadoComisionDirectiva estado)
+    {
+        await ComisionDirectivaService.CambiarEstado(ComisionDirectivaId, estado);
         await RefreshData();
     }
 
     private void EditarBombero(int ID)
     {
-        BomberoId = ID;
+        PersonalId = ID;
         EditarVisible = true;
     }
 
     private void DetalleBombero(int ID)
     {
-        BomberoId = ID;
+        PersonalId = ID;
         DetallesVisible = true;
     }
 
@@ -516,11 +621,12 @@
         if (TipoPersonal.ToLower() == "bomberos")
         {
             var bomberos = await BomberoService.ObtenerTodosLosBomberosAsync(ConImagenes: true);
-            SinFiltrar = bomberos.ToBomberoViewModelList();
+            SinFiltrarB = bomberos.ToBomberoViewModelList();
 
-            search(searchString, Estado);
+            searchB(searchString, EstadoB);
 
             EscalafonJerarquicoFilter = new TableFilter<EscalafonJerarquico>[Enum.GetValues(typeof(EscalafonJerarquico)).Length];
+
             int i = 0;
             foreach (EscalafonJerarquico value in Enum.GetValues(typeof(EscalafonJerarquico)))
             {
@@ -528,9 +634,21 @@
                 i++;
             }
         }
-        else if(TipoPersonal.ToLower() == "comisiondirectiva")
+        else if (TipoPersonal.ToLower() == "comisiondirectiva")
         {
-            
+            var comisionDirectiva = await ComisionDirectivaService.ObtenerTodosLosMiembrosDeComisionDirectivaAsync(ConImagenes: true);
+            SinFiltrarCD = comisionDirectiva.ToComisionDirectivaViewModelList();
+
+            searchCD(searchString, EstadoCD);
+
+            GradoComisionDirectivaFilter = new TableFilter<GradoComisionDirectiva>[Enum.GetValues(typeof(GradoComisionDirectiva)).Length];
+
+            int i = 0;
+            foreach (GradoComisionDirectiva value in Enum.GetValues(typeof(GradoComisionDirectiva)))
+            {
+                GradoComisionDirectivaFilter[i] = new() { Text = Enum.GetName(typeof(GradoComisionDirectiva), value), Value = value };
+                i++;
+            }
         }
         else
         {
@@ -543,19 +661,13 @@
     private async Task RefreshData()
     {
         var bomberos = await BomberoService.ObtenerTodosLosBomberosAsync();
-        SinFiltrar = bomberos.ToBomberoViewModelList();
+        SinFiltrarB = bomberos.ToBomberoViewModelList();
 
-        search(searchString, Estado);
+        searchB(searchString, EstadoB);
         await InvokeAsync(StateHasChanged);
     }
 
-    private async Task OnChange(QueryModel<BomberoViweModel> queryModel)
-    {
-        Console.WriteLine(JsonSerializer.Serialize(queryModel));
-        await OnInitializedAsync();
-    }
-
-    // Función para manejar el clic en una fila de la tabla
+    // Función para manejar el clic en una fila de la tabla de bomberos
     private Dictionary<string, object> OnRowClick(RowData<BomberoViweModel> rowData)
     {
         return new Dictionary<string, object>
@@ -564,13 +676,22 @@
         };
     }
 
-    private void search(string value, EstadoBombero estado)
+    // Función para manejar el clic en una fila de la tabla de comisión directiva
+    private Dictionary<string, object> OnRowClick(RowData<ComisionDirectivaViewModel> rowData)
+    {
+        return new Dictionary<string, object>
+        {
+            ["onclick"] = Microsoft.AspNetCore.Components.EventCallback.Factory.Create<Microsoft.AspNetCore.Components.Web.MouseEventArgs>(this, () => DetalleBombero(rowData.Data.Id))
+        };
+    }
+
+    private void searchB(string value, EstadoBombero estado)
     {
         int number;
 
-        Estado = estado;
+        EstadoB = estado;
 
-        bomberos = SinFiltrar.Where(d => d.Estado == Estado).ToList();
+        bomberos = SinFiltrarB.Where(d => d.Estado == EstadoB).ToList();
 
         if (string.IsNullOrEmpty(value))
         {
@@ -587,6 +708,33 @@
         {
             bomberos = bomberos.Where(d =>
             d.NumeroLegajo.Equals(number)).ToList();
+        }
+        StateHasChanged();
+    }
+
+    private void searchCD(string value, EstadoComisionDirectiva estado)
+    {
+        int number;
+
+        EstadoCD = estado;
+
+        comisionDirectiva = SinFiltrarCD.Where(d => d.Estado == EstadoCD).ToList();
+
+        if (string.IsNullOrEmpty(value))
+        {
+            StateHasChanged();
+            return;
+        }
+
+        comisionDirectiva = comisionDirectiva.Where(d =>
+        d.Nombre.Contains(value, StringComparison.OrdinalIgnoreCase) ||
+        Enum.GetName(typeof(EscalafonJerarquico), d.Grado).Contains(value, StringComparison.OrdinalIgnoreCase) ||
+        d.Apellido.Contains(value, StringComparison.OrdinalIgnoreCase))
+        .ToList();
+        if (int.TryParse(value, out number))
+        {
+            comisionDirectiva = comisionDirectiva.Where(d =>
+            d.Documento.Equals(number)).ToList();
         }
         StateHasChanged();
     }

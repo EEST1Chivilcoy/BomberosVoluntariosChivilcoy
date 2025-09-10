@@ -11,5 +11,10 @@ namespace Vista.Data.ViewModels.Personal
         /// Grado del miembro de la Comisión Directiva.
         /// </summary>
         public GradoComisionDirectiva Grado { get; set; }
+
+        /// <summary>
+        /// Estado del miembro de la Comisión Directiva.
+        /// </summary>
+        public EstadoComisionDirectiva Estado { get; set; }
     }
 }

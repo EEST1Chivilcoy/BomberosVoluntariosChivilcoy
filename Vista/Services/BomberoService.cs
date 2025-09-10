@@ -19,7 +19,7 @@ namespace Vista.Services
         Task<bool> BorrarBombero(Bombero bombero);
         Task<bool> EditarBombero(Bombero bombero);
         Task<Sancion> SancionarBombero(Sancion sancion);
-        Task<bool> CambiarEstado(Bombero bombero);
+        Task<bool> CambiarEstado(int id, EstadoBombero estado);
         Task<AscensoBombero> AscenderBombero(AscensoBombero ascenso);
         Task<List<Bombero>> ObtenerTodosLosBomberosAsync(bool ConImagenes = false, bool ConTodasLasDemasRelaciones = false);
         Task<Bombero> ObtenerBomberoPorIdAsync(int id, bool asnotracking = false, bool conRelaciones = true);
@@ -143,10 +143,17 @@ namespace Vista.Services
             }
         }
 
-        public async Task<bool> CambiarEstado(Bombero bombero)
+        public async Task<bool> CambiarEstado(int id, EstadoBombero estado)
         {
-            Bombero BomberoBaja = await _context.Bomberos.SingleOrDefaultAsync(b => b.PersonaId == bombero.PersonaId);
-            BomberoBaja.Estado = bombero.Estado;
+            Bombero? BomberoE = await _context.Bomberos.SingleOrDefaultAsync(b => b.PersonaId == id);
+            
+            if (BomberoE == null)
+            {
+                return false;
+            }
+
+            BomberoE.Estado = estado;
+
             await _context.SaveChangesAsync();
             return true;
         }
