@@ -15,113 +15,130 @@
 @inject NavigationManager navigationManager
 
 <style>
+    /* Estilos generales */
     .container {
-        padding: 24px;
-        min-height: 100vh;
+        padding: 24px !important;
+        min-height: 100vh !important;
     }
 
     .page-title {
-        font-size: 24px;
-        font-weight: 600;
-        color: #1f1f1f;
-        margin-bottom: 24px;
-        display: flex;
-        align-items: center;
+        font-size: 24px !important;
+        font-weight: 600 !important;
+        color: #1f1f1f !important;
+        margin-bottom: 24px !important;
+        display: flex !important;
+        align-items: center !important;
     }
 
     .page-title-icon {
-        margin-right: 12px;
-        color: #c43a3a;
+        margin-right: 12px !important;
+        color: #c43a3a !important;
     }
 
     .card {
-        background-color: rgb(255, 255, 255);
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        padding: 24px;
-        margin-bottom: 24px;
+        background-color: white !important;
+        border-radius: 8px !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+        padding: 24px !important;
+        margin-bottom: 24px !important;
     }
 
     .card-title {
-        font-size: 18px;
-        font-weight: 500;
-        color: #434343;
-        margin-bottom: 16px;
-        padding-bottom: 12px;
-        border-bottom: 1px solid #f0f0f0;
+        font-size: 18px !important;
+        font-weight: 500 !important;
+        color: #434343 !important;
+        margin-bottom: 16px !important;
+        padding-bottom: 12px !important;
+        border-bottom: 1px solid #f0f0f0 !important;
     }
 
+    /* Estilos de la foto */
     .profile-photo-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 16px;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        padding: 16px !important;
     }
 
     .photo-preview {
-        width: 150px;
-        height: 150px;
-        border-radius: 50%;
-        overflow: hidden;
-        margin-bottom: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        width: 150px !important;
+        height: 150px !important;
+        border-radius: 50% !important;
+        overflow: hidden !important;
+        margin-bottom: 16px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
     }
 
     .upload-actions {
-        display: flex;
-        gap: 8px;
+        display: flex !important;
+        gap: 8px !important;
     }
 
+    /* Estilo para las secciones del formulario */
     .form-section {
-        margin-bottom: 24px;
+        margin-bottom: 24px !important;
     }
 
+    /* Estilo para los botones de acción */
     .action-buttons {
-        display: flex;
-        justify-content: flex-end;
-        gap: 12px;
-        margin-top: 24px;
+        display: flex !important;
+        justify-content: flex-end !important;
+        gap: 12px !important;
+        margin-top: 24px !important;
     }
 
-    :deep(.ant-form-item) {
-        margin-bottom: 16px;
+    /* Estilo para los campos */
+    .ant-form-item {
+        margin-bottom: 16px !important;
     }
 
-    :deep(.ant-form-item-label > label) {
-        color: #595959;
-        font-weight: 500;
+    .ant-form-item-label > label {
+        color: #595959 !important;
+        font-weight: 500 !important;
     }
 
-    :deep(.ant-input), :deep(.ant-select:not(.ant-select-customize-input) .ant-select-selector), :deep(.ant-picker), :deep(.ant-input-number) {
-        border-radius: 4px;
-        border: 1px solid #d9d9d9;
+    .ant-input,
+    .ant-select:not(.ant-select-customize-input) .ant-select-selector,
+    .ant-picker,
+    .ant-input-number {
+        border-radius: 4px !important;
+        border: 1px solid #d9d9d9 !important;
     }
 
-    :deep(.ant-input:hover), :deep(.ant-select:not(.ant-select-customize-input) .ant-select-selector:hover), :deep(.ant-picker:hover), :deep(.ant-input-number:hover) {
-        border-color: #c43a3a;
+        .ant-input:hover,
+        .ant-select:not(.ant-select-customize-input) .ant-select-selector:hover,
+        .ant-picker:hover,
+        .ant-input-number:hover {
+            border-color: #c43a3a !important;
+        }
+
+        .ant-input:focus,
+        .ant-select-focused:not(.ant-select-customize-input) .ant-select-selector,
+        .ant-picker-focused,
+        .ant-input-number-focused {
+            border-color: #c43a3a !important;
+            box-shadow: 0 0 0 2px rgba(196, 58, 58, 0.2) !important;
+        }
+
+    /* Ajuste visual para el switch */
+    .ant-switch-checked {
+        background-color: #c43a3a !important;
     }
 
-    :deep(.ant-input:focus), :deep(.ant-select-focused:not(.ant-select-customize-input) .ant-select-selector), :deep(.ant-picker-focused), :deep(.ant-input-number-focused) {
-        border-color: #c43a3a;
-        box-shadow: 0 0 0 2px rgba(196,58,58,0.2);
-    }
-
-    :deep(.ant-switch-checked) {
-        background-color: #c43a3a;
-    }
-
+    /* Estilo para campos requeridos */
     .required-field::after {
-        content: '*';
-        color: #c43a3a;
-        margin-left: 4px;
+        content: '*' !important;
+        color: #c43a3a !important;
+        margin-left: 4px !important;
     }
 
+    /* Estilo para el campo condicional de chofer */
     .conditional-field {
-        margin-top: 12px;
-        padding-top: 12px;
-        border-top: 1px dashed #f0f0f0;
+        margin-top: 12px !important;
+        padding-top: 12px !important;
+        border-top: 1px dashed #f0f0f0 !important;
     }
 </style>
 
