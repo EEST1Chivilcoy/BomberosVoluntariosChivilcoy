@@ -12,6 +12,7 @@ using Vista.Data.Models.Salidas.Componentes;
 using Vista.Data.Models.Salidas.Planillas;
 using Vista.Data.Models.Vehiculos.Flota;
 using Vista.Data.ViewModels.Personal;
+using Vista.Data.Models.Personas;
 
 namespace Vista.Services
 {
@@ -179,9 +180,11 @@ namespace Vista.Services
 
         public async Task<int> ObtenerUltimoNumeroParteDelAnioAsync(int anio)
         {
-            return await _context.Salidas
+            var NumeroParteAlto = await _context.Salidas
                 .Where(p => p.AnioNumeroParte == anio)
-                .MaxAsync(p => (int?)p.NumeroParte) ?? 1;
+                .MaxAsync(p => (int?)p.NumeroParte);
+
+            return (NumeroParteAlto ?? 0) + 1;
         }
     }
 }
