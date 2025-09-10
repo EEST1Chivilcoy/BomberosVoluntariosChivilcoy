@@ -256,11 +256,11 @@
                        @bind-PageSize="_pageSize"
                        Responsive>
                     <ColumnDefinitions>
-                        <PropertyColumn Title="🔢 Número Parte" Property="s => s.Numero" Sortable Width="200px">
+                        <PropertyColumn Title="🔢 Número Parte" Property="s => s.Numero" Sortable Width="170px">
                         </PropertyColumn>
                         <PropertyColumn Title="🚨 Tipo de Salida" Property="s => s.TipoSalida" Sortable Width="200px">
                         </PropertyColumn>
-                        <PropertyColumn Title="📝 Descripción" Property="s => s.Descripcion" Sortable Width="220px">
+                        <PropertyColumn Title="📝 Descripción" Property="s => s.Descripcion" Sortable Width="400px">
                         </PropertyColumn>
                         <PropertyColumn Title="📍 Dirección" Property="s => s.Direccion" Sortable>
                         </PropertyColumn>
@@ -303,7 +303,7 @@
             <Suffix>
                 / @newSalida.Anio
             </Suffix>
-            </Input>
+            </Input >
         </FormItem>
         <FormItem Label="Tipo de Emergencia" Required>
             <EnumSelect @bind-Value="@newSalida.Categoria" Placeholder="Seleccione un tipo de emergencia" />
