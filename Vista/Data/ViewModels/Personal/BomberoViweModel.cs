@@ -61,7 +61,5 @@ namespace Vista.Data.ViewModels.Personal
         //Brigada-------------------------------
         public int BrigadaId { get; set; }
         public string NombreBrigada { get; set; }
-
-        public bool Selected { get; set; }
     }
 }

@@ -8,17 +8,18 @@ using Vista.Data.Enums;
 using Vista.Data.Models.Grupos.Brigadas;
 using Vista.Data.Models.Personas.Personal;
 using Vista.Data.Models.Personas.Personal.Componentes;
+using Vista.Data.Models.Imagenes;
 using Vista.Data.ViewModels.Personal;
 
 namespace Vista.Services
 {
     public interface IBomberoService
     {
-        Task CrearBombero(Bombero bombero);
+        Task CrearBombero(Bombero bombero, Imagen? imagen = null);
         Task<bool> BorrarBombero(Bombero bombero);
-        Task<Bombero> EditarBombero(Bombero bombero);
+        Task<bool> EditarBombero(Bombero bombero);
         Task<Sancion> SancionarBombero(Sancion sancion);
-        Task<Bombero> CambiarEstado(Bombero bombero);
+        Task<bool> CambiarEstado(Bombero bombero);
         Task<AscensoBombero> AscenderBombero(AscensoBombero ascenso);
         Task<List<Bombero>> ObtenerTodosLosBomberosAsync(bool ConImagenes = false, bool ConTodasLasDemasRelaciones = false);
         Task<Bombero> ObtenerBomberoPorIdAsync(int id, bool asnotracking = false, bool conRelaciones = true);
@@ -28,10 +29,12 @@ namespace Vista.Services
     public class BomberoService : IBomberoService
     {
         private readonly BomberosDbContext _context;
+        private readonly IImagenService _imagenService;
 
-        public BomberoService(BomberosDbContext context)
+        public BomberoService(BomberosDbContext context, IImagenService imagenService)
         {
             _context = context;
+            _imagenService = imagenService;
         }
 
         public async Task<Bombero> ObtenerBomberoPorIdAsync(int id, bool asNoTracking = false, bool conRelaciones = true)
@@ -42,8 +45,19 @@ namespace Vista.Services
             {
                 query = query
                     .Include(b => b.Imagen)
+                    .Include(b => b.Firmas)
                     .Include(b => b.Brigadas)
-                    .Include(b => b.Contacto);
+                    .Include(b => b.VehiculosEncargado)
+                    .Include(b => b.Dependencias)
+                    .Include(b => b.Incidentes)
+                    .Include(b => b.Salidas)
+                    .Include(b => b.Handie)
+                    .Include(b => b.Ascensos)
+                    .Include(b => b.DestinoMaterial)
+                    .Include(b => b.SancionesRecibidas)
+                    .Include(b => b.Limpieza)
+                    .Include(b => b.Novedades)
+                    .Include(b => b.Licencias);
             }
 
             if (asNoTracking)
@@ -61,7 +75,7 @@ namespace Vista.Services
             return bombero;
         }
 
-        public async Task CrearBombero(Bombero bombero)
+        public async Task CrearBombero(Bombero bombero, Imagen? imagen = null)
         {
             // Asumiendo que Id es la clave primaria
             if (await _context.Bomberos.AnyAsync(b => b.PersonaId == bombero.PersonaId))
@@ -77,51 +91,64 @@ namespace Vista.Services
             }
 
             _context.Bomberos.Add(bombero);
-            await _context.SaveChangesAsync();
+
+            await _context.SaveChangesAsync(); // Guardar el bombero primero para obtener su PersonaId
+
+            // Si hay una imagen, asociarla al bombero
+            if (imagen != null)
+            {
+                if (imagen is Imagen_Personal imagenPersonal)
+                {
+                    imagenPersonal.PersonalId = bombero.PersonaId;
+                    await _imagenService.GuardarImagenAsync(imagenPersonal);
+                }
+                else
+                {
+                    throw new InvalidOperationException("La imagen proporcionada no es del tipo correcto para un bombero.");
+                }
+            }
         }
 
-        public async Task<Bombero> EditarBombero(Bombero bombero)
+        public async Task<bool> EditarBombero(Bombero bombero)
         {
             try
             {
-                Bombero Editar = await _context.Bomberos.SingleOrDefaultAsync(e => e.PersonaId == bombero.PersonaId);
+                Bombero? Editar = await _context.Bomberos.SingleOrDefaultAsync(e => e.PersonaId == bombero.PersonaId);
                 Contacto? contacto = await _context.Contactos.SingleOrDefaultAsync(c => c.PersonalId == bombero.PersonaId);
+
+                if (Editar == null)
+                {
+                    throw new Exception("No se encontró el bombero para editar.");
+                }
+
                 if (contacto != null)
                 {
                     _context.Contactos.Remove(contacto);
                 }
-                foreach (var i in bombero.GetType().GetProperties())
-                {
-                    var propNombre = i.Name;
-                    var propValor = i.GetValue(bombero);
-                    var editarProp = Editar.GetType().GetProperty(propNombre);
-                    if (editarProp != null && editarProp.CanWrite && propValor != null && propNombre != "Brigada" && propNombre != "BrigadaId")
-                    {
-                        editarProp.SetValue(Editar, propValor);
-                    }
-                }
+
+                Editar = bombero;
 
                 await _context.SaveChangesAsync();
-                return bombero;
+                return true;
             }
             catch (DbUpdateException ex)
             {
                 Console.WriteLine($"Error al editar el bombero {ex.Message}");
-                return null;
+                return false;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error inesperado {ex.Message}");
-                return null;
+                return false;
             }
         }
 
-        public async Task<Bombero> CambiarEstado(Bombero bombero)
+        public async Task<bool> CambiarEstado(Bombero bombero)
         {
             Bombero BomberoBaja = await _context.Bomberos.SingleOrDefaultAsync(b => b.PersonaId == bombero.PersonaId);
             BomberoBaja.Estado = bombero.Estado;
             await _context.SaveChangesAsync();
-            return bombero;
+            return true;
         }
 
         public async Task<bool> BorrarBombero(Bombero bombero)
