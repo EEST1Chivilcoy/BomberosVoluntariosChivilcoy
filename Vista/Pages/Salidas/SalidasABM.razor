@@ -180,6 +180,18 @@
         border: none;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
+    .boton-nueva-salida {
+        background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
+        border: none !important;
+        color: #fff !important;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
+        padding: 0 20px !important;
+    }
+    .boton-nueva-salida:hover {
+        background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
+        color: #fff !important;
+    }
     @@media (max-width: 960px) {
         .title-template-container {
             flex-direction: column;
@@ -216,7 +228,71 @@
         border-radius: 2px;
         box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
         pointer-events: auto;
-        border: 1px solid red !important;
+        border: 4px solid #A63333 !important;
+    }
+    .modal-crear-salidas .ant-modal-content {
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        border: 4px solid #A63333;
+        margin-top: -50px;
+        margin-bottom: 0px;
+    }
+    .modal-crear-salidas .ant-modal-header {
+        background-color: #f0f2f5;
+        border-bottom: 1px solid #d9d9d9;
+        padding: 16px 24px;
+        border-radius: 9px 9px 0 0;
+    }
+    .modal-crear-salidas-content {
+        padding: 24px;
+    }
+    .modal-crear-salidas-form-item {
+        margin-bottom: 20px;
+        position: relative;
+        padding-left: 10px;
+    }
+    .modal-crear-salidas-form-item::before {
+        content: ''; 
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 3px;
+        border-radius: 5px;
+    }
+    .modal-crear-salidas-form-item .ant-form-item-label > label,
+    .modal-crear-salidas-form-full-width .ant-form-item-label > label {
+        font-weight: 600;
+        color: #434343;
+        display: flex; 
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        transition: color 0.3s ease;
+    }
+    
+.modal-crear-salidas .ant-input:hover,
+.modal-crear-salidas .ant-select-selector:focus,
+.modal-crear-salidas .ant-select-selector:hover,
+.modal-crear-salidas .ant-input-number-input:hover {
+    border-color: #FFD700 !important;
+    box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
+}
+
+
+    .modal-crear-salidas .ant-btn-primary {
+        background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
+        border: none !important;
+        color: #fff !important;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
+        margin-top:  0;
+        margin-bottom: 0;
+        padding: 0 20px !important;
+    }
+    .modal-crear-salidas .ant-btn-primary:hover {
+        background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
+        color: #fff !important;
     }
 </style>
 
@@ -244,7 +320,7 @@
                     </h1>
                 </div>
                 <div class="actions-row">
-                    <Button Type="ButtonType.Primary" OnClick="() => VerAñadirSalida()">
+                    <Button Type="ButtonType.Primary" OnClick="() => VerAñadirSalida()" Class="boton-nueva-salida">
                         <Icon Type="plus" /> Nueva
                     </Button>
                 </div>
@@ -256,11 +332,11 @@
                        @bind-PageSize="_pageSize"
                        Responsive>
                     <ColumnDefinitions>
-                        <PropertyColumn Title="🔢 Número Parte" Property="s => s.Numero" Sortable Width="200px">
+                        <PropertyColumn Title="🔢 Número Parte" Property="s => s.Numero" Sortable Width="170px">
                         </PropertyColumn>
                         <PropertyColumn Title="🚨 Tipo de Salida" Property="s => s.TipoSalida" Sortable Width="200px">
                         </PropertyColumn>
-                        <PropertyColumn Title="📝 Descripción" Property="s => s.Descripcion" Sortable Width="220px">
+                        <PropertyColumn Title="📝 Descripción" Property="s => s.Descripcion" Sortable Width="400px">
                         </PropertyColumn>
                         <PropertyColumn Title="📍 Dirección" Property="s => s.Direccion" Sortable>
                         </PropertyColumn>
@@ -295,38 +371,55 @@
     </div>
 </div>
 
-@*Modal para Crear Salida*@
-<Modal @bind-Visible="_modalAñadirVisible" Title="Crear Salida" OkText="@("Crear")" CancelText="@("Cancelar")" OnOk="@AddSalida">
-    <Form Model="newSalida">
-        <FormItem Label="Nº Parte" Required>
-            <Input @bind-Value="@newSalida.NumeroSalida" ReadOnly="true">
-            <Suffix>
-                / @newSalida.Anio
-            </Suffix>
-            </Input>
-        </FormItem>
-        <FormItem Label="Tipo de Emergencia" Required>
-            <EnumSelect @bind-Value="@newSalida.Categoria" Placeholder="Seleccione un tipo de emergencia" />
-        </FormItem>
-        @if (newSalida.Categoria == CategoriaEmergencia.Incendio)
-        {
-            <FormItem Label="Tipo de Incendio" Required>
-                <EnumSelect @bind-Value="@newSalida.TipoIncendio" Placeholder="Seleccione un tipo de incendio" />
+@*Modal para Crear Salida con diseño similar a Licencias*@
+<Modal @bind-Visible="_modalAñadirVisible"
+       Title="Crear Salida"
+       Width="@("100%")"
+       Style="max-width: 800px;"
+       OkText="@("Crear")"
+       CancelText="@("Cancelar")"
+       OnOk="@AddSalida"
+       DestroyOnClose
+       WrapClassName="modal-crear-salidas">
+    <div class="modal-crear-salidas-content">
+        <Form Model="newSalida" Layout="FormLayout.Vertical" Class="modal-crear-salidas-form">
+            <Row Class="modal-crear-salidas-row" Gutter="16">
+                <AntDesign.Col Span="12">
+                    <FormItem Label="🔢 Nº Parte" Required Class="modal-crear-salidas-form-item">
+                        <Input @bind-Value="@newSalida.NumeroSalida" ReadOnly Size="InputSize.Large">
+
+                        </Input>
+                    </FormItem>
+                </AntDesign.Col>
+                <AntDesign.Col Span="12">
+                    <FormItem Label="📅 Año" Required Class="modal-crear-salidas-form-item">
+                        <Input Value="@newSalida.Anio" ReadOnly Size="InputSize.Large" />
+                    </FormItem>
+                </AntDesign.Col>
+            </Row>
+            <FormItem Label="🚨 Tipo de Emergencia" Required Class="modal-crear-salidas-form-item">
+                <EnumSelect @bind-Value="@newSalida.Categoria" Placeholder="Seleccione un tipo de emergencia" Size="InputSize.Large" />
             </FormItem>
-        }
-        @if (newSalida.Categoria == CategoriaEmergencia.Rescate)
-        {
-            <FormItem Label="Tipo de Rescate" Required>
-                <EnumSelect @bind-Value="@newSalida.TipoRescate" Placeholder="Seleccione un tipo de rescate" />
-            </FormItem>
-        }
-        @if (newSalida.Categoria == CategoriaEmergencia.ServicioEspecial)
-        {
-            <FormItem Label="Tipo de Servicio Especial" Required>
-                <EnumSelect @bind-Value="@newSalida.TipoServicioEspecial" Placeholder="Seleccione un tipo de servicio especial" />
-            </FormItem>
-        }
-    </Form>
+            @if (newSalida.Categoria == CategoriaEmergencia.Incendio)
+            {
+                <FormItem Label="🔥 Tipo de Incendio" Required Class="modal-crear-salidas-form-item">
+                    <EnumSelect @bind-Value="@newSalida.TipoIncendio" Placeholder="Seleccione un tipo de incendio" Size="InputSize.Large" />
+                </FormItem>
+            }
+            @if (newSalida.Categoria == CategoriaEmergencia.Rescate)
+            {
+                <FormItem Label="🤝 Tipo de Rescate" Required Class="modal-crear-salidas-form-item">
+                    <EnumSelect @bind-Value="@newSalida.TipoRescate" Placeholder="Seleccione un tipo de rescate" Size="InputSize.Large" />
+                </FormItem>
+            }
+            @if (newSalida.Categoria == CategoriaEmergencia.ServicioEspecial)
+            {
+                <FormItem Label="🛠️ Tipo de Servicio Especial" Required Class="modal-crear-salidas-form-item">
+                    <EnumSelect @bind-Value="@newSalida.TipoServicioEspecial" Placeholder="Seleccione un tipo de servicio especial" Size="InputSize.Large" />
+                </FormItem>
+            }
+        </Form>
+    </div>
 </Modal>
 
 @code {
