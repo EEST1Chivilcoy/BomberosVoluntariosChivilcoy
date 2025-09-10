@@ -1,13 +1,10 @@
+@using Vista.Data.Models.Grupos.FuerzasIntervinientes
 @using Vista.Data.ViewModels
-@using Vista.Data.ViewModels.Personal
-@using Vista.Data.Models.Vehiculos.Flota
-@using Vista.Data.Models.Personas.Personal
-@using Vista.Data.Mappers
 
 @*Servicios Utilizados*@
 @using Vista.Services
+@inject IFuerzaIntervinienteService FuerzaIntervinienteService
 @inject IMessageService MessageService
-@inject IVehiculoSalidaService VehiculoSalidaService
 
 
 
@@ -15,92 +12,90 @@
     .fuerzas-intervinientes {
         border: 2px solid #e53935 !important;
         background: linear-gradient(180deg, #fff5f5 0%, #ffeaea 100%) !important;
-        box-shadow: 0 4px 12px rgba(229, 57, 53, 0.15)!important;
+        box-shadow: 0 4px 12px rgba(229, 57, 53, 0.15) !important;
         border-radius: 16px !important;
         margin-bottom: 2rem !important;
         padding: 2.5rem 2rem 2rem 2rem !important;
         transition: box-shadow 0.25s ease, transform 0.2s ease !important;
     }
-    .fuerzas-intervinientes .section-number {
-        background: linear-gradient(135deg, #b71c1c, #e53935);
-        color: white;
-    }
-    .fuerzas-intervinientes .ant-table {
-        background: #fff5f5;
-        color: #b71c1c;
-        font-weight: 500;
-        font-size: 1.05rem;
-        border-radius: 14px;
-        min-width: 600px;
-        width: 100%;
-        table-layout: auto;
-    }
-    .fuerzas-intervinientes .ant-table-thead .ant-table-cell, .fuerzas-intervinientes .ant-table thead th {
-        background: linear-gradient(135deg, #ff6b6b, #c62828);
-        border-right: 1px solid #ffcdd2; 
-        color: #fff !important;
-        font-weight: 700;
-        text-align: center;
-        border-bottom: 2.5px solid #ffcdd2;
-        letter-spacing: 0.3px;
-        font-size: 1.02rem;
-        padding: 3px 6px !important;
-        height: 22px;
-    }
-    .fuerzas-intervinientes .ant-table-title {
-        background: #fff5f5;
-        color: #b71c1c;
-        font-weight: 700;
-        font-size: 1.08rem;
-        text-align: left;
-        padding: 0.5rem 0.8rem;
-        border-top-left-radius: 12px;
-        border-top-right-radius: 12px;
-        border-bottom: 1px solid #ffcdd2;
-    }
-    .fuerzas-intervinientes .ant-table-cell, .fuerzas-intervinientes .ant-table td {
-        background: #fff !important;
-        border-right: 1px solid #f5b5b5;
-        color: #333 !important;
-        font-size: 0.97rem;
-        padding: 2px 6px !important;
-        height: 20px;
-    }
-    .fuerzas-intervinientes .ant-table tbody tr:hover td {
-    background: #fff0f0 !important;
-}
-    .fuerzas-intervinientes .ant-btn-dangerous, .fuerzas-intervinientes .ant-btn[Danger] {
-        background: linear-gradient(135deg, #ff6b6b, #c62828) !important;
-        border:none !important;
-        color:#fff !important;
-        border-radius:8px;
-        font-weight:600;
-        box-shadow:0 2px 8px rgba(229,57,53,.18);
-        transition: all 0.2s ease-in-out;
-        font-size: 0.95rem !important;
-        padding: 4px 10px !important;
-    }
-    .fuerzas-intervinientes .ant-btn-dangerous:hover {
-        filter: brightness(1.1);
-        transform: scale(1.05);
-    }
-    .fuerzas-intervinientes .ant-table-tbody > tr.ant-table-row-selected > td{
-        background:#ffeaea !important;
-    }
-    .fuerzas-intervinientes .centrado{
-        display:flex;
-        justify-content:flex-end;
-    }
 
-    /* Inputs del formulario más compactos */
-    .fuerzas-intervinientes input[type="text"],
-    .fuerzas-intervinientes .ant-input {
-        padding: 4px 8px !important;
-        font-size: 0.98rem !important;
-        height: 28px !important;
-        min-height: 28px !important;
-        box-sizing: border-box;
-    }
+        .fuerzas-intervinientes .section-number {
+            background: linear-gradient(135deg, #b71c1c, #e53935);
+            color: white;
+        }
+
+        .fuerzas-intervinientes .ant-table {
+            background: #fff5f5;
+            color: #b71c1c;
+            font-weight: 500;
+            font-size: 1.25rem;
+            border-radius: 14px;
+            min-width: 900px;
+            width: 100%;
+            table-layout: auto;
+        }
+
+            .fuerzas-intervinientes .ant-table-thead .ant-table-cell, .fuerzas-intervinientes .ant-table thead th {
+                background: linear-gradient(135deg, #ff6b6b, #c62828);
+                border-right: 1px solid #ffcdd2;
+                color: #fff !important;
+                font-weight: 700;
+                text-align: center;
+                border-bottom: 2.5px solid #ffcdd2;
+                letter-spacing: 0.3px;
+                font-size: 1.3rem;
+                padding: 18px 24px !important;
+                height: 56px;
+            }
+
+        .fuerzas-intervinientes .ant-table-title {
+            background: #fff5f5;
+            color: #b71c1c;
+            font-weight: 700;
+            font-size: 1.25rem;
+            text-align: left;
+            padding: 1.1rem 1.5rem;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+            border-bottom: 1px solid #ffcdd2;
+        }
+
+        .fuerzas-intervinientes .ant-table-cell, .fuerzas-intervinientes .ant-table td {
+            background: #fff !important;
+            border-right: 1px solid #f5b5b5;
+            color: #333 !important;
+            font-size: 1.18rem;
+            padding: 16px 22px !important;
+            height: 54px;
+        }
+
+        .fuerzas-intervinientes .ant-table tbody tr:hover td {
+            background: #fff0f0 !important;
+        }
+
+        .fuerzas-intervinientes .ant-btn-dangerous, .fuerzas-intervinientes .ant-btn[Danger] {
+            background: linear-gradient(135deg, #ff6b6b, #c62828) !important;
+            border: none !important;
+            color: #fff !important;
+            border-radius: 8px;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(229,57,53,.18);
+            transition: all 0.2s ease-in-out;
+        }
+
+            .fuerzas-intervinientes .ant-btn-dangerous:hover {
+                filter: brightness(1.1);
+                transform: scale(1.05);
+            }
+
+        .fuerzas-intervinientes .ant-table-tbody > tr.ant-table-row-selected > td {
+            background: #ffeaea !important;
+        }
+
+        .fuerzas-intervinientes .centrado {
+            display: flex;
+            justify-content: flex-end;
+        }
 </style>
 
 <div class="fuerzas-intervinientes">
@@ -110,31 +105,42 @@
                 <h4 style="color: #e53935; margin: 0; font-weight: 600;">Fuerza Interviniente</h4>
             </div>
             <Row Gutter="16">
-                <Col Xs="24" Sm="8" Md="8" Lg="8">
-                    <FormItem Label="A cargo de" Required>
-                        <Input @bind-Value="fuerzaForm.Encargado" Placeholder="Nombre del encargado" />
-                    </FormItem>
-
+                <Col Xs="24" Sm="12" Md="12" Lg="12">
+                <FormItem Label="Fuerza Interviniente" Required>
+                    <Select TItem="FuerzaInterviniente"
+                            TItemValue="int?"
+                            DataSource="@fuerzasDisponibles"
+                            @bind-Value="fuerzaForm.FuerzaID"
+                            LabelName="@nameof(FuerzaInterviniente.NombreFuerza)"
+                            ValueName="@nameof(FuerzaInterviniente.Id)"
+                            Placeholder="Ej: Policía, Defensa Civil, etc."
+                            DefaultActiveFirstOption="false"
+                            AllowClear="true"
+                            EnableSearch>
+                    </Select>
+                </FormItem>
                 </Col>
-                <Col Xs="24" Sm="8" Md="8" Lg="8">
-                    <FormItem Label="N° Unidad" Required>
-                        <Input @bind-Value="fuerzaForm.NumeroUnidad" Placeholder="Ingrese el número de unidad" />
-                    </FormItem>
+                <Col Xs="24" Sm="12" Md="12" Lg="12">
+                <FormItem Label="N° Unidad" Required>
+                    <Input @bind-Value="fuerzaForm.NumeroUnidad" Placeholder="Ingrese el número de unidad" />
+                </FormItem>
                 </Col>
-                <Col Xs="24" Sm="8" Md="8" Lg="8">
-                    <FormItem Label="Tipo" Required>
-                        <Input @bind-Value="fuerzaForm.Fuerza" Placeholder="Ej: Policía, Defensa Civil, etc." />
-                    </FormItem>
+            </Row>
+            <Row Gutter="16">
+                <Col Xs="24" Sm="12" Md="8" Lg="8">
+                <FormItem Label="Encargado" Required>
+                    <Input @bind-Value="fuerzaForm.Encargado" Placeholder="Nombre del encargado" />
+                </FormItem>
                 </Col>
             </Row>
             <Row Justify="RowJustify.End" style="margin-top: 16px;">
                 <Col>
-                    <Button Type="@ButtonType.Primary"
-                            OnClick="@CargarFuerza"
-                            Icon="plus"
-                            Style="background-color: #e53935; border-color: #e53935;">
-                        Cargar Fuerza Interviniente
-                    </Button>
+                <Button Type="@ButtonType.Primary"
+                        OnClick="@CargarFuerza"
+                        Icon="plus"
+                        Style="background-color: #e53935; border-color: #e53935;">
+                    Cargar Fuerza Interviniente
+                </Button>
                 </Col>
             </Row>
         </div>
@@ -156,9 +162,9 @@
                 <table class="ant-table">
                     <thead>
                         <tr>
-                            <th>A cargo de</th>
+                            <th>Encargado</th>
                             <th>N° Unidad</th>
-                            <th>Tipo</th>
+                            <th>Fuerza</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -168,7 +174,7 @@
                             <tr>
                                 <td>@item.Encargado</td>
                                 <td>@item.NumeroUnidad</td>
-                                <td>@item.Fuerza</td>
+                                <td>@fuerzasDisponibles.FirstOrDefault(f => f.Id == item.FuerzaID)?.NombreFuerza</td>
                                 <td>
                                     <Button Type="@ButtonType.Text"
                                             Danger
@@ -191,49 +197,50 @@
 
 @code {
     [Parameter, EditorRequired] public SalidasViewModels Model { get; set; } = null!;
-    [Parameter, EditorRequired] public List<Bombero> BomberosTodos { get; set; } = null!;
-    [Parameter, EditorRequired] public List<VehiculoSalida> Flota { get; set; } = null!;
-     private FuerzaIntervinienteModel fuerzaForm = new FuerzaIntervinienteModel();
+    private FuerzaIntervinienteModel fuerzaForm = new FuerzaIntervinienteModel();
     private List<FuerzaIntervinienteModel> fuerzasCargadas = new();
+
     public class FuerzaIntervinienteModel
     {
-        public string? Fuerza { get; set; }
+        public int? FuerzaID { get; set; }
         public string? NumeroUnidad { get; set; }
         public string? Encargado { get; set; }
     }
+    private List<FuerzaInterviniente> fuerzasDisponibles = new();
 
     private void CargarFuerza()
     {
-        if (!string.IsNullOrWhiteSpace(fuerzaForm.Fuerza) &&
+        if (fuerzaForm != null &&
             !string.IsNullOrWhiteSpace(fuerzaForm.NumeroUnidad) &&
             !string.IsNullOrWhiteSpace(fuerzaForm.Encargado))
         {
             fuerzasCargadas.Add(new FuerzaIntervinienteModel
-            {
-                Fuerza = fuerzaForm.Fuerza,
-                NumeroUnidad = fuerzaForm.NumeroUnidad,
-                Encargado = fuerzaForm.Encargado
-            });
+                {
+                    FuerzaID = fuerzaForm.FuerzaID,
+                    NumeroUnidad = fuerzaForm.NumeroUnidad,
+                    Encargado = fuerzaForm.Encargado
+                });
             fuerzaForm = new FuerzaIntervinienteModel();
         }
-
     }
-    
-        private void EliminarFuerza(FuerzaIntervinienteModel fuerza)
+
+    private async Task EliminarFuerza(FuerzaIntervinienteModel fuerza)
+    {
+        try
         {
             fuerzasCargadas.Remove(fuerza);
+            await MessageService.SuccessAsync("Fuerza interviniente eliminada");
+            StateHasChanged();
         }
+        catch (Exception ex)
+        {
+            await MessageService.ErrorAsync("Error al eliminar fuerza");
+        }
+    }
 
-    private List<BomberoViweModel> bomberoChoferes { get; set; } = new();
-
-
-    private List<Movil> Moviles { get; set; } = new();
-
-    private MovilSalidaViewModels movilSalidaView = new MovilSalidaViewModels();
-
-    private bool switchMoviles = false;
-    private bool _visible = false;
-    private bool loading = false;
-
-    
+    protected override async Task OnInitializedAsync()
+    {
+        fuerzasDisponibles = await FuerzaIntervinienteService.ObtenerTodasLasFuerzasAsync();
+        StateHasChanged();
+}
 }
