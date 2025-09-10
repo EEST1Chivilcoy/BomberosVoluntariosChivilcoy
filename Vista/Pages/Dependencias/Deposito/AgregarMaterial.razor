@@ -6,92 +6,118 @@
 @using Vista.Services
 @inject IDepositoService DepositoService
 @inject IMessageService message
+
 <style>
-    /* Estilos del modal y formulario de la página de licencias */
-    .licencias-abm .modal-content {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
+    .material-abm {
+        font-family: 'Poppins', sans-serif !important;
+        --primary-color: #e4e4e4; 
+        --primary-dark: #e4e4e4;
+        --secondary-color: #2F54EB; 
+        --success-color: #52C41A;
+        --success-dark: #449E17;
+        --background-card: #FFFFFF;
+        --background-body: #F0F2F5; 
+        --text-color: #262626;
+        --border-color: #E8E8E8;
+        --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    .material-abm .modal-content {
+        background: var(--background-body);
         border-radius: 16px;
-        box-shadow: 0 8px 32px rgba(166, 51, 51, 0.1), 0 4px 16px rgba(0, 0, 0, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: var(--shadow);
+        padding: 40px;
         max-height: 95vh;
         overflow-y: auto;
-        padding: 40px;
     }
 
-    .licencias-abm .form-grid {
-        display: grid;
-        gap: 16px;
-    }
-
-    .licencias-abm .form-row {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 16px;
+    .material-abm .section-header {
+        background: linear-gradient(90deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+        color: rgb(0, 0, 0);
+        padding: 18px 40px;
+        font-size: 1.5em;
+        font-weight: 600;
+        border-radius: 16px 16px 0 0;
+        margin: -40px -40px 20px -40px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     }
     
-    /* Botones */
-    .licencias-abm .form-buttons-container {
-        display: flex;
-        justify-content: flex-end; /* Alinea los botones a la derecha */
-        gap: 10px;
-        margin-top: 20px; /* Espacio para separar de los campos */
+    .material-abm .form-card {
+        background-color: var(--background-card);
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
 
-    .licencias-abm .primary-button {
-        background: linear-gradient(135deg, var(--abm-success-color) 0%, var(--abm-success-dark) 100%);
+    .material-abm .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+
+    .material-abm .form-item-full-width {
+        grid-column: span 2;
+    }
+    
+    .material-abm .form-buttons-container {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 20px;
+    }
+    
+    .material-abm .secondary-button {
+        background: transparent;
+        border: 1px solid var(--border-color);
+        color: var(--text-color);
+        height: 40px;
+        font-weight: 500;
+        border-radius: 6px;
+    }
+    
+    .material-abm .save-button {
+        background: linear-gradient(135deg, var(--success-color) 0%, var(--success-dark) 100%);
         border: none;
         color: white;
         box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
         font-weight: 600;
         height: 40px;
+        border-radius: 6px;
     }
 
-    .licencias-abm .secondary-button {
-        background: transparent;
-        border: 1px solid #d9d9d9;
-        color: rgba(0, 0, 0, 0.85);
-        font-weight: 500;
-        height: 40px;
+    .ant-input, .ant-picker, .ant-select:not(.ant-select-customize-input) .ant-select-selector {
+        border-radius: 6px !important;
+        background-color: #fafafa !important;
     }
-
-    /* Variables de color de la página principal */
-    .licencias-abm {
-        --abm-primary-color: #A63333;
-        --abm-primary-dark: #732D2D;
-        --abm-success-color: #4CAF50;
-        --abm-success-dark: #438E46;
-        --abm-warning-color: #F57F17;
-        --abm-warning-light: #FFF8E1;
-        --abm-error-color: #C62828;
-        --abm-error-light: #FFEBEE;
-        --abm-approved-color: #2E7D32;
-        --abm-approved-light: #E6F7E9;
-        --abm-gold-color: #FFD700;
+    .ant-input:focus, .ant-picker-focused, .ant-select-focused:not(.ant-select-disabled) .ant-select-selector {
+        border-color: var(--primary-color) !important;
+        box-shadow: 0 0 0 2px rgba(166, 51, 51, 0.2) !important;
     }
-
 </style>
 
-<div class="licencias-abm">
+<div class="material-abm">
     <div class="modal-content">
-        <Form Model="@MaterialViewModel"
-              OnFinish="OnFinish"
-              OnFinishFailed="OnFinishFailed"
-              LabelColSpan="8"
-              WrapperColSpan="16">
+        
+        <div class="section-header">
+            Agregar Nuevo Material
+        </div>
 
-            <div class="form-grid">
-                <div class="form-row">
+        <div class="form-card">
+            <Form Model="@MaterialViewModel"
+                  OnFinish="OnFinish"
+                  OnFinishFailed="OnFinishFailed"
+                  LabelColSpan="8"
+                  WrapperColSpan="16">
+
+                <div class="form-grid">
                     <FormItem Label="Producto">
                         <Input @bind-Value="MaterialViewModel.Descripcion" />
                     </FormItem>
 
-                    <FormItem Label="Codigo de Barra">
+                    <FormItem Label="Código de Barra">
                         <Input @bind-Value="MaterialViewModel.Codigo" />
                     </FormItem>
-                </div>
 
-                <div class="form-row">
                     <FormItem Label="Fecha">
                         <DatePicker TValue="DateTime" DefaultValue="DateTime.Now" @bind-Value="MaterialViewModel.FechaAlta" />
                     </FormItem>
@@ -99,25 +125,23 @@
                     <FormItem Label="Stock">
                         <AntDesign.InputNumber @bind-Value="MaterialViewModel.Stock" />
                     </FormItem>
-                </div>
-                
-                <div class="form-row">
-                    <FormItem Label="Rubro" Style="width:100%">
+                    
+                    <FormItem Label="Rubro">
                         <EnumSelect TEnum="TipoRubro" @bind-Value="MaterialViewModel.Rubro" />
                     </FormItem>
                 </div>
-            </div>
 
-            <div class="form-buttons-container">
-                <Button Type="@ButtonType.Primary" HtmlType="Sumbit" Class="primary-button">
-                    Cargar Material
-                </Button>
-            </div>
-        </Form>
+                <div class="form-buttons-container">
+                    <Button Type="@ButtonType.Primary" HtmlType="submit" Class="save-button">
+                        Cargar Material
+                    </Button>
+                </div>
+            </Form>
+        </div>
     </div>
 </div>
 
-@code {
+@code { 
     public BomberosDbContext Context;
 
     public class MaterialVM

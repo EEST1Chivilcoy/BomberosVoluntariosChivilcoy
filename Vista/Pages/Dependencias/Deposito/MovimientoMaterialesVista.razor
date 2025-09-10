@@ -14,145 +14,240 @@
 @inject IDbContextFactory<BomberosDbContext> DbFactory
 @inject IMessageService message
 
-<div>
-    Tipo de destino:
-    <Select @bind-value="@FiltrarDestino" TItemValue="string" TItem="string" Style="width:120px"
-    Placeholder="Seleccione el tipo de destino">
-        <SelectOptions>
-            <SelectOption Value="@("Sin asignar")" Label="Sin asignar" />
-            <SelectOption Value="@("Bombero")" Label="Bombero" />
-            <SelectOption Value="@("Movil")" Label="Movil" />
-        </SelectOptions>
-    </Select>
-    @if (FiltrarDestino == "Bombero")
-    {
-        <Select TItem="BomberoViewModel"
-                TItemValue="int"
-                DataSource="@bomberoTodos"
-                @bind-Value="@FiltrarBombero"
-                LabelName="@nameof(BomberoViewModel.NombreYApellido)"
-                ValueName="@nameof(BomberoViewModel.PersonaId)"
-                Placeholder="Selecione el bombero"
-                DefaultActiveFirstOption="false"
-                AllowClear="true"
-                Style="width:120px"
-                EnableSearch>
-        </Select>
+<style>
+    .movimientos-abm {
+        font-family: 'Poppins', sans-serif !important;
+        --primary-color: #e4e4e4; 
+        --primary-dark: #e4e4e4;
+        --secondary-color: #2F54EB;
+        --success-color: #52C41A; 
+        --success-dark: #449E17;
+        --background-card: #FFFFFF;
+        --background-body: #F0F2F5; 
+        --text-color: #262626;
+        --border-color: #D9D9D9;
+        --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     }
-    else if (FiltrarDestino == "Movil")
-    {
-        <Select TItem="MovilViewModel"
-                TItemValue="int"
-                DataSource="@MovilTodos"
-                @bind-Value="@FiltrarMovil"
-                LabelName="@nameof(MovilViewModel.NumeroMovil)"
-                ValueName="@nameof(MovilViewModel.VehiculoId)"
-                Placeholder="Selecione el movil"
-                DefaultActiveFirstOption="false"
-                AllowClear="true"
-                Style="width:120px"
-                EnableSearch>
-        </Select>
+
+    .movimientos-abm .modal-content {
+        background-color: var(--background-body);
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        padding: 40px;
+        max-height: 95vh;
+        overflow-y: auto;
     }
-    <Button OnClick="CargarMovimientos" Style="width:120px">
-        <Icon Type="search" Theme="IconThemeType.Outline" /> Filtrar
-    </Button>
-</div>
-<Table DataSource="ListasMoviminetosVista" Bordered Responsive Style="min-width: 320px!important;" PageSize="5" Size="TableSize.Small">
-         <ColumnDefinitions Context="muestra">
-             <PropertyColumn Property="c=>c.FechaIngreso" Title="Fecha de Ingreso" Format="dd/MM/yyyy" Sortable></PropertyColumn>
-         <PropertyColumn Property="c=>c.MaterialAsignado.Codigo" Sortable></PropertyColumn>
-         <PropertyColumn Property="c=>c.TipoMovimiento" Title="Tipo de Movimiento"
-                         SortDirections="new[] { SortDirection.Descending }"
-                         Filters="DiscriminadorFilter"
-                         OnFilter="((value,name)=>Enum.GetName(typeof(TipoMovimiento), name).StartsWith(Enum.GetName(typeof(TipoMovimiento), value)))" >
-         </PropertyColumn>
-         <PropertyColumn Property="c=>c.MaterialAsignado.Descripcion" Sortable></PropertyColumn>
-         <PropertyColumn Property="c=>c.BomberoOMovil" Title="Bombero/Móvil" Sortable></PropertyColumn>
-         
-     </ColumnDefinitions>
- </Table>
 
- <Form Model="MovimientoVM"
-       LabelColSpan="8"
-       WrapperColSpan="16"
-       OnFinish="OnFinish"
-       OnFinishFailed="OnFinishFailed"
-       Style="width: 100%;height: 100%;">
-
-     <FormItem Label="Rubro">
-         <EnumSelect TEnum="@TipoMovimiento" @bind-Value="@MovimientoVM.TipoMovimiento" />
-     </FormItem>
-
-    <CheckboxGroup Style="width:100%" @bind-Value="@_value" TValue="string" OnChange="OnChange">
-        <Row>
-            <Col Span="8">
-            <Checkbox Label="Bombero" @bind-Value="@chIsBombero">Bombero</Checkbox>
-            </Col>
-            <Col Span="8">
-            <Checkbox Label="Movil" @bind-Value="@chIsMovil">Movil</Checkbox>
-            </Col>
-        </Row>
-    </CheckboxGroup>
-
-     <FormItem Label="Bombero asignado">
-         <Select TItem="BomberoViewModel"
-                 TItemValue="int?"
-                 DataSource="@bomberoTodos"
-                 @bind-Value="@MovimientoVM.BomberoAsignado"
-                 LabelName="@nameof(BomberoViweModel.NombreYApellido)"
-                 ValueName="@nameof(BomberoViweModel.NumeroLegajo)"
-                 Placeholder="Selecione el bombero"
-                 DefaultActiveFirstOption="false"
-                 AllowClear="true"
-                 Disabled="@(!chIsBombero)"
-                EnableSearch>
-        </Select>
-    </FormItem>
+    .movimientos-abm .section-header {
+        background-color: var(--primary-color);
+        color: rgb(0, 0, 0);
+        padding: 12px 20px;
+        font-size: 1.2em;
+        font-weight: 600;
+        border-radius: 8px 8px 0 0;
+        margin: 20px -20px 0 -20px; 
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
     
-    <FormItem Label="Movil asignado">
-        <Select TItem="MovilViewModel"
-                TItemValue="string"
-                DataSource="@MovilTodos"
-                @bind-Value="@MovimientoVM.MovilAsignado"
-                LabelName="@nameof(MovilViewModel.NumeroMovil)"
-                ValueName="@nameof(MovilViewModel.NumeroMovil)"
-                Placeholder="Selecione el movil"
-                DefaultActiveFirstOption="false"
-                AllowClear="true"
-                Disabled="@(!chIsMovil)"
-                EnableSearch>
-        </Select>
-    </FormItem>
-    <FormItem Label="Material otorgado">
-        <Select TItem="MaterialVM"
-                TItemValue="int"
-                DataSource="@MaterialesVM"
-                @bind-Value="@MovimientoVM.MaterialId"
-                LabelName="@nameof(MaterialVM.Descripcion)"
-                ValueName="@nameof(MaterialVM.MaterialId)"
-                Placeholder="Selecione el material"
-                DefaultActiveFirstOption="false"
-                AllowClear="true"
-                EnableSearch>
-        </Select>
-    </FormItem>
+    .movimientos-abm .form-grid {
+        display: grid;
+        gap: 16px;
+    }
 
-    <FormItem Label="Ingrese las cantidad">
-        <AntDesign.InputNumber @bind-Value="MovimientoVM.Cantidad" />
-    </FormItem>
-    <FormItem Label="Observaciones">
-        <Input @bind-Value="MovimientoVM.Observaciones" />
-    </FormItem>
-    <FormItem Style="width: 100% !important;
-            display: flex !important;
-            justify-content: flex-end !important;
-            align-items: flex-end !important; height:100% !important; margin-bottom: -32px;" WrapperColOffset="8" WrapperColSpan="16">
-        <Button Class="boton_p" HtmlType="submit" Style="margin-center: 60px;background-color: #1890ff !important">
-            Guardar
-        </Button>
-    </FormItem>
-</Form>
+    .movimientos-abm .form-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 16px;
+    }
+
+    .movimientos-abm .table-container {
+        margin-top: 20px;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+    
+    .movimientos-abm .form-buttons-container {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 20px;
+    }
+    
+    .movimientos-abm .primary-button {
+        background-color: var(--secondary-color);
+        border: none;
+        color: white;
+        box-shadow: 0 2px 8px rgba(47, 84, 235, 0.3);
+        height: 40px;
+        font-weight: 500;
+        border-radius: 6px;
+    }
+    
+    .movimientos-abm .secondary-button {
+        background: transparent;
+        border: 1px solid var(--border-color);
+        color: var(--text-color);
+        height: 40px;
+        font-weight: 500;
+        border-radius: 6px;
+    }
+    
+    .movimientos-abm .save-button {
+        background: linear-gradient(135deg, var(--success-color) 0%, var(--success-dark) 100%);
+        border: none;
+        color: white;
+        box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+        font-weight: 600;
+        height: 40px;
+        border-radius: 6px;
+    }
+
+    .movimientos-abm .section-separator {
+        border: none;
+        border-top: 1px dashed var(--border-color);
+        margin: 30px 0;
+    }
+
+    .ant-select:not(.ant-select-customize-input) .ant-select-selector {
+        border-radius: 6px !important;
+    }
+    .ant-input {
+        border-radius: 6px !important;
+    }
+
+    .movimientos-abm .ant-table-wrapper {
+        border-radius: 8px;
+    }
+    .movimientos-abm .ant-table-thead > tr > th {
+        background-color: #fafafa !important;
+        font-weight: bold;
+    }
+    .movimientos-abm .ant-table-tbody > tr:nth-child(even) > td {
+        background-color: #f8f8f8 !important;
+    }
+
+</style>
+
+<div class="movimientos-abm">
+    <div class="modal-content">
+
+        <h3 class="section-header">Tabla de Movimientos</h3>
+        
+        <Form Model="MovimientoVM"
+              LabelColSpan="8"
+              WrapperColSpan="16"
+              OnFinish="OnFinish"
+              OnFinishFailed="OnFinishFailed"
+              Style="width: 100%;height: 100%;">
+            
+            <div class="form-row" style="align-items: flex-end; margin-top: 20px;">
+                <FormItem Label="Tipo de destino">
+                    <Select @bind-value="@FiltrarDestino" TItemValue="string" TItem="string" Placeholder="Seleccione el tipo de destino">
+                        <SelectOptions>
+                            <SelectOption Value="@("Sin asignar")" Label="Sin asignar" />
+                            <SelectOption Value="@("Bombero")" Label="Bombero" />
+                            <SelectOption Value="@("Movil")" Label="Movil" />
+                        </SelectOptions>
+                    </Select>
+                </FormItem>
+    
+                @if (FiltrarDestino == "Bombero")
+                {
+                    <FormItem Label="Bombero">
+                        <Select TItem="BomberoViewModel" TItemValue="int" DataSource="@bomberoTodos" @bind-Value="@FiltrarBombero"
+                                LabelName="@nameof(BomberoViewModel.NombreYApellido)" ValueName="@nameof(BomberoViewModel.PersonaId)"
+                                Placeholder="Selecione el bombero" DefaultActiveFirstOption="false" AllowClear="true" EnableSearch />
+                    </FormItem>
+                }
+                else if (FiltrarDestino == "Movil")
+                {
+                    <FormItem Label="Movil">
+                        <Select TItem="MovilViewModel" TItemValue="int" DataSource="@MovilTodos" @bind-Value="@FiltrarMovil"
+                                LabelName="@nameof(MovilViewModel.NumeroMovil)" ValueName="@nameof(MovilViewModel.VehiculoId)"
+                                Placeholder="Selecione el movil" DefaultActiveFirstOption="false" AllowClear="true" EnableSearch />
+                    </FormItem>
+                }
+    
+                <Button OnClick="CargarMovimientos" Class="primary-button" Style="margin-bottom: 24px;">
+                    <Icon Type="search" Theme="IconThemeType.Outline" /> Filtrar
+                </Button>
+            </div>
+    
+            <div class="table-container">
+                <Table DataSource="ListasMoviminetosVista" Bordered Responsive PageSize="5" Size="TableSize.Small">
+                    <ColumnDefinitions Context="muestra">
+                        <PropertyColumn Property="c=>c.FechaIngreso" Title="Fecha de Ingreso" Format="dd/MM/yyyy" Sortable></PropertyColumn>
+                        <PropertyColumn Property="c=>c.MaterialAsignado.Codigo" Title="Código" Sortable></PropertyColumn>
+                        <PropertyColumn Property="c=>c.TipoMovimiento" Title="Tipo de Movimiento"
+                                        SortDirections="new[] { SortDirection.Descending }"
+                                        Filters="DiscriminadorFilter"
+                                        OnFilter="((value,name)=>Enum.GetName(typeof(TipoMovimiento), name).StartsWith(Enum.GetName(typeof(TipoMovimiento), value)))">
+                        </PropertyColumn>
+                        <PropertyColumn Property="c=>c.MaterialAsignado.Descripcion" Title="Material" Sortable></PropertyColumn>
+                        <PropertyColumn Property="c=>c.BomberoOMovil" Title="Bombero/Móvil" Sortable></PropertyColumn>
+                    </ColumnDefinitions>
+                </Table>
+            </div>
+    
+            <hr class="section-separator" />
+            
+            <h3 class="section-header">Formulario para Cargar Nuevo Movimiento</h3>
+    
+            <div class="form-grid" style="margin-top: 20px;">
+                <div class="form-row">
+                    <FormItem Label="Rubro">
+                        <EnumSelect TEnum="@TipoMovimiento" @bind-Value="@MovimientoVM.TipoMovimiento" />
+                    </FormItem>
+    
+                    <CheckboxGroup Style="width:100%; display:flex; justify-content:center; gap:20px; margin-bottom:10px;" @bind-Value="@_value" TValue="string" OnChange="OnChange">
+                        <Checkbox Label="Bombero" @bind-Value="@chIsBombero">Bombero</Checkbox>
+                        <Checkbox Label="Movil" @bind-Value="@chIsMovil">Movil</Checkbox>
+                    </CheckboxGroup>
+                </div>
+    
+                <div class="form-row">
+                    <FormItem Label="Bombero asignado">
+                        <Select TItem="BomberoViewModel" TItemValue="int?" DataSource="@bomberoTodos" @bind-Value="@MovimientoVM.BomberoAsignado"
+                                LabelName="@nameof(BomberoViewModel.NombreYApellido)" ValueName="@nameof(BomberoViewModel.NumeroLegajo)"
+                                Placeholder="Selecione el bombero" DefaultActiveFirstOption="false" AllowClear="true" Disabled="@(!chIsBombero)" EnableSearch />
+                    </FormItem>
+    
+                    <FormItem Label="Movil asignado">
+                        <Select TItem="MovilViewModel" TItemValue="string" DataSource="@MovilTodos" @bind-Value="@MovimientoVM.MovilAsignado"
+                                LabelName="@nameof(MovilViewModel.NumeroMovil)" ValueName="@nameof(MovilViewModel.NumeroMovil)"
+                                Placeholder="Selecione el movil" DefaultActiveFirstOption="false" AllowClear="true" Disabled="@(!chIsMovil)" EnableSearch />
+                    </FormItem>
+                </div>
+    
+                <div class="form-row">
+                    <FormItem Label="Material otorgado">
+                        <Select TItem="MaterialVM" TItemValue="int" DataSource="@MaterialesVM" @bind-Value="@MovimientoVM.MaterialId"
+                                LabelName="@nameof(MaterialVM.Descripcion)" ValueName="@nameof(MaterialVM.MaterialId)"
+                                Placeholder="Selecione el material" DefaultActiveFirstOption="false" AllowClear="true" EnableSearch />
+                    </FormItem>
+    
+                    <FormItem Label="Cantidad">
+                        <AntDesign.InputNumber @bind-Value="MovimientoVM.Cantidad" />
+                    </FormItem>
+                </div>
+    
+                <div class="form-row">
+                    <FormItem Label="Observaciones">
+                        <Input @bind-Value="MovimientoVM.Observaciones" />
+                    </FormItem>
+                </div>
+    
+                <div class="form-buttons-container">
+                    <Button Type="@ButtonType.Primary" HtmlType="submit" Class="save-button">
+                        Guardar
+                    </Button>
+                </div>
+            </div>
+        </Form>
+    </div>
+</div>
+
 
 
 @code {
