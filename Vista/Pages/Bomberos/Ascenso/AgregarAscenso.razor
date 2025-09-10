@@ -8,118 +8,179 @@
 @inject IDbContextFactory<BomberosDbContext> DbFactory
 @inject IMessageService message
 <style>
-
-
-
-    .boton_p {
-        background-color: #1890ff !important;
-        border-color: currentColor !important;
-        margin-right: 60px;
-        margin-bottom: 17px !important;
-        color: white;
+    .modal-crear-ascenso .ant-modal-content {
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        border: 4px solid #A63333;
+        margin-top: -50px;
+        margin-bottom: 0px;
     }
-
-    .ant-btn:hover, .ant-btn:focus, .ant-btn:active {
-        text-decoration: none;
-        background: #40a9ff !important;
+    .modal-crear-ascenso .ant-modal-header {
+        background-color: #f0f2f5;
+        border-bottom: 1px solid #d9d9d9;
+        padding: 16px 24px;
+        border-radius: 9px 9px 0 0;
     }
-
-    .ant-btn:hover, .ant-btn:focus {
-        color: white !important;
-        border-color: #40a9ff !important;
-        background: #40a9ff !important;
-    }
-
-    .ant-form-horizontal .ant-form-item-label {
-        flex-grow: 0;
-        font-weight: bold;
-    }
-
-    .ant-modal-header {
-        padding: 0px !important;
-        color: rgba(0, 0, 0, 0.85);
-        background: #fff;
-        border-bottom: 1px solid #f0f0f0;
-        border-radius: 2px 2px 0 0;
-    }
-
-    .ant-modal-body {
+    .modal-crear-ascenso-content {
         padding: 24px;
+    }
+    .modal-crear-ascenso-form-item {
+        margin-bottom: 20px;
+        position: relative;
+        padding-left: 10px;
+    }
+    .modal-crear-ascenso-form-item .ant-form-item-label > label,
+    .modal-crear-ascenso-form-full-width .ant-form-item-label > label {
+        font-weight: 600;
+        color: #434343;
+        display: flex;
+        align-items: center;
+        gap: 8px;
         font-size: 14px;
-        line-height: 1.5715;
-        word-wrap: break-word;
-        margin-top: 20px !important;
+        transition: color 0.3s ease;
+    }
+    .modal-crear-ascenso-form-item .ant-form-item-label > label:hover,
+    .modal-crear-ascenso-form-full-width .ant-form-item-label > label:hover {
+        color: #A63333;
+    }
+    .modal-crear-ascenso .ant-input:focus,
+    .modal-crear-ascenso .ant-input:hover,
+    .modal-crear-ascenso .ant-select-selector:focus,
+    .modal-crear-ascenso .ant-select-selector:hover,
+    .modal-crear-ascenso .ant-picker:focus,
+    .modal-crear-ascenso .ant-picker:hover,
+    .modal-crear-ascenso .ant-picker-input > input:focus,
+    .modal-crear-ascenso .ant-picker-input > input:hover,
+    .modal-crear-ascenso .ant-input-number-input:focus,
+    .modal-crear-ascenso .ant-input-number-input:hover,
+    .modal-crear-ascenso .ant-textarea:focus,
+    .modal-crear-ascenso .ant-textarea:hover {
+        border-color: #FFD700 !important;
+        box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
+    }
+    .modal-crear-ascenso .ant-picker,
+    .modal-crear-ascenso .ant-input,
+    .modal-crear-ascenso .ant-select-selector,
+    .modal-crear-ascenso .ant-input-number,
+    .modal-crear-ascenso .ant-textarea {
+        border-radius: 8px !important;
+        border: 1px solid #d9d9d9 !important;
+        background: #fff !important;
+        color: #434343 !important;
+        transition: all 0.3s ease !important;
+    }
+    .modal-crear-ascenso-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 18px;
+        margin-bottom: 0px;
+    }
+    .modal-crear-ascenso .ant-btn-primary {
+        background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
+        border: none !important;
+        color: #fff !important;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
+        margin-top:  0;
+        margin-bottom: 0;
+        padding: 0 20px !important;
+    }
+    .modal-crear-ascenso .ant-btn-primary:hover {
+        background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
+        color: #fff !important;
     }
 </style>
 
-<Form Model="AscensoVM"
-      LabelColSpan="8"
-      WrapperColSpan="16"
-      OnFinish="OnFinish"
-      OnFinishFailed="OnFinishFailed"
-      Style="width: 100%;height: 100%;">
-
-    <!-- Habilita la validación basada en DataAnnotations -->
-    <DataAnnotationsValidator />
-
-    <!-- Muestra un resumen de errores de validación -->
-    <ValidationSummary />
-
-    <FormItem Label="Personal Afectado">
-        <Select TItem="BomberoViweModel"
-                TItemValue="int"
-                DataSource="@BomberoTodos"
-                @bind-Value="@Bombero"
-                LabelName="@nameof(BomberoViweModel.NombreYApellido)"
-                ValueName="@nameof(BomberoViweModel.NumeroLegajo)"
-                Placeholder="Seleccione Bombero Encargado"
-                DefaultActiveFirstOption="false"
-                OnSelectedItemChanged="HandleChange"
-                EnableSearch>
-        </Select>
-    </FormItem>
-
-    <FormItem Label="Fecha de Ascenso">
-        <DatePicker TValue="DateTime" DefaultValue="DateTime.Now" @bind-Value="@AscensoVM.FechaAscenso" />
-    </FormItem>
-
-    <FormItem Label="Descripción">
-        <Input @bind-Value="AscensoVM.Descripcion" />
-    </FormItem>
-
-    <FormItem Label="Grado anterior">
-        <Input Value="@AscensoVM.GradoAntiguo" Disabled />
-    </FormItem>
-
-    <FormItem Label="Grado ascenso">
-        <EnumSelect TEnum="@EscalafonJerarquico" @bind-Value="AscensoVM.GradoAscenso" />
-    </FormItem>
-
-    <FormItem Label="Número de libro" Class="required-label">
-        <Input @bind-Value="AscensoVM.NumeroLibro" />
-        <ValidationMessage For="() => AscensoVM.NumeroLibro" />
-    </FormItem>
-
-    <FormItem Label="Número de acta" Class="required-label">
-        <Input @bind-Value="AscensoVM.NumeroActa" />
-        <ValidationMessage For="() => AscensoVM.NumeroActa" />
-    </FormItem>
-
-    <FormItem Style="width: 100% !important;
-            display: flex !important;
-            justify-content: flex-end !important;
-            align-items: flex-end !important; height:100% !important; margin-bottom: -32px;" WrapperColOffset="8" WrapperColSpan="16">
-        <Button Class="boton_p" HtmlType="submit" Style="margin-right: 60px;">
-            Ascender Bombero
-        </Button>
-    </FormItem>
-</Form>
+<Modal Visible="@Visible"
+       Title="Nuevo Ascenso"
+       Width=@("100%")
+       Style="max-width: 800px;"
+       Footer="null"
+       DestroyOnClose
+       WrapClassName="modal-crear-ascenso"
+       OnCancel="@(() => OnClose.InvokeAsync())">
+    <div class="modal-crear-ascenso-content">
+        <Form Model="AscensoVM"
+              Layout="FormLayout.Vertical"
+              Class="modal-crear-ascenso-form"
+              OnFinish="OnFinish"
+              OnFinishFailed="OnFinishFailed">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <Row Class="modal-crear-ascenso-row" Gutter="16">
+                <AntDesign.Col Span="12">
+                    <FormItem Label="👤 Personal Afectado" Required Class="modal-crear-ascenso-form-item">
+                        <Select TItem="BomberoViweModel"
+                                TItemValue="int"
+                                DataSource="@BomberoTodos"
+                                @bind-Value="@Bombero"
+                                LabelName="@nameof(BomberoViweModel.NombreYApellido)"
+                                ValueName="@nameof(BomberoViweModel.NumeroLegajo)"
+                                Placeholder="Seleccione Bombero Encargado"
+                                DefaultActiveFirstOption="false"
+                                OnSelectedItemChanged="HandleChange"
+                                EnableSearch />
+                    </FormItem>
+                </AntDesign.Col>
+                <AntDesign.Col Span="12">
+                    <FormItem Label="📅 Fecha de Ascenso" Required Class="modal-crear-ascenso-form-item">
+                        <DatePicker TValue="DateTime" DefaultValue="DateTime.Now" @bind-Value="AscensoVM.FechaAscenso" />
+                    </FormItem>
+                </AntDesign.Col>
+            </Row>
+            <AntDesign.Col Span="24" Class="modal-crear-ascenso-form-full-width">
+                <FormItem Label="📝 Descripción" Class="modal-crear-ascenso-form-item">
+                    <TextArea @bind-Value="AscensoVM.Descripcion" 
+                              Rows="4"
+                              ShowCounts
+                              MaxLength="500"/>
+                </FormItem>
+            </AntDesign.Col>
+            <Row Class="modal-crear-ascenso-row" Gutter="16">
+                <AntDesign.Col Span="12">
+                    <FormItem Label="🎖️ Grado anterior" Class="modal-crear-ascenso-form-item">
+                        <Input Value="@AscensoVM.GradoAntiguo" Disabled />
+                    </FormItem>
+                </AntDesign.Col>
+                <AntDesign.Col Span="12">
+                    <FormItem Label="🎖️ Grado ascenso" Required Class="modal-crear-ascenso-form-item">
+                        <EnumSelect TEnum="@EscalafonJerarquico" @bind-Value="AscensoVM.GradoAscenso" />
+                    </FormItem>
+                </AntDesign.Col>
+            </Row>
+            <Row Class="modal-crear-ascenso-row" Gutter="16">
+                <AntDesign.Col Span="12">
+                    <FormItem Label="📚 Número de libro" Required Class="modal-crear-ascenso-form-item">
+                        <Input @bind-Value="AscensoVM.NumeroLibro" />
+                        <ValidationMessage For="() => AscensoVM.NumeroLibro" />
+                    </FormItem>
+                </AntDesign.Col>
+                <AntDesign.Col Span="12">
+                    <FormItem Label="📄 Número de acta" Required Class="modal-crear-ascenso-form-item">
+                        <Input @bind-Value="AscensoVM.NumeroActa" />
+                        <ValidationMessage For="() => AscensoVM.NumeroActa" />
+                    </FormItem>
+                </AntDesign.Col>
+            </Row>
+            <div class="modal-crear-ascenso-footer">
+                <Button Class="boton_p ant-btn-primary" HtmlType="submit">
+                    Ascender Bombero
+                </Button>
+                <Button Type="ButtonType.Default" OnClick="@(() => OnClose.InvokeAsync())">
+                    Cancelar
+                </Button>
+            </div>
+        </Form>
+    </div>
+</Modal>
 
 
 
 
 @code {
     [Parameter] public EventCallback OnClose { get; set; }
+    [Parameter] public bool Visible { get; set; } // <-- Nuevo parámetro para visibilidad
     List<BomberoViweModel> BomberoTodos = new List<BomberoViweModel>();
     public Bombero[]? bomberos;
     public int Bombero { get; set; }
