@@ -8,7 +8,8 @@
 @using Vista.Data.Models.Personas.Personal.Componentes
 @using Vista.Data.Models.Imagenes
 @using Vista.Data.ViewModels.Personal
-@page "/bomberos/agregar"
+
+@page "/personal/{TipoPersonal}/agregar"
 
 @*Servicios Utilizados*@
 @using Vista.Services
@@ -146,8 +147,20 @@
 
 <div class="container">
     <div class="page-title">
-        <Icon Type="fire" Theme="IconThemeType.Fill" Class="page-title-icon" />
-        Registro de Nuevo Bombero
+        @if (TipoPersonal.ToLower() == "bombero")
+        {
+            <div>
+                <Icon Type="fire" Theme="IconThemeType.Fill" Class="page-title-icon" />
+                <span>Registro de Nuevo Bombero</span>
+            </div>
+        }
+        else if (TipoPersonal.ToLower() == "comisiondirectiva")
+        {
+            <div>
+                <Icon Type="reconciliation" Theme="IconThemeType.Fill" Class="page-title-icon" />
+                <span>Registro de Nuevo Miembro de Comisión Directiva</span>
+            </div>
+        }
     </div>
 
     <Form Model="@bomberoView"
@@ -236,7 +249,7 @@
                     </Col>
                     <Col Span="6">
                     <FormItem Label="Grupo Sanguíneo">
-                        <EnumSelect TEnum="TipoGrupoSanguineo" @bind-Value="@bomberoView.GrupoSanguineo" AllowClear />
+                        <EnumSelect TEnum="TipoGrupoSanguineo?" @bind-Value="@bomberoView.GrupoSanguineo" AllowClear />
                     </FormItem>
                     </Col>
                 </Row>
@@ -375,10 +388,12 @@
 </div>
 
 @code {
-    [Parameter]
-    public int? BomberoId { get; set; }
+    [Parameter] public int? PersonalId { get; set; }
+    [Parameter] public string TipoPersonal { get; set; } = null!;
 
-    private BomberoViweModel bomberoView = new();
+
+    private BomberoViweModel? bomberoView = null; // No lo inicializamos aquí (ya que lo hacemos en OnInitialized) (Esto por que no se si va a ser bombero o no)
+
     private ImageViewModel imageViewModel = new();
 
     private string? ImageUrlPreview => imageViewModel.Base64 != null

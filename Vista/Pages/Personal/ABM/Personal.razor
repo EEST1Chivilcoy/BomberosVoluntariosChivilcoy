@@ -1,4 +1,4 @@
-@page "/bomberos"
+@page "/personal/{TipoPersonal}"
 
 @using Microsoft.AspNetCore.Components.Forms
 @using System.ComponentModel
@@ -455,14 +455,26 @@
 }
 
 @code {
-    string searchString;
+    [Parameter] public string TipoPersonal { get; set; } = null!; // Parámetro para el tipo de personal (comisión directiva o bombero)
+
+    string? searchString;
+
+    // Referencia a la tabla
     ITable table;
+
+    // Bomberos
+
+    // Listas
     List<BomberoViweModel>? bomberos = new();
     List<BomberoViweModel>? SinFiltrar = new();
+
+    // Estado seleccionado
     public EstadoBombero Estado = EstadoBombero.CuerpoActivo;
 
+    // Filtros de la Tabla de Bomberos
     private TableFilter<EscalafonJerarquico>[] EscalafonJerarquicoFilter;
 
+    // Tamaño de la tabla
     int _pageIndex = 1;
     int _pageSize = 6;
 
@@ -501,17 +513,28 @@
     // Init, OnChange y Carga de datos
     protected override async Task OnInitializedAsync()
     {
-        var bomberos = await BomberoService.ObtenerTodosLosBomberosAsync(ConImagenes: true);
-        SinFiltrar = bomberos.ToBomberoViewModelList();
-
-        search(searchString, Estado);
-
-        EscalafonJerarquicoFilter = new TableFilter<EscalafonJerarquico>[Enum.GetValues(typeof(EscalafonJerarquico)).Length];
-        int i = 0;
-        foreach (EscalafonJerarquico value in Enum.GetValues(typeof(EscalafonJerarquico)))
+        if (TipoPersonal.ToLower() == "bomberos")
         {
-            EscalafonJerarquicoFilter[i] = new() { Text = Enum.GetName(typeof(EscalafonJerarquico), value), Value = value };
-            i++;
+            var bomberos = await BomberoService.ObtenerTodosLosBomberosAsync(ConImagenes: true);
+            SinFiltrar = bomberos.ToBomberoViewModelList();
+
+            search(searchString, Estado);
+
+            EscalafonJerarquicoFilter = new TableFilter<EscalafonJerarquico>[Enum.GetValues(typeof(EscalafonJerarquico)).Length];
+            int i = 0;
+            foreach (EscalafonJerarquico value in Enum.GetValues(typeof(EscalafonJerarquico)))
+            {
+                EscalafonJerarquicoFilter[i] = new() { Text = Enum.GetName(typeof(EscalafonJerarquico), value), Value = value };
+                i++;
+            }
+        }
+        else if(TipoPersonal.ToLower() == "comisiondirectiva")
+        {
+            
+        }
+        else
+        {
+            navigationManager.NavigateTo("/personal/bomberos", true);
         }
 
         StateHasChanged();

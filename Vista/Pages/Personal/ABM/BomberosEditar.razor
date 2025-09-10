@@ -215,7 +215,7 @@
                     </Col>
                     <Col Span="6">
                     <FormItem Label="Grupo Sanguíneo">
-                        <EnumSelect TEnum="TipoGrupoSanguineo" @bind-Value="@bomberoVM.GrupoSanguineo" AllowClear />
+                        <EnumSelect TEnum="TipoGrupoSanguineo?" @bind-Value="@bomberoVM.GrupoSanguineo" AllowClear />
                     </FormItem>
                     </Col>
                 </Row>
@@ -562,7 +562,7 @@
         public int NumeroLegajo { get; set; }
         public EscalafonJerarquico Grado { get; set; }
         public TipoDotaciones Dotacion { get; set; }
-        public TipoGrupoSanguineo GrupoSanguineo { get; set; }
+        public TipoGrupoSanguineo? GrupoSanguineo { get; set; }
         public int? Altura { get; set; }
         public int? Peso { get; set; }
         public bool Chofer { get; set; }
