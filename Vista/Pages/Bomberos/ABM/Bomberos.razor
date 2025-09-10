@@ -42,69 +42,98 @@
         overflow: hidden !important;
         margin-bottom: 0 !important;
     }
-    .abm-header-section::before {
-        content: '';
-        display: none;
-    }
-    .abm-header-section .lava-bubbles {
-        position: absolute;
-        top: 0; left: 0; width: 100%; height: 100%;
-        pointer-events: none;
-        z-index: 1;
-        overflow: hidden;
-    }
-    .abm-header-section .lava-bubble {
-        position: absolute;
-        border-radius: 50%;
-        opacity: 0.45;
-        background: radial-gradient(circle at 60% 40%, #FFD54F 0%, #F9A825 80%, transparent 100%);
-        animation: lava-bubble-move 8s linear infinite;
-        filter: blur(1.5px);
-        mix-blend-mode: lighten;
-    }
-    .abm-header-section .lava-bubble.b1 {
-        left: 10%; width: 60px; height: 60px; bottom: -70px;
-        animation-delay: 0s;
-        animation-duration: 7.5s;
-    }
-    .abm-header-section .lava-bubble.b2 {
-        left: 35%; width: 90px; height: 90px; bottom: -100px;
-        animation-delay: 2s;
-        animation-duration: 9s;
-        background: radial-gradient(circle at 60% 40%, #FFEB3B 0%, #FFD54F 80%, transparent 100%);
-    }
-    .abm-header-section .lava-bubble.b3 {
-        left: 65%; width: 50px; height: 50px; bottom: -60px;
-        animation-delay: 1.5s;
-        animation-duration: 6.5s;
-        background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #FFD54F 80%, transparent 100%);
-    }
-    .abm-header-section .lava-bubble.b4 {
-        left: 80%; width: 70px; height: 70px; bottom: -80px;
-        animation-delay: 3.2s;
-        animation-duration: 8.5s;
-        background: radial-gradient(circle at 60% 40%, #F9A825 0%, #FFD54F 80%, transparent 100%);
-    }
-    .abm-header-section .lava-bubble.b5 {
-        left: 55%; width: 40px; height: 40px; bottom: -50px;
-        animation-delay: 5s;
-        animation-duration: 7.2s;
-        background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #F9A825 80%, transparent 100%);
-    }
+
+        .abm-header-section::before {
+            content: '';
+            display: none;
+        }
+
+        .abm-header-section .lava-bubbles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .abm-header-section .lava-bubble {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.45;
+            background: radial-gradient(circle at 60% 40%, #FFD54F 0%, #F9A825 80%, transparent 100%);
+            animation: lava-bubble-move 8s linear infinite;
+            filter: blur(1.5px);
+            mix-blend-mode: lighten;
+        }
+
+            .abm-header-section .lava-bubble.b1 {
+                left: 10%;
+                width: 60px;
+                height: 60px;
+                bottom: -70px;
+                animation-delay: 0s;
+                animation-duration: 7.5s;
+            }
+
+            .abm-header-section .lava-bubble.b2 {
+                left: 35%;
+                width: 90px;
+                height: 90px;
+                bottom: -100px;
+                animation-delay: 2s;
+                animation-duration: 9s;
+                background: radial-gradient(circle at 60% 40%, #FFEB3B 0%, #FFD54F 80%, transparent 100%);
+            }
+
+            .abm-header-section .lava-bubble.b3 {
+                left: 65%;
+                width: 50px;
+                height: 50px;
+                bottom: -60px;
+                animation-delay: 1.5s;
+                animation-duration: 6.5s;
+                background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #FFD54F 80%, transparent 100%);
+            }
+
+            .abm-header-section .lava-bubble.b4 {
+                left: 80%;
+                width: 70px;
+                height: 70px;
+                bottom: -80px;
+                animation-delay: 3.2s;
+                animation-duration: 8.5s;
+                background: radial-gradient(circle at 60% 40%, #F9A825 0%, #FFD54F 80%, transparent 100%);
+            }
+
+            .abm-header-section .lava-bubble.b5 {
+                left: 55%;
+                width: 40px;
+                height: 40px;
+                bottom: -50px;
+                animation-delay: 5s;
+                animation-duration: 7.2s;
+                background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #F9A825 80%, transparent 100%);
+            }
 
     @@keyframes lava-bubble-move {
         0% {
             transform: translateY(0) scale(1) rotate(0deg);
             opacity: 0.45;
         }
+
         60% {
             opacity: 0.7;
             filter: blur(2.5px);
         }
+
         80% {
             transform: translateY(-220px) scale(1.15) rotate(10deg);
             opacity: 0.6;
         }
+
         100% {
             transform: translateY(-320px) scale(0.95) rotate(-8deg);
             opacity: 0;
@@ -124,15 +153,23 @@
         position: relative !important;
         z-index: 2 !important;
     }
+
     .abm-header-section .title-icon {
         color: #FFD54F !important;
         font-size: 2rem !important;
         filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25)) !important;
     }
+
     @@keyframes text-glow {
-        0%, 100% { text-shadow: 0 0 5px #F9A825, 0 0 10px #FFD54F; }
-        50% { text-shadow: 0 0 12px #F9A825, 0 0 22px #FFD54F; }
+        0%, 100% {
+            text-shadow: 0 0 5px #F9A825, 0 0 10px #FFD54F;
+        }
+
+        50% {
+            text-shadow: 0 0 12px #F9A825, 0 0 22px #FFD54F;
+        }
     }
+
     .abm-header-section .title-container {
         position: relative !important;
         z-index: 2 !important;
@@ -154,26 +191,26 @@
             height: 40px !important;
         }
 
-        .abm-select-estado .ant-select-selector {
-    width: 100% !important;
-    height: 40px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-}   
+    .abm-select-estado .ant-select-selector {
+        width: 100% !important;
+        height: 40px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
 
-        .abm-filters .ant-input-search {
-            display: flex !important;
-        }
+    .abm-filters .ant-input-search {
+        display: flex !important;
+    }
 
-        .abm-filters button {
-            height: 40px !important;
-            font-size: 16px !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            gap: 6px !important;
-        }
+    .abm-filters button {
+        height: 40px !important;
+        font-size: 16px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 6px !important;
+    }
 
     .ant-table {
         overflow: hidden !important;
@@ -262,20 +299,17 @@
         .abm-action-buttons .ant-btn {
             width: 100% !important;
         }
-
-
     }
 
-            .abm-title h2 {
-    font-family: 'Bebas Neue', 'Fjalla One', sans-serif;
-    font-size: 2.5rem;
-    letter-spacing: 2px;
-
-    color: #ffffff;
-    position: relative;
-    margin-right: 950px;
-    padding-bottom: 6px;
-        }
+    .abm-title h2 {
+        font-family: 'Bebas Neue', 'Fjalla One', sans-serif;
+        font-size: 2.5rem;
+        letter-spacing: 2px;
+        color: #ffffff;
+        position: relative;
+        margin-right: 950px;
+        padding-bottom: 6px;
+    }
 
 
     .add-button {
@@ -288,10 +322,11 @@
         border-radius: 8px !important;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
-    .add-button:hover {
-        transform: translateY(-2px) !important;
-        box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4) !important;
-    }
+
+        .add-button:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4) !important;
+        }
 
 
     .abm-select-estado {
@@ -300,7 +335,6 @@
         box-sizing: border-box !important;
         height: 40px !important;
         font-size: 14px !important;
-
         display: block !important;
     }
 
@@ -344,6 +378,7 @@
                    TItem="BomberoViweModel"
                    DataSource="@bomberos"
                    OnChange="OnChange"
+                   OnRow="@OnRowClick"
                    @bind-PageIndex="_pageIndex"
                    @bind-PageSize="_pageSize"
                    Responsive>
@@ -369,9 +404,6 @@
                     </PropertyColumn>
                     <ActionColumn Title="⚙️ Acciones" Align=ColumnAlign.Center>
                         <div class="abm-action-buttons">
-                            <Button Type="ButtonType.Primary" OnClick="() => DetalleBombero(context.Id)">
-                                <Icon Type="eye" /> Detalles
-                            </Button>
                             <Button Type="default" OnClick="() => EditarBombero(context.Id)">
                                 <Icon Type="edit" /> Editar
                             </Button>
@@ -498,6 +530,15 @@
     {
         Console.WriteLine(JsonSerializer.Serialize(queryModel));
         await OnInitializedAsync();
+    }
+
+    // Función para manejar el clic en una fila de la tabla
+    private Dictionary<string, object> OnRowClick(RowData<BomberoViweModel> rowData)
+    {
+        return new Dictionary<string, object>
+        {
+            ["onclick"] = Microsoft.AspNetCore.Components.EventCallback.Factory.Create<Microsoft.AspNetCore.Components.Web.MouseEventArgs>(this, () => DetalleBombero(rowData.Data.Id))
+        };
     }
 
     private void search(string value, EstadoBombero estado)
