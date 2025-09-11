@@ -539,7 +539,14 @@
 @if (DetallesVisible == true)
 {
     <Modal Visible="@DetallesVisible" OnCancel="@CloseModals" Footer="@footer" Centered="@true" DefaultMaximized="@true">
-        <BomberosDetalles BomberoId="@PersonalId" />
+        @if (TipoPersonal.ToLower() == "comisiondirectiva")
+        {
+            <DetallePersonal PersonalId="@PersonalId" Tipo="Data.Enums.Discriminadores.TipoPersonal.ComisionDirectiva" />
+        }
+        else if (TipoPersonal.ToLower() == "bomberos")
+        {
+            <DetallePersonal PersonalId="@PersonalId" Tipo="Data.Enums.Discriminadores.TipoPersonal.Bombero" />
+        }
     </Modal>
 }
 
@@ -579,10 +586,12 @@
     int _pageIndex = 1;
     int _pageSize = 6;
 
-    // Funciones modal
-    public int PersonalId { get; set; }
-    public bool EditarVisible { get; set; }
-    public bool DetallesVisible { get; set; }
+    // ID del personal seleccionado para editar o ver detalles
+    private int PersonalId { get; set; }
+
+    // Variables para controlar la visibilidad de los modales
+    private bool EditarVisible { get; set; }
+    private bool DetallesVisible { get; set; }
 
     private async Task CambiarEstadoBombero(int BomberoId, EstadoBombero estado)
     {
@@ -602,7 +611,7 @@
         EditarVisible = true;
     }
 
-    private void DetalleBombero(int ID)
+    private void DetallePersonal(int ID)
     {
         PersonalId = ID;
         DetallesVisible = true;
@@ -672,7 +681,7 @@
     {
         return new Dictionary<string, object>
         {
-            ["onclick"] = Microsoft.AspNetCore.Components.EventCallback.Factory.Create<Microsoft.AspNetCore.Components.Web.MouseEventArgs>(this, () => DetalleBombero(rowData.Data.Id))
+            ["onclick"] = Microsoft.AspNetCore.Components.EventCallback.Factory.Create<Microsoft.AspNetCore.Components.Web.MouseEventArgs>(this, () => DetallePersonal(rowData.Data.Id))
         };
     }
 
@@ -681,7 +690,7 @@
     {
         return new Dictionary<string, object>
         {
-            ["onclick"] = Microsoft.AspNetCore.Components.EventCallback.Factory.Create<Microsoft.AspNetCore.Components.Web.MouseEventArgs>(this, () => DetalleBombero(rowData.Data.Id))
+            ["onclick"] = Microsoft.AspNetCore.Components.EventCallback.Factory.Create<Microsoft.AspNetCore.Components.Web.MouseEventArgs>(this, () => DetallePersonal(rowData.Data.Id))
         };
     }
 

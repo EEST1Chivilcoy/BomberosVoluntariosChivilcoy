@@ -19,6 +19,7 @@ namespace Vista.Services
     {
         Task CrearComisionDirectiva(ComisionDirectiva comisionDirectiva, Imagen? imagen = null);
         Task<List<ComisionDirectiva>> ObtenerTodosLosMiembrosDeComisionDirectivaAsync(bool ConImagenes = false);
+        Task<ComisionDirectiva> ObtenerMiembroComisionDirectivaPorIdAsync(int id, bool asnotracking = false, bool conRelaciones = false);
         Task<bool> CambiarEstado(int id, EstadoComisionDirectiva estado);
     }
 
@@ -86,6 +87,31 @@ namespace Vista.Services
             miembro.Estado = estado;
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<ComisionDirectiva> ObtenerMiembroComisionDirectivaPorIdAsync(int id, bool asnotracking = false, bool conRelaciones = false)
+        {
+            IQueryable<ComisionDirectiva> query = _context.ComisionDirectivas;
+
+            if (conRelaciones)
+            {
+                query = query
+                    .Include(c => c.Imagen);
+            }
+
+            if (asnotracking)
+            {
+                query = query.AsNoTracking();
+            }
+
+            var miembro = await query.FirstOrDefaultAsync(c => c.PersonaId == id);
+
+            if (miembro is null)
+            {
+                throw new KeyNotFoundException($"No se encontró un miembro de comisión directiva con el ID {id}.");
+            }
+
+            return miembro;
         }
     }
 }
