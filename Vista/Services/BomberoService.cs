@@ -111,34 +111,111 @@ namespace Vista.Services
 
         public async Task<bool> EditarBombero(Bombero bombero)
         {
+            if (bombero == null)
+            {
+                Console.WriteLine("ERROR: El bombero no puede ser nulo.");
+                return false;
+            }
+
+            using var transaction = await _context.Database.BeginTransactionAsync();
+
             try
             {
-                Bombero? Editar = await _context.Bomberos.SingleOrDefaultAsync(e => e.PersonaId == bombero.PersonaId);
-                Contacto? contacto = await _context.Contactos.SingleOrDefaultAsync(c => c.PersonalId == bombero.PersonaId);
+                // Buscar el bombero existente incluyendo su contacto
+                var bomberoExistente = await _context.Bomberos
+                    .Include(b => b.Contacto)
+                    .SingleOrDefaultAsync(e => e.PersonaId == bombero.PersonaId);
 
-                if (Editar == null)
+                if (bomberoExistente == null)
                 {
-                    throw new Exception("No se encontró el bombero para editar.");
+                    Console.WriteLine($"ERROR: No se encontró el bombero con ID {bombero.PersonaId}.");
+                    return false;
                 }
 
-                if (contacto != null)
+                // Validar que no exista otro bombero con el mismo número de legajo (si se cambió)
+                if (bomberoExistente.NumeroLegajo != bombero.NumeroLegajo)
                 {
-                    _context.Contactos.Remove(contacto);
+                    bool legajoExistente = await _context.Bomberos
+                        .AnyAsync(b => b.NumeroLegajo == bombero.NumeroLegajo && b.PersonaId != bombero.PersonaId);
+
+                    if (legajoExistente)
+                    {
+                        Console.WriteLine($"ERROR: Ya existe un bombero con el número de legajo {bombero.NumeroLegajo}.");
+                        await transaction.RollbackAsync();
+                        return false;
+                    }
                 }
 
-                Editar = bombero;
+                // Actualizar las propiedades del bombero existente
+                bomberoExistente.Nombre = bombero.Nombre;
+                bomberoExistente.Apellido = bombero.Apellido;
+                bomberoExistente.Documento = bombero.Documento;
+                bomberoExistente.NumeroLegajo = bombero.NumeroLegajo;
+                bomberoExistente.NumeroIoma = bombero.NumeroIoma;
+                bomberoExistente.LugarNacimiento = bombero.LugarNacimiento;
+                bomberoExistente.Grado = bombero.Grado;
+                bomberoExistente.Dotacion = bombero.Dotacion;
+                bomberoExistente.GrupoSanguineo = bombero.GrupoSanguineo;
+                bomberoExistente.Altura = bombero.Altura;
+                bomberoExistente.Peso = bombero.Peso;
+                bomberoExistente.Estado = bombero.Estado;
+                bomberoExistente.Chofer = bombero.Chofer;
+                bomberoExistente.VencimientoRegistro = bombero.VencimientoRegistro;
+                bomberoExistente.Direccion = bombero.Direccion;
+                bomberoExistente.Observaciones = bombero.Observaciones;
+                bomberoExistente.Profesion = bombero.Profesion;
+                bomberoExistente.NivelEstudios = bombero.NivelEstudios;
+                bomberoExistente.FechaAceptacion = bombero.FechaAceptacion;
+                bomberoExistente.FechaNacimiento = bombero.FechaNacimiento;
+                bomberoExistente.Sexo = bombero.Sexo;
 
+                // Manejar la actualización del contacto
+                if (bombero.Contacto != null)
+                {
+                    if (bomberoExistente.Contacto != null)
+                    {
+                        // Actualizar contacto existente
+                        bomberoExistente.Contacto.TelefonoCel = bombero.Contacto.TelefonoCel;
+                        bomberoExistente.Contacto.TelefonoFijo = bombero.Contacto.TelefonoFijo;
+                        bomberoExistente.Contacto.TelefonoLaboral = bombero.Contacto.TelefonoLaboral;
+                        bomberoExistente.Contacto.Email = bombero.Contacto.Email;
+                    }
+                    else
+                    {
+                        // Crear nuevo contacto
+                        bomberoExistente.Contacto = new Contacto
+                        {
+                            PersonalId = bomberoExistente.PersonaId,
+                            TelefonoCel = bombero.Contacto.TelefonoCel,
+                            TelefonoFijo = bombero.Contacto.TelefonoFijo,
+                            TelefonoLaboral = bombero.Contacto.TelefonoLaboral,
+                            Email = bombero.Contacto.Email
+                        };
+                        _context.Contactos.Add(bomberoExistente.Contacto);
+                    }
+                }
+
+                // Guardar los cambios
                 await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                Console.WriteLine($"INFO: Bombero con ID {bombero.PersonaId} actualizado correctamente.");
                 return true;
             }
             catch (DbUpdateException ex)
             {
-                Console.WriteLine($"Error al editar el bombero {ex.Message}");
+                await transaction.RollbackAsync();
+                Console.WriteLine($"ERROR: Error de base de datos al editar el bombero con ID {bombero.PersonaId}. {ex.Message}");
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine($"ERROR: Detalle interno: {ex.InnerException.Message}");
+                }
                 return false;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error inesperado {ex.Message}");
+                await transaction.RollbackAsync();
+                Console.WriteLine($"ERROR: Error inesperado al editar el bombero con ID {bombero.PersonaId}. {ex.Message}");
                 return false;
             }
         }
