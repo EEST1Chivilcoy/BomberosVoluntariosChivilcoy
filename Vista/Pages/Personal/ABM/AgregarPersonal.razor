@@ -503,6 +503,17 @@
 
     public Task Cancelar()
     {
+        if (TipoPersonal.ToLower() == "bombero")
+        {
+            navigationManager.NavigateTo($"/personal/bomberos", true);
+            return Task.CompletedTask;
+        }
+        else if (TipoPersonal.ToLower() == "comisiondirectiva")
+        {
+            navigationManager.NavigateTo($"/personal/comisiondirectiva", true);
+            return Task.CompletedTask;
+        }
+
         navigationManager.NavigateTo($"/personal/", true);
         return Task.CompletedTask;
     }
@@ -577,7 +588,7 @@
             comisionDirectiva = new();
             StateHasChanged();
             message.Success("Se agregó el miembro de comisión directiva.");
-            navigationManager.NavigateTo($"/bomberos", true);
+            navigationManager.NavigateTo($"/personal/comisiondirectiva", true);
         }
         catch (Exception ex)
         {
@@ -667,7 +678,7 @@
             bomberoView = new BomberoViweModel();
             StateHasChanged();
             message.Success("Se agregó el bombero.");
-            navigationManager.NavigateTo($"/bomberos", true);
+            navigationManager.NavigateTo($"/personal/bomberos", true);
         }
         catch (Exception ex)
         {

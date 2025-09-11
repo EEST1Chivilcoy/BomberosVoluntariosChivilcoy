@@ -96,7 +96,8 @@ namespace Vista.Services
             if (conRelaciones)
             {
                 query = query
-                    .Include(c => c.Imagen);
+                    .Include(c => c.Imagen)
+                    .Include(c => c.Contacto);
             }
 
             if (asnotracking)

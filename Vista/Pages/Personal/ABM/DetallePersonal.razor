@@ -419,7 +419,7 @@
 
             try
             {
-                bombero = await BomberoService.ObtenerBomberoPorIdAsync(PersonalId);
+                bombero = await BomberoService.ObtenerBomberoPorIdAsync(id: PersonalId, asnotracking:true, conRelaciones:true);
             }
             catch (Exception ex)
             {

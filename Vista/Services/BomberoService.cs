@@ -49,15 +49,7 @@ namespace Vista.Services
                     .Include(b => b.Brigadas)
                     .Include(b => b.VehiculosEncargado)
                     .Include(b => b.Dependencias)
-                    .Include(b => b.Incidentes)
-                    .Include(b => b.Salidas)
-                    .Include(b => b.Handie)
-                    .Include(b => b.Ascensos)
-                    .Include(b => b.DestinoMaterial)
-                    .Include(b => b.SancionesRecibidas)
-                    .Include(b => b.Limpieza)
-                    .Include(b => b.Novedades)
-                    .Include(b => b.Licencias);
+                    .Include(b => b.Contacto);
             }
 
             if (asNoTracking)
