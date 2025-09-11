@@ -133,13 +133,6 @@
         background-color: #c43a3a !important;
     }
 
-    /* Estilo para campos requeridos */
-    .required-field::after {
-        content: '*' !important;
-        color: #c43a3a !important;
-        margin-left: 4px !important;
-    }
-
     /* Estilo para el campo condicional de chofer */
     .conditional-field {
         margin-top: 12px !important;
@@ -255,12 +248,12 @@
                     <!-- Campos específicos para Bombero -->
                     <AntDesign.Row Gutter="16">
                         <AntDesign.Col Span="6">
-                            <FormItem Label="Número Legajo" Required>
+                            <FormItem Label="Número Legajo">
                                 <Input @bind-Value="@bomberoView.NumeroLegajo" Placeholder="No disponible" ReadOnly />
                             </FormItem>
                         </AntDesign.Col>
                         <AntDesign.Col Span="6">
-                            <FormItem Label="Dotación" Required>
+                            <FormItem Label="Dotación">
                                 <Input Value="@bomberoView.Dotacion.GetDisplayName()" Placeholder="No disponible" ReadOnly />
                             </FormItem>
                         </AntDesign.Col>
@@ -460,7 +453,7 @@
                 return;
             }
 
-            if(comisionDirectiva == null)
+            if (comisionDirectiva == null)
             {
                 await message.ErrorAsync("No se encontró el miembro de comisión directiva especificado.");
                 navigationManager.NavigateTo($"/personal/comisiondirectiva", true);
