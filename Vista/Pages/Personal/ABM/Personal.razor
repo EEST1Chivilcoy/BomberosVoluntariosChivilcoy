@@ -433,7 +433,7 @@
                         </PropertyColumn>
                         <ActionColumn Title="⚙️ Acciones" Align=ColumnAlign.Center>
                             <div class="abm-action-buttons">
-                                <Button Type="default" OnClick="() => EditarBombero(context.Id)">
+                                <Button Type="default" OnClick="() => EditarBombero(context.Id)" OnClickStopPropagation>
                                     <Icon Type="edit" /> Editar
                                 </Button>
                                 @if (context.Estado != EstadoBombero.Baja)
@@ -441,7 +441,7 @@
                                     <Popconfirm Title="¿Está seguro de dar de baja?"
                                                 OnConfirm="()=>CambiarEstadoBombero(context.Id, EstadoBombero.Baja)"
                                                 OkText="Sí" CancelText="No">
-                                        <Button Danger>
+                                        <Button Danger OnClickStopPropagation>
                                             <Icon Type="down" /> Baja
                                         </Button>
                                     </Popconfirm>
@@ -451,7 +451,7 @@
                                     <Popconfirm Title="¿Está seguro de dar de alta?"
                                                 OnConfirm="()=>CambiarEstadoBombero(context.Id, EstadoBombero.CuerpoActivo)"
                                                 OkText="Sí" CancelText="No">
-                                        <Button Color="Color.Green2">
+                                        <Button Color="Color.Green2" OnClickStopPropagation>
                                             <Icon Type="up" /> Alta
                                         </Button>
                                     </Popconfirm>
@@ -492,7 +492,7 @@
                         </PropertyColumn>
                         <ActionColumn Title="⚙️ Acciones" Align=ColumnAlign.Center>
                             <div class="abm-action-buttons">
-                                <Button Type="default" OnClick="() => EditarBombero(context.Id)">
+                                <Button Type="default" OnClick="() => EditarBombero(context.Id)" OnClickStopPropagation>
                                     <Icon Type="edit" /> Editar
                                 </Button>
                                 @if (context.Estado != EstadoComisionDirectiva.Baja)
@@ -500,7 +500,7 @@
                                     <Popconfirm Title="¿Está seguro de dar de baja?"
                                                 OnConfirm="()=>CambiarEstadoComisionDirectiva(context.Id, EstadoComisionDirectiva.Baja)"
                                                 OkText="Sí" CancelText="No">
-                                        <Button Danger>
+                                        <Button Danger OnClickStopPropagation>
                                             <Icon Type="down" /> Baja
                                         </Button>
                                     </Popconfirm>
@@ -510,7 +510,7 @@
                                     <Popconfirm Title="¿Está seguro de dar de alta?"
                                                 OnConfirm="()=>CambiarEstadoComisionDirectiva(context.Id, EstadoComisionDirectiva.Activo)"
                                                 OkText="Sí" CancelText="No">
-                                        <Button Color="Color.Green2">
+                                        <Button Color="Color.Green2" OnClickStopPropagation>
                                             <Icon Type="up" /> Alta
                                         </Button>
                                     </Popconfirm>
