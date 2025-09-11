@@ -669,10 +669,18 @@
 
     private async Task RefreshData()
     {
-        var bomberos = await BomberoService.ObtenerTodosLosBomberosAsync();
-        SinFiltrarB = bomberos.ToBomberoViewModelList();
-
-        searchB(searchString, EstadoB);
+        if (TipoPersonal.ToLower() == "bomberos")
+        {
+            var bomberos = await BomberoService.ObtenerTodosLosBomberosAsync(ConImagenes: true);
+            SinFiltrarB = bomberos.ToBomberoViewModelList();
+            searchB(searchString, EstadoB);
+        }
+        else if (TipoPersonal.ToLower() == "comisiondirectiva")
+        {
+            var comisionDirectiva = await ComisionDirectivaService.ObtenerTodosLosMiembrosDeComisionDirectivaAsync(ConImagenes: true);
+            SinFiltrarCD = comisionDirectiva.ToComisionDirectivaViewModelList();
+            searchCD(searchString, EstadoCD);
+        }
         await InvokeAsync(StateHasChanged);
     }
 
