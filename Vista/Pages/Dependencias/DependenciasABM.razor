@@ -244,6 +244,103 @@
             display: table-cell !important;
         }
     }
+
+    /* ====== MODAL DISEÑO DEPENDENCIAS ====== */
+    .modal-crear-dependencia .ant-modal-content {
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        border: 4px solid #A63333;
+        margin-top: -50px;
+        margin-bottom: 0px;
+    }
+    .modal-crear-dependencia .ant-modal-header {
+        background-color: #f0f2f5;
+        border-bottom: 1px solid #d9d9d9;
+        padding: 16px 24px;
+        border-radius: 9px 9px 0 0;
+    }
+    .modal-crear-dependencia .ant-modal-title {
+        color: #434343;
+        font-weight: 600;
+        font-size: 1.25rem;
+        letter-spacing: 1px;
+    }
+    .modal-crear-dependencia-content {
+        padding: 24px;
+    }
+    .modal-crear-dependencia-form-item {
+        margin-bottom: 20px;
+        position: relative;
+        padding-left: 10px;
+    }
+    .modal-crear-dependencia-form-item::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 3px;
+        border-radius: 5px;
+    }
+    .modal-crear-dependencia-form-item .ant-form-item-label > label {
+        font-weight: 600;
+        color: #434343;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        transition: color 0.3s ease;
+    }
+    .modal-crear-dependencia-form-item .ant-form-item-label > label:hover {
+        color: #FFD700;
+    }
+    .modal-crear-dependencia .ant-input:focus,
+    .modal-crear-dependencia .ant-input:hover,
+    .modal-crear-dependencia .ant-select-selector:focus,
+    .modal-crear-dependencia .ant-select-selector:hover,
+    .modal-crear-dependencia .ant-picker:focus,
+    .modal-crear-dependencia .ant-picker:hover,
+    .modal-crear-dependencia .ant-picker-input > input:focus,
+    .modal-crear-dependencia .ant-picker-input > input:hover,
+    .modal-crear-dependencia .ant-input-number-input:focus,
+    .modal-crear-dependencia .ant-input-number-input:hover,
+    .modal-crear-dependencia .ant-textarea:focus,
+    .modal-crear-dependencia .ant-textarea:hover {
+        border-color: #FFD700 !important;
+        box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
+    }
+    .modal-crear-dependencia .ant-picker,
+    .modal-crear-dependencia .ant-input,
+    .modal-crear-dependencia .ant-select-selector,
+    .modal-crear-dependencia .ant-input-number,
+    .modal-crear-dependencia .ant-textarea {
+        border-radius: 8px !important;
+        border: 1px solid #d9d9d9 !important;
+        background: #fff !important;
+        color: #434343 !important;
+        transition: all 0.3s ease !important;
+    }
+    .modal-crear-dependencia .modal-crear-dependencia-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 18px;
+        margin-bottom: 0px;
+    }
+    .modal-crear-dependencia .ant-btn-primary {
+        background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
+        border: none !important;
+        color: #fff !important;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
+        margin-top:  0;
+        margin-bottom: 0;
+        padding: 0 20px !important;
+    }
+    .modal-crear-dependencia .ant-btn-primary:hover {
+        background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
+        color: #fff !important;
+    }
 </style>
 
 
@@ -327,44 +424,86 @@
     </div>
 </div>
 
-@*Modal para Añadir Dependencias*@
-<Modal @bind-Visible="_modalAñadirVisible" Title="Añadir Dependencia" OkText="@("Guardar")" CancelText="@("Cancelar")" OnOk="@AddDependencia">
-    <Form Model="newDependencia">
-        <FormItem Label="Nombre">
-            <Input @bind-Value="newDependencia.Nombre" />
-        </FormItem>
-        <FormItem Label="Encargado">
-            <Select TItem="BomberoViweModel"
-                    TItemValue="BomberoViweModel"
-                    DataSource="@bomberosTodosViewModel"
-                    @bind-Value="newDependencia.Encargado"
-                    LabelName="@nameof(BomberoViweModel.ApellidoYNombre)"
-                    Placeholder="Seleccione un bombero"
-                    DefaultActiveFirstOption="false"
-                    AllowClear="true" EnableSearch>
-            </Select>
-        </FormItem>
-    </Form>
+@*Modal para Añadir Dependencias con diseño de Dependencias*@
+<Modal @bind-Visible="_modalAñadirVisible"
+       Title="Añadir Dependencia"
+       Width="@("100%")"
+       Style="max-width: 800px;"
+       OkText="@("Guardar")"
+       CancelText="@("Cancelar")"
+       OnOk="@AddDependencia"
+       DestroyOnClose
+       WrapClassName="modal-crear-dependencia">
+    <div class="modal-crear-dependencia-content">
+        <Form Model="newDependencia" Layout="FormLayout.Vertical" Class="modal-crear-dependencia-form">
+            <Row Class="modal-crear-dependencia-row" Gutter="16">
+                <AntDesign.Col Span="16">
+                    <FormItem Label="Nombre" Required Class="modal-crear-dependencia-form-item">
+                        <Input @bind-Value="newDependencia.Nombre" Size="InputSize.Large" />
+                    </FormItem>
+                </AntDesign.Col>
+                <AntDesign.Col Span="8">
+                    <FormItem Label="Encargado" Required Class="modal-crear-dependencia-form-item">
+                        <Select TItem="BomberoViweModel"
+                                TItemValue="BomberoViweModel"
+                                DataSource="@bomberosTodosViewModel"
+                                @bind-Value="newDependencia.Encargado"
+                                LabelName="@nameof(BomberoViweModel.ApellidoYNombre)"
+                                Placeholder="Seleccione un bombero"
+                                DefaultActiveFirstOption="false"
+                                AllowClear="true"
+                                EnableSearch
+                                Size="InputSize.Large" />
+                    </FormItem>
+                </AntDesign.Col>
+            </Row>
+        </Form>
+    </div>
 </Modal>
 
-@*Modal para Editar Dependencias*@
-<Modal @bind-Visible="_modalEditarVisible" Title="Editar Dependencia" OkText="@("Editar")" CancelText="@("Cancelar")" OnOk="@EditDependencia">
-    <Form Model="selDependencia">
-        <FormItem Label="Nombre">
-            <Input @bind-Value="selDependencia.Nombre" />
-        </FormItem>
-        <FormItem Label="Encargado">
-            <Select TItem="BomberoViweModel"
-                    TItemValue="BomberoViweModel"
-                    DataSource="@bomberosTodosViewModel"
-                    @bind-Value="selDependencia.Encargado"
-                    LabelName="@nameof(BomberoViweModel.ApellidoYNombre)"
-                    Placeholder="Seleccione un bombero"
-                    DefaultActiveFirstOption="false"
-                    AllowClear="true" EnableSearch>
-            </Select>
-        </FormItem>
-    </Form>
+@*Modal para Editar Dependencias con diseño de Dependencias*@
+<Modal @bind-Visible="_modalEditarVisible"
+       Title="Editar Dependencia"
+       Width="@("100%")"
+       Style="max-width: 800px;"
+       OkText="@("Editar")"
+       CancelText="@("Cancelar")"
+       OnOk="@EditDependencia"
+       DestroyOnClose
+       WrapClassName="modal-crear-dependencia">
+    <div class="modal-crear-dependencia-content">
+        <Form Model="selDependencia" Layout="FormLayout.Vertical" Class="modal-crear-dependencia-form">
+            <Row Class="modal-crear-dependencia-row" Gutter="16">
+                <AntDesign.Col Span="16">
+                    <FormItem Label="Nombre" Required Class="modal-crear-dependencia-form-item">
+                        <Input @bind-Value="selDependencia.Nombre" Size="InputSize.Large" />
+                    </FormItem>
+                </AntDesign.Col>
+                <AntDesign.Col Span="8">
+                    <FormItem Label="Encargado" Required Class="modal-crear-dependencia-form-item">
+                        <Select TItem="BomberoViweModel"
+                                TItemValue="BomberoViweModel"
+                                DataSource="@bomberosTodosViewModel"
+                                @bind-Value="selDependencia.Encargado"
+                                LabelName="@nameof(BomberoViweModel.ApellidoYNombre)"
+                                Placeholder="Seleccione un bombero"
+                                DefaultActiveFirstOption="false"
+                                AllowClear="true"
+                                EnableSearch
+                                Size="InputSize.Large" />
+                    </FormItem>
+                </AntDesign.Col>
+            </Row>
+        </Form>
+        <div class="modal-crear-dependencia-footer">
+            <Button Type="ButtonType.Primary" HtmlType="ButtonHtmlType.Submit" OnClick="@EditDependencia">
+                Editar
+            </Button>
+            <Button OnClick="@(() => _modalEditarVisible = false)">
+                Cancelar
+            </Button>
+        </div>
+    </div>
 </Modal>
 
 <Modal @bind-Visible="_modalDetallesVisible" Title="@TitleDependenciaSel" Maximizable="@true" Centered="@true">
