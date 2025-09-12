@@ -32,58 +32,163 @@
 		border-radius: 2px 2px 0 0;
 	}
 
+    /* MODAL CREAR SANCION - DISEÑO LICENCIAS */
+    .modal-crear-sancion-form {
+        width: 100%;
+    }
+    .modal-crear-sancion-form-item {
+        margin-bottom: 20px;
+        position: relative;
+        padding-left: 10px;
+    }
+    .modal-crear-sancion-form-item::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 3px;
+        border-radius: 5px;
+    }
+    .modal-crear-sancion-form-item .ant-form-item-label > label {
+        font-weight: 600;
+        color: #434343;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        transition: color 0.3s ease;
+    }
+    .modal-crear-sancion-form-item .ant-form-item-label > label:hover {
+        color: #FFD700;
+    }
+    .modal-crear-sancion .ant-input:focus,
+    .modal-crear-sancion .ant-input:hover,
+    .modal-crear-sancion .ant-select-selector:focus,
+    .modal-crear-sancion .ant-select-selector:hover,
+    .modal-crear-sancion .ant-picker:focus,
+    .modal-crear-sancion .ant-picker:hover,
+    .modal-crear-sancion .ant-picker-input > input:focus,
+    .modal-crear-sancion .ant-picker-input > input:hover,
+    .modal-crear-sancion .ant-input-number-input:focus,
+    .modal-crear-sancion .ant-input-number-input:hover,
+    .modal-crear-sancion .ant-textarea:focus,
+    .modal-crear-sancion .ant-textarea:hover {
+        border-color: #FFD700 !important;
+        box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
+    }
+    .modal-crear-sancion .ant-picker,
+    .modal-crear-sancion .ant-input,
+    .modal-crear-sancion .ant-select-selector,
+    .modal-crear-sancion .ant-input-number,
+    .modal-crear-sancion .ant-textarea {
+        border-radius: 8px !important;
+        border: 1px solid #d9d9d9 !important;
+        background: #fff !important;
+        color: #434343 !important;
+        transition: all 0.3s ease !important;
+    }
+    .modal-crear-sancion-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 18px;
+        margin-bottom: 0px;
+    }
+    .modal-crear-sancion .ant-btn-primary {
+        background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
+        border: none !important;
+        color: #fff !important;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
+        margin-top:  0;
+        margin-bottom: 0;
+        padding: 0 20px !important;
+    }
+    .modal-crear-sancion .ant-btn-primary:hover {
+        background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
+        color: #fff !important;
+    }
 </style>
 
 <Form Model="@SancionVM"
-	  LabelColSpan="8"
-	  WrapperColSpan="16"
-	  OnFinish="OnFinish"
-	  OnFinishFailed="OnFinishFailed"
-	  Style="widthwidth: 100%;height: 100%;">
+      WrapperColSpan="16"
+      OnFinish="OnFinish"
+      OnFinishFailed="OnFinishFailed"
+      Class="modal-crear-sancion-form"
+      Style="width: 100%; height: 100%;">
 
-	<FormItem Label="Fecha Desde">
-		<DatePicker AllowClear="false" @bind-Value="SancionVM.FechaDesde" />
-	</FormItem>
-	@if (SancionVM.TipoSancion == TipoSancion.Sancion)
-	{
-		<FormItem Label="Fecha Hasta">
-			<DatePicker AllowClear="false" @bind-Value="SancionVM.FechaHasta" />
-		</FormItem>
-	}
-	<FormItem Label="Personal Sancionado">
-		<Select TItem="BomberoViweModel"
-				TItemValue="int"
-				DataSource="@ListabomberosVM"
-				@bind-Value="@SancionVM.NumeroLegajoSancionado"
-				LabelName="@nameof(BomberoViweModel.NombreYApellido)"
-				ValueName="@nameof(BomberoViweModel.NumeroLegajo)"
-				Placeholder="Selecione el bombero"
-				DefaultActiveFirstOption="false"
-				AllowClear="true"
-				EnableSearch>
-		</Select>
-	</FormItem>
-	<FormItem Label="Numero Legajo">
-		<AntDesign.InputNumber @bind-Value="SancionVM.NumeroLegajoSancionado" Disabled />
-	</FormItem>
-	<FormItem Label="Tipo Sancion">
-		<EnumSelect TEnum="TipoSancion" @bind-Value="@SancionVM.TipoSancion" />
-	</FormItem>
-	<FormItem Label="Area Sancion">
-		<EnumSelect TEnum="AreaSancion" @bind-Value="@SancionVM.SancionArea" />
-	</FormItem>
-	<FormItem Label="Observacion">
-		<TextArea @bind-Value="SancionVM.observaciones" />
-	</FormItem>
-	<FormItem Style="width: 100% !important;
-            display: flex !important;
-            justify-content: flex-end !important;
-            align-items: flex-end !important; height:100% !important; margin-bottom: -32px;" WrapperColOffset="8" WrapperColSpan="16">
-		<Button Style="background-color: #1890ff !important; border-color:currentColor !important; margin-right: 60px; margin-bottom: 17px !important; color: white;" HtmlType="submit">
-			Cargar Sancion
-		</Button>
-	</FormItem>
+    <!-- Fecha Desde / Fecha Hasta -->
+    <Row Class="modal-crear-sancion-row" Gutter="24">
+        <AntDesign.Col Span="12">
+            <FormItem Label="Fecha Desde" Required Class="modal-crear-sancion-form-item">
+                <DatePicker AllowClear="false" @bind-Value="SancionVM.FechaDesde" Size="InputSize.Large" />
+            </FormItem>
+        </AntDesign.Col>
+        <AntDesign.Col Span="12">
+            @if (SancionVM.TipoSancion == TipoSancion.Sancion)
+            {
+                <FormItem Label="Fecha Hasta" Required Class="modal-crear-sancion-form-item">
+                    <DatePicker AllowClear="false" @bind-Value="SancionVM.FechaHasta" Size="InputSize.Large" />
+                </FormItem>
+            }
+        </AntDesign.Col>
+    </Row>
 
+
+    <Row Class="modal-crear-sancion-row" Gutter="24">
+        <AntDesign.Col Span="12">
+            <FormItem Label="Personal Sancionado" Required Class="modal-crear-sancion-form-item">
+                <Select TItem="BomberoViweModel"
+                        TItemValue="int"
+                        DataSource="@ListabomberosVM"
+                        @bind-Value="@SancionVM.NumeroLegajoSancionado"
+                        LabelName="@nameof(BomberoViweModel.NombreYApellido)"
+                        ValueName="@nameof(BomberoViweModel.NumeroLegajo)"
+                        Placeholder="Selecione el bombero"
+                        DefaultActiveFirstOption="false"
+                        AllowClear="true"
+                        EnableSearch
+                        Size="InputSize.Large">
+                </Select>
+            </FormItem>
+        </AntDesign.Col>
+        <AntDesign.Col Span="12">
+            <FormItem Label="Numero Legajo" Class="modal-crear-sancion-form-item">
+                <AntDesign.InputNumber @bind-Value="SancionVM.NumeroLegajoSancionado" Disabled Size="InputSize.Large" />
+            </FormItem>
+        </AntDesign.Col>
+    </Row>
+
+
+    <Row Class="modal-crear-sancion-row" Gutter="24">
+        <AntDesign.Col Span="12">
+            <FormItem Label="Tipo Sancion" Required Class="modal-crear-sancion-form-item">
+                <EnumSelect TEnum="TipoSancion" @bind-Value="@SancionVM.TipoSancion" Size="InputSize.Large" />
+            </FormItem>
+        </AntDesign.Col>
+        <AntDesign.Col Span="12">
+            <FormItem Label="Area Sancion" Required Class="modal-crear-sancion-form-item">
+                <EnumSelect TEnum="AreaSancion" @bind-Value="@SancionVM.SancionArea" Size="InputSize.Large" />
+            </FormItem>
+        </AntDesign.Col>
+    </Row>
+
+    <Row Class="modal-crear-sancion-row" Gutter="24">
+        <AntDesign.Col Span="24">
+            <FormItem Label="Observacion" Class="modal-crear-sancion-form-item">
+                <TextArea @bind-Value="SancionVM.observaciones" Size="InputSize.Large" />
+            </FormItem>
+        </AntDesign.Col>
+    </Row>
+    <div class="modal-crear-sancion-footer">
+        <Button Type="ButtonType.Primary" HtmlType="submit">
+            Cargar Sancion
+        </Button>
+        <Button OnClick="@(() => OnClose.InvokeAsync())">
+            Cancelar
+        </Button>
+    </div>
 </Form>
 
 @code {
