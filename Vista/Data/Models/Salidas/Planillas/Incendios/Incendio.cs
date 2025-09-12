@@ -10,7 +10,6 @@ namespace Vista.Data.Models.Salidas.Planillas.Incendios
         public bool DeteccionAutomaticaId { get; set; }
         public bool Extintor { get; set; }
         public bool Hidrante { get; set; }
-        public List<VehiculoAfectadoIncendio> VehiculoAfectados { get; set; }
         public TipoEvacuacion TipoEvacuacion { get; set; }
         [Required]
         public TipoSuperficie TipoSuperficieAfectada { get; set; }

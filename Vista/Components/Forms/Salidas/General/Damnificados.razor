@@ -8,17 +8,17 @@
 
 <style>
 
-      .damnificados {
-    border: 2px solid #ffb366 !important;
-    background: linear-gradient(180deg, #fffdf9 0%, #fff7f0 100%);
-    box-shadow: 0 4px 12px rgba(255, 163, 77, 0.15);
-    border-radius: 16px;
-    margin-bottom: 2rem;
-    padding: 2.5rem 2rem 2rem 2rem;
-    transition: box-shadow 0.25s ease, transform 0.2s ease;
+    .damnificados {
+        border: 2px solid #ffb366 !important;
+        background: linear-gradient(180deg, #fffdf9 0%, #fff7f0 100%);
+        box-shadow: 0 4px 12px rgba(255, 163, 77, 0.15);
+        border-radius: 16px;
+        margin-bottom: 2rem;
+        padding: 2.5rem 2rem 2rem 2rem;
+        transition: box-shadow 0.25s ease, transform 0.2s ease;
     }
-    
-    
+
+
 
     .damnificados-componente .ant-table {
         background: #fff8f0;
@@ -31,16 +31,18 @@
         border-top-right-radius: 12px;
         border-bottom: 1px solid #ffd6b3;
     }
+
     .damnificados-componente .ant-table-thead .ant-table-cell {
-        background: linear-gradient(135deg, #ff944d, #ff7a45) !important; 
+        background: linear-gradient(135deg, #ff944d, #ff7a45) !important;
         color: #fff !important;
         font-weight: 600;
         text-align: center;
-        border-bottom: 2px solid #ffe0cc; 
+        border-bottom: 2px solid #ffe0cc;
         letter-spacing: 0.3px;
     }
+
     .damnificados-componente .ant-table-title {
-    background: #fff8f0;
+        background: #fff8f0;
         color: #ff6a33;
         font-weight: 700;
         font-size: 1.05rem;
@@ -48,8 +50,9 @@
         padding: 0.75rem 1rem;
         border-top-left-radius: 12px;
         border-top-right-radius: 12px;
-        border-bottom: 1px solid #ffd6b3; 
+        border-bottom: 1px solid #ffd6b3;
     }
+
     .damnificados-componente .ant-table-cell {
         background: #fff !important;
         color: #333 !important;
@@ -59,35 +62,73 @@
 
 <div class="damnificados damnificados-componente">
 
-    <Table Context="Damnificados" DataSource="Model.Damnificados" Bordered>
-        <TitleTemplate>
-            <GridRow>
-                <GridCol Span="24" Style="text-align: right;">
-                    <Button Type="ButtonType.Primary" OnClick="@(() => visibleDamnificados = true)">
-                        <Icon Type="plus" /> Nueva
-                    </Button>
-                </GridCol>
-            </GridRow>
-        </TitleTemplate>
-        <ColumnDefinitions>
-            <PropertyColumn Property="d => d.Nombre"></PropertyColumn>
-            <PropertyColumn Property="d => d.Apellido"></PropertyColumn>
-            <PropertyColumn Property="d => d.Edad"></PropertyColumn>
-            <PropertyColumn Property="d => d.Estado"></PropertyColumn>
-            <ActionColumn Title="Acciones">
-                <Popconfirm Title="¿Quieres borrar este damnificado?"
-                            OnConfirm="@(() => deleteRowDamnificados(Damnificados.Documento))"
-                            OkText="Si"
-                            CancelText="No">
-                    <Button Danger>
-                        <Icon Type="delete" />
-                    </Button>
-                </Popconfirm>
-            </ActionColumn>
-        </ColumnDefinitions>
-    </Table>
+    <Switch @bind-Value="@visiblePersonaAfectada" /> <span>Personas Afectada</span>
 
-    <Modal @bind-Visible="visibleDamnificados" Title="@("Datos del damnificado")" OkText="@("Agregar")" CancelText="@("Cancelar")" OnOk="@AgregarDamnificado">
+    @if (visiblePersonaAfectada)
+    {
+        <Table Context="Damnificados" DataSource="Model.Damnificados" Bordered>
+            <TitleTemplate>
+                <GridRow>
+                    <GridCol Span="24" Style="text-align: right;">
+                        <Button Type="ButtonType.Primary" OnClick="@(() => visibleAgregarDamnificados = true)">
+                            <Icon Type="plus" /> Nueva
+                        </Button>
+                    </GridCol>
+                </GridRow>
+            </TitleTemplate>
+            <ColumnDefinitions>
+                <PropertyColumn Property="d => d.Nombre"></PropertyColumn>
+                <PropertyColumn Property="d => d.Apellido"></PropertyColumn>
+                <PropertyColumn Property="d => d.Edad"></PropertyColumn>
+                <PropertyColumn Property="d => d.Estado"></PropertyColumn>
+                <ActionColumn Title="Acciones">
+                    <Popconfirm Title="¿Quieres borrar este damnificado?"
+                                OnConfirm="@(() => deleteRowDamnificados(Damnificados.Documento))"
+                                OkText="Si"
+                                CancelText="No">
+                        <Button Danger>
+                            <Icon Type="delete" />
+                        </Button>
+                    </Popconfirm>
+                </ActionColumn>
+            </ColumnDefinitions>
+        </Table>
+    }
+
+    <Switch @bind-Value="@visibleVehiculoAfectado" /> <span>Vehiculos Afectados</span>
+
+    @if (visibleVehiculoAfectado)
+    {
+        <Table TItem="VehiculoAfectadoViewModel" DataSource="@VehiculoAfectado" Bordered>
+            <TitleTemplate>
+                <GridRow>
+                    <GridCol Span="24" Style="text-align: right;">
+                        <Button Type="ButtonType.Primary">
+                            <Icon Type="plus" /> Nueva
+                        </Button>
+                    </GridCol>
+                </GridRow>
+            </TitleTemplate>
+            <ColumnDefinitions>
+                <PropertyColumn Property="v => v.TipoVehiculo"></PropertyColumn>
+                <PropertyColumn Property="v => v.Marca"></PropertyColumn>
+                <PropertyColumn Property="v => v.Modelo"></PropertyColumn>
+                <PropertyColumn Property="v => v.Patente"></PropertyColumn>
+                <PropertyColumn Property="v => v.Conductor"></PropertyColumn>
+                <ActionColumn Title="Acciones">
+                    <Popconfirm Title="¿Quieres borrar este damnificado?"
+                                OkText="Si"
+                                CancelText="No">
+                        <Button Danger>
+                            <Icon Type="delete" />
+                        </Button>
+                    </Popconfirm>
+                </ActionColumn>
+            </ColumnDefinitions>
+        </Table>
+    }
+
+    <Modal @bind-Visible="visibleAgregarDamnificados" Title="@("Datos del damnificado")" OkText="@("Agregar")" CancelText="@("Cancelar")" OnOk="@AgregarDamnificado">
         <Form Model="Damnificado">
             <FormItem Label="Nombre" Required="true">
                 <Input @bind-Value="@Damnificado.Nombre" />
@@ -128,7 +169,26 @@
     [Parameter, EditorRequired] public SalidasViewModels Model { get; set; } = null!;
 
     private DamnificadoViewModels Damnificado = new DamnificadoViewModels();
-    private bool visibleDamnificados = false;
+
+    private List<VehiculoAfectadoViewModel> VehiculoAfectado = new();
+
+    public class VehiculoAfectadoViewModel
+    {
+        public string? TipoVehiculo;
+
+        public string? Marca;
+
+        public string? Modelo;
+
+        public string? Patente;
+
+        public string? Conductor;
+    }
+
+    private bool visibleAgregarDamnificados = false;
+
+    private bool visiblePersonaAfectada = false;
+    private bool visibleVehiculoAfectado = false;
 
     private async Task deleteRowDamnificados(int DNI)
     {
@@ -178,7 +238,7 @@
 
             Damnificado = new DamnificadoViewModels();
 
-            visibleDamnificados = false;
+            visibleAgregarDamnificados = false;
             await MessageService.SuccessAsync("Damnificado agregado correctamente");
             StateHasChanged();
         }

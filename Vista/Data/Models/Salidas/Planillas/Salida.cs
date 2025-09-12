@@ -126,7 +126,7 @@ namespace Vista.Data.Models.Salidas.Planillas
         public List<Damnificado_Salida> Damnificados { get; set; } = new();
 
         public int? SeguroId { get; set; }
-        public SeguroSalida? Seguro { get; set; }
+        public SeguroVivienda? Seguro { get; set; }
 
 
         // Moviles que asistieron al Servicio

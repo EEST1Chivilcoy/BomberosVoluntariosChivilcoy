@@ -20,15 +20,5 @@ namespace Vista.Data.Models.Salidas.Componentes
         /// Nombre de la compañía aseguradora.
         /// </summary>
         public string? CompañiaAseguradora { get; set; }
-
-        /// <summary>
-        /// Número de la póliza del seguro.
-        /// </summary>
-        public string? NumeroDePoliza { get; set; }
-
-        /// <summary>
-        /// Fecha de vencimiento de la póliza del seguro.
-        /// </summary
-        public DateTime? FechaDeVencimineto { get; set; }
     }
 }
