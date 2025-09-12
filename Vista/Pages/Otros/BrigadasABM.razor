@@ -204,6 +204,94 @@
             transform: translateY(0);
         }
     }
+
+    .modal-crear-brigada .ant-modal-content {
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        border: 4px solid #A63333;
+        margin-top: -50px;
+        margin-bottom: 0px;
+    }
+    .modal-crear-brigada .ant-modal-header {
+        background-color: #f0f2f5;
+        border-bottom: 1px solid #d9d9d9;
+        padding: 16px 24px;
+        border-radius: 9px 9px 0 0;
+    }
+    .modal-crear-brigada .ant-modal-title {
+        color: #434343;
+        font-weight: 600;
+        font-size: 1.25rem;
+        letter-spacing: 1px;
+    }
+    .modal-crear-brigada-content {
+        padding: 24px;
+    }
+    .modal-crear-brigada-form-item {
+        margin-bottom: 20px;
+        position: relative;
+        padding-left: 10px;
+    }
+    .modal-crear-brigada-form-item::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 3px;
+        border-radius: 5px;
+    }
+    .modal-crear-brigada-form-item .ant-form-item-label > label {
+        font-weight: 600;
+        color: #434343;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        transition: color 0.3s ease;
+    }
+    .modal-crear-brigada-form-item .ant-form-item-label > label:hover {
+        color: #FFD700;
+    }
+    .modal-crear-brigada .ant-input:focus,
+    .modal-crear-brigada .ant-input:hover,
+    .modal-crear-brigada .ant-select-selector:focus,
+    .modal-crear-brigada .ant-select-selector:hover {
+        border-color: #FFD700 !important;
+        box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
+    }
+    .modal-crear-brigada .ant-picker,
+    .modal-crear-brigada .ant-input,
+    .modal-crear-brigada .ant-select-selector,
+    .modal-crear-brigada .ant-input-number,
+    .modal-crear-brigada .ant-textarea {
+        border-radius: 8px !important;
+        border: 1px solid #d9d9d9 !important;
+        background: #fff !important;
+        color: #434343 !important;
+        transition: all 0.3s ease !important;
+    }
+    .modal-crear-brigada .modal-crear-brigada-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 18px;
+        margin-bottom: 0px;
+    }
+    .modal-crear-brigada .ant-btn-primary {
+        background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
+        border: none !important;
+        color: #fff !important;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
+        margin-top:  0;
+        margin-bottom: 0;
+        padding: 0 20px !important;
+    }
+    .modal-crear-brigada .ant-btn-primary:hover {
+        background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
+        color: #fff !important;
+    }
 </style>
 
 <div class="brigadas-abm">
@@ -281,44 +369,86 @@
     </div>
 </div>
 
-@*Modal para Añadir Brigada*@
-<Modal @bind-Visible="_modalAñadirVisible" Title="Añadir Brigada" OkText="@("Guardar")" CancelText="@("Cancelar")" OnOk="@AddBrigade">
-    <Form Model="newBrigada">
-        <FormItem Label="Nombre">
-            <Input @bind-Value="newBrigada.Nombre" />
-        </FormItem>
-        <FormItem Label="Encargado">
-            <Select TItem="BomberoViweModel"
-                    TItemValue="BomberoViweModel"
-                    DataSource="@bomberosTodosViewModel"
-                    @bind-Value="newBrigada.Encargado"
-                    LabelName="@nameof(BomberoViweModel.ApellidoYNombre)"
-                    Placeholder="Seleccione un bombero"
-                    DefaultActiveFirstOption="false"
-                    AllowClear="true" EnableSearch>
-            </Select>
-        </FormItem>
-    </Form>
+@*Modal para Añadir Brigada con diseño de Licencias*@
+<Modal @bind-Visible="_modalAñadirVisible"
+       Title="Añadir Brigada"
+       Width="@("100%")"
+       Style="max-width: 800px;"
+       OkText="@("Guardar")"
+       CancelText="@("Cancelar")"
+       OnOk="@AddBrigade"
+       DestroyOnClose
+       WrapClassName="modal-crear-brigada">
+    <div class="modal-crear-brigada-content">
+        <Form Model="newBrigada" Layout="FormLayout.Vertical" Class="modal-crear-brigada-form">
+            <Row Class="modal-crear-brigada-row" Gutter="16">
+                <AntDesign.Col Span="16">
+                    <FormItem Label="Nombre" Required Class="modal-crear-brigada-form-item">
+                        <Input @bind-Value="newBrigada.Nombre" Size="InputSize.Large" />
+                    </FormItem>
+                </AntDesign.Col>
+                <AntDesign.Col Span="8">
+                    <FormItem Label="Encargado" Required Class="modal-crear-brigada-form-item">
+                        <Select TItem="BomberoViweModel"
+                                TItemValue="BomberoViweModel"
+                                DataSource="@bomberosTodosViewModel"
+                                @bind-Value="newBrigada.Encargado"
+                                LabelName="@nameof(BomberoViweModel.ApellidoYNombre)"
+                                Placeholder="Seleccione un bombero"
+                                DefaultActiveFirstOption="false"
+                                AllowClear="true"
+                                EnableSearch
+                                Size="InputSize.Large" />
+                    </FormItem>
+                </AntDesign.Col>
+            </Row>
+        </Form>
+    </div>
 </Modal>
 
-@*Modal para Editar Brigada*@
-<Modal @bind-Visible="_modalEditarVisible" Title="Editar Brigada" OkText="@("Editar")" CancelText="@("Cancelar")" OnOk="@EditBrigade">
-    <Form Model="selBrigada">
-        <FormItem Label="Nombre">
-            <Input @bind-Value="selBrigada.Nombre" />
-        </FormItem>
-        <FormItem Label="Encargado">
-            <Select TItem="BomberoViweModel"
-                    TItemValue="BomberoViweModel"
-                    DataSource="@bomberosTodosViewModel"
-                    @bind-Value="selBrigada.Encargado"
-                    LabelName="@nameof(BomberoViweModel.ApellidoYNombre)"
-                    Placeholder="Seleccione un bombero"
-                    DefaultActiveFirstOption="false"
-                    AllowClear="true" EnableSearch>
-            </Select>
-        </FormItem>
-    </Form>
+@*Modal para Editar Brigada con diseño de Licencias*@
+<Modal @bind-Visible="_modalEditarVisible"
+       Title="Editar Brigada"
+       Width="@("100%")"
+       Style="max-width: 800px;"
+       OkText="@("Editar")"
+       CancelText="@("Cancelar")"
+       OnOk="@EditBrigade"
+       DestroyOnClose
+       WrapClassName="modal-crear-brigada">
+    <div class="modal-crear-brigada-content">
+        <Form Model="selBrigada" Layout="FormLayout.Vertical" Class="modal-crear-brigada-form">
+            <Row Class="modal-crear-brigada-row" Gutter="16">
+                <AntDesign.Col Span="16">
+                    <FormItem Label="Nombre" Required Class="modal-crear-brigada-form-item">
+                        <Input @bind-Value="selBrigada.Nombre" Size="InputSize.Large" />
+                    </FormItem>
+                </AntDesign.Col>
+                <AntDesign.Col Span="8">
+                    <FormItem Label="Encargado" Required Class="modal-crear-brigada-form-item">
+                        <Select TItem="BomberoViweModel"
+                                TItemValue="BomberoViweModel"
+                                DataSource="@bomberosTodosViewModel"
+                                @bind-Value="selBrigada.Encargado"
+                                LabelName="@nameof(BomberoViweModel.ApellidoYNombre)"
+                                Placeholder="Seleccione un bombero"
+                                DefaultActiveFirstOption="false"
+                                AllowClear="true"
+                                EnableSearch
+                                Size="InputSize.Large" />
+                    </FormItem>
+                </AntDesign.Col>
+            </Row>
+        </Form>
+        <div class="modal-crear-brigada-footer">
+            <Button Type="ButtonType.Primary" HtmlType="ButtonHtmlType.Submit" OnClick="@EditBrigade">
+                Editar
+            </Button>
+            <Button OnClick="@(() => _modalEditarVisible = false)">
+                Cancelar
+            </Button>
+        </div>
+    </div>
 </Modal>
 
 <Modal @bind-Visible="_modalDetallesVisible" Title="@TitleBrigadaSel" Maximizable="@true" Centered="@true">
