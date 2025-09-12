@@ -188,6 +188,22 @@
     .brigadas-abm .ant-table-cell {
         padding: 16px !important;
     }
+
+        .brigadas-abm .fade-in {
+        animation: abm-fadeIn 0.5s ease-in-out !important;
+    }
+
+@@keyframes abm-fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
 </style>
 
 <div class="brigadas-abm">
