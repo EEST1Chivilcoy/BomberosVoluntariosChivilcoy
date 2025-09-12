@@ -294,6 +294,22 @@
         background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
         color: #fff !important;
     }
+    .salidas-abm .fade-in {
+        animation: abm-fadeIn 0.5s ease-in-out !important;
+    }
+
+    @@keyframes abm-fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
 </style>
 
 @*Servicios Utilizados*@
@@ -303,7 +319,7 @@
 @inject NavigationManager NavigationManager
 
 <div class="salidas-abm">
-    <div style="padding:16px; min-height:100vh; background:linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%)">
+    <div class="salidas-container fade-in" style="padding:16px; min-height:100vh; background:linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%)">
         <Card Class="main-card">
             <div class="header-section">
                 <div class="lava-bubbles">

@@ -12,216 +12,498 @@
 @inject IMessageService MessageService
 
 <style>
-    .template {
-        width: 100%;
-        height: 100%;
-        max-width: 97%;
-        min-width: 400px;
-        max-height: 100vh;
-        border-radius: 10px;
-        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-        background: #fff;
-        display: flex;
-        flex-direction: column;
-        margin: 1em;
-        padding: 10px;
-        overflow: auto;
+    /* ===========================
+       VARIABLES PRINCIPALES
+       =========================== */
+    .dependencias-abm {
+        --abm-primary-color: #A63333;
+        --abm-primary-dark: #732D2D;
+        --abm-success-color: #4CAF50;
+        --abm-success-dark: #438E46;
+        --abm-warning-color: #F57F17;
+        --abm-warning-light: #FFF8E1;
+        --abm-error-color: #C62828;
+        --abm-error-light: #FFEBEE;
+        --abm-approved-color: #2E7D32;
+        --abm-approved-light: #E6F7E9;
+        --abm-gold-color: #FFD700;
     }
 
-    .ant-table {
-        width: 100%;
-        background-color: white;
-        border-radius: 8px;
+
+    .dependencias-abm .container {
+        padding: 12px !important;
+        min-height: 100vh !important;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;
+    }
+    .dependencias-abm .main-card {
+        background: rgba(255, 255, 255, 0.95) !important;
+        backdrop-filter: blur(10px) !important;
+        border-radius: 16px !important;
+        box-shadow: 0 8px 32px rgba(166, 51, 51, 0.1), 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        overflow: hidden !important;
+    }
+
+    .dependencias-abm .header-section {
+        background: linear-gradient(135deg, #A63333 0%, #732D2D 100%) !important;
+        color: white !important;
+        padding: 28px !important;
+        position: relative !important;
+        overflow: hidden !important;
+    }
+
+    .dependencias-abm .header-section .lava-bubbles {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        pointer-events: none;
+        z-index: 1;
         overflow: hidden;
     }
-
-    .ant-table-title {
-        background-color: #A63333
+    .dependencias-abm .header-section .lava-bubble {
+        position: absolute;
+        border-radius: 50%;
+        opacity: 0.45;
+        background: radial-gradient(circle at 60% 40%, #FFD54F 0%, #F9A825 80%, transparent 100%);
+        animation: lava-bubble-move 8s linear infinite;
+        filter: blur(1.5px);
+        mix-blend-mode: lighten;
+    }
+    .dependencias-abm .header-section .lava-bubble.b1 {
+        left: 10%; width: 60px; height: 60px; bottom: -70px;
+        animation-delay: 0s;
+        animation-duration: 7.5s;
+    }
+    .dependencias-abm .header-section .lava-bubble.b2 {
+        left: 35%; width: 90px; height: 90px; bottom: -100px;
+        animation-delay: 2s;
+        animation-duration: 9s;
+        background: radial-gradient(circle at 60% 40%, #FFEB3B 0%, #FFD54F 80%, transparent 100%);
+    }
+    .dependencias-abm .header-section .lava-bubble.b3 {
+        left: 65%; width: 50px; height: 50px; bottom: -60px;
+        animation-delay: 1.5s;
+        animation-duration: 6.5s;
+        background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #FFD54F 80%, transparent 100%);
+    }
+    .dependencias-abm .header-section .lava-bubble.b4 {
+        left: 80%; width: 70px; height: 70px; bottom: -80px;
+        animation-delay: 3.2s;
+        animation-duration: 8.5s;
+        background: radial-gradient(circle at 60% 40%, #F9A825 0%, #FFD54F 80%, transparent 100%);
+    }
+    .dependencias-abm .header-section .lava-bubble.b5 {
+        left: 55%; width: 40px; height: 40px; bottom: -50px;
+        animation-delay: 5s;
+        animation-duration: 7.2s;
+        background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #F9A825 80%, transparent 100%);
     }
 
-    .ant-table-thead .ant-table-cell {
-        background-color: #A63333 !important;
+    @@keyframes lava-bubble-move {
+        0% {
+            transform: translateY(0) scale(1) rotate(0deg);
+            opacity: 0.45;
+        }
+        60% {
+            opacity: 0.7;
+            filter: blur(2.5px);
+        }
+        80% {
+            transform: translateY(-220px) scale(1.15) rotate(10deg);
+            opacity: 0.6;
+        }
+        100% {
+            transform: translateY(-320px) scale(0.95) rotate(-8deg);
+            opacity: 0;
+        }
+    }
+
+
+    .dependencias-abm .main-title {
+        font-family: 'Poppins', 'Fjalla One', sans-serif !important;
+        font-size: 2.2rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 1px !important;
+        margin: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 12px !important;
+        animation: text-glow 2.5s ease-in-out infinite alternate !important;
+        position: relative !important;
+        z-index: 2 !important;
+    }
+
+    .dependencias-abm .title-icon {
+        color: #FFD54F !important;
+        font-size: 2rem !important;
+        filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25)) !important;
+    }
+
+    @@keyframes text-glow {
+        0%, 100% { text-shadow: 0 0 5px #F9A825, 0 0 10px #FFD54F; }
+        50% { text-shadow: 0 0 12px #F9A825, 0 0 22px #FFD54F; }
+    }
+
+    .dependencias-abm .title-container {
+        position: relative !important;
+        z-index: 2 !important;
+        margin-bottom: 20px !important;
+    }
+
+
+    .dependencias-abm .actions-row {
+        display: flex !important;
+        justify-content: flex-end !important;
+        gap: 16px !important;
+        align-items: center !important;
+        margin-top: 16px !important;
+    }
+
+    .dependencias-abm .modern-button {
+        height: 40px !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        position: relative !important;
+        overflow: hidden !important;
+    }
+
+    .dependencias-abm .add-button {
+        background: linear-gradient(135deg, var(--abm-success-color) 0%, var(--abm-success-dark) 100%) !important;
+        border: none !important;
         color: white !important;
-        font-weight: bold;
+        box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3) !important;
+        padding: 0 20px !important;
     }
 
-    .ant-table-cell {
+    .dependencias-abm .add-button:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4) !important;
+    }
+
+
+    .dependencias-abm .table-container {
+        padding: 0 !important;
+        overflow: hidden !important;
+    }
+
+    .dependencias-abm .ant-table-thead > tr > th {
+        background: #A63333 !important;
+        color: #fff !important;
+        font-weight: 600 !important;
+        border: none !important;
         padding: 16px !important;
     }
 
-    .title-template-container {
-        background-color: #A63333;
-        padding: 16px;
-        border-top-left-radius: 8px;
-        border-top-right-radius: 8px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+    .dependencias-abm .ant-table-thead > tr > th:hover {
+        background: #ececec9d !important;
+        color: #fff !important;
     }
 
-    .search-input {
-        width: 250px;
+    .dependencias-abm .ant-table-cell {
+        padding: 16px !important;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
     }
 
-        .search-input input {
-            background-color: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: none;
+    .dependencias-abm .ant-table {
+        border-radius: 0 !important;
+    }
+
+
+    @@media (max-width: 1199px) {
+        .dependencias-abm .table-container {
+            padding: 8px !important;
         }
-
-            .search-input input::placeholder {
-                color: rgba(255, 255, 255, 0.7);
-            }
-
-    .add-button {
-        background-color: #4CAF50 !important;
-        border-color: #438E46 !important;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .boton_p {
-        background-color: #732D2D !important;
-        color: white !important;
-        border: none;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    @@media (max-width: 960px) {
-        .title-template-container {
-            flex-direction: column;
-            align-items: stretch;
+        .dependencias-abm .ant-table-cell {
+            padding: 12px !important;
         }
     }
-
-    .ant-form-horizontal .ant-form-item-label {
-        flex-grow: 1;
-        background: #A63333;
+    @@media (max-width: 767px) {
+        .dependencias-abm .ant-table-cell {
+            font-size: 0.95rem !important;
+            padding: 10px !important;
+        }
+        .dependencias-abm .ant-table-cell:nth-child(3),
+        .dependencias-abm .ant-table-cell:nth-child(4) {
+            display: none !important;
+        }
+    }
+    @@media (max-width: 575px) {
+        .dependencias-abm .ant-table-cell {
+            font-size: 0.9rem !important;
+            padding: 8px !important;
+        }
+        .dependencias-abm .ant-table-cell:nth-child(n+4) {
+            display: none !important;
+        }
+        .dependencias-abm .ant-table-cell:nth-child(1),
+        .dependencias-abm .ant-table-cell:nth-child(2),
+        .dependencias-abm .ant-table-cell:nth-child(6) {
+            display: table-cell !important;
+        }
     }
 
-        .ant-form-horizontal .ant-form-item-label > label {
-            color: #FFFFFF;
-            padding: 2px 4px;
-        }
-
-    .ant-form-item {
-        box-sizing: border-box;
-        margin: 0;
+    /* ====== MODAL DISEÑO DEPENDENCIAS ====== */
+    .modal-crear-dependencia .ant-modal-content {
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        border: 4px solid #A63333;
+        margin-top: -50px;
         margin-bottom: 0px;
-        padding: 0;
-        color: rgba(0, 0, 0, 0.85);
-        font-size: 14px;
-        line-height: 1.5715;
-        list-style: none;
-        font-feature-settings: 'tnum';
-        margin-bottom: 8px !important;
-        vertical-align: top;
-        font-weight: bold;
     }
-
-    .ant-modal-content {
+    .modal-crear-dependencia .ant-modal-header {
+        background-color: #f0f2f5;
+        border-bottom: 1px solid #d9d9d9;
+        padding: 16px 24px;
+        border-radius: 9px 9px 0 0;
+    }
+    .modal-crear-dependencia .ant-modal-title {
+        color: #434343;
+        font-weight: 600;
+        font-size: 1.25rem;
+        letter-spacing: 1px;
+    }
+    .modal-crear-dependencia-content {
+        padding: 24px;
+    }
+    .modal-crear-dependencia-form-item {
+        margin-bottom: 20px;
         position: relative;
-        background-color: #fff;
-        background-clip: padding-box;
-        border: 0;
-        border-radius: 2px;
-        box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
-        pointer-events: auto;
-        border: 1px solid red !important;
+        padding-left: 10px;
+    }
+    .modal-crear-dependencia-form-item::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 3px;
+        border-radius: 5px;
+    }
+    .modal-crear-dependencia-form-item .ant-form-item-label > label {
+        font-weight: 600;
+        color: #434343;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        transition: color 0.3s ease;
+    }
+    .modal-crear-dependencia-form-item .ant-form-item-label > label:hover {
+        color: #FFD700;
+    }
+    .modal-crear-dependencia .ant-input:focus,
+    .modal-crear-dependencia .ant-input:hover,
+    .modal-crear-dependencia .ant-select-selector:focus,
+    .modal-crear-dependencia .ant-select-selector:hover,
+    .modal-crear-dependencia .ant-picker:focus,
+    .modal-crear-dependencia .ant-picker:hover,
+    .modal-crear-dependencia .ant-picker-input > input:focus,
+    .modal-crear-dependencia .ant-picker-input > input:hover,
+    .modal-crear-dependencia .ant-input-number-input:focus,
+    .modal-crear-dependencia .ant-input-number-input:hover,
+    .modal-crear-dependencia .ant-textarea:focus,
+    .modal-crear-dependencia .ant-textarea:hover {
+        border-color: #FFD700 !important;
+        box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
+    }
+    .modal-crear-dependencia .ant-picker,
+    .modal-crear-dependencia .ant-input,
+    .modal-crear-dependencia .ant-select-selector,
+    .modal-crear-dependencia .ant-input-number,
+    .modal-crear-dependencia .ant-textarea {
+        border-radius: 8px !important;
+        border: 1px solid #d9d9d9 !important;
+        background: #fff !important;
+        color: #434343 !important;
+        transition: all 0.3s ease !important;
+    }
+    .modal-crear-dependencia .modal-crear-dependencia-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 18px;
+        margin-bottom: 0px;
+    }
+    .modal-crear-dependencia .ant-btn-primary {
+        background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
+        border: none !important;
+        color: #fff !important;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
+        margin-top:  0;
+        margin-bottom: 0;
+        padding: 0 20px !important;
+    }
+    .modal-crear-dependencia .ant-btn-primary:hover {
+        background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
+        color: #fff !important;
     }
 </style>
 
-<div class="template">
-    <Table TItem="DependenciaViewModelTable"
-           DataSource="@DependenciaViewModels"
-           @bind-PageIndex="_pageIndex"
-           @bind-PageSize="_pageSize"
-           Title="Dependencias"
-           Responsive>
-        <TitleTemplate>
-            <GridRow>
-                <GridCol Span="12">
-                    <Title Level="3" Style="color: white;">Dependencias</Title>
-                </GridCol>
-                <GridCol Span="12" Style="text-align: right;">
-                    <Button Type="ButtonType.Primary" OnClick="() => VerAñadirDependencia()">
-                        <Icon Type="plus" /> Nueva
+
+<div class="dependencias-abm">
+    <div class="container fade-in">
+        <Card Class="main-card">
+            <div class="header-section">
+                <div class="lava-bubbles">
+                    <div class="lava-bubble b1"></div>
+                    <div class="lava-bubble b2"></div>
+                    <div class="lava-bubble b3"></div>
+                    <div class="lava-bubble b4"></div>
+                    <div class="lava-bubble b5"></div>
+                </div>
+                <div class="title-container">
+                    <h1 class="main-title">
+                        <Icon Type="team" Class="title-icon" />
+                        DEPENDENCIAS
+                    </h1>
+                </div>
+                <div class="actions-row">
+                    <Button Class="modern-button add-button"
+                            OnClick="() => VerAñadirDependencia()"
+                            Icon="plus"
+                            Size="ButtonSize.Large">
+                        Nueva Dependencia
                     </Button>
-                </GridCol>
-            </GridRow>
-        </TitleTemplate>
-        <ColumnDefinitions>
-            <PropertyColumn Title="Nombre" Property="d => d.Nombre" Sortable />
+                </div>
+            </div>
+            <div class="table-container">
+                <Table DataSource="@DependenciaViewModels"
+                       PageSize="@_pageSize"
+                       Responsive
+                       TItem="DependenciaViewModelTable"
+                       ScrollX="800px">
+                    <ColumnDefinitions Context="dependencia">
+                        <PropertyColumn Title="👤 Nombre"
+                                        Property="d => d.Nombre"
+                                        Sortable
+                                        Width="250px"
+                                        Fixed="ColumnFixPlacement.Left" />
 
-            <PropertyColumn Title="Encargado" Property="d => d.EncargadoApellidoYNombre" Sortable />
+                        <PropertyColumn Title="🧑‍💼 Encargado"
+                                        Property="d => d.EncargadoApellidoYNombre"
+                                        Sortable
+                                        Width="200px" />
 
-            <ActionColumn Title="Acciones" Align=ColumnAlign.Center>
-                <Space>
-                    <SpaceItem>
-                        <Button OnClick="() => VerDetalleDependencia(context.Id)">
-                            <Icon Type="team" />
-                        </Button>
-                    </SpaceItem>
-                    <SpaceItem>
-                        <Popconfirm Title="¿Eliminar esta dependencia?"
-                                    OnConfirm="() => BorrarDependencia(context.Id)"
-                                    OkText="Si"
-                                    CancelText="No">
-                            <Button Danger>
-                                <Icon Type="delete" />
-                            </Button>
-                        </Popconfirm>
-                    </SpaceItem>
-                    <SpaceItem>
-                        <Button Type="@ButtonType.Primary" OnClick="()=>
-                                                                                       VerEditarDependencia(context.Id)" Ghost>
-                            <Icon Type="edit" />
-                        </Button>
-                    </SpaceItem>
-                </Space>
-            </ActionColumn>
-
-        </ColumnDefinitions>
-    </Table>
+                        <ActionColumn Title="⚙️ Acciones"
+                                      Align=ColumnAlign.Center
+                                      Width="180px"
+                                      Fixed="ColumnFixPlacement.Right">
+                            <Space>
+                                <SpaceItem>
+                                    <Button OnClick="() => VerDetalleDependencia(dependencia.Id)">
+                                        <Icon Type="team" />
+                                    </Button>
+                                </SpaceItem>
+                                <SpaceItem>
+                                    <Popconfirm Title="¿Eliminar esta dependencia?"
+                                                OnConfirm="() => BorrarDependencia(dependencia.Id)"
+                                                OkText="Si"
+                                                CancelText="No">
+                                        <Button Danger>
+                                            <Icon Type="delete" />
+                                        </Button>
+                                    </Popconfirm>
+                                </SpaceItem>
+                                <SpaceItem>
+                                    <Button Type="@ButtonType.Primary"
+                                            OnClick="() => VerEditarDependencia(dependencia.Id)"
+                                            Ghost>
+                                        <Icon Type="edit" />
+                                    </Button>
+                                </SpaceItem>
+                            </Space>
+                        </ActionColumn>
+                    </ColumnDefinitions>
+                </Table>
+            </div>
+        </Card>
+    </div>
 </div>
 
-@*Modal para Añadir Dependencias*@
-<Modal @bind-Visible="_modalAñadirVisible" Title="Añadir Dependencia" OkText="@("Guardar")" CancelText="@("Cancelar")" OnOk="@AddDependencia">
-    <Form Model="newDependencia">
-        <FormItem Label="Nombre">
-            <Input @bind-Value="newDependencia.Nombre" />
-        </FormItem>
-        <FormItem Label="Encargado">
-            <Select TItem="BomberoViweModel"
-                    TItemValue="BomberoViweModel"
-                    DataSource="@bomberosTodosViewModel"
-                    @bind-Value="newDependencia.Encargado"
-                    LabelName="@nameof(BomberoViweModel.ApellidoYNombre)"
-                    Placeholder="Seleccione un bombero"
-                    DefaultActiveFirstOption="false"
-                    AllowClear="true" EnableSearch>
-            </Select>
-        </FormItem>
-    </Form>
+@*Modal para Añadir Dependencias con diseño de Dependencias*@
+<Modal @bind-Visible="_modalAñadirVisible"
+       Title="Añadir Dependencia"
+       Width="@("100%")"
+       Style="max-width: 800px;"
+       OkText="@("Guardar")"
+       CancelText="@("Cancelar")"
+       OnOk="@AddDependencia"
+       DestroyOnClose
+       WrapClassName="modal-crear-dependencia">
+    <div class="modal-crear-dependencia-content">
+        <Form Model="newDependencia" Layout="FormLayout.Vertical" Class="modal-crear-dependencia-form">
+            <Row Class="modal-crear-dependencia-row" Gutter="16">
+                <AntDesign.Col Span="16">
+                    <FormItem Label="Nombre" Required Class="modal-crear-dependencia-form-item">
+                        <Input @bind-Value="newDependencia.Nombre" Size="InputSize.Large" />
+                    </FormItem>
+                </AntDesign.Col>
+                <AntDesign.Col Span="8">
+                    <FormItem Label="Encargado" Required Class="modal-crear-dependencia-form-item">
+                        <Select TItem="BomberoViweModel"
+                                TItemValue="BomberoViweModel"
+                                DataSource="@bomberosTodosViewModel"
+                                @bind-Value="newDependencia.Encargado"
+                                LabelName="@nameof(BomberoViweModel.ApellidoYNombre)"
+                                Placeholder="Seleccione un bombero"
+                                DefaultActiveFirstOption="false"
+                                AllowClear="true"
+                                EnableSearch
+                                Size="InputSize.Large" />
+                    </FormItem>
+                </AntDesign.Col>
+            </Row>
+        </Form>
+    </div>
 </Modal>
 
-@*Modal para Editar Dependencias*@
-<Modal @bind-Visible="_modalEditarVisible" Title="Editar Dependencia" OkText="@("Editar")" CancelText="@("Cancelar")" OnOk="@EditDependencia">
-    <Form Model="selDependencia">
-        <FormItem Label="Nombre">
-            <Input @bind-Value="selDependencia.Nombre" />
-        </FormItem>
-        <FormItem Label="Encargado">
-            <Select TItem="BomberoViweModel"
-                    TItemValue="BomberoViweModel"
-                    DataSource="@bomberosTodosViewModel"
-                    @bind-Value="selDependencia.Encargado"
-                    LabelName="@nameof(BomberoViweModel.ApellidoYNombre)"
-                    Placeholder="Seleccione un bombero"
-                    DefaultActiveFirstOption="false"
-                    AllowClear="true" EnableSearch>
-            </Select>
-        </FormItem>
-    </Form>
+@*Modal para Editar Dependencias con diseño de Dependencias*@
+<Modal @bind-Visible="_modalEditarVisible"
+       Title="Editar Dependencia"
+       Width="@("100%")"
+       Style="max-width: 800px;"
+       OkText="@("Editar")"
+       CancelText="@("Cancelar")"
+       OnOk="@EditDependencia"
+       DestroyOnClose
+       WrapClassName="modal-crear-dependencia">
+    <div class="modal-crear-dependencia-content">
+        <Form Model="selDependencia" Layout="FormLayout.Vertical" Class="modal-crear-dependencia-form">
+            <Row Class="modal-crear-dependencia-row" Gutter="16">
+                <AntDesign.Col Span="16">
+                    <FormItem Label="Nombre" Required Class="modal-crear-dependencia-form-item">
+                        <Input @bind-Value="selDependencia.Nombre" Size="InputSize.Large" />
+                    </FormItem>
+                </AntDesign.Col>
+                <AntDesign.Col Span="8">
+                    <FormItem Label="Encargado" Required Class="modal-crear-dependencia-form-item">
+                        <Select TItem="BomberoViweModel"
+                                TItemValue="BomberoViweModel"
+                                DataSource="@bomberosTodosViewModel"
+                                @bind-Value="selDependencia.Encargado"
+                                LabelName="@nameof(BomberoViweModel.ApellidoYNombre)"
+                                Placeholder="Seleccione un bombero"
+                                DefaultActiveFirstOption="false"
+                                AllowClear="true"
+                                EnableSearch
+                                Size="InputSize.Large" />
+                    </FormItem>
+                </AntDesign.Col>
+            </Row>
+        </Form>
+        <div class="modal-crear-dependencia-footer">
+            <Button Type="ButtonType.Primary" HtmlType="ButtonHtmlType.Submit" OnClick="@EditDependencia">
+                Editar
+            </Button>
+            <Button OnClick="@(() => _modalEditarVisible = false)">
+                Cancelar
+            </Button>
+        </div>
+    </div>
 </Modal>
 
 <Modal @bind-Visible="_modalDetallesVisible" Title="@TitleDependenciaSel" Maximizable="@true" Centered="@true">

@@ -226,6 +226,23 @@
         pointer-events: auto;
         border: 1px solid red !important;
     }
+
+        .sancionados-abm .fade-in {
+        animation: abm-fadeIn 0.5s ease-in-out !important;
+    }
+
+    @@keyframes abm-fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
 </style>
 
 <div class="sancionados-abm">

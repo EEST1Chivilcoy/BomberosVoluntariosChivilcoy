@@ -473,3 +473,20 @@ button.ant-btn-primary {
     box-shadow: 0 6px 20px rgba(47, 211, 63, 0.28) !important;
 }
 
+    .unidades-abm .fade-in {
+        animation: abm-fadeIn 0.5s ease-in-out !important;
+    }
+
+@keyframes abm-fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+
