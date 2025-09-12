@@ -54,6 +54,114 @@
         background: #fff !important;
         color: #333 !important;
     }
+
+    /* Modal estilo Licencias adaptado para Damnificados */
+    .modal-damnificado .ant-modal-content {
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(255, 163, 77, 0.15);
+        border: 4px solid #ffb366;
+        margin-top: -50px;
+        margin-bottom: 0px;
+        background: linear-gradient(180deg, #fffdf9 0%, #fff7f0 100%);
+    }
+
+    .modal-damnificado .ant-modal-header {
+        background-color: #fff8f0;
+        border-bottom: 1px solid #ffd6b3;
+        padding: 16px 24px;
+        border-radius: 9px 9px 0 0;
+    }
+
+    .modal-damnificado-content {
+        padding: 24px;
+    }
+
+    .modal-damnificado-form-item {
+        margin-bottom: 20px;
+        position: relative;
+        padding-left: 10px;
+    }
+
+    .modal-damnificado-form-item .ant-form-item-label > label,
+    .modal-damnificado-form-full-width .ant-form-item-label > label {
+        font-weight: 600;
+        color: #ff6a33;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        transition: color 0.3s ease;
+    }
+
+    .modal-damnificado-form-item .ant-form-item-label > label:hover,
+    .modal-damnificado-form-full-width .ant-form-item-label > label:hover {
+        color: #ff944d;
+    }
+
+    .modal-damnificado .ant-input:focus,
+    .modal-damnificado .ant-input:hover,
+    .modal-damnificado .ant-select-selector:focus,
+    .modal-damnificado .ant-select-selector:hover,
+    .modal-damnificado .ant-picker:focus,
+    .modal-damnificado .ant-picker:hover,
+    .modal-damnificado .ant-picker-input > input:focus,
+    .modal-damnificado .ant-picker-input > input:hover,
+    .modal-damnificado .ant-input-number-input:focus,
+    .modal-damnificado .ant-input-number-input:hover,
+    .modal-damnificado .ant-textarea:focus,
+    .modal-damnificado .ant-textarea:hover {
+        border-color: #ffb366 !important;
+        box-shadow: 0 0 0 2px rgba(255, 163, 77, 0.15) !important;
+    }
+
+    .modal-damnificado .ant-picker,
+    .modal-damnificado .ant-input,
+    .modal-damnificado .ant-select-selector,
+    .modal-damnificado .ant-input-number,
+    .modal-damnificado .ant-textarea {
+        border-radius: 8px !important;
+        border: 1px solid #ffd6b3 !important;
+        background: #fff !important;
+        color: #434343 !important;
+        transition: all 0.3s ease !important;
+    }
+
+    .modal-damnificado .modal-damnificado-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 18px;
+        margin-bottom: 0px;
+    }
+    .modal-damnificado .ant-btn-primary {
+        background: linear-gradient(135deg, #ff944d 0%, #ff6a33 100%) !important;
+        border: none !important;
+        color: #fff !important;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(255, 163, 77, 0.18);
+        margin-top:  0;
+        margin-bottom: 0;
+        padding: 0 20px !important;
+    }
+    .modal-damnificado .ant-btn-primary:hover {
+        background: linear-gradient(135deg, #ff7a45 0%, #ff944d 100%) !important;
+        color: #fff !important;
+    }
+
+    .btn-nuevo-damnificado {
+        background: linear-gradient(135deg, #ff944d 0%, #ff6a33 100%) !important;
+        color: #fff !important;
+        font-weight: 600;
+        border: none !important;
+        box-shadow: 0 2px 8px rgba(255, 163, 77, 0.18);
+        border-radius: 8px;
+        padding: 0 20px !important;
+        transition: background 0.3s;
+    }
+    .btn-nuevo-damnificado:hover {
+        background: linear-gradient(135deg, #ff7a45 0%, #ff944d 100%) !important;
+        color: #fff !important;
+    }
 </style>
 
 
@@ -63,8 +171,10 @@
         <TitleTemplate>
             <GridRow>
                 <GridCol Span="24" Style="text-align: right;">
-                    <Button Type="ButtonType.Primary" OnClick="@(() => visibleDamnificados = true)">
-                        <Icon Type="plus" /> Nueva
+                    <Button Type="ButtonType.Primary"
+                            Class="btn-nuevo-damnificado"
+                            OnClick="@(() => visibleDamnificados = true)">
+                        <Icon Type="plus" /> Nuevo Damnificado
                     </Button>
                 </GridCol>
             </GridRow>
@@ -87,41 +197,63 @@
         </ColumnDefinitions>
     </Table>
 
-    <Modal @bind-Visible="visibleDamnificados" Title="@("Datos del damnificado")" OkText="@("Agregar")" CancelText="@("Cancelar")" OnOk="@AgregarDamnificado">
-        <Form Model="Damnificado">
-            <FormItem Label="Nombre" Required="true">
-                <Input @bind-Value="@Damnificado.Nombre" />
-            </FormItem>
-
-            <FormItem Label="Apellido" Required="true">
-                <Input @bind-Value="@Damnificado.Apellido" />
-            </FormItem>
-
-            <FormItem Label="Documento" Required="true">
-                <Input @bind-Value="@Damnificado.Dni" />
-            </FormItem>
-
-            <FormItem Label="Sexo">
-                <Input @bind-Value="@Damnificado.Sexo" />
-            </FormItem>
-
-            <FormItem Label="Edad">
-                <Input @bind-Value="@Damnificado.Edad" Disabled="@Damnificado.FechaDeNacimiento.HasValue" />
-            </FormItem>
-
-            <FormItem Label="Lugar de Nacimiento">
-                <Input @bind-Value="@Damnificado.LugarDeNacimiento" />
-            </FormItem>
-
-            <FormItem Label="Fecha de Nacimiento">
-                <DatePicker TValue="DateTime?" @bind-Value="@Damnificado.FechaDeNacimiento" OnChange="@CalcularEdad" />
-            </FormItem>
-
-            <FormItem Label="Estado">
-                <EnumSelect TEnum="TipoDamnificado" @bind-Value="@Damnificado.Estado" />
-            </FormItem>
+    <Modal @bind-Visible="visibleDamnificados"
+       Title="@("Datos del damnificado")"
+       OkText="@("Agregar")"
+       CancelText="@("Cancelar")"
+       OnOk="@AgregarDamnificado"
+       WrapClassName="modal-damnificado">
+    <div class="modal-damnificado-content">
+        <Form Model="Damnificado" Layout="FormLayout.Vertical" Class="modal-damnificado-form">
+            <Row Gutter="16">
+                <AntDesign.Col Span="8">
+                    <FormItem Label="Nombre" Required="true" Class="modal-damnificado-form-item">
+                        <Input @bind-Value="@Damnificado.Nombre" />
+                    </FormItem>
+                </AntDesign.Col>
+                <AntDesign.Col Span="8">
+                    <FormItem Label="Apellido" Required="true" Class="modal-damnificado-form-item">
+                        <Input @bind-Value="@Damnificado.Apellido" />
+                    </FormItem>
+                </AntDesign.Col>
+                <AntDesign.Col Span="8">
+                    <FormItem Label="Documento" Required="true" Class="modal-damnificado-form-item">
+                        <Input @bind-Value="@Damnificado.Dni" />
+                    </FormItem>
+                </AntDesign.Col>
+            </Row>
+            <Row Gutter="16">
+                <AntDesign.Col Span="8">
+                    <FormItem Label="Sexo" Class="modal-damnificado-form-item">
+                        <Input @bind-Value="@Damnificado.Sexo" />
+                    </FormItem>
+                </AntDesign.Col>
+                <AntDesign.Col Span="8">
+                    <FormItem Label="Edad" Class="modal-damnificado-form-item">
+                        <Input @bind-Value="@Damnificado.Edad" Disabled="@Damnificado.FechaDeNacimiento.HasValue" />
+                    </FormItem>
+                </AntDesign.Col>
+                <AntDesign.Col Span="14">
+                    <FormItem Label="Lugar de Nacimiento" Class="modal-damnificado-form-item">
+                        <Input @bind-Value="@Damnificado.LugarDeNacimiento" />
+                    </FormItem>
+                </AntDesign.Col>
+            </Row>
+            <Row Gutter="16">
+                <AntDesign.Col Span="12">
+                    <FormItem Label="Fecha de Nacimiento" Class="modal-damnificado-form-item">
+                        <DatePicker TValue="DateTime?" @bind-Value="@Damnificado.FechaDeNacimiento" OnChange="@CalcularEdad" />
+                    </FormItem>
+                </AntDesign.Col>
+                <AntDesign.Col Span="12">
+                    <FormItem Label="Estado" Class="modal-damnificado-form-item">
+                        <EnumSelect TEnum="TipoDamnificado" @bind-Value="@Damnificado.Estado" />
+                    </FormItem>
+                </AntDesign.Col>
+            </Row>
         </Form>
-    </Modal>
+    </div>
+</Modal>
 </div>
 
 @code {
