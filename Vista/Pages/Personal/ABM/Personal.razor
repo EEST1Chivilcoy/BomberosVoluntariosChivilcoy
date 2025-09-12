@@ -340,11 +340,25 @@
         display: block !important;
     }
 
+            .flex-container .fade-in {
+        animation: abm-fadeIn 0.5s ease-in-out !important;
+    }
+    @@keyframes abm-fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
 </style>
 
 <Flex Class="flex-container" Justify="FlexJustify.Center" Align="FlexAlign.Center">
     <div class="abm-container">
-        <Card Class="abm-main-card">
+        <Card Class="abm-main-card fade-in">
             <div class="abm-header-section">
                 <div class="lava-bubbles">
                     <div class="lava-bubble b1"></div>

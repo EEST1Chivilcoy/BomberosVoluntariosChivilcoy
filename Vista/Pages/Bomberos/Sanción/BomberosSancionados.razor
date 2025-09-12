@@ -216,6 +216,110 @@
         font-weight: bold;
     }
 
+    /* ====== MODAL DISEÑO SANCIONES ====== */
+    .modal-crear-sancion .ant-modal-content {
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        border: 4px solid #A63333;
+        margin-top: -50px;
+        margin-bottom: 0px;
+    }
+    .modal-crear-sancion .ant-modal-header {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 32px 32px 24px 32px;
+        border-radius: 12px 12px 0 0;
+        min-height: 70px;
+        display: flex;
+        align-items: flex-end;
+    }
+    .modal-crear-sancion .ant-modal-title {
+        font-weight: 600;
+        font-size: 1.5rem  !important;
+        margin-left: 20px;
+        color: #434343;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        transition: color 0.3s ease;
+    }
+    .modal-crear-sancion-content {
+        padding: 24px;
+    }
+    .modal-crear-sancion-form-item {
+        margin-bottom: 20px;
+        position: relative;
+        padding-left: 10px;
+    }
+    .modal-crear-sancion-form-item::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 3px;
+        border-radius: 5px;
+    }
+    .modal-crear-sancion-form-item .ant-form-item-label > label {
+        font-weight: 600;
+        color: #434343;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        transition: color 0.3s ease;
+    }
+    .modal-crear-sancion-form-item .ant-form-item-label > label:hover {
+        color: #FFD700;
+    }
+    .modal-crear-sancion .ant-input:focus,
+    .modal-crear-sancion .ant-input:hover,
+    .modal-crear-sancion .ant-select-selector:focus,
+    .modal-crear-sancion .ant-select-selector:hover,
+    .modal-crear-sancion .ant-picker:focus,
+    .modal-crear-sancion .ant-picker:hover,
+    .modal-crear-sancion .ant-picker-input > input:focus,
+    .modal-crear-sancion .ant-picker-input > input:hover,
+    .modal-crear-sancion .ant-input-number-input:focus,
+    .modal-crear-sancion .ant-input-number-input:hover,
+    .modal-crear-sancion .ant-textarea:focus,
+    .modal-crear-sancion .ant-textarea:hover {
+        border-color: #FFD700 !important;
+        box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
+    }
+    .modal-crear-sancion .ant-picker,
+    .modal-crear-sancion .ant-input,
+    .modal-crear-sancion .ant-select-selector,
+    .modal-crear-sancion .ant-input-number,
+    .modal-crear-sancion .ant-textarea {
+        border-radius: 8px !important;
+        border: 1px solid #d9d9d9 !important;
+        background: #fff !important;
+        color: #434343 !important;
+        transition: all 0.3s ease !important;
+    }
+    .modal-crear-sancion .modal-crear-sancion-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 18px;
+        margin-bottom: 0px;
+    }
+    .modal-crear-sancion .ant-btn-primary {
+        background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
+        border: none !important;
+        color: #fff !important;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
+        margin-top:  0;
+        margin-bottom: 0;
+        padding: 0 20px !important;
+    }
+    .modal-crear-sancion .ant-btn-primary:hover {
+        background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
+        color: #fff !important;
+    }
+
     .sancionados-abm .ant-modal-content {
         position: relative;
         background-color: #fff;
@@ -226,6 +330,23 @@
         pointer-events: auto;
         border: 1px solid red !important;
     }
+
+        .sancionados-abm .fade-in {
+        animation: abm-fadeIn 0.5s ease-in-out !important;
+    }
+
+    @@keyframes abm-fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
 </style>
 
 <div class="sancionados-abm">
@@ -315,8 +436,18 @@
 
 @if(_visibleCargar == true)
 {
-    <Modal Footer="null" OnCancel="()=> _visibleCargar = false" Visible="@_visibleCargar" Style="width: 35%!important;">
-        <AgregarSancion OnClose="OnClose"/>
+    <Modal
+        Title="Nueva Sanción"
+        Width="@("100%")"
+        Style="max-width: 800px;"
+        Footer="null"
+        OnCancel="()=> _visibleCargar = false"
+        Visible="@_visibleCargar"
+        DestroyOnClose
+        WrapClassName="modal-crear-sancion">
+        <div class="modal-crear-sancion-content">
+            <AgregarSancion OnClose="OnClose"/>
+        </div>
     </Modal>
 }
 

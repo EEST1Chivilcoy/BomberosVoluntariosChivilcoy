@@ -58,9 +58,6 @@
                         Móviles
                     </MenuItem>
                 </SubMenu>
-                <MenuItem Key="brigadas" OnClick="@(() => navigationManager.NavigateTo("/Brigadas"))">
-                    <i class="fa-solid fa-users-gear"></i> Brigada
-                </MenuItem>
                 <SubMenu Key="herramientas" TitleTemplate="@herramientasTitle">
                     <MenuItem Key="fuerzas" OnClick="@(() => navigationManager.NavigateTo("/FuerzasIntervinientes"))">
                         Fuerzas Intervinientes
@@ -70,6 +67,12 @@
                     </MenuItem>
                     <MenuItem Key="deposito" OnClick="@(() => navigationManager.NavigateTo("/Dependencias/Deposito"))">
                         Depósito
+                    </MenuItem>
+                    <MenuItem Key="dependencias" OnClick="@(() => navigationManager.NavigateTo("/Dependencias"))">
+                        Dependencias
+                    </MenuItem>
+                    <MenuItem Key="brigadas" OnClick="@(() => navigationManager.NavigateTo("/Brigadas"))">
+                        Brigadas
                     </MenuItem>
                 </SubMenu>
             </Menu>
@@ -192,13 +195,28 @@
                             <a class="menu-link" href="/Dependencias/Comunicacion">Comunicación</a>
                         </ChildContent>
                     </MenuItem>
-
                     <MenuItem Key="deposito">
                         <IconTemplate>
                             <i class="fa-solid fa-warehouse submenu-icon"></i>
                         </IconTemplate>
                         <ChildContent>
                             <a class="menu-link" href="/Dependencias/Deposito">Depósito</a>
+                        </ChildContent>
+                    </MenuItem>
+                    <MenuItem Key="dependencias">
+                        <IconTemplate>
+                            <i class="fa-solid fa-building submenu-icon"></i>
+                        </IconTemplate>
+                        <ChildContent>
+                            <a class="menu-link" href="/Dependencias">Dependencias</a>
+                        </ChildContent>
+                    </MenuItem>
+                    <MenuItem Key="brigadas">
+                        <IconTemplate>
+                            <i class="fa-solid fa-users-gear submenu-icon"></i>
+                        </IconTemplate>
+                        <ChildContent>
+                            <a class="menu-link" href="/Brigadas">Brigadas</a>
                         </ChildContent>
                     </MenuItem>
                 </SubMenu>
@@ -344,17 +362,17 @@
 
     RenderFragment reportesTitle =
         @<span class="submenu-title">
-        <span class="submenu-title-text"><i class="fa-solid fa-file-lines"></i>Reportes</span>
+        <span class="submenu-title-text"><i class="fa-solid fa-file-lines"></i> Reportes</span>
     </span>;
 
     RenderFragment herramientasTitle =
         @<span class="submenu-title">
-        <span class="submenu-title-text"><i class="fa-solid fa-tools"></i>Utilidades  </span>
+        <span class="submenu-title-text"><i class="fa-solid fa-tools"></i> Utilidades  </span>
     </span>;
 
     RenderFragment eticaTitle =
         @<span class="submenu-title">
-        <span class="submenu-title-text"><i class="fa-solid fa-gavel"></i>Ética</span>
+        <span class="submenu-title-text"><i class="fa-solid fa-gavel"></i> Ética</span>
     </span>;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)

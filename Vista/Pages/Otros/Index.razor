@@ -252,7 +252,7 @@
 <div class="dashboard-container">
     @*Banner Section*@
     <Row Class="banner-section">
-        <Col Span="24">
+        <AntDesign.Col Span="24">
         <Card Bordered="false" Class="banner-card">
     <img src="Imagenes/banner_index.png" class="banner-image" alt="Banner Bomberos" />
         <div class="banner-overlay">
@@ -262,14 +262,14 @@
                 </div>
             </div>
         </Card>
-        </Col>
+        </AntDesign.Col>
     </Row>
 
     @*Main Grid Section*@
     <Row Gutter="24" Class="dashboard-grid">
 
         @*Legajo Section*@
-        <Col Xs="24" Sm="12" Lg="8">
+        <AntDesign.Col Xs="24" Sm="12" Lg="8">
         <div @onclick="@(() => { navigationManager.NavigateTo("/Bomberos/Legajo"); })" style="cursor: pointer;">
             <Card Class="dashboard-card legajo-card">
                 <i class="fa-solid fa-user card-icon"></i>
@@ -277,10 +277,10 @@
                 <p>Visite su legajo personal</p>
             </Card>
         </div>
-        </Col>
+        </AntDesign.Col>
 
         @*Licencias Section*@
-        <Col Xs="24" Sm="12" Lg="8">
+        <AntDesign.Col Xs="24" Sm="12" Lg="8">
         <div @onclick="@(() => { navigationManager.NavigateTo("/Licencias"); })" style="cursor: pointer;">
             <Card Class="dashboard-card licencias-card">
                 <i class="fa-solid fa-file-signature card-icon"></i>
@@ -288,10 +288,10 @@
                 <p>Gestión de licencias</p>
             </Card>
         </div>
-        </Col>
+        </AntDesign.Col>
 
         @*Salidas Section*@
-        <Col Xs="24" Sm="12" Lg="8">
+        <AntDesign.Col Xs="24" Sm="12" Lg="8">
         <div @onclick="@(() => { navigationManager.NavigateTo("/Salidas"); })" style="cursor: pointer;">
             <Card Class="dashboard-card salidas-card">
                 <Icon class="card-icon" Type="alert" Theme="IconThemeType.Fill" />
@@ -299,10 +299,10 @@
                 <p>Gestión de salidas</p>
             </Card>
         </div>
-        </Col>
+        </AntDesign.Col>
 
         @* Personal/Bomberos Section *@
-        <Col Xs="24" Sm="12" Lg="8">
+        <AntDesign.Col Xs="24" Sm="12" Lg="8">
         <div @onclick="@(() => { navigationManager.NavigateTo("/personal/bomberos"); })" style="cursor: pointer;">
             <Card Class="dashboard-card personal-card">
                 <i class="fa-solid fa-people-group card-icon"></i>
@@ -310,10 +310,10 @@
                 <p>Ver el personal de bomberos</p>
             </Card>
         </div>
-        </Col>
+        </AntDesign.Col>
 
         @* Comisión Directiva Section *@
-        <Col Xs="24" Sm="12" Lg="8">
+        <AntDesign.Col Xs="24" Sm="12" Lg="8">
         <div @onclick="@(() => { navigationManager.NavigateTo("/personal/comisiondirectiva"); })" style="cursor: pointer;">
             <Card Class="dashboard-card personal-card">
                 <i class="fa-solid fa-user-tie card-icon"></i>
@@ -321,10 +321,10 @@
                 <p>Ver la comisión directiva</p>
             </Card>
         </div>
-        </Col>
+        </AntDesign.Col>
 
         @* Unidades Section *@
-        <Col Xs="24" Sm="12" Lg="8">
+        <AntDesign.Col Xs="24" Sm="12" Lg="8">
         <div @onclick="@(() => { navigationManager.NavigateTo("/unidades"); })" style="cursor: pointer;">
             <Card Class="dashboard-card unidades-card">
                 <i class="fa-solid fa-truck card-icon"></i>
@@ -332,10 +332,10 @@
                 <p>Ver las unidades</p>
             </Card>
         </div>
-        </Col>
+        </AntDesign.Col>
 
         @* Firmas Section *@
-        <Col Xs="24" Sm="12" Lg="8">
+        <AntDesign.Col Xs="24" Sm="12" Lg="8">
         <div @onclick="@(() => { navigationManager.NavigateTo("/incidentes-vehiculos"); })" style="cursor: pointer;">
             <Card Class="dashboard-card firmas-card">
                 <i class="fa-solid fa-scroll card-icon"></i>
@@ -343,82 +343,85 @@
                 <p>Ver firmas</p>
             </Card>
         </div>
-        </Col>
+        </AntDesign.Col>
 
         @* Reportes Section *@
-        <Col Xs="24" Sm="12" Lg="8">
+        <AntDesign.Col Xs="24" Sm="12" Lg="8">
         <Card Class="dashboard-card reportes-card">
             <h2>REPORTES</h2>
             <div class="report-buttons">
-                <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/Reportes/HistorialBomberos"); })">
-                    <i class="fa-solid fa-user-clock"></i>
-                </Button>
-                <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/Reportes/Reportes_Choferes"); })">
-                    <i class="fa-solid fa-id-card"></i>
-                </Button>
-                <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/Reportes/HistorialMoviles"); })">
-                    <i class="fa-solid fa-truck"></i>
-                </Button>
+                <span title="Historial Bomberos">
+                    <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/Reportes/HistorialBomberos"); })">
+                        <i class="fa-solid fa-user-clock"></i>
+                    </Button>
+                </span>
+                <span title="Choferes">
+                    <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/Reportes/Reportes_Choferes"); })">
+                        <i class="fa-solid fa-id-card"></i>
+                    </Button>
+                </span>
+                <span title="Historial Móviles">
+                    <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/Reportes/HistorialMoviles"); })">
+                        <i class="fa-solid fa-truck"></i>
+                    </Button>
+                </span>
             </div>
         </Card>
-        </Col>
+        </AntDesign.Col>
 
         @* Dependencias Section *@
-        <Col Xs="24" Sm="12" Lg="8">
+        <AntDesign.Col Xs="24" Sm="12" Lg="8">
         <Card Class="dashboard-card departamentos-card">
-            <h2>DEPENDENCIAS</h2>
+            <h2>Utilidades</h2>
             <div class="department-buttons">
-                <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/Dependencias/Comunicacion"); })">
-                    <i class="fa-solid fa-walkie-talkie"></i>
-                </Button>
-                <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/Dependencias/Deposito"); })">
-                    <i class="fa-solid fa-warehouse"></i>
-                </Button>
-                <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/Dependencias"); })">
-                    <i class="fa-solid fa-plus"></i>
-                </Button>
+                <span title="Comunicación">
+                    <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/Dependencias/Comunicacion"); })">
+                        <i class="fa-solid fa-walkie-talkie"></i>
+                    </Button>
+                </span>
+                <span title="Depósito">
+                    <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/Dependencias/Deposito"); })">
+                        <i class="fa-solid fa-warehouse"></i>
+                    </Button>
+                </span>
+                <span title="Dependencias">
+                    <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/Dependencias"); })">
+                        <i class="fa-solid fa-building"></i>
+                    </Button>
+                </span>
+                <span title="Fuerzas Intervinientes">
+                    <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/FuerzasIntervinientes"); })">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </Button>
+                </span>
+                <span title="Brigadas">
+                    <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/Brigadas"); })">
+                        <i class="fa-solid fa-users-gear"></i>
+                    </Button>
+                </span>
             </div>
         </Card>
-        </Col>
+        </AntDesign.Col>
 
 
         @* Ética Section *@
-        <Col Xs="24" Sm="12" Lg="8">
+        <AntDesign.Col Xs="24" Sm="12" Lg="8">
         <Card Class="dashboard-card etica-card">
             <h2>ÉTICA</h2>
             <div class="ethics-buttons">
-                <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/bomberos/sancionados"); })">
-                    <i class="fa-solid fa-user-xmark"></i>
-                </Button>
-                <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/bomberos/ascenso"); })">
-                    <i class="fa-solid fa-user-plus"></i>
-                </Button>
+                <span title="Sancionados">
+                    <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/bomberos/sancionados"); })">
+                        <i class="fa-solid fa-user-xmark"></i>
+                    </Button>
+                </span>
+                <span title="Ascensos">
+                    <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/bomberos/ascenso"); })">
+                        <i class="fa-solid fa-user-plus"></i>
+                    </Button>
+                </span>
             </div>
         </Card>
-        </Col>
-
-        @* Brigadas Section *@
-        <Col Xs="24" Sm="12" Lg="8">
-        <div @onclick="@(() => { navigationManager.NavigateTo("/Brigadas"); })" style="cursor: pointer;">
-            <Card Class="dashboard-card brigadas-card">
-                <i class="fa-solid fa-users card-icon"></i>
-                <h2>BRIGADAS</h2>
-                <p>Ver brigadas</p>
-            </Card>
-        </div>
-        </Col>
-
-        @* Fuerzas Intervinientes Section *@
-        <Col Xs="24" Sm="12" Lg="8">
-        <div @onclick="@(() => { navigationManager.NavigateTo("/FuerzasIntervinientes"); })" style="cursor: pointer;">
-            <Card Class="dashboard-card fuerzas-intervinientes-card">
-                <i class="fa-solid fa-shield-alt card-icon"></i>
-                <h2>FUERZAS INTERVINIENTES</h2>
-                <p>Ver fuerzas intervinientes</p>
-            </Card>
-        </div>
-        </Col>
-
+        </AntDesign.Col>
     </Row>
 </div>
 
