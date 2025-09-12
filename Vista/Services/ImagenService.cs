@@ -53,6 +53,17 @@ namespace Vista.Services
                             }
                         }
                         break;
+                    case Imagen_Personal imagen_Personal:
+                        if (imagen_Personal.PersonalId != 0)
+                        {
+                            var personal = await _context.Bomberos.FindAsync(imagen_Personal.PersonalId);
+
+                            if (personal != null)
+                            {
+                                imagen_Personal.Personal = personal;
+                            }
+                        }
+                        break;
                     default:
                         throw new InvalidOperationException("Tipo de imagen no soportado para guardar.");
                 }

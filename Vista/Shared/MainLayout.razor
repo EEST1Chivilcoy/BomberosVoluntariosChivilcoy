@@ -24,7 +24,7 @@
                 <MenuItem Key="salidas" OnClick="@(() => navigationManager.NavigateTo("/salidas"))">
                     <i class="fa-solid fa-sign-out-alt"></i> Salidas
                 </MenuItem>
-                <MenuItem Key="personal" OnClick="@(() => navigationManager.NavigateTo("/bomberos"))">
+                <MenuItem Key="personal" OnClick="@(() => navigationManager.NavigateTo("/personal/bomberos"))">
                     <i class="fa-solid fa-user"></i> Personal
                 </MenuItem>
                 <MenuItem Key="licencias" OnClick="@(() => navigationManager.NavigateTo("/licencias"))">
@@ -113,12 +113,12 @@
                     </ChildContent>
                 </MenuItem>
 
-                <MenuItem Key="personal" OnClick="@(() => navigationManager.NavigateTo("/bomberos"))">
+                <MenuItem Key="personal" OnClick="@(() => navigationManager.NavigateTo("/personal/bomberos"))">
                     <IconTemplate>
                         <i class="fa-solid fa-people-group menu-icon"></i>
                     </IconTemplate>
                     <ChildContent>
-                        <a class="menu-link" href="/bomberos">Personal</a>
+                        <a class="menu-link" href="/personal/bomberos">Personal</a>
                     </ChildContent>
                 </MenuItem>
 

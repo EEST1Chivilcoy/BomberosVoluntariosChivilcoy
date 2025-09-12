@@ -1,0 +1,770 @@
+﻿@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components
+@using System.ComponentModel.DataAnnotations
+@using System.Text.Json
+@using Vista.Data.Mappers
+@using System.ComponentModel
+@using Vista.Data.Models.Personas.Personal
+@using Vista.Data.Models.Personas.Personal.Componentes
+@using Vista.Data.Models.Imagenes
+@using Vista.Data.ViewModels.Personal
+@using Vista.Data.Enums.Personal.ComisionDirectiva
+@using Vista.Data.Enums.Discriminadores
+@using AntDesign
+
+@*Servicios Utilizados*@
+@using Vista.Services
+@inject IMessageService message
+@inject NavigationManager navigationManager
+
+@inject IBomberoService BomberoService
+@inject IComisionDirectivaService ComisionDirectivaService
+
+<style>
+    /* Estilos generales */
+    .container {
+        padding: 24px !important;
+        min-height: 100vh !important;
+    }
+
+    .page-title {
+        font-size: 24px !important;
+        font-weight: 600 !important;
+        color: #1f1f1f !important;
+        margin-bottom: 24px !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+
+    .page-title-icon {
+        margin-right: 12px !important;
+        color: #c43a3a !important;
+    }
+
+    .card {
+        background-color: white !important;
+        border-radius: 8px !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+        padding: 24px !important;
+        margin-bottom: 24px !important;
+    }
+
+    .card-title {
+        font-size: 18px !important;
+        font-weight: 500 !important;
+        color: #434343 !important;
+        margin-bottom: 16px !important;
+        padding-bottom: 12px !important;
+        border-bottom: 1px solid #f0f0f0 !important;
+    }
+
+    /* Estilos de la foto */
+    .profile-photo-container {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        padding: 16px !important;
+    }
+
+    .photo-preview {
+        width: 150px !important;
+        height: 150px !important;
+        border-radius: 50% !important;
+        overflow: hidden !important;
+        margin-bottom: 16px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .upload-actions {
+        display: flex !important;
+        gap: 8px !important;
+    }
+
+    /* Estilo para las secciones del formulario */
+    .form-section {
+        margin-bottom: 24px !important;
+    }
+
+    /* Estilo para los botones de acción */
+    .action-buttons {
+        display: flex !important;
+        justify-content: flex-end !important;
+        gap: 12px !important;
+        margin-top: 24px !important;
+    }
+
+    /* Estilo para los campos */
+    .ant-form-item {
+        margin-bottom: 16px !important;
+    }
+
+    .ant-form-item-label > label {
+        color: #595959 !important;
+        font-weight: 500 !important;
+    }
+
+    .ant-input,
+    .ant-select:not(.ant-select-customize-input) .ant-select-selector,
+    .ant-picker,
+    .ant-input-number {
+        border-radius: 4px !important;
+        border: 1px solid #d9d9d9 !important;
+    }
+
+        .ant-input:hover,
+        .ant-select:not(.ant-select-customize-input) .ant-select-selector:hover,
+        .ant-picker:hover,
+        .ant-input-number:hover {
+            border-color: #c43a3a !important;
+        }
+
+        .ant-input:focus,
+        .ant-select-focused:not(.ant-select-customize-input) .ant-select-selector,
+        .ant-picker-focused,
+        .ant-input-number-focused {
+            border-color: #c43a3a !important;
+            box-shadow: 0 0 0 2px rgba(196, 58, 58, 0.2) !important;
+        }
+
+    /* Ajuste visual para el switch */
+    .ant-switch-checked {
+        background-color: #c43a3a !important;
+    }
+
+    /* Estilo para campos requeridos */
+    .required-field::after {
+        content: '*' !important;
+        color: #c43a3a !important;
+        margin-left: 4px !important;
+    }
+
+    /* Estilo para el campo condicional de chofer */
+    .conditional-field {
+        margin-top: 12px !important;
+        padding-top: 12px !important;
+        border-top: 1px dashed #f0f0f0 !important;
+    }
+</style>
+
+<div class="container">
+    <div class="page-title">
+        @if (Tipo == TipoPersonal.Bombero)
+        {
+            <div>
+                <Icon Type="fire" Theme="IconThemeType.Fill" Class="page-title-icon" />
+                <span>Registro de Nuevo Bombero</span>
+            </div>
+        }
+        else if (Tipo == TipoPersonal.ComisionDirectiva)
+        {
+            <div>
+                <Icon Type="reconciliation" Theme="IconThemeType.Fill" Class="page-title-icon" />
+                <span>Registro de Nuevo Miembro de Comisión Directiva</span>
+            </div>
+        }
+    </div>
+
+
+    @if (personalView != null)
+    {
+        <Form Model="@personalView"
+              Layout="FormLayout.Vertical"
+              OnFinish="OnFinish"
+              OnFinishFailed="OnFinishFailed">
+
+            @*Información Personal (Común para todos)*@
+
+            <div class="card">
+                <div class="card-title">Información Personal</div>
+                <AntDesign.Row Gutter="24">
+                    <AntDesign.Col Span="6">
+                        <div class="profile-photo-container">
+                            <div class="photo-preview">
+                                @if (ImageUrlPreview != null)
+                                {
+                                    <Avatar Src="@ImageUrlPreview" Alt="Foto de perfil" Size="@("5rem")" />
+                                }
+                                else
+                                {
+                                    <Avatar Icon="@IconType.Outline.User" Size="@("5rem")" />
+                                }
+                            </div>
+
+                            <div class="upload-actions">
+                                <Button Type="@ButtonType.Primary">
+                                    <label style="cursor: pointer; margin: 0;">
+                                        <Icon Type="upload" /> Subir foto
+                                        <InputFile OnChange="SubirFoto" style="display: none;" accept=".jpg,.jpeg,.png" />
+                                    </label>
+                                </Button>
+
+                                @if (ImageUrlPreview != null)
+                                {
+                                    <Button Type="@ButtonType.Default" OnClick="RemovePhoto" Danger>
+                                        <Icon Type="delete" /> Eliminar
+                                    </Button>
+                                }
+                            </div>
+                        </div>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="18">
+                        <AntDesign.Row Gutter="16">
+                            <AntDesign.Col Span="12">
+                                <FormItem Label="Nombre" Required>
+                                    <Input @bind-Value="@personalView.Nombre" Placeholder="Ingrese el nombre" />
+                                </FormItem>
+                            </AntDesign.Col>
+                            <AntDesign.Col Span="12">
+                                <FormItem Label="Apellido" Required>
+                                    <Input @bind-Value="@personalView.Apellido" Placeholder="Ingrese el apellido" />
+                                </FormItem>
+                            </AntDesign.Col>
+                        </AntDesign.Row>
+
+                        <AntDesign.Row Gutter="16">
+                            <AntDesign.Col Span="8">
+                                <FormItem Label="DNI" Required>
+                                    <Input @bind-Value="@personalView.Documento" Placeholder="Ingrese el DNI" />
+                                </FormItem>
+                            </AntDesign.Col>
+                            <AntDesign.Col Span="8">
+                                <FormItem Label="Fecha de Nacimiento">
+                                    <DatePicker @bind-Value="@personalView.FechaNacimiento"
+                                                Picker="@DatePickerType.Date"
+                                                Style="width: 100%;"
+                                                Placeholder="@("Seleccione fecha")"
+                                                AllowClear />
+                                </FormItem>
+                            </AntDesign.Col>
+                            <AntDesign.Col Span="8">
+                                <FormItem Label="Lugar de nacimiento">
+                                    <Input @bind-Value="@personalView.LugarNacimiento" Placeholder="Ingrese lugar de nacimiento" />
+                                </FormItem>
+                            </AntDesign.Col>
+                        </AntDesign.Row>
+
+                        <AntDesign.Row Gutter="16">
+                            <AntDesign.Col Span="12">
+                                <FormItem Label="Dirección">
+                                    <Input @bind-Value="@personalView.Direccion" Placeholder="Ingrese dirección" />
+                                </FormItem>
+                            </AntDesign.Col>
+                            <AntDesign.Col Span="6">
+                                <FormItem Label="Sexo">
+                                    <EnumSelect TEnum="TipoSexo" @bind-Value="@personalView.Sexo" />
+                                </FormItem>
+                            </AntDesign.Col>
+                            <AntDesign.Col Span="6">
+                                <FormItem Label="Grupo Sanguíneo">
+                                    <EnumSelect TEnum="TipoGrupoSanguineo?" @bind-Value="@personalView.GrupoSanguineo" AllowClear />
+                                </FormItem>
+                            </AntDesign.Col>
+                        </AntDesign.Row>
+                    </AntDesign.Col>
+                </AntDesign.Row>
+            </div>
+
+            <!-- Información Profesional -->
+            <div class="card">
+                <div class="card-title">Información Profesional</div>
+
+                @if (Tipo == TipoPersonal.Bombero && personalView is BomberoViweModel bomberoView)
+                {
+                    <!-- Campos específicos para Bombero -->
+                    <AntDesign.Row Gutter="16">
+                        <AntDesign.Col Span="6">
+                            <FormItem Label="Número Legajo" Required>
+                                <Input @bind-Value="@bomberoView.NumeroLegajo" Placeholder="Ingrese número de legajo" />
+                            </FormItem>
+                        </AntDesign.Col>
+                        <AntDesign.Col Span="6">
+                            <FormItem Label="Dotación" Required>
+                                <EnumSelect TEnum="TipoDotaciones" @bind-Value="@bomberoView.Dotacion" />
+                            </FormItem>
+                        </AntDesign.Col>
+                        <AntDesign.Col Span="6">
+                            <FormItem Label="Grado">
+                                <EnumSelect TEnum="EscalafonJerarquico" @bind-Value="@bomberoView.Grado" AllowClear />
+                            </FormItem>
+                        </AntDesign.Col>
+                        <AntDesign.Col Span="6">
+                            <FormItem Label="Estado">
+                                <EnumSelect TEnum="EstadoBombero" @bind-Value="bomberoView.Estado" AllowClear />
+                            </FormItem>
+                        </AntDesign.Col>
+                    </AntDesign.Row>
+
+                    <AntDesign.Row Gutter="16">
+                        <AntDesign.Col Span="8">
+                            <FormItem Label="Fecha de Aceptación">
+                                <DatePicker @bind-Value="@bomberoView.FechaAceptacion"
+                                            Picker="@DatePickerType.Date"
+                                            Style="width: 100%;"
+                                            Placeholder="@("Seleccione fecha")"
+                                            AllowClear />
+                            </FormItem>
+                        </AntDesign.Col>
+                        <AntDesign.Col Span="8">
+                            <FormItem Label="Número IOMA">
+                                <Input @bind-Value="bomberoView.NumeroIoma" Placeholder="Ingrese número IOMA" />
+                            </FormItem>
+                        </AntDesign.Col>
+                    </AntDesign.Row>
+
+                    <AntDesign.Row Gutter="16">
+                        <AntDesign.Col Span="12">
+                            <FormItem Label="¿Es chofer?">
+                                <Switch @bind-Checked="bomberoView.EsChofer"></Switch>
+                                @if (bomberoView.EsChofer)
+                                {
+                                    <div class="conditional-field">
+                                        <FormItem Label="Fecha vencimiento del carnet">
+                                            <DatePicker @bind-Value="@bomberoView.VencimientoRegistro"
+                                                        Picker="@DatePickerType.Date"
+                                                        Style="width: 100%;"
+                                                        Placeholder="@("Seleccione fecha de vencimiento")"
+                                                        AllowClear />
+                                        </FormItem>
+                                    </div>
+                                }
+                            </FormItem>
+                        </AntDesign.Col>
+                    </AntDesign.Row>
+                }
+                else if (Tipo == TipoPersonal.ComisionDirectiva  && personalView is ComisionDirectivaViewModel comisionDirectivaView)
+                {
+                    <!-- Campos específicos para Comisión Directiva -->
+                    <AntDesign.Row Gutter="16">
+                        <AntDesign.Col Span="6">
+                            <FormItem Label="Grado">
+                                <EnumSelect TEnum="GradoComisionDirectiva" @bind-Value="@comisionDirectivaView.Grado" AllowClear />
+                            </FormItem>
+                        </AntDesign.Col>
+                        <AntDesign.Col Span="6">
+                            <FormItem Label="Estado">
+                                <EnumSelect TEnum="EstadoComisionDirectiva" @bind-Value="@comisionDirectivaView.Estado" AllowClear />
+                            </FormItem>
+                        </AntDesign.Col>
+                    </AntDesign.Row>
+
+                    <AntDesign.Row Gutter="16">
+                        <AntDesign.Col Span="8">
+                            <FormItem Label="Fecha de Aceptación">
+                                <DatePicker @bind-Value="@comisionDirectivaView.FechaAceptacion"
+                                            Picker="@DatePickerType.Date"
+                                            Style="width: 100%;"
+                                            Placeholder="@("Seleccione fecha")"
+                                            AllowClear />
+                            </FormItem>
+                        </AntDesign.Col>
+                    </AntDesign.Row>
+                }
+            </div>
+
+            <!-- Información Adicional (Solo para Bomberos) -->
+            @if (Tipo == TipoPersonal.Bombero && personalView is BomberoViweModel bomberoViweModel)
+            {
+                <div class="card">
+                    <div class="card-title">Información Adicional</div>
+                    <AntDesign.Row Gutter="16">
+                        <AntDesign.Col Span="6">
+                            <FormItem Label="Altura (cm)">
+                                <AntDesign.InputNumber @bind-Value="@bomberoViweModel.Altura" Style="width: 100%;" Placeholder="Ingrese altura" />
+                            </FormItem>
+                        </AntDesign.Col>
+                        <AntDesign.Col Span="6">
+                            <FormItem Label="Peso (kg)">
+                                <AntDesign.InputNumber @bind-Value="@bomberoViweModel.Peso" Style="width: 100%;" Placeholder="Ingrese peso" />
+                            </FormItem>
+                        </AntDesign.Col>
+                        <AntDesign.Col Span="6">
+                            <FormItem Label="Nivel de estudio">
+                                <Input @bind-Value="@bomberoViweModel.NivelEstudios" Placeholder="Ingrese nivel de estudios" />
+                            </FormItem>
+                        </AntDesign.Col>
+                        <AntDesign.Col Span="6">
+                            <FormItem Label="Profesión">
+                                <Input @bind-Value="@bomberoViweModel.Profesion" Placeholder="Ingrese profesión" />
+                            </FormItem>
+                        </AntDesign.Col>
+                    </AntDesign.Row>
+
+                    <FormItem Label="Observaciones">
+                        <TextArea @bind-Value="@bomberoViweModel.Observaciones" Placeholder="Ingrese observaciones" Rows="4" />
+                    </FormItem>
+                </div>
+            }
+
+            <!-- Información de Contacto (Común para todos) -->
+            <div class="card">
+                <div class="card-title">Información de Contacto</div>
+                <AntDesign.Row Gutter="16">
+                    <AntDesign.Col Span="6">
+                        <FormItem Label="Teléfono Celular">
+                            <Input @bind-Value="@personalView.TelefonoCel" Placeholder="Ingrese teléfono celular" />
+                        </FormItem>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="6">
+                        <FormItem Label="Teléfono Fijo">
+                            <Input @bind-Value="@personalView.TelefonoFijo" Placeholder="Ingrese teléfono fijo" />
+                        </FormItem>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="6">
+                        <FormItem Label="Teléfono Laboral">
+                            <Input @bind-Value="@personalView.TelefonoLaboral" Placeholder="Ingrese teléfono laboral" />
+                        </FormItem>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="6">
+                        <FormItem Label="Email">
+                            <Input @bind-Value="@personalView.Email" Placeholder="Ingrese email" />
+                        </FormItem>
+                    </AntDesign.Col>
+                </AntDesign.Row>
+            </div>
+
+            <!-- Botones de Acción -->
+            <div class="action-buttons">
+                <Button Type="@ButtonType.Default" OnClick="Cancelar">
+                    Cancelar
+                </Button>
+                @*
+                <Button Type="@ButtonType.Primary" HtmlType="submit" Class="primary-button" OnClick="@(Tipo == TipoPersonal.Bombero ? CrearBombero : CrearComisionDirectiva)">
+                    Editar @(Tipo == TipoPersonal.Bombero ? "Bombero" : "Comisión Directiva")
+                </Button>
+                *@
+                <Button Type="@ButtonType.Primary" HtmlType="submit" Class="primary-button">
+                    Editar @(Tipo == TipoPersonal.Bombero ? "Bombero" : "Comisión Directiva")
+                </Button>
+            </div>
+        </Form>
+    }
+    else
+    {
+        <div>
+            <p>Error: No se ha inicializado correctamente el formulario.</p>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public int PersonalId { get; set; }
+    [Parameter] public TipoPersonal Tipo { get; set; } // Puede ser "bombero" o "comisiondirectiva"
+
+    private PersonalViewModel? personalView = null; // ViewModel base para el personal
+
+    private ImageViewModel imageViewModel = new(); // ViewModel para manejar la imagen
+
+    private string? ImageUrlPreview => imageViewModel.Base64 != null
+        ? $"data:{imageViewModel.TipoImagen};base64,{imageViewModel.Base64}"
+        : null;
+
+    private class ImageViewModel
+    {
+        public string? Base64 { get; set; }
+        public string? TipoImagen { get; set; }
+        public string? NombreImagen { get; set; }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        // Inicializamos el ViewModel según el tipo de personal
+        if (Tipo == TipoPersonal.Bombero)
+        {
+            personalView = new BomberoViweModel();
+            Bombero? bombero = null;
+
+            try
+            {
+                bombero = await BomberoService.ObtenerBomberoPorIdAsync(id: PersonalId, asnotracking: true, conRelaciones: true);
+            }
+            catch (Exception ex)
+            {
+                await message.ErrorAsync($"Error al obtener el bombero: {ex.Message}");
+                navigationManager.NavigateTo($"/personal/bomberos", true);
+                return;
+            }
+
+            if (bombero == null)
+            {
+                await message.ErrorAsync("No se encontró el bombero especificado.");
+                navigationManager.NavigateTo($"/personal/bomberos", true);
+                return;
+            }
+
+            personalView = bombero.ToBomberoViewModel();
+
+            // Cargar la foto si existe
+            if (bombero.Imagen != null)
+            {
+                imageViewModel.Base64 = bombero.Imagen.Base64Imagen;
+                imageViewModel.TipoImagen = bombero.Imagen.TipoImagen;
+                imageViewModel.NombreImagen = bombero.Imagen.NombreImagen;
+            }
+        }
+        else if (Tipo == TipoPersonal.ComisionDirectiva)
+        {
+            personalView = new ComisionDirectivaViewModel();
+            ComisionDirectiva? comisionDirectiva = null;
+
+            try
+            {
+                comisionDirectiva = await ComisionDirectivaService.ObtenerMiembroComisionDirectivaPorIdAsync(id: PersonalId, asnotracking: true, conRelaciones: true);
+            }
+            catch (Exception ex)
+            {
+                await message.ErrorAsync($"Error al obtener el miembro de comisión directiva: {ex.Message}");
+                navigationManager.NavigateTo($"/personal/comisiondirectiva", true);
+                return;
+            }
+
+            if (comisionDirectiva == null)
+            {
+                await message.ErrorAsync("No se encontró el miembro de comisión directiva especificado.");
+                navigationManager.NavigateTo($"/personal/comisiondirectiva", true);
+                return;
+            }
+
+            personalView = comisionDirectiva.ToComisionDirectivaViewModel();
+
+            // Cargar la foto si existe
+            if (comisionDirectiva.Imagen != null)
+            {
+                imageViewModel.Base64 = comisionDirectiva.Imagen.Base64Imagen;
+                imageViewModel.TipoImagen = comisionDirectiva.Imagen.TipoImagen;
+                imageViewModel.NombreImagen = comisionDirectiva.Imagen.NombreImagen;
+            }
+        }
+        else
+        {
+            await message.ErrorAsync("Tipo de personal no válido. Debe ser 'Bombero' o 'Comision Directiva'.");
+            navigationManager.NavigateTo($"/personal/bomberos", true);
+        }
+
+        StateHasChanged();
+    }
+
+    private async Task RemovePhoto()
+    {
+        imageViewModel.Base64 = null;
+        imageViewModel.TipoImagen = null;
+        imageViewModel.NombreImagen = null;
+        await Task.CompletedTask;
+    }
+
+    private async void SubirFoto(InputFileChangeEventArgs e)
+    {
+        string imagenBase64 = await Base64Helper.StreamToBase64(e.File.OpenReadStream());
+
+        imageViewModel.Base64 = imagenBase64;
+        imageViewModel.TipoImagen = e.File.ContentType;
+        imageViewModel.NombreImagen = e.File.Name;
+
+        StateHasChanged();
+        await message.SuccessAsync("Foto subida correctamente.");
+    }
+
+    public Task Cancelar()
+    {
+        if (Tipo == TipoPersonal.Bombero)
+        {
+            navigationManager.NavigateTo($"/personal/bomberos", true);
+            return Task.CompletedTask;
+        }
+        else if (Tipo == TipoPersonal.ComisionDirectiva)
+        {
+            navigationManager.NavigateTo($"/personal/comisiondirectiva", true);
+            return Task.CompletedTask;
+        }
+
+        navigationManager.NavigateTo($"/personal/", true);
+        return Task.CompletedTask;
+    }
+
+    public async Task CrearComisionDirectiva()
+    {
+        try
+        {
+            if (personalView == null)
+            {
+                await message.ErrorAsync("Ocurrió un error al crear el miembro de comisión directiva.");
+                return;
+            }
+
+            if (personalView.Documento == 0)
+            {
+                await message.ErrorAsync("El número de documento no puede ser cero.");
+                return;
+            }
+
+            if (personalView is not ComisionDirectivaViewModel comisionDirectivaView)
+            {
+                await message.ErrorAsync("Ocurrió un error al crear el miembro de comisión directiva.");
+                return;
+            }
+
+            // Preparar el objeto ComisionDirectiva para enviarlo al servicio
+            ComisionDirectiva comisionDirectiva = new ComisionDirectiva()
+            {
+                // --- Información Personal ---
+                Nombre = comisionDirectivaView.Nombre,
+                Apellido = comisionDirectivaView.Apellido,
+                Documento = comisionDirectivaView.Documento,
+                FechaNacimiento = comisionDirectivaView.FechaNacimiento,
+                LugarNacimiento = comisionDirectivaView.LugarNacimiento,
+                Direccion = comisionDirectivaView.Direccion,
+                Sexo = comisionDirectivaView.Sexo,
+                GrupoSanguineo = comisionDirectivaView.GrupoSanguineo,
+
+                // --- Información Profesional ---
+                Grado = comisionDirectivaView.Grado,
+                Estado = comisionDirectivaView.Estado,
+                FechaAceptacion = comisionDirectivaView.FechaAceptacion,
+
+                // --- Información de Contacto ---
+                Contacto = new Contacto
+                {
+                    TelefonoCel = comisionDirectivaView.TelefonoCel,
+                    TelefonoFijo = comisionDirectivaView.TelefonoFijo,
+                    TelefonoLaboral = comisionDirectivaView.TelefonoLaboral,
+                    Email = comisionDirectivaView.Email
+                }
+            };
+
+            // Preparar la foto si existe
+
+            Imagen_Personal? foto = null;
+
+            if (imageViewModel.Base64 != null && imageViewModel.TipoImagen != null && imageViewModel.NombreImagen != null)
+            {
+                foto = new Imagen_Personal
+                {
+                    NombreImagen = imageViewModel.NombreImagen,
+                    TipoImagen = imageViewModel.TipoImagen,
+                    Base64Imagen = imageViewModel.Base64
+                };
+            }
+
+            // Creamos el miembro de comisión directiva
+            await ComisionDirectivaService.CrearComisionDirectiva(comisionDirectiva, foto);
+
+            comisionDirectiva = new();
+            StateHasChanged();
+            message.Success("Se agregó el miembro de comisión directiva.");
+            navigationManager.NavigateTo($"/personal/comisiondirectiva", true);
+        }
+        catch (Exception ex)
+        {
+            await message.ErrorAsync("Ocurrió un error al crear el miembro de comisión directiva.");
+            await message.ErrorAsync($"Error: {ex.Message}");
+        }
+    }
+
+    public async Task CrearBombero()
+    {
+        try
+        {
+            if (personalView == null)
+            {
+                await message.ErrorAsync("Ocurrió un error al crear el bombero.");
+                return;
+            }
+
+            if (personalView.Documento == 0)
+            {
+                await message.ErrorAsync("El número de documento no puede ser cero.");
+                return;
+            }
+
+            if (personalView is not BomberoViweModel bomberoView)
+            {
+                await message.ErrorAsync("Ocurrió un error al crear el bombero.");
+                return;
+            }
+
+            if (bomberoView.NumeroLegajo == 0)
+            {
+                await message.ErrorAsync("El número de legajo no puede ser cero.");
+                return;
+            }
+
+            // Preparar el objeto Bombero para enviarlo al servicio
+            Bombero bombero = new Bombero()
+            {
+                FechaNacimiento = bomberoView.FechaNacimiento,
+                Sexo = bomberoView.Sexo,
+                Nombre = bomberoView.Nombre,
+                Apellido = bomberoView.Apellido,
+                Documento = bomberoView.Documento,
+                NumeroLegajo = bomberoView.NumeroLegajo,
+                NumeroIoma = bomberoView.NumeroIoma,
+                LugarNacimiento = bomberoView.LugarNacimiento,
+                Grado = bomberoView.Grado,
+                Dotacion = bomberoView.Dotacion,
+                GrupoSanguineo = bomberoView.GrupoSanguineo,
+                Altura = bomberoView.Altura,
+                Peso = bomberoView.Peso,
+                Estado = bomberoView.Estado,
+                Chofer = bomberoView.EsChofer,
+                VencimientoRegistro = bomberoView.VencimientoRegistro,
+                Direccion = bomberoView.Direccion,
+                Observaciones = bomberoView.Observaciones,
+                Profesion = bomberoView.Profesion,
+                NivelEstudios = bomberoView.NivelEstudios,
+                FechaAceptacion = bomberoView.FechaAceptacion,
+                Contacto = new Contacto
+                {
+                    TelefonoCel = bomberoView.TelefonoCel,
+                    TelefonoFijo = bomberoView.TelefonoFijo,
+                    TelefonoLaboral = bomberoView.TelefonoLaboral,
+                    Email = bomberoView.Email
+                }
+            };
+
+            // Preparar la foto si existe
+
+            Imagen_Personal? foto = null;
+
+            if (imageViewModel.Base64 != null && imageViewModel.TipoImagen != null && imageViewModel.NombreImagen != null)
+            {
+                foto = new Imagen_Personal
+                {
+                    NombreImagen = imageViewModel.NombreImagen,
+                    TipoImagen = imageViewModel.TipoImagen,
+                    Base64Imagen = imageViewModel.Base64
+                };
+            }
+
+            // Creamos el bombero
+            await BomberoService.CrearBombero(bombero, foto);
+
+            bomberoView = new BomberoViweModel();
+            StateHasChanged();
+            message.Success("Se agregó el bombero.");
+            navigationManager.NavigateTo($"/personal/bomberos", true);
+        }
+        catch (Exception ex)
+        {
+            if (ex.Message.Contains("legajo", StringComparison.OrdinalIgnoreCase))
+            {
+                await message.WarningAsync(ex.Message);
+            }
+            else
+            {
+                await message.ErrorAsync("Ocurrió un error al crear el bombero.");
+                await message.ErrorAsync($"Error: {ex.Message}");
+            }
+        }
+    }
+
+    private void OnFinish(EditContext editContext)
+    {
+        Console.WriteLine($"Success:{JsonSerializer.Serialize(personalView)}");
+    }
+
+    private void OnFinishFailed(EditContext editContext)
+    {
+        Console.WriteLine($"Failed:{JsonSerializer.Serialize(personalView)}");
+    }
+}

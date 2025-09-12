@@ -32,6 +32,7 @@ builder.Services.AddHostedService<InitData>();
 
 // Servicios Scoped
 builder.Services.AddScoped<IBomberoService, BomberoService>();
+builder.Services.AddScoped<IComisionDirectivaService, ComisionDirectivaService>();
 builder.Services.AddScoped<IBrigadaService, BrigadaService>();
 builder.Services.AddScoped<IDepositoService, DepositoService>();
 builder.Services.AddScoped<IVehiculoService, VehiculoService>();

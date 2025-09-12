@@ -399,6 +399,12 @@ namespace Vista.Data
                 .HasMaxLength(255);
 
             modelBuilder
+                .Entity<ComisionDirectiva>()
+                .Property(c => c.Estado)
+                .HasConversion<string>()
+                .HasMaxLength(255);
+
+            modelBuilder
                 .Entity<Bombero>()
                 .Property(b => b.Estado)
                 .HasConversion<string>()
