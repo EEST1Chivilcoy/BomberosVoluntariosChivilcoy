@@ -201,6 +201,93 @@
             transform: translateY(0);
         }
     }
+
+    /* ====== MODAL DISEÑO FUERZAS INTERVINIENTES ====== */
+    .modal-crear-fuerza .ant-modal-content {
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        border: 4px solid #A63333;
+        margin-top: -50px;
+        margin-bottom: 0px;
+    }
+    .modal-crear-fuerza .ant-modal-header {
+        background-color: #f0f2f5;
+        border-bottom: 1px solid #d9d9d9;
+        padding: 16px 24px;
+        border-radius: 9px 9px 0 0;
+    }
+    .modal-crear-fuerza .ant-modal-title {
+        color: #434343;
+        font-weight: 600;
+        font-size: 1.25rem;
+        letter-spacing: 1px;
+    }
+    .modal-crear-fuerza-content {
+        padding: 24px;
+    }
+    .modal-crear-fuerza-form-item {
+        margin-bottom: 20px;
+        position: relative;
+        padding-left: 10px;
+    }
+    .modal-crear-fuerza-form-item::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 3px;
+        border-radius: 5px;
+    }
+    .modal-crear-fuerza-form-item .ant-form-item-label > label {
+        font-weight: 600;
+        color: #434343;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        transition: color 0.3s ease;
+    }
+    .modal-crear-fuerza-form-item .ant-form-item-label > label:hover {
+        color: #FFD700;
+    }
+    .modal-crear-fuerza .ant-input:focus,
+    .modal-crear-fuerza .ant-input:hover {
+        border-color: #FFD700 !important;
+        box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
+    }
+    .modal-crear-fuerza .ant-picker,
+    .modal-crear-fuerza .ant-input,
+    .modal-crear-fuerza .ant-select-selector,
+    .modal-crear-fuerza .ant-input-number,
+    .modal-crear-fuerza .ant-textarea {
+        border-radius: 8px !important;
+        border: 1px solid #d9d9d9 !important;
+        background: #fff !important;
+        color: #434343 !important;
+        transition: all 0.3s ease !important;
+    }
+    .modal-crear-fuerza .modal-crear-fuerza-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 18px;
+        margin-bottom: 0px;
+    }
+    .modal-crear-fuerza .ant-btn-primary {
+        background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
+        border: none !important;
+        color: #fff !important;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
+        margin-top:  0;
+        margin-bottom: 0;
+        padding: 0 20px !important;
+    }
+    .modal-crear-fuerza .ant-btn-primary:hover {
+        background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
+        color: #fff !important;
+    }
 </style>
 
 <div class="fuerzas-abm">
@@ -269,22 +356,58 @@
     </div>
 </div>
 
-@*Modal para Añadir Fuerzas*@
-<Modal @bind-Visible="_modalAñadirVisible" Title="Añadir Fuerza" OkText="@("Guardar")" CancelText="@("Cancelar")" OnOk="@AddFuerza">
-    <Form Model="nuevaFuerza">
-        <FormItem Label="Nombre">
-            <Input @bind-Value="nuevaFuerza.Nombre" />
-        </FormItem>
-    </Form>
+@*Modal para Añadir Fuerzas con diseño de Licencias*@
+<Modal @bind-Visible="_modalAñadirVisible"
+       Title="Añadir Fuerza"
+       Width="@("100%")"
+       Style="max-width: 800px;"
+       OkText="@("Guardar")"
+       CancelText="@("Cancelar")"
+       OnOk="@AddFuerza"
+       DestroyOnClose
+       WrapClassName="modal-crear-fuerza">
+    <div class="modal-crear-fuerza-content">
+        <Form Model="nuevaFuerza" Layout="FormLayout.Vertical" Class="modal-crear-fuerza-form">
+            <Row Class="modal-crear-fuerza-row" Gutter="16">
+                <AntDesign.Col Span="24">
+                    <FormItem Label="Nombre" Required Class="modal-crear-fuerza-form-item">
+                        <Input @bind-Value="nuevaFuerza.Nombre" Size="InputSize.Large" />
+                    </FormItem>
+                </AntDesign.Col>
+            </Row>
+        </Form>
+    </div>
 </Modal>
 
-@*Modal para Editar Fuerza*@
-<Modal @bind-Visible="_modalEditarVisible" Title="Editar Fuerza" OkText="@("Editar")" CancelText="@("Cancelar")" OnOk="@EditarFuerza">
-    <Form Model="selFuerza">
-        <FormItem Label="Nombre">
-            <Input @bind-Value="selFuerza.Nombre" />
-        </FormItem>
-    </Form>
+@*Modal para Editar Fuerza con diseño de Licencias*@
+<Modal @bind-Visible="_modalEditarVisible"
+       Title="Editar Fuerza"
+       Width="@("100%")"
+       Style="max-width: 800px;"
+       OkText="@("Editar")"
+       CancelText="@("Cancelar")"
+       OnOk="@EditarFuerza"
+       DestroyOnClose
+       WrapClassName="modal-crear-fuerza">
+    <div class="modal-crear-fuerza-content">
+        <Form Model="selFuerza" Layout="FormLayout.Vertical" Class="modal-crear-fuerza-form">
+            <Row Class="modal-crear-fuerza-row" Gutter="16">
+                <AntDesign.Col Span="24">
+                    <FormItem Label="Nombre" Required Class="modal-crear-fuerza-form-item">
+                        <Input @bind-Value="selFuerza.Nombre" Size="InputSize.Large" />
+                    </FormItem>
+                </AntDesign.Col>
+            </Row>
+        </Form>
+        <div class="modal-crear-fuerza-footer">
+            <Button Type="ButtonType.Primary" HtmlType="ButtonHtmlType.Submit" OnClick="@EditarFuerza">
+                Editar
+            </Button>
+            <Button OnClick="@(() => _modalEditarVisible = false)">
+                Cancelar
+            </Button>
+        </div>
+    </div>
 </Modal>
 
 @code {
