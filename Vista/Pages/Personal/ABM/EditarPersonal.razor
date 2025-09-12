@@ -152,14 +152,14 @@
 
 <div class="container">
     <div class="page-title">
-        @if (TipoPersonal.ToLower() == "bombero")
+        @if (Tipo == TipoPersonal.Bombero)
         {
             <div>
                 <Icon Type="fire" Theme="IconThemeType.Fill" Class="page-title-icon" />
                 <span>Registro de Nuevo Bombero</span>
             </div>
         }
-        else if (TipoPersonal.ToLower() == "comisiondirectiva")
+        else if (Tipo == TipoPersonal.ComisionDirectiva)
         {
             <div>
                 <Icon Type="reconciliation" Theme="IconThemeType.Fill" Class="page-title-icon" />
@@ -272,7 +272,7 @@
             <div class="card">
                 <div class="card-title">Información Profesional</div>
 
-                @if (TipoPersonal.ToLower() == "bombero" && personalView is BomberoViweModel bomberoView)
+                @if (Tipo == TipoPersonal.Bombero && personalView is BomberoViweModel bomberoView)
                 {
                     <!-- Campos específicos para Bombero -->
                     <AntDesign.Row Gutter="16">
@@ -335,7 +335,7 @@
                         </AntDesign.Col>
                     </AntDesign.Row>
                 }
-                else if (TipoPersonal.ToLower() == "comisiondirectiva" && personalView is ComisionDirectivaViewModel comisionDirectivaView)
+                else if (Tipo == TipoPersonal.ComisionDirectiva  && personalView is ComisionDirectivaViewModel comisionDirectivaView)
                 {
                     <!-- Campos específicos para Comisión Directiva -->
                     <AntDesign.Row Gutter="16">
@@ -366,7 +366,7 @@
             </div>
 
             <!-- Información Adicional (Solo para Bomberos) -->
-            @if (TipoPersonal.ToLower() == "bombero" && personalView is BomberoViweModel bomberoViweModel)
+            @if (Tipo == TipoPersonal.Bombero && personalView is BomberoViweModel bomberoViweModel)
             {
                 <div class="card">
                     <div class="card-title">Información Adicional</div>
@@ -431,8 +431,13 @@
                 <Button Type="@ButtonType.Default" OnClick="Cancelar">
                     Cancelar
                 </Button>
-                <Button Type="@ButtonType.Primary" HtmlType="submit" Class="primary-button" OnClick="@(TipoPersonal.ToLower() == "bombero" ? CrearBombero : CrearComisionDirectiva)">
-                    Registrar @(TipoPersonal.ToLower() == "bombero" ? "Bombero" : "Comisión Directiva")
+                @*
+                <Button Type="@ButtonType.Primary" HtmlType="submit" Class="primary-button" OnClick="@(Tipo == TipoPersonal.Bombero ? CrearBombero : CrearComisionDirectiva)">
+                    Editar @(Tipo == TipoPersonal.Bombero ? "Bombero" : "Comisión Directiva")
+                </Button>
+                *@
+                <Button Type="@ButtonType.Primary" HtmlType="submit" Class="primary-button">
+                    Editar @(Tipo == TipoPersonal.Bombero ? "Bombero" : "Comisión Directiva")
                 </Button>
             </div>
         </Form>
