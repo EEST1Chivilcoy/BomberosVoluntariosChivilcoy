@@ -9,149 +9,214 @@
 @inject IDbContextFactory<BomberosDbContext> DbFactory
 
 <style>
-    /* tile uploaded pictures */
-    .upload-list-inline .ant-upload-list-item {
-        float: left;
-        width: 200px;
-        margin-right: 8px;
+    .modal-crear-licencia .ant-modal-content {
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        border: 4px solid #A63333;
+        margin-top: 50px;
+        margin-bottom: 0px;
+        ;
+        }
+
+    .modal-crear-licencia .ant-modal-header {
+        background-color: #f0f2f5;
+        border-bottom: 1px solid #d9d9d9;
+        padding: 16px 24px;
+        border-radius: 9px 9px 0 0;
     }
 
-    .upload-list-inline [class*='-upload-list-rtl'] .ant-upload-list-item {
-        float: right;
+
+    .modal-crear-licencia-form-item .ant-form-item-label > label,
+    .modal-crear-licencia-form-full-width .ant-form-item-label > label {
+        font-weight: 600;
+        color: #434343;
+        transition: color 0.3s ease;
     }
 
-    .upload-list-inline .ant-upload-animate-enter {
-        animation-name: uploadAnimateInlineIn;
+    .modal-crear-licencia-form-item .ant-form-item-label > label:hover,
+    .modal-crear-licencia-form-full-width .ant-form-item-label > label:hover {
+        color: #FFD700;
     }
 
-    .upload-list-inline .ant-upload-animate-leave {
-        animation-name: uploadAnimateInlineOut;
+    .modal-crear-licencia .ant-input:focus,
+    .modal-crear-licencia .ant-input:hover,
+    .modal-crear-licencia .ant-select-selector:focus,
+    .modal-crear-licencia .ant-select-selector:hover,
+    .modal-crear-licencia .ant-picker:focus,
+    .modal-crear-licencia .ant-picker:hover,
+    .modal-crear-licencia .ant-picker-input > input:focus,
+    .modal-crear-licencia .ant-picker-input > input:hover,
+    .modal-crear-licencia .ant-input-number-input:focus,
+    .modal-crear-licencia .ant-input-number-input:hover,
+    .modal-crear-licencia .ant-textarea:focus,
+    .modal-crear-licencia .ant-textarea:hover {
+        border-color: #FFD700 !important;
+        box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
     }
 
-    #crear-comunicacion {
-        background-color: #C43A3A;
-        color: white;
-        font-size: 20px;
-        font-family: calibri light;
-        border: 0px;
-        border-radius: 8px;
+    .modal-crear-licencia .ant-picker,
+    .modal-crear-licencia .ant-input,
+    .modal-crear-licencia .ant-select-selector,
+    .modal-crear-licencia .ant-input-number,
+    .modal-crear-licencia .ant-textarea {
+        border-radius: 8px !important;
+        border: 1px solid #d9d9d9 !important;
+        background: #fff !important;
+        color: #434343 !important;
+        transition: all 0.3s ease !important;
     }
 
-    #blancoA {
+    .modal-crear-licencia-footer {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 16px;
+        margin-top: 18px;
+        margin-bottom: 0px;
         width: 100%;
-        padding: 15px;
     }
 
-    #estilo {
-        border: 1px;
-        border-radius: 8px;
-        background-color: #AFAFAF;
+    .modal-crear-licencia .ant-btn-primary {
+        background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
+        border: none !important;
+        color: #fff !important;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
+        margin-top: 0;
+        margin-bottom: 0;
+        padding: 0 20px !important;
+        border-radius: 8px !important;
+        transition: background 0.3s;
     }
 
-    #texto {
-        font-size: 20px;
-        font-family: calibri light;
-        Font-Weight: bold;
+    .modal-crear-licencia .ant-btn-primary:hover {
+        background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
+        color: #fff !important;
     }
-    
-    .boton_p {
-        background-color: #732D2D !important;
-        color: white !important;
+
+    .boton-agregar {
+        background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
+        border: none !important;
+        color: #fff !important;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
+        padding: 0 20px !important;
+        border-radius: 8px !important;
+        transition: background 0.3s;
     }
+
+    .boton-agregar:hover {
+        background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
+        color: #fff !important;
+    }
+
+    @@media (max-width: 767px) {
+        .modal-crear-licencia-content {
+            padding: 16px;
+        }
+    }   
 </style>
 
-<Form Model="@ComunicacionVM"
-      LabelColSpan="8"
-      WrapperColSpan="16"
-      OnFinish="OnFinish"
-      OnFinishFailed="OnFinishFailed">
-    <FormItem Label="Número Equipo">
-        <Input @bind-Value="@ComunicacionVM.NroEquipo" />
-    </FormItem>
-    <FormItem Label="Modelo">
-        <Input @bind-Value="@ComunicacionVM.Modelo" />
-    </FormItem>
-    <FormItem Label="Marca">
-        <Input @bind-Value="@ComunicacionVM.Marca" />
-    </FormItem>
-    <FormItem Label="Número Serie">
-        <Input @bind-Value="@ComunicacionVM.NroSerie" />
-    </FormItem>
-    <FormItem Label="Estado">
-        <EnumSelect TEnum="TipoEstadoHandie" @bind-Value="@ComunicacionVM.Estado" />
-    </FormItem>
-
-    @if (ComunicacionVM.Estado == TipoEstadoHandie.Activo)
-    {
-        <div>
-            <FormItem Label="Seleccione una opción">
-                <Checkbox @bind-Checked="@selectBombero" OnChange="() => HandleCheckboxChange(true, checkboxBomberoLabel)">Elija el bombero</Checkbox>
-                <Checkbox @bind-Checked="@selectMovil" OnChange="() => HandleCheckboxChange(true, checkboxMovilLabel)">Elija el móvil</Checkbox>
-            </FormItem>
+<div class="modal-crear-licencia-content">
+    <Form Model="@ComunicacionVM"
+          Class="modal-crear-licencia-form"
+          OnFinish="OnFinish"
+          OnFinishFailed="OnFinishFailed">
+        <Row Class="modal-crear-licencia-row" Gutter="24">
+            <AntDesign.Col Span="12">
+                <FormItem Label="Número Equipo" Class="modal-crear-licencia-form-item">
+                    <Input @bind-Value="@ComunicacionVM.NroEquipo" />
+                </FormItem>
+            </AntDesign.Col>
+            <AntDesign.Col Span="12">
+                <FormItem Label="Modelo" Class="modal-crear-licencia-form-item">
+                    <Input @bind-Value="@ComunicacionVM.Modelo" />
+                </FormItem>
+            </AntDesign.Col>
+        </Row>
+        <Row Class="modal-crear-licencia-row" Gutter="24">
+            <AntDesign.Col Span="12">
+                <FormItem Label="Marca" Class="modal-crear-licencia-form-item">
+                    <Input @bind-Value="@ComunicacionVM.Marca" />
+                </FormItem>
+            </AntDesign.Col>
+            <AntDesign.Col Span="12">
+                <FormItem Label="Número Serie" Class="modal-crear-licencia-form-item">
+                    <Input @bind-Value="@ComunicacionVM.NroSerie" />
+                </FormItem>
+            </AntDesign.Col>
+        </Row>
+        <Row Class="modal-crear-licencia-row" Gutter="24">
+            <AntDesign.Col Span="24">
+                <FormItem Label="Estado" Class="modal-crear-licencia-form-item">
+                    <EnumSelect TEnum="TipoEstadoHandie" @bind-Value="@ComunicacionVM.Estado" />
+                </FormItem>
+            </AntDesign.Col>
+        </Row>
+        @if (ComunicacionVM.Estado == TipoEstadoHandie.Activo)
+        {
+            <Row Class="modal-crear-licencia-row" Gutter="24">
+                <AntDesign.Col Span="24">
+                    <FormItem Label="Seleccione una opción" Class="modal-crear-licencia-form-item">
+                        <Checkbox @bind-Checked="@selectBombero" OnChange="() => HandleCheckboxChange(true, checkboxBomberoLabel)">Elija el bombero</Checkbox>
+                        <Checkbox @bind-Checked="@selectMovil" OnChange="() => HandleCheckboxChange(true, checkboxMovilLabel)">Elija el móvil</Checkbox>
+                    </FormItem>
+                </AntDesign.Col>
+            </Row>
+            @if (selectBombero)
+            {
+                <Row Class="modal-crear-licencia-row" Gutter="24">
+                    <AntDesign.Col Span="24">
+                        <FormItem Label="Elija el bombero que será asignado" Class="modal-crear-licencia-form-item">
+                            <Select TItem="BomberoViweModel"
+                                    TItemValue="int?"
+                                    DataSource="@BomberosVM"
+                                    @bind-Value="@ComunicacionVM.NroLegajo"
+                                    LabelName="@nameof(BomberoViweModel.NombreYApellido)"
+                                    ValueName="@nameof(BomberoViweModel.NumeroLegajo)"
+                                    Placeholder="Seleccione a un bombero"
+                                    EnableSearch
+                                    AllowClear="true">
+                            </Select>
+                        </FormItem>
+                    </AntDesign.Col>
+                </Row>
+            }
+            @if (selectMovil)
+            {
+                <Row Class="modal-crear-licencia-row" Gutter="24">
+                    <AntDesign.Col Span="24">
+                        <FormItem Label="Elija el móvil que será asignado" Class="modal-crear-licencia-form-item">
+                            <Select TItem="MovilViewModel"
+                                    TItemValue="string"
+                                    DataSource="@MovilesViewModel"
+                                    @bind-Value="@ComunicacionVM.NumeroMovil"
+                                    LabelName="@nameof(MovilViewModel.NumeroMovil)"
+                                    ValueName="@nameof(MovilViewModel.NumeroMovil)"
+                                    Placeholder="Seleccione un móvil"
+                                    EnableSearch
+                                    AllowClear="true">
+                            </Select>
+                        </FormItem>
+                    </AntDesign.Col>
+                </Row>
+            }
+        }
+        <div class="modal-crear-licencia-footer">
+            <Button Style="border: 1px solid black;" OnClick="@(() => OnFinishCallback.InvokeAsync())">
+                Volver
+            </Button>
+            <Button Class="boton-agregar" HtmlType="submit">
+                Agregar Handie
+            </Button>
         </div>
-
-
-        @if (selectBombero)
-        {
-            <div>
-                <FormItem Label="Elija el bombero que será asignado">
-                    <Select TItem="BomberoViweModel"
-                    TItemValue="int?"
-                    DataSource="@BomberosVM"
-                    @bind-Value="@ComunicacionVM.NroLegajo"
-                    LabelName="@nameof(BomberoViweModel.NombreYApellido)"
-                    ValueName="@nameof(BomberoViweModel.NumeroLegajo)"
-                    Placeholder="Seleccione a un bombero"
-                    DefaultActiveFirstOption="false"
-
-            EnableSearch
-                    AllowClear="true">
-                    </Select>
-                </FormItem>
-            </div>
-        }
-
-        @if (selectMovil)
-        {
-            <div>
-                <FormItem Label="Elija el móvil que será asignado">
-                    <Select TItem="MovilViewModel"
-                    TItemValue="string"
-                    DataSource="@MovilesViewModel"
-                    @bind-Value="@ComunicacionVM.NumeroMovil"
-                    LabelName="@nameof(MovilViewModel.NumeroMovil)"
-                    ValueName="@nameof(MovilViewModel.NumeroMovil)"
-                    Placeholder="Seleccione un móvil"
-                    DefaultActiveFirstOption="false"
-
-            EnableSearch
-                    AllowClear="true">
-                    </Select>
-                </FormItem>
-            </div>
-        }
-    }
-    <style>
-        .ant-col-offset-8 {
-            margin-left: 0px !important;
-        }
-        
-    .boton_p {
-        background-color: #732D2D !important;
-        color: white !important;
-    }
-    </style>
-    <FormItem Style="width: 100% !important;
-            display: flex !important;
-            justify-content: flex-end !important;
-            align-items: flex-end !important; height:100% !important; margin-bottom: -32px;" WrapperColOffset="8" WrapperColSpan="16">
-        <Button Class="boton_p" HtmlType="submit">
-            Agregar Handie
-        </Button>
-    </FormItem>
-</Form>
+    </Form>
+</div>
 
 @code {
+    [Parameter]
+    public EventCallback OnFinishCallback { get; set; }
+
     private class ComunicacionViewModel
     {
         [Required, StringLength(255)]
@@ -241,7 +306,7 @@
             MovilesViewModel.Add(movilVM);
         }
     }
-    public async void OnFinish(EditContext editContext)
+    public async Task OnFinish(EditContext editContext)
     {
         try
         {
@@ -303,9 +368,8 @@
             }
 
             await Context.SaveChangesAsync();
-            await Init();
-            StateHasChanged();
             await message.SuccessAsync("Handie agregado correctamente");
+            await OnFinishCallback.InvokeAsync();
         }
         catch (Exception ex)
         {
@@ -328,3 +392,4 @@
         Context?.Dispose();
     }
 }
+
