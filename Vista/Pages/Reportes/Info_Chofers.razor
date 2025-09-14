@@ -11,140 +11,351 @@
 
 <style>
 
-    .template {
-        width: 100%;
-        height: 100%;
-        max-width: 97%;
-        min-width: 400px;
-        max-height: 100vh;
-        border-radius: 10px;
-        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-        background: #fff;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        margin: 1em;
-        padding: 0;
-        overflow: auto;
+    .info-chofers-abm {
+        --abm-primary-color: #A63333;
+        --abm-primary-dark: #732D2D;
+        --abm-success-color: #4CAF50;
+        --abm-success-dark: #438E46;
+        --abm-warning-color: #F57F17;
+        --abm-warning-light: #FFF8E1;
+        --abm-error-color: #C62828;
+        --abm-error-light: #FFEBEE;
+        --abm-approved-color: #2E7D32;
+        --abm-approved-light: #E6F7E9;
+        --abm-gold-color: #FFD700;
     }
 
-    .nombreClase {
-        display: inline-block;
+    .info-chofers-abm .container {
+        padding: 32px !important;
+        min-height: 100vh !important;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;
     }
 
-    .inpt-cont--lbl {
-        min-width: 170px;
-        text-align: start;
-        font-weight: bold;
+    .info-chofers-abm .main-card {
+        background: rgba(255, 255, 255, 0.97) !important;
+        backdrop-filter: blur(12px) !important;
+        box-shadow: 0 12px 48px rgba(166, 51, 51, 0.13), 0 6px 24px rgba(0, 0, 0, 0.07) !important;
+        border: 1px solid rgba(255, 255, 255, 0.25) !important;
         overflow: hidden !important;
+        margin: 2em auto;
+        max-width: 1800px;
+        min-width: 600px;
     }
 
-    .inpt-cont {
-        min-width: 170px;
-        display: flex;
-        flex-direction: column;
-        padding: .3em 0;
-        width: 100%;
+    .info-chofers-abm .header-section {
+        background: linear-gradient(135deg, #A63333 0%, #732D2D 100%) !important;
+        color: white !important;
+        padding: 48px 36px !important;
+        position: relative !important;
         overflow: hidden !important;
+        margin-bottom: 0 !important;
     }
 
-    .inpt-cont-inline {
-        min-width: 170px;
-        display: flex;
-        align-items: flex-end;
-        gap: 1em;
+    .info-chofers-abm .header-section .lava-bubbles {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        pointer-events: none;
+        z-index: 1;
+        overflow: hidden;
+    }
+
+    .info-chofers-abm .header-section .lava-bubble {
+        position: absolute;
+        border-radius: 50%;
+        opacity: 0.45;
+        background: radial-gradient(circle at 60% 40%, #FFD54F 0%, #F9A825 80%, transparent 100%);
+        animation: lava-bubble-move 8s linear infinite;
+        filter: blur(2px);
+        mix-blend-mode: lighten;
+    }
+
+    .info-chofers-abm .header-section .lava-bubble.b1 {
+        left: 10%; width: 90px; height: 90px; bottom: -90px;
+        animation-delay: 0s; animation-duration: 7.5s;
+    }
+
+    .info-chofers-abm .header-section .lava-bubble.b2 {
+        left: 35%; width: 140px; height: 140px; bottom: -140px;
+        animation-delay: 2s; animation-duration: 9s;
+        background: radial-gradient(circle at 60% 40%, #FFEB3B 0%, #FFD54F 80%, transparent 100%);
+    }
+
+    .info-chofers-abm .header-section .lava-bubble.b3 {
+        left: 65%; width: 80px; height: 80px; bottom: -80px;
+        animation-delay: 1.5s; animation-duration: 6.5s;
+        background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #FFD54F 80%, transparent 100%);
+    }
+
+    .info-chofers-abm .header-section .lava-bubble.b4 {
+        left: 80%; width: 110px; height: 110px; bottom: -110px;
+        animation-delay: 3.2s; animation-duration: 8.5s;
+        background: radial-gradient(circle at 60% 40%, #F9A825 0%, #FFD54F 80%, transparent 100%);
+    }
+
+    .info-chofers-abm .header-section .lava-bubble.b5 {
+        left: 55%; width: 70px; height: 70px; bottom: -70px;
+        animation-delay: 5s; animation-duration: 7.2s;
+        background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #F9A825 80%, transparent 100%);
+    }
+
+    @@keyframes lava-bubble-move {
+        0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 0.45; }
+        60% { opacity: 0.7; filter: blur(2.5px); }
+        80% { transform: translateY(-320px) scale(1.25) rotate(10deg); opacity: 0.6; }
+        100% { transform: translateY(-420px) scale(1.05) rotate(-8deg); opacity: 0; }
+    }
+
+    .info-chofers-abm .main-title {
+        font-family: 'Poppins', 'Fjalla One', sans-serif !important;
+        font-size: 3rem !important;
+        font-weight: 800 !important;
+        letter-spacing: 2px !important;
+        margin: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 18px !important;
+        animation: text-glow 2.5s ease-in-out infinite alternate !important;
+        position: relative !important;
+        z-index: 2 !important;
+    }
+
+    .info-chofers-abm .title-container {
+        position: relative !important;
+        z-index: 2 !important;
+        margin-bottom: 20px !important;
+    }
+
+    .info-chofers-abm .filters-section {
+        position: relative !important;
+        z-index: 2 !important;
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+    }
+
+    .info-chofers-abm .filter-row {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
+        gap: 16px !important;
+        align-items: end !important;
+    }
+
+    .info-chofers-abm .filter-group {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 8px !important;
+    }
+
+    .info-chofers-abm .filter-label {
+        font-weight: 600 !important;
+        color: rgba(255, 255, 255, 0.9) !important;
+        font-size: 0.9rem !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+    }
+
+    .info-chofers-abm .actions-row {
+        display: grid !important;
+        grid-template-columns: 1fr auto auto !important;
+        gap: 16px !important;
+        align-items: center !important;
+    }
+
+    .info-chofers-abm .search-container {
+        min-width: 0 !important;
+    }
+
+    .info-chofers-abm .modern-button {
+        height: 40px !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        position: relative !important;
         overflow: hidden !important;
-        height: 100%;
+        background: linear-gradient(135deg, var(--abm-success-color) 0%, var(--abm-success-dark) 100%) !important;
+        border: none !important;
+        color: white !important;
+        box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3) !important;
+        padding: 0 20px !important;
     }
 
-    .botonesCont {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-end;
+    .info-chofers-abm .modern-button:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4) !important;
     }
 
-    .ant-table-title {
-        height: 6.5em !important;
+    .info-chofers-abm .table-container {
+        padding: 0 !important;
+        overflow: hidden !important;
+        margin-top: 0 !important;
     }
 
-    .ant-badge {
-        margin: 20px 10px 0 0 !important;
+    .info-chofers-abm .ant-table-thead > tr > th {
+        background: #A63333 !important;
+        color: #fff !important;
+        font-weight: 600 !important;
+        border: none !important;
+        padding: 16px !important;
     }
 
-    @@media (max-width: 960px) {
-        .ant-table-row, .ant-table-row-level-0 {
-            display: flex !important;
-            flex-direction: column !important;
-        }
+    .info-chofers-abm :deep(.ant-table-tbody > tr:hover > td) {
+        background-color: inherit !important;
+        cursor: default !important;
+        transform: none !important;
+        transition: none !important;
+    }
 
-        .ant-table-title {
-            height: 12.5em !important;
-        }
+    .info-chofers-abm :deep(.ant-table) {
+        margin-top: 0 !important;
+        border-radius: 0 !important;
+    }
 
-        .buton-cont {
-            width: 100% !important;
-        }
+    .info-chofers-abm :deep(.ant-table-container) {
+        border-top: none !important;
+    }
 
-        #ant-blazor-df7d6d62-e78b-479a-b209-8325c3889500 {
-            width: 100% !important;
-        }
+    .info-chofers-abm :deep(.ant-picker),
+    .info-chofers-abm :deep(.ant-select-selector),
+    .info-chofers-abm :deep(.ant-input) {
+        border-radius: 8px !important;
+        border: 1px solid rgba(255, 255, 255, 0.3) !important;
+        background: rgba(255, 255, 255, 0.1) !important;
+        color: white !important;
+        transition: all 0.3s ease !important;
+    }
 
-        .inpt-cont-inline {
-            flex-direction: column !important;
-            gap: 0 !important;
-            align-items: flex-start;
+    .info-chofers-abm :deep(.ant-picker:hover),
+    .info-chofers-abm :deep(.ant-select-selector:hover),
+    .info-chofers-abm :deep(.ant-input:hover) {
+        background: rgba(255, 255, 255, 0.2) !important;
+        border-color: rgba(255, 255, 255, 0.5) !important;
+    }
+
+    .info-chofers-abm :deep(.ant-picker-input > input),
+    .info-chofers-abm :deep(.ant-select-selection-item),
+    .info-chofers-abm :deep(.ant-input::placeholder) {
+        color: white !important;
+    }
+
+    .ant-table-cell {
+        min-width: 120px!important;
+        font-size: 1.1rem !important;
+        padding: 18px !important;
+    }
+
+    @@media (max-width: 1199px) {
+        .info-chofers-abm .container {
+            padding: 12px !important;
         }
-        .buttoncont{
-            width: 100%!important;
+        .info-chofers-abm .header-section {
+            padding: 24px 12px !important;
         }
+        .info-chofers-abm .main-title {
+            font-size: 2rem !important;
+        }
+        .info-chofers-abm .filter-row {
+            grid-template-columns: 1fr !important;
+        }
+        .info-chofers-abm .actions-row {
+            grid-template-columns: 1fr !important;
+            gap: 12px !important;
+        }
+    }
+
+
+    .info-chofers-abm .title-icon {
+        color: #FFD54F !important;
+        font-size: 2.8rem !important;
+        filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.25)) !important;
+    }
+
+    @@keyframes text-glow {
+        0%, 100% { text-shadow: 0 0 8px #F9A825, 0 0 18px #FFD54F; }
+        50% { text-shadow: 0 0 22px #F9A825, 0 0 32px #FFD54F; }
     }
 </style>
 
-<div class="template">
-    <Table DataSource="preferencia" TItem="ChoferesVM" PageSize="6" Responsive>
-        <TitleTemplate>
-            <div class="botonesCont">
-                <div class="inpt-cont-inline">
-                    <div class="inpt-cont">
-                        <label class="inpt-cont--lbl">Desde: </label>
-                            <DatePicker TValue="DateTime" DefaultValue="DateTime.Now" @bind-Value="@desde" Style="width: 150px;" AllowClear />
+<div class="info-chofers-abm">
+    <div class="container fade-in">
+        <Card Class="main-card">
+            <div class="header-section">
+                <div class="lava-bubbles">
+                    <div class="lava-bubble b1"></div>
+                    <div class="lava-bubble b2"></div>
+                    <div class="lava-bubble b3"></div>
+                    <div class="lava-bubble b4"></div>
+                    <div class="lava-bubble b5"></div>
+                </div>
+                <div class="title-container">
+                    <h1 class="main-title">
+                        <Icon Type="car" Class="title-icon" />
+                        REPORTES DE CHOFERES
+                    </h1>
+                </div>
+                <div class="filters-section">
+                    <div class="filter-row">
+                        <div class="filter-group">
+                            <label class="filter-label">📅 Fecha Desde</label>
+                            <DatePicker TValue="DateTime" 
+                                        DefaultValue="@DateTime.Now"
+                                        @bind-Value="@desde" 
+                                        Size="InputSize.Large"
+                                        laceholder="@("Seleccionar fecha")" />
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">📅 Fecha Hasta</label>
+                            <DatePicker TValue="DateTime" 
+                                        DefaultValue="@DateTime.Now"
+                                        @bind-Value="@hasta" 
+                                        Size="InputSize.Large"
+                                        laceholder="@("Seleccionar fecha")" />
+                        </div>
                     </div>
 
-                    <div class="inpt-cont">
-                        <label class="inpt-cont--lbl">Hasta: </label>
-                            <DatePicker TValue="DateTime" DefaultValue="DateTime.Now" @bind-Value="@hasta" Style="width: 150px;" AllowClear />
-                    </div>
+                    <div class="actions-row">
+                        <div class="search-container">
+                            <!-- Espacio para búsqueda si se desea agregar en el futuro -->
+                        </div>
 
-                    <div>
-                        <Button OnClick="()=>colocar_preferencia(desde,hasta,preferencia)" Style="margin-bottom: 5px;">
+                        <Button Class="modern-button" 
+                                OnClick="()=>colocar_preferencia(desde,hasta,preferencia)" 
+                                Icon="search"
+                                Size="ButtonSize.Large">
                             Buscar
+                        </Button>
+
+                        <Button Class="modern-button" 
+                                OnClick="()=>Insertar_todos_choferes(preferencia)" 
+                                Icon="team"
+                                Size="ButtonSize.Large">
+                            Mostrar todos
                         </Button>
                     </div>
                 </div>
-
-                <div class="buttoncont">
-                    <Button Class="buttoncont" Style="margin-bottom: 5px;" OnClick="()=>Insertar_todos_choferes(preferencia)">
-                        Mostrar todos
-                    </Button>
-                </div>
             </div>
-        </TitleTemplate>
-
-        <ColumnDefinitions>
-            <Selection Key="@(context.NumeroLegajo.ToString())" />
-            <PropertyColumn Property="c=>c.NumeroLegajo" Title="Numero de Legajo"
-                DefaultSortOrder="@SortDirection.Descending"
-                    SorterCompare="@((a,b)=> a - b)" />
-            <PropertyColumn Property="c=>c.Nombre" Sortable />
-            <PropertyColumn Property="c=>c.Apellido" Sortable />
-            <PropertyColumn Property="c => c.DotacionNumero" Title="Dotacion" />
-            <PropertyColumn Property="c=>c.VencimientoRegistro" Title="Vencimiento Registro" Format="dd/MM/yyyy" Sortable />
-            <PropertyColumn Property="c=>c.TelefonoCel" Title="Telefono Celular" Sortable />
-            <PropertyColumn Property="c=>c.TelefonoFijo" Title="Telefono Fijo" Sortable />
-            <PropertyColumn Property="c=>c.TelefonoLaboral" Title="Telefono Laboral" Sortable />
-        </ColumnDefinitions>
-    </Table>
+            
+            <div class="table-container">
+                <Table DataSource="preferencia" TItem="ChoferesVM" PageSize="6" Responsive>
+                    <ColumnDefinitions>
+                        <Selection Key="@(context.NumeroLegajo.ToString())" />
+                        <PropertyColumn Property="c=>c.NumeroLegajo" Title="Numero de Legajo"
+                            DefaultSortOrder="@SortDirection.Descending"
+                                SorterCompare="@((a,b)=> a - b)" />
+                        <PropertyColumn Property="c=>c.Nombre" Sortable />
+                        <PropertyColumn Property="c=>c.Apellido" Sortable />
+                        <PropertyColumn Property="c => c.DotacionNumero" Title="Dotacion" />
+                        <PropertyColumn Property="c=>c.VencimientoRegistro" Title="Vencimiento Registro" Format="dd/MM/yyyy" Sortable />
+                        <PropertyColumn Property="c=>c.TelefonoCel" Title="Telefono Celular" Sortable />
+                        <PropertyColumn Property="c=>c.TelefonoFijo" Title="Telefono Fijo" Sortable />
+                        <PropertyColumn Property="c=>c.TelefonoLaboral" Title="Telefono Laboral" Sortable />
+                    </ColumnDefinitions>
+                </Table>
+            </div>
+        </Card>
+    </div>
 </div>
 
 @code {
