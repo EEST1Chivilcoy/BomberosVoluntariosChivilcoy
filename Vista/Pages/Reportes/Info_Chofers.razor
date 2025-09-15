@@ -26,30 +26,26 @@
     }
 
     .info-chofers-abm .container {
-        padding: 32px !important;
+        padding: 12px !important;
         min-height: 100vh !important;
         background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;
     }
 
     .info-chofers-abm .main-card {
-        background: rgba(255, 255, 255, 0.97) !important;
-        backdrop-filter: blur(12px) !important;
-        border-radius: 24px !important;
-        box-shadow: 0 12px 48px rgba(166, 51, 51, 0.13), 0 6px 24px rgba(0, 0, 0, 0.07) !important;
-        border: 1px solid rgba(255, 255, 255, 0.25) !important;
+        background: rgba(255, 255, 255, 0.95) !important;
+        backdrop-filter: blur(10px) !important;
+        border-radius: 16px !important;
+        box-shadow: 0 8px 32px rgba(166, 51, 51, 0.1), 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
         overflow: hidden !important;
-        margin: 2em auto;
-        max-width: 1800px;
-        min-width: 600px;
     }
 
     .info-chofers-abm .header-section {
         background: linear-gradient(135deg, #A63333 0%, #732D2D 100%) !important;
         color: white !important;
-        padding: 48px 36px !important;
+        padding: 28px !important;
         position: relative !important;
         overflow: hidden !important;
-        margin-bottom: 0 !important;
     }
 
     .info-chofers-abm .header-section .lava-bubbles {
@@ -66,35 +62,35 @@
         opacity: 0.45;
         background: radial-gradient(circle at 60% 40%, #FFD54F 0%, #F9A825 80%, transparent 100%);
         animation: lava-bubble-move 8s linear infinite;
-        filter: blur(2px);
+        filter: blur(1.5px);
         mix-blend-mode: lighten;
     }
 
     .info-chofers-abm .header-section .lava-bubble.b1 {
-        left: 10%; width: 90px; height: 90px; bottom: -90px;
+        left: 10%; width: 60px; height: 60px; bottom: -70px;
         animation-delay: 0s; animation-duration: 7.5s;
     }
 
     .info-chofers-abm .header-section .lava-bubble.b2 {
-        left: 35%; width: 140px; height: 140px; bottom: -140px;
+        left: 35%; width: 90px; height: 90px; bottom: -100px;
         animation-delay: 2s; animation-duration: 9s;
         background: radial-gradient(circle at 60% 40%, #FFEB3B 0%, #FFD54F 80%, transparent 100%);
     }
 
     .info-chofers-abm .header-section .lava-bubble.b3 {
-        left: 65%; width: 80px; height: 80px; bottom: -80px;
+        left: 65%; width: 50px; height: 50px; bottom: -60px;
         animation-delay: 1.5s; animation-duration: 6.5s;
         background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #FFD54F 80%, transparent 100%);
     }
 
     .info-chofers-abm .header-section .lava-bubble.b4 {
-        left: 80%; width: 110px; height: 110px; bottom: -110px;
+        left: 80%; width: 70px; height: 70px; bottom: -80px;
         animation-delay: 3.2s; animation-duration: 8.5s;
         background: radial-gradient(circle at 60% 40%, #F9A825 0%, #FFD54F 80%, transparent 100%);
     }
 
     .info-chofers-abm .header-section .lava-bubble.b5 {
-        left: 55%; width: 70px; height: 70px; bottom: -70px;
+        left: 55%; width: 40px; height: 40px; bottom: -50px;
         animation-delay: 5s; animation-duration: 7.2s;
         background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #F9A825 80%, transparent 100%);
     }
@@ -102,19 +98,19 @@
     @@keyframes lava-bubble-move {
         0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 0.45; }
         60% { opacity: 0.7; filter: blur(2.5px); }
-        80% { transform: translateY(-320px) scale(1.25) rotate(10deg); opacity: 0.6; }
-        100% { transform: translateY(-420px) scale(1.05) rotate(-8deg); opacity: 0; }
+        80% { transform: translateY(-220px) scale(1.15) rotate(10deg); opacity: 0.6; }
+        100% { transform: translateY(-320px) scale(0.95) rotate(-8deg); opacity: 0; }
     }
 
     .info-chofers-abm .main-title {
         font-family: 'Poppins', 'Fjalla One', sans-serif !important;
-        font-size: 3rem !important;
-        font-weight: 800 !important;
-        letter-spacing: 2px !important;
+        font-size: 2.2rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 1px !important;
         margin: 0 !important;
         display: flex !important;
         align-items: center !important;
-        gap: 18px !important;
+        gap: 12px !important;
         animation: text-glow 2.5s ease-in-out infinite alternate !important;
         position: relative !important;
         z-index: 2 !important;
@@ -243,19 +239,22 @@
 
     .ant-table-cell {
         min-width: 120px!important;
-        font-size: 1.1rem !important;
-        padding: 18px !important;
+        font-size: 1rem !important;
+        padding: 16px !important;
     }
 
     @@media (max-width: 1199px) {
         .info-chofers-abm .container {
-            padding: 12px !important;
+            padding: 8px !important;
         }
         .info-chofers-abm .header-section {
-            padding: 24px 12px !important;
+            padding: 20px !important;
         }
         .info-chofers-abm .main-title {
             font-size: 2rem !important;
+            flex-direction: column !important;
+            text-align: center !important;
+            gap: 8px !important;
         }
         .info-chofers-abm .filter-row {
             grid-template-columns: 1fr !important;
@@ -266,16 +265,35 @@
         }
     }
 
+    @@media (max-width: 768px) {
+        .info-chofers-abm .container {
+            padding: 4px !important;
+        }
+        .info-chofers-abm .header-section {
+            padding: 16px !important;
+        }
+        .info-chofers-abm .main-title {
+            font-size: 1.8rem !important;
+            letter-spacing: 2px !important;
+        }
+    }
+
+    @@media (max-width: 575px) {
+        .info-chofers-abm .main-title {
+            font-size: 1.5rem !important;
+        }
+    }
+
 
     .info-chofers-abm .title-icon {
         color: #FFD54F !important;
-        font-size: 2.8rem !important;
-        filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.25)) !important;
+        font-size: 2rem !important;
+        filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25)) !important;
     }
 
     @@keyframes text-glow {
-        0%, 100% { text-shadow: 0 0 8px #F9A825, 0 0 18px #FFD54F; }
-        50% { text-shadow: 0 0 22px #F9A825, 0 0 32px #FFD54F; }
+        0%, 100% { text-shadow: 0 0 5px #F9A825, 0 0 10px #FFD54F; }
+        50% { text-shadow: 0 0 12px #F9A825, 0 0 22px #FFD54F; }
     }
 </style>
 
