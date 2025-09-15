@@ -9,21 +9,34 @@
 @inject IDbContextFactory<BomberosDbContext> DbFactory
 
 <style>
-    .modal-crear-licencia .ant-modal-content {
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        border: 4px solid #A63333;
-        margin-top: 50px;
-        margin-bottom: 0px;
-        ;
-        }
+.modal-crear-licencia .ant-modal-content {
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: 2px solid #732D2D;
+    margin-top: 55px;
+    max-width: 800px;
+}
 
-    .modal-crear-licencia .ant-modal-header {
-        background-color: #f0f2f5;
-        border-bottom: 1px solid #d9d9d9;
+.modal-crear-licencia .ant-modal {
+    top: 25px !important;
+    padding-bottom: 0 !important;
+}
+
+.modal-crear-licencia .ant-modal-title {
+    color: white !important;
+}
+
+.modal-crear-licencia .ant-modal-header {
+        background-color: #A63333;
         padding: 16px 24px;
-        border-radius: 9px 9px 0 0;
-    }
+}
+
+
+
+.modal-crear-licencia-row {
+    margin-bottom: 16px !important;
+}
+
 
 
     .modal-crear-licencia-form-item .ant-form-item-label > label,
@@ -114,6 +127,18 @@
         .modal-crear-licencia-content {
             padding: 16px;
         }
+        
+        .modal-crear-licencia .ant-modal-content {
+            width: 95vw !important;
+            margin: 10px auto !important;
+            top: 20px !important;
+            transform: none !important;
+        }
+        
+        .modal-crear-licencia .ant-modal-wrap {
+            align-items: flex-start !important;
+            padding-top: 20px !important;
+        }
     }   
 </style>
 
@@ -122,9 +147,9 @@
           Class="modal-crear-licencia-form"
           OnFinish="OnFinish"
           OnFinishFailed="OnFinishFailed">
-        <Row Class="modal-crear-licencia-row" Gutter="24">
+        <Row Class="modal-crear-licencia-row" Gutter="16">
             <AntDesign.Col Span="12">
-                <FormItem Label="Número Equipo" Class="modal-crear-licencia-form-item">
+                <FormItem Label="Num. Equipo" Class="modal-crear-licencia-form-item">
                     <Input @bind-Value="@ComunicacionVM.NroEquipo" />
                 </FormItem>
             </AntDesign.Col>
@@ -134,19 +159,19 @@
                 </FormItem>
             </AntDesign.Col>
         </Row>
-        <Row Class="modal-crear-licencia-row" Gutter="24">
+        <Row Class="modal-crear-licencia-row" Gutter="16">
             <AntDesign.Col Span="12">
                 <FormItem Label="Marca" Class="modal-crear-licencia-form-item">
                     <Input @bind-Value="@ComunicacionVM.Marca" />
                 </FormItem>
             </AntDesign.Col>
             <AntDesign.Col Span="12">
-                <FormItem Label="Número Serie" Class="modal-crear-licencia-form-item">
+                <FormItem Label="Núm. Serie" Class="modal-crear-licencia-form-item">
                     <Input @bind-Value="@ComunicacionVM.NroSerie" />
                 </FormItem>
             </AntDesign.Col>
         </Row>
-        <Row Class="modal-crear-licencia-row" Gutter="24">
+        <Row Class="modal-crear-licencia-row" Gutter="16">
             <AntDesign.Col Span="24">
                 <FormItem Label="Estado" Class="modal-crear-licencia-form-item">
                     <EnumSelect TEnum="TipoEstadoHandie" @bind-Value="@ComunicacionVM.Estado" />
@@ -155,7 +180,7 @@
         </Row>
         @if (ComunicacionVM.Estado == TipoEstadoHandie.Activo)
         {
-            <Row Class="modal-crear-licencia-row" Gutter="24">
+            <Row Class="modal-crear-licencia-row" Gutter="16">
                 <AntDesign.Col Span="24">
                     <FormItem Label="Seleccione una opción" Class="modal-crear-licencia-form-item">
                         <Checkbox @bind-Checked="@selectBombero" OnChange="() => HandleCheckboxChange(true, checkboxBomberoLabel)">Elija el bombero</Checkbox>
@@ -165,7 +190,7 @@
             </Row>
             @if (selectBombero)
             {
-                <Row Class="modal-crear-licencia-row" Gutter="24">
+                <Row Class="modal-crear-licencia-row" Gutter="16">
                     <AntDesign.Col Span="24">
                         <FormItem Label="Elija el bombero que será asignado" Class="modal-crear-licencia-form-item">
                             <Select TItem="BomberoViweModel"
@@ -184,7 +209,7 @@
             }
             @if (selectMovil)
             {
-                <Row Class="modal-crear-licencia-row" Gutter="24">
+                <Row Class="modal-crear-licencia-row" Gutter="16">
                     <AntDesign.Col Span="24">
                         <FormItem Label="Elija el móvil que será asignado" Class="modal-crear-licencia-form-item">
                             <Select TItem="MovilViewModel"
@@ -203,11 +228,11 @@
             }
         }
         <div class="modal-crear-licencia-footer">
-            <Button Style="border: 1px solid black;" OnClick="@(() => OnFinishCallback.InvokeAsync())">
-                Volver
-            </Button>
             <Button Class="boton-agregar" HtmlType="submit">
                 Agregar Handie
+            </Button>
+            <Button Style="border: 1px solid black;" OnClick="@(() => OnFinishCallback.InvokeAsync())">
+                Volver
             </Button>
         </div>
     </Form>
@@ -392,4 +417,4 @@
         Context?.Dispose();
     }
 }
-
+    
