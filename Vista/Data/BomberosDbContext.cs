@@ -19,18 +19,33 @@ using Vista.Data.Models.Vehiculos.Flota.Componentes;
 using Vista.Data.Models.Otros;
 using Vista.Data.Models.Objetos;
 using Vista.Data.Models.Objetos.Componentes;
+using Vista.Data.Models.Socios;
+using Vista.Data.Models.Socios.Componentes;
 
 namespace Vista.Data
 {
     public class BomberosDbContext : DbContext
     {
-        // Personas
+        // Personas - Herencia de Personal que heredan de Persona
+
         public DbSet<Bombero> Bomberos { get; set; }
         public DbSet<Damnificado_Salida> Damnificados { get; set; }
         public DbSet<ComisionDirectiva> ComisionDirectivas { get; set; }
 
         // Personas Assets
         public DbSet<Contacto> Contactos { get; set; }
+
+        // Socios
+
+        public DbSet<Socio> Socios { get; set; }
+        public DbSet<Socio_Empresa> SociosEmpresas { get; set; }
+        public DbSet<Socio_Persona> SociosPersonas { get; set; }
+
+        // Socios Assets
+
+        public DbSet<HistorialCuota_Socio> HistorialCuotas { get; set; }
+        public DbSet<HistorialEstado_Socio> HistorialEstados { get; set; }
+        public DbSet<HistorialPago_Socio> HistorialPagos { get; set; }
 
         // Dependencias (Departamentos)
         public DbSet<Dependencia> Dependencias { get; set; }
