@@ -422,7 +422,6 @@
     </div>
 </div>
 
-@*Modal para Crear Salida con diseño similar a Licencias*@
 <Modal @bind-Visible="_modalAñadirVisible"
        Title="Crear Salida"
        Width="@("100%")"
@@ -446,27 +445,36 @@
                     </FormItem>
                 </AntDesign.Col>
             </Row>
-            <FormItem Label="🚨 Tipo de Emergencia" Required Class="modal-crear-salidas-form-item">
-                <EnumSelect @bind-Value="@newSalida.Categoria" Placeholder="Seleccione un tipo de emergencia" Size="InputSize.Large" />
-            </FormItem>
+            <Row Gutter="16">
+                <AntDesign.Col Span="12">
+                    <FormItem Label="🚨 Tipo de Emergencia" Required Class="modal-crear-salidas-form-item">
+                        <EnumSelect @bind-Value="@newSalida.Categoria" Placeholder="Seleccione un tipo de emergencia" Size="InputSize.Large" />
+                    </FormItem>
+                </AntDesign.Col>
+
+            <AntDesign.Col Span="12">
             @if (newSalida.Categoria == CategoriaEmergencia.Incendio)
             {
                 <FormItem Label="🔥 Tipo de Incendio" Required Class="modal-crear-salidas-form-item">
                     <EnumSelect @bind-Value="@newSalida.TipoIncendio" Placeholder="Seleccione un tipo de incendio" Size="InputSize.Large" />
                 </FormItem>
             }
+
             @if (newSalida.Categoria == CategoriaEmergencia.Rescate)
             {
                 <FormItem Label="🤝 Tipo de Rescate" Required Class="modal-crear-salidas-form-item">
                     <EnumSelect @bind-Value="@newSalida.TipoRescate" Placeholder="Seleccione un tipo de rescate" Size="InputSize.Large" />
                 </FormItem>
             }
+
             @if (newSalida.Categoria == CategoriaEmergencia.ServicioEspecial)
             {
                 <FormItem Label="🛠️ Tipo de Servicio Especial" Required Class="modal-crear-salidas-form-item">
                     <EnumSelect @bind-Value="@newSalida.TipoServicioEspecial" Placeholder="Seleccione un tipo de servicio especial" Size="InputSize.Large" />
                 </FormItem>
             }
+            </AntDesign.Col>
+            </Row>
         </Form>
     </div>
 </Modal>
