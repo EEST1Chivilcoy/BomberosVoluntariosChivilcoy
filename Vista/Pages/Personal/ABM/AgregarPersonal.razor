@@ -9,6 +9,8 @@
 @using Vista.Data.Models.Imagenes
 @using Vista.Data.ViewModels.Personal
 @using Vista.Data.Enums.Personal.ComisionDirectiva
+@using Vista.Data.Enums.Personal.Cobrador
+@using Vista.Data.Enums.Socios
 @using AntDesign
 
 @page "/personal/{TipoPersonal}/agregar"
@@ -20,6 +22,7 @@
 
 @inject IBomberoService BomberoService
 @inject IComisionDirectivaService ComisionDirectivaService
+@inject ICobradorService CobradorService
 
 <style>
     /* Estilos generales */
@@ -163,6 +166,13 @@
             <div>
                 <Icon Type="reconciliation" Theme="IconThemeType.Fill" Class="page-title-icon" />
                 <span>Registro de Nuevo Miembro de Comisión Directiva</span>
+            </div>
+        }
+        else if (TipoPersonal.ToLower() == "cobrador")
+        {
+            <div>
+                <Icon Type="fund" Theme="IconThemeType.Fill" Class="page-title-icon" />
+                <span>Registro de Nuevo Cobrador</span>
             </div>
         }
     </div>
@@ -362,6 +372,34 @@
                         </AntDesign.Col>
                     </AntDesign.Row>
                 }
+                else if (TipoPersonal.ToLower() == "cobrador" && personalView is CobradorViewModel cobradorView)
+                {
+                    <!-- Campos específicos para Cobrador -->
+                    <AntDesign.Row Gutter="16">
+                        <AntDesign.Col Span="6">
+                            <FormItem Label="Estado">
+                                <EnumSelect TEnum="EstadoCobrador" @bind-Value="@cobradorView.Estado" AllowClear />
+                            </FormItem>
+                        </AntDesign.Col>
+                        <AntDesign.Col Span="6">
+                            <FormItem Label="Zonas asignadas">
+                                <EnumSelect Mode="SelectMode.Multiple" TEnum="Zona" @bind-Value="@cobradorView.ZonasAsignadas" AllowClear />
+                            </FormItem>
+                        </AntDesign.Col>
+                    </AntDesign.Row>
+                    <AntDesign.Row Gutter="16">
+                        <AntDesign.Col Span="8">
+                            <FormItem Label="Fecha de Aceptación">
+                                <DatePicker @bind-Value="@cobradorView.FechaAceptacion"
+                                            Picker="@DatePickerType.Date"
+                                            Style="width: 100%;"
+                                            Placeholder="@("Seleccione fecha")"
+                                            AllowClear />
+                            </FormItem>
+                        </AntDesign.Col>
+                    </AntDesign.Row>
+                }
+                )
             </div>
 
             <!-- Información Adicional (Solo para Bomberos) -->
@@ -430,9 +468,18 @@
                 <Button Type="@ButtonType.Default" OnClick="Cancelar">
                     Cancelar
                 </Button>
-                <Button Type="@ButtonType.Primary" HtmlType="submit" Class="primary-button" OnClick="@(TipoPersonal.ToLower() == "bombero" ? CrearBombero : CrearComisionDirectiva)">
-                    Registrar @(TipoPersonal.ToLower() == "bombero" ? "Bombero" : "Comisión Directiva")
-                </Button>
+                @if(TipoPersonal.ToLower() == "cobrador")
+                {
+                    <Button Type="@ButtonType.Primary" HtmlType="submit" Class="primary-button" OnClick="CrearCobrador">
+                        Registrar Cobrador
+                    </Button>
+                }
+                else
+                {
+                    <Button Type="@ButtonType.Primary" HtmlType="submit" Class="primary-button" OnClick="@(TipoPersonal.ToLower() == "bombero" ? CrearBombero : CrearComisionDirectiva)">
+                        Registrar @(TipoPersonal.ToLower() == "bombero" ? "Bombero" : "Comisión Directiva")
+                    </Button>
+                }
             </div>
         </Form>
     }
@@ -474,6 +521,10 @@
         {
             personalView = new ComisionDirectivaViewModel();
         }
+        else if (TipoPersonal.ToLower() == "cobrador")
+        {
+            personalView = new CobradorViewModel();
+        }
         else
         {
             await message.ErrorAsync("Tipo de personal no válido. Debe ser 'bombero' o 'comisiondirectiva'.");
@@ -511,6 +562,11 @@
         else if (TipoPersonal.ToLower() == "comisiondirectiva")
         {
             navigationManager.NavigateTo($"/personal/comisiondirectiva", true);
+            return Task.CompletedTask;
+        }
+        else if (TipoPersonal.ToLower() == "cobrador")
+        {
+            navigationManager.NavigateTo($"/personal/cobradores", true);
             return Task.CompletedTask;
         }
 
@@ -691,6 +747,87 @@
                 await message.ErrorAsync("Ocurrió un error al crear el bombero.");
                 await message.ErrorAsync($"Error: {ex.Message}");
             }
+        }
+    }
+
+    public async Task CrearCobrador()
+    {
+        try
+        {
+            if (personalView == null)
+            {
+                await message.ErrorAsync("Ocurrió un error al crear el cobrador.");
+                return;
+            }
+
+            if (personalView.Documento == 0)
+            {
+                await message.ErrorAsync("El número de documento no puede ser cero.");
+                return;
+            }
+
+            if (personalView is not CobradorViewModel cobradorView)
+            {
+                await message.ErrorAsync("Ocurrió un error al crear el miembro de comisión directiva.");
+                return;
+            }
+
+            // Preparar el objeto Cobrador para enviarlo al servicio
+            Cobrador cobrador = new Cobrador()
+            {
+                // --- Información Personal ---
+
+                Nombre = cobradorView.Nombre,
+                Apellido = cobradorView.Apellido,
+                Documento = cobradorView.Documento,
+                FechaNacimiento = cobradorView.FechaNacimiento,
+                LugarNacimiento = cobradorView.LugarNacimiento,
+                Direccion = cobradorView.Direccion,
+                Sexo = cobradorView.Sexo,
+                GrupoSanguineo = cobradorView.GrupoSanguineo,
+
+                // --- Información Profesional ---
+
+                Estado = cobradorView.Estado,
+                ZonasAsignadas = cobradorView.ZonasAsignadas,
+                FechaAceptacion = cobradorView.FechaAceptacion,
+
+                // --- Información de Contacto ---
+                Contacto = new Contacto
+                {
+                    TelefonoCel = cobradorView.TelefonoCel,
+                    TelefonoFijo = cobradorView.TelefonoFijo,
+                    TelefonoLaboral = cobradorView.TelefonoLaboral,
+                    Email = cobradorView.Email
+                }
+            };
+
+            // Preparar la foto si existe
+
+            Imagen_Personal? foto = null;
+
+            if (imageViewModel.Base64 != null && imageViewModel.TipoImagen != null && imageViewModel.NombreImagen != null)
+            {
+                foto = new Imagen_Personal
+                {
+                    NombreImagen = imageViewModel.NombreImagen,
+                    TipoImagen = imageViewModel.TipoImagen,
+                    Base64Imagen = imageViewModel.Base64
+                };
+            }
+
+            // Creamos el cobrador
+            await CobradorService.CrearCobrador(cobrador, foto);
+
+            cobrador = new();
+            StateHasChanged();
+            message.Success("Se agregó el cobrador.");
+            navigationManager.NavigateTo($"/personal/cobradores", true);
+        }
+        catch (Exception ex)
+        {
+            await message.ErrorAsync("Ocurrió un error al crear el miembro de comisión directiva.");
+            await message.ErrorAsync($"Error: {ex.Message}");
         }
     }
 

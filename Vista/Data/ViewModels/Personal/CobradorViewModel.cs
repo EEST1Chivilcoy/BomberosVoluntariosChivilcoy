@@ -1,17 +1,20 @@
 ﻿using Vista.Data.Enums.Personal.Cobrador;
 using Vista.Data.Enums.Socios;
 
-namespace Vista.Data.Models.Personas.Personal
+namespace Vista.Data.ViewModels.Personal
 {
-    public class Cobrador : Personal
+    /// <summary>
+    /// ViewModel para representar un cobrador.
+    /// </summary>
+    public class CobradorViewModel : PersonalViewModel
     {
         /// <summary>
-        /// Estado actual del cobrador
+        /// Estado del cobrador.
         /// </summary>
         public EstadoCobrador Estado { get; set; } = EstadoCobrador.Activo;
 
         /// <summary>
-        /// Zonas que el cobrador tiene a su cargo
+        /// Regiónes asignadas al cobrador.
         /// </summary>
         public Zona ZonasAsignadas { get; set; } = Zona.Ninguna;
     }

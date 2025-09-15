@@ -31,6 +31,7 @@ namespace Vista.Data
         public DbSet<Bombero> Bomberos { get; set; }
         public DbSet<Damnificado_Salida> Damnificados { get; set; }
         public DbSet<ComisionDirectiva> ComisionDirectivas { get; set; }
+        public DbSet<Cobrador> Cobradores { get; set; }
 
         // Personas Assets
         public DbSet<Contacto> Contactos { get; set; }
@@ -224,6 +225,10 @@ namespace Vista.Data
 
             // Enum Discriminadores
 
+            modelBuilder.Entity<Socio>()
+                .Property(s => s.Tipo)
+                .HasConversion<int>();
+
             modelBuilder.Entity<Persona>()
                 .Property(p => p.Tipo)
                 .HasConversion<int>();
@@ -249,7 +254,13 @@ namespace Vista.Data
             modelBuilder.Entity<Persona>()
                 .HasDiscriminator(p => p.Tipo)
                 .HasValue<Bombero>(TipoPersonal.Bombero)
-                .HasValue<ComisionDirectiva>(TipoPersonal.ComisionDirectiva);
+                .HasValue<ComisionDirectiva>(TipoPersonal.ComisionDirectiva)
+                .HasValue<Cobrador>(TipoPersonal.Cobrador);
+
+            modelBuilder.Entity<Socio>()
+                .HasDiscriminator(s => s.Tipo)
+                .HasValue<Socio_Persona>(TipoSocio.Persona)
+                .HasValue<Socio_Empresa>(TipoSocio.Empresa);
 
             modelBuilder.Entity<Seguro>()
                 .HasDiscriminator(s => s.Tipo)
