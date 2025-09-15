@@ -18,25 +18,37 @@
 @inject IComisionDirectivaService ComisionDirectivaService
 
 <style>
-    .abm-container {
-        width: 100% !important;
-        max-width: 1400px !important;
-        margin: 0 auto !important;
-        padding: 32px 16px !important;
+    /* Variables CSS para colores principales - Prefijo para evitar conflictos */
+    .personal-abm {
+        --abm-primary-color: #A63333;
+        --abm-primary-dark: #732D2D;
+        --abm-success-color: #4CAF50;
+        --abm-success-dark: #438E46;
+        --abm-warning-color: #F57F17;
+        --abm-warning-light: #FFF8E1;
+        --abm-error-color: #C62828;
+        --abm-error-light: #FFEBEE;
+        --abm-approved-color: #2E7D32;
+        --abm-approved-light: #E6F7E9;
+        --abm-gold-color: #FFD700;
     }
 
+    .personal-abm .abm-container {
+        padding: 12px !important;
+        min-height: 100vh !important;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;
+    }
 
-    .abm-main-card {
-        background: rgba(255, 255, 255, 0.92) !important;
-        backdrop-filter: blur(12px) !important;
-        border-radius: 18px !important;
-        box-shadow: 0 6px 24px rgba(130, 0, 20, 0.25), 0 4px 12px rgba(0, 0, 0, 0.08) !important;
-        border: 1px solid rgba(130, 0, 20, 0.15) !important;
+    .personal-abm .abm-main-card {
+        background: rgba(255, 255, 255, 0.95) !important;
+        backdrop-filter: blur(10px) !important;
+        border-radius: 16px !important;
+        box-shadow: 0 8px 32px rgba(166, 51, 51, 0.1), 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
         overflow: hidden !important;
-        margin-bottom: 32px !important;
     }
 
-    .abm-header-section {
+    .personal-abm .abm-header-section {
         background: linear-gradient(135deg, #A63333 0%, #732D2D 100%) !important;
         color: white !important;
         padding: 28px !important;
@@ -45,12 +57,12 @@
         margin-bottom: 0 !important;
     }
 
-        .abm-header-section::before {
+        .personal-abm .abm-header-section::before {
             content: '';
             display: none;
         }
 
-        .abm-header-section .lava-bubbles {
+        .personal-abm .abm-header-section .lava-bubbles {
             position: absolute;
             top: 0;
             left: 0;
@@ -61,7 +73,7 @@
             overflow: hidden;
         }
 
-        .abm-header-section .lava-bubble {
+        .personal-abm .abm-header-section .lava-bubble {
             position: absolute;
             border-radius: 50%;
             opacity: 0.45;
@@ -71,7 +83,7 @@
             mix-blend-mode: lighten;
         }
 
-            .abm-header-section .lava-bubble.b1 {
+            .personal-abm .abm-header-section .lava-bubble.b1 {
                 left: 10%;
                 width: 60px;
                 height: 60px;
@@ -80,7 +92,7 @@
                 animation-duration: 7.5s;
             }
 
-            .abm-header-section .lava-bubble.b2 {
+            .personal-abm .abm-header-section .lava-bubble.b2 {
                 left: 35%;
                 width: 90px;
                 height: 90px;
@@ -90,7 +102,7 @@
                 background: radial-gradient(circle at 60% 40%, #FFEB3B 0%, #FFD54F 80%, transparent 100%);
             }
 
-            .abm-header-section .lava-bubble.b3 {
+            .personal-abm .abm-header-section .lava-bubble.b3 {
                 left: 65%;
                 width: 50px;
                 height: 50px;
@@ -100,7 +112,7 @@
                 background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #FFD54F 80%, transparent 100%);
             }
 
-            .abm-header-section .lava-bubble.b4 {
+            .personal-abm .abm-header-section .lava-bubble.b4 {
                 left: 80%;
                 width: 70px;
                 height: 70px;
@@ -110,7 +122,7 @@
                 background: radial-gradient(circle at 60% 40%, #F9A825 0%, #FFD54F 80%, transparent 100%);
             }
 
-            .abm-header-section .lava-bubble.b5 {
+            .personal-abm .abm-header-section .lava-bubble.b5 {
                 left: 55%;
                 width: 40px;
                 height: 40px;
@@ -142,7 +154,7 @@
         }
     }
 
-    .abm-header-section .main-title {
+    .personal-abm .abm-header-section .main-title {
         font-family: 'Poppins', 'Fjalla One', sans-serif !important;
         font-size: 2.2rem !important;
         font-weight: 700 !important;
@@ -156,7 +168,7 @@
         z-index: 2 !important;
     }
 
-    .abm-header-section .title-icon {
+    .personal-abm .abm-header-section .title-icon {
         color: #FFD54F !important;
         font-size: 2rem !important;
         filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25)) !important;
@@ -172,13 +184,33 @@
         }
     }
 
-    .abm-header-section .title-container {
+    .personal-abm .abm-header-section .title-container {
         position: relative !important;
         z-index: 2 !important;
         margin-bottom: 20px !important;
     }
 
-    .abm-filters {
+    /* Filtros responsivos - Matching licenses layout */
+    .personal-abm .filters-section {
+        position: relative !important;
+        z-index: 2 !important;
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+    }
+
+    .personal-abm .actions-row {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr auto !important;
+        gap: 16px !important;
+        align-items: center !important;
+    }
+
+    .personal-abm .search-container {
+        min-width: 0 !important;
+    }
+
+    .personal-abm .abm-filters {
         display: grid !important;
         grid-template-columns: 2fr 2fr auto !important;
         align-items: center !important;
@@ -186,14 +218,14 @@
         margin-bottom: 16px !important;
     }
 
-        .abm-filters .ant-select,
-        .abm-filters .ant-input {
+        .personal-abm .abm-filters .ant-select,
+        .personal-abm .abm-filters .ant-input {
             font-size: 16px !important;
             width: 100% !important;
             height: 40px !important;
         }
 
-    .abm-select-estado .ant-select-selector {
+    .personal-abm .abm-select-estado .ant-select-selector {
         width: 100% !important;
         height: 40px !important;
         display: flex !important;
@@ -201,11 +233,11 @@
         justify-content: center !important;
     }
 
-    .abm-filters .ant-input-search {
+    .personal-abm .abm-filters .ant-input-search {
         display: flex !important;
     }
 
-    .abm-filters button {
+    .personal-abm .abm-filters button {
         height: 40px !important;
         font-size: 16px !important;
         display: flex !important;
@@ -214,13 +246,13 @@
         gap: 6px !important;
     }
 
-    .ant-table {
+    .personal-abm .ant-table {
         overflow: hidden !important;
         font-size: 16px !important;
         background-color: #ffffff !important;
     }
 
-    .ant-table-thead .ant-table-cell {
+    .personal-abm .ant-table-thead .ant-table-cell {
         background-color: #A63333 !important;
         color: #fff !important;
         font-weight: bold !important;
@@ -228,19 +260,19 @@
         border: none !important;
     }
 
-    .ant-table-cell {
+    .personal-abm .ant-table-cell {
         padding: 18px !important;
         border-bottom: 1px solid #f0f0f0 !important;
     }
 
-    .abm-action-buttons {
+    .personal-abm .abm-action-buttons {
         display: flex !important;
         justify-content: center !important;
         flex-wrap: wrap !important;
         gap: 8px !important;
     }
 
-        .abm-action-buttons .ant-btn {
+        .personal-abm .abm-action-buttons .ant-btn {
             min-width: 110px !important;
             height: 38px !important;
             font-size: 15px !important;
@@ -252,69 +284,35 @@
             padding: 0 12px !important;
         }
 
-    .ant-btn-dangerous {
+    .personal-abm .ant-btn-dangerous {
         color: #a63333 !important;
         border-color: #a63333 !important;
     }
 
-        .ant-btn-dangerous:hover {
+        .personal-abm .ant-btn-dangerous:hover {
             background-color: #a63333 !important;
             color: white !important;
         }
 
-    .ant-pagination {
+    .personal-abm .ant-pagination {
         justify-content: center !important;
         margin-top: 24px !important;
     }
 
-    .ant-pagination-item {
+    .personal-abm .ant-pagination-item {
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
     }
 
-    .ant-pagination-prev,
-    .ant-pagination-next {
+    .personal-abm .ant-pagination-prev,
+    .personal-abm .ant-pagination-next {
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
     }
 
-    @@media (max-width: 768px) {
-        .abm-title {
-            font-size: 22px !important;
-        }
-
-        .ant-table {
-            font-size: 15px !important;
-        }
-
-        .abm-action-buttons {
-            flex-direction: column !important;
-            align-items: stretch !important;
-        }
-
-        .abm-filters {
-            grid-template-columns: 1fr !important;
-        }
-
-        .abm-action-buttons .ant-btn {
-            width: 100% !important;
-        }
-    }
-
-    .abm-title h2 {
-        font-family: 'Bebas Neue', 'Fjalla One', sans-serif;
-        font-size: 2.5rem;
-        letter-spacing: 2px;
-        color: #ffffff;
-        position: relative;
-        margin-right: 950px;
-        padding-bottom: 6px;
-    }
-
-
-    .add-button {
+    .personal-abm .add-button {
         background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
         border: none !important;
         color: white !important;
@@ -325,13 +323,12 @@
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
 
-        .add-button:hover {
+        .personal-abm .add-button:hover {
             transform: translateY(-2px) !important;
             box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4) !important;
         }
 
-
-    .abm-select-estado {
+    .personal-abm .abm-select-estado {
         width: 100% !important;
         min-width: 0 !important;
         box-sizing: border-box !important;
@@ -340,9 +337,10 @@
         display: block !important;
     }
 
-            .flex-container .fade-in {
+    .personal-abm .flex-container .fade-in {
         animation: abm-fadeIn 0.5s ease-in-out !important;
     }
+
     @@keyframes abm-fadeIn {
         from {
             opacity: 0;
@@ -353,10 +351,66 @@
             transform: translateY(0);
         }
     }
-    
+
+    /* Responsive adjustments - Matching licenses */
+    @@media (max-width: 1199px) {
+        .personal-abm .abm-container {
+            padding: 8px !important;
+        }
+
+        .personal-abm .abm-header-section {
+            padding: 20px !important;
+        }
+
+        .personal-abm .main-title {
+            font-size: 2rem !important;
+            flex-direction: column !important;
+            text-align: center !important;
+            gap: 8px !important;
+        }
+
+        .personal-abm .abm-filters {
+            grid-template-columns: 1fr !important;
+        }
+
+        .personal-abm .actions-row {
+            grid-template-columns: 1fr !important;
+            gap: 12px !important;
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .personal-abm .abm-container {
+            padding: 4px !important;
+        }
+
+        .personal-abm .abm-header-section {
+            padding: 16px !important;
+        }
+
+        .personal-abm .main-title {
+            font-size: 1.8rem !important;
+            letter-spacing: 2px !important;
+        }
+
+        .personal-abm .abm-action-buttons {
+            flex-direction: column !important;
+            align-items: stretch !important;
+        }
+
+        .personal-abm .abm-action-buttons .ant-btn {
+            width: 100% !important;
+        }
+    }
+
+    @@media (max-width: 575px) {
+        .personal-abm .main-title {
+            font-size: 1.5rem !important;
+        }
+    }
 </style>
 
-<Flex Class="flex-container" Justify="FlexJustify.Center" Align="FlexAlign.Center">
+<div class="personal-abm">
     <div class="abm-container">
         <Card Class="abm-main-card fade-in">
             <div class="abm-header-section">
@@ -381,39 +435,45 @@
                         }
                     </h1>
                 </div>
-                <div class="abm-filters">
-                    @if (TipoPersonal.ToLower() == "bomberos")
-                    {
-                        <EnumSelect DefaultValue="EstadoBombero.CuerpoActivo"
-                                    ValueChanged="(EstadoBombero estado) => searchB(searchString, estado)"
-                                    TEnum="EstadoBombero"
-                                    Class="abm-select-estado" />
-                        <Search Placeholder="Buscar Bombero"
-                                @bind-Value="@searchString"
-                                OnSearch="()=>searchB(searchString, EstadoB)"
-                                BindOnInput />
-                        <Button Type="ButtonType.Primary"
-                                Class="add-button"
-                                OnClick="@(() => navigationManager.NavigateTo("/personal/bombero/agregar"))">
-                            <Icon Type="plus" /> Agregar Bombero
-                        </Button>
-                    }
-                    else if (TipoPersonal.ToLower() == "comisiondirectiva")
-                    {
-                        <EnumSelect DefaultValue="EstadoComisionDirectiva.Activo"
-                                    ValueChanged="(EstadoComisionDirectiva estado) => searchCD(searchString, estado)"
-                                    TEnum="EstadoComisionDirectiva"
-                                    Class="abm-select-estado" />
-                        <Search Placeholder="Buscar Miembro"
-                                @bind-Value="@searchString"
-                                OnSearch="()=>searchCD(searchString, EstadoCD)"
-                                BindOnInput />
-                        <Button Type="ButtonType.Primary"
-                                Class="add-button"
-                                OnClick="@(() => navigationManager.NavigateTo("/personal/comisiondirectiva/agregar"))">
-                            <Icon Type="plus" /> Agregar Comisión Directiva
-                        </Button>
-                    }
+                <div class="filters-section">
+                    <div class="actions-row abm-filters">
+                        @if (TipoPersonal.ToLower() == "bomberos")
+                        {
+                            <EnumSelect DefaultValue="EstadoBombero.CuerpoActivo"
+                                        ValueChanged="(EstadoBombero estado) => searchB(searchString, estado)"
+                                        TEnum="EstadoBombero"
+                                        Class="abm-select-estado" />
+                            <div class="search-container">
+                                <Search Placeholder="Buscar Bombero"
+                                        @bind-Value="@searchString"
+                                        OnSearch="()=>searchB(searchString, EstadoB)"
+                                        BindOnInput />
+                            </div>
+                            <Button Type="ButtonType.Primary"
+                                    Class="add-button"
+                                    OnClick="@(() => navigationManager.NavigateTo("/personal/bombero/agregar"))">
+                                <Icon Type="plus" /> Agregar Bombero
+                            </Button>
+                        }
+                        else if (TipoPersonal.ToLower() == "comisiondirectiva")
+                        {
+                            <EnumSelect DefaultValue="EstadoComisionDirectiva.Activo"
+                                        ValueChanged="(EstadoComisionDirectiva estado) => searchCD(searchString, estado)"
+                                        TEnum="EstadoComisionDirectiva"
+                                        Class="abm-select-estado" />
+                            <div class="search-container">
+                                <Search Placeholder="Buscar Miembro"
+                                        @bind-Value="@searchString"
+                                        OnSearch="()=>searchCD(searchString, EstadoCD)"
+                                        BindOnInput />
+                            </div>
+                            <Button Type="ButtonType.Primary"
+                                    Class="add-button"
+                                    OnClick="@(() => navigationManager.NavigateTo("/personal/comisiondirectiva/agregar"))">
+                                <Icon Type="plus" /> Agregar Comisión Directiva
+                            </Button>
+                        }
+                    </div>
                 </div>
             </div>
             @if (TipoPersonal.ToLower() == "bomberos")
@@ -536,7 +596,7 @@
             }
         </Card>
     </div>
-</Flex>
+</div>
 
 @{
     RenderFragment footer = @<Template>

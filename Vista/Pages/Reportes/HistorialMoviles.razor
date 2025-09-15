@@ -14,94 +14,393 @@
 
 <style>
 
-    .template {
-        width: 100%;
-        height: 100%;
-        max-width: 97%;
-        min-width: 400px;
-        max-height: 100vh;
-        border-radius: 10px;
-        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-        background: #fff;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        margin: 1em;
-        padding: 0;
-        overflow: auto;
+    .historial-moviles-abm {
+        --abm-primary-color: #A63333;
+        --abm-primary-dark: #732D2D;
+        --abm-success-color: #4CAF50;
+        --abm-success-dark: #438E46;
+        --abm-warning-color: #F57F17;
+        --abm-warning-light: #FFF8E1;
+        --abm-error-color: #C62828;
+        --abm-error-light: #FFEBEE;
+        --abm-approved-color: #2E7D32;
+        --abm-approved-light: #E6F7E9;
+        --abm-gold-color: #FFD700;
     }
 
-    @@media (max-width: 960px) {
-        .ant-table-row, .ant-table-row-level-0 {
-            display: flex !important;
+    .historial-moviles-abm .container {
+        padding: 12px !important;
+        min-height: 100vh !important;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;
+    }
+
+    .historial-moviles-abm .main-card {
+        background: rgba(255, 255, 255, 0.95) !important;
+        backdrop-filter: blur(10px) !important;
+        border-radius: 16px !important;
+        box-shadow: 0 8px 32px rgba(166, 51, 51, 0.1), 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        overflow: hidden !important;
+    }
+
+    .historial-moviles-abm .header-section {
+        background: linear-gradient(135deg, #A63333 0%, #732D2D 100%) !important;
+        color: white !important;
+        padding: 28px !important;
+        position: relative !important;
+        overflow: hidden !important;
+        margin-bottom: 0 !important;
+    }
+
+    .historial-moviles-abm .header-section .lava-bubbles {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        pointer-events: none;
+        z-index: 1;
+        overflow: hidden;
+    }
+
+    .historial-moviles-abm .header-section .lava-bubble {
+        position: absolute;
+        border-radius: 50%;
+        opacity: 0.45;
+        background: radial-gradient(circle at 60% 40%, #FFD54F 0%, #F9A825 80%, transparent 100%);
+        animation: lava-bubble-move 8s linear infinite;
+        filter: blur(1.5px);
+        mix-blend-mode: lighten;
+    }
+
+    .historial-moviles-abm .header-section .lava-bubble.b1 {
+        left: 10%; width: 60px; height: 60px; bottom: -70px;
+        animation-delay: 0s; animation-duration: 7.5s;
+    }
+
+    .historial-moviles-abm .header-section .lava-bubble.b2 {
+        left: 35%; width: 90px; height: 90px; bottom: -100px;
+        animation-delay: 2s; animation-duration: 9s;
+        background: radial-gradient(circle at 60% 40%, #FFEB3B 0%, #FFD54F 80%, transparent 100%);
+    }
+
+    .historial-moviles-abm .header-section .lava-bubble.b3 {
+        left: 65%; width: 50px; height: 50px; bottom: -60px;
+        animation-delay: 1.5s; animation-duration: 6.5s;
+        background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #FFD54F 80%, transparent 100%);
+    }
+
+    .historial-moviles-abm .header-section .lava-bubble.b4 {
+        left: 80%; width: 70px; height: 70px; bottom: -80px;
+        animation-delay: 3.2s; animation-duration: 8.5s;
+        background: radial-gradient(circle at 60% 40%, #F9A825 0%, #FFD54F 80%, transparent 100%);
+    }
+
+    .historial-moviles-abm .header-section .lava-bubble.b5 {
+        left: 55%; width: 40px; height: 40px; bottom: -50px;
+        animation-delay: 5s; animation-duration: 7.2s;
+        background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #F9A825 80%, transparent 100%);
+    }
+
+    @@keyframes lava-bubble-move {
+        0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 0.45; }
+        60% { opacity: 0.7; filter: blur(2.5px); }
+        80% { transform: translateY(-220px) scale(1.15) rotate(10deg); opacity: 0.6; }
+        100% { transform: translateY(-320px) scale(0.95) rotate(-8deg); opacity: 0; }
+    }
+
+    .historial-moviles-abm .main-title {
+        font-family: 'Poppins', 'Fjalla One', sans-serif !important;
+        font-size: 2.2rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 1px !important;
+        margin: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 12px !important;
+        animation: text-glow 2.5s ease-in-out infinite alternate !important;
+        position: relative !important;
+        z-index: 2 !important;
+    }
+
+    .historial-moviles-abm .title-icon {
+        color: #FFD54F !important;
+        font-size: 2rem !important;
+        filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25)) !important;
+    }
+
+    @@keyframes text-glow {
+        0%, 100% { text-shadow: 0 0 5px #F9A825, 0 0 10px #FFD54F; }
+        50% { text-shadow: 0 0 12px #F9A825, 0 0 22px #FFD54F; }
+    }
+
+    .historial-moviles-abm .title-container {
+        position: relative !important;
+        z-index: 2 !important;
+        margin-bottom: 20px !important;
+    }
+
+    .historial-moviles-abm .filters-section {
+        position: relative !important;
+        z-index: 2 !important;
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+    }
+
+    .historial-moviles-abm .filter-row {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
+        gap: 16px !important;
+        align-items: end !important;
+    }
+
+    .historial-moviles-abm .filter-group {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 8px !important;
+    }
+
+    .historial-moviles-abm .filter-label {
+        font-weight: 600 !important;
+        color: rgba(255, 255, 255, 0.9) !important;
+        font-size: 0.9rem !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+    }
+
+    .historial-moviles-abm .actions-row {
+        display: grid !important;
+        grid-template-columns: auto auto 1fr auto auto !important;
+        gap: 16px !important;
+        align-items: center !important;
+    }
+
+    .historial-moviles-abm .search-container {
+        min-width: 0 !important;
+    }
+
+    .historial-moviles-abm .modern-button {
+        height: 40px !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        position: relative !important;
+        overflow: hidden !important;
+        background: linear-gradient(135deg, var(--abm-success-color) 0%, var(--abm-success-dark) 100%) !important;
+        border: none !important;
+        color: white !important;
+        box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3) !important;
+        padding: 0 20px !important;
+    }
+
+    .historial-moviles-abm .modern-button:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4) !important;
+    }
+
+    .historial-moviles-abm .modern-button.blue-gradient {
+        background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%) !important;
+        box-shadow: 0 4px 12px rgba(24, 144, 255, 0.3) !important;
+    }
+
+    .historial-moviles-abm .modern-button.blue-gradient:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 20px rgba(24, 144, 255, 0.4) !important;
+    }
+
+    .historial-moviles-abm .table-container {
+        padding: 0 !important;
+        overflow: hidden !important;
+        margin-top: 0 !important;
+    }
+
+        .historial-moviles-abm .ant-table-wrapper {
+        margin-top: 0 !important;
+    }
+
+        
+
+    .historial-moviles-abm .ant-table-thead > tr > th {
+        background: #A63333 !important;
+        color: #fff !important;
+        font-weight: 600 !important;
+        border: none !important;
+        padding: 16px !important;
+    }
+
+    .historial-moviles-abm :deep(.ant-table-tbody > tr:hover > td) {
+        background-color: inherit !important;
+        cursor: default !important;
+        transform: none !important;
+        transition: none !important;
+    }
+
+    .historial-moviles-abm :deep(.ant-table) {
+        margin-top: 0 !important;
+        border-radius: 0 !important;
+    }
+
+    .historial-moviles-abm :deep(.ant-table-container) {
+        border-top: none !important;
+    }
+
+    .historial-moviles-abm :deep(.ant-picker),
+    .historial-moviles-abm :deep(.ant-select-selector),
+    .historial-moviles-abm :deep(.ant-input) {
+        border-radius: 8px !important;
+        border: 1px solid rgba(255, 255, 255, 0.3) !important;
+        background: rgba(255, 255, 255, 0.1) !important;
+        color: white !important;
+        transition: all 0.3s ease !important;
+    }
+
+    .historial-moviles-abm :deep(.ant-picker:hover),
+    .historial-moviles-abm :deep(.ant-select-selector:hover),
+    .historial-moviles-abm :deep(.ant-input:hover) {
+        background: rgba(255, 255, 255, 0.2) !important;
+        border-color: rgba(255, 255, 255, 0.5) !important;
+    }
+
+    .historial-moviles-abm :deep(.ant-picker-input > input),
+    .historial-moviles-abm :deep(.ant-select-selection-item),
+    .historial-moviles-abm :deep(.ant-input::placeholder) {
+        color: white !important;
+    }
+
+    .ant-table-cell {
+        min-width: 120px!important;
+        font-size: 1rem !important;
+        padding: 16px !important;
+    }
+
+    @@media (max-width: 1199px) {
+        .historial-moviles-abm .container {
+            padding: 8px !important;
+        }
+        .historial-moviles-abm .header-section {
+            padding: 20px !important;
+        }
+        .historial-moviles-abm .main-title {
+            font-size: 2rem !important;
             flex-direction: column !important;
+            text-align: center !important;
+            gap: 8px !important;
         }
-
-        .ant-table-title {
-            height: 12.5em !important;
+        .historial-moviles-abm .filter-row {
+            grid-template-columns: 1fr !important;
         }
-
-        .buton-cont {
-            width: 100% !important;
-        }
-
-        #ant-blazor-df7d6d62-e78b-479a-b209-8325c3889500 {
-            width: 100% !important;
-        }
-
-        .inpt-cont-inline {
-            flex-direction: column !important;
-            gap: 0 !important;
-            align-items: flex-start!important;
-        }
-
-        .buttoncont {
-            width: 100% !important;
+        .historial-moviles-abm .actions-row {
+            grid-template-columns: 1fr !important;
+            gap: 12px !important;
         }
     }
+
+    @@media (max-width: 768px) {
+        .historial-moviles-abm .container {
+            padding: 4px !important;
+        }
+        .historial-moviles-abm .header-section {
+            padding: 16px !important;
+        }
+        .historial-moviles-abm .main-title {
+            font-size: 1.8rem !important;
+            letter-spacing: 2px !important;
+        }
+    }
+
+    @@media (max-width: 575px) {
+        .historial-moviles-abm .main-title {
+            font-size: 1.5rem !important;
+        }
+    }
+
 </style>
-<div class="template">
-    <EditForm Model="this">
-            <Table DataSource="MovilesSalidas" PageSize="6" Bordered Responsive>
-                <TitleTemplate>
-                    <div class="botonesCont">
-                        <div class="inpt-cont-inline">
-                            <div class="inpt-cont">
-                                <label class="inpt-cont--lbl">Desde: </label>
-                                <InputDate @bind-Value="fechaInicio" />
-                            </div>
-                            <div class="inpt-cont">
-                                <label class="inpt-cont--lbl">Hasta: </label>
-                                <InputDate @bind-Value="fechaFin" />
-                            </div>
-                            <div>
-                                <Button OnClick="()=> FiltrarResultados(fechaInicio, fechaFin)">
-                                    Filtrar
-                                </Button>
-                            </div>
+
+<div class="historial-moviles-abm">
+    <div class="container fade-in">
+        <Card Class="main-card">
+            <div class="header-section">
+                <div class="lava-bubbles">
+                    <div class="lava-bubble b1"></div>
+                    <div class="lava-bubble b2"></div>
+                    <div class="lava-bubble b3"></div>
+                    <div class="lava-bubble b4"></div>
+                    <div class="lava-bubble b5"></div>
+                </div>
+                <div class="title-container">
+                    <h1 class="main-title">
+                        <Icon Type="car" Class="title-icon" />
+                        HISTORIAL DE MÓVILES
+                    </h1>
+                </div>
+                <div class="filters-section">
+                    <div class="filter-row">
+                        <div class="filter-group">
+                            <label class="filter-label">📅 Fecha Desde</label>
+                            <DatePicker TValue="DateTime" 
+                                        @bind-Value="@fechaInicio" 
+                                        Size="InputSize.Large"
+                                        Placeholder="@("Seleccionar fecha")" />
                         </div>
-                        <div class="buttoncont">
-                            <Button OnClick="() => CargarSalidasMovil()">
-                                Mostrar todos
-                            </Button>
+                        <div class="filter-group">
+                            <label class="filter-label">📅 Fecha Hasta</label>
+                            <DatePicker TValue="DateTime" 
+                                        @bind-Value="@fechaFin" 
+                                        Size="InputSize.Large"
+                                        Placeholder="@("Seleccionar fecha")" />
                         </div>
                     </div>
-                </TitleTemplate>
-    
-                <ColumnDefinitions Context="muestra">
-                <PropertyColumn Property="c=>c.NumeroMovil" Title="Numero de Movil" Sortable></PropertyColumn>
-                    <PropertyColumn Property="c=>c.Kilometraje" Sortable></PropertyColumn>
-                <PropertyColumn Property="c=>c.NumeroParte" Title="Numero de Parte" Sortable></PropertyColumn>
-                <PropertyColumn Property="c=>c.Hrllegada" Title="Hora de Llegada" Sortable></PropertyColumn>
-                <PropertyColumn Property="c=>c.CargoCombustibleTexto" Title="Cargo Combustible" Sortable> cargo </PropertyColumn>
-                </ColumnDefinitions> 
-            </Table>
-            <div style="display: flex;justify-content: flex-end;margin-top: -3.5em;">
-            <Button OnClick="@(async () => await GenerarYMostrarPDF())">Imprimir</Button>
-            <Button OnClick="@(async () => await GuardarEnExcel())">Exportar en Excel</Button>
+
+                    <div class="actions-row">
+                        <Button Class="modern-button blue-gradient" 
+                                OnClick="()=> FiltrarResultados(fechaInicio, fechaFin)" 
+                                Icon="search"
+                                Size="ButtonSize.Large">
+                            Filtrar
+                        </Button>
+
+                        <Button Class="modern-button blue-gradient" 
+                                OnClick="() => CargarSalidasMovil()" 
+                                Icon="reload"
+                                Size="ButtonSize.Large">
+                            Mostrar todos
+                        </Button>
+
+                        <div class="search-container">
+                            <!-- Espacio para búsqueda si se desea agregar en el futuro -->
+                        </div>
+
+                        <Button Class="modern-button" 
+                                OnClick="@(async () => await GenerarYMostrarPDF())" 
+                                Icon="printer"
+                                Size="ButtonSize.Large">
+                            Imprimir
+                        </Button>
+
+                        <Button Class="modern-button" 
+                                OnClick="@(async () => await GuardarEnExcel())" 
+                                Icon="file-excel"
+                                Size="ButtonSize.Large">
+                            Exportar en Excel
+                        </Button>
+                    </div>
+                </div>
             </div>
-    </EditForm>
+            
+            <div class="table-container">
+                <Table DataSource="MovilesSalidas" PageSize="6" Bordered Responsive>
+                    <ColumnDefinitions Context="muestra">
+                        <PropertyColumn Property="c=>c.NumeroMovil" Title="Numero de Movil" Sortable></PropertyColumn>
+                        <PropertyColumn Property="c=>c.Kilometraje" Sortable></PropertyColumn>
+                        <PropertyColumn Property="c=>c.NumeroParte" Title="Numero de Parte" Sortable></PropertyColumn>
+                        <PropertyColumn Property="c=>c.Hrllegada" Title="Hora de Llegada" Sortable></PropertyColumn>
+                        <PropertyColumn Property="c=>c.CargoCombustibleTexto" Title="Cargo Combustible" Sortable></PropertyColumn>
+                    </ColumnDefinitions> 
+                </Table>
+            </div>
+        </Card>
+    </div>
 </div>
 
 @code {
@@ -228,5 +527,7 @@
     private void Cancel()
     {
         _message.Error("Operacion cancelada");
+    }
+}
     }
 }

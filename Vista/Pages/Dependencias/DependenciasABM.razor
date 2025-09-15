@@ -50,6 +50,10 @@
         padding: 28px !important;
         position: relative !important;
         overflow: hidden !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        flex-wrap: wrap;
     }
 
     .dependencias-abm .header-section .lava-bubbles {
@@ -146,16 +150,13 @@
     .dependencias-abm .title-container {
         position: relative !important;
         z-index: 2 !important;
-        margin-bottom: 20px !important;
     }
-
 
     .dependencias-abm .actions-row {
         display: flex !important;
-        justify-content: flex-end !important;
-        gap: 16px !important;
+        gap: 10px !important;
         align-items: center !important;
-        margin-top: 16px !important;
+        z-index: 2 !important;
     }
 
     .dependencias-abm .modern-button {
@@ -213,11 +214,26 @@
 
 
     @@media (max-width: 1199px) {
-        .dependencias-abm .table-container {
+        .dependencias-abm .container {
             padding: 8px !important;
         }
-        .dependencias-abm .ant-table-cell {
-            padding: 12px !important;
+
+        .dependencias-abm .header-section {
+            padding: 20px !important;
+            flex-direction: column;
+            align-items: flex-start !important;
+        }
+        .dependencias-abm .actions-row {
+            margin-top: 15px;
+            justify-content: flex-start !important;
+            width: 100%;
+        }
+
+        .dependencias-abm .main-title {
+            font-size: 2rem !important;
+            flex-direction: column !important;
+            text-align: center !important;
+            gap: 8px !important;
         }
     }
     @@media (max-width: 767px) {

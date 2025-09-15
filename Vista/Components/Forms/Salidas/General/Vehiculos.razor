@@ -99,6 +99,150 @@
     min-height: 28px !important;
     box-sizing: border-box;
     }
+
+    /* Modal estilo vehiculos */
+    .modal-vehiculo .ant-modal-content {
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(32, 99, 155, 0.15);
+        border: 4px solid #20639B;
+        margin-top: -50px;
+        margin-bottom: 0px;
+        background: linear-gradient(180deg, #f4faff 0%, #e6f2fa 100%);
+    }
+
+    .modal-vehiculo .ant-modal-header {
+        background-color: #f4faff;
+        border-bottom: 1px solid #b3e0f7;
+        padding: 16px 24px;
+        border-radius: 9px 9px 0 0;
+    }
+
+    .modal-vehiculo .ant-modal-title {
+        color: #20639B;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .modal-vehiculo-content {
+        padding: 24px;
+    }
+
+    .modal-vehiculo-form-item {
+        margin-bottom: 20px;
+        position: relative;
+        padding-left: 10px;
+    }
+
+    .modal-vehiculo-form-item .ant-form-item-label > label,
+    .modal-vehiculo-form-full-width .ant-form-item-label > label {
+        font-weight: 600;
+        color: #20639B;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        transition: color 0.3s ease;
+    }
+
+    .modal-vehiculo-form-item .ant-form-item-label > label:hover,
+    .modal-vehiculo-form-full-width .ant-form-item-label > label:hover {
+        color: #3CAEA3;
+    }
+
+    .modal-vehiculo .ant-input:focus,
+    .modal-vehiculo .ant-input:hover,
+    .modal-vehiculo .ant-select-selector:focus,
+    .modal-vehiculo .ant-select-selector:hover,
+    .modal-vehiculo .ant-picker:focus,
+    .modal-vehiculo .ant-picker:hover,
+    .modal-vehiculo .ant-picker-input > input:focus,
+    .modal-vehiculo .ant-picker-input > input:hover,
+    .modal-vehiculo .ant-input-number-input:focus,
+    .modal-vehiculo .ant-input-number-input:hover,
+    .modal-vehiculo .ant-textarea:focus,
+    .modal-vehiculo .ant-textarea:hover {
+        border-color: #20639B !important;
+        box-shadow: 0 0 0 2px rgba(32, 99, 155, 0.15) !important;
+    }
+
+    .modal-vehiculo .ant-picker,
+    .modal-vehiculo .ant-input,
+    .modal-vehiculo .ant-select-selector,
+    .modal-vehiculo .ant-input-number,
+    .modal-vehiculo .ant-textarea {
+        border-radius: 8px !important;
+        background: #fff !important;
+        color: #434343 !important;
+        transition: all 0.3s ease !important;
+    }
+
+    .modal-vehiculo .ant-input-affix-wrapper {
+        border-radius: 8px !important;
+        border: 1px solid #b3e0f7 !important;
+        background: #fff !important;
+        transition: all 0.3s ease !important;
+    }
+
+    .modal-vehiculo .ant-input-affix-wrapper:focus,
+    .modal-vehiculo .ant-input-affix-wrapper:hover {
+        border-color: #20639B !important;
+        box-shadow: 0 0 0 2px rgba(32, 99, 155, 0.15) !important;
+    }
+
+    .modal-vehiculo .ant-btn-primary {
+        background: linear-gradient(135deg, #20639B 0%, #3CAEA3 100%) !important;
+        border: none !important;
+        color: #fff !important;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(32, 99, 155, 0.18);
+        border-radius: 8px;
+        padding: 0 20px !important;
+        transition: all 0.3s ease;
+    }
+
+    .modal-vehiculo .ant-btn-primary:hover {
+        background: linear-gradient(135deg, #3CAEA3 0%, #20639B 100%) !important;
+        color: #fff !important;
+        transform: translateY(-1px);
+    }
+
+    .modal-vehiculo .ant-btn-default {
+        border: 1px solid #20639B !important;
+        color: #20639B !important;
+        background: #fff !important;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .modal-vehiculo .ant-btn-default:hover {
+        background: #f4faff !important;
+        border-color: #3CAEA3 !important;
+        color: #3CAEA3 !important;
+    }
+
+    .modal-vehiculo .section-header {
+        border-bottom: 2px solid #20639B;
+        padding-bottom: 8px;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .modal-vehiculo .section-header h5 {
+        color: #20639B;
+        margin: 0;
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+
+    .modal-vehiculo .section-icon {
+        color: #3CAEA3;
+        font-size: 1.2rem;
+    }
 </style>
 
 
@@ -112,7 +256,7 @@
             </div>
 
             <Row Gutter="16">
-                <Col Xs="24" Sm="12" Md="12" Lg="12">
+                <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12">
                     <FormItem Label="Seleccione al Chofer" Required>
                         <Select TItem="BomberoViweModel"
                         TItemValue="BomberoViweModel"
@@ -125,8 +269,8 @@
                         EnableSearch>
                         </Select>
                     </FormItem>
-                </Col>
-                <Col Xs="24" Sm="12" Md="12" Lg="12">
+                </AntDesign.Col>
+                <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12">
                     <FormItem Label="Número de Móvil" Required>
                         <Select TItem="Movil"
                         TItemValue="string"
@@ -140,7 +284,7 @@
                         EnableSearch>
                         </Select>
                     </FormItem>
-                </Col>
+                </AntDesign.Col>
             </Row>
 
             @if (movilSalidaView.NumeroMovil is not null)
@@ -149,22 +293,22 @@
             }
 
             <Row Gutter="16">
-                <Col Xs="24" Sm="12" Md="8" Lg="8">
+                <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="8">
                     <FormItem Label="KM de Salida">
-                        <Input @bind-Value="movilSalidaView.KmSalida" Disabled>
+                        <AntDesign.Input @bind-Value="movilSalidaView.KmSalida" Disabled>
                             <Suffix>Km</Suffix>
-                        </Input>
+                        </AntDesign.Input>
                     </FormItem>
-                </Col>
-                <Col Xs="24" Sm="12" Md="8" Lg="8">
+                </AntDesign.Col>
+                <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="8">
                     <FormItem Label="KM de Llegada" Required>
-                        <Input @bind-Value="movilSalidaView.KmLlegada"
+                        <AntDesign.Input @bind-Value="movilSalidaView.KmLlegada"
                         Placeholder="Ingrese el KM de llegada">
                             <Suffix>Km</Suffix>
-                        </Input>
+                        </AntDesign.Input>
                     </FormItem>
-                </Col>
-                <Col Xs="24" Sm="24" Md="8" Lg="8">
+                </AntDesign.Col>
+                <AntDesign.Col Xs="24" Sm="24" Md="8" Lg="8">
                     <FormItem Label="¿Cargó Combustible?">
                         <div style="padding-top: 4px;">
                             <Switch @bind-Checked="switchMoviles" OnChange="@OnChangeSwitch" />
@@ -173,18 +317,18 @@
                             </span>
                         </div>
                     </FormItem>
-                </Col>
+                </AntDesign.Col>
             </Row>
 
             <Row Justify="RowJustify.End" style="margin-top: 16px;">
-                <Col>
+                <AntDesign.Col>
                     <Button Type="@ButtonType.Primary"
                     OnClick="@AgregarMovilSalida"
                     Icon="plus"
                     Style="background-color: #20639B; border-color: #20639B;">
                         Cargar Móvil
                     </Button>
-                </Col>
+                </AntDesign.Col>
             </Row>
         </div>
 
@@ -248,7 +392,7 @@
                                     </Tag>
                                     @if (!string.IsNullOrEmpty(MovilesSalidasL1.CantidadLitros))
                                     {
-                                        <div><small>@MovilesSalidasL1.CantidadLitros L</small></div>
+                                        <div><small>@MovilesSalidasL1.CantidadLitros</small></div>
                                     }
                                 }
                                 else
@@ -292,69 +436,69 @@
 
 @*Modal para los Datos de la Carga de Combustible*@
 <Modal Title="Datos de la Carga de Combustible"
-Visible="@_visible"
-OnCancel="@HandleCancelMovil"
-OkText="@("Cargar Móvil")"
-OnOk="@AgregarMovilSalida"
-CancelText="@("Cancelar")"
-Width="600">
-    <Form Model="@movilSalidaView">
-        <div style="margin-bottom: 16px;">
-            <div style="border-bottom: 1px solid #fa8c16; padding-bottom: 8px; margin-bottom: 16px;">
-                <h5 style="color: #fa8c16; margin: 0; font-weight: 500;">Información del Combustible</h5>
+       Visible="@_visible"
+       OnCancel="@HandleCancelMovil"
+       OkText="@("Cargar Móvil")"
+       OnOk="@AgregarMovilSalida"
+       CancelText="@("Cancelar")"
+       WrapClassName="modal-vehiculo">
+    <div class="modal-vehiculo-content">
+        <Form Model="@movilSalidaView" Layout="FormLayout.Vertical" Class="modal-vehiculo-form">
+            <div class="section-header">
+                <Icon Type="fire" Class="section-icon" />
+                <h5>Información del Combustible</h5>
             </div>
-
+            
             <Row Gutter="16">
-                <Col Xs="24" Sm="12">
-                    <FormItem Label="Número de Remito" Required>
+                <AntDesign.Col Xs="24" Sm="12">
+                    <FormItem Label="Número de Remito" Required Class="modal-vehiculo-form-item">
                         <Input @bind-Value="@movilSalidaView.NumeroFactura"
-                        Placeholder="Ingrese el número de remito" />
+                               Placeholder="Ingrese el número de remito" />
                     </FormItem>
-                </Col>
-                <Col Xs="24" Sm="12">
-                    <FormItem Label="Fecha de la Factura" Required>
+                </AntDesign.Col>
+                <AntDesign.Col Xs="24" Sm="12">
+                    <FormItem Label="Fecha de la Factura" Required Class="modal-vehiculo-form-item">
                         <DatePicker TValue="DateTime?"
-                        @bind-Value="@movilSalidaView.FechaFactura"
-                        Placeholder="@("Seleccione la fecha")" />
+                                    @bind-Value="@movilSalidaView.FechaFactura"
+                                    Placeholder="@("Seleccione la fecha")" />
                     </FormItem>
-                </Col>
+                </AntDesign.Col>
             </Row>
 
             <Row Gutter="16">
-                <Col Xs="24" Sm="12">
-                    <FormItem Label="Tipo de Combustible" Required>
+                <AntDesign.Col Xs="24" Sm="12">
+                    <FormItem Label="Tipo de Combustible" Required Class="modal-vehiculo-form-item">
                         <Input @bind-Value="@movilSalidaView.TipoConbustible"
-                        Placeholder="Ej: Nafta Super, Gasoil" />
+                               Placeholder="Ej: Nafta Super, Gasoil" />
                     </FormItem>
-                </Col>
-                <Col Xs="24" Sm="12">
-                    <FormItem Label="Cantidad de Litros" Required>
-                        <Input @bind-Value="@movilSalidaView.CantidadLitros"
-                        Placeholder="Cantidad en litros">
-                            <Suffix>L</Suffix>
-                        </Input>
+                </AntDesign.Col>
+                <AntDesign.Col Xs="24" Sm="12">
+                    <FormItem Label="Cantidad de Litros" Required Class="modal-vehiculo-form-item">
+                        <AntDesign.Input @bind-Value="@movilSalidaView.CantidadLitros"
+                                         Placeholder="Cantidad en litros">
+                        </AntDesign.Input>
                     </FormItem>
-                </Col>
+                </AntDesign.Col>
             </Row>
 
             <Row>
-                <Col Span="24">
-                    <FormItem Label="Quien llenó el tanque" Required>
+                <AntDesign.Col Span="24">
+                    <FormItem Label="Quien llenó el tanque" Required Class="modal-vehiculo-form-item">
                         <Select TItem="BomberoViweModel"
-                        TItemValue="BomberoViweModel"
-                        DataSource="@bomberoChoferes"
-                        @bind-Value="@movilSalidaView.QuienLleno"
-                        LabelName="@nameof(BomberoViweModel.ApellidoYNombre)"
-                        Placeholder="Seleccione a un bombero"
-                        DefaultActiveFirstOption="false"
-                        AllowClear="true"
-                        EnableSearch>
+                                TItemValue="BomberoViweModel"
+                                DataSource="@bomberoChoferes"
+                                @bind-Value="@movilSalidaView.QuienLleno"
+                                LabelName="@nameof(BomberoViweModel.ApellidoYNombre)"
+                                Placeholder="Seleccione a un bombero"
+                                DefaultActiveFirstOption="false"
+                                AllowClear="true"
+                                EnableSearch>
                         </Select>
                     </FormItem>
-                </Col>
+                </AntDesign.Col>
             </Row>
-        </div>
-    </Form>
+        </Form>
+    </div>
 </Modal>
 
 
