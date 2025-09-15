@@ -25,67 +25,72 @@
         }
 
         .fuerzas-intervinientes .ant-table {
-            background: #fff5f5;
-            color: #b71c1c;
-            font-weight: 500;
-            font-size: 1.25rem;
-            border-radius: 14px;
-            min-width: 900px;
-            width: 100%;
-            table-layout: auto;
+            background: #fff5f5 !important;
+            color: #b71c1c !important;
+            font-weight: 500 !important;
+            font-size: 1.05rem !important;
+            border-radius: 14px !important;
+            min-width: 600px !important;
+            width: 100% !important;
+            table-layout: auto !important;
         }
 
-            .fuerzas-intervinientes .ant-table-thead .ant-table-cell, .fuerzas-intervinientes .ant-table thead th {
-                background: linear-gradient(135deg, #ff6b6b, #c62828);
-                border-right: 1px solid #ffcdd2;
+            .fuerzas-intervinientes .ant-table-thead .ant-table-cell, 
+            .fuerzas-intervinientes .ant-table thead th {
+                background: linear-gradient(135deg, #ff6b6b, #c62828) !important;
+                border-right: 1px solid #ffcdd2 !important;
                 color: #fff !important;
-                font-weight: 700;
-                text-align: center;
-                border-bottom: 2.5px solid #ffcdd2;
-                letter-spacing: 0.3px;
-                font-size: 1.3rem;
-                padding: 18px 24px !important;
-                height: 56px;
+                font-weight: 700 !important;
+                text-align: center !important;
+                border-bottom: 2.5px solid #ffcdd2 !important;
+                letter-spacing: 0.3px !important;
+                font-size: 1.08rem !important;
+                padding: 8px 10px !important;
+                height: 32px !important;
             }
 
         .fuerzas-intervinientes .ant-table-title {
-            background: #fff5f5;
-            color: #b71c1c;
-            font-weight: 700;
-            font-size: 1.25rem;
-            text-align: left;
-            padding: 1.1rem 1.5rem;
-            border-top-left-radius: 12px;
-            border-top-right-radius: 12px;
-            border-bottom: 1px solid #ffcdd2;
+            background: #fff5f5 !important;
+            color: #b71c1c !important;
+            font-weight: 700 !important;
+            font-size: 1.08rem !important;
+            text-align: left !important;
+            padding: 0.5rem 0.8rem !important;
+            border-top-left-radius: 12px !important;
+            border-top-right-radius: 12px !important;
+            border-bottom: 1px solid #ffcdd2 !important;
         }
 
-        .fuerzas-intervinientes .ant-table-cell, .fuerzas-intervinientes .ant-table td {
+        .fuerzas-intervinientes .ant-table-cell, 
+        .fuerzas-intervinientes .ant-table td {
             background: #fff !important;
-            border-right: 1px solid #f5b5b5;
+            border-right: 1px solid #f5b5b5 !important;
             color: #333 !important;
-            font-size: 1.18rem;
-            padding: 16px 22px !important;
-            height: 54px;
+            font-size: 1rem !important;
+            padding: 6px 10px !important;
+            height: 28px !important;
         }
 
         .fuerzas-intervinientes .ant-table tbody tr:hover td {
             background: #fff0f0 !important;
         }
 
-        .fuerzas-intervinientes .ant-btn-dangerous, .fuerzas-intervinientes .ant-btn[Danger] {
+        .fuerzas-intervinientes .ant-btn-dangerous, 
+        .fuerzas-intervinientes .ant-btn[Danger] {
             background: linear-gradient(135deg, #ff6b6b, #c62828) !important;
             border: none !important;
             color: #fff !important;
-            border-radius: 8px;
-            font-weight: 600;
-            box-shadow: 0 2px 8px rgba(229,57,53,.18);
-            transition: all 0.2s ease-in-out;
+            border-radius: 8px !important;
+            font-weight: 600 !important;
+            box-shadow: 0 2px 8px rgba(229,57,53,.18) !important;
+            transition: all 0.2s ease-in-out !important;
+            font-size: 0.95rem !important;
+            padding: 4px 10px !important;
         }
 
             .fuerzas-intervinientes .ant-btn-dangerous:hover {
-                filter: brightness(1.1);
-                transform: scale(1.05);
+                filter: brightness(1.1) !important;
+                transform: scale(1.05) !important;
             }
 
         .fuerzas-intervinientes .ant-table-tbody > tr.ant-table-row-selected > td {
@@ -93,8 +98,8 @@
         }
 
         .fuerzas-intervinientes .centrado {
-            display: flex;
-            justify-content: flex-end;
+            display: flex !important;
+            justify-content: flex-end !important;
         }
 </style>
 
@@ -105,7 +110,7 @@
                 <h4 style="color: #e53935; margin: 0; font-weight: 600;">Fuerza Interviniente</h4>
             </div>
             <Row Gutter="16">
-                <Col Xs="24" Sm="12" Md="12" Lg="12">
+                <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12">
                 <FormItem Label="Fuerza Interviniente" Required>
                     <Select TItem="FuerzaInterviniente"
                             TItemValue="int?"
@@ -119,29 +124,29 @@
                             EnableSearch>
                     </Select>
                 </FormItem>
-                </Col>
-                <Col Xs="24" Sm="12" Md="12" Lg="12">
+                </AntDesign.Col>
+                <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12">
                 <FormItem Label="N° Unidad" Required>
                     <Input @bind-Value="fuerzaForm.NumeroUnidad" Placeholder="Ingrese el número de unidad" />
                 </FormItem>
-                </Col>
+                </AntDesign.Col>
             </Row>
             <Row Gutter="16">
-                <Col Xs="24" Sm="12" Md="8" Lg="8">
+                <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="8">
                 <FormItem Label="Encargado" Required>
                     <Input @bind-Value="fuerzaForm.Encargado" Placeholder="Nombre del encargado" />
                 </FormItem>
-                </Col>
+                </AntDesign.Col>
             </Row>
             <Row Justify="RowJustify.End" style="margin-top: 16px;">
-                <Col>
+                <AntDesign.Col>
                 <Button Type="@ButtonType.Primary"
                         OnClick="@CargarFuerza"
                         Icon="plus"
                         Style="background-color: #e53935; border-color: #e53935;">
                     Cargar Fuerza Interviniente
                 </Button>
-                </Col>
+                </AntDesign.Col>
             </Row>
         </div>
     </Form>
@@ -159,28 +164,28 @@
                 </h4>
             </div>
             <div style="overflow-x: auto;">
-                <table class="ant-table">
+                <table class="ant-table" style="width: 100%; border-collapse: collapse;">
                     <thead>
                         <tr>
-                            <th>Encargado</th>
-                            <th>N° Unidad</th>
-                            <th>Fuerza</th>
-                            <th>Acciones</th>
+                            <th style="background: linear-gradient(135deg, #ff6b6b, #c62828); color: #fff; font-weight: 700; text-align: center; border-bottom: 2.5px solid #ffcdd2; letter-spacing: 0.3px; font-size: 1.08rem; padding: 8px 10px; height: 32px;">Encargado</th>
+                            <th style="background: linear-gradient(135deg, #ff6b6b, #c62828); color: #fff; font-weight: 700; text-align: center; border-bottom: 2.5px solid #ffcdd2; letter-spacing: 0.3px; font-size: 1.08rem; padding: 8px 10px; height: 32px;">N° Unidad</th>
+                            <th style="background: linear-gradient(135deg, #ff6b6b, #c62828); color: #fff; font-weight: 700; text-align: center; border-bottom: 2.5px solid #ffcdd2; letter-spacing: 0.3px; font-size: 1.08rem; padding: 8px 10px; height: 32px;">Fuerza</th>
+                            <th style="background: linear-gradient(135deg, #ff6b6b, #c62828); color: #fff; font-weight: 700; text-align: center; border-bottom: 2.5px solid #ffcdd2; letter-spacing: 0.3px; font-size: 1.08rem; padding: 8px 10px; height: 32px;">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in fuerzasCargadas)
                         {
                             <tr>
-                                <td>@item.Encargado</td>
-                                <td>@item.NumeroUnidad</td>
-                                <td>@fuerzasDisponibles.FirstOrDefault(f => f.Id == item.FuerzaID)?.NombreFuerza</td>
-                                <td>
+                                <td style="background: #fff; border-right: 1px solid #f5b5b5; color: #333; font-size: 1rem; padding: 6px 10px; height: 28px;">@item.Encargado</td>
+                                <td style="background: #fff; border-right: 1px solid #f5b5b5; color: #333; font-size: 1rem; padding: 6px 10px; height: 28px;">@item.NumeroUnidad</td>
+                                <td style="background: #fff; border-right: 1px solid #f5b5b5; color: #333; font-size: 1rem; padding: 6px 10px; height: 28px;">@fuerzasDisponibles.FirstOrDefault(f => f.Id == item.FuerzaID)?.NombreFuerza</td>
+                                <td style="background: #fff; border-right: 1px solid #f5b5b5; color: #333; font-size: 1rem; padding: 6px 10px; height: 28px;">
                                     <Button Type="@ButtonType.Text"
                                             Danger
                                             Size="@ButtonSize.Large"
                                             Icon="delete"
-                                            Style="font-size:1.3rem; padding: 8px 16px;"
+                                            Style="font-size: 0.95rem; padding: 4px 10px;"
                                             OnClick="@(() => EliminarFuerza(item))">
                                     </Button>
                                 </td>

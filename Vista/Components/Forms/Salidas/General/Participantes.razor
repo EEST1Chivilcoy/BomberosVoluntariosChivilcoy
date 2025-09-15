@@ -30,12 +30,12 @@
             </div>
 
             <Row Gutter="16">
-                <Col Span="12">
+                <AntDesign.Col Span="12">
                     <FormItem Label="Nombre" Required>
                         <Input @bind-Value="@Model.NombreSolicitante"
                                Placeholder="Ingrese el nombre" />
                     </FormItem>
-                </Col>
+                </AntDesign.Col>
                 <AntDesign.Col Span="12">
                     <FormItem Label="Apellido" Required>
                         <Input @bind-Value="@Model.ApellidoSolicitante"
@@ -45,45 +45,45 @@
             </Row>
 
             <Row Gutter="16">
-                <Col Span="12">
+                <AntDesign.Col Span="12">
                     <FormItem Label="Documento">
                         <Input @bind-Value="@Model.DniSolicitante"
                                Placeholder="Número de documento" />
                     </FormItem>
-                </Col>
-                <Col Span="12">
+                </AntDesign.Col>
+                <AntDesign.Col Span="12">
                     <FormItem Label="Teléfono" Required>
                         <Input @bind-Value="@Model.TelefonoSolicitante"
                                Placeholder="Número de teléfono" />
                     </FormItem>
-                </Col>
+                </AntDesign.Col>
             </Row>
         </div>
 
         @*Sección Receptor*@
         <div style="margin-bottom: 24px;">
             <div style="border-bottom: 2px solid #52c41a; padding-bottom: 8px; margin-bottom: 16px;">
-                <h4 style="color: #52c41a; margin: 0; font-weight: 600;">Datos de Receptoria</h4>
+                <h4 style="color: #52c41a; margin: 0; font-weight: 600;">Datos del Recepcionista</h4>
             </div>
 
             <Row Gutter="16">
-                <Col Span="12">
+                <AntDesign.Col Span="12">
                     <FormItem Label="Nombre" Required>
                         <Input @bind-Value="@Model.NombreReceptor"
                                Placeholder="Ingrese el nombre" />
                     </FormItem>
-                </Col>
-                <Col Span="12">
+                </AntDesign.Col>
+                <AntDesign.Col Span="12">
                     <FormItem Label="Apellido" Required>
                         <Input @bind-Value="@Model.ApellidoReceptor"
                                Placeholder="Ingrese el apellido" />
                     </FormItem>
-                </Col>
-                <Col Span="12">
+                </AntDesign.Col>
+                <AntDesign.Col Span="12">
                     <FormItem Label="Tipo" Required>
                         <EnumSelect TEnum="TipoReceptoria" @bind-Value="@Model.TipoReceptoria" DefaultActiveFirstOption="false" />
                     </FormItem>
-                </Col>
+                </AntDesign.Col>
             </Row>
         </div>
     </Form>

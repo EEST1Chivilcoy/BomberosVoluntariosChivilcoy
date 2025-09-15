@@ -21,38 +21,48 @@
     
 
     .damnificados-componente .ant-table {
-        background: #fff8f0;
-        color: #ff6a33;
-        font-weight: 700;
-        font-size: 1.05rem;
-        text-align: left;
-        padding: 0.75rem 1rem;
-        border-top-left-radius: 12px;
-        border-top-right-radius: 12px;
-        border-bottom: 1px solid #ffd6b3;
+        background: #fff8f0 !important;
+        color: #ff6a33 !important;
+        font-weight: 500 !important;
+        font-size: 1.05rem !important;
+        border-radius: 14px !important;
     }
-    .damnificados-componente .ant-table-thead .ant-table-cell {
+
+    .damnificados-componente .ant-table-thead .ant-table-cell, 
+    .damnificados-componente .ant-table thead th {
         background: linear-gradient(135deg, #ff944d, #ff7a45) !important; 
         color: #fff !important;
-        font-weight: 600;
-        text-align: center;
-        border-bottom: 2px solid #ffe0cc; 
-        letter-spacing: 0.3px;
+        font-weight: 600 !important;
+        text-align: center !important;
+        border-bottom: 2px solid #ffe0cc !important;
+        letter-spacing: 0.3px !important;
+        padding: 8px 10px !important;
+        font-size: 1.08rem !important;
+        height: 32px !important;
     }
     .damnificados-componente .ant-table-title {
-    background: #fff8f0;
-        color: #ff6a33;
-        font-weight: 700;
-        font-size: 1.05rem;
-        text-align: left;
-        padding: 0.75rem 1rem;
-        border-top-left-radius: 12px;
-        border-top-right-radius: 12px;
-        border-bottom: 1px solid #ffd6b3; 
+        background: #fff8f0 !important;
+        color: #ff6a33 !important;
+        font-weight: 700 !important;
+        font-size: 1.05rem !important;
+        text-align: left !important;
+        padding: 0.5rem 0.8rem !important;
+        border-top-left-radius: 12px !important;
+        border-top-right-radius: 12px !important;
+        border-bottom: 1px solid #ffd6b3 !important;
     }
-    .damnificados-componente .ant-table-cell {
+    .damnificados-componente .ant-table-cell, 
+    .damnificados-componente .ant-table td {
         background: #fff !important;
         color: #333 !important;
+        padding: 6px 10px !important;
+        font-size: 1rem !important;
+        height: 28px !important;
+    }
+
+    .damnificados-componente .ant-btn {
+        font-size: 0.95rem !important;
+        padding: 4px 10px !important;
     }
 
     /* Modal estilo Licencias adaptado para Damnificados */
@@ -167,7 +177,11 @@
 
 <div class="damnificados damnificados-componente">
 
-    <Table Context="Damnificados" DataSource="Model.Damnificados" Bordered>
+    <Table Context="Damnificados" 
+           DataSource="Model.Damnificados" 
+           Size="TableSize.Small"
+           Class="damnificados-componente"
+           Bordered>
         <TitleTemplate>
             <GridRow>
                 <GridCol Span="24" Style="text-align: right;">
