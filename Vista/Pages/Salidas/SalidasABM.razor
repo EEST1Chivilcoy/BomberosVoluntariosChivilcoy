@@ -312,6 +312,34 @@
         }
     }
 
+    .salidas-abm .button-wrapper .ant-btn:not(.ant-btn-icon-only){
+        border-color: transparent !important;
+        color:#fff !important;
+        border-radius:8px;
+        font-weight:600;
+        box-shadow:0 2px 8px rgba(146,84,222,.22);
+        margin-top: 1rem;
+        height: 40px !important;
+        font-size: 16px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 6px !important;
+        padding: 0 20px !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+
+    .salidas-abm .button-wrapper .ant-btn.ant-btn-icon-only{
+        background:#fff !important;
+        color:#4caf50 !important;
+        border-radius:8px;
+    }
+
+    .salidas-abm .button-wrapper .ant-btn:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4) !important;
+    }
+
 </style>
 
 @*Servicios Utilizados*@
@@ -338,9 +366,14 @@
                     </h1>
                 </div>
                 <div class="actions-row">
-                    <Button Type="ButtonType.Primary" OnClick="() => VerAñadirSalida()" Class="boton-nueva-salida">
-                        <Icon Type="plus" /> Nueva
-                    </Button>
+                    <div class="button-wrapper">
+                        <Button Type="ButtonType.Primary" 
+                                OnClick="() => VerAñadirSalida()" 
+                                class="ant-btn"
+                                style="background-color: #4CAF50; border-color: #4CAF50;">
+                            <Icon Type="plus" /> Nueva Salida
+                        </Button>
+                    </div>
                 </div>
             </div>
             <div class="table-container">
