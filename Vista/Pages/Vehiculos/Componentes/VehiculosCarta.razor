@@ -13,13 +13,10 @@
 <card class="vehiculo-card">
     <div class="vehiculo-imagen-contenedor">
         <img src="@Vehiculo.ImageUrl" class="vehiculo-imagen" />
+        <div class="numero-overlay"> @Vehiculo.NumeroMovil</div>
     </div>
 
     <div class="vehiculo-info">
-        <div class="vehiculo-titulo">
-            <p>Unidad N° @Vehiculo.NumeroMovil</p>
-        </div>
-
         <div class="botones-grid">
 
             <Button OnClick="() => DetallesVisible = true">
