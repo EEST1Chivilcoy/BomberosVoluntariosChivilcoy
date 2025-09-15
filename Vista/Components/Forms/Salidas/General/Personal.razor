@@ -212,32 +212,39 @@
     }
 
     <div class="inpt-cont-inline">
-        <div class="inpt-cont">
-            <label class="inpt-cont--lbl">Encargado</label>
-            <Select TItem="BomberoViweModel"
-                    TItemValue="BomberoViweModel"
-                    DataSource="@bomberosTodosView"
-                    Value="@EncargadoSeleccionado"
-                    ValueChanged="@EncargadoSeleccionadoChanged"
-                    LabelName="@nameof(BomberoViweModel.ApellidoYNombre)"
-                    Placeholder="Seleccione  a un  bombero"
-                    DefaultActiveFirstOption="false"
-                    AllowClear="true" EnableSearch>
-            </Select>
-        </div>
-        <div class="inpt-cont">
-            <label class="inpt-cont--lbl">Lleno la planilla</label>
-            <Select TItem="BomberoViweModel"
-                    TItemValue="BomberoViweModel"
-                    DataSource="@bomberosTodosView"
-                    Value="@PlanillaSeleccionado"
-                    ValueChanged="@PlanillaSeleccionadoChanged"
-                    LabelName="@nameof(BomberoViweModel.ApellidoYNombre)"
-                    Placeholder="Seleccione un bombero"
-                    DefaultActiveFirstOption="false"
-                    AllowClear="true" EnableSearch>
-            </Select>
-        </div>
+        <Row Gutter="16">
+            <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12">
+                <div class="inpt-cont">
+                    <label class="inpt-cont--lbl">Lleno la planilla</label>
+                    <Select TItem="BomberoViweModel"
+                            TItemValue="BomberoViweModel"
+                            DataSource="@bomberosTodosView"
+                            Value="@PlanillaSeleccionado"
+                            ValueChanged="@PlanillaSeleccionadoChanged"
+                            LabelName="@nameof(BomberoViweModel.ApellidoYNombre)"
+                            Placeholder="Seleccione un bombero"
+                            DefaultActiveFirstOption="false"
+                            AllowClear="true" EnableSearch>
+                    </Select>
+                </div>
+            </AntDesign.Col>
+
+              <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12">
+                <div class="inpt-cont">
+                    <label class="inpt-cont--lbl">Encargado Del Servicio</label>
+                    <Select TItem="BomberoViweModel"
+                            TItemValue="BomberoViweModel"
+                            DataSource="@bomberosTodosView"
+                            Value="@EncargadoSeleccionado"
+                            ValueChanged="@EncargadoSeleccionadoChanged"
+                            LabelName="@nameof(BomberoViweModel.ApellidoYNombre)"
+                            Placeholder="Seleccione  a un  bombero"
+                            DefaultActiveFirstOption="false"
+                            AllowClear="true" EnableSearch>
+                    </Select>
+                </div>
+            </AntDesign.Col>
+        </Row>
     </div>
 </div>
 
