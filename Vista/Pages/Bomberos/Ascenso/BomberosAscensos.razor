@@ -38,6 +38,10 @@
         padding: 28px !important;
         position: relative !important;
         overflow: hidden !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        flex-wrap: wrap;
     }
 
     .ascensos-abm .header-section .lava-bubbles {
@@ -130,15 +134,13 @@
     .ascensos-abm .title-container {
         position: relative !important;
         z-index: 2 !important;
-        margin-bottom: 20px !important;
     }
 
     .ascensos-abm .actions-row {
         display: flex !important;
-        justify-content: flex-end !important;
+        gap: 10px !important;
         align-items: center !important;
-        gap: 16px !important;
-        margin-top: 16px !important;
+        z-index: 2 !important;
     }
 
     .ascensos-abm .table-container {
@@ -198,6 +200,30 @@
         to {
             opacity: 1;
             transform: translateY(0);
+        }
+    }
+
+    @@media (max-width: 1199px) {
+        .ascensos-abm .ascensos-container {
+            padding: 8px !important;
+        }
+
+        .ascensos-abm .header-section {
+            padding: 20px !important;
+            flex-direction: column;
+            align-items: flex-start !important;
+        }
+        .ascensos-abm .actions-row {
+            margin-top: 15px;
+            justify-content: flex-start !important;
+            width: 100%;
+        }
+
+        .ascensos-abm .main-title {
+            font-size: 2rem !important;
+            flex-direction: column !important;
+            text-align: center !important;
+            gap: 8px !important;
         }
     }
 

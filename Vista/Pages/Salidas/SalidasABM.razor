@@ -25,6 +25,10 @@
         padding: 28px !important;
         position: relative !important;
         overflow: hidden !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        flex-wrap: wrap;
     }
     .salidas-abm .header-section::before {
         content: '';
@@ -118,14 +122,12 @@
     .salidas-abm .title-container {
         position: relative !important;
         z-index: 2 !important;
-        margin-bottom: 20px !important;
     }
     .salidas-abm .actions-row {
         display: flex !important;
-        justify-content: flex-end !important;
+        gap: 10px !important;
         align-items: center !important;
-        gap: 16px !important;
-        margin-top: 16px !important;
+        z-index: 2 !important;
     }
     .salidas-abm .table-container {
         padding: 0 !important;
@@ -402,9 +404,7 @@
             <Row Class="modal-crear-salidas-row" Gutter="16">
                 <AntDesign.Col Span="12">
                     <FormItem Label="🔢 Nº Parte" Required Class="modal-crear-salidas-form-item">
-                        <Input @bind-Value="@newSalida.NumeroSalida" ReadOnly Size="InputSize.Large">
-
-                        </Input>
+                        <Input @bind-Value="@newSalida.NumeroSalida" ReadOnly Size="InputSize.Large" />
                     </FormItem>
                 </AntDesign.Col>
                 <AntDesign.Col Span="12">

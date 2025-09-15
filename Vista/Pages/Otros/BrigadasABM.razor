@@ -42,6 +42,10 @@
         padding: 28px !important;
         position: relative !important;
         overflow: hidden !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        flex-wrap: wrap;
     }
 
     .brigadas-abm .header-section .lava-bubbles {
@@ -134,15 +138,13 @@
     .brigadas-abm .title-container {
         position: relative !important;
         z-index: 2 !important;
-        margin-bottom: 20px !important;
     }
 
     .brigadas-abm .actions-row {
         display: flex !important;
-        justify-content: flex-end !important;
+        gap: 10px !important;
         align-items: center !important;
-        gap: 16px !important;
-        margin-top: 16px !important;
+        z-index: 2 !important;
     }
 
     .brigadas-abm .table-container {
@@ -291,6 +293,30 @@
     .modal-crear-brigada .ant-btn-primary:hover {
         background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
         color: #fff !important;
+    }
+
+    @@media (max-width: 1199px) {
+        .brigadas-abm .brigadas-container {
+            padding: 8px !important;
+        }
+
+        .brigadas-abm .header-section {
+            padding: 20px !important;
+            flex-direction: column;
+            align-items: flex-start !important;
+        }
+        .brigadas-abm .actions-row {
+            margin-top: 15px;
+            justify-content: flex-start !important;
+            width: 100%;
+        }
+
+        .brigadas-abm .main-title {
+            font-size: 2rem !important;
+            flex-direction: column !important;
+            text-align: center !important;
+            gap: 8px !important;
+        }
     }
 </style>
 
