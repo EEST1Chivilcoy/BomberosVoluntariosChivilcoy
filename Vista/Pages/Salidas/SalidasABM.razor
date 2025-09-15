@@ -507,7 +507,7 @@
 
         var resultado = await SalidaService.ObtenerUltimoNumeroParteDelAnioAsync(newSalida.Anio);
 
-        newSalida.NumeroSalida = resultado;
+        newSalida.NumeroSalida = resultado + 1;
     }
 
     private async Task AddSalida()
