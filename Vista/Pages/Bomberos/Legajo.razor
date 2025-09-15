@@ -7,14 +7,6 @@
 <Layout>
     <Content>
         <div class="main-container">
-            <Row class="header-row">
-                <AntDesign.Col>
-                    <Button Type="ButtonType.Default" OnClick="CerrarSesion" class="logout-button">
-                        Cerrar Sesión
-                    </Button>
-                </AntDesign.Col>
-            </Row>
-
             <Row Gutter="30">
                 <AntDesign.Col Xs="24" Sm="24" Md="24" Lg="8" Xl="6">
                     <div class="profile-section">
@@ -135,10 +127,3 @@
         </div>
     </Content>
 </Layout>
-
-@code {
-    private void CerrarSesion()
-    {
-        Console.WriteLine("Sesión Cerrada");
-    }
-}
