@@ -868,6 +868,15 @@
         };
     }
 
+    // Función para manejar el clic en una fila de la tabla de cobradores
+    private Dictionary<string, object> OnRowClick(RowData<CobradorViewModel> rowData)
+    {
+        return new Dictionary<string, object>
+        {
+            ["onclick"] = Microsoft.AspNetCore.Components.EventCallback.Factory.Create<Microsoft.AspNetCore.Components.Web.MouseEventArgs>(this, () => DetallePersonal(rowData.Data.Id))
+        };
+    }
+
     private void searchB(string value, EstadoBombero estado)
     {
         int number;

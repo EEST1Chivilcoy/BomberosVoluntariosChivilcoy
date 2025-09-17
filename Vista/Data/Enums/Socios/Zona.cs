@@ -4,7 +4,7 @@ namespace Vista.Data.Enums.Socios
 {
     /// <summary>
     /// Representa las zonas geográficas o áreas de operación de los socios.
-    /// Esto es paramarcar diferentes regiones o sectores en los que los socios pueden estan ubicados.
+    /// Esto es para marcar diferentes regiones o sectores en los que los socios pueden estan ubicados.
     /// </summary>
     [Flags]
     public enum Zona

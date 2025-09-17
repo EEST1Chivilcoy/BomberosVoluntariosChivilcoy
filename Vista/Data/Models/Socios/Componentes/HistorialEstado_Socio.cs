@@ -13,9 +13,14 @@ namespace Vista.Data.Models.Socios.Componentes
         public DateTime Fecha { get; set; }
 
         /// <summary>
-        /// Representa el estado del socio en el historial.
+        /// Representa el Estado anterior del socio antes del cambio.
         /// </summary>
-        public TipoEstadoSocio Estado { get; set; }
+        public TipoEstadoSocio EstadoAnterior { get; set; }
+
+        /// <summary>
+        /// Representa el nuevo Estado del socio después del cambio.
+        /// </summary>
+        public TipoEstadoSocio EstadoNuevo { get; set; }
 
         /// <summary>
         /// Representa el motivo del cambio de estado del socio. (No es obligatorio)

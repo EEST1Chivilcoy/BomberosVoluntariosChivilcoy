@@ -20,7 +20,7 @@ namespace Vista.Data.Models.Socios.Componentes
         /// <summary>
         /// Representa la nueva frecuencia de pago a partir de la fecha del cambio.
         /// </summary>
-        public FrecuenciaPago FrecuenciaDePagoNuevo { get; set; }
+        public FrecuenciaPago FrecuenciaDePagoNueva { get; set; }
 
         /// <summary>
         /// Monto de la nueva cuota a partir de la fecha del cambio.

@@ -9,8 +9,9 @@ namespace Vista.Data.Models.Socios
 {
     /// <summary>
     /// Representa un socio en el sistema.
+    /// Puede ser una persona o una empresa.
     /// </summary>
-    public abstract class Socio
+    public class Socio
     {
         // -- Datos socio --
 
@@ -37,19 +38,9 @@ namespace Vista.Data.Models.Socios
         public TipoEstadoSocio EstadoSocio { get; set; } = TipoEstadoSocio.Activo;
 
         /// <summary>
-        /// Representa la relación del socio con el historial del socio. (1 a n) (Componente) (Estado del socio)
+        /// Representa la relación del con el historial del socio. (1 a n) (Componente)
         /// </summary>
-        public List<HistorialEstado_Socio> HistorialEstado { get; set; } = new();
-
-        /// <summary>
-        /// Representa la relación del socio con el historial de pagos realizados por el socio. (1 a n) (Componente) (Historial de pagos)
-        /// </summary>
-        public List<HistorialPago_Socio> HistorialPagos { get; set; } = new();
-
-        /// <summary>
-        /// Representa la relación del socio con el historial de cuotas del socio. (1 a n) (Componente) (Historial de cuotas) (Valor de las cuotas a lo largo del tiempo)
-        /// </summary>
-        public List<HistorialCuota_Socio> HistorialCuotas { get; set; } = new();
+        public List<Historial_Socio> Historial { get; set; } = new();
 
         /// <summary>
         /// Representa el monto actual de la cuota del socio.
@@ -64,9 +55,23 @@ namespace Vista.Data.Models.Socios
         // --- Datos personales ---
 
         /// <summary>
+        /// Documento o CUIT del socio. 
+        /// Documento para personas y CUIT para empresas.
+        /// Debe ser único.
+        /// </summary>
+        [Required]
+        public int DocumentoOCUIT { get; set; }
+
+        /// <summary>
         /// Representa el nombre de la persona o empresa.
         /// </summary>
         public string Nombre { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Representa el apellido de la persona.
+        /// En caso de ser una empresa, puede estar vacío.
+        /// </summary>
+        public string? Apellido { get; set; } = string.Empty;
 
         /// <summary>
         /// Representa la localidad del socio.
