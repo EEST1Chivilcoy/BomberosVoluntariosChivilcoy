@@ -402,35 +402,37 @@
 
                         <ActionColumn Title="⚙️ Acciones"
                                       Width="150px"
-                            <Space>
-                                <MenuItem>
-                                    <Popconfirm Title="¿Estás seguro que deseas borrar el handie?"
-                                                OnConfirm="()=>Delete(comunicacion.NroEquipo)"
-                                                OnCancel="Cancel"
-                                                OkText="Si"
-                                                CancelText="No">
-                                        <Button Danger>
-                                            <Icon Type="delete" />
-                                        </Button>
-                                    </Popconfirm>
-                                </MenuItem>
-                                <MenuItem>
-                                    <Popconfirm Title="¿Estás seguro que deseas desasignar el handie?"
-                                                OnConfirm="()=>Desasignar(comunicacion.NroEquipo)"
-                                                OnCancel="Cancel"
-                                                OkText="Si"
-                                                CancelText="No">
-                                        <Button>
-                                            <Icon Type="disconnect" />
-                                        </Button>
-                                    </Popconfirm>
-                                </Menuitem>
-                                <Menuitem>
-                                    <Button Type="@ButtonType.Primary" OnClick="()=>ShowModalEditar(comunicacion.NroEquipo)" Ghost>
-                                        <Icon Type="edit" />
-                                    </Button>
-                                </Menuitem>
-                            </Space>
+                                      Fixed="ColumnFixPlacement.Right">
+                            <Dropdown Trigger="@(new Trigger[] { Trigger.Click })">
+                                <Overlay>
+                                    <Menu>
+                                        <MenuItem>
+                                            <Popconfirm Title="¿Estás seguro que deseas borrar el handie?"
+                                                        OnConfirm="()=>Delete(comunicacion.NroEquipo)"
+                                                        OnCancel="Cancel">
+                                                <Button Danger>
+                                                    Eliminar
+                                                </Button>
+                                            </Popconfirm>
+                                        </MenuItem>
+                                        <MenuItem>
+                                            <Popconfirm Title="¿Estás seguro que deseas desasignar el handie?"
+                                                        OnConfirm="()=>Desasignar(comunicacion.NroEquipo)"
+                                                        OnCancel="Cancel">
+                                                <Button Danger>
+                                                    Desasignar
+                                                </Button>
+                                            </Popconfirm>
+                                        </MenuItem>
+                                        <MenuItem>
+                                            <Button Class="boton_p" OnClick="()=>ShowModalEditar(comunicacion.NroEquipo)">Editar</Button>
+                                        </MenuItem>
+                                    </Menu>
+                                </Overlay>
+                                <ChildContent>
+                                    <Button class="boton_p">Acciones<Icon Type="down" /></Button>
+                                </ChildContent>
+                            </Dropdown>
                         </ActionColumn>
                     </ColumnDefinitions>
                 </Table>
