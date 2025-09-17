@@ -11,5 +11,11 @@ namespace Vista.Data.Models.Personas.Personal
         /// Rango Jerárquico del miembro de la Comisión Directiva.
         /// </summary>
         public GradoComisionDirectiva Grado { get; set; }
+
+        /// <summary>
+        /// Estado actual del miembro de la Comisión Directiva.
+        /// Puede ser Activo, Baja o Baja por Fallecimiento.
+        /// </summary>
+        public EstadoComisionDirectiva Estado { get; set; }
     }
 }

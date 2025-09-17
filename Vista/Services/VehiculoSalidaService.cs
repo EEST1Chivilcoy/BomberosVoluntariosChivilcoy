@@ -128,10 +128,17 @@ namespace Vista.Services
             await _context.SaveChangesAsync(); // Guardamos primero el vehículo para obtener su ID
 
             // Si hay imagen, la vinculamos y la guardamos
-            if (imagen is Imagen_VehiculoSalida imagenVehiculo)
+            if (imagen is null)
             {
-                imagenVehiculo.VehiculoId = vehiculo.VehiculoId; // Asignamos el ID recién generado
-                await _imagenService.GuardarImagenAsync(imagenVehiculo);
+                if (imagen is Imagen_VehiculoSalida imagenVehiculo)
+                {
+                    imagenVehiculo.VehiculoId = vehiculo.VehiculoId; // Asignamos el ID recién generado
+                    await _imagenService.GuardarImagenAsync(imagenVehiculo);
+                }
+                else
+                {
+                    throw new InvalidOperationException("Tipo de imagen no soportado para vehículos.");
+                }
             }
 
             return vehiculo;

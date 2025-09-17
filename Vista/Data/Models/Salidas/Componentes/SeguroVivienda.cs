@@ -2,7 +2,7 @@
 
 namespace Vista.Data.Models.Salidas.Componentes
 {
-    public class SeguroSalida : Seguro
+    public class SeguroVivienda : Seguro
     {
         public Salida Salida { get; set; }
     }

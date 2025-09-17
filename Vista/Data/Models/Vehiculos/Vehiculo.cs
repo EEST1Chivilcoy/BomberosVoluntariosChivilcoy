@@ -49,15 +49,5 @@ namespace Vista.Data.Models.Vehiculos
         /// </summary>
         [StringLength(255)]
         public string? Tipo { get; set; }
-
-        /// <summary>
-        /// Identificador único del seguro asociado al vehículo.
-        /// </summary>
-        public int? SeguroId { get; set; }
-
-        /// <summary>
-        /// Objeto que representa el seguro del vehículo.
-        /// </summary>
-        public SeguroVehiculo? Seguro { get; set; }
     }
 }

@@ -36,6 +36,29 @@ namespace Vista.Data.Models.Personas.Personal
         public EstadoBombero Estado { get; set; }
 
         /// <summary>
+        /// Observaciones adicionales sobre la persona.
+        /// </summary>
+        public string? Observaciones { get; set; }
+
+        /// <summary>
+        /// Profesión de la persona. Longitud máxima de 255 caracteres.
+        /// </summary>
+        [StringLength(255)]
+        public string? Profesion { get; set; }
+
+        /// <summary>
+        /// Nivel de estudios alcanzado por la persona. Longitud máxima de 255 caracteres.
+        /// </summary>
+        [StringLength(255)]
+        public string? NivelEstudios { get; set; }
+
+        /// <summary>
+        /// Número de IOMA (cobertura de salud). Longitud máxima de 255 caracteres.
+        /// </summary>
+        [StringLength(255)]
+        public string? NumeroIoma { get; set; }
+
+        /// <summary>
         /// Dotación a la que pertenece el bombero.
         /// </summary>
         public TipoDotaciones Dotacion { get; set; }

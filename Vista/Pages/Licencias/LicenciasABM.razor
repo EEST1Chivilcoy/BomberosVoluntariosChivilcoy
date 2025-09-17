@@ -224,9 +224,9 @@
 
     /* Badge de notificaciones */
     .licencias-abm .notification-button {
-        background: rgba(255, 255, 255, 0.2) !important;
-        border: 1px solid rgba(255, 255, 255, 0.3) !important;
-        color: white !important;
+        background: rgba(255, 255, 255, 0.9) !important;
+        border: 2px solid rgba(166, 51, 51, 0.6) !important;
+        color: var(--abm-primary-color) !important;
         width: 40px !important;
         height: 40px !important;
         border-radius: 50% !important;
@@ -234,11 +234,14 @@
         align-items: center !important;
         justify-content: center !important;
         transition: all 0.3s ease !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
     }
 
         .licencias-abm .notification-button:hover {
-            background: rgba(255, 255, 255, 0.3) !important;
+            background: white !important;
+            border-color: var(--abm-primary-color) !important;
             transform: scale(1.1) !important;
+            box-shadow: 0 4px 12px rgba(166, 51, 51, 0.3) !important;
         }
 
     /* Tabla responsive */
@@ -519,20 +522,23 @@
     }
 
 
-.modal-crear-licencia .ant-modal-content {
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    border: 4px solid #A63333;
-    margin-top: -50px;
-    margin-bottom: 0px;
-}
+    .modal-crear-licencia .ant-modal-content {
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        border: 2px solid #732D2D;
+        margin-top: -50px;
+        margin-bottom: 0px;
+    }
 
-.modal-crear-licencia .ant-modal-header {
-    background-color: #f0f2f5;
-    border-bottom: 1px solid #d9d9d9;
-    padding: 16px 24px;
-    border-radius: 9px 9px 0 0;
-}
+    .modal-crear-licencia .ant-modal-title {
+        color: white !important;
+    }
+
+    .modal-crear-licencia .ant-modal-header {
+            background-color: #A63333;
+            padding: 16px 24px;
+
+    }
 
 .modal-crear-licencia-content {
     padding: 24px;
@@ -682,7 +688,7 @@
                                 OnClick="@(() => _modalAñadirVisible = true)"
                                 Icon="plus"
                                 Size="ButtonSize.Large">
-                            Nueva Licencia
+                            Solicitar Licencia
                         </Button>
 
                         <Dropdown Trigger="@(new Trigger[] { Trigger.Click })"
@@ -810,7 +816,7 @@
        Title="Nueva Licencia"
        Width="@("100%")"
        Style="max-width: 800px;"
-       OkText="@("Crear Licencia")"
+       OkText="@("Solicitar Licencia")"
        CancelText="@("Cancelar")"
        OnOk="@AddLicencia"
        DestroyOnClose

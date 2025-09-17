@@ -45,13 +45,11 @@ namespace Vista.Data
         public DbSet<Imagen_VehiculoSalida> ImagenesVehiculo { get; set; }
 
         // Seguros
-        public DbSet<SeguroSalida> SegurosSalidas { get; set; }
+        public DbSet<SeguroVivienda> SegurosSalidas { get; set; }
         public DbSet<SeguroVehiculo> SeguroVehiculos { get; set; }
 
         public DbSet<EmbarcacionAfectada> EmbarcacionesAfectadas { get; set; }
-        public DbSet<VehiculoAfectadoAccidente> VehiculosAfectadosAccidentes { get; set; }
-        public DbSet<VehiculoAfectadoIncendio> VehiculosAfectadoIncendios { get; set; }
-        public DbSet<VehiculoDamnificado> VehiculosDamnificados { get; set; }
+        public DbSet<VehiculoAfectado> VehiculosDamnificados { get; set; }
 
         // Salidas 
         public DbSet<Accidente> Accidentes { get; set; }
@@ -116,6 +114,27 @@ namespace Vista.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Relacion de Damnificado con VehiculoAfectado
+            modelBuilder.Entity<Damnificado_Salida>()
+                .HasOne(ds => ds.VehiculoDamnificado)
+                .WithMany() // No navegamos de vuelta desde VehiculoAfectado
+                .HasForeignKey("VehiculoDamnificadoId") // FK implícita
+                .IsRequired(false); // Porque puede no tener vehículo
+
+            modelBuilder.Entity<VehiculoAfectado>()
+                .HasOne(va => va.ConductorDamnificado)
+                .WithOne() // No navegamos de vuelta desde Damnificado_Salida
+                .HasForeignKey<VehiculoAfectado>("ConductorDamnificadoId")
+                .IsRequired(false);
+
+            modelBuilder.Entity<VehiculoAfectado>()
+                .HasMany(va => va.PasajerosDamnificados)
+                .WithOne() // No navegamos de vuelta desde Damnificado_Salida
+                .HasForeignKey("VehiculoPasajeroId")
+                .IsRequired(false);
+
+
+
             // Relaciónes 1:1 (Imagenes)
 
             modelBuilder.Entity<Personal>()
@@ -219,7 +238,7 @@ namespace Vista.Data
 
             modelBuilder.Entity<Seguro>()
                 .HasDiscriminator(s => s.Tipo)
-                .HasValue<SeguroSalida>(TipoSeguro.SeguroSalida)
+                .HasValue<SeguroVivienda>(TipoSeguro.SeguroSalida)
                 .HasValue<SeguroVehiculo>(TipoSeguro.SeguroVehiculo);
 
             modelBuilder.Entity<Imagen>()
@@ -254,9 +273,7 @@ namespace Vista.Data
 
             modelBuilder.Entity<Vehiculo>()
                 .HasDiscriminator(v => v.Discriminador)
-                .HasValue<VehiculoAfectadoAccidente>(TipoVehiculo.VehiculoAfectadoAccidente)
-                .HasValue<VehiculoAfectadoIncendio>(TipoVehiculo.VehiculoAfectadoIncendio)
-                .HasValue<VehiculoDamnificado>(TipoVehiculo.VehiculoDamnificado)
+                .HasValue<VehiculoAfectado>(TipoVehiculo.VehiculoDamnificado)
                 .HasValue<Vehiculo_Personal>(TipoVehiculo.VehiculoPersonal)
                 .HasValue<Movil>(TipoVehiculo.Movil)
                 .HasValue<VehiculoAfectado>(TipoVehiculo.VehiculoAfectado)
@@ -395,6 +412,12 @@ namespace Vista.Data
             modelBuilder
                 .Entity<Personal>()
                 .Property(b => b.GrupoSanguineo)
+                .HasConversion<string>()
+                .HasMaxLength(255);
+
+            modelBuilder
+                .Entity<ComisionDirectiva>()
+                .Property(c => c.Estado)
                 .HasConversion<string>()
                 .HasMaxLength(255);
 
