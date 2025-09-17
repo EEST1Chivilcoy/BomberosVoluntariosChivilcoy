@@ -46,78 +46,106 @@
         }
 
 
-    .licencias-abm .header-section {
-        background: linear-gradient(135deg, #A63333 0%, #732D2D 100%) !important;
-        color: white !important;
-        padding: 28px !important;
-        position: relative !important;
-        overflow: hidden !important;
-    }
+        .licencias-abm .header-section {
+            background: linear-gradient(135deg, #A63333 0%, #732D2D 100%) !important;
+            color: white !important;
+            padding: 28px !important;
+            position: relative !important;
+            overflow: hidden !important;
+        }
 
 
-    .licencias-abm .header-section::before {
-        content: '';
-        display: none;
-    }
-    .licencias-abm .header-section .lava-bubbles {
-        position: absolute;
-        top: 0; left: 0; width: 100%; height: 100%;
-        pointer-events: none;
-        z-index: 1;
-        overflow: hidden;
-    }
-    .licencias-abm .header-section .lava-bubble {
-        position: absolute;
-        border-radius: 50%;
-        opacity: 0.45;
-        background: radial-gradient(circle at 60% 40%, #FFD54F 0%, #F9A825 80%, transparent 100%);
-        animation: lava-bubble-move 8s linear infinite;
-        filter: blur(1.5px);
-        mix-blend-mode: lighten;
-    }
-    .licencias-abm .header-section .lava-bubble.b1 {
-        left: 10%; width: 60px; height: 60px; bottom: -70px;
-        animation-delay: 0s;
-        animation-duration: 7.5s;
-    }
-    .licencias-abm .header-section .lava-bubble.b2 {
-        left: 35%; width: 90px; height: 90px; bottom: -100px;
-        animation-delay: 2s;
-        animation-duration: 9s;
-        background: radial-gradient(circle at 60% 40%, #FFEB3B 0%, #FFD54F 80%, transparent 100%);
-    }
-    .licencias-abm .header-section .lava-bubble.b3 {
-        left: 65%; width: 50px; height: 50px; bottom: -60px;
-        animation-delay: 1.5s;
-        animation-duration: 6.5s;
-        background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #FFD54F 80%, transparent 100%);
-    }
-    .licencias-abm .header-section .lava-bubble.b4 {
-        left: 80%; width: 70px; height: 70px; bottom: -80px;
-        animation-delay: 3.2s;
-        animation-duration: 8.5s;
-        background: radial-gradient(circle at 60% 40%, #F9A825 0%, #FFD54F 80%, transparent 100%);
-    }
-    .licencias-abm .header-section .lava-bubble.b5 {
-        left: 55%; width: 40px; height: 40px; bottom: -50px;
-        animation-delay: 5s;
-        animation-duration: 7.2s;
-        background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #F9A825 80%, transparent 100%);
-    }
+            .licencias-abm .header-section::before {
+                content: '';
+                display: none;
+            }
+
+            .licencias-abm .header-section .lava-bubbles {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                z-index: 1;
+                overflow: hidden;
+            }
+
+            .licencias-abm .header-section .lava-bubble {
+                position: absolute;
+                border-radius: 50%;
+                opacity: 0.45;
+                background: radial-gradient(circle at 60% 40%, #FFD54F 0%, #F9A825 80%, transparent 100%);
+                animation: lava-bubble-move 8s linear infinite;
+                filter: blur(1.5px);
+                mix-blend-mode: lighten;
+            }
+
+                .licencias-abm .header-section .lava-bubble.b1 {
+                    left: 10%;
+                    width: 60px;
+                    height: 60px;
+                    bottom: -70px;
+                    animation-delay: 0s;
+                    animation-duration: 7.5s;
+                }
+
+                .licencias-abm .header-section .lava-bubble.b2 {
+                    left: 35%;
+                    width: 90px;
+                    height: 90px;
+                    bottom: -100px;
+                    animation-delay: 2s;
+                    animation-duration: 9s;
+                    background: radial-gradient(circle at 60% 40%, #FFEB3B 0%, #FFD54F 80%, transparent 100%);
+                }
+
+                .licencias-abm .header-section .lava-bubble.b3 {
+                    left: 65%;
+                    width: 50px;
+                    height: 50px;
+                    bottom: -60px;
+                    animation-delay: 1.5s;
+                    animation-duration: 6.5s;
+                    background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #FFD54F 80%, transparent 100%);
+                }
+
+                .licencias-abm .header-section .lava-bubble.b4 {
+                    left: 80%;
+                    width: 70px;
+                    height: 70px;
+                    bottom: -80px;
+                    animation-delay: 3.2s;
+                    animation-duration: 8.5s;
+                    background: radial-gradient(circle at 60% 40%, #F9A825 0%, #FFD54F 80%, transparent 100%);
+                }
+
+                .licencias-abm .header-section .lava-bubble.b5 {
+                    left: 55%;
+                    width: 40px;
+                    height: 40px;
+                    bottom: -50px;
+                    animation-delay: 5s;
+                    animation-duration: 7.2s;
+                    background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #F9A825 80%, transparent 100%);
+                }
 
     @@keyframes lava-bubble-move {
         0% {
             transform: translateY(0) scale(1) rotate(0deg);
             opacity: 0.45;
         }
+
         60% {
             opacity: 0.7;
             filter: blur(2.5px);
         }
+
         80% {
             transform: translateY(-220px) scale(1.15) rotate(10deg);
             opacity: 0.6;
         }
+
         100% {
             transform: translateY(-320px) scale(0.95) rotate(-8deg);
             opacity: 0;
@@ -145,8 +173,13 @@
     }
 
     @@keyframes text-glow {
-        0%, 100% { text-shadow: 0 0 5px #F9A825, 0 0 10px #FFD54F; }
-        50% { text-shadow: 0 0 12px #F9A825, 0 0 22px #FFD54F; }
+        0%, 100% {
+            text-shadow: 0 0 5px #F9A825, 0 0 10px #FFD54F;
+        }
+
+        50% {
+            text-shadow: 0 0 12px #F9A825, 0 0 22px #FFD54F;
+        }
     }
 
     .licencias-abm .title-container {
@@ -224,9 +257,9 @@
 
     /* Badge de notificaciones */
     .licencias-abm .notification-button {
-        background: rgba(255, 255, 255, 0.9) !important;
-        border: 2px solid rgba(166, 51, 51, 0.6) !important;
-        color: var(--abm-primary-color) !important;
+        background: rgba(255, 255, 255, 0.2) !important;
+        border: 1px solid rgba(255, 255, 255, 0.3) !important;
+        color: white !important;
         width: 40px !important;
         height: 40px !important;
         border-radius: 50% !important;
@@ -234,16 +267,12 @@
         align-items: center !important;
         justify-content: center !important;
         transition: all 0.3s ease !important;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
     }
 
         .licencias-abm .notification-button:hover {
-            background: white !important;
-            border-color: var(--abm-primary-color) !important;
+            background: rgba(255, 255, 255, 0.3) !important;
             transform: scale(1.1) !important;
-            box-shadow: 0 4px 12px rgba(166, 51, 51, 0.3) !important;
         }
-
     /* Tabla responsive */
     .licencias-abm .table-container {
         padding: 0 !important;
@@ -308,10 +337,10 @@
         padding: 16px !important;
     }
 
-    .licencias-abm :deep(.ant-table-thead > tr > th):hover {
-        background: #ececec9d !important;
-        color: #fff !important;
-    }
+        .licencias-abm :deep(.ant-table-thead > tr > th):hover {
+            background: #ececec9d !important;
+            color: #fff !important;
+        }
 
     .licencias-abm :deep(.ant-table-cell) {
         padding: 16px !important;
@@ -495,6 +524,7 @@
             font-size: 1.8rem !important;
             letter-spacing: 2px !important;
         }
+
         .licencias-abm :deep(.ant-table-cell:nth-child(3)),
         .licencias-abm :deep(.ant-table-cell:nth-child(4)) {
             display: none !important;
@@ -510,6 +540,7 @@
             height: 36px !important;
             padding: 0 12px !important;
         }
+
         .licencias-abm :deep(.ant-table-cell:nth-child(n+4)) {
             display: none !important;
         }
@@ -535,105 +566,106 @@
     }
 
     .modal-crear-licencia .ant-modal-header {
-            background-color: #A63333;
-            padding: 16px 24px;
-
+        background-color: #A63333;
+        padding: 16px 24px;
     }
 
-.modal-crear-licencia-content {
-    padding: 24px;
-}
+    .modal-crear-licencia-content {
+        padding: 24px;
+    }
 
-.modal-crear-licencia-form-item {
-    margin-bottom: 20px;
-    position: relative;
-    padding-left: 10px;
-}
+    .modal-crear-licencia-form-item {
+        margin-bottom: 20px;
+        position: relative;
+        padding-left: 10px;
+    }
 
-.modal-crear-licencia-form-item::before {
-    content: ''; 
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 3px;
-    border-radius: 5px;
-}
+        .modal-crear-licencia-form-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            border-radius: 5px;
+        }
 
-.modal-crear-licencia-form-item .ant-form-item-label > label,
-.modal-crear-licencia-form-full-width .ant-form-item-label > label {
-    font-weight: 600;
-    color: #434343;
-    display: flex; 
-    align-items: center;
-    gap: 8px;
-    font-size: 14px;
-    transition: color 0.3s ease;
-}
+        .modal-crear-licencia-form-item .ant-form-item-label > label,
+        .modal-crear-licencia-form-full-width .ant-form-item-label > label {
+            font-weight: 600;
+            color: #434343;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
 
-.modal-crear-licencia-form-item .ant-form-item-label > label:hover,
-.modal-crear-licencia-form-full-width .ant-form-item-label > label:hover {
-    color: #A63333;
-}
+            .modal-crear-licencia-form-item .ant-form-item-label > label:hover,
+            .modal-crear-licencia-form-full-width .ant-form-item-label > label:hover {
+                color: #A63333;
+            }
 
-.modal-crear-licencia .ant-input:focus,
-.modal-crear-licencia .ant-input:hover,
-.modal-crear-licencia .ant-select-selector:focus,
-.modal-crear-licencia .ant-select-selector:hover,
-.modal-crear-licencia .ant-picker:focus,
-.modal-crear-licencia .ant-picker:hover,
-.modal-crear-licencia .ant-picker-input > input:focus,
-.modal-crear-licencia .ant-picker-input > input:hover,
-.modal-crear-licencia .ant-input-number-input:focus,
-.modal-crear-licencia .ant-input-number-input:hover,
-.modal-crear-licencia .ant-textarea:focus,
-.modal-crear-licencia .ant-textarea:hover {
-    border-color: #FFD700 !important;
-    box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
-}
+    .modal-crear-licencia .ant-input:focus,
+    .modal-crear-licencia .ant-input:hover,
+    .modal-crear-licencia .ant-select-selector:focus,
+    .modal-crear-licencia .ant-select-selector:hover,
+    .modal-crear-licencia .ant-picker:focus,
+    .modal-crear-licencia .ant-picker:hover,
+    .modal-crear-licencia .ant-picker-input > input:focus,
+    .modal-crear-licencia .ant-picker-input > input:hover,
+    .modal-crear-licencia .ant-input-number-input:focus,
+    .modal-crear-licencia .ant-input-number-input:hover,
+    .modal-crear-licencia .ant-textarea:focus,
+    .modal-crear-licencia .ant-textarea:hover {
+        border-color: #FFD700 !important;
+        box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
+    }
 
-.modal-crear-licencia .modal-crear-licencia-label-duracion {
-    background-color: #FFD700;
-    border-radius: 4px;
-    color: #434343;
-    font-weight: 700;
-    border: 2px solid #A63333; 
-    display: inline-block;
-}
+    .modal-crear-licencia .modal-crear-licencia-label-duracion {
+        background-color: #FFD700;
+        border-radius: 4px;
+        color: #434343;
+        font-weight: 700;
+        border: 2px solid #A63333;
+        display: inline-block;
+    }
 
-.modal-crear-licencia .ant-picker,
-.modal-crear-licencia .ant-input,
-.modal-crear-licencia .ant-select-selector,
-.modal-crear-licencia .ant-input-number,
-.modal-crear-licencia .ant-textarea {
-    border-radius: 8px !important;
-    border: 1px solid #d9d9d9 !important;
-    background: #fff !important;
-    color: #434343 !important;
-    transition: all 0.3s ease !important;
-}
+    .modal-crear-licencia .ant-picker,
+    .modal-crear-licencia .ant-input,
+    .modal-crear-licencia .ant-select-selector,
+    .modal-crear-licencia .ant-input-number,
+    .modal-crear-licencia .ant-textarea {
+        border-radius: 8px !important;
+        border: 1px solid #d9d9d9 !important;
+        background: #fff !important;
+        color: #434343 !important;
+        transition: all 0.3s ease !important;
+    }
 
-.modal-crear-licencia .modal-crear-licencia-footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
-    margin-top: 18px;
-    margin-bottom: 0px;
-}
-.modal-crear-licencia .ant-btn-primary {
-    background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
-    border: none !important;
-    color: #fff !important;
-    font-weight: 600;
-    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
-    margin-top:  0;
-    margin-bottom: 0;
-    padding: 0 20px !important;
-}
-.modal-crear-licencia .ant-btn-primary:hover {
-    background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
-    color: #fff !important;
-}
+    .modal-crear-licencia .modal-crear-licencia-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 18px;
+        margin-bottom: 0px;
+    }
+
+    .modal-crear-licencia .ant-btn-primary {
+        background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
+        border: none !important;
+        color: #fff !important;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
+        margin-top: 0;
+        margin-bottom: 0;
+        padding: 0 20px !important;
+    }
+
+        .modal-crear-licencia .ant-btn-primary:hover {
+            background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
+            color: #fff !important;
+        }
 
 </style>
 
@@ -688,7 +720,7 @@
                                 OnClick="@(() => _modalAñadirVisible = true)"
                                 Icon="plus"
                                 Size="ButtonSize.Large">
-                            Solicitar Licencia
+                            Nueva Licencia
                         </Button>
 
                         <Dropdown Trigger="@(new Trigger[] { Trigger.Click })"
@@ -772,7 +804,7 @@
                         </PropertyColumn>
 
                         <PropertyColumn Title="🏷️ Tipo"
-                                        Property="@(c => c.TipoLicencia.GetDisplayName())"
+                                        Property="@(c => c.TipoLicencia != null ? c.TipoLicencia.GetDisplayName() : "Desconocido")"
                                         Sortable
                                         Width="200px" />
 
@@ -816,7 +848,7 @@
        Title="Nueva Licencia"
        Width="@("100%")"
        Style="max-width: 800px;"
-       OkText="@("Solicitar Licencia")"
+       OkText="@("Crear Licencia")"
        CancelText="@("Cancelar")"
        OnOk="@AddLicencia"
        DestroyOnClose
@@ -862,7 +894,6 @@
             {
                 <FormItem Label="📎 Certificado Médico" Class="modal-crear-licencia-form-item">
                     <Upload Accept=".pdf,.jpg,.png,.jpeg"
-                            MaxCount="1"
                             ShowUploadList>
                         <Button Icon="upload">Adjuntar Certificado</Button>
                     </Upload>
@@ -910,7 +941,7 @@
                     </FormItem>
                 </AntDesign.Col>
 
-           </Row>
+            </Row>
         </Form>
     </div>
 </Modal>
@@ -938,7 +969,11 @@
 
                     <div class="detail-item">
                         <div class="detail-label">🏷️ Tipo</div>
-                        <div class="detail-value">@licenciaSeleccionada.TipoLicencia?.GetDisplayName()</div>
+                        <div class="detail-value">
+                            @(licenciaSeleccionada.TipoLicencia != null
+                                ? licenciaSeleccionada.TipoLicencia.GetDisplayName()
+                                : "Desconocido")
+                        </div>
                     </div>
 
                     <div class="detail-item">
@@ -1060,9 +1095,9 @@
     private Dictionary<string, object> OnRowClick(RowData<LicenciaViewModel> rowData)
     {
         return new Dictionary<string, object>
-        {
-            ["onclick"] = Microsoft.AspNetCore.Components.EventCallback.Factory.Create<Microsoft.AspNetCore.Components.Web.MouseEventArgs>(this, () => MostrarDetalleLicencia(rowData.Data))
-        };
+            {
+                ["onclick"] = Microsoft.AspNetCore.Components.EventCallback.Factory.Create<Microsoft.AspNetCore.Components.Web.MouseEventArgs>(this, () => MostrarDetalleLicencia(rowData.Data))
+            };
     }
 
     // Función para mostrar el detalle de la licencia seleccionada
@@ -1131,20 +1166,20 @@
         foreach (var l in licencias)
         {
             var licVm = new LicenciaViewModel
-            {
-                Id = l.LicenciaId,
-                TipoLicencia = l.TipoLicencia,
-                NumeroLegajo = l.BomberoAfectado?.NumeroLegajo ?? 0,
-                PersonaId = l.PersonalId,
-                PersonalAfectado = l.BomberoAfectado?.ToBomberoViewModel(),
-                ApellidoYNombre = l.BomberoAfectado != null
-                    ? $"{l.BomberoAfectado.Apellido}, {l.BomberoAfectado.Nombre}"
-                    : string.Empty,
-                Descripcion = l.Descripcion,
-                Desde = l.Desde,
-                Hasta = l.Hasta,
-                EstadoLicencia = l.EstadoLicencia
-            };
+                {
+                    Id = l.LicenciaId,
+                    TipoLicencia = l.TipoLicencia,
+                    NumeroLegajo = l.BomberoAfectado?.NumeroLegajo ?? 0,
+                    PersonaId = l.PersonalId,
+                    PersonalAfectado = l.BomberoAfectado?.ToBomberoViewModel(),
+                    ApellidoYNombre = l.BomberoAfectado != null
+                        ? $"{l.BomberoAfectado.Apellido}, {l.BomberoAfectado.Nombre}"
+                        : string.Empty,
+                    Descripcion = l.Descripcion,
+                    Desde = l.Desde,
+                    Hasta = l.Hasta,
+                    EstadoLicencia = l.EstadoLicencia
+                };
 
             licenciasVM.Add(licVm);
         }
@@ -1228,15 +1263,15 @@
         try
         {
             var nuevaLicenciaModel = new Licencia
-            {
-                TipoLicencia = nuevaLicencia.TipoLicencia!.Value,
-                PersonalId = nuevaLicencia.PersonaId,
-                Descripcion = nuevaLicencia.Descripcion,
-                Desde = nuevaLicencia.Desde,
-                Hasta = nuevaLicencia.Hasta,
-                EstadoLicencia = TipoEstadoLicencia.Pendiente,
-                BomberoAfectado = bombero,
-            };
+                {
+                    TipoLicencia = nuevaLicencia.TipoLicencia!.Value,
+                    PersonalId = nuevaLicencia.PersonaId,
+                    Descripcion = nuevaLicencia.Descripcion,
+                    Desde = nuevaLicencia.Desde,
+                    Hasta = nuevaLicencia.Hasta,
+                    EstadoLicencia = TipoEstadoLicencia.Pendiente,
+                    BomberoAfectado = bombero,
+                };
 
             // Guardar en la base de datos
             await LicenciaService.AgregarLicencia(nuevaLicenciaModel);
