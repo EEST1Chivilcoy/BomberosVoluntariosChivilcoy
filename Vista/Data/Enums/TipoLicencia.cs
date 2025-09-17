@@ -3,6 +3,9 @@ namespace Vista.Data.Enums
 {
     public enum TipoLicencia
     {
+        [Display(Name = "Razones laborales")]
+        RazonesLaborales,
+
         [Display(Name = "Razones personales")]
         RazonesPersonales,
 
