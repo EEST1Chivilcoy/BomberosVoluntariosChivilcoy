@@ -362,11 +362,11 @@
                                         Sortable
                                         Width="220px">
                         </PropertyColumn>
-                        <ActionColumn Title="⚙️ Acciones" Align=ColumnAlign.Center>
+                        <ActionColumn Title="⚙️ Acciones" Align=ColumnAlign.Center Width="180px">
                             <Space>
                                 <SpaceItem>
                                     <Button OnClick="() => ViewBrigadeDetails(brigada.Id)">
-                                        <Icon Type="eye" /> Ver
+                                        <Icon Type="team" />
                                     </Button>
                                 </SpaceItem>
                                 <SpaceItem>
@@ -375,13 +375,13 @@
                                                 OkText="Si"
                                                 CancelText="No">
                                         <Button Danger>
-                                            <Icon Type="delete" /> Eliminar
+                                            <Icon Type="delete" />
                                         </Button>
                                     </Popconfirm>
                                 </SpaceItem>
                                 <SpaceItem>
                                     <Button Type="@ButtonType.Primary" OnClick="() => ViewEditBrigade(brigada.Id)" Ghost>
-                                        <Icon Type="edit" /> Editar
+                                        <Icon Type="edit" />
                                     </Button>
                                 </SpaceItem>
                             </Space>

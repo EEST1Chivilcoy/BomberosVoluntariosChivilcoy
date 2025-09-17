@@ -354,7 +354,7 @@
                                         Width="220px"
                                         Fixed="ColumnFixPlacement.Left">
                         </PropertyColumn>
-                        <ActionColumn Title="⚙️ Acciones" Align=ColumnAlign.Center>
+                        <ActionColumn Title="⚙️ Acciones" Align=ColumnAlign.Center Width="180px">
                             <Space>
                                 <SpaceItem>
                                     <Popconfirm Title="¿Eliminar esta fuerza?"
@@ -362,13 +362,13 @@
                                                 OkText="Si"
                                                 CancelText="No">
                                         <Button Danger>
-                                            <Icon Type="delete" /> Eliminar
+                                            <Icon Type="delete" />
                                         </Button>
                                     </Popconfirm>
                                 </SpaceItem>
                                 <SpaceItem>
                                     <Button Type="@ButtonType.Primary" OnClick="() => VerEditarFuerza(fuerza.Id)" Ghost>
-                                        <Icon Type="edit" /> Editar
+                                        <Icon Type="edit" />
                                     </Button>
                                 </SpaceItem>
                             </Space>

@@ -5,6 +5,12 @@
       "resourceId": null,
       "type": "secrets.user",
       "connectionId": null
+    },
+    "identityapp1": {
+      "connectionInfo": "Registro de la aplicación: FireForce, Inquilino: Sociedad de Bomberos Voluntarios de Chivilcoy (bomberoschivilcoy.org.ar - Microsoft Entra ID)",
+      "secretStore": "LocalSecretsFile",
+      "type": "identityapp.secretStore",
+      "connectionId": "AzureAD:ClientSecret"
     }
   }
 }
