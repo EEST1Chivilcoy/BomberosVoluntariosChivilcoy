@@ -224,9 +224,9 @@
 
     /* Badge de notificaciones */
     .licencias-abm .notification-button {
-        background: rgba(255, 255, 255, 0.2) !important;
-        border: 1px solid rgba(255, 255, 255, 0.3) !important;
-        color: white !important;
+        background: rgba(255, 255, 255, 0.9) !important;
+        border: 2px solid rgba(166, 51, 51, 0.6) !important;
+        color: var(--abm-primary-color) !important;
         width: 40px !important;
         height: 40px !important;
         border-radius: 50% !important;
@@ -234,11 +234,14 @@
         align-items: center !important;
         justify-content: center !important;
         transition: all 0.3s ease !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
     }
 
         .licencias-abm .notification-button:hover {
-            background: rgba(255, 255, 255, 0.3) !important;
+            background: white !important;
+            border-color: var(--abm-primary-color) !important;
             transform: scale(1.1) !important;
+            box-shadow: 0 4px 12px rgba(166, 51, 51, 0.3) !important;
         }
 
     /* Tabla responsive */
