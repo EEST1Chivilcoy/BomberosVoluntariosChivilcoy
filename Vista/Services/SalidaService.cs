@@ -13,6 +13,7 @@ using Vista.Data.Models.Salidas.Planillas;
 using Vista.Data.Models.Vehiculos.Flota;
 using Vista.Data.ViewModels.Personal;
 using Vista.Data.Models.Personas;
+using Vista.Data.Models.Grupos.FuerzasIntervinientes;
 
 namespace Vista.Services
 {
@@ -32,7 +33,7 @@ namespace Vista.Services
         Task<bool> BorrarSalidaAsync(int id);
 
         Task<int> ObtenerUltimoNumeroParteDelAnioAsync(int anio);
-    }
+    }   
 
     public class SalidaService : ISalidaService
     {
@@ -44,7 +45,7 @@ namespace Vista.Services
         }
 
         public async Task<T?> ObtenerSalidaPorNumeroParteAsync<T>(int numeroParte,
-    Expression<Func<T, bool>> predicate) where T : class
+        Expression<Func<T, bool>> predicate) where T : class
         {
             // Consulta genérica a la base de datos utilizando el predicado de búsqueda
             return await _context.Set<T>()
@@ -109,29 +110,47 @@ namespace Vista.Services
                     movilessalida.Add(movilS);
                 }
                 salida.Moviles = movilessalida;
-
-                //Damnificados
-                /*
-                List<Damnificado> damnificadossalida = new List<Damnificado>();
-                foreach (Damnificado d in salida.Damnificados)
+                //FuerzasIntervinientes
+                List<FuerzaInterviniente_Salida> fuerzasintervinientessalida = new List<FuerzaInterviniente_Salida>();
+                if (salida.FuerzasIntervinientes != null)
                 {
-                    Damnificado damn = new()
+                    foreach (FuerzaInterviniente_Salida f in salida.FuerzasIntervinientes)
+                    {
+                        // Buscamos la FuerzaInterviniente completa desde la base de datos usando el ID.
+                        var fuerzaCompleta = await _context.Fuerzas.FindAsync(f.FuerzaIntervinienteId);
+                        // Creamos la nueva entidad de relación para la salida.
+                        FuerzaInterviniente_Salida fuerzaS = new()
+                        {
+                            EncargadoApellidoyNombre = f.EncargadoApellidoyNombre,
+                            NumeroUnidad = f.NumeroUnidad,
+                            SalidaId = salida.SalidaId,
+                            FuerzaIntervinienteId = f.FuerzaIntervinienteId,
+                            FuerzaNombre = fuerzaCompleta != null ? fuerzaCompleta.NombreFuerza : string.Empty
+                        };
+                        fuerzasintervinientessalida.Add(fuerzaS);
+
+                    }
+                }
+                salida.FuerzasIntervinientes = fuerzasintervinientessalida;
+                //Damnificados
+
+                List<Damnificado_Salida> damnificadossalida = new List<Damnificado_Salida>();
+                foreach (Damnificado_Salida d in salida.Damnificados)
+                {
+                    Damnificado_Salida damn = new()
                     {
                         Nombre = d.Nombre,
                         Apellido = d.Apellido,
-                        Dni = d.Dni,
+                        Documento = d.Documento,
                         Sexo = d.Sexo,
-                        LugarDeNacimiento = d.LugarDeNacimiento,
+                        LugarNacimiento = d.LugarNacimiento,
                         Edad = d.Edad,
                         Estado = d.Estado,
                     };
                     damnificadossalida.Add(damn);
                 }
                 salida.Damnificados = damnificadossalida;
-                
-                
-                
-                */
+
                 _context.Set<T>().Add(salida);
                 await _context.SaveChangesAsync();
                 return salida;
@@ -180,11 +199,10 @@ namespace Vista.Services
 
         public async Task<int> ObtenerUltimoNumeroParteDelAnioAsync(int anio)
         {
-            var NumeroParteAlto = await _context.Salidas
+            return await _context.Salidas
                 .Where(p => p.AnioNumeroParte == anio)
-                .MaxAsync(p => (int?)p.NumeroParte);
-
-            return (NumeroParteAlto ?? 0) + 1;
+                .MaxAsync(p => (int?)p.NumeroParte) ?? 1;
         }
     }
 }
+
