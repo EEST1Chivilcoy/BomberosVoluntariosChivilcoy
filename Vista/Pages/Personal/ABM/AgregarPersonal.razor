@@ -399,7 +399,6 @@
                         </AntDesign.Col>
                     </AntDesign.Row>
                 }
-                )
             </div>
 
             <!-- Información Adicional (Solo para Bomberos) -->
@@ -493,7 +492,7 @@
 
 @code {
     [Parameter] public int? PersonalId { get; set; }
-    [Parameter] public string TipoPersonal { get; set; } = null!; // Puede ser "bombero" o "comisiondirectiva"
+    [Parameter] public string TipoPersonal { get; set; } = null!; // Puede ser "bombero" o "comisiondirectiva" o "cobrador"
 
     private PersonalViewModel? personalView = null; // ViewModel base para el personal
 
@@ -537,6 +536,9 @@
         imageViewModel.Base64 = null;
         imageViewModel.TipoImagen = null;
         imageViewModel.NombreImagen = null;
+
+        StateHasChanged();
+
         await Task.CompletedTask;
     }
 
@@ -549,6 +551,7 @@
         imageViewModel.NombreImagen = e.File.Name;
 
         StateHasChanged();
+
         await message.SuccessAsync("Foto subida correctamente.");
     }
 
@@ -826,7 +829,7 @@
         }
         catch (Exception ex)
         {
-            await message.ErrorAsync("Ocurrió un error al crear el miembro de comisión directiva.");
+            await message.ErrorAsync("Ocurrió un error al crear el cobrador.");
             await message.ErrorAsync($"Error: {ex.Message}");
         }
     }

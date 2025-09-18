@@ -1,5 +1,6 @@
 ﻿using Vista.Data.Enums.Personal.Cobrador;
 using Vista.Data.Enums.Socios;
+using Vista.Shared;
 
 namespace Vista.Data.ViewModels.Personal
 {
@@ -17,5 +18,20 @@ namespace Vista.Data.ViewModels.Personal
         /// Regiónes asignadas al cobrador.
         /// </summary>
         public Zona ZonasAsignadas { get; set; } = Zona.Ninguna;
+
+        public string ZonasAsignadasAsString
+        {
+            get
+            {
+                if (ZonasAsignadas == Zona.Ninguna)
+                    return "Ninguna";
+                var zonas = Enum.GetValues(typeof(Zona))
+                               .Cast<Zona>()
+                               .Where(z => z != Zona.Ninguna && ZonasAsignadas.HasFlag(z))
+                               .Select(z => z.GetDisplayName());
+
+                return string.Join(", ", zonas);
+            }
+        }
     }
 }

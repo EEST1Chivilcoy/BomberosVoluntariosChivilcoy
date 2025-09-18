@@ -18,6 +18,7 @@ namespace Vista.Services
     public interface ICobradorService
     {
         Task CrearCobrador(Cobrador cobrador, Imagen? imagen = null);
+        Task<List<Cobrador>> ObtenerTodosLosCobradoresAsync(bool ConImagenes = false);
     }
 
     public class CobradorService : ICobradorService
@@ -56,6 +57,20 @@ namespace Vista.Services
                     throw new InvalidOperationException("La imagen proporcionada no es del tipo correcto para un personal.");
                 }
             }
+        }
+
+        public async Task<List<Cobrador>> ObtenerTodosLosCobradoresAsync(bool ConImagenes = false)
+        {
+            IQueryable<Cobrador> query = _context.Cobradores;
+
+            if (ConImagenes)
+            {
+                query = query.Include(c => c.Imagen);
+            }
+
+            return await query
+                .AsNoTracking()
+                .ToListAsync();
         }
     }
 }
