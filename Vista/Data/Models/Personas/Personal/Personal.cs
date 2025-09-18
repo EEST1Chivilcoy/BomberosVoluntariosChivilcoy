@@ -16,7 +16,7 @@ namespace Vista.Data.Models.Personas.Personal
         /// <summary>
         /// Grupo sanguíneo de la persona.
         /// </summary>
-        public TipoGrupoSanguineo GrupoSanguineo { get; set; }
+        public TipoGrupoSanguineo? GrupoSanguineo { get; set; }
 
         /// <summary>
         /// Fecha de nacimiento de la persona. Es opcional.
@@ -49,29 +49,6 @@ namespace Vista.Data.Models.Personas.Personal
         /// </summary>
         [StringLength(255)]
         public string? LugarNacimiento { get; set; }
-
-        /// <summary>
-        /// Observaciones adicionales sobre la persona.
-        /// </summary>
-        public string? Observaciones { get; set; }
-
-        /// <summary>
-        /// Profesión de la persona. Longitud máxima de 255 caracteres.
-        /// </summary>
-        [StringLength(255)]
-        public string? Profesion { get; set; }
-
-        /// <summary>
-        /// Nivel de estudios alcanzado por la persona. Longitud máxima de 255 caracteres.
-        /// </summary>
-        [StringLength(255)]
-        public string? NivelEstudios { get; set; }
-
-        /// <summary>
-        /// Número de IOMA (cobertura de salud). Longitud máxima de 255 caracteres.
-        /// </summary>
-        [StringLength(255)]
-        public string? NumeroIoma { get; set; }
 
         /// <summary>
         /// Información de contacto de la persona. Es opcional.

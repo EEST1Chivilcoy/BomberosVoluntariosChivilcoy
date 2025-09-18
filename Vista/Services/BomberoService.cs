@@ -8,17 +8,18 @@ using Vista.Data.Enums;
 using Vista.Data.Models.Grupos.Brigadas;
 using Vista.Data.Models.Personas.Personal;
 using Vista.Data.Models.Personas.Personal.Componentes;
+using Vista.Data.Models.Imagenes;
 using Vista.Data.ViewModels.Personal;
 
 namespace Vista.Services
 {
     public interface IBomberoService
     {
-        Task CrearBombero(Bombero bombero);
+        Task CrearBombero(Bombero bombero, Imagen? imagen = null);
         Task<bool> BorrarBombero(Bombero bombero);
-        Task<Bombero> EditarBombero(Bombero bombero);
+        Task<bool> EditarBombero(Bombero bombero);
         Task<Sancion> SancionarBombero(Sancion sancion);
-        Task<Bombero> CambiarEstado(Bombero bombero);
+        Task<bool> CambiarEstado(int id, EstadoBombero estado);
         Task<AscensoBombero> AscenderBombero(AscensoBombero ascenso);
         Task<List<Bombero>> ObtenerTodosLosBomberosAsync(bool ConImagenes = false, bool ConTodasLasDemasRelaciones = false);
         Task<Bombero> ObtenerBomberoPorIdAsync(int id, bool asnotracking = false, bool conRelaciones = true);
@@ -28,10 +29,12 @@ namespace Vista.Services
     public class BomberoService : IBomberoService
     {
         private readonly BomberosDbContext _context;
+        private readonly IImagenService _imagenService;
 
-        public BomberoService(BomberosDbContext context)
+        public BomberoService(BomberosDbContext context, IImagenService imagenService)
         {
             _context = context;
+            _imagenService = imagenService;
         }
 
         public async Task<Bombero> ObtenerBomberoPorIdAsync(int id, bool asNoTracking = false, bool conRelaciones = true)
@@ -42,7 +45,10 @@ namespace Vista.Services
             {
                 query = query
                     .Include(b => b.Imagen)
+                    .Include(b => b.Firmas)
                     .Include(b => b.Brigadas)
+                    .Include(b => b.VehiculosEncargado)
+                    .Include(b => b.Dependencias)
                     .Include(b => b.Contacto);
             }
 
@@ -61,7 +67,7 @@ namespace Vista.Services
             return bombero;
         }
 
-        public async Task CrearBombero(Bombero bombero)
+        public async Task CrearBombero(Bombero bombero, Imagen? imagen = null)
         {
             // Asumiendo que Id es la clave primaria
             if (await _context.Bomberos.AnyAsync(b => b.PersonaId == bombero.PersonaId))
@@ -77,51 +83,148 @@ namespace Vista.Services
             }
 
             _context.Bomberos.Add(bombero);
-            await _context.SaveChangesAsync();
+
+            await _context.SaveChangesAsync(); // Guardar el bombero primero para obtener su PersonaId
+
+            // Si hay una imagen, asociarla al bombero
+            if (imagen != null)
+            {
+                if (imagen is Imagen_Personal imagenPersonal)
+                {
+                    imagenPersonal.PersonalId = bombero.PersonaId;
+                    await _imagenService.GuardarImagenAsync(imagenPersonal);
+                }
+                else
+                {
+                    throw new InvalidOperationException("La imagen proporcionada no es del tipo correcto para un bombero.");
+                }
+            }
         }
 
-        public async Task<Bombero> EditarBombero(Bombero bombero)
+        public async Task<bool> EditarBombero(Bombero bombero)
         {
+            if (bombero == null)
+            {
+                Console.WriteLine("ERROR: El bombero no puede ser nulo.");
+                return false;
+            }
+
+            using var transaction = await _context.Database.BeginTransactionAsync();
+
             try
             {
-                Bombero Editar = await _context.Bomberos.SingleOrDefaultAsync(e => e.PersonaId == bombero.PersonaId);
-                Contacto? contacto = await _context.Contactos.SingleOrDefaultAsync(c => c.PersonalId == bombero.PersonaId);
-                if (contacto != null)
+                // Buscar el bombero existente incluyendo su contacto
+                var bomberoExistente = await _context.Bomberos
+                    .Include(b => b.Contacto)
+                    .SingleOrDefaultAsync(e => e.PersonaId == bombero.PersonaId);
+
+                if (bomberoExistente == null)
                 {
-                    _context.Contactos.Remove(contacto);
+                    Console.WriteLine($"ERROR: No se encontró el bombero con ID {bombero.PersonaId}.");
+                    return false;
                 }
-                foreach (var i in bombero.GetType().GetProperties())
+
+                // Validar que no exista otro bombero con el mismo número de legajo (si se cambió)
+                if (bomberoExistente.NumeroLegajo != bombero.NumeroLegajo)
                 {
-                    var propNombre = i.Name;
-                    var propValor = i.GetValue(bombero);
-                    var editarProp = Editar.GetType().GetProperty(propNombre);
-                    if (editarProp != null && editarProp.CanWrite && propValor != null && propNombre != "Brigada" && propNombre != "BrigadaId")
+                    bool legajoExistente = await _context.Bomberos
+                        .AnyAsync(b => b.NumeroLegajo == bombero.NumeroLegajo && b.PersonaId != bombero.PersonaId);
+
+                    if (legajoExistente)
                     {
-                        editarProp.SetValue(Editar, propValor);
+                        Console.WriteLine($"ERROR: Ya existe un bombero con el número de legajo {bombero.NumeroLegajo}.");
+                        await transaction.RollbackAsync();
+                        return false;
                     }
                 }
 
+                // Actualizar las propiedades del bombero existente
+                bomberoExistente.Nombre = bombero.Nombre;
+                bomberoExistente.Apellido = bombero.Apellido;
+                bomberoExistente.Documento = bombero.Documento;
+                bomberoExistente.NumeroLegajo = bombero.NumeroLegajo;
+                bomberoExistente.NumeroIoma = bombero.NumeroIoma;
+                bomberoExistente.LugarNacimiento = bombero.LugarNacimiento;
+                bomberoExistente.Grado = bombero.Grado;
+                bomberoExistente.Dotacion = bombero.Dotacion;
+                bomberoExistente.GrupoSanguineo = bombero.GrupoSanguineo;
+                bomberoExistente.Altura = bombero.Altura;
+                bomberoExistente.Peso = bombero.Peso;
+                bomberoExistente.Estado = bombero.Estado;
+                bomberoExistente.Chofer = bombero.Chofer;
+                bomberoExistente.VencimientoRegistro = bombero.VencimientoRegistro;
+                bomberoExistente.Direccion = bombero.Direccion;
+                bomberoExistente.Observaciones = bombero.Observaciones;
+                bomberoExistente.Profesion = bombero.Profesion;
+                bomberoExistente.NivelEstudios = bombero.NivelEstudios;
+                bomberoExistente.FechaAceptacion = bombero.FechaAceptacion;
+                bomberoExistente.FechaNacimiento = bombero.FechaNacimiento;
+                bomberoExistente.Sexo = bombero.Sexo;
+
+                // Manejar la actualización del contacto
+                if (bombero.Contacto != null)
+                {
+                    if (bomberoExistente.Contacto != null)
+                    {
+                        // Actualizar contacto existente
+                        bomberoExistente.Contacto.TelefonoCel = bombero.Contacto.TelefonoCel;
+                        bomberoExistente.Contacto.TelefonoFijo = bombero.Contacto.TelefonoFijo;
+                        bomberoExistente.Contacto.TelefonoLaboral = bombero.Contacto.TelefonoLaboral;
+                        bomberoExistente.Contacto.Email = bombero.Contacto.Email;
+                    }
+                    else
+                    {
+                        // Crear nuevo contacto
+                        bomberoExistente.Contacto = new Contacto
+                        {
+                            PersonalId = bomberoExistente.PersonaId,
+                            TelefonoCel = bombero.Contacto.TelefonoCel,
+                            TelefonoFijo = bombero.Contacto.TelefonoFijo,
+                            TelefonoLaboral = bombero.Contacto.TelefonoLaboral,
+                            Email = bombero.Contacto.Email
+                        };
+                        _context.Contactos.Add(bomberoExistente.Contacto);
+                    }
+                }
+
+                // Guardar los cambios
                 await _context.SaveChangesAsync();
-                return bombero;
+                await transaction.CommitAsync();
+
+                Console.WriteLine($"INFO: Bombero con ID {bombero.PersonaId} actualizado correctamente.");
+                return true;
             }
             catch (DbUpdateException ex)
             {
-                Console.WriteLine($"Error al editar el bombero {ex.Message}");
-                return null;
+                await transaction.RollbackAsync();
+                Console.WriteLine($"ERROR: Error de base de datos al editar el bombero con ID {bombero.PersonaId}. {ex.Message}");
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine($"ERROR: Detalle interno: {ex.InnerException.Message}");
+                }
+                return false;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error inesperado {ex.Message}");
-                return null;
+                await transaction.RollbackAsync();
+                Console.WriteLine($"ERROR: Error inesperado al editar el bombero con ID {bombero.PersonaId}. {ex.Message}");
+                return false;
             }
         }
 
-        public async Task<Bombero> CambiarEstado(Bombero bombero)
+        public async Task<bool> CambiarEstado(int id, EstadoBombero estado)
         {
-            Bombero BomberoBaja = await _context.Bomberos.SingleOrDefaultAsync(b => b.PersonaId == bombero.PersonaId);
-            BomberoBaja.Estado = bombero.Estado;
+            Bombero? BomberoE = await _context.Bomberos.SingleOrDefaultAsync(b => b.PersonaId == id);
+            
+            if (BomberoE == null)
+            {
+                return false;
+            }
+
+            BomberoE.Estado = estado;
+
             await _context.SaveChangesAsync();
-            return bombero;
+            return true;
         }
 
         public async Task<bool> BorrarBombero(Bombero bombero)

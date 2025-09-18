@@ -7,14 +7,6 @@
 <Layout>
     <Content>
         <div class="main-container">
-            <Row class="header-row">
-                <AntDesign.Col>
-                    <Button Type="ButtonType.Default" OnClick="CerrarSesion" class="logout-button">
-                        Cerrar Sesión
-                    </Button>
-                </AntDesign.Col>
-            </Row>
-
             <Row Gutter="30">
                 <AntDesign.Col Xs="24" Sm="24" Md="24" Lg="8" Xl="6">
                     <div class="profile-section">
@@ -45,6 +37,10 @@
                                     <div class="label">FECHA DE INGRESO</div>
                                     <Input Value="@("01/01/25")" Disabled />
                                 </div>
+                                <div class="info-block">
+                                    <div class="label">NÚMERO DE HANDY</div>
+                                    <Input Value="@("2")" Disabled />
+                                </div>
                             </div>
                         </Card>
                     </div>
@@ -70,16 +66,47 @@
 
                         <div class="estadisticas-servicios">
                             <Statistic Title="SERVICIOS INTERVINIENTES"
-                                       Value="14"
-                                       ValueStyle="font-size: 2em; color: #a51c16; font-weight: bold;" />
+                                    Value="14"
+                                    ValueStyle="font-size: 2em; color: #a51c16; font-weight: bold;" />
                             <Divider Type="@DividerType.Vertical" class="stats-divider" />
                             <Statistic Title="SERVICIOS APRESTOS"
-                                       Value="41"
-                                       ValueStyle="font-size: 2em; color: #a51c16; font-weight: bold;" />
+                                    Value="41"
+                                    ValueStyle="font-size: 2em; color: #a51c16; font-weight: bold;" />
                             <Divider Type="@DividerType.Vertical" class="stats-divider" />
                             <Statistic Title="SERVICIOS CHOFER"
-                                       Value="0"
-                                       ValueStyle="font-size: 2em; color: #a51c16; font-weight: bold;" />
+                                    Value="0"
+                                    ValueStyle="font-size: 2em; color: #a51c16; font-weight: bold;" />
+                        </div>
+                    </Card>
+
+                    <Card Bordered="false" class="services-card2">
+                        <div class="header-servicios2">
+                            <div class="banner-container2">
+                                <div class="servicios-banner2">
+                                    <div class="banner-text">PUNTUAJE</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="estadisticas-puntuaje">
+                            <Statistic Title="PUNTUAJE MENSUAL"
+                                    Value="14"
+                                    ValueStyle="font-size: 2em; color: #a51c16; font-weight: bold;" />
+                            <Divider Type="@DividerType.Vertical" class="stats-divider" />
+                            <Statistic Title="PUNTUAJE ANUAL"
+                                    Value="41"
+                                    ValueStyle="font-size: 2em; color: #a51c16; font-weight: bold;" />
+                            <Divider Type="@DividerType.Vertical" class="stats-divider" />
+                            <Statistic Title="LICENCIA MENSUAL"
+                                    Value="23"
+                                    ValueStyle="font-size: 2em; color: #a51c16; font-weight: bold;" />
+                            <Divider Type="@DividerType.Vertical" class="stats-divider" />
+                            <Statistic Title="LICENCIA ANUAL"
+                                    Value="12"
+                                    ValueStyle="font-size: 2em; color: #a51c16; font-weight: bold;" />
+                            <Divider Type="@DividerType.Vertical" class="stats-divider" />
+                            <Statistic Title="FIRMAS"
+                                    Value="65"
+                                    ValueStyle="font-size: 2em; color: #a51c16; font-weight: bold;" />
                         </div>
                     </Card>
 
@@ -137,8 +164,5 @@
 </Layout>
 
 @code {
-    private void CerrarSesion()
-    {
-        Console.WriteLine("Sesión Cerrada");
-    }
 }
+

@@ -1,82 +1,82 @@
-/* Variables de colores */
-:root {
-    --color-rojo: #a51c16;
-    --color-amarillo-acento: #edb34d;
-    --color-gris-fondo-tarjeta: #e6e6e6f1;
-}
+    :root {
+        --color-rojo: #a51c16;
+        --color-amarillo-acento: #edb34d;
+        --color-gris-fondo-tarjeta: #e6e6e6f1;
+    }
 
-/* Contenedor principal */
-.main-container {
-    padding: 30px;
-}
+    .main-container {
+        margin-top: 50px;
+        padding: 30px;
+    }
 
-.header-row {
-    margin-bottom: 20px;
-}
+    .header-row {
+        margin-bottom: 20px;
+    }
 
-/* Botón de cerrar sesión */
-.logout-button {
-    color: #555 !important;
-    border-color: #ccc !important;
-}
+    .logout-button {
+        color: #555 !important;
+        border-color: #ccc !important;
+    }
 
-/* Sección de perfil */
-.profile-section {
-    position: relative;
-}
+    .profile-section {
+        height: 100%;
+        position: relative;
+    }
 
-.avatar-container {
-    position: absolute;
-    top: -90px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10;
-}
+    .avatar-container {
+        position: absolute;
+        top: -90px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10;
+    }
 
-.profile-avatar {
-    width: 160px !important;
-    height: 160px !important;
-    border: 10px solid var(--color-amarillo-acento) !important;
-    border-radius: 50% !important;
-}
+    .profile-avatar {
+        width: 160px !important;
+        height: 160px !important;
+        border: 10px solid var(--color-amarillo-acento) !important;
+        border-radius: 50% !important;
+    }
 
-.profile-card {
-    border-radius: 15px !important;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1) !important;
-    background-color: var(--color-gris-fondo-tarjeta) !important;
-    padding-top: 60px !important;
-}
+    .profile-card {
+        height: 100%;
+        border-radius: 15px !important;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1) !important;
+        background-color: var(--color-gris-fondo-tarjeta) !important;
+        padding-top: 60px !important;
+    }
 
-.profile-content {
-    padding-bottom: 20px;
-}
 
-.profile-header {
-    text-align: center;
-    margin-bottom: 25px;
-    margin-top: 5px;
-}
+    .profile-content {
+        padding-bottom: 20px;
+    }
 
-.name-box {
-    background-color: var(--color-amarillo-acento);
-    color: white;
-    padding: 8px 15px;
-    font-weight: bold;
-    margin-bottom: 5px;
-    font-size: 1.4em;
-    display: inline-block;
-    border-radius: 6px;
-}
+    .profile-header {
+        text-align: center;
+        margin-bottom: 25px;
+        margin-top: 5px;
+    }
 
-.subtitle-text {
-    font-size: 1.2em;
-    color: #6e6e6e;
-    font-weight: 700;
-}
+    .name-box {
+        background-color: var(--color-amarillo-acento);
+        color: white;
+        padding: 8px 15px;
+        font-weight: bold;
+        margin-bottom: 5px;
+        font-size: 1.4em;
+        display: inline-block;
+        border-radius: 6px;
+    }
 
-.info-block {
-    margin-bottom: 25px;
-}
+    .subtitle-text {
+        font-size: 1.2em;
+        color: #6e6e6e;
+        font-weight: 700;
+    }
+
+    .info-block {
+        margin-bottom: 25px;
+    }
 
     .info-block .label {
         color: #555;
@@ -84,122 +84,161 @@
         font-weight: bold;
     }
 
-.ant-input[disabled], .ant-input-disabled {
-    color: #7c7c7c !important;
-    border: 1px solid #e0e0e0 !important;
-    border-radius: 8px !important;
-    font-weight: bold !important;
-    height: 30px !important;
-    line-height: 30px !important;
-    cursor: default;
-}
+    .ant-input[disabled], .ant-input-disabled {
+        color: #7c7c7c !important;
+        border: 1px solid #e0e0e0 !important;
+        border-radius: 8px !important;
+        font-weight: bold !important;
+        height: 30px !important;
+        line-height: 30px !important;
+        cursor: default;
+    }
 
-.value-box {
-    background-color: white;
-    font-weight: bold;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 6px 11px;
-    color: #7c7c7c;
-    font-size: 14px;
-}
+    .value-box {
+        background-color: white;
+        font-weight: bold;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 6px 11px;
+        color: #7c7c7c;
+        font-size: 14px;
+    }
 
-/* Tarjeta de servicios */
-.services-card {
-    border-radius: 15px !important;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1) !important;
-    background-color: var(--color-gris-fondo-tarjeta) !important;
-}
+    .services-card {
+        border-radius: 15px !important;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1) !important;
+        background-color: var(--color-gris-fondo-tarjeta) !important;
+    }
 
-.header-servicios {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 30px;
-}
+    .services-card2 {
+        top: 15px;
+        border-radius: 15px !important;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1) !important;
+        background-color: var(--color-gris-fondo-tarjeta) !important;
+    }
 
-.banner-container {
-    display: flex;
-    justify-content: flex-end;
-    margin-left: 100px;
-}
+    .header-servicios {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 30px;
+    }
 
-.servicios-banner {
-    display: flex;
-    align-items: center;
-    background-color: var(--color-amarillo-acento);
-    height: 50px;
-    position: relative;
-    padding-left: 150px;
-    padding-right: 40px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin-top: 40px;
-}
+    .banner-container {
+        display: flex;
+        justify-content: flex-end;
+        margin-left: 80px;
+    }
 
-.banner-image-container {
-    position: absolute;
-    left: 0;
-    top: -38px;
-    height: 135px;
-    width: 140px;
-    z-index: 10;
-}
+    .banner-container2 {
+        display: flex;
+        justify-content: flex-start;
+        margin-left: 85px;
+    }
 
-.banderin-image {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
+    .servicios-banner {
+        display: flex;
+        align-items: center;
+        background-color: var(--color-amarillo-acento);
+        height: 50px;
+        position: relative;
+        padding-left: 150px;
+        padding-right: 40px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-top: 40px;
+    }
 
-.banner-number-overlay {
-    position: absolute;
-    left: 53%;
-    top: 41%;
-    transform: translate(-50%, -50%);
-    font-size: 4em;
-    font-weight: 1000;
-    color: white;
-    z-index: 20;
-    line-height: 1;
-}
+    .servicios-banner2 {
+        display: flex;
+        align-items: center;
+        background-color: var(--color-amarillo-acento);
+        height: 50px;
+        position: relative;
+        padding-left: 150px;
+        padding-right: 40px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-top: -5px;
+        margin-bottom: 40px; 
+        width: 400px;
+    }
 
-.banner-text {
-    font-size: 1.2em;
-    font-weight: bold;
-    color: white;
-    white-space: nowrap;
-    margin-left: 10px;
-    z-index: 1;
-    flex-grow: 1;
-    min-width: 0;
-}
+    .banner-image-container {
+        position: absolute;
+        left: 0;
+        top: -38px;
+        height: 135px;
+        width: 140px;
+        z-index: 10;
+    }
 
-.report-button {
-    height: 40px !important;
-    padding: 0 15px !important;
-    font-size: 1em !important;
-    font-weight: bold !important;
-    gap: 8px !important;
-    border-radius: 8px !important;
-    border: 1px solid #d9d9d9 !important;
-    color: #ffffff !important;
-    background-color: #3150eb !important;
-    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.02) !important;
-    display: flex !important;
-    align-items: center !important;
-}
+    .banderin-image {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
 
-.report-icon {
-    font-size: 1.2em !important;
-}
+    .banner-number-overlay {
+        position: absolute;
+        left: 53%;
+        top: 41%;
+        transform: translate(-50%, -50%);
+        font-size: 4em;
+        font-weight: 1000;
+        color: white;
+        z-index: 20;
+        line-height: 1;
+    }
 
-/* Estadísticas de servicios */
-.estadisticas-servicios {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-}
+    .banner-text {
+        font-size: 1.2em;
+        font-weight: bold;
+        color: white;
+        white-space: nowrap;
+        margin-left: 10px;
+        z-index: 1;
+        flex-grow: 1;
+        min-width: 0;
+    }
+
+    .banner-text2 {
+        font-size: 2.4em; 
+        font-weight: bold;
+        color: white;
+        white-space: nowrap;
+        margin-left: 10px;
+        z-index: 1;
+        flex-grow: 1;
+        min-width: 0;
+    }
+
+    .report-button {
+        height: 40px !important;
+        padding: 0 15px !important;
+        font-size: 1em !important;
+        font-weight: bold !important;
+        gap: 8px !important;
+        border-radius: 8px !important;
+        border: 1px solid #d9d9d9 !important;
+        color: #ffffff !important;
+        background-color: #3150eb !important;
+        box-shadow: 0 2px 0 rgba(0, 0, 0, 0.02) !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+
+    .report-icon {
+        font-size: 1.2em !important;
+    }
+
+    .estadisticas-servicios {
+        display: flex;
+        flex-wrap: wrap; 
+        justify-content: space-around;
+        align-items: center;
+        gap: 20px; 
+    }
 
     .estadisticas-servicios .ant-statistic {
         display: flex;
@@ -210,122 +249,158 @@
         margin: 0 10px;
     }
 
-.ant-statistic-title {
-    text-transform: uppercase;
-    font-size: 0.8em !important;
-    font-weight: bold !important;
-    color: #333;
-    margin-bottom: 5px !important;
-    white-space: normal;
-    height: auto;
-}
-
-.estadisticas-servicios .ant-statistic-title {
-    font-size: 1.2em !important;
-    color: #666 !important;
-    margin-bottom: 0px !important;
-    margin-top: 5px !important;
-}
-
-.ant-statistic-content {
-    font-weight: bold !important;
-    font-size: 2em !important;
-}
-
-.estadisticas-servicios .ant-statistic-content {
-    font-size: 4.5em !important;
-    font-weight: 900 !important;
-}
-
-.stats-divider {
-    border-left: 1px solid #c7c7c7 !important;
-    height: 50px !important;
-}
-
-/* Tarjeta de herramientas */
-.tools-card {
-    border-radius: 15px !important;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1) !important;
-    background-color: var(--color-gris-fondo-tarjeta) !important;
-    margin-top: 20px !important;
-    min-height: 230px !important;
-}
-
-.tools-title {
-    font-size: 2.5em;
-    font-weight: bold;
-    color: #696969;
-    margin-bottom: 20px;
-}
-
-.tool-col {
-    margin-bottom: 10px;
-}
-
-.tool-button {
-    background-color: var(--color-amarillo-acento) !important;
-    color: white !important;
-    border: 1px solid var(--color-amarillo-acento) !important;
-    font-size: 1.1em !important;
-    padding: 10px 10px !important;
-    font-weight: bold !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: 100% !important;
-    height: 100% !important;
-    text-align: center !important;
-    border-radius: 12px !important;
-}
-
-/* Responsive Design */
-@media (max-width: 991px) {
-    .ant-col-lg-8, .ant-col-lg-16 {
-        max-width: 100%;
-        flex: 0 0 100%;
+    .ant-statistic-title {
+        text-transform: uppercase;
+        font-size: 0.8em !important;
+        font-weight: bold !important;
+        color: #333;
+        margin-bottom: 5px !important;
+        white-space: normal;
+        height: auto;
     }
 
-    .profile-card {
-        padding-top: 20px !important;
-    }
-
-    .profile-avatar {
-        width: 120px !important;
-        height: 120px !important;
-        border-width: 5px !important;
-    }
-
-    .avatar-container {
-        top: -60px;
-    }
-
-    .header-servicios {
-        flex-direction: column;
-        align-items: center;
-        gap: 15px;
-    }
-
-    .estadisticas-servicios {
-        flex-direction: column;
-        gap: 20px;
+    .estadisticas-servicios .ant-statistic-title {
+        font-size: 1.2em !important;
+        color: #666 !important;
+        margin-bottom: 0px !important;
+        margin-top: 5px !important;
     }
 
     .ant-statistic-content {
-        font-size: 1.8em !important;
+        font-weight: bold !important;
+        font-size: 2em !important;
     }
 
-    .report-button {
-        width: 100% !important;
-        justify-content: center !important;
-        font-size: 0.9em !important;
-        height: 35px !important;
+    .estadisticas-servicios .ant-statistic-content {
+        font-size: 4.5em !important;
+        font-weight: 900 !important;
     }
 
     .stats-divider {
-        display: none !important;
+        border-left: 1px solid #c7c7c7 !important;
+        height: 50px !important;
     }
 
-    .banner-container {
-        margin-left: 0;
+    .estadisticas-puntuaje {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 20px; 
     }
-}
+
+    .estadisticas-puntuaje .ant-statistic {
+        flex-direction: column-reverse;
+        align-items: center;
+        text-align: center;
+        margin: 0 10px;
+        min-width: 190px;
+    }
+
+    .estadisticas-puntuaje .ant-statistic-content {
+        font-size: 4.5em !important;
+        font-weight: 900 !important;
+    }
+
+    .estadisticas-puntuaje .ant-statistic-title {
+        font-size: 1.2em !important;
+        color: #666 !important;
+        margin-bottom: 0px !important;
+        margin-top: 5px !important;
+    }
+
+    .estadisticas-puntuaje .stats-divider {
+        display: block !important;
+    }
+
+    .tools-card {
+        border-radius: 15px !important;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1) !important;
+        background-color: var(--color-gris-fondo-tarjeta) !important;
+        margin-top: 30px !important;
+        min-height: 230px !important;
+    }
+
+    .tools-title {
+        font-size: 2.5em;
+        font-weight: bold;
+        color: #696969;
+        margin-bottom: 20px;
+    }
+
+    .tool-col {
+        margin-bottom: 10px;
+    }
+
+    .tool-button {
+        background-color: var(--color-amarillo-acento) !important;
+        color: white !important;
+        border: 1px solid var(--color-amarillo-acento) !important;
+        font-size: 1.1em !important;
+        padding: 10px 10px !important;
+        font-weight: bold !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 100% !important;
+        height: 100% !important;
+        text-align: center !important;
+        border-radius: 12px !important;
+    }
+
+    @media (max-width: 991px) {
+        .ant-col-lg-8, .ant-col-lg-16 {
+            max-width: 100%;
+            flex: 0 0 100%;
+        }
+
+        .profile-card {
+            padding-top: 20px !important;
+        }
+
+        .profile-avatar {
+            width: 120px !important;
+            height: 120px !important;
+            border-width: 5px !important;
+        }
+
+        .avatar-container {
+            top: -60px;
+        }
+
+        .header-servicios {
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .header-servicios2 {
+            display: flex;
+            justify-content: center; 
+            margin-bottom: 10px;
+        }
+
+        .estadisticas-servicios, .estadisticas-puntuaje {
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .ant-statistic-content {
+            font-size: 1.8em !important;
+        }
+
+        .report-button {
+            width: 100% !important;
+            justify-content: center !important;
+            font-size: 0.9em !important;
+            height: 35px !important;
+        }
+
+        .stats-divider {
+            display: none !important;
+        }
+
+        .banner-container {
+            margin-left: 0;
+        }
+    }

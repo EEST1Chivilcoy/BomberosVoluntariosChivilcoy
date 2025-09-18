@@ -6,40 +6,142 @@
 @using Vista.Services
 @inject IDepositoService DepositoService
 @inject IMessageService message
-<Form Model="@MaterialViewModel"
-        OnFinish="OnFinish"
-        OnFinishFailed="OnFinishFailed"
-        LabelColSpan="8"
-        WrapperColSpan="16">
 
-    <FormItem Label="Producto">
-        <Input @bind-Value="MaterialViewModel.Descripcion" />
-    </FormItem>
+<style>
+    .material-abm {
+        font-family: 'Poppins', sans-serif !important;
+        --primary-color: #e4e4e4; 
+        --primary-dark: #e4e4e4;
+        --secondary-color: #2F54EB; 
+        --success-color: #52C41A;
+        --success-dark: #449E17;
+        --background-card: #FFFFFF;
+        --background-body: #F0F2F5; 
+        --text-color: #262626;
+        --border-color: #E8E8E8;
+        --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
 
-    <FormItem Label="Codigo de Barra">
-        <Input @bind-Value="MaterialViewModel.Codigo" />
-    </FormItem>
+    .material-abm .modal-content {
+        background: var(--background-body);
+        border-radius: 16px;
+        box-shadow: var(--shadow);
+        padding: 40px;
+        max-height: 95vh;
+        overflow-y: auto;
+    }
 
-    <FormItem Label="Fecha">
-        <DatePicker TValue="DateTime" DefaultValue="DateTime.Now" @bind-Value="MaterialViewModel.FechaAlta" />
-    </FormItem>
+    .material-abm .section-header {
+        background: linear-gradient(90deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+        color: rgb(0, 0, 0);
+        padding: 18px 40px;
+        font-size: 1.5em;
+        font-weight: 600;
+        border-radius: 16px 16px 0 0;
+        margin: -40px -40px 20px -40px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+    
+    .material-abm .form-card {
+        background-color: var(--background-card);
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
 
-    <FormItem Label="Stock">
-        <AntDesign.InputNumber @bind-Value="MaterialViewModel.Stock" />
-    </FormItem>
+    .material-abm .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
 
-    <FormItem Label="Rubro">
-        <EnumSelect TEnum="TipoRubro" @bind-Value="MaterialViewModel.Rubro" />
-    </FormItem>
+    .material-abm .form-item-full-width {
+        grid-column: span 2;
+    }
+    
+    .material-abm .form-buttons-container {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 20px;
+    }
+    
+    .material-abm .secondary-button {
+        background: transparent;
+        border: 1px solid var(--border-color);
+        color: var(--text-color);
+        height: 40px;
+        font-weight: 500;
+        border-radius: 6px;
+    }
+    
+    .material-abm .save-button {
+        background: linear-gradient(135deg, var(--success-color) 0%, var(--success-dark) 100%);
+        border: none;
+        color: white;
+        box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+        font-weight: 600;
+        height: 40px;
+        border-radius: 6px;
+    }
 
-    <FormItem WrapperColOffset="8" WrapperColSpan="16">
-        <Button Type="@ButtonType.Primary" HtmlType="Sumbit">
-            Cargar Material
-        </Button>
-    </FormItem>
-</Form>
+    .ant-input, .ant-picker, .ant-select:not(.ant-select-customize-input) .ant-select-selector {
+        border-radius: 6px !important;
+        background-color: #fafafa !important;
+    }
+    .ant-input:focus, .ant-picker-focused, .ant-select-focused:not(.ant-select-disabled) .ant-select-selector {
+        border-color: var(--primary-color) !important;
+        box-shadow: 0 0 0 2px rgba(166, 51, 51, 0.2) !important;
+    }
+</style>
 
-@code {
+<div class="material-abm">
+    <div class="modal-content">
+        
+        <div class="section-header">
+            Agregar Nuevo Material
+        </div>
+
+        <div class="form-card">
+            <Form Model="@MaterialViewModel"
+                  OnFinish="OnFinish"
+                  OnFinishFailed="OnFinishFailed"
+                  LabelColSpan="8"
+                  WrapperColSpan="16">
+
+                <div class="form-grid">
+                    <FormItem Label="Producto">
+                        <Input @bind-Value="MaterialViewModel.Descripcion" />
+                    </FormItem>
+
+                    <FormItem Label="Código de Barra">
+                        <Input @bind-Value="MaterialViewModel.Codigo" />
+                    </FormItem>
+
+                    <FormItem Label="Fecha">
+                        <DatePicker TValue="DateTime" DefaultValue="DateTime.Now" @bind-Value="MaterialViewModel.FechaAlta" />
+                    </FormItem>
+
+                    <FormItem Label="Stock">
+                        <AntDesign.InputNumber @bind-Value="MaterialViewModel.Stock" />
+                    </FormItem>
+                    
+                    <FormItem Label="Rubro">
+                        <EnumSelect TEnum="TipoRubro" @bind-Value="MaterialViewModel.Rubro" />
+                    </FormItem>
+                </div>
+
+                <div class="form-buttons-container">
+                    <Button Type="@ButtonType.Primary" HtmlType="submit" Class="save-button">
+                        Cargar Material
+                    </Button>
+                </div>
+            </Form>
+        </div>
+    </div>
+</div>
+
+@code { 
     public BomberosDbContext Context;
 
     public class MaterialVM

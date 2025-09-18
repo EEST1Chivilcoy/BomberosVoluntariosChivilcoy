@@ -61,7 +61,7 @@ namespace Vista.Data.Models.Personas
         /// Relacionado con la clase VehiculoDamnificado.
         /// No es obligatorio.
         /// </summary>
-        public VehiculoDamnificado? VehiculoDamnificado { get; set; }
+        public VehiculoAfectado? VehiculoDamnificado { get; set; }
 
         /// <summary>
         /// Identificador único de la salida a la que pertenece el damnificado.

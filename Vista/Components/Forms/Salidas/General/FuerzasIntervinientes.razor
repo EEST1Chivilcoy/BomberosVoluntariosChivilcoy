@@ -1,3 +1,4 @@
+@using Vista.Data.Models.Grupos.FuerzasIntervinientes
 @using Vista.Data.ViewModels
 @using Vista.Data.ViewModels.Personal
 @using Vista.Data.Models.Vehiculos.Flota
@@ -8,6 +9,7 @@
 
 @*Servicios Utilizados*@
 @using Vista.Services
+@inject IFuerzaIntervinienteService FuerzaIntervinienteService
 @inject IMessageService MessageService
 @inject IFuerzaIntervinienteService fuerzaService
 
@@ -17,92 +19,95 @@
     .fuerzas-intervinientes {
         border: 2px solid #e53935 !important;
         background: linear-gradient(180deg, #fff5f5 0%, #ffeaea 100%) !important;
-        box-shadow: 0 4px 12px rgba(229, 57, 53, 0.15)!important;
+        box-shadow: 0 4px 12px rgba(229, 57, 53, 0.15) !important;
         border-radius: 16px !important;
         margin-bottom: 2rem !important;
         padding: 2.5rem 2rem 2rem 2rem !important;
         transition: box-shadow 0.25s ease, transform 0.2s ease !important;
     }
-    .fuerzas-intervinientes .section-number {
-        background: linear-gradient(135deg, #b71c1c, #e53935);
-        color: white;
-    }
-    .fuerzas-intervinientes .ant-table {
-        background: #fff5f5;
-        color: #b71c1c;
-        font-weight: 500;
-        font-size: 1.05rem;
-        border-radius: 14px;
-        min-width: 600px;
-        width: 100%;
-        table-layout: auto;
-    }
-    .fuerzas-intervinientes .ant-table-thead .ant-table-cell, .fuerzas-intervinientes .ant-table thead th {
-        background: linear-gradient(135deg, #ff6b6b, #c62828);
-        border-right: 1px solid #ffcdd2; 
-        color: #fff !important;
-        font-weight: 700;
-        text-align: center;
-        border-bottom: 2.5px solid #ffcdd2;
-        letter-spacing: 0.3px;
-        font-size: 1.02rem;
-        padding: 3px 6px !important;
-        height: 22px;
-    }
-    .fuerzas-intervinientes .ant-table-title {
-        background: #fff5f5;
-        color: #b71c1c;
-        font-weight: 700;
-        font-size: 1.08rem;
-        text-align: left;
-        padding: 0.5rem 0.8rem;
-        border-top-left-radius: 12px;
-        border-top-right-radius: 12px;
-        border-bottom: 1px solid #ffcdd2;
-    }
-    .fuerzas-intervinientes .ant-table-cell, .fuerzas-intervinientes .ant-table td {
-        background: #fff !important;
-        border-right: 1px solid #f5b5b5;
-        color: #333 !important;
-        font-size: 0.97rem;
-        padding: 2px 6px !important;
-        height: 20px;
-    }
-    .fuerzas-intervinientes .ant-table tbody tr:hover td {
-    background: #fff0f0 !important;
-}
-    .fuerzas-intervinientes .ant-btn-dangerous, .fuerzas-intervinientes .ant-btn[Danger] {
-        background: linear-gradient(135deg, #ff6b6b, #c62828) !important;
-        border:none !important;
-        color:#fff !important;
-        border-radius:8px;
-        font-weight:600;
-        box-shadow:0 2px 8px rgba(229,57,53,.18);
-        transition: all 0.2s ease-in-out;
-        font-size: 0.95rem !important;
-        padding: 4px 10px !important;
-    }
-    .fuerzas-intervinientes .ant-btn-dangerous:hover {
-        filter: brightness(1.1);
-        transform: scale(1.05);
-    }
-    .fuerzas-intervinientes .ant-table-tbody > tr.ant-table-row-selected > td{
-        background:#ffeaea !important;
-    }
-    .fuerzas-intervinientes .centrado{
-        display:flex;
-        justify-content:flex-end;
-    }
 
-    /* Inputs del formulario más compactos */
-    .fuerzas-intervinientes input[type="text"],
-    .fuerzas-intervinientes .ant-input {
-        padding: 4px 8px !important;
-        font-size: 0.98rem !important;
-        height: 28px !important;
-        min-height: 28px !important;
-        box-sizing: border-box;
-    }
+        .fuerzas-intervinientes .section-number {
+            background: linear-gradient(135deg, #b71c1c, #e53935);
+            color: white;
+        }
+
+        .fuerzas-intervinientes .ant-table {
+            background: #fff5f5 !important;
+            color: #b71c1c !important;
+            font-weight: 500 !important;
+            font-size: 1.05rem !important;
+            border-radius: 14px !important;
+            min-width: 600px !important;
+            width: 100% !important;
+            table-layout: auto !important;
+        }
+
+            .fuerzas-intervinientes .ant-table-thead .ant-table-cell, 
+            .fuerzas-intervinientes .ant-table thead th {
+                background: linear-gradient(135deg, #ff6b6b, #c62828) !important;
+                border-right: 1px solid #ffcdd2 !important;
+                color: #fff !important;
+                font-weight: 700 !important;
+                text-align: center !important;
+                border-bottom: 2.5px solid #ffcdd2 !important;
+                letter-spacing: 0.3px !important;
+                font-size: 1.08rem !important;
+                padding: 8px 10px !important;
+                height: 32px !important;
+            }
+
+        .fuerzas-intervinientes .ant-table-title {
+            background: #fff5f5 !important;
+            color: #b71c1c !important;
+            font-weight: 700 !important;
+            font-size: 1.08rem !important;
+            text-align: left !important;
+            padding: 0.5rem 0.8rem !important;
+            border-top-left-radius: 12px !important;
+            border-top-right-radius: 12px !important;
+            border-bottom: 1px solid #ffcdd2 !important;
+        }
+
+        .fuerzas-intervinientes .ant-table-cell, 
+        .fuerzas-intervinientes .ant-table td {
+            background: #fff !important;
+            border-right: 1px solid #f5b5b5 !important;
+            color: #333 !important;
+            font-size: 1rem !important;
+            padding: 6px 10px !important;
+            height: 28px !important;
+        }
+
+        .fuerzas-intervinientes .ant-table tbody tr:hover td {
+            background: #fff0f0 !important;
+        }
+
+        .fuerzas-intervinientes .ant-btn-dangerous, 
+        .fuerzas-intervinientes .ant-btn[Danger] {
+            background: linear-gradient(135deg, #ff6b6b, #c62828) !important;
+            border: none !important;
+            color: #fff !important;
+            border-radius: 8px !important;
+            font-weight: 600 !important;
+            box-shadow: 0 2px 8px rgba(229,57,53,.18) !important;
+            transition: all 0.2s ease-in-out !important;
+            font-size: 0.95rem !important;
+            padding: 4px 10px !important;
+        }
+
+            .fuerzas-intervinientes .ant-btn-dangerous:hover {
+                filter: brightness(1.1) !important;
+                transform: scale(1.05) !important;
+            }
+
+        .fuerzas-intervinientes .ant-table-tbody > tr.ant-table-row-selected > td {
+            background: #ffeaea !important;
+        }
+
+        .fuerzas-intervinientes .centrado {
+            display: flex !important;
+            justify-content: flex-end !important;
+        }
 </style>
 
 <div class="fuerzas-intervinientes">

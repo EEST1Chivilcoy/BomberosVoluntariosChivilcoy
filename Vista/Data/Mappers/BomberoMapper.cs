@@ -59,9 +59,6 @@ namespace Vista.Data.Mappers
                 Brigada = bombero.Brigadas?.FirstOrDefault()?.Brigada,
                 BrigadaId = bombero.Brigadas?.FirstOrDefault()?.BrigadaId ?? 0,
                 NombreBrigada = bombero.Brigadas?.FirstOrDefault()?.Brigada?.NombreBrigada ?? string.Empty,
-
-                // Propiedad por defecto
-                Selected = false
             };
 
             return viewModel;

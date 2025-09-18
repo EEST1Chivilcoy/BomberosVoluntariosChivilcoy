@@ -8,68 +8,71 @@
 
 
 <Layout>
-    <Header class="main-header">
-        <div class="header-content">
-            <Button class="menu-toggle" Type="ButtonType.Primary" OnClick="ToggleCollapsed">
+    <Header class="main-header compact-header">
+        <div class="header-content compact-content">
+            <Button class="menu-toggle compact-toggle" Type="ButtonType.Primary" OnClick="ToggleCollapsed">
                 <Icon Type="@(collapsedMenu ? "menu-unfold" : "menu-fold")" Theme="IconThemeType.Outline" />
             </Button>
-            <Menu Mode="MenuMode.Horizontal" Theme="MenuTheme.Light" class="top-menu"
+            <Menu Mode="MenuMode.Horizontal" Theme="MenuTheme.Light" class="top-menu compact-menu"
                   SelectedKeys="@GetSelectedMenuKeys()">
-                <MenuItem Key="home" OnClick="@(() => navigationManager.NavigateTo("/"))">
-                    <i class="fa-solid fa-house"></i> Home
+                <MenuItem Key="home" OnClick="@(() => navigationManager.NavigateTo("/"))" class="compact-item">
+                    <i class="fa-solid fa-house compact-icon"></i> <span class="compact-text">Home</span>
                 </MenuItem>
-                <MenuItem Key="legajo" OnClick="@(() => navigationManager.NavigateTo("/Bomberos/Legajo"))">
-                    <i class="fa-solid fa-id-card"></i> Legajo
+                <MenuItem Key="legajo" OnClick="@(() => navigationManager.NavigateTo("/Bomberos/Legajo"))" class="compact-item">
+                    <i class="fa-solid fa-id-card compact-icon"></i> <span class="compact-text">Legajo</span>
                 </MenuItem>
-                <MenuItem Key="licencias" OnClick="@(() => navigationManager.NavigateTo("/licencias"))">
-                    <i class="fa-solid fa-file-alt"></i> Licencias
+                <MenuItem Key="salidas" OnClick="@(() => navigationManager.NavigateTo("/salidas"))" class="compact-item">
+                    <i class="fa-solid fa-sign-out-alt compact-icon"></i> <span class="compact-text">Salidas</span>
                 </MenuItem>
-                <MenuItem Key="moviles" OnClick="@(() => navigationManager.NavigateTo("/unidades"))">
-                    <i class="fa-solid fa-car"></i> Móviles
+                <MenuItem Key="personal" OnClick="@(() => navigationManager.NavigateTo("/personal/bomberos"))" class="compact-item">
+                    <i class="fa-solid fa-user compact-icon"></i> <span class="compact-text">Personal</span>
                 </MenuItem>
-                <MenuItem Key="fuerzas" OnClick="@(() => navigationManager.NavigateTo("/FuerzasIntervinientes"))">
-                    <i class="fa-solid fa-shield-halved"></i> Fuerzas
+                <MenuItem Key="licencias" OnClick="@(() => navigationManager.NavigateTo("/licencias"))" class="compact-item">
+                    <i class="fa-solid fa-file-alt compact-icon"></i> <span class="compact-text">Licencias</span>
                 </MenuItem>
-                <MenuItem Key="personal" OnClick="@(() => navigationManager.NavigateTo("/bomberos"))">
-                    <i class="fa-solid fa-user"></i> Personal
+                <MenuItem Key="moviles" OnClick="@(() => navigationManager.NavigateTo("/unidades"))" class="compact-item">
+                    <i class="fa-solid fa-car compact-icon"></i> <span class="compact-text">Unidades</span>
                 </MenuItem>
-                <MenuItem Key="salidas" OnClick="@(() => navigationManager.NavigateTo("/salidas"))">
-                    <i class="fa-solid fa-sign-out-alt"></i> Salidas
+                <MenuItem Key="firmas" OnClick="@(() => navigationManager.NavigateTo("/incidentes-vehiculos"))" class="compact-item">
+                    <i class="fa-solid fa-signature compact-icon"></i> <span class="compact-text">Firmas</span>
                 </MenuItem>
-                <MenuItem Key="firmas" OnClick="@(() => navigationManager.NavigateTo("/incidentes-vehiculos"))">
-                    <i class="fa-solid fa-signature"></i> Firmas
-                </MenuItem>
-                <SubMenu Key="reportes" TitleTemplate="@reportesTitle">
-                    <MenuItem Key="reportes-salidas" OnClick="@(() => navigationManager.NavigateTo("/Reportes/HistorialSalidas"))">
-                        Historial Salidas
+                <SubMenu Key="etica" TitleTemplate="@eticaCompactTitle" class="compact-submenu">
+                    <MenuItem Key="sanciones" OnClick="@(() => navigationManager.NavigateTo("/bomberos/sancionados"))" class="compact-item">
+                        <span class="compact-text">Sanciones</span>
                     </MenuItem>
-                    <MenuItem Key="reportes-bomberos" OnClick="@(() => navigationManager.NavigateTo("/Reportes/HistorialBomberos"))">
-                        Historial Bomberos
-                    </MenuItem>
-                    <MenuItem Key="reportes-choferes" OnClick="@(() => navigationManager.NavigateTo("/Reportes/Reportes_Choferes"))">
-                        Choferes
-                    </MenuItem>
-                    <MenuItem Key="reportes-moviles" OnClick="@(() => navigationManager.NavigateTo("/Reportes/HistorialMoviles"))">
-                        Móviles
+                    <MenuItem Key="ascensos" OnClick="@(() => navigationManager.NavigateTo("/bomberos/ascenso"))" class="compact-item">
+                        <span class="compact-text">Ascensos</span>
                     </MenuItem>
                 </SubMenu>
-                <SubMenu Key="herramientas" TitleTemplate="@herramientasTitle">
-                    <MenuItem Key="brigadas" OnClick="@(() => navigationManager.NavigateTo("/Brigadas"))">
-                        Brigadas
+                <SubMenu Key="reportes" TitleTemplate="@reportesCompactTitle" class="compact-submenu">
+                    <MenuItem Key="reportes-salidas" OnClick="@(() => navigationManager.NavigateTo("/Reportes/HistorialSalidas"))" class="compact-item">
+                        <span class="compact-text">Historial Salidas</span>
                     </MenuItem>
-                    <MenuItem Key="comunicacion" OnClick="@(() => navigationManager.NavigateTo("/Dependencias/Comunicacion"))">
-                        Comunicación
+                    <MenuItem Key="reportes-bomberos" OnClick="@(() => navigationManager.NavigateTo("/Reportes/HistorialBomberos"))" class="compact-item">
+                        <span class="compact-text">Historial Bomberos</span>
                     </MenuItem>
-                    <MenuItem Key="deposito" OnClick="@(() => navigationManager.NavigateTo("/Dependencias/Deposito"))">
-                        Depósito
+                    <MenuItem Key="reportes-choferes" OnClick="@(() => navigationManager.NavigateTo("/Reportes/Reportes_Choferes"))" class="compact-item">
+                        <span class="compact-text">Choferes</span>
+                    </MenuItem>
+                    <MenuItem Key="reportes-moviles" OnClick="@(() => navigationManager.NavigateTo("/Reportes/HistorialMoviles"))" class="compact-item">
+                        <span class="compact-text">Móviles</span>
                     </MenuItem>
                 </SubMenu>
-                <SubMenu Key="etica" TitleTemplate="@eticaTitle">
-                    <MenuItem Key="sanciones" OnClick="@(() => navigationManager.NavigateTo("/bomberos/sancionados"))">
-                        Sanciones
+                <SubMenu Key="herramientas" TitleTemplate="@herramientasCompactTitle" class="compact-submenu">
+                    <MenuItem Key="fuerzas" OnClick="@(() => navigationManager.NavigateTo("/FuerzasIntervinientes"))" class="compact-item">
+                        <span class="compact-text">Fuerzas Intervinientes</span>
                     </MenuItem>
-                    <MenuItem Key="ascensos" OnClick="@(() => navigationManager.NavigateTo("/bomberos/ascenso"))">
-                        Ascensos
+                    <MenuItem Key="comunicacion" OnClick="@(() => navigationManager.NavigateTo("/Dependencias/Comunicacion"))" class="compact-item">
+                        <span class="compact-text">Comunicación</span>
+                    </MenuItem>
+                    <MenuItem Key="deposito" OnClick="@(() => navigationManager.NavigateTo("/Dependencias/Deposito"))" class="compact-item">
+                        <span class="compact-text">Depósito</span>
+                    </MenuItem>
+                    <MenuItem Key="dependencias" OnClick="@(() => navigationManager.NavigateTo("/Dependencias"))" class="compact-item">
+                        <span class="compact-text">Dependencias</span>
+                    </MenuItem>
+                    <MenuItem Key="brigadas" OnClick="@(() => navigationManager.NavigateTo("/Brigadas"))" class="compact-item">
+                        <span class="compact-text">Brigadas</span>
                     </MenuItem>
                 </SubMenu>
             </Menu>
@@ -110,12 +113,12 @@
                     </ChildContent>
                 </MenuItem>
 
-                <MenuItem Key="personal" OnClick="@(() => navigationManager.NavigateTo("/bomberos"))">
+                <MenuItem Key="personal" OnClick="@(() => navigationManager.NavigateTo("/personal/bomberos"))">
                     <IconTemplate>
                         <i class="fa-solid fa-people-group menu-icon"></i>
                     </IconTemplate>
                     <ChildContent>
-                        <a class="menu-link" href="/bomberos">Personal</a>
+                        <a class="menu-link" href="/personal/bomberos">Personal</a>
                     </ChildContent>
                 </MenuItem>
 
@@ -176,15 +179,14 @@
                 </SubMenu>
 
                 <SubMenu Key="herramientas" TitleTemplate="@herramientasTitle">
-                    <MenuItem Key="brigadas">
+                    <MenuItem Key="fuerzas">
                         <IconTemplate>
-                            <i class="fa-solid fa-users-gear submenu-icon"></i>
+                            <i class="fa-solid fa-shield-halved submenu-icon"></i>
                         </IconTemplate>
                         <ChildContent>
-                            <a class="menu-link" href="/Brigadas">Brigadas</a>
+                            <a class="menu-link" href="/FuerzasIntervinientes">Fuerzas Intervinientes</a>
                         </ChildContent>
                     </MenuItem>
-
                     <MenuItem Key="comunicacion">
                         <IconTemplate>
                             <i class="fa-solid fa-walkie-talkie submenu-icon"></i>
@@ -193,13 +195,28 @@
                             <a class="menu-link" href="/Dependencias/Comunicacion">Comunicación</a>
                         </ChildContent>
                     </MenuItem>
-
                     <MenuItem Key="deposito">
                         <IconTemplate>
                             <i class="fa-solid fa-warehouse submenu-icon"></i>
                         </IconTemplate>
                         <ChildContent>
                             <a class="menu-link" href="/Dependencias/Deposito">Depósito</a>
+                        </ChildContent>
+                    </MenuItem>
+                    <MenuItem Key="dependencias">
+                        <IconTemplate>
+                            <i class="fa-solid fa-building submenu-icon"></i>
+                        </IconTemplate>
+                        <ChildContent>
+                            <a class="menu-link" href="/Dependencias">Dependencias</a>
+                        </ChildContent>
+                    </MenuItem>
+                    <MenuItem Key="brigadas">
+                        <IconTemplate>
+                            <i class="fa-solid fa-users-gear submenu-icon"></i>
+                        </IconTemplate>
+                        <ChildContent>
+                            <a class="menu-link" href="/Brigadas">Brigadas</a>
                         </ChildContent>
                     </MenuItem>
                 </SubMenu>
@@ -345,17 +362,32 @@
 
     RenderFragment reportesTitle =
         @<span class="submenu-title">
-        <span class="submenu-title-text"><i class="fa-solid fa-file-lines"></i>Reportes</span>
+        <span class="submenu-title-text"><i class="fa-solid fa-file-lines"></i> Reportes</span>
     </span>;
 
     RenderFragment herramientasTitle =
         @<span class="submenu-title">
-        <span class="submenu-title-text"><i class="fa-solid fa-tools"></i>Herramientas  </span>
+        <span class="submenu-title-text"><i class="fa-solid fa-tools"></i> Utilidades  </span>
     </span>;
 
     RenderFragment eticaTitle =
         @<span class="submenu-title">
-        <span class="submenu-title-text"><i class="fa-solid fa-gavel"></i>Ética</span>
+        <span class="submenu-title-text"><i class="fa-solid fa-gavel"></i> Ética</span>
+    </span>;
+
+    RenderFragment reportesCompactTitle =
+        @<span class="compact-submenu-title">
+        <i class="fa-solid fa-file-lines compact-icon"></i> <span class="compact-text">Reportes</span>
+    </span>;
+
+    RenderFragment herramientasCompactTitle =
+        @<span class="compact-submenu-title">
+        <i class="fa-solid fa-tools compact-icon"></i> <span class="compact-text">Utilidades</span>
+    </span>;
+
+    RenderFragment eticaCompactTitle =
+        @<span class="compact-submenu-title">
+        <i class="fa-solid fa-gavel compact-icon"></i> <span class="compact-text">Ética</span>
     </span>;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
