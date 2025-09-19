@@ -26,7 +26,6 @@ namespace Vista.Data.ViewModels.Personal
                 }
             }
         }
-        [Required]
         public int Dni { get; set; }
         public TipoSexo Sexo { get; set; }
         [Required, StringLength(255)]

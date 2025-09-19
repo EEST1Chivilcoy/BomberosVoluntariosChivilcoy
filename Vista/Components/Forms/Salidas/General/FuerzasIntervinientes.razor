@@ -1,10 +1,17 @@
 @using Vista.Data.Models.Grupos.FuerzasIntervinientes
 @using Vista.Data.ViewModels
+@using Vista.Data.ViewModels.Personal
+@using Vista.Data.Models.Vehiculos.Flota
+@using Vista.Data.Models.Personas.Personal
+@using Vista.Data.Mappers
+@using Vista.Data.Models.Grupos.FuerzasIntervinientes;
+@using Vista.Data.Models.Salidas.Componentes
 
 @*Servicios Utilizados*@
 @using Vista.Services
 @inject IFuerzaIntervinienteService FuerzaIntervinienteService
 @inject IMessageService MessageService
+@inject IFuerzaIntervinienteService fuerzaService
 
 
 
@@ -113,9 +120,9 @@
                 <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12">
                 <FormItem Label="Fuerza Interviniente" Required>
                     <Select TItem="FuerzaInterviniente"
-                            TItemValue="int?"
+                            TItemValue="int"
                             DataSource="@fuerzasDisponibles"
-                            @bind-Value="fuerzaForm.FuerzaID"
+                            @bind-Value="fuerzaForm.FuerzaIntervinienteId"
                             LabelName="@nameof(FuerzaInterviniente.NombreFuerza)"
                             ValueName="@nameof(FuerzaInterviniente.Id)"
                             Placeholder="Ej: Policía, Defensa Civil, etc."
@@ -134,7 +141,7 @@
             <Row Gutter="16">
                 <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="8">
                 <FormItem Label="Encargado" Required>
-                    <Input @bind-Value="fuerzaForm.Encargado" Placeholder="Nombre del encargado" />
+                    <Input @bind-Value="fuerzaForm.EncargadoApellidoyNombre" Placeholder="Nombre del encargado" />
                 </FormItem>
                 </AntDesign.Col>
             </Row>
@@ -152,14 +159,14 @@
     </Form>
 
     @* Tabla de Fuerzas Intervinientes Cargadas *@
-    @if (fuerzasCargadas.Any())
+    @if (Model.FuerzasIntervinientes.Any())
     {
         <div style="margin-top: 32px;">
             <div style="border-bottom: 2px solid #e53935; padding-bottom: 8px; margin-bottom: 16px;">
                 <h4 style="color: #e53935; margin: 0; font-weight: 600; display: flex; align-items: center;">
                     <Icon Type="team" style="margin-right: 8px;" />
                     Fuerzas Intervinientes Asignadas
-                    <Badge Count="@fuerzasCargadas.Count"
+                    <Badge Count="@Model.FuerzasIntervinientes.Count"
                            Style="margin-left: 12px; background-color: #e53935;" />
                 </h4>
             </div>
@@ -174,12 +181,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in fuerzasCargadas)
+                        @foreach (var item in Model.FuerzasIntervinientes)
                         {
                             <tr>
-                                <td style="background: #fff; border-right: 1px solid #f5b5b5; color: #333; font-size: 1rem; padding: 6px 10px; height: 28px;">@item.Encargado</td>
+                                <td style="background: #fff; border-right: 1px solid #f5b5b5; color: #333; font-size: 1rem; padding: 6px 10px; height: 28px;">@item.EncargadoApellidoyNombre</td>
                                 <td style="background: #fff; border-right: 1px solid #f5b5b5; color: #333; font-size: 1rem; padding: 6px 10px; height: 28px;">@item.NumeroUnidad</td>
-                                <td style="background: #fff; border-right: 1px solid #f5b5b5; color: #333; font-size: 1rem; padding: 6px 10px; height: 28px;">@fuerzasDisponibles.FirstOrDefault(f => f.Id == item.FuerzaID)?.NombreFuerza</td>
+                                <td style="background: #fff; border-right: 1px solid #f5b5b5; color: #333; font-size: 1rem; padding: 6px 10px; height: 28px;">@fuerzasDisponibles.FirstOrDefault(f => f.Id == item.FuerzaIntervinienteId)?.NombreFuerza</td>
                                 <td style="background: #fff; border-right: 1px solid #f5b5b5; color: #333; font-size: 1rem; padding: 6px 10px; height: 28px;">
                                     <Button Type="@ButtonType.Text"
                                             Danger
@@ -202,50 +209,64 @@
 
 @code {
     [Parameter, EditorRequired] public SalidasViewModels Model { get; set; } = null!;
-    private FuerzaIntervinienteModel fuerzaForm = new FuerzaIntervinienteModel();
-    private List<FuerzaIntervinienteModel> fuerzasCargadas = new();
-
-    public class FuerzaIntervinienteModel
-    {
-        public int? FuerzaID { get; set; }
-        public string? NumeroUnidad { get; set; }
-        public string? Encargado { get; set; }
-    }
+    private FuerzaIntervinienteViewModel fuerzaForm = new();
+    private bool _isLoading = true;
     private List<FuerzaInterviniente> fuerzasDisponibles = new();
 
-    private void CargarFuerza()
+    private async Task CargarFuerza()
     {
-        if (fuerzaForm != null &&
+        if (fuerzaForm.FuerzaIntervinienteId > 0 &&
             !string.IsNullOrWhiteSpace(fuerzaForm.NumeroUnidad) &&
-            !string.IsNullOrWhiteSpace(fuerzaForm.Encargado))
+            !string.IsNullOrWhiteSpace(fuerzaForm.EncargadoApellidoyNombre))
         {
-            fuerzasCargadas.Add(new FuerzaIntervinienteModel
-                {
-                    FuerzaID = fuerzaForm.FuerzaID,
-                    NumeroUnidad = fuerzaForm.NumeroUnidad,
-                    Encargado = fuerzaForm.Encargado
-                });
-            fuerzaForm = new FuerzaIntervinienteModel();
+            if (Model.FuerzasIntervinientes.Any(f => f.FuerzaIntervinienteId == fuerzaForm.FuerzaIntervinienteId && f.NumeroUnidad == fuerzaForm.NumeroUnidad))
+            {
+                await MessageService.WarningAsync("Esta fuerza y unidad ya han sido agregadas.");
+                return;
+            }
+
+            FuerzaInterviniente_Salida nuevaFuerza = new()
+            {
+                FuerzaIntervinienteId = fuerzaForm.FuerzaIntervinienteId,
+                NumeroUnidad = fuerzaForm.NumeroUnidad,
+                EncargadoApellidoyNombre = fuerzaForm.EncargadoApellidoyNombre
+            };
+            Model.FuerzasIntervinientes.Add(nuevaFuerza);
+
+            fuerzaForm = new(); // Reinicia el formulario
+            await MessageService.SuccessAsync("Fuerza interviniente agregada.");
+            StateHasChanged();
+        }
+        else
+        {
+            await MessageService.ErrorAsync("Por favor, complete todos los campos requeridos.");
         }
     }
 
-    private async Task EliminarFuerza(FuerzaIntervinienteModel fuerza)
+    private async Task EliminarFuerza(FuerzaInterviniente_Salida fuerza)
     {
         try
         {
-            fuerzasCargadas.Remove(fuerza);
+            Model.FuerzasIntervinientes.Remove(fuerza);
             await MessageService.SuccessAsync("Fuerza interviniente eliminada");
             StateHasChanged();
         }
         catch (Exception ex)
         {
-            await MessageService.ErrorAsync("Error al eliminar fuerza");
+            await MessageService.ErrorAsync($"Error al eliminar fuerza: {ex.Message}");
         }
     }
 
     protected override async Task OnInitializedAsync()
     {
-        fuerzasDisponibles = await FuerzaIntervinienteService.ObtenerTodasLasFuerzasAsync();
-        StateHasChanged();
-}
+        _isLoading = true;
+        try
+        {
+            fuerzasDisponibles = await fuerzaService.ObtenerTodasLasFuerzasAsync();
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
 }

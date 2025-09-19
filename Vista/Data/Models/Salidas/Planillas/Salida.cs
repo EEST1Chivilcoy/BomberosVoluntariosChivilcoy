@@ -1,5 +1,6 @@
 ﻿using Vista.Data.Enums;
 using Vista.Data.Models.Salidas.Componentes;
+using Vista.Data.Models.Grupos;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.CompilerServices;
@@ -135,8 +136,7 @@ namespace Vista.Data.Models.Salidas.Planillas
         // Bomberos que asistieron al Servico
 
         public List<BomberoSalida> CuerpoParticipante { get; set; } = new();
-
-
+        public List<FuerzaInterviniente_Salida> FuerzasIntervinientes { get; set; } = new();
         // Encargado (Obligatorio)
         public int EncargadoId { get; set; }
         [ForeignKey("EncargadoId")]

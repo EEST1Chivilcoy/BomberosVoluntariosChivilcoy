@@ -399,6 +399,7 @@
                                         <Icon Type="aim" />
                                     </Button>
                                 </SpaceItem>
+                                @*
                                 <SpaceItem>
                                     <Popconfirm Title="¿Eliminar esta salida?"
                                                 OnConfirm="() => BorrarSalida(context.Id)"
@@ -409,6 +410,7 @@
                                         </Button>
                                     </Popconfirm>
                                 </SpaceItem>
+                                *@
                                 <SpaceItem>
                                     <Button Type="@ButtonType.Primary" OnClick="() => VerEditarSalida(context.Id)" Ghost>
                                         <Icon Type="edit" />
@@ -493,7 +495,6 @@
 
     // Variables de Modal
     bool _modalAñadirVisible = false;
-
     public class SalidaViewModelTable
     {
         public int Id { get; set; }
@@ -524,12 +525,11 @@
     {
         await ObtenerSalidas(_anioSeleccionado);
     }
-
+    /*
     private async Task BorrarSalida(int id)
     {
-
     }
-
+    */    
     private async Task VerUbicacionSalida(double Longitud, double Latitud)
     {
 
@@ -537,7 +537,7 @@
 
     private async Task VerEditarSalida(int id)
     {
-
+        
     }
 
     private async Task VerAñadirSalida()

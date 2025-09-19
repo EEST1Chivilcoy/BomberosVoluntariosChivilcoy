@@ -196,15 +196,16 @@ namespace Vista.Data.ViewModels
         /// </summary>
         public string? ApellidoReceptor { get; set; }
 
-        public List<Damnificado_Salida>? Damnificados { get; set; }
+        public List<Damnificado_Salida> Damnificados { get; set; } = new();
 
         //datos del seguro 
         public string? CompaniaAseguradora { get; set; }
         public string? NumeroPoliza { get; set; }
         public DateTime? FechaVencimineto { get; set; }
 
-        public List<Movil_Salida> Moviles { get; set; }
-        public List<BomberoSalida> CuerpoParticipante { get; set; }
+        public List<Movil_Salida> Moviles { get; set; } = new();
+        public List<BomberoSalida> CuerpoParticipante { get; set; } = new();
+        public List<FuerzaInterviniente_Salida> FuerzasIntervinientes { get; set; } = new();
         //Bombero encargado
         public string NombreEncargado { get; set; }
         public string ApellidoEncargado { get; set; }
