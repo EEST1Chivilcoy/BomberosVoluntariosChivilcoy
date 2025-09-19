@@ -2,43 +2,222 @@
 
 @using Microsoft.Identity.Web
 @using Microsoft.Graph
+@using AntDesign
+
 @inject Microsoft.Graph.GraphServiceClient GraphServiceClient
 @inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
 
-<h1>Me</h1>
-
-<p>This component demonstrates fetching data from a service.</p>
+<PageHeader Title="Perfil de Usuario" SubTitle="Información detallada del usuario autenticado">
+    <PageHeaderExtra>
+        <Tag Icon="bug" Color="TagColor.Blue">Debug Mode</Tag>
+    </PageHeaderExtra>
+</PageHeader>
 
 @if (user == null)
 {
-    <p><em>Loading...</em></p>
+    <div style="text-align: center; padding: 50px 0;">
+        <Spin Size="SpinSize.Large" Tip="Cargando perfil de usuario..." />
+    </div>
 }
 else
 {
-    <table class="table table-striped table-condensed" style="font-family: monospace">
-        <tr>
-            <th>Property</th>
-            <th>Value</th>
-        </tr>
-        <tr>
-            <td>Name</td>
-            <td>@user.DisplayName</td>
-        </tr>
-    </table>
+    <Card>
+        <div style="text-align: center; margin-bottom: 24px;">
+            @if (!string.IsNullOrEmpty(photoBase64))
+            {
+                <Avatar Size="AvatarSize.Large" Src="@photoBase64" Shape="AvatarShape.Circle" />
+            }
+            else
+            {
+                <Avatar Size="AvatarSize.Large" Icon="user" Shape="AvatarShape.Circle" Style="background-color: #1890ff;" />
+            }
+            <Title Level="3" Style="margin-top: 16px; margin-bottom: 0;">
+                @GetDisplayValue(user.DisplayName)
+            </Title>
+            <Text Type="TextElementType.Secondary">@GetDisplayValue(user.JobTitle)</Text>
+        </div>
+
+        <Divider Orientation="DividerOrientation.Left">
+            <Title Level="4">
+                <Icon Type="info-circle" Style="margin-right: 8px;" />
+                Información Personal
+            </Title>
+        </Divider>
+
+        <Descriptions Bordered Column="1" Size="DescriptionsSize.Small">
+            <DescriptionsItem Title="Nombre completo | Display Name">
+                <Tag Color="TagColor.Blue">@GetDisplayValue(user.DisplayName)</Tag>
+            </DescriptionsItem>
+            <DescriptionsItem Title="Nombre | Given Name">
+                <Tag Color="TagColor.Green">@GetDisplayValue(user.GivenName)</Tag>
+            </DescriptionsItem>
+            <DescriptionsItem Title="Apellido | Surname">
+                <Tag Color="TagColor.Green">@GetDisplayValue(user.Surname)</Tag>
+            </DescriptionsItem>
+            <DescriptionsItem Title="Email | Mail">
+                <Tag Color="TagColor.Orange">@GetDisplayValue(user.Mail)</Tag>
+            </DescriptionsItem>
+            <DescriptionsItem Title="UPN | User Principal Name">
+                <Tag Color="TagColor.Purple">@GetDisplayValue(user.UserPrincipalName)</Tag>
+            </DescriptionsItem>
+            <DescriptionsItem Title="ID de Usuario | User ID">
+                <Text Code>@GetDisplayValue(user.Id)</Text>
+            </DescriptionsItem>
+        </Descriptions>
+
+        <Divider Orientation="DividerOrientation.Left">
+            <Title Level="4">
+                <Icon Type="team" Style="margin-right: 8px;" />
+                Información Laboral
+            </Title>
+        </Divider>
+
+        <Descriptions Bordered Column="1" Size="DescriptionsSize.Small">
+            <DescriptionsItem Title="Título | Job Title">
+                @GetDisplayValue(user.JobTitle)
+            </DescriptionsItem>
+            <DescriptionsItem Title="Departamento | Department">
+                @GetDisplayValue(user.Department)
+            </DescriptionsItem>
+            <DescriptionsItem Title="Ubicación de oficina | Office Location">
+                @GetDisplayValue(user.OfficeLocation)
+            </DescriptionsItem>
+        </Descriptions>
+
+        <Divider Orientation="DividerOrientation.Left">
+            <Title Level="4">
+                <Icon Type="phone" Style="margin-right: 8px;" />
+                Información de Contacto
+            </Title>
+        </Divider>
+
+        <Descriptions Bordered Column="1" Size="DescriptionsSize.Small">
+            <DescriptionsItem Title="Teléfono móvil | Mobile Phone">
+                @if (!string.IsNullOrEmpty(user.MobilePhone))
+                {
+                    <Tag Icon="mobile" Color="TagColor.Green">@user.MobilePhone</Tag>
+                }
+                else
+                {
+                    <AntDesign.Text Type="TextElementType.Secondary">No disponible</AntDesign.Text>
+                }
+            </DescriptionsItem>
+            <DescriptionsItem Title="Teléfonos de empresa | Business Phones">
+                @if (user.BusinessPhones?.Any() == true)
+                {
+                    @foreach (var phone in user.BusinessPhones)
+                    {
+                        <Tag Icon="phone" Color="TagColor.Blue" Style="margin-bottom: 4px;">@phone</Tag>
+                    }
+                }
+                else
+                {
+                    <AntDesign.Text Type="TextElementType.Secondary">No disponible</AntDesign.Text>
+                }
+            </DescriptionsItem>
+        </Descriptions>
+
+        <Divider Orientation="DividerOrientation.Left">
+            <Title Level="4">
+                <Icon Type="environment" Style="margin-right: 8px;" />
+                Ubicación
+            </Title>
+        </Divider>
+
+        <Descriptions Bordered Column="1" Size="DescriptionsSize.Small">
+            <DescriptionsItem Title="Ciudad | City">
+                @GetDisplayValue(user.City)
+            </DescriptionsItem>
+            <DescriptionsItem Title="Provincia/Estado | State">
+                @GetDisplayValue(user.State)
+            </DescriptionsItem>
+            <DescriptionsItem Title="País | Country">
+                @GetDisplayValue(user.Country)
+            </DescriptionsItem>
+            <DescriptionsItem Title="Dirección | Street Address">
+                @GetDisplayValue(user.StreetAddress)
+            </DescriptionsItem>
+            <DescriptionsItem Title="Código postal | Postal Code">
+                @GetDisplayValue(user.PostalCode)
+            </DescriptionsItem>
+        </Descriptions>
+
+        <Divider Orientation="DividerOrientation.Left">
+            <Title Level="4">
+                <Icon Type="setting" Style="margin-right: 8px;" />
+                Configuración de Cuenta
+            </Title>
+        </Divider>
+
+        <Descriptions Bordered Column="1" Size="DescriptionsSize.Small">
+            <DescriptionsItem Title="Idioma preferido | Preferred Language">
+                @GetDisplayValue(user.PreferredLanguage)
+            </DescriptionsItem>
+            <DescriptionsItem Title="Cuenta habilitada | Account Enabled">
+                @if (user.AccountEnabled == true)
+                {
+                    <Tag Icon="check-circle" Color="TagColor.Success">Sí / Yes</Tag>
+                }
+                else
+                {
+                    <Tag Icon="close-circle" Color="TagColor.Error">No / No</Tag>
+                }
+            </DescriptionsItem>
+            <DescriptionsItem Title="Fecha de creación | Created DateTime">
+                @if (user.CreatedDateTime.HasValue)
+                {
+                    <AntDesign.Text Code>@user.CreatedDateTime.Value.ToString("yyyy-MM-dd HH:mm:ss UTC")</AntDesign.Text>
+                }
+                else
+                {
+                    <AntDesign.Text Type="TextElementType.Secondary">No disponible</AntDesign.Text>
+                }
+            </DescriptionsItem>
+        </Descriptions>
+
+        <Divider />
+
+        <Alert Type="AlertType.Info" Message="Información de Debug" ShowIcon="true" Style="margin-top: 16px;">
+                Esta página muestra información detallada del perfil de usuario obtenida de Microsoft Graph API.
+                Los campos marcados como "No disponible" indican que el dato no está presente en el perfil del usuario.
+        </Alert>
+    </Card>
 }
 
 @code {
     User? user;
+    string? photoBase64;
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
             user = await GraphServiceClient.Me.Request().GetAsync();
+            try
+            {
+                using var photoStream = await GraphServiceClient.Me.Photo.Content.Request().GetAsync();
+                using var ms = new MemoryStream();
+                await photoStream.CopyToAsync(ms);
+                var bytes = ms.ToArray();
+                if (bytes.Length > 0)
+                {
+                    photoBase64 = $"data:image/jpeg;base64,{Convert.ToBase64String(bytes)}";
+                }
+            }
+            catch
+            {
+                // Si no hay foto, simplemente no asignamos photoBase64
+                photoBase64 = null;
+            }
         }
         catch (Exception ex)
         {
             ConsentHandler.HandleException(ex);
         }
+    }
+
+    private string GetDisplayValue(string? value)
+    {
+        return string.IsNullOrEmpty(value) ? "No disponible" : value;
     }
 }
