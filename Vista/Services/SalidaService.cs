@@ -110,14 +110,25 @@ namespace Vista.Services
                     movilessalida.Add(movilS);
                 }
                 salida.Moviles = movilessalida;
+
                 //FuerzasIntervinientes
+
                 List<FuerzaInterviniente_Salida> fuerzasintervinientessalida = new List<FuerzaInterviniente_Salida>();
+
                 if (salida.FuerzasIntervinientes != null)
                 {
                     foreach (FuerzaInterviniente_Salida f in salida.FuerzasIntervinientes)
                     {
-                        // Buscamos la FuerzaInterviniente completa desde la base de datos usando el ID.
+                        // Buscamos la FuerzaInterviniente -- (Pasar esto luego a tomarlo del Servicio de FuerzasIntervinientes)
                         var fuerzaCompleta = await _context.Fuerzas.FindAsync(f.FuerzaIntervinienteId);
+
+                        // Nos aseguramos de que la fuerza exista
+
+                        if (fuerzaCompleta == null)
+                        {
+                            throw new Exception($"La fuerza interviniente con ID {f.FuerzaIntervinienteId} no existe.");
+                        }
+
                         // Creamos la nueva entidad de relación para la salida.
                         FuerzaInterviniente_Salida fuerzaS = new()
                         {
@@ -125,13 +136,15 @@ namespace Vista.Services
                             NumeroUnidad = f.NumeroUnidad,
                             SalidaId = salida.SalidaId,
                             FuerzaIntervinienteId = f.FuerzaIntervinienteId,
-                            FuerzaNombre = fuerzaCompleta != null ? fuerzaCompleta.NombreFuerza : string.Empty
+                            Fuerzainterviniente = fuerzaCompleta
                         };
-                        fuerzasintervinientessalida.Add(fuerzaS);
 
+                        fuerzasintervinientessalida.Add(fuerzaS);
                     }
                 }
+
                 salida.FuerzasIntervinientes = fuerzasintervinientessalida;
+
                 //Damnificados
 
                 List<Damnificado_Salida> damnificadossalida = new List<Damnificado_Salida>();
