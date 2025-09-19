@@ -7,7 +7,7 @@
 @inject Microsoft.Graph.GraphServiceClient GraphServiceClient
 @inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
 
-<PageHeader Title="Perfil de Usuario" SubTitle="InformaciÛn detallada del usuario autenticado">
+<PageHeader Title="Perfil de Usuario" SubTitle="Informaci√≥n detallada del usuario autenticado">
     <PageHeaderExtra>
         <Tag Icon="bug" Color="TagColor.Blue">Debug Mode</Tag>
     </PageHeaderExtra>
@@ -40,7 +40,7 @@ else
         <Divider Orientation="DividerOrientation.Left">
             <Title Level="4">
                 <Icon Type="info-circle" Style="margin-right: 8px;" />
-                InformaciÛn Personal
+                Informaci√≥n Personal
             </Title>
         </Divider>
 
@@ -68,18 +68,18 @@ else
         <Divider Orientation="DividerOrientation.Left">
             <Title Level="4">
                 <Icon Type="team" Style="margin-right: 8px;" />
-                InformaciÛn Laboral
+                Informaci√≥n Laboral
             </Title>
         </Divider>
 
         <Descriptions Bordered Column="1" Size="DescriptionsSize.Small">
-            <DescriptionsItem Title="TÌtulo | Job Title">
+            <DescriptionsItem Title="T√≠tulo | Job Title">
                 @GetDisplayValue(user.JobTitle)
             </DescriptionsItem>
             <DescriptionsItem Title="Departamento | Department">
                 @GetDisplayValue(user.Department)
             </DescriptionsItem>
-            <DescriptionsItem Title="UbicaciÛn de oficina | Office Location">
+            <DescriptionsItem Title="Ubicaci√≥n de oficina | Office Location">
                 @GetDisplayValue(user.OfficeLocation)
             </DescriptionsItem>
         </Descriptions>
@@ -87,12 +87,12 @@ else
         <Divider Orientation="DividerOrientation.Left">
             <Title Level="4">
                 <Icon Type="phone" Style="margin-right: 8px;" />
-                InformaciÛn de Contacto
+                Informaci√≥n de Contacto
             </Title>
         </Divider>
 
         <Descriptions Bordered Column="1" Size="DescriptionsSize.Small">
-            <DescriptionsItem Title="TelÈfono mÛvil | Mobile Phone">
+            <DescriptionsItem Title="Tel√©fono m√≥vil | Mobile Phone">
                 @if (!string.IsNullOrEmpty(user.MobilePhone))
                 {
                     <Tag Icon="mobile" Color="TagColor.Green">@user.MobilePhone</Tag>
@@ -102,7 +102,7 @@ else
                     <AntDesign.Text Type="TextElementType.Secondary">No disponible</AntDesign.Text>
                 }
             </DescriptionsItem>
-            <DescriptionsItem Title="TelÈfonos de empresa | Business Phones">
+            <DescriptionsItem Title="Tel√©fonos de empresa | Business Phones">
                 @if (user.BusinessPhones?.Any() == true)
                 {
                     @foreach (var phone in user.BusinessPhones)
@@ -120,7 +120,7 @@ else
         <Divider Orientation="DividerOrientation.Left">
             <Title Level="4">
                 <Icon Type="environment" Style="margin-right: 8px;" />
-                UbicaciÛn
+                Ubicaci√≥n
             </Title>
         </Divider>
 
@@ -131,13 +131,13 @@ else
             <DescriptionsItem Title="Provincia/Estado | State">
                 @GetDisplayValue(user.State)
             </DescriptionsItem>
-            <DescriptionsItem Title="PaÌs | Country">
+            <DescriptionsItem Title="Pa√≠s | Country">
                 @GetDisplayValue(user.Country)
             </DescriptionsItem>
-            <DescriptionsItem Title="DirecciÛn | Street Address">
+            <DescriptionsItem Title="Direcci√≥n | Street Address">
                 @GetDisplayValue(user.StreetAddress)
             </DescriptionsItem>
-            <DescriptionsItem Title="CÛdigo postal | Postal Code">
+            <DescriptionsItem Title="C√≥digo postal | Postal Code">
                 @GetDisplayValue(user.PostalCode)
             </DescriptionsItem>
         </Descriptions>
@@ -145,7 +145,7 @@ else
         <Divider Orientation="DividerOrientation.Left">
             <Title Level="4">
                 <Icon Type="setting" Style="margin-right: 8px;" />
-                ConfiguraciÛn de Cuenta
+                Configuraci√≥n de Cuenta
             </Title>
         </Divider>
 
@@ -156,14 +156,14 @@ else
             <DescriptionsItem Title="Cuenta habilitada | Account Enabled">
                 @if (user.AccountEnabled == true)
                 {
-                    <Tag Icon="check-circle" Color="TagColor.Success">SÌ / Yes</Tag>
+                    <Tag Icon="check-circle" Color="TagColor.Success">S√≠ / Yes</Tag>
                 }
                 else
                 {
                     <Tag Icon="close-circle" Color="TagColor.Error">No / No</Tag>
                 }
             </DescriptionsItem>
-            <DescriptionsItem Title="Fecha de creaciÛn | Created DateTime">
+            <DescriptionsItem Title="Fecha de creaci√≥n | Created DateTime">
                 @if (user.CreatedDateTime.HasValue)
                 {
                     <AntDesign.Text Code>@user.CreatedDateTime.Value.ToString("yyyy-MM-dd HH:mm:ss UTC")</AntDesign.Text>
@@ -177,9 +177,9 @@ else
 
         <Divider />
 
-        <Alert Type="AlertType.Info" Message="InformaciÛn de Debug" ShowIcon="true" Style="margin-top: 16px;">
-                Esta p·gina muestra informaciÛn detallada del perfil de usuario obtenida de Microsoft Graph API.
-                Los campos marcados como "No disponible" indican que el dato no est· presente en el perfil del usuario.
+        <Alert Type="AlertType.Info" Message="Informaci√≥n de Debug" ShowIcon="true" Style="margin-top: 16px;">
+                Esta p√°gina muestra informaci√≥n detallada del perfil de usuario obtenida de Microsoft Graph API.
+                Los campos marcados como "No disponible" indican que el dato no est√° presente en el perfil del usuario.
         </Alert>
     </Card>
 }
