@@ -260,9 +260,14 @@
     protected override async Task OnInitializedAsync()
     {
         _isLoading = true;
+
         try
         {
             fuerzasDisponibles = await fuerzaService.ObtenerTodasLasFuerzasAsync();
+        }
+        catch (Exception ex)
+        {
+            await MessageService.ErrorAsync($"Error al cargar fuerzas intervinientes: {ex.Message}");
         }
         finally
         {

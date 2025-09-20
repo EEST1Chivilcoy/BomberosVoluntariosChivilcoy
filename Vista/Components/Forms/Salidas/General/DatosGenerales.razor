@@ -3,10 +3,13 @@
 @using Vista.DTOs.Nominatim
 @using Vista.Data.Enums.Salidas
 @using Vista.Data.ViewModels
+@using Vista.Data.Models.Grupos.FuerzasIntervinientes
 
 @*Servicios Utilizados*@
 @using Vista.Services
 @inject INominatimService GeorefService
+@inject IFuerzaIntervinienteService FuerzaIntervinienteService
+@inject IMessageService MessageService
 
 <style>
 
@@ -26,7 +29,7 @@
         }
     }
 
-      .datos-generales {
+    .datos-generales {
         border: 2px solid #40a9ff;
         background: #fff;
         border-radius: 16px;
@@ -35,24 +38,25 @@
         margin-bottom: 2rem;
         transition: box-shadow 0.2s;
     }
-    .datos-generales .section-title {
-        color: #1890ff;
-        display: flex;
-        align-items: center;
-        gap: 0.7rem;
-    }
+
+        .datos-generales .section-title {
+            color: #1890ff;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
 
     .hora-row {
         display: flex;
-        gap: 24px; 
+        gap: 24px;
         align-items: flex-end;
         margin-bottom: 16px;
     }
-    .hora-row .ant-form-item {
-        margin-bottom: 0;
-        min-width: 180px;
-    }
-    
+
+        .hora-row .ant-form-item {
+            margin-bottom: 0;
+            min-width: 180px;
+        }
 </style>
 
 <div class="datos-generales">
@@ -144,7 +148,7 @@
         </div>
 
         @* 🏢 Detalles del Lugar *@
-        @if (!esSoloDireccion && MostrarOpcionDepartamento)
+        @if (MostrarOpcionDepartamento)
         {
             <div style="margin-bottom: 24px;">
                 <div style="border-bottom: 2px solid #1890ff; padding-bottom: 8px; margin-bottom: 16px;">
@@ -177,6 +181,7 @@
             <div style="border-bottom: 2px solid #1890ff; padding-bottom: 8px; margin-bottom: 16px;">
                 <h4 style="color: #1890ff; margin: 0; font-weight: 600;">🚒 Información Operativa</h4>
             </div>
+
             <FormItem Label="¿Se convoca Guardia?">
                 <Switch @bind-Checked="@SeConvocoGuardia" />
             </FormItem>
@@ -186,6 +191,29 @@
                 <FormItem Label="Guardia">
                     <EnumSelect TEnum="Guardia" @bind-Value="@Model.GuardiaSelecionada" />
                 </FormItem>
+            }
+
+            @if (MostrarSwitchFuerzasIntervinientes)
+            {
+                <FormItem Label="¿Hubo Fuerzas Intervinientes?">
+                    <Switch @bind-Checked="@IntervencionDeFuerzasIntervinientes" />
+                </FormItem>
+            }
+
+            @if (IntervencionDeFuerzasIntervinientes || !MostrarSwitchFuerzasIntervinientes)
+            {
+                <AntDesign.FormItem Label="Fuerzas Intervinientes">
+                    <Select Mode="SelectMode.Multiple"
+                            @bind-Values="@Model.FuerzasIntervinientesParticipantes"
+                            TItem="SimpleFuerzaViewModel"
+                            TItemValue="SimpleFuerzaViewModel"
+                            DataSource="@FuerzaViewModels"
+                            LabelName="@nameof(SimpleFuerzaViewModel.Nombre)"
+                            Placeholder="Seleccione las fuerzas intervinientes"
+                            DefaultActiveFirstOption="false"
+                            EnableSearch
+                            AllowClear />
+                </AntDesign.FormItem>
             }
         </div>
 
@@ -205,21 +233,52 @@
 </div>
 
 @code {
-    [Parameter, EditorRequired] public required SalidasViewModels Model { get; set; }
-    [Parameter] public bool esSoloDireccion { get; set; } = false;
-    [Parameter] public bool MostrarOpcionDepartamento { get; set; } = true;
+    [Parameter, EditorRequired] public required SalidasViewModels Model { get; set; } // Modelo de datos para el formulario
+
+    [Parameter] public bool MostrarOpcionDepartamento { get; set; } = true; // Indica si se muestra la opción de departamento (En algunos casos es imposible que sea un deparatamento)
+
+    [Parameter] public bool MostrarSwitchFuerzasIntervinientes { get; set; } = true; // Indica si se muestra el switch de la opción de fuerzas intervinientes (En algunos casos es obligatorio por lo que no se muestra el switch)
+
+    [Parameter] public bool MostrarSwitchDamnficados { get; set; } = true; // Indica si se muestra el switch de la opción de damnificados (En algunos casos es obligatorio por lo que no se muestra el switch)
+
     [Parameter] public EventCallback<bool> OnCompleted { get; set; } // Evento para notificar que se ha completado el formulario
 
     private bool isApiAvailable;
-    private int anio = DateTime.Now.Year;
+
     private bool _loading = false; // Variable para controlar el estado de carga
+
     private bool esDepartamento;
     private bool SeConvocoGuardia;
+    private bool IntervencionDeFuerzasIntervinientes;
+
+    private List<SimpleFuerzaViewModel> FuerzaViewModels = new();
     private List<Direccion> direcciones = new();
 
     protected override async Task OnInitializedAsync()
     {
         isApiAvailable = await GeorefService.CheckApiConnectionAsync();
+
+        if (Model != null)
+        {
+            if (Model.FechaSalida == DateTime.MinValue)
+            {
+                Model.FechaSalida = DateTime.Today;
+            }
+
+            esDepartamento = !string.IsNullOrEmpty(Model.PisoNumero) ||
+                              !string.IsNullOrEmpty(Model.Depto);
+
+
+            try
+            {
+                var Fuerzas = await FuerzaIntervinienteService.ObtenerTodasLasFuerzasAsync();
+                FuerzaViewModels = await MapearFuerzasAsync(Fuerzas);
+            }
+            catch (Exception ex)
+            {
+                await MessageService.ErrorAsync($"Error al cargar fuerzas intervinientes: {ex.Message}");
+            }
+        }
     }
 
     private async Task ValidateForm()
@@ -290,19 +349,13 @@
         }
     }
 
-    protected override void OnInitialized()
+    public async Task<List<SimpleFuerzaViewModel>> MapearFuerzasAsync(List<FuerzaInterviniente> fuerzas)
     {
-        base.OnInitialized();
-
-        if (Model != null)
+        return await Task.Run(() => fuerzas.Select(f => new SimpleFuerzaViewModel
         {
-            if (Model.FechaSalida == DateTime.MinValue)
-            {
-                Model.FechaSalida = DateTime.Today;
-            }
-            esDepartamento = !string.IsNullOrEmpty(Model.PisoNumero) ||
-                              !string.IsNullOrEmpty(Model.Depto);
-        }
+            Id = f.Id,
+            Nombre = f.NombreFuerza ?? string.Empty
+        }).ToList());
     }
 
     private string GetOpenStreetMapUrl(double latitud, double longitud)

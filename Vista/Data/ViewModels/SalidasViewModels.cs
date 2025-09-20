@@ -5,6 +5,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Vista.Data.Enums.Salidas;
 using Vista.Data.Models.Personas;
 using Vista.DTOs.Nominatim;
+using Vista.Data.Models.Grupos.FuerzasIntervinientes;
+using Vista.Data.ViewModels.Personal;
 
 namespace Vista.Data.ViewModels
 {
@@ -91,6 +93,11 @@ namespace Vista.Data.ViewModels
         /// Esta propiedad representa la guardia seleccionada para la salida. (Si se convocó a una guardia específica).
         /// </summary>
         public Guardia GuardiaSelecionada { get; set; }
+
+        /// <summary>
+        /// Fuerzas intervinientes que participaron en la salida.
+        /// </summary>
+        public IEnumerable<SimpleFuerzaViewModel> FuerzasIntervinientesParticipantes { get; set; } = new List<SimpleFuerzaViewModel>();
 
         /// <summary>
         /// Descripción del incidente o motivo de la salida.
