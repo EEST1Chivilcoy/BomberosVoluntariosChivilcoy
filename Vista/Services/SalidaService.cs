@@ -33,7 +33,7 @@ namespace Vista.Services
         Task<bool> BorrarSalidaAsync(int id);
 
         Task<int> ObtenerUltimoNumeroParteDelAnioAsync(int anio);
-    }   
+    }
 
     public class SalidaService : ISalidaService
     {
@@ -214,7 +214,7 @@ namespace Vista.Services
         {
             return await _context.Salidas
                 .Where(p => p.AnioNumeroParte == anio)
-                .MaxAsync(p => (int?)p.NumeroParte) ?? 1;
+                .MaxAsync(p => (int?)p.NumeroParte) ?? 0;
         }
     }
 }
