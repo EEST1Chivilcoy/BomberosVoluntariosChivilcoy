@@ -58,9 +58,12 @@
                                OnCompleted="@((bool done) => _parte2Completa = done)" />
             </TabPane>
 
-            <TabPane Key="3" Tab="🛡️ Fuerzas Intervinientes">
-                <FuerzasIntervinientes Model="@PersonaViewModel" />
-            </TabPane>
+            @if (PersonaViewModel.FuerzasIntervinientesParticipantes?.Any() == true)
+            {
+                <TabPane Key="3" Tab="🛡️ Fuerzas Intervinientes">
+                    <FuerzasIntervinientes Model="@PersonaViewModel" />
+                </TabPane>
+            }
 
             <TabPane Key="4" Tab="⚠️ Afectado">
                 <Damnificados Model="@PersonaViewModel" />

@@ -203,6 +203,10 @@ namespace Vista.Data.ViewModels
         /// </summary>
         public string? ApellidoReceptor { get; set; }
 
+        // Sección de Datos Adicionales.
+
+        public List<FuerzaIntervinienteViewModel> FuerzasIntervinientes { get; set; } = new();
+
         public List<Damnificado_Salida> Damnificados { get; set; } = new();
 
         //datos del seguro 
@@ -212,7 +216,7 @@ namespace Vista.Data.ViewModels
 
         public List<Movil_Salida> Moviles { get; set; } = new();
         public List<BomberoSalida> CuerpoParticipante { get; set; } = new();
-        public List<FuerzaInterviniente_Salida> FuerzasIntervinientes { get; set; } = new();
+
         //Bombero encargado
         public string NombreEncargado { get; set; }
         public string ApellidoEncargado { get; set; }
