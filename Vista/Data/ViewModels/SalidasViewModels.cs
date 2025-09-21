@@ -109,7 +109,12 @@ namespace Vista.Data.ViewModels
         /// Nombre de la calle o ruta donde ocurrió el incidente.
         /// </summary>
         [StringLength(255)]
-        public string CalleORuta { get; set; }
+        public string? CalleORuta { get; set; }
+
+        /// <summary>
+        /// Altura o kilómetro donde ocurrió el incidente.
+        /// </summary>
+        public int? AlturaOKm { get; set; }
 
         // Datos por si es en un edificio. (Opcional) (Apartamento, Piso, etc.)
 

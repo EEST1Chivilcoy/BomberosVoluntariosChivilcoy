@@ -96,29 +96,17 @@
             <div style="border-bottom: 2px solid #1890ff; padding-bottom: 4px; margin-bottom: 8px;">
                 <h4 style="color: #1890ff; margin: 0; font-weight: 600; font-size: 1.08rem;">📍 Ubicación</h4>
             </div>
-            <Row Gutter="16">
-                <AntDesign.Col Span="12">
-                    <FormItem Label="Tipo Zona" Required>
-                        <EnumSelect TEnum="TipoZona" @bind-Value="@Model.TipoZona" />
-                    </FormItem>
-                </AntDesign.Col>
-                <AntDesign.Col Span="12">
-                    <FormItem Label="Región Cuartel" Required>
-                        <EnumSelect TEnum="CuartelRegionChivilcoy" @bind-Value="@Model.CuartelRegion" DefaultActiveFirstOption="false" />
-                    </FormItem>
-                </AntDesign.Col>
-            </Row>
 
             <Row Gutter="16">
                 <AntDesign.Col Span="12">
-                    <FormItem Label="Dirección" Required>
+                    <FormItem Label="Calle o Ruta" Required>
                         @if (isApiAvailable)
                         {
                             <Select TItem="Direccion"
                                     TItemValue="Direccion"
                                     DataSource="@direcciones"
                                     @bind-Value="@Model.Direccion"
-                                    Placeholder="Seleccione una calle"
+                                    Placeholder="Seleccione una calle o ruta"
                                     LabelName="@nameof(Direccion.NombreYAltura)"
                                     OnSearch="OnSearch"
                                     SearchDebounceMilliseconds="350"
@@ -129,8 +117,26 @@
                         }
                         else
                         {
-                            <Input @bind-Value="@Model.CalleORuta" Placeholder="Ingrese dirección" />
+                            <Input @bind-Value="@Model.CalleORuta" Placeholder="Ingrese una calle o ruta" />
                         }
+                    </FormItem>
+                </AntDesign.Col>
+                <AntDesign.Col Span="12">
+                    <FormItem Label="Altura / Km" Required>
+                        <Input @bind-Value="@Model.AlturaOKm" />
+                    </FormItem>
+                </AntDesign.Col>
+            </Row>
+
+            <Row Gutter="16">
+                <AntDesign.Col Span="12">
+                    <FormItem Label="Tipo Zona" Required>
+                        <EnumSelect TEnum="TipoZona" @bind-Value="@Model.TipoZona" />
+                    </FormItem>
+                </AntDesign.Col>
+                <AntDesign.Col Span="12">
+                    <FormItem Label="Región Cuartel" Required>
+                        <EnumSelect TEnum="CuartelRegionChivilcoy" @bind-Value="@Model.CuartelRegion" DefaultActiveFirstOption="false" />
                     </FormItem>
                 </AntDesign.Col>
             </Row>
@@ -217,12 +223,12 @@
             }
         </div>
 
-        @* 📝 Descripción *@
+        @* 📝 Detalles o Daños Generales *@
         <div style="margin-bottom: 24px;">
             <div style="border-bottom: 2px solid #1890ff; padding-bottom: 8px; margin-bottom: 16px;">
-                <h4 style="color: #1890ff; margin: 0; font-weight: 600;">📝 Descripción</h4>
+                <h4 style="color: #1890ff; margin: 0; font-weight: 600;">📝 Detalles o Daños Generales</h4>
             </div>
-            <FormItem Label="Descripción" Required>
+            <FormItem Required>
                 <TextArea Placeholder="Describa la situación o evento..."
                           @bind-Value="@Model.Descripcion"
                           Rows="4" />
@@ -286,8 +292,6 @@
         var esValido = true;
 
         if (Model.FechaSalida == default ||
-            Model.TimeSalida == default ||
-            Model.TimeLlegada == default ||
             string.IsNullOrWhiteSpace(Model.Descripcion))
         {
             esValido = false;
