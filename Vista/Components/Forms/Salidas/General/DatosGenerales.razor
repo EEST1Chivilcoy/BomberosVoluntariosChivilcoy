@@ -138,11 +138,11 @@
             @if (Model.Latitud != 0.0 && Model.Longitud != 0.0)
             {
                 <div class="map-container">
-                    <iframe width="220"
-                            height="220"
-                            style="border:0;"
+                    <iframe style="border:0; width: 100%; aspect-ratio: 1 / 1;"
                             src="@GetOpenStreetMapUrl(Model.Latitud, Model.Longitud)"
-                            frameborder="0" allowfullscreen></iframe>
+                            frameborder="0"
+                            allowfullscreen>
+                    </iframe>
                 </div>
             }
         </div>
