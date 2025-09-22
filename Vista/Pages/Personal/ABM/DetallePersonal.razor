@@ -9,6 +9,8 @@
 @using Vista.Data.Models.Imagenes
 @using Vista.Data.ViewModels.Personal
 @using Vista.Data.Enums.Personal.ComisionDirectiva
+@using Vista.Data.Enums.Socios
+@using Vista.Data.Enums.Personal.Cobrador
 @using Vista.Data.Enums.Discriminadores
 @using AntDesign
 
@@ -19,6 +21,7 @@
 
 @inject IBomberoService BomberoService
 @inject IComisionDirectivaService ComisionDirectivaService
+@inject ICobradorService CobradorService
 
 <style>
     /* Estilos generales */
@@ -331,6 +334,32 @@
                         </AntDesign.Col>
                     </AntDesign.Row>
                 }
+                else if (Tipo == TipoPersonal.Cobrador && personalView is CobradorViewModel cobradorView)
+                {
+                    <!-- Campos específicos para Cobrador -->
+                    <AntDesign.Row Gutter="16">
+                        <AntDesign.Col Span="6">
+                            <FormItem Label="Estado">
+                                <Input Value="@cobradorView.Estado.GetDisplayName()" Placeholder="No disponible" ReadOnly />
+                            </FormItem>
+                        </AntDesign.Col>
+                        <AntDesign.Col Span="6">
+                            <FormItem Label="Zonas asignadas">
+                                <Input Value="@cobradorView.ZonasAsignadasAsString" Placeholder="No disponible" ReadOnly />
+                            </FormItem>
+                        </AntDesign.Col>
+                    </AntDesign.Row>
+                    <AntDesign.Row Gutter="16">
+                        <AntDesign.Col Span="8">
+                            <FormItem Label="Fecha de Aceptación">
+                                <Input Value="@cobradorView.FechaAceptacion?.ToString("dd/MM/yyyy")"
+                                       Placeholder="No disponible"
+                                       ReadOnly
+                                       Style="width:100%;" />
+                            </FormItem>
+                        </AntDesign.Col>
+                    </AntDesign.Row>
+                }
             </div>
 
             <!-- Información Adicional (Solo para Bomberos) -->
@@ -419,7 +448,7 @@
 
             try
             {
-                bombero = await BomberoService.ObtenerBomberoPorIdAsync(id: PersonalId, asnotracking:true, conRelaciones:true);
+                bombero = await BomberoService.ObtenerBomberoPorIdAsync(id: PersonalId, asnotracking: true, conRelaciones: true);
             }
             catch (Exception ex)
             {
@@ -461,6 +490,28 @@
             }
 
             personalView = comisionDirectiva.ToComisionDirectivaViewModel();
+        }
+        else if (Tipo == TipoPersonal.Cobrador)
+        {
+            personalView = new CobradorViewModel();
+            Cobrador? cobrador = null;
+
+            try
+            {
+            }
+            catch (Exception ex)
+            {
+                await message.ErrorAsync($"Error al obtener el cobrador: {ex.Message}");
+                navigationManager.NavigateTo($"/personal/cobradores", true);
+                return;
+            }
+
+            if (cobrador == null)
+            {
+                await message.ErrorAsync("No se encontró el cobrador especificado.");
+                navigationManager.NavigateTo($"/personal/cobradores", true);
+                return;
+            }
         }
         else
         {

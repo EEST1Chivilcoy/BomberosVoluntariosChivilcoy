@@ -653,7 +653,7 @@
                                 <Button Type="default" OnClick="() => EditarPersonal(context.Id)" OnClickStopPropagation>
                                     <Icon Type="edit" /> Editar
                                 </Button>
-                                @if (context.Estado != EstadoCobrador.Activo)
+                                @if (context.Estado == EstadoCobrador.Activo)
                                 {
                                     <Popconfirm Title="¿Está seguro de dar de baja?"
                                                 OnConfirm="()=>CambiarEstadoComisionDirectiva(context.Id, EstadoComisionDirectiva.Baja)"
@@ -711,6 +711,10 @@
         else if (TipoPersonal.ToLower() == "bomberos")
         {
             <DetallePersonal PersonalId="@PersonalId" Tipo="Data.Enums.Discriminadores.TipoPersonal.Bombero" />
+        }
+        else if (TipoPersonal.ToLower() == "cobradores")
+        {
+            <DetallePersonal PersonalId="@PersonalId" Tipo="Data.Enums.Discriminadores.TipoPersonal.Cobrador" />
         }
     </Modal>
 }

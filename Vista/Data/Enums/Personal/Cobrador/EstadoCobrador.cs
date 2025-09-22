@@ -27,18 +27,6 @@ namespace Vista.Data.Enums.Personal.Cobrador
         Suspendido = 3,
 
         /// <summary>
-        /// Estado de cobrador enfermo.
-        /// </summary>
-        [Display(Name = "Enfermo")]
-        Enfermo = 4,
-
-        /// <summary>
-        /// Estado de cobrador con licencia.
-        /// </summary>
-        [Display(Name = "Licencia")]
-        Licencia = 5,
-
-        /// <summary>
         /// Estado de baja por edad del cobrador.
         /// </summary>
         [Display(Name = "Baja por Edad")]
