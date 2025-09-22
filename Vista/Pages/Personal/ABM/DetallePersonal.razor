@@ -153,6 +153,13 @@
                 <span>@(Tipo == TipoPersonal.ComisionDirectiva ? "Detalles Comisión Directiva" : "Detalles Bombero")</span>
             </div>
         }
+        else if (Tipo == TipoPersonal.Cobrador)
+        {
+            <div>
+                <Icon Type="info-circle" Theme="IconThemeType.Outline" Class="page-title-icon" />
+                <span>Detalles Cobrador</span>
+            </div>
+        }
         else
         {
             <div>
@@ -498,6 +505,7 @@
 
             try
             {
+                cobrador = await CobradorService.ObtenerCobradorPorIdAsync(id: PersonalId, asnotracking: true, conRelaciones: true);
             }
             catch (Exception ex)
             {
@@ -512,6 +520,8 @@
                 navigationManager.NavigateTo($"/personal/cobradores", true);
                 return;
             }
+
+            personalView = cobrador.ToCobradorViewModel();
         }
         else
         {
