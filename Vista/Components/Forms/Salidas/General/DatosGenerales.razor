@@ -98,7 +98,7 @@
             </div>
 
             <Row Gutter="16">
-                <AntDesign.Col Span="12">
+                <AntDesign.Col Span="8">
                     <FormItem Label="Calle o Ruta" Required>
                         @if (isApiAvailable)
                         {
@@ -121,22 +121,22 @@
                         }
                     </FormItem>
                 </AntDesign.Col>
-                <AntDesign.Col Span="12">
-                    <FormItem Label="Altura / Km" Required>
-                        <Input @bind-Value="@Model.AlturaOKm" />
+                <AntDesign.Col Span="8">
+                    <FormItem Label="Tipo Zona" Required>
+                        <EnumSelect TEnum="TipoZona" @bind-Value="@Model.TipoZona" />
+                    </FormItem>
+                </AntDesign.Col>
+                <AntDesign.Col Span="8">
+                    <FormItem Label="Región Cuartel" Required>
+                        <EnumSelect TEnum="CuartelRegionChivilcoy" @bind-Value="@Model.CuartelRegion" DefaultActiveFirstOption="false" />
                     </FormItem>
                 </AntDesign.Col>
             </Row>
 
             <Row Gutter="16">
                 <AntDesign.Col Span="12">
-                    <FormItem Label="Tipo Zona" Required>
-                        <EnumSelect TEnum="TipoZona" @bind-Value="@Model.TipoZona" />
-                    </FormItem>
-                </AntDesign.Col>
-                <AntDesign.Col Span="12">
-                    <FormItem Label="Región Cuartel" Required>
-                        <EnumSelect TEnum="CuartelRegionChivilcoy" @bind-Value="@Model.CuartelRegion" DefaultActiveFirstOption="false" />
+                    <FormItem Label="Altura / Km" Required>
+                        <Input @bind-Value="@Model.AlturaOKm" />
                     </FormItem>
                 </AntDesign.Col>
             </Row>
@@ -223,10 +223,10 @@
             }
         </div>
 
-        @* 📝 Detalles o Daños Generales *@
+        @* Detalles o Daños Generales *@
         <div style="margin-bottom: 24px;">
             <div style="border-bottom: 2px solid #1890ff; padding-bottom: 8px; margin-bottom: 16px;">
-                <h4 style="color: #1890ff; margin: 0; font-weight: 600;">📝 Detalles o Daños Generales</h4>
+                <h4 style="color: #1890ff; margin: 0; font-weight: 600;">Detalles o Daños Generales</h4>
             </div>
             <FormItem Required>
                 <TextArea Placeholder="Describa la situación o evento..."
