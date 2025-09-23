@@ -355,10 +355,15 @@
                                         Sortable
                                         Width="150px" />
 
-                        <PropertyColumn Title="🔢 N° Serie"
-                                        Property="c => c.NroSerie"
+                        <PropertyColumn Title="📋 N° Legajo"
+                                        Property="c => c.NroLegajo"
                                         Sortable
-                                        Width="150px" />
+                                        Width="120px" />
+
+                        <PropertyColumn Title="🚗 Móvil"
+                                        Property="c => c.NumeroMovil"
+                                        Sortable
+                                        Width="120px" />
 
                         <PropertyColumn Title="📊 Estado"
                                         Property="c => c.Estado"
@@ -379,26 +384,6 @@
                                 </Space>
                             </Template>
                         </PropertyColumn>
-
-                        <PropertyColumn Title="👤 Nombre"
-                                        Property="c => c.Nombre"
-                                        Sortable
-                                        Width="150px" />
-
-                        <PropertyColumn Title="👤 Apellido"
-                                        Property="c => c.Apellido"
-                                        Sortable
-                                        Width="150px" />
-
-                        <PropertyColumn Title="📋 N° Legajo"
-                                        Property="c => c.NroLegajo"
-                                        Sortable
-                                        Width="120px" />
-
-                        <PropertyColumn Title="🚗 Móvil"
-                                        Property="c => c.NumeroMovil"
-                                        Sortable
-                                        Width="120px" />
 
                         <ActionColumn Title="⚙️ Acciones"
                                       Width="180px"
@@ -933,6 +918,21 @@
     private void NevigateToYourUrl()
     {
         navigationManager.NavigateTo($"/Comunicacion", true);
+    }
+
+    private async void GetComunicacionViewModel(string NroEquipo)
+    {
+        ComunicacionVM = ComunicacionesViewModel.Single(c => c.NroEquipo == NroEquipo);
+        StateHasChanged();
+    }//Se obtienen los valores de la base de datos al view model
+
+    private void Cancel()
+    {
+        message.Error("Operación cancelada.");
+    }
+
+
+}
     }
 
     private async void GetComunicacionViewModel(string NroEquipo)

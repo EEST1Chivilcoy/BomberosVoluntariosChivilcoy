@@ -147,6 +147,7 @@
           Class="modal-crear-licencia-form"
           OnFinish="OnFinish"
           OnFinishFailed="OnFinishFailed">
+        
         <Row Class="modal-crear-licencia-row" Gutter="16">
             <AntDesign.Col Span="12">
                 <FormItem Label="Num. Equipo" Class="modal-crear-licencia-form-item">
@@ -159,6 +160,7 @@
                 </FormItem>
             </AntDesign.Col>
         </Row>
+
         <Row Class="modal-crear-licencia-row" Gutter="16">
             <AntDesign.Col Span="12">
                 <FormItem Label="Marca" Class="modal-crear-licencia-form-item">
@@ -166,33 +168,34 @@
                 </FormItem>
             </AntDesign.Col>
             <AntDesign.Col Span="12">
-                <FormItem Label="Núm. Serie" Class="modal-crear-licencia-form-item">
-                    <Input @bind-Value="@ComunicacionVM.NroSerie" />
-                </FormItem>
-            </AntDesign.Col>
-        </Row>
-        <Row Class="modal-crear-licencia-row" Gutter="16">
-            <AntDesign.Col Span="24">
                 <FormItem Label="Estado" Class="modal-crear-licencia-form-item">
                     <EnumSelect TEnum="TipoEstadoHandie" @bind-Value="@ComunicacionVM.Estado" />
                 </FormItem>
             </AntDesign.Col>
         </Row>
+
         @if (ComunicacionVM.Estado == TipoEstadoHandie.Activo)
         {
             <Row Class="modal-crear-licencia-row" Gutter="16">
                 <AntDesign.Col Span="24">
-                    <FormItem Label="Seleccione una opción" Class="modal-crear-licencia-form-item">
-                        <Checkbox @bind-Checked="@selectBombero" OnChange="() => HandleCheckboxChange(true, checkboxBomberoLabel)">Elija el bombero</Checkbox>
-                        <Checkbox @bind-Checked="@selectMovil" OnChange="() => HandleCheckboxChange(true, checkboxMovilLabel)">Elija el móvil</Checkbox>
+                    <FormItem Label="Asignación" Class="modal-crear-licencia-form-item">
+                        <div style="display: flex; gap: 24px; align-items: center;">
+                            <Checkbox @bind-Checked="@selectBombero" OnChange="() => HandleCheckboxChange(true, checkboxBomberoLabel)">
+                                <Icon Type="user" /> Asignar a Bombero
+                            </Checkbox>
+                            <Checkbox @bind-Checked="@selectMovil" OnChange="() => HandleCheckboxChange(true, checkboxMovilLabel)">
+                                <Icon Type="car" /> Asignar a Móvil
+                            </Checkbox>
+                        </div>
                     </FormItem>
                 </AntDesign.Col>
             </Row>
+
             @if (selectBombero)
             {
                 <Row Class="modal-crear-licencia-row" Gutter="16">
                     <AntDesign.Col Span="24">
-                        <FormItem Label="Elija el bombero que será asignado" Class="modal-crear-licencia-form-item">
+                        <FormItem Label="Bombero Asignado" Class="modal-crear-licencia-form-item">
                             <Select TItem="BomberoViweModel"
                                     TItemValue="int?"
                                     DataSource="@BomberosVM"
@@ -207,11 +210,12 @@
                     </AntDesign.Col>
                 </Row>
             }
+
             @if (selectMovil)
             {
                 <Row Class="modal-crear-licencia-row" Gutter="16">
                     <AntDesign.Col Span="24">
-                        <FormItem Label="Elija el móvil que será asignado" Class="modal-crear-licencia-form-item">
+                        <FormItem Label="Móvil Asignado" Class="modal-crear-licencia-form-item">
                             <Select TItem="MovilViewModel"
                                     TItemValue="string"
                                     DataSource="@MovilesViewModel"
@@ -227,12 +231,13 @@
                 </Row>
             }
         }
+
         <div class="modal-crear-licencia-footer">
-            <Button Class="boton-agregar" HtmlType="submit">
-                Agregar Handie
+                    <Button Class="boton-agregar" HtmlType="submit">
+                 Agregar Handie
             </Button>
-            <Button Style="border: 1px solid black;" OnClick="@(() => OnFinishCallback.InvokeAsync())">
-                Volver
+            <Button Style="border: 1px solid #d9d9d9; color: #666;" OnClick="@(() => OnFinishCallback.InvokeAsync())">
+                 Cancelar
             </Button>
         </div>
     </Form>
@@ -417,4 +422,3 @@
         Context?.Dispose();
     }
 }
-    
