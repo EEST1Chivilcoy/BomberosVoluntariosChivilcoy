@@ -8,58 +8,33 @@
 
 
 <style>
-	.ant-btn:hover, .ant-btn:focus, .ant-btn:active {
-		text-decoration: none;
-		background: #40a9ff !important;
-	}
-
-	.ant-btn:hover, .ant-btn:focus {
-		color: white !important;
-		border-color: #40a9ff !important;
-		background: #40a9ff !important;
-	}
-
-	.ant-form-horizontal .ant-form-item-label {
-		flex-grow: 0;
-		font-weight: bold;
-	}
-
 .modal-crear-sancion .ant-modal-content {
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    border: 2px solid #732D2D;
-    margin-top: -50px;
-    margin-bottom: 0px;
-}
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        border: 2px solid #732D2D;
+        margin-top: -50px;
+        margin-bottom: 0px;
+    }
 
-.modal-crear-sancion .ant-modal-title {
-    color: white !important;
-}
+    .modal-crear-sancion .ant-modal-title {
+        color: white !important;
+    }
 
-.modal-crear-sancion .ant-modal-header {
-        background-color: #A63333;
-        padding: 16px 24px;
+    .modal-crear-sancion .ant-modal-header {
+            background-color: #A63333;
+            padding: 16px 24px;
 
-}
-
-    .modal-crear-sancion-form {
-        width: 100%;
+    }
+    .modal-crear-sancion-content {
+        padding: 24px;
     }
     .modal-crear-sancion-form-item {
         margin-bottom: 20px;
         position: relative;
         padding-left: 10px;
     }
-    .modal-crear-sancion-form-item::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        height: 100%;
-        width: 3px;
-        border-radius: 5px;
-    }
-    .modal-crear-sancion-form-item .ant-form-item-label > label {
+    .modal-crear-sancion-form-item .ant-form-item-label > label,
+    .modal-crear-sancion-form-full-width .ant-form-item-label > label {
         font-weight: 600;
         color: #434343;
         display: flex;
@@ -68,8 +43,9 @@
         font-size: 14px;
         transition: color 0.3s ease;
     }
-    .modal-crear-sancion-form-item .ant-form-item-label > label:hover {
-        color: #FFD700;
+    .modal-crear-sancion-form-item .ant-form-item-label > label:hover,
+    .modal-crear-sancion-form-full-width .ant-form-item-label > label:hover {
+        color: #A63333;
     }
     .modal-crear-sancion .ant-input:focus,
     .modal-crear-sancion .ant-input:hover,
@@ -114,20 +90,19 @@
         margin-bottom: 0;
         padding: 0 20px !important;
     }
-    .modal-crear-sancion .ant-btn-primary:hover {
+    .modal-crear-sa .ant-btn-primary:hover {
         background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
         color: #fff !important;
     }
 </style>
 
-<Form Model="@SancionVM"
-      WrapperColSpan="16"
-      OnFinish="OnFinish"
-      OnFinishFailed="OnFinishFailed"
+<Form Model="SancionVM"
+      Layout="FormLayout.Vertical"
       Class="modal-crear-sancion-form"
-      Style="width: 100%; height: 100%;">
-
-    <!-- Fecha Desde / Fecha Hasta -->
+      OnFinish="OnFinish"
+      OnFinishFailed="OnFinishFailed">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
     <Row Class="modal-crear-sancion-row" Gutter="24">
         <AntDesign.Col Span="12">
             <FormItem Label="Fecha Desde" Required Class="modal-crear-sancion-form-item">
@@ -227,7 +202,7 @@
 		{
 			Bombero? BomberoSancionado = await Context.Bomberos.Where(b => b.NumeroLegajo == SancionVM.NumeroLegajoSancionado).SingleOrDefaultAsync();
 
-			Sancion Sancion = new()
+			Sancion nuevaSancion = new()
 				{
 					FechaDesde = SancionVM.FechaDesde,
 					FechaHasta = SancionVM.FechaHasta,
@@ -237,7 +212,7 @@
 					DescripcionSancion = SancionVM.observaciones
 				};
 
-			await BomberoService.SancionarBombero(Sancion);
+			await BomberoService.SancionarBombero(nuevaSancion);
 			await Init();
 			await OnClose.InvokeAsync();
 			StateHasChanged();
