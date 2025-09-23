@@ -151,7 +151,7 @@
         </div>
     </Form>
 
-    @* Tabla de Fuerzas Intervinientes Cargadas *@
+ @* Tabla de Fuerzas Intervinientes Cargadas *@
     @if (Model.FuerzasIntervinientes.Any())
     {
         <div style="margin-top: 32px;">
@@ -164,35 +164,33 @@
                 </h4>
             </div>
             <div style="overflow-x: auto;">
-                <table class="ant-table" style="width: 100%; border-collapse: collapse;">
-                    <thead>
-                        <tr>
-                            <th style="background: linear-gradient(135deg, #ff6b6b, #c62828); color: #fff; font-weight: 700; text-align: center; border-bottom: 2.5px solid #ffcdd2; letter-spacing: 0.3px; font-size: 1.08rem; padding: 8px 10px; height: 32px;">Encargado</th>
-                            <th style="background: linear-gradient(135deg, #ff6b6b, #c62828); color: #fff; font-weight: 700; text-align: center; border-bottom: 2.5px solid #ffcdd2; letter-spacing: 0.3px; font-size: 1.08rem; padding: 8px 10px; height: 32px;">N° Unidad</th>
-                            <th style="background: linear-gradient(135deg, #ff6b6b, #c62828); color: #fff; font-weight: 700; text-align: center; border-bottom: 2.5px solid #ffcdd2; letter-spacing: 0.3px; font-size: 1.08rem; padding: 8px 10px; height: 32px;">Fuerza</th>
-                            <th style="background: linear-gradient(135deg, #ff6b6b, #c62828); color: #fff; font-weight: 700; text-align: center; border-bottom: 2.5px solid #ffcdd2; letter-spacing: 0.3px; font-size: 1.08rem; padding: 8px 10px; height: 32px;">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model.FuerzasIntervinientes)
-                        {
-                            <tr>
-                                <td style="background: #fff; border-right: 1px solid #f5b5b5; color: #333; font-size: 1rem; padding: 6px 10px; height: 28px;">@item.EncargadoApellidoyNombre</td>
-                                <td style="background: #fff; border-right: 1px solid #f5b5b5; color: #333; font-size: 1rem; padding: 6px 10px; height: 28px;">@item.NumeroUnidad</td>
-                                <td style="background: #fff; border-right: 1px solid #f5b5b5; color: #333; font-size: 1rem; padding: 6px 10px; height: 28px;">@item.FuerzaViewModel.Nombre</td>
-                                <td style="background: #fff; border-right: 1px solid #f5b5b5; color: #333; font-size: 1rem; padding: 6px 10px; height: 28px;">
-                                    <Button Type="@ButtonType.Text"
-                                            Danger
-                                            Size="@ButtonSize.Large"
-                                            Icon="delete"
-                                            Style="font-size: 0.95rem; padding: 4px 10px;"
-                                            OnClick="@(() => EliminarFuerza(item))">
-                                    </Button>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+                <Table TItem="FuerzaIntervinienteViewModel"
+                       DataSource="@Model.FuerzasIntervinientes"
+                       Responsive>
+                    <ColumnDefinitions Context="item">
+                        <PropertyColumn Title="Encargado"
+                                        Property="f => f.EncargadoApellidoyNombre"
+                                        Align="ColumnAlign.Center">
+                        </PropertyColumn>
+                        <PropertyColumn Title="N° Unidad"
+                                        Property="f => f.NumeroUnidad"
+                                        Align="ColumnAlign.Center">
+                        </PropertyColumn>
+                        <PropertyColumn Title="Fuerza"
+                                        Property="f => f.FuerzaViewModel.Nombre"
+                                        Align="ColumnAlign.Center">
+                        </PropertyColumn>
+                        <ActionColumn Title="Acciones" Align="ColumnAlign.Center">
+                            <Button Type="@ButtonType.Text"
+                                    Danger
+                                    Size="@ButtonSize.Large"
+                                    Icon="delete"
+                                    Style="font-size: 0.95rem; padding: 4px 10px;"
+                                    OnClick="@(() => EliminarFuerza(item))">
+                            </Button>
+                        </ActionColumn>
+                    </ColumnDefinitions>
+                </Table>
             </div>
         </div>
     }
