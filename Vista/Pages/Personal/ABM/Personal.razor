@@ -529,7 +529,10 @@
                         </PropertyColumn>
                         <PropertyColumn Title="🆔 Legajo" Property="c => c.NumeroLegajo" Sortable>
                         </PropertyColumn>
-                        <PropertyColumn Title="🎖️ Jerarquía" Property="@(c => c.Grado.GetDisplayName())" Sortable>
+                        <PropertyColumn Title="🎖️ Jerarquía"
+                                        Property="@(c => c.Grado.GetDisplayName())"
+                                        SorterCompare="@((x, y) => ((int)Enum.Parse<EscalafonJerarquico>(x)).CompareTo((int)Enum.Parse<EscalafonJerarquico>(y)))"
+                                        Sortable>
                         </PropertyColumn>
                         <PropertyColumn Title="📊 Estado" Property="@(c => c.Estado.GetDisplayName())" Sortable>
 
@@ -757,9 +760,6 @@
     // Estado seleccionado
     public EstadoBombero EstadoB = EstadoBombero.CuerpoActivo;
 
-    // Filtros de la Tabla de Bomberos
-    private TableFilter<EscalafonJerarquico>[] EscalafonJerarquicoFilter;
-
     // Tamaño de la tabla
     int _pageIndex = 1;
     int _pageSize = 6;
@@ -811,15 +811,6 @@
             SinFiltrarB = bomberos.ToBomberoViewModelList();
 
             searchB(searchString, EstadoB);
-
-            EscalafonJerarquicoFilter = new TableFilter<EscalafonJerarquico>[Enum.GetValues(typeof(EscalafonJerarquico)).Length];
-
-            int i = 0;
-            foreach (EscalafonJerarquico value in Enum.GetValues(typeof(EscalafonJerarquico)))
-            {
-                EscalafonJerarquicoFilter[i] = new() { Text = Enum.GetName(typeof(EscalafonJerarquico), value), Value = value };
-                i++;
-            }
         }
         else if (TipoPersonal.ToLower() == "comisiondirectiva")
         {
@@ -868,7 +859,7 @@
 
             searchCD(searchString, EstadoCD);
         }
-        else if(TipoPersonal.ToLower() == "cobradores")
+        else if (TipoPersonal.ToLower() == "cobradores")
         {
             var cobradores = await CobradorService.ObtenerTodosLosCobradoresAsync(ConImagenes: true);
             SinFiltrarC = cobradores.ToCobradorViewModelList();

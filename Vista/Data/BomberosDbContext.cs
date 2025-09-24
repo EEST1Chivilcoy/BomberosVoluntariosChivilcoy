@@ -380,6 +380,11 @@ namespace Vista.Data
 
             // Enum Conversiones a INT (Enteros)
 
+            modelBuilder
+                .Entity<Bombero>()
+                .Property(b => b.Grado)
+                .HasConversion<int>();
+
             // Licencia - Enum TipoLicencia
 
             modelBuilder
@@ -500,12 +505,6 @@ namespace Vista.Data
                .Property(m => m.TipoMovimiento)
                .HasConversion<string>()
                .HasMaxLength(255);
-
-            modelBuilder
-                .Entity<Bombero>()
-                .Property(b => b.Grado)
-                .HasConversion<string>()
-                .HasMaxLength(255);
 
             modelBuilder
                 .Entity<Licencia>()
