@@ -254,8 +254,27 @@
     }
 
     .comunicaciones-abm .status-activo {
-        background: var(--abm-approved-light) !important;
-        color: var(--abm-approved-color) !important;
+        background: #E8F5E8 !important;
+        color: #2E7D32 !important;
+        border: 1px solid #4CAF50 !important;
+    }
+
+    .comunicaciones-abm .status-stock {
+        background: #E3F2FD !important;
+        color: #1565C0 !important;
+        border: 1px solid #2196F3 !important;
+    }
+
+    .comunicaciones-abm .status-baja {
+        background: #FFEBEE !important;
+        color: #C62828 !important;
+        border: 1px solid #F44336 !important;
+    }
+
+    .comunicaciones-abm .status-reparacion {
+        background: #FFFDE7 !important;
+        color: #F57F17 !important;
+        border: 1px solid #FFEB3B !important;
     }
 
     .comunicaciones-abm .status-inactivo {
@@ -373,8 +392,27 @@
                                         OnFilter="((value,name)=>Enum.GetName(typeof(TipoEstadoHandie), name).StartsWith(Enum.GetName(typeof(TipoEstadoHandie), value)))">
                             <Template>
                                 @{
-                                    string statusClass = comunicacion.Estado == TipoEstadoHandie.Activo ? "status-activo" : "status-inactivo";
-                                    string icon = comunicacion.Estado == TipoEstadoHandie.Activo ? "check-circle" : "close-circle";
+                                    string statusClass = "";
+                                    string icon = "";
+                                    
+                                    switch (comunicacion.Estado)
+                                    {
+                                        case TipoEstadoHandie.Activo:
+                                            statusClass = "status-activo";
+                                            break;
+                                        case TipoEstadoHandie.Stock:
+                                            statusClass = "status-stock";
+                                            break;
+                                        case TipoEstadoHandie.Baja:
+                                            statusClass = "status-baja";
+                                            break;
+                                        case TipoEstadoHandie.Reparacion:
+                                            statusClass = "status-reparacion";
+                                            break;
+                                        default:
+                                            statusClass = "status-inactivo";
+                                            break;
+                                    }
                                 }
                                 <Space>
                                     <Icon Type="@icon" />
@@ -918,21 +956,6 @@
     private void NevigateToYourUrl()
     {
         navigationManager.NavigateTo($"/Comunicacion", true);
-    }
-
-    private async void GetComunicacionViewModel(string NroEquipo)
-    {
-        ComunicacionVM = ComunicacionesViewModel.Single(c => c.NroEquipo == NroEquipo);
-        StateHasChanged();
-    }//Se obtienen los valores de la base de datos al view model
-
-    private void Cancel()
-    {
-        message.Error("Operación cancelada.");
-    }
-
-
-}
     }
 
     private async void GetComunicacionViewModel(string NroEquipo)

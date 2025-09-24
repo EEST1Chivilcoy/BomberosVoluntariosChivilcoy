@@ -286,17 +286,6 @@
             </div>
         </AntDesign.Col>
 
-        @*Licencias Section*@
-        <AntDesign.Col Xs="24" Sm="12" Lg="8">
-            <div @onclick="@(() => { navigationManager.NavigateTo("/Licencias"); })" style="cursor: pointer;">
-                <Card Class="dashboard-card licencias-card">
-                    <i class="fa-solid fa-file-signature card-icon"></i>
-                    <h2>LICENCIAS</h2>
-                    <p>Gestión de licencias</p>
-                </Card>
-            </div>
-        </AntDesign.Col>
-
         @*Salidas Section*@
         <AntDesign.Col Xs="24" Sm="12" Lg="8">
             <div @onclick="@(() => { navigationManager.NavigateTo("/Salidas"); })" style="cursor: pointer;">
@@ -330,13 +319,13 @@
             </div>
         </AntDesign.Col>
 
-        @* Cobradores Section *@
+        @*Licencias Section*@
         <AntDesign.Col Xs="24" Sm="12" Lg="8">
-            <div @onclick="@(() => { navigationManager.NavigateTo("/personal/cobradores"); })" style="cursor: pointer;">
-                <Card Class="dashboard-card cobradores-card">
-                    <i class="fa-solid fa-money-bill-wave card-icon"></i>
-                    <h2>COBRADORES</h2>
-                    <p>Ver el personal de cobradores</p>
+            <div @onclick="@(() => { navigationManager.NavigateTo("/Licencias"); })" style="cursor: pointer;">
+                <Card Class="dashboard-card licencias-card">
+                    <i class="fa-solid fa-file-signature card-icon"></i>
+                    <h2>LICENCIAS</h2>
+                    <p>Gestión de licencias</p>
                 </Card>
             </div>
         </AntDesign.Col>
@@ -361,6 +350,25 @@
                     <p>Ver firmas</p>
                 </Card>
             </div>
+        </AntDesign.Col>
+
+        @* Ética Section *@
+        <AntDesign.Col Xs="24" Sm="12" Lg="8">
+            <Card Class="dashboard-card etica-card">
+                <h2>ÉTICA</h2>
+                <div class="ethics-buttons">
+                    <span title="Sancionados">
+                        <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/bomberos/sancionados"); })">
+                            <i class="fa-solid fa-user-xmark"></i>
+                        </Button>
+                    </span>
+                    <span title="Ascensos">
+                        <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/bomberos/ascenso"); })">
+                            <i class="fa-solid fa-user-plus"></i>
+                        </Button>
+                    </span>
+                </div>
+            </Card>
         </AntDesign.Col>
 
         @* Reportes Section *@
@@ -421,24 +429,15 @@
             </Card>
         </AntDesign.Col>
 
-
-        @* Ética Section *@
+        @* Cobradores Section *@
         <AntDesign.Col Xs="24" Sm="12" Lg="8">
-            <Card Class="dashboard-card etica-card">
-                <h2>ÉTICA</h2>
-                <div class="ethics-buttons">
-                    <span title="Sancionados">
-                        <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/bomberos/sancionados"); })">
-                            <i class="fa-solid fa-user-xmark"></i>
-                        </Button>
-                    </span>
-                    <span title="Ascensos">
-                        <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/bomberos/ascenso"); })">
-                            <i class="fa-solid fa-user-plus"></i>
-                        </Button>
-                    </span>
-                </div>
-            </Card>
+            <div @onclick="@(() => { navigationManager.NavigateTo("/personal/cobradores"); })" style="cursor: pointer;">
+                <Card Class="dashboard-card cobradores-card">
+                    <i class="fa-solid fa-money-bill-wave card-icon"></i>
+                    <h2>COBRADORES</h2>
+                    <p>Ver el personal de cobradores</p>
+                </Card>
+            </div>
         </AntDesign.Col>
     </Row>
 </div>
