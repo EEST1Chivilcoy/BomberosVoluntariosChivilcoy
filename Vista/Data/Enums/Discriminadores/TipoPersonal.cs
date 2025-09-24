@@ -14,6 +14,12 @@ namespace Vista.Data.Enums.Discriminadores
         /// Representa a un miembro de la Comisión Directiva.
         /// </summary>
         [Display(Name = "Comisión Directiva")]
-        ComisionDirectiva = 2
+        ComisionDirectiva = 2,
+
+        /// <summary>
+        /// Representa a un cobrador.
+        /// </summary>
+        [Display(Name = "Cobrador")]
+        Cobrador = 3
     }
 }

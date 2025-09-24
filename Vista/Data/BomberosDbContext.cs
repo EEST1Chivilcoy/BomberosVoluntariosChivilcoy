@@ -19,32 +19,52 @@ using Vista.Data.Models.Vehiculos.Flota.Componentes;
 using Vista.Data.Models.Otros;
 using Vista.Data.Models.Objetos;
 using Vista.Data.Models.Objetos.Componentes;
+using Vista.Data.Models.Socios;
+using Vista.Data.Models.Socios.Componentes;
 
 namespace Vista.Data
 {
     public class BomberosDbContext : DbContext
     {
-        // Personas
+        // Personas - Herencia de Personal que heredan de Persona
+
         public DbSet<Bombero> Bomberos { get; set; }
         public DbSet<Damnificado_Salida> Damnificados { get; set; }
         public DbSet<ComisionDirectiva> ComisionDirectivas { get; set; }
+        public DbSet<Cobrador> Cobradores { get; set; }
 
         // Personas Assets
+
         public DbSet<Contacto> Contactos { get; set; }
 
+        // Socios
+
+        public DbSet<Socio> Socios { get; set; }
+
+        // Socios Assets
+
+        public DbSet<Historial_Socio> HistorialesSocios { get; set; }
+        public DbSet<HistorialCuota_Socio> HistorialCuotas { get; set; }
+        public DbSet<HistorialEstado_Socio> HistorialEstados { get; set; }
+        public DbSet<HistorialPago_Socio> HistorialPagos { get; set; }
+
         // Dependencias (Departamentos)
+
         public DbSet<Dependencia> Dependencias { get; set; }
 
         // Vehiculos
+
         public DbSet<Movil> Moviles { get; set; }
         public DbSet<Vehiculo_Personal> VehiculosPersonales { get; set; }
 
         // Imagenes
+
         public DbSet<Imagen> Imagen { get; set; }
         public DbSet<Imagen_Personal> ImagenesBomberos { get; set; }
         public DbSet<Imagen_VehiculoSalida> ImagenesVehiculo { get; set; }
 
         // Seguros
+
         public DbSet<SeguroVivienda> SegurosSalidas { get; set; }
         public DbSet<SeguroVehiculo> SeguroVehiculos { get; set; }
 
@@ -133,21 +153,29 @@ namespace Vista.Data
                 .HasForeignKey("VehiculoPasajeroId")
                 .IsRequired(false);
 
+            // Relaciónes 1:1
 
-
-            // Relaciónes 1:1 (Imagenes)
-
+            // Relación uno a uno entre Personal e Imagen_Personal
             modelBuilder.Entity<Personal>()
                 .HasOne(p => p.Imagen)
                 .WithOne(pi => pi.Personal)
                 .HasForeignKey<Imagen_Personal>(pi => pi.PersonalId); // Clave foránea en ProfileImage
 
             // Relaciónes 1:N (uno a muchos)
+
+            // Relación uno a muchos entre Bombero y Licencia
             modelBuilder.Entity<Licencia>()
                 .HasOne(l => l.BomberoAfectado)       // Una licencia tiene un bombero
                 .WithMany(b => b.Licencias)           // Un bombero tiene muchas licencias
                 .HasForeignKey(l => l.PersonalId)      // Clave foránea en Licencia
                 .OnDelete(DeleteBehavior.Restrict);   // Esto evita borrado en cascada
+
+            // Relación uno a muchos entre Socio y HistorialSocio
+            modelBuilder.Entity<Historial_Socio>()
+                .HasOne(hs => hs.Socio)               // Un historial pertenece a un socio
+                .WithMany(s => s.Historial)         // Un socio tiene muchos movimientos en su historial
+                .HasForeignKey(hs => hs.SocioId)      // Clave foránea en HistorialSocio
+                .OnDelete(DeleteBehavior.Cascade);    // Borrado en cascada si se borra el socio
 
             // Relaciones mucho a muchos
 
@@ -234,7 +262,8 @@ namespace Vista.Data
             modelBuilder.Entity<Persona>()
                 .HasDiscriminator(p => p.Tipo)
                 .HasValue<Bombero>(TipoPersonal.Bombero)
-                .HasValue<ComisionDirectiva>(TipoPersonal.ComisionDirectiva);
+                .HasValue<ComisionDirectiva>(TipoPersonal.ComisionDirectiva)
+                .HasValue<Cobrador>(TipoPersonal.Cobrador);
 
             modelBuilder.Entity<Seguro>()
                 .HasDiscriminator(s => s.Tipo)
@@ -349,13 +378,84 @@ namespace Vista.Data
                 .WithMany(s => s.CuerpoParticipante) // Asegúrate de que Salida tenga una colección BomberosSalidas
                 .HasForeignKey(bs => bs.SalidaId);
 
-            // Enum Conversiones a String - INT
+            // Enum Conversiones a INT (Enteros)
+
+            // Cobrador - Enum ZonasAsignadas
+
+            modelBuilder
+                .Entity<Cobrador>()
+                .Property(c => c.ZonasAsignadas)
+                .HasConversion<int>();
+
+            // Cobrador - Enum EstadoCobrador
+
+            modelBuilder
+                .Entity<Cobrador>()
+                .Property(c => c.Estado)
+                .HasConversion<int>();
+
+            // Socio - Enum EstadoSocio
+
+            modelBuilder
+                .Entity<Socio>()
+                .Property(s => s.EstadoSocio)
+                .HasConversion<int>();
+
+            // Socio - Enum TipoSocio
+
+            modelBuilder.Entity<Socio>()
+                .Property(s => s.Tipo)
+                .HasConversion<int>();
+
+            // Socio - Enum FrecuenciaDePago
+
+            modelBuilder
+                .Entity<Socio>()
+                .Property(s => s.FrecuenciaDePago)
+                .HasConversion<int>();
+
+            // HistorialPago_Socio - Enum FormaDePago
+
+            modelBuilder
+                .Entity<HistorialPago_Socio>()
+                .Property(hp => hp.FormaDePago)
+                .HasConversion<int>();
+
+            // HistorialEstado_Socio - Enum TipoEstadoSocio
+
+            modelBuilder
+                .Entity<HistorialEstado_Socio>()
+                .Property(he => he.EstadoAnterior)
+                .HasConversion<int>();
+
+            modelBuilder
+                .Entity<HistorialEstado_Socio>()
+                .Property(he => he.EstadoNuevo)
+                .HasConversion<int>();
+
+            // HistorialCuota_Socio - Enum FrecuenciaDePago
+
+            modelBuilder
+                .Entity<HistorialCuota_Socio>()
+                .Property(hc => hc.FrecuenciaDePagoAnterior)
+                .HasConversion<int>();
+
+            modelBuilder
+                .Entity<HistorialCuota_Socio>()
+                .Property(hc => hc.FrecuenciaDePagoNueva)
+                .HasConversion<int>();
+
+            // Enum Conversiones a String (Texto)
+
+            // Movil - Enum TipoDireccion
 
             modelBuilder
                 .Entity<Movil>()
                 .Property(m => m.TipoDireccion)
                 .HasConversion<string>()
                 .HasMaxLength(255);
+
+            // Movil - Enum TipoTension
 
             modelBuilder
                 .Entity<Movil>()

@@ -6,6 +6,7 @@
 @using System.Text.Json
 @using Vista.Data.Models.Imagenes
 @using Vista.Data.Enums.Personal.ComisionDirectiva
+@using Vista.Data.Enums.Personal.Cobrador
 @using Vista.Data.Models.Personas.Personal
 @using Vista.Data.Models.Personas.Personal.Componentes
 @using Vista.Data.Mappers
@@ -33,104 +34,104 @@
         --abm-gold-color: #FFD700;
     }
 
-    .personal-abm .abm-container {
-        padding: 12px !important;
-        min-height: 100vh !important;
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;
-    }
-
-    .personal-abm .abm-main-card {
-        background: rgba(255, 255, 255, 0.95) !important;
-        backdrop-filter: blur(10px) !important;
-        border-radius: 16px !important;
-        box-shadow: 0 8px 32px rgba(166, 51, 51, 0.1), 0 4px 16px rgba(0, 0, 0, 0.05) !important;
-        border: 1px solid rgba(255, 255, 255, 0.2) !important;
-        overflow: hidden !important;
-    }
-
-    .personal-abm .abm-header-section {
-        background: linear-gradient(135deg, #A63333 0%, #732D2D 100%) !important;
-        color: white !important;
-        padding: 28px !important;
-        position: relative !important;
-        overflow: hidden !important;
-        margin-bottom: 0 !important;
-    }
-
-        .personal-abm .abm-header-section::before {
-            content: '';
-            display: none;
+        .personal-abm .abm-container {
+            padding: 12px !important;
+            min-height: 100vh !important;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;
         }
 
-        .personal-abm .abm-header-section .lava-bubbles {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-            overflow: hidden;
+        .personal-abm .abm-main-card {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(10px) !important;
+            border-radius: 16px !important;
+            box-shadow: 0 8px 32px rgba(166, 51, 51, 0.1), 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            overflow: hidden !important;
         }
 
-        .personal-abm .abm-header-section .lava-bubble {
-            position: absolute;
-            border-radius: 50%;
-            opacity: 0.45;
-            background: radial-gradient(circle at 60% 40%, #FFD54F 0%, #F9A825 80%, transparent 100%);
-            animation: lava-bubble-move 8s linear infinite;
-            filter: blur(1.5px);
-            mix-blend-mode: lighten;
+        .personal-abm .abm-header-section {
+            background: linear-gradient(135deg, #A63333 0%, #732D2D 100%) !important;
+            color: white !important;
+            padding: 28px !important;
+            position: relative !important;
+            overflow: hidden !important;
+            margin-bottom: 0 !important;
         }
 
-            .personal-abm .abm-header-section .lava-bubble.b1 {
-                left: 10%;
-                width: 60px;
-                height: 60px;
-                bottom: -70px;
-                animation-delay: 0s;
-                animation-duration: 7.5s;
+            .personal-abm .abm-header-section::before {
+                content: '';
+                display: none;
             }
 
-            .personal-abm .abm-header-section .lava-bubble.b2 {
-                left: 35%;
-                width: 90px;
-                height: 90px;
-                bottom: -100px;
-                animation-delay: 2s;
-                animation-duration: 9s;
-                background: radial-gradient(circle at 60% 40%, #FFEB3B 0%, #FFD54F 80%, transparent 100%);
+            .personal-abm .abm-header-section .lava-bubbles {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                z-index: 1;
+                overflow: hidden;
             }
 
-            .personal-abm .abm-header-section .lava-bubble.b3 {
-                left: 65%;
-                width: 50px;
-                height: 50px;
-                bottom: -60px;
-                animation-delay: 1.5s;
-                animation-duration: 6.5s;
-                background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #FFD54F 80%, transparent 100%);
+            .personal-abm .abm-header-section .lava-bubble {
+                position: absolute;
+                border-radius: 50%;
+                opacity: 0.45;
+                background: radial-gradient(circle at 60% 40%, #FFD54F 0%, #F9A825 80%, transparent 100%);
+                animation: lava-bubble-move 8s linear infinite;
+                filter: blur(1.5px);
+                mix-blend-mode: lighten;
             }
 
-            .personal-abm .abm-header-section .lava-bubble.b4 {
-                left: 80%;
-                width: 70px;
-                height: 70px;
-                bottom: -80px;
-                animation-delay: 3.2s;
-                animation-duration: 8.5s;
-                background: radial-gradient(circle at 60% 40%, #F9A825 0%, #FFD54F 80%, transparent 100%);
-            }
+                .personal-abm .abm-header-section .lava-bubble.b1 {
+                    left: 10%;
+                    width: 60px;
+                    height: 60px;
+                    bottom: -70px;
+                    animation-delay: 0s;
+                    animation-duration: 7.5s;
+                }
 
-            .personal-abm .abm-header-section .lava-bubble.b5 {
-                left: 55%;
-                width: 40px;
-                height: 40px;
-                bottom: -50px;
-                animation-delay: 5s;
-                animation-duration: 7.2s;
-                background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #F9A825 80%, transparent 100%);
-            }
+                .personal-abm .abm-header-section .lava-bubble.b2 {
+                    left: 35%;
+                    width: 90px;
+                    height: 90px;
+                    bottom: -100px;
+                    animation-delay: 2s;
+                    animation-duration: 9s;
+                    background: radial-gradient(circle at 60% 40%, #FFEB3B 0%, #FFD54F 80%, transparent 100%);
+                }
+
+                .personal-abm .abm-header-section .lava-bubble.b3 {
+                    left: 65%;
+                    width: 50px;
+                    height: 50px;
+                    bottom: -60px;
+                    animation-delay: 1.5s;
+                    animation-duration: 6.5s;
+                    background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #FFD54F 80%, transparent 100%);
+                }
+
+                .personal-abm .abm-header-section .lava-bubble.b4 {
+                    left: 80%;
+                    width: 70px;
+                    height: 70px;
+                    bottom: -80px;
+                    animation-delay: 3.2s;
+                    animation-duration: 8.5s;
+                    background: radial-gradient(circle at 60% 40%, #F9A825 0%, #FFD54F 80%, transparent 100%);
+                }
+
+                .personal-abm .abm-header-section .lava-bubble.b5 {
+                    left: 55%;
+                    width: 40px;
+                    height: 40px;
+                    bottom: -50px;
+                    animation-delay: 5s;
+                    animation-duration: 7.2s;
+                    background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #F9A825 80%, transparent 100%);
+                }
 
     @@keyframes lava-bubble-move {
         0% {
@@ -346,6 +347,7 @@
             opacity: 0;
             transform: translateY(20px);
         }
+
         to {
             opacity: 1;
             transform: translateY(0);
@@ -398,9 +400,9 @@
             align-items: stretch !important;
         }
 
-        .personal-abm .abm-action-buttons .ant-btn {
-            width: 100% !important;
-        }
+            .personal-abm .abm-action-buttons .ant-btn {
+                width: 100% !important;
+            }
     }
 
     @@media (max-width: 575px) {
@@ -432,6 +434,11 @@
                         {
                             <Icon Type="fire" Class="title-icon" />
                             <span>BOMBEROS</span>
+                        }
+                        else if (TipoPersonal.ToLower() == "cobradores")
+                        {
+                            <Icon Type="transaction" Class="title-icon" />
+                            <span>COBRADORES</span>
                         }
                     </h1>
                 </div>
@@ -471,6 +478,20 @@
                                     Class="add-button"
                                     OnClick="@(() => navigationManager.NavigateTo("/personal/comisiondirectiva/agregar"))">
                                 <Icon Type="plus" /> Agregar Comisión Directiva
+                            </Button>
+                        }
+                        else if (TipoPersonal.ToLower() == "cobradores")
+                        {
+                            <div class="search-container">
+                                <Search Placeholder="Buscar Cobrador"
+                                        @bind-Value="@searchString"
+                                        OnSearch="@(()=>message.Error("Funcionalidad en desarrollo"))"
+                                        BindOnInput />
+                            </div>
+                            <Button Type="ButtonType.Primary"
+                                    Class="add-button"
+                                    OnClick="@(() => message.Error("Funcionalidad en desarrollo"))">
+                                <Icon Type="plus" /> Agregar Cobrador
                             </Button>
                         }
                     </div>
@@ -594,6 +615,61 @@
                     </ColumnDefinitions>
                 </Table>
             }
+            else if (TipoPersonal.ToLower() == "cobradores")
+            {
+                <Table @ref="table"
+                       TItem="CobradorViewModel"
+                       DataSource="@cobradores"
+                       OnRow="@OnRowClick"
+                       @bind-PageIndex="_pageIndex"
+                       @bind-PageSize="_pageSize"
+                       Responsive>
+                    <ColumnDefinitions>
+                        <Column TData="CobradorViewModel" Title="Foto" Width="100">
+                            @if (context.UrlImagen != null)
+                            {
+                                <Avatar Size="AvatarSize.Large" Src="@(context.UrlImagen)" />
+                            }
+                            else
+                            {
+                                <Avatar Size="AvatarSize.Large" Icon="user" />
+                            }
+                        </Column>
+                        <PropertyColumn Property="c => c.ApellidoYNombre" Title="👤 Apellido y Nombre" Sortable />
+                        <PropertyColumn Title="🆔 Documento" Property="c => c.Documento" Sortable />
+                        <PropertyColumn Title="🏘️ Zonas Asignadas" Property="@(c => c.ZonasAsignadas.GetDisplayName())" Sortable />
+                        <PropertyColumn Title="📊 Estado" Property="@(c => c.Estado.GetDisplayName())" Sortable />
+
+                        <ActionColumn Title="⚙️ Acciones" Align=ColumnAlign.Center>
+                            <div class="abm-action-buttons">
+                                <Button Type="default" OnClick="() => EditarPersonal(context.Id)" OnClickStopPropagation>
+                                    <Icon Type="edit" /> Editar
+                                </Button>
+                                @if (context.Estado != EstadoCobrador.Activo)
+                                {
+                                    <Popconfirm Title="¿Está seguro de dar de baja?"
+                                                OnConfirm="()=>CambiarEstadoComisionDirectiva(context.Id, EstadoComisionDirectiva.Baja)"
+                                                OkText="Sí" CancelText="No">
+                                        <Button Danger OnClickStopPropagation>
+                                            <Icon Type="down" /> Baja
+                                        </Button>
+                                    </Popconfirm>
+                                }
+                                else
+                                {
+                                    <Popconfirm Title="¿Está seguro de dar de alta?"
+                                                OnConfirm="()=>CambiarEstadoComisionDirectiva(context.Id, EstadoComisionDirectiva.Activo)"
+                                                OkText="Sí" CancelText="No">
+                                        <Button Color="Color.Green2" OnClickStopPropagation>
+                                            <Icon Type="up" /> Alta
+                                        </Button>
+                                    </Popconfirm>
+                                }
+                            </div>
+                        </ActionColumn>
+                    </ColumnDefinitions>
+                </Table>
+            }
         </Card>
     </div>
 </div>
@@ -638,6 +714,15 @@
 
     // Referencia a la tabla
     ITable table;
+
+    // Cobradores
+
+    // Listas
+    List<CobradorViewModel>? cobradores = null;
+    List<CobradorViewModel>? SinFiltrarC = null;
+
+    // Estado seleccionado
+    public EstadoCobrador EstadoC = EstadoCobrador.Activo;
 
     // Comisión Directiva
 
@@ -776,6 +861,15 @@
 
     // Función para manejar el clic en una fila de la tabla de comisión directiva
     private Dictionary<string, object> OnRowClick(RowData<ComisionDirectivaViewModel> rowData)
+    {
+        return new Dictionary<string, object>
+        {
+            ["onclick"] = Microsoft.AspNetCore.Components.EventCallback.Factory.Create<Microsoft.AspNetCore.Components.Web.MouseEventArgs>(this, () => DetallePersonal(rowData.Data.Id))
+        };
+    }
+
+    // Función para manejar el clic en una fila de la tabla de cobradores
+    private Dictionary<string, object> OnRowClick(RowData<CobradorViewModel> rowData)
     {
         return new Dictionary<string, object>
         {
