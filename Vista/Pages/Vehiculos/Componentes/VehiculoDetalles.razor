@@ -7,214 +7,161 @@
 @inject IVehiculoSalidaService VehiculoSalidaService
 @inject IBomberoService BomberoService
 
-<link rel="stylesheet" href="css/DetallesVehiculosEstilos.css" />
+<link rel="stylesheet" href="css/EditarMovilEstilos.css"> 
 
 @if (vehiculo != null)
 {
-    <div class="modal-content-container">
-        <div class="header-content-details-card">
-            <Title Level="2" class="titulo-unidad">
-                Detalles de la Unidad
-            </Title>
-            <Paragraph class="subtitulo">Información básica y técnica del vehículo</Paragraph>
-        </div>
-        
-        <div class="form-content-grid">
-            <div class="form-left-panel">
-                <Card class="image-card" bordered="true">
-                    @if (vehiculoView.ImageUrl == null)
+    <div class="header-content-details-card">
+        <Title Level="2" class="titulo-unidad">
+            Detalles de la Unidad
+        </Title>
+        <Paragraph class="subtitulo">Información básica y técnica del vehículo</Paragraph>
+    </div>
+
+    <div class="modal-body-content">
+        <div class="modal-left-panel">
+            <Card Style="border: 1px solid #d9d9d9; border-radius: 20px;">
+                <div style="text-align: center;">
+                    @if (!string.IsNullOrEmpty(vehiculoView.ImageUrl))
                     {
-                        <div class="image-placeholder">
-                            <Avatar Size="@GetAvatarSize()" Icon="camera" Alt="Ninguna foto seleccionada" />
+                        <img src="@vehiculoView.ImageUrl" alt="Foto del vehículo" style="width: 100%; max-height: 150px; object-fit: contain;" />
+                    }
+                    else
+                    {
+                        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 120px; background: #f0f2f5; color: #999; border-radius: 4px;">
+                            <Icon Type="picture" Theme="IconThemeType.Outline" Style="font-size: 2em; margin-bottom: 5px;" />
                             <span>Ninguna foto seleccionada</span>
+                        </div>
+                    }
+                </div>
+                <div style="font-weight: 500; margin-top: 10px; text-align: center;">
+                    @if (!string.IsNullOrEmpty(vehiculoView.NumeroMovil))
+                    {
+                        <span>Nº Unidad @vehiculoView.NumeroMovil</span>
+                    }
+                </div>
+            </Card>
+        </div>
+
+        <div class="modal-right-panel">
+            <Form Model="vehiculoView" Layout="@FormLayout.Vertical">
+                <Card Title="Información Básica" Style="margin-bottom: 24px;">
+                    <div class="form-grid-4-col">
+                        <FormItem Label="Nº de la Unidad">
+                            <Input @bind-Value="vehiculoView.NumeroMovil" Placeholder="Número de la Unidad" ReadOnly="true" />
+                        </FormItem>
+                        <FormItem Label="Estado de la Unidad">
+                            <Input TEnum="TipoEstadoMovil" @bind-Value="vehiculoView.Estado" Placeholder="Seleccione estado" Disabled="true" />
+                        </FormItem>
+                        <FormItem Label="Encargado">
+                            <Input @bind-Value="vehiculoView.Encargado" Placeholder="Nombre del encargado" ReadOnly="true" />
+                        </FormItem>
+                        <FormItem Label="Tipo">
+                            <Input @bind-Value="vehiculoView.Tipo" Placeholder="Tipo" ReadOnly="true" />
+                        </FormItem>
+
+                        <FormItem Label="Marca">
+                            <Input @bind-Value="vehiculoView.Marca" Placeholder="Marca" ReadOnly="true" />
+                        </FormItem>
+                        <FormItem Label="Modelo">
+                            <Input @bind-Value="vehiculoView.Modelo" Placeholder="Modelo" ReadOnly="true" />
+                        </FormItem>
+                        <FormItem Label="Año">
+                            <Input @bind-Value="vehiculoView.Año" Placeholder="Año" Style="width: 100%;" ReadOnly="true" />
+                        </FormItem>
+                        <FormItem Label="Patente">
+                            <Input @bind-Value="vehiculoView.Patente" Placeholder="Patente" ReadOnly="true" />
+                        </FormItem>
+
+                        <FormItem Label="Observaciones" Class="full-width-4">
+                            <Input @bind-Value="vehiculoView.Observaciones" Placeholder="Observaciones" Rows="3" ReadOnly="true" />
+                        </FormItem>
+                    </div>
+                </Card>
+
+                <Card Title="Ficha Técnica">
+                    @if (vehiculo is Movil)
+                    {
+                        <div class="form-grid-4-col">
+                            <FormItem Label="Nº Motor">
+                                <Input @bind-Value="vehiculoView.NumeroMotor" Placeholder="Número de motor" ReadOnly="true" />
+                            </FormItem>
+                            <FormItem Label="Nº Chasis">
+                                <Input @bind-Value="vehiculoView.NumeroChasis" Placeholder="Número de chasis" ReadOnly="true" />
+                            </FormItem>
+                            <FormItem Label="Modelo de bomba">
+                                <Input @bind-Value="vehiculoView.ModeloBomba" Placeholder="Modelo de bomba" ReadOnly="true" />
+                            </FormItem>
+                            <FormItem Label="Tipo de combustible">
+                                <Input @bind-Value="vehiculoView.Combustible" Placeholder="Combustible" ReadOnly="true" />
+                            </FormItem>
+
+                            <FormItem Label="Litros de Combustible">
+                                <Input @bind-Value="@vehiculoView.CantidadLitros" Min="0" Placeholder="Cantidad de litros" Style="width: 100%;" ReadOnly="true" />
+                            </FormItem>
+                            <FormItem Label="Tipo de aceite">
+                                <Input @bind-Value="vehiculoView.TipoAceite" Placeholder="Tipo de aceite" ReadOnly="true" />
+                            </FormItem>
+                            <FormItem Label="Marca de aceite">
+                                <Input @bind-Value="vehiculoView.MarcaAceite" Placeholder="Marca de aceite" ReadOnly="true" />
+                            </FormItem>
+                            <FormItem Label="Litros de aceite">
+                                <Input @bind-Value="@vehiculoView.CantidadAceite" Min="0" Placeholder="Cantidad de aceite" Style="width: 100%;" ReadOnly="true" />
+                            </FormItem>
+
+                            <FormItem Label="Modelo de filtro de aire">
+                                <Input @bind-Value="vehiculoView.ModeloFiltroAire" Placeholder="Modelo de filtro de aire" ReadOnly="true" />
+                            </FormItem>
+                            <FormItem Label="Medidas de las cubiertas">
+                                <Input @bind-Value="vehiculoView.MedidasCubiertas" Placeholder="Medidas de las cubiertas" ReadOnly="true" />
+                            </FormItem>
+                            <FormItem Label="Presión de Cubiertas">
+                                <Input @bind-Value="vehiculoView.LibrasCubiertas" Placeholder="Presión de Cubiertas" ReadOnly="true" />
+                            </FormItem>
+                            <FormItem Label="Caja de velocidades">
+                                <Input @bind-Value="vehiculoView.CajasVelocidades" Placeholder="Caja de velocidades" ReadOnly="true" />
+                            </FormItem>
+
+                            <FormItem Label="Tensión del sistema eléctrico">
+                                <Input @bind-Value="vehiculoView.TensionCElectrico" Placeholder="Tensión del sistema" ReadOnly="true" />
+                            </FormItem>
+                            <FormItem Label="Tipo de dirección">
+                                <Input @bind-Value="vehiculoView.TipoDireccion" Placeholder="Tipo de dirección" ReadOnly="true" />
+                            </FormItem>
+                            <FormItem Label="Marca de batería">
+                                <Input @bind-Value="vehiculoView.MarcaBateria" Placeholder="Marca de batería" ReadOnly="true" />
+                            </FormItem>
+                            <FormItem Label="Fecha del último cambio de batería">
+                                <Input @bind-Value="vehiculoView.FechaUltimoCambioBateria" ReadOnly="true" />
+                            </FormItem>
+
+                            <FormItem Label="Fecha del último service">
+                                <Input @bind-Value="vehiculoView.FechaUltimoService" ReadOnly="true" />
+                            </FormItem>
+                            <FormItem Label="Fecha del próximo service">
+                                <Input @bind-Value="vehiculoView.FechaProximoService" ReadOnly="true" />
+                            </FormItem>
                         </div>
                     }
                     else
                     {
-                        <Image Width="100%"
-                               Height="auto"
-                               Src="@vehiculoView.ImageUrl"
-                               Alt="Imagen de la Unidad"
-                               class="unit-image" />
+                        <div class="form-grid-4-col">
+                            <FormItem Label="Tipo de Combustible">
+                                <Input @bind-Value="vehiculoView.Combustible" Placeholder="Tipo de Combustible" ReadOnly="true" />
+                            </FormItem>
+                            <FormItem Label="Litros de Combustible">
+                                <Input @bind-Value="vehiculoView.CantidadLitros" Placeholder="Litros de Combustible" ReadOnly="true" />
+                            </FormItem>
+                            <FormItem Label="Fecha del último service">
+                                <Input @bind-Value="vehiculoView.FechaUltimoService" ReadOnly="true" />
+                            </FormItem>
+                            <FormItem Label="Fecha del próximo service">
+                                <Input @bind-Value="vehiculoView.FechaProximoService" ReadOnly="true" />
+                            </FormItem>
+                        </div>
                     }
                 </Card>
-            </div>
-
-            <div class="form-right-panel">
-                <h3 class="section-title-sub">Información Básica</h3>
-                <Row Gutter="(16, 16)">
-                    <AntDesign.Col Span="24" Lg="6" Md="12">
-                        <div class="detail-item-display">
-                            <span class="detail-label">N° de la Unidad</span>
-                            <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.NumeroMovil) ? "—" : vehiculoView.NumeroMovil)</span>
-                        </div>
-                    </AntDesign.Col>
-                    <AntDesign.Col Span="24" Lg="6" Md="12">
-                        <div class="detail-item-display">
-                            <span class="detail-label">Estado de la Unidad</span>
-                            <span class="detail-value"><Tag Color="@GetEstadoColor()">@(string.IsNullOrEmpty(vehiculoView.Estado) ? "—" : vehiculoView.Estado)</Tag></span>
-                        </div>
-                    </AntDesign.Col>
-                    <AntDesign.Col Span="24" Lg="6" Md="12">
-                        <div class="detail-item-display">
-                            <span class="detail-label">Encargado</span>
-                            <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.Encargado) ? "—" : vehiculoView.Encargado)</span>
-                        </div>
-                    </AntDesign.Col>
-                    <AntDesign.Col Span="24" Lg="6" Md="12">
-                        <div class="detail-item-display">
-                            <span class="detail-label">Tipo</span>
-                            <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.Tipo) ? "—" : vehiculoView.Tipo)</span>
-                        </div>
-                    </AntDesign.Col>
-                    <AntDesign.Col Span="24" Lg="6" Md="12">
-                        <div class="detail-item-display">
-                            <span class="detail-label">Marca</span>
-                            <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.Marca) ? "—" : vehiculoView.Marca)</span>
-                        </div>
-                    </AntDesign.Col>
-                    <AntDesign.Col Span="24" Lg="6" Md="12">
-                        <div class="detail-item-display">
-                            <span class="detail-label">Modelo</span>
-                            <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.Modelo) ? "—" : vehiculoView.Modelo)</span>
-                        </div>
-                    </AntDesign.Col>
-                    <AntDesign.Col Span="24" Lg="6" Md="12">
-                        <div class="detail-item-display">
-                            <span class="detail-label">Año</span>
-                            <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.Año) ? "—" : vehiculoView.Año)</span>
-                        </div>
-                    </AntDesign.Col>
-                    <AntDesign.Col Span="24" Lg="6" Md="12">
-                        <div class="detail-item-display">
-                            <span class="detail-label">Patente</span>
-                            <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.Patente) ? "—" : vehiculoView.Patente)</span>
-                        </div>
-                    </AntDesign.Col>
-                    <AntDesign.Col Span="24">
-                        <div class="detail-item-display">
-                            <span class="detail-label">Observaciones</span>
-                            <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.Observaciones) ? "—" : vehiculoView.Observaciones)</span>
-                        </div>
-                    </AntDesign.Col>
-                </Row>
-
-                @if (vehiculo is Movil)
-                {
-                    <h3 class="section-title-sub" style="margin-top: 24px;">Ficha Técnica</h3>
-                    <Row Gutter="(16, 16)">
-                        <AntDesign.Col Span="24" Lg="6" Md="12">
-                            <div class="detail-item-display">
-                                <span class="detail-label">N° Motor</span>
-                                <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.NumeroMotor) ? "—" : vehiculoView.NumeroMotor)</span>
-                            </div>
-                        </AntDesign.Col>
-                        <AntDesign.Col Span="24" Lg="6" Md="12">
-                            <div class="detail-item-display">
-                                <span class="detail-label">N° Chasis</span>
-                                <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.NumeroChasis) ? "—" : vehiculoView.NumeroChasis)</span>
-                            </div>
-                        </AntDesign.Col>
-                        <AntDesign.Col Span="24" Lg="6" Md="12">
-                            <div class="detail-item-display">
-                                <span class="detail-label">Modelo de la Bomba</span>
-                                <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.ModeloBomba) ? "—" : vehiculoView.ModeloBomba)</span>
-                            </div>
-                        </AntDesign.Col>
-                        <AntDesign.Col Span="24" Lg="6" Md="12">
-                            <div class="detail-item-display">
-                                <span class="detail-label">Tipo de Combustible</span>
-                                <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.Combustible) ? "—" : vehiculoView.Combustible)</span>
-                            </div>
-                        </AntDesign.Col>
-                        <AntDesign.Col Span="24" Lg="6" Md="12">
-                            <div class="detail-item-display">
-                                <span class="detail-label">Litros de Combustible</span>
-                                <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.CantidadLitros) ? "—" : vehiculoView.CantidadLitros)</span>
-                            </div>
-                        </AntDesign.Col>
-                        <AntDesign.Col Span="24" Lg="6" Md="12">
-                            <div class="detail-item-display">
-                                <span class="detail-label">Tipo de aceite</span>
-                                <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.TipoAceite) ? "—" : vehiculoView.TipoAceite)</span>
-                            </div>
-                        </AntDesign.Col>
-                        <AntDesign.Col Span="24" Lg="6" Md="12">
-                            <div class="detail-item-display">
-                                <span class="detail-label">Marca de aceite</span>
-                                <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.MarcaAceite) ? "—" : vehiculoView.MarcaAceite)</span>
-                            </div>
-                        </AntDesign.Col>
-                        <AntDesign.Col Span="24" Lg="6" Md="12">
-                            <div class="detail-item-display">
-                                <span class="detail-label">Litros de aceite</span>
-                                <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.CantidadAceite) ? "—" : vehiculoView.CantidadAceite)</span>
-                            </div>
-                        </AntDesign.Col>
-                        <AntDesign.Col Span="24" Lg="6" Md="12">
-                            <div class="detail-item-display">
-                                <span class="detail-label">Modelo de filtro de aire</span>
-                                <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.ModeloFiltroAire) ? "—" : vehiculoView.ModeloFiltroAire)</span>
-                            </div>
-                        </AntDesign.Col>
-                        <AntDesign.Col Span="24" Lg="6" Md="12">
-                            <div class="detail-item-display">
-                                <span class="detail-label">Medidas de las cubiertas</span>
-                                <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.MedidasCubiertas) ? "—" : vehiculoView.MedidasCubiertas)</span>
-                            </div>
-                        </AntDesign.Col>
-                        <AntDesign.Col Span="24" Lg="6" Md="12">
-                            <div class="detail-item-display">
-                                <span class="detail-label">Presión de Cubiertas</span>
-                                <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.LibrasCubiertas) ? "—" : vehiculoView.LibrasCubiertas)</span>
-                            </div>
-                        </AntDesign.Col>
-                        <AntDesign.Col Span="24" Lg="6" Md="12">
-                            <div class="detail-item-display">
-                                <span class="detail-label">Caja de velocidades</span>
-                                <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.CajasVelocidades) ? "—" : vehiculoView.CajasVelocidades)</span>
-                            </div>
-                        </AntDesign.Col>
-                        <AntDesign.Col Span="24" Lg="6" Md="12">
-                            <div class="detail-item-display">
-                                <span class="detail-label">Tensión del sistema eléctrico</span>
-                                <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.TensionCElectrico) ? "—" : vehiculoView.TensionCElectrico)</span>
-                            </div>
-                        </AntDesign.Col>
-                        <AntDesign.Col Span="24" Lg="6" Md="12">
-                            <div class="detail-item-display">
-                                <span class="detail-label">Tipo de dirección</span>
-                                <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.TipoDireccion) ? "—" : vehiculoView.TipoDireccion)</span>
-                            </div>
-                        </AntDesign.Col>
-                        <AntDesign.Col Span="24" Lg="6" Md="12">
-                            <div class="detail-item-display">
-                                <span class="detail-label">Marca de batería</span>
-                                <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.MarcaBateria) ? "—" : vehiculoView.MarcaBateria)</span>
-                            </div>
-                        </AntDesign.Col>
-                        <AntDesign.Col Span="24" Lg="6" Md="12">
-                            <div class="detail-item-display">
-                                <span class="detail-label">Fecha último cambio de batería</span>
-                                <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.FechaUltimoCambioBateria) ? "—" : vehiculoView.FechaUltimoCambioBateria)</span>
-                            </div>
-                        </AntDesign.Col>
-                        <AntDesign.Col Span="24" Lg="6" Md="12">
-                            <div class="detail-item-display">
-                                <span class="detail-label">Fecha del último service</span>
-                                <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.FechaUltimoService) ? "—" : vehiculoView.FechaUltimoService)</span>
-                            </div>
-                        </AntDesign.Col>
-                        <AntDesign.Col Span="24" Lg="6" Md="12">
-                            <div class="detail-item-display">
-                                <span class="detail-label">Fecha del próximo service</span>
-                                <span class="detail-value">@(string.IsNullOrEmpty(vehiculoView.FechaProximoService) ? "—" : vehiculoView.FechaProximoService)</span>
-                            </div>
-                        </AntDesign.Col>
-                        
-                    </Row>
-                }
-            </div>
+            </Form>
         </div>
     </div>
 }

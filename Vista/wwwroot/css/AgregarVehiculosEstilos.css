@@ -82,3 +82,29 @@ body {
     color: #8c8c8c;
     margin-top: 4px;
 }
+.ant-picker:hover {
+  border-color: #ff4d4f !important;
+}
+
+.ant-picker-focused {
+  border-color: #ff4d4f !important;
+  box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.2);
+}
+
+.ant-input-number:hover {
+  border-color: #ff4d4f !important;
+}
+
+.ant-input-number-focused {
+  border-color: #ff4d4f !important;
+  box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.2);
+}
+
+.ant-select-selector:hover {
+  border-color: #ff4d4f !important;
+}
+
+.ant-select-focused .ant-select-selector {
+  border-color: #ff4d4f !important;
+  box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.2);
+}

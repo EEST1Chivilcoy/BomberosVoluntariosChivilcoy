@@ -7,7 +7,7 @@
     .main-container {
         margin-top: 50px;
         padding: 30px;
-    }
+    }a
 
     .header-row {
         margin-bottom: 20px;
@@ -287,6 +287,7 @@
         justify-content: center;
         align-items: center;
         gap: 20px; 
+        margin-top: 60px; 
     }
 
     .estadisticas-puntuaje .ant-statistic {

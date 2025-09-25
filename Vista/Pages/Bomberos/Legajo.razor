@@ -58,10 +58,10 @@
                                     <div class="banner-text">TOTAL DE SERVICIOS EN 2024</div>
                                 </div>
                             </div>
-                            <Button Class="report-button">
+                            @*<Button Class="report-button">
                                 <i class="fa-solid fa-magnifying-glass report-icon"></i>
                                 Ver Reporte Completo
-                            </Button>
+                            </Button>*@
                         </div>
 
                         <div class="estadisticas-servicios">
@@ -80,37 +80,41 @@
                     </Card>
 
                     <Card Bordered="false" class="services-card2">
-                        <div class="header-servicios2">
-                            <div class="banner-container2">
-                                <div class="servicios-banner2">
+                        <div class="header-servicios">
+                            <div class="banner-container"> 
+                                <div class="servicios-banner"> 
+                                    <div class="banner-image-container">
+                                        <img src="Imagenes/banderin.png" alt="Banderín de puntaje" class="banderin-image" />
+                                        <div class="banner-number-overlay">41</div> 
+                                    </div>
                                     <div class="banner-text">PUNTUAJE</div>
                                 </div>
                             </div>
                         </div>
                         <div class="estadisticas-puntuaje">
                             <Statistic Title="PUNTUAJE MENSUAL"
-                                    Value="14"
-                                    ValueStyle="font-size: 2em; color: #a51c16; font-weight: bold;" />
+                                                Value="14"
+                                                ValueStyle="font-size: 2em; color: #a51c16; font-weight: bold;" />
                             <Divider Type="@DividerType.Vertical" class="stats-divider" />
                             <Statistic Title="PUNTUAJE ANUAL"
-                                    Value="41"
-                                    ValueStyle="font-size: 2em; color: #a51c16; font-weight: bold;" />
+                                                Value="41"
+                                                ValueStyle="font-size: 2em; color: #a51c16; font-weight: bold;" />
                             <Divider Type="@DividerType.Vertical" class="stats-divider" />
                             <Statistic Title="LICENCIA MENSUAL"
-                                    Value="23"
-                                    ValueStyle="font-size: 2em; color: #a51c16; font-weight: bold;" />
+                                                Value="23"
+                                                ValueStyle="font-size: 2em; color: #a51c16; font-weight: bold;" />
                             <Divider Type="@DividerType.Vertical" class="stats-divider" />
                             <Statistic Title="LICENCIA ANUAL"
-                                    Value="12"
-                                    ValueStyle="font-size: 2em; color: #a51c16; font-weight: bold;" />
+                                                Value="12"
+                                                ValueStyle="font-size: 2em; color: #a51c16; font-weight: bold;" />
                             <Divider Type="@DividerType.Vertical" class="stats-divider" />
                             <Statistic Title="FIRMAS"
-                                    Value="65"
-                                    ValueStyle="font-size: 2em; color: #a51c16; font-weight: bold;" />
+                                                Value="65"
+                                                ValueStyle="font-size: 2em; color: #a51c16; font-weight: bold;" />
                         </div>
                     </Card>
 
-                    <Card Bordered="false" class="tools-card">
+                    @*<Card Bordered="false" class="tools-card">
                         <div class="tools-title">HERRAMIENTAS</div>
 
                         <Row Gutter="20">
@@ -156,7 +160,7 @@
                                 </Button>
                             </AntDesign.Col>
                         </Row>
-                    </Card>
+                    </Card>*@
                 </AntDesign.Col>
             </Row>
         </div>
