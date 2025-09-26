@@ -57,10 +57,11 @@ namespace Vista.Data.Mappers
             destination.QuienLleno = new Bombero { NumeroLegajo = source.LegajoLLenoPlanilla };
 
             // Mapeo de listas
+
             destination.Damnificados = source.Damnificados.ToList();
             destination.Moviles = source.Moviles.ToList();
             destination.CuerpoParticipante = source.CuerpoParticipante.ToList();
-            destination.FuerzasIntervinientes = source.FuerzasIntervinientes.ToList();
+            // destination.FuerzasIntervinientes = source.FuerzasIntervinientes.ToList(); <-- Error en la conversión la lista de source es ViewModel, realizar la conversión.
 
         }
 
@@ -71,7 +72,7 @@ namespace Vista.Data.Mappers
 
             // Mapeo de propiedades específicas de RescatePersona
             rescate.LugarRescatePersona = viewModel.TipoRescatePersona;
-            rescate.OtroLugarRescate = viewModel.OtroLugarRescate;
+            rescate.OtroLugarRescate = viewModel.Otro;
 
             return rescate;
         }                                   
@@ -106,7 +107,7 @@ namespace Vista.Data.Mappers
 
                 // especificos de RescatePersona
                 TipoRescatePersona = model.LugarRescatePersona,
-                OtroLugarRescate = model.OtroLugarRescate,
+                Otro = model.OtroLugarRescate,
 
                 // Encargado y QuienLleno
                 LegajoEncargado = model.Encargado?.NumeroLegajo ?? 0,
@@ -120,7 +121,8 @@ namespace Vista.Data.Mappers
                 Damnificados = model.Damnificados.ToList(),
                 CuerpoParticipante = model.CuerpoParticipante.ToList(),
                 Moviles = model.Moviles.ToList(),
-                FuerzasIntervinientes = model.FuerzasIntervinientes.ToList()
+
+                // FuerzasIntervinientes = model.FuerzasIntervinientes.ToList() <-- Error en la conversión la lista de model es ViewModel, realizar la conversión.
             };
 
             return viewModel;
