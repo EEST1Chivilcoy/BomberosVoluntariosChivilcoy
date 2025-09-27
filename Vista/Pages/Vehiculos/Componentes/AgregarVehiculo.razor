@@ -1,0 +1,699 @@
+﻿@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components
+@using System.ComponentModel.DataAnnotations
+@using System.Text.Json
+@using Vista.Data.Mappers
+@using System.ComponentModel
+@using Vista.Data.Models.Personas.Personal
+@using Vista.Data.Models.Personas.Personal.Componentes
+@using Vista.Data.Models.Imagenes
+@using Vista.Data.ViewModels.Personal
+@using Vista.Data.Enums.Personal.ComisionDirectiva
+@using Vista.Data.Enums.Personal.Cobrador
+@using Vista.Data.Enums.Socios
+@using AntDesign
+
+@page "/unidades/agregar"
+
+@*Servicios Utilizados*@
+@using Vista.Services
+@inject IMessageService message
+@inject NavigationManager navigationManager
+
+@inject IVehiculoSalidaService VehiculoSalidaService
+@inject IBomberoService BomberoService
+
+<style>
+    /* Estilos generales */
+    .container {
+        padding: 24px !important;
+        min-height: 100vh !important;
+    }
+
+    .page-title {
+        font-size: 24px !important;
+        font-weight: 600 !important;
+        color: #1f1f1f !important;
+        margin-bottom: 24px !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+
+    .page-title-icon {
+        margin-right: 12px !important;
+        color: #c43a3a !important;
+    }
+
+    .card {
+        background-color: white !important;
+        border-radius: 8px !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+        padding: 24px !important;
+        margin-bottom: 24px !important;
+    }
+
+    .card-title {
+        font-size: 18px !important;
+        font-weight: 500 !important;
+        color: #434343 !important;
+        margin-bottom: 16px !important;
+        padding-bottom: 12px !important;
+        border-bottom: 1px solid #f0f0f0 !important;
+    }
+
+    /* Estilos de la foto */
+    .profile-photo-container {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        padding: 16px !important;
+    }
+
+    .photo-preview {
+        width: 150px !important;
+        height: 150px !important;
+        border-radius: 50% !important;
+        overflow: hidden !important;
+        margin-bottom: 16px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .upload-actions {
+        display: flex !important;
+        gap: 8px !important;
+    }
+
+    /* Estilo para las secciones del formulario */
+    .form-section {
+        margin-bottom: 24px !important;
+    }
+
+    /* Estilo para los botones de acción */
+    .action-buttons {
+        display: flex !important;
+        justify-content: flex-end !important;
+        gap: 12px !important;
+        margin-top: 24px !important;
+    }
+
+    /* Estilo para los campos */
+    .ant-form-item {
+        margin-bottom: 16px !important;
+    }
+
+    .ant-form-item-label > label {
+        color: #595959 !important;
+        font-weight: 500 !important;
+    }
+
+    .ant-input,
+    .ant-select:not(.ant-select-customize-input) .ant-select-selector,
+    .ant-picker,
+    .ant-input-number {
+        border-radius: 4px !important;
+        border: 1px solid #d9d9d9 !important;
+    }
+
+        .ant-input:hover,
+        .ant-select:not(.ant-select-customize-input) .ant-select-selector:hover,
+        .ant-picker:hover,
+        .ant-input-number:hover {
+            border-color: #c43a3a !important;
+        }
+
+        .ant-input:focus,
+        .ant-select-focused:not(.ant-select-customize-input) .ant-select-selector,
+        .ant-picker-focused,
+        .ant-input-number-focused {
+            border-color: #c43a3a !important;
+            box-shadow: 0 0 0 2px rgba(196, 58, 58, 0.2) !important;
+        }
+
+    /* Ajuste visual para el switch */
+    .ant-switch-checked {
+        background-color: #c43a3a !important;
+    }
+
+    /* Estilo para campos requeridos */
+    .required-field::after {
+        content: '*' !important;
+        color: #c43a3a !important;
+        margin-left: 4px !important;
+    }
+
+    /* Estilo para el campo condicional de chofer */
+    .conditional-field {
+        margin-top: 12px !important;
+        padding-top: 12px !important;
+        border-top: 1px dashed #f0f0f0 !important;
+    }
+</style>
+
+<div class="container">
+    <div class="page-title">
+        @if (!EsEmbarcacion)
+        {
+            <div>
+                <Icon Type="car" Theme="IconThemeType.Fill" Class="page-title-icon" />
+                <span>Registro de Nueva Unidad</span>
+            </div>
+        }
+        else
+        {
+            <div>
+                <Icon Type="thunderbolt" Theme="IconThemeType.Fill" Class="page-title-icon" />
+                <span>Registro de Nuevo Embarcación</span>
+            </div>
+        }
+    </div>
+
+
+    @if (vehiculoView != null)
+    {
+        <Form Model="@vehiculoView"
+              Layout="FormLayout.Vertical"
+              OnFinish="OnFinish"
+              OnFinishFailed="OnFinishFailed">
+
+            @*Información Básica (Común para todos)*@
+
+            <div class="card">
+                <div class="card-title">Información Básica</div>
+                <AntDesign.Row Gutter="24">
+                    <AntDesign.Col Span="6">
+                        <div class="profile-photo-container">
+                            <div class="photo-preview">
+                                @if (ImageUrlPreview != null)
+                                {
+                                    <Image Src="@ImageUrlPreview" Alt="Foto de perfil" Width="200px"
+                                           Height="200px" />
+                                }
+                                else
+                                {
+                                    <Image Width="200px"
+                                           Height="200px"
+                                           Src="error"
+                                           Fallback="data:image/png;base64,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" />
+                                }
+                            </div>
+
+                            <div class="upload-actions">
+                                <Button Type="@ButtonType.Primary">
+                                    <label style="cursor: pointer; margin: 0;">
+                                        <Icon Type="upload" /> Subir foto
+                                        <InputFile OnChange="SubirFoto" style="display: none;" accept=".jpg,.jpeg,.png" />
+                                    </label>
+                                </Button>
+
+                                @if (ImageUrlPreview != null)
+                                {
+                                    <Button Type="@ButtonType.Default" OnClick="RemovePhoto" Danger>
+                                        <Icon Type="delete" /> Eliminar
+                                    </Button>
+                                }
+                            </div>
+                        </div>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="18">
+                        <AntDesign.Row Gutter="16">
+                            <AntDesign.Col Span="12">
+                                <FormItem Label="Nº de la Unidad" Required>
+                                    <Input @bind-Value="@vehiculoView.NumeroMovil" Placeholder="Ingrese el Número la Unidad" />
+                                </FormItem>
+                            </AntDesign.Col>
+                            <AntDesign.Col Span="12">
+                                <FormItem Label="Encargado" Required>
+                                    <Select TItem="BomberoViweModel"
+                                            TItemValue="int"
+                                            DataSource="@ListaBomberos" @bind-Value="@vehiculoView.EncargadoId"
+                                            LabelName="@nameof(BomberoViweModel.NombreYApellido)"
+                                            ValueName="@nameof(BomberoViweModel.Id)"
+                                            Placeholder="Seleccione al Encargado"
+                                            AllowClear EnableSearch />
+                                </FormItem>
+
+                            </AntDesign.Col>
+                        </AntDesign.Row>
+
+                        <AntDesign.Row Gutter="16">
+                            <AntDesign.Col Span="8">
+                                <FormItem Label="Estado de la Unidad">
+                                    <Input Value="vehiculoView.Estado.GetDisplayName()" Placeholder="Seleccione el Estado de la Unidad" Disabled />
+                                </FormItem>
+                            </AntDesign.Col>
+                            <AntDesign.Col Span="8">
+                                <FormItem Label="Marca">
+                                    <Input Placeholder="Marca" @bind-Value="@vehiculoView.Marca" AllowClear />
+                                </FormItem>
+                            </AntDesign.Col>
+                            <AntDesign.Col Span="8">
+                                <FormItem Label="Año">
+                                    <AntDesign.InputNumber @bind-Value="vehiculoView.Año" Placeholder="Año" Min="1900" Max="@DateTime.Now.Year" Style="width: 100%;" AllowClear />
+                                </FormItem>
+                            </AntDesign.Col>
+                            <AntDesign.Col Span="8">
+                                <FormItem Label="Es una embarcación">
+                                    <Switch @bind-Checked="@EsEmbarcacion" />
+                                </FormItem>
+                            </AntDesign.Col>
+                        </AntDesign.Row>
+
+                        <FormItem Label="Observaciones">
+                            <TextArea Placeholder="Ingrese observaciones" @bind-Value="@vehiculoView.Observaciones" Rows="4" AllowClear />
+                        </FormItem>
+                    </AntDesign.Col>
+                </AntDesign.Row>
+            </div>
+
+            <!-- Información Profesional -->
+            <div class="card">
+                <div class="card-title">Información Profesional</div>
+
+                @if (TipoPersonal.ToLower() == "bombero" && personalView is BomberoViweModel bomberoView)
+                {
+                    <!-- Campos específicos para Bombero -->
+                    <AntDesign.Row Gutter="16">
+                        <AntDesign.Col Span="6">
+                            <FormItem Label="Número Legajo" Required>
+                                <Input @bind-Value="@bomberoView.NumeroLegajo" Placeholder="Ingrese número de legajo" />
+                            </FormItem>
+                        </AntDesign.Col>
+                        <AntDesign.Col Span="6">
+                            <FormItem Label="Dotación" Required>
+                                <EnumSelect TEnum="TipoDotaciones" @bind-Value="@bomberoView.Dotacion" />
+                            </FormItem>
+                        </AntDesign.Col>
+                        <AntDesign.Col Span="6">
+                            <FormItem Label="Grado">
+                                <EnumSelect TEnum="EscalafonJerarquico" @bind-Value="@bomberoView.Grado" AllowClear />
+                            </FormItem>
+                        </AntDesign.Col>
+                        <AntDesign.Col Span="6">
+                            <FormItem Label="Estado">
+                                <EnumSelect TEnum="EstadoBombero" @bind-Value="bomberoView.Estado" AllowClear />
+                            </FormItem>
+                        </AntDesign.Col>
+                    </AntDesign.Row>
+
+                    <AntDesign.Row Gutter="16">
+                        <AntDesign.Col Span="8">
+                            <FormItem Label="Fecha de Aceptación">
+                                <DatePicker @bind-Value="@bomberoView.FechaAceptacion"
+                                            Picker="@DatePickerType.Date"
+                                            Style="width: 100%;"
+                                            Placeholder="@("Seleccione fecha")"
+                                            AllowClear />
+                            </FormItem>
+                        </AntDesign.Col>
+                        <AntDesign.Col Span="8">
+                            <FormItem Label="Número IOMA">
+                                <Input @bind-Value="bomberoView.NumeroIoma" Placeholder="Ingrese número IOMA" />
+                            </FormItem>
+                        </AntDesign.Col>
+                    </AntDesign.Row>
+
+                    <AntDesign.Row Gutter="16">
+                        <AntDesign.Col Span="12">
+                            <FormItem Label="¿Es chofer?">
+                                <Switch @bind-Checked="bomberoView.EsChofer"></Switch>
+                                @if (bomberoView.EsChofer)
+                                {
+                                    <div class="conditional-field">
+                                        <FormItem Label="Fecha vencimiento del carnet">
+                                            <DatePicker @bind-Value="@bomberoView.VencimientoRegistro"
+                                                        Picker="@DatePickerType.Date"
+                                                        Style="width: 100%;"
+                                                        Placeholder="@("Seleccione fecha de vencimiento")"
+                                                        AllowClear />
+                                        </FormItem>
+                                    </div>
+                                }
+                            </FormItem>
+                        </AntDesign.Col>
+                    </AntDesign.Row>
+                }
+                else if (TipoPersonal.ToLower() == "comisiondirectiva" && personalView is ComisionDirectivaViewModel comisionDirectivaView)
+                {
+                    <!-- Campos específicos para Comisión Directiva -->
+                    <AntDesign.Row Gutter="16">
+                        <AntDesign.Col Span="6">
+                            <FormItem Label="Grado">
+                                <EnumSelect TEnum="GradoComisionDirectiva" @bind-Value="@comisionDirectivaView.Grado" AllowClear />
+                            </FormItem>
+                        </AntDesign.Col>
+                        <AntDesign.Col Span="6">
+                            <FormItem Label="Estado">
+                                <EnumSelect TEnum="EstadoComisionDirectiva" @bind-Value="@comisionDirectivaView.Estado" AllowClear />
+                            </FormItem>
+                        </AntDesign.Col>
+                    </AntDesign.Row>
+
+                    <AntDesign.Row Gutter="16">
+                        <AntDesign.Col Span="8">
+                            <FormItem Label="Fecha de Aceptación">
+                                <DatePicker @bind-Value="@comisionDirectivaView.FechaAceptacion"
+                                            Picker="@DatePickerType.Date"
+                                            Style="width: 100%;"
+                                            Placeholder="@("Seleccione fecha")"
+                                            AllowClear />
+                            </FormItem>
+                        </AntDesign.Col>
+                    </AntDesign.Row>
+                }
+                else if (TipoPersonal.ToLower() == "cobrador" && personalView is CobradorViewModel cobradorView)
+                {
+                    <!-- Campos específicos para Cobrador -->
+                    <AntDesign.Row Gutter="16">
+                        <AntDesign.Col Span="6">
+                            <FormItem Label="Estado">
+                                <EnumSelect TEnum="EstadoCobrador" @bind-Value="@cobradorView.Estado" AllowClear />
+                            </FormItem>
+                        </AntDesign.Col>
+                        <AntDesign.Col Span="6">
+                            <FormItem Label="Zonas asignadas">
+                                <EnumSelect Mode="SelectMode.Multiple" TEnum="Zona" @bind-Value="@cobradorView.ZonasAsignadas" AllowClear />
+                            </FormItem>
+                        </AntDesign.Col>
+                    </AntDesign.Row>
+                    <AntDesign.Row Gutter="16">
+                        <AntDesign.Col Span="8">
+                            <FormItem Label="Fecha de Aceptación">
+                                <DatePicker @bind-Value="@cobradorView.FechaAceptacion"
+                                            Picker="@DatePickerType.Date"
+                                            Style="width: 100%;"
+                                            Placeholder="@("Seleccione fecha")"
+                                            AllowClear />
+                            </FormItem>
+                        </AntDesign.Col>
+                    </AntDesign.Row>
+                }
+            </div>
+
+            <!-- Información Adicional (Solo para Bomberos) -->
+            @if (TipoPersonal.ToLower() == "bombero" && personalView is BomberoViweModel bomberoViweModel)
+            {
+                <div class="card">
+                    <div class="card-title">Información Adicional</div>
+                    <AntDesign.Row Gutter="16">
+                        <AntDesign.Col Span="6">
+                            <FormItem Label="Altura (cm)">
+                                <AntDesign.InputNumber @bind-Value="@bomberoViweModel.Altura" Style="width: 100%;" Placeholder="Ingrese altura" />
+                            </FormItem>
+                        </AntDesign.Col>
+                        <AntDesign.Col Span="6">
+                            <FormItem Label="Peso (kg)">
+                                <AntDesign.InputNumber @bind-Value="@bomberoViweModel.Peso" Style="width: 100%;" Placeholder="Ingrese peso" />
+                            </FormItem>
+                        </AntDesign.Col>
+                        <AntDesign.Col Span="6">
+                            <FormItem Label="Nivel de estudio">
+                                <Input @bind-Value="@bomberoViweModel.NivelEstudios" Placeholder="Ingrese nivel de estudios" />
+                            </FormItem>
+                        </AntDesign.Col>
+                        <AntDesign.Col Span="6">
+                            <FormItem Label="Profesión">
+                                <Input @bind-Value="@bomberoViweModel.Profesion" Placeholder="Ingrese profesión" />
+                            </FormItem>
+                        </AntDesign.Col>
+                    </AntDesign.Row>
+
+                    <FormItem Label="Observaciones">
+                        <TextArea @bind-Value="@bomberoViweModel.Observaciones" Placeholder="Ingrese observaciones" Rows="4" />
+                    </FormItem>
+                </div>
+            }
+
+            <!-- Información de Contacto (Común para todos) -->
+            <div class="card">
+                <div class="card-title">Información de Contacto</div>
+                <AntDesign.Row Gutter="16">
+                    <AntDesign.Col Span="6">
+                        <FormItem Label="Teléfono Celular">
+                            <Input @bind-Value="@personalView.TelefonoCel" Placeholder="Ingrese teléfono celular" />
+                        </FormItem>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="6">
+                        <FormItem Label="Teléfono Fijo">
+                            <Input @bind-Value="@personalView.TelefonoFijo" Placeholder="Ingrese teléfono fijo" />
+                        </FormItem>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="6">
+                        <FormItem Label="Teléfono Laboral">
+                            <Input @bind-Value="@personalView.TelefonoLaboral" Placeholder="Ingrese teléfono laboral" />
+                        </FormItem>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="6">
+                        <FormItem Label="Email">
+                            <Input @bind-Value="@personalView.Email" Placeholder="Ingrese email" />
+                        </FormItem>
+                    </AntDesign.Col>
+                </AntDesign.Row>
+            </div>
+
+            <!-- Botones de Acción -->
+            <div class="action-buttons">
+                <Button Type="@ButtonType.Default" OnClick="Cancelar">
+                    Cancelar
+                </Button>
+
+                <Button Type="@ButtonType.Primary" HtmlType="submit" Class="primary-button" OnClick="CargarVehiculoAsync">
+                    Registrar
+                </Button>
+
+            </div>
+        </Form>
+    }
+    else
+    {
+        <div>
+            <p>Error: No se ha inicializado correctamente el formulario.</p>
+        </div>
+    }
+</div>
+
+@code {
+    private UnidadViewModel vehiculoView { get; set; } = new(); // ViewModel de Unidad --> Padre de Embarcación y Movil
+
+    private ImageViewModel imageViewModel = new(); // ViewModel para manejar la imagen
+    private List<BomberoViweModel> ListaBomberos = new(); // Lista de ViewModels de Bomberos
+
+    public bool EsEmbarcacion = false;
+
+    private string? ImageUrlPreview => imageViewModel.Base64 != null
+        ? $"data:{imageViewModel.TipoImagen};base64,{imageViewModel.Base64}"
+        : null;
+
+    private class ImageViewModel
+    {
+        public string? Base64 { get; set; }
+        public string? TipoImagen { get; set; }
+        public string? NombreImagen { get; set; }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        try
+        {
+            // Cargamos los bomberos
+            var bomberos = await BomberoService.ObtenerTodosLosBomberosAsync();
+
+            // Los convertimos a view model
+            ListaBomberos = bomberos.ToBomberoViewModelList().ToList(); // Le ponemos ToList() para evitar problemas de serialización
+
+            // Reseteamos los formularios
+            imageViewModel = new();
+        }
+        catch (Exception e)
+        {
+            await message.ErrorAsync($"Error inesperado: {e.Message}");
+            Console.WriteLine(e.Message);
+            navigationManager.NavigateTo($"/unidades", true);
+        }
+    }
+
+    private async Task RemovePhoto()
+    {
+        imageViewModel.Base64 = null;
+        imageViewModel.TipoImagen = null;
+        imageViewModel.NombreImagen = null;
+
+        StateHasChanged();
+
+        await Task.CompletedTask;
+    }
+
+    private async void SubirFoto(InputFileChangeEventArgs e)
+    {
+        // Validar el tipo de archivo permitido
+        string[] allowedExtensions = { ".jpg", ".jpeg", ".png" };
+        string extension = Path.GetExtension(e.File.Name).ToLower();
+        if (!allowedExtensions.Contains(extension))
+        {
+            await message.ErrorAsync("Solo se permiten archivos JPG, JPEG o PNG");
+            return;
+        }
+
+        string imagenBase64 = await Base64Helper.StreamToBase64(e.File.OpenReadStream());
+
+        imageViewModel.Base64 = imagenBase64;
+        imageViewModel.TipoImagen = e.File.ContentType;
+        imageViewModel.NombreImagen = e.File.Name;
+
+        StateHasChanged();
+
+        await message.SuccessAsync("Imagen cargada exitosamente");
+    }
+
+    public Task Cancelar()
+    {
+        navigationManager.NavigateTo($"/unidades/", true);
+        return Task.CompletedTask;
+    }
+
+    private void OnFinish(EditContext editContext)
+    {
+        Console.WriteLine($"Success:{JsonSerializer.Serialize(vehiculoView)}");
+    }
+
+    private void OnFinishFailed(EditContext editContext)
+    {
+        Console.WriteLine($"Failed:{JsonSerializer.Serialize(vehiculoView)}");
+    }
+
+    private async Task CargarVehiculoAsync()
+    {
+        if (vehiculoView is null) return;
+
+        try
+        {
+            var encargado = await BomberoService.ObtenerBomberoPorIdAsync(vehiculoView.EncargadoId);
+
+            if (encargado is null)
+            {
+                await message.ErrorAsync("El bombero encargado no existe");
+                return;
+            }
+
+            var vehiculoExistente = await VehiculoSalidaService.ObtenerVehiculoSalidaPorNumeroMovilAsync(vehiculoView.NumeroMovil);
+
+            if (vehiculoExistente is not null)
+            {
+                await message.ErrorAsync("Existe un vehiculo con el mismo Nº Móvil");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(imageViewModel.Base64))
+                await message.WarningAsync("No se ingresó una foto del vehículo");
+
+
+            if (!EsEmbarcacion)
+            {
+                var movil = Convertir<Movil>(vehiculo);
+                MapearDatosMovil(movil);
+                await VehiculoSalidaService.AgregarVehiculoSalidaAsync(movil, imagen);
+            }
+            else
+            {
+                await VehiculoSalidaService.AgregarVehiculoSalidaAsync(vehiculo, imagen);
+            }
+
+            await message.SuccessAsync("Se agregó el móvil");
+
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            StateHasChanged();
+            var errorMsg = ex.InnerException?.Message ?? ex.Message;
+            await message.ErrorAsync("Error inesperado: " + errorMsg, 5);
+            Console.WriteLine(errorMsg);
+        }
+    }
+
+    // -- Clases (ViewModels) ---
+
+    public class UnidadViewModel
+    {
+        // --- Datos Generales ---
+
+        /// <summary>
+        /// Marca de la Unidad.
+        /// </summary>
+        public string? Marca { get; set; }
+
+        /// <summary>
+        /// Modelo de la Unidad.
+        /// </summary>
+        public string? Modelo { get; set; }
+
+        /// <summary>
+        /// Año de Fabricación de la Unidad.
+        /// </summary>
+        public int? Año { get; set; }
+
+        /// <summary>
+        /// Numero de Unidad.
+        /// </summary>
+        public string NumeroMovil { get; set; } = null!;
+
+        /// <summary>
+        /// Estado de la Unidad.
+        /// </summary>
+        public TipoEstadoMovil Estado { get; set; } = TipoEstadoMovil.Activo
+
+        /// <summary>
+        /// Id del Encargado de la Unidad.
+        /// </summary>
+        public int EncargadoId { get; set; }
+
+        /// <summary>
+        /// Observaciones de la Unidad. (Facha)
+        /// </summary>
+        public string? Observaciones { get; set; }
+
+        // --- Ficha Tecnica ---
+
+        /// <summary>
+        /// Tipo de Combustible de la Unidad.
+        /// </summary>
+        public string? Combustible { get; set; }
+
+        /// <summary>
+        /// Fecha del Ultimo service de la Unidad.
+        /// </summary>
+        public DateTime? FechaUltimoService { get; set; }
+
+        /// <summary>
+        /// Fecha del Proximo service.
+        /// </summary>
+        public DateTime? FechaProximoService { get; set; }
+    }
+
+    public class MovilViewModel : UnidadViewModel
+    {
+        // --- Datos Generales ---
+
+        // --- Ficha Tecnica ---
+
+
+        public string? NumeroMotor { get; set; }
+
+        public string? NumeroChasis { get; set; }
+        public string? ModeloBomba { get; set; }
+        public int? CantidadLitros { get; set; }
+        public string? TipoAceite { get; set; }
+        public string? MarcaAceite { get; set; }
+        public int? CantidadAceite { get; set; }
+        public string? ModeloFiltroAire { get; set; }
+        public string? MedidasCubiertas { get; set; }
+        public string? LibrasCubiertas { get; set; }
+        public TipoCajaVelocidades CajaVelocidades { get; set; }
+        public TipoTension TensionCElectrico { get; set; }
+        public TipoDireccionUnidades TipoDireccion { get; set; }
+        public string? MarcaBateria { get; set; }
+        public DateTime? FechaUltimoCambioBateria { get; set; }
+    }
+}
