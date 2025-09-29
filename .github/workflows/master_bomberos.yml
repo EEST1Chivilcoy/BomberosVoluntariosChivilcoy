@@ -5,8 +5,6 @@ on:
   push:
     branches:
       - master
-    tags:
-      - "break*"
   workflow_dispatch:
 
 env:
@@ -70,3 +68,61 @@ jobs:
           slot-name: "Production"
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E5412DC5FC7648B698D15A1D3A7910EF }}
           package: ./app
+
+  sync-branches:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Clonar repositorio
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🔄 Sincronizar ramas colaborativas con detección de conflictos
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
+          branches=("Oses-Emiliano" "Tobi" "fran" "Antonio")
+          conflicts_found=false
+          conflict_branches=()
+
+          for branch in "${branches[@]}"; do
+            echo "🔁 Actualizando $branch desde master"
+            git checkout $branch
+
+            if ! git merge origin/master --no-edit; then
+              echo "⚠️ Conflicto detectado en $branch"
+              echo "::warning file=.github/workflows/sync.yml,title=Conflicto en $branch::Se detectaron conflictos al intentar mergear master en $branch. Se requiere resolución manual."
+              
+              # Abortar el merge
+              git merge --abort
+              
+              conflicts_found=true
+              conflict_branches+=("$branch")
+            else
+              echo "✅ $branch actualizada exitosamente"
+              git push origin $branch
+            fi
+          done
+
+          if [ "$conflicts_found" = true ]; then
+            echo ""
+            echo "❌ Resumen: Se encontraron conflictos en las siguientes ramas:"
+            printf '%s\n' "${conflict_branches[@]}"
+            echo ""
+            echo "Por favor, resuelve los conflictos manualmente ejecutando:"
+            echo "  git checkout <rama>"
+            echo "  git merge master"
+            echo "  # Resolver conflictos"
+            echo "  git commit"
+            echo "  git push"
+            
+            # Crear un warning general
+            echo "::warning title=Sincronización incompleta::Se encontraron conflictos en ${#conflict_branches[@]} rama(s). Revisa los warnings anteriores para más detalles."
+            
+            # Fallar el workflow para que sea visible
+            exit 1
+          fi
+
+          echo "✅ Todas las ramas se sincronizaron correctamente"
