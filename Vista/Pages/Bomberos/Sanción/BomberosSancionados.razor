@@ -480,11 +480,9 @@
 @code {
     List<SancionViewModel> sancionesVM = new();
 
-    // Variables
     BomberosDbContext Context { get; set; }
     bool _visibleCargar = false;
 
-    // View Model
     public class SancionViewModel
     {
         public DateOnly FechaDesde { get; set; }
@@ -501,7 +499,6 @@
         public int DiasSancion => (FechaHasta.ToDateTime(TimeOnly.MinValue) - FechaDesde.ToDateTime(TimeOnly.MinValue)).Days + 1;
     }
 
-    // Init y Carga de datos
 
     public async void OnClose()
     {

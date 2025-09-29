@@ -239,6 +239,150 @@
         background: var(--apr-success-dark) !important;
         border-color: var(--apr-success-dark) !important;
     }
+
+    /* Estilos para el modal de rechazo - actualizados para coincidir con sanciones */
+    .modal-rechazar-licencia .ant-modal-content {
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        border: 2px solid #732D2D;
+        margin-top: -50px;
+        margin-bottom: 0px;
+    }
+
+    .modal-rechazar-licencia .ant-modal-header {
+        background-color: #A63333;
+        border-radius: 10px 10px 0 0;
+        padding: 16px 24px;
+    }
+
+    .modal-rechazar-licencia .ant-modal-title {
+        color: white !important;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .modal-rechazar-licencia .modal-rechazo-content {
+        padding: 24px;
+    }
+
+    .modal-rechazar-licencia .licencia-info-card {
+        background: rgba(198, 40, 40, 0.05);
+        border: 1px solid rgba(198, 40, 40, 0.2);
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 20px;
+    }
+
+    .modal-rechazar-licencia .licencia-info-title {
+        font-weight: 700;
+        color: var(--apr-error-color);
+        margin-bottom: 16px;
+        font-size: 1.1rem;
+    }
+
+    .modal-rechazar-licencia .licencia-info-item {
+        background: white;
+        border: 1px solid rgba(198, 40, 40, 0.15);
+        border-radius: 6px;
+        padding: 12px;
+        margin-bottom: 8px;
+        transition: all 0.3s ease;
+    }
+
+        .modal-rechazar-licencia .licencia-info-item:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transform: translateY(-1px);
+            border: 2px solid #A63333;
+        }
+
+    .modal-rechazar-licencia .licencia-info-label {
+        font-size: 0.8rem;
+        color: #666;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 4px;
+        display: block;
+    }
+
+    .modal-rechazar-licencia .licencia-info-value {
+        font-size: 0.95rem;
+        color: #333;
+        font-weight: 500;
+        word-break: break-word;
+    }
+
+    .modal-rechazar-licencia .reason-form-item {
+        margin-bottom: 16px;
+    }
+
+    .modal-rechazar-licencia .reason-form-item .ant-form-item-label > label {
+        font-weight: 600;
+        color: var(--apr-error-color);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 1rem;
+    }
+
+    .modal-rechazar-licencia .reason-textarea {
+        border-radius: 8px !important;
+        border: 2px solid #d9d9d9 !important;
+        transition: all 0.3s ease !important;
+    }
+
+    .modal-rechazar-licencia .reason-textarea:focus,
+    .modal-rechazar-licencia .reason-textarea:hover {
+        border-color: #A63333 !important;
+        box-shadow: 0 0 0 2px rgba(166, 51, 51, 0.1) !important;
+    }
+
+    .modal-rechazar-licencia .button-row-right {
+        display: flex !important;
+        width: 100% !important;
+        margin-top: 20px !important;
+    }
+
+    .modal-rechazar-licencia .button-container-right {
+        display: flex !important;
+        gap: 12px !important;
+        margin-left: auto !important;
+    }
+
+    .modal-rechazar-licencia .btn-confirm-reject {
+        background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
+        border: none !important;
+        color: white !important;
+        font-weight: 600;
+        padding: 0 24px !important;
+        height: 40px !important;
+        border-radius: 8px !important;
+        box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+    }
+
+    .modal-rechazar-licencia .btn-confirm-reject:hover {
+        background: linear-gradient(135deg, #438E46 0%, #4CAF50 100%) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
+    }
+
+    .modal-rechazar-licencia .btn-cancel-reject {
+        background: #f5f5f5 !important;
+        border: 1px solid #d9d9d9 !important;
+        color: #666 !important;
+        font-weight: 500;
+        padding: 0 20px !important;
+        height: 40px !important;
+        border-radius: 8px !important;
+    }
+
+    .modal-rechazar-licencia .btn-cancel-reject:hover {
+        background: #e6f7ff !important;
+        border-color: #1890ff !important;
+        color: #1890ff !important;
+    }
 </style>
 
 <div class="licencias-aprobar">
@@ -369,15 +513,9 @@
                                     </Tooltip>
 
                                     <Tooltip Title="Rechazar licencia">
-                                        <Popconfirm Title="¿Confirma que desea rechazar esta licencia?"
-                                                    OnConfirm="() => RechazarLicencia(licencia.Id)"
-                                                    OkText="❌ Rechazar"
-                                                    CancelText="↩️ Cancelar"
-                                                    Icon="@IconType.Outline.CloseCircle">
-                                            <div class="reject-button">
-                                                <Icon Type="close" />
-                                            </div>
-                                        </Popconfirm>
+                                        <div class="reject-button" @onclick="() => MostrarModalRechazo(licencia)">
+                                            <Icon Type="close" />
+                                        </div>
                                     </Tooltip>
                                 </div>
                             </Template>
@@ -388,6 +526,101 @@
         </div>
     </div>
 </div>
+
+@* Modal para rechazar licencia con motivo *@
+<Modal @bind-Visible="_modalRechazoVisible"
+       Title="❌ Rechazar Licencia"
+       Width="@("90%")"
+       Style="max-width: 900px;"
+       Footer="null"
+       DestroyOnClose
+       WrapClassName="modal-rechazar-licencia">
+    
+    <div class="modal-rechazo-content">
+        @if (_licenciaParaRechazar != null)
+        {
+            <div class="licencia-info-card">
+                <div class="licencia-info-title">
+                    📋 Información de la Licencia a Rechazar
+                </div>
+                
+                <Row Gutter="12">
+                    <AntDesign.Col Xs="24" Sm="12" Md="8">
+                        <div class="licencia-info-item">
+                            <span class="licencia-info-label">👤 Bombero</span>
+                            <div class="licencia-info-value">@_licenciaParaRechazar.ApellidoYNombre</div>
+                        </div>
+                    </AntDesign.Col>
+
+                    <AntDesign.Col Xs="12" Sm="12" Md="8">
+                        <div class="licencia-info-item">
+                            <span class="licencia-info-label">📋 Legajo</span>
+                            <div class="licencia-info-value">@_licenciaParaRechazar.NumeroLegajo</div>
+                        </div>
+                    </AntDesign.Col>
+
+                    <AntDesign.Col Xs="24" Sm="12" Md="8">
+                        <div class="licencia-info-item">
+                            <span class="licencia-info-label">🏷️ Tipo</span>
+                            <div class="licencia-info-value">@_licenciaParaRechazar.TipoLicencia?.GetDisplayName()</div>
+                        </div>
+                    </AntDesign.Col>
+
+                    <AntDesign.Col Xs="12" Sm="12" Md="8">
+                        <div class="licencia-info-item">
+                            <span class="licencia-info-label">⏱️ Duración</span>
+                            <div class="licencia-info-value">@_licenciaParaRechazar.DuracionEnDias días</div>
+                        </div>
+                    </AntDesign.Col>
+
+                    <AntDesign.Col Xs="12" Sm="12" Md="8">
+                        <div class="licencia-info-item">
+                            <span class="licencia-info-label">📅 Desde</span>
+                            <div class="licencia-info-value">@_licenciaParaRechazar.Desde.ToString("dd/MM/yyyy")</div>
+                        </div>
+                    </AntDesign.Col>
+
+                    <AntDesign.Col Xs="12" Sm="12" Md="8">
+                        <div class="licencia-info-item">
+                            <span class="licencia-info-label">📅 Hasta</span>
+                            <div class="licencia-info-value">@_licenciaParaRechazar.Hasta.ToString("dd/MM/yyyy")</div>
+                        </div>
+                    </AntDesign.Col>
+                </Row>
+            </div>
+
+            <Form Model="_motivoRechazo" Layout="FormLayout.Vertical">
+                <FormItem Label="📝 Motivo del Rechazo" Required Class="reason-form-item">
+                    <TextArea @bind-Value="_motivoRechazo"
+                              Placeholder="Ingrese el motivo detallado por el cual se rechaza esta licencia..."
+                              Rows="4"
+                              ShowCounts
+                              MaxLength="500"
+                              Class="reason-textarea" />
+                    <div style="margin-top: 8px; color: #666; font-size: 0.9rem;">
+                        💡 Proporcione una explicación clara y detallada para que el bombero comprenda la razón del rechazo.
+                    </div>
+                </FormItem>
+            </Form>
+
+            <Row Gutter="12" Class="button-row-right">
+                <div class="button-container-right">
+                    <Button Class="btn-confirm-reject"
+                            OnClick="ConfirmarRechazo"
+                            Disabled="@(string.IsNullOrWhiteSpace(_motivoRechazo))"
+                            Loading="_procesandoRechazo">
+                        ✅ Confirmar Rechazo
+                    </Button>
+
+                    <Button Class="btn-cancel-reject"
+                            OnClick="CerrarModalRechazo">
+                        ↩️ Cancelar
+                    </Button>
+                </div>
+            </Row>
+        }
+    </div>
+</Modal>
 
 @code {
     [Parameter, EditorRequired] public EventCallback OnCompleted { get; set; }
@@ -400,6 +633,12 @@
 
     // Estado de carga
     private bool _loading = false;
+
+    // Variables para el modal de rechazo
+    private bool _modalRechazoVisible = false;
+    private LicenciaViewModel? _licenciaParaRechazar;
+    private string _motivoRechazo = string.Empty;
+    private bool _procesandoRechazo = false;
 
     // Método que se ejecuta al inicializar el componente
     protected override async Task OnInitializedAsync()
@@ -491,21 +730,78 @@
         }
     }
 
-    // Rechaza la licencia que esta en pendiente
-    private async Task RechazarLicencia(int IdLicencia)
+    // Muestra el modal para ingresar el motivo de rechazo
+    private void MostrarModalRechazo(LicenciaViewModel licencia)
     {
+        _licenciaParaRechazar = licencia;
+        _motivoRechazo = string.Empty;
+        _modalRechazoVisible = true;
+    }
+
+    // Cierra el modal de rechazo
+    private void CerrarModalRechazo()
+    {
+        _modalRechazoVisible = false;
+        _licenciaParaRechazar = null;
+        _motivoRechazo = string.Empty;
+    }
+
+    // Confirma el rechazo de la licencia con motivo
+    private async Task ConfirmarRechazo()
+    {
+        if (_licenciaParaRechazar == null || string.IsNullOrWhiteSpace(_motivoRechazo))
+        {
+            await message.ErrorAsync("⚠️ Debe ingresar un motivo para rechazar la licencia.");
+            return;
+        }
+
+        _procesandoRechazo = true;
+        StateHasChanged();
+
         try
         {
-            // Llamamos al servicio para rechazar la licencia
-            await LicenciaService.CambiarEstadoLicencia(IdLicencia, TipoEstadoLicencia.Rechazada);
+            // Primero actualizamos la descripción con el motivo del rechazo
+            var licenciaCompleta = LicenciasVM_SinFiltro.FirstOrDefault(l => l.Id == _licenciaParaRechazar.Id);
+            if (licenciaCompleta != null)
+            {
+                // Agregamos el motivo del rechazo a la descripción existente
+                string descripcionActualizada = string.IsNullOrEmpty(licenciaCompleta.Descripcion) 
+                    ? $"MOTIVO DE RECHAZO: {_motivoRechazo}"
+                    : $"{licenciaCompleta.Descripcion}\n\nMOTIVO DE RECHAZO: {_motivoRechazo}";
+                
+                // Aquí deberías llamar a un método para actualizar la descripción si existe
+                // await LicenciaService.ActualizarDescripcionLicencia(_licenciaParaRechazar.Id, descripcionActualizada);
+            }
 
+            // Llamamos al servicio para rechazar la licencia (método con 2 parámetros)
+            await LicenciaService.CambiarEstadoLicencia(_licenciaParaRechazar.Id, TipoEstadoLicencia.Rechazada);
+
+            // Cerramos el modal
+            CerrarModalRechazo();
+            
             await Init();
-            await message.WarningAsync("⚠️ Licencia rechazada.");
+            await message.WarningAsync($"⚠️ Licencia de {_licenciaParaRechazar.ApellidoYNombre} rechazada correctamente.");
             await OnCompleted.InvokeAsync(); // Notificamos que se completó la acción
         }
         catch (Exception ex)
         {
             await message.ErrorAsync($"❌ Error al rechazar la licencia: {ex.Message}");
+        }
+        finally
+        {
+            _procesandoRechazo = false;
+            StateHasChanged();
+        }
+    }
+
+    // Rechaza la licencia que esta en pendiente (método obsoleto - mantenido por compatibilidad)
+    private async Task RechazarLicencia(int IdLicencia)
+    {
+        // Este método ya no se usa directamente, pero se mantiene por si acaso
+        var licencia = LicenciasVM_PendientesDeAprobacion.FirstOrDefault(l => l.Id == IdLicencia);
+        if (licencia != null)
+        {
+            MostrarModalRechazo(licencia);
         }
     }
 }

@@ -37,7 +37,7 @@ namespace Vista.Data.Models.Salidas.Componentes
         /// Fuerza interviniente asociada a la salida.
         /// </summary>
         [ForeignKey(nameof(FuerzaIntervinienteId))]
-        public FuerzaInterviniente FuerzaInterviniente { get; set; } = null!;
+        public FuerzaInterviniente Fuerzainterviniente { get; set; } = null!;
 
         // Relación con la Salida
 

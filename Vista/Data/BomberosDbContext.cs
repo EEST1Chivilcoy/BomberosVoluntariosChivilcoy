@@ -380,6 +380,25 @@ namespace Vista.Data
 
             // Enum Conversiones a INT (Enteros)
 
+            modelBuilder
+                .Entity<Bombero>()
+                .Property(b => b.Grado)
+                .HasConversion<int>();
+
+            // Licencia - Enum TipoLicencia
+
+            modelBuilder
+                .Entity<Licencia>()
+                .Property(p => p.TipoLicencia)
+                .HasConversion<int>();
+
+            // Sancion - Enum AreaSancion
+
+            modelBuilder
+                .Entity<Sancion>()
+                .Property(S => S.SacionArea)
+                .HasConversion<int>();
+
             // Cobrador - Enum ZonasAsignadas
 
             modelBuilder
@@ -488,21 +507,11 @@ namespace Vista.Data
                .HasMaxLength(255);
 
             modelBuilder
-                .Entity<Bombero>()
-                .Property(b => b.Grado)
-                .HasConversion<string>()
-                .HasMaxLength(255);
-
-            modelBuilder
                 .Entity<Licencia>()
                 .Property(p => p.EstadoLicencia)
                 .HasConversion<string>()
                 .HasMaxLength(255);
-            modelBuilder
-                .Entity<Licencia>()
-                .Property(p => p.TipoLicencia)
-                .HasConversion<string>()
-                .HasMaxLength(255);
+
             modelBuilder
                 .Entity<Bombero>()
                 .Property(b => b.Dotacion)
@@ -610,13 +619,6 @@ namespace Vista.Data
                 .Property(S => S.TipoSancion)
                 .HasConversion<string>()
                 .HasMaxLength(255);
-
-            modelBuilder
-                .Entity<Sancion>()
-                .Property(S => S.SacionArea)
-                .HasConversion<string>()
-                .HasMaxLength(255);
-
 
             modelBuilder
                 .Entity<IncendioEstablecimientoPublico>()

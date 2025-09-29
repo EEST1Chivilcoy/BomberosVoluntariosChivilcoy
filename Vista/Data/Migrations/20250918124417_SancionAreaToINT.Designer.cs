@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Vista.Data;
 
@@ -11,9 +12,11 @@ using Vista.Data;
 namespace Vista.Data.Migrations
 {
     [DbContext(typeof(BomberosDbContext))]
-    partial class BomberosDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250918124417_SancionAreaToINT")]
+    partial class SancionAreaToINT
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -577,8 +580,10 @@ namespace Vista.Data.Migrations
                     b.Property<int>("PersonalId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TipoLicencia")
-                        .HasColumnType("int");
+                    b.Property<string>("TipoLicencia")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("LicenciaId");
 
@@ -1565,8 +1570,10 @@ namespace Vista.Data.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
-                    b.Property<int>("Grado")
-                        .HasColumnType("int");
+                    b.Property<string>("Grado")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("NivelEstudios")
                         .HasMaxLength(255)
@@ -2220,19 +2227,19 @@ namespace Vista.Data.Migrations
 
             modelBuilder.Entity("Vista.Data.Models.Salidas.Componentes.FuerzaInterviniente_Salida", b =>
                 {
-                    b.HasOne("Vista.Data.Models.Grupos.FuerzasIntervinientes.FuerzaInterviniente", "Fuerzainterviniente")
+                    b.HasOne("Vista.Data.Models.Grupos.FuerzasIntervinientes.FuerzaInterviniente", "FuerzaInterviniente")
                         .WithMany()
                         .HasForeignKey("FuerzaIntervinienteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Vista.Data.Models.Salidas.Planillas.Salida", "Salida")
-                        .WithMany("FuerzasIntervinientes")
+                        .WithMany()
                         .HasForeignKey("SalidaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Fuerzainterviniente");
+                    b.Navigation("FuerzaInterviniente");
 
                     b.Navigation("Salida");
                 });
@@ -2456,8 +2463,6 @@ namespace Vista.Data.Migrations
                     b.Navigation("CuerpoParticipante");
 
                     b.Navigation("Damnificados");
-
-                    b.Navigation("FuerzasIntervinientes");
 
                     b.Navigation("Moviles");
                 });

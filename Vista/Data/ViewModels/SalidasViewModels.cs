@@ -5,6 +5,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Vista.Data.Enums.Salidas;
 using Vista.Data.Models.Personas;
 using Vista.DTOs.Nominatim;
+using Vista.Data.Models.Grupos.FuerzasIntervinientes;
+using Vista.Data.ViewModels.Personal;
 
 namespace Vista.Data.ViewModels
 {
@@ -93,6 +95,11 @@ namespace Vista.Data.ViewModels
         public Guardia GuardiaSelecionada { get; set; }
 
         /// <summary>
+        /// Fuerzas intervinientes que participaron en la salida.
+        /// </summary>
+        public IEnumerable<SimpleFuerzaViewModel> FuerzasIntervinientesParticipantes { get; set; } = new List<SimpleFuerzaViewModel>();
+
+        /// <summary>
         /// Descripción del incidente o motivo de la salida.
         /// </summary>
         [Required, StringLength(255)]
@@ -102,7 +109,12 @@ namespace Vista.Data.ViewModels
         /// Nombre de la calle o ruta donde ocurrió el incidente.
         /// </summary>
         [StringLength(255)]
-        public string CalleORuta { get; set; }
+        public string? CalleORuta { get; set; }
+
+        /// <summary>
+        /// Altura o kilómetro donde ocurrió el incidente.
+        /// </summary>
+        public int? AlturaOKm { get; set; }
 
         // Datos por si es en un edificio. (Opcional) (Apartamento, Piso, etc.)
 
@@ -196,15 +208,20 @@ namespace Vista.Data.ViewModels
         /// </summary>
         public string? ApellidoReceptor { get; set; }
 
-        public List<Damnificado_Salida>? Damnificados { get; set; }
+        // Sección de Datos Adicionales.
+
+        public List<FuerzaIntervinienteViewModel> FuerzasIntervinientes { get; set; } = new();
+
+        public List<Damnificado_Salida> Damnificados { get; set; } = new();
 
         //datos del seguro 
         public string? CompaniaAseguradora { get; set; }
         public string? NumeroPoliza { get; set; }
         public DateTime? FechaVencimineto { get; set; }
 
-        public List<Movil_Salida> Moviles { get; set; }
-        public List<BomberoSalida> CuerpoParticipante { get; set; }
+        public List<Movil_Salida> Moviles { get; set; } = new();
+        public List<BomberoSalida> CuerpoParticipante { get; set; } = new();
+
         //Bombero encargado
         public string NombreEncargado { get; set; }
         public string ApellidoEncargado { get; set; }

@@ -254,8 +254,27 @@
     }
 
     .comunicaciones-abm .status-activo {
-        background: var(--abm-approved-light) !important;
-        color: var(--abm-approved-color) !important;
+        background: #E8F5E8 !important;
+        color: #2E7D32 !important;
+        border: 1px solid #4CAF50 !important;
+    }
+
+    .comunicaciones-abm .status-stock {
+        background: #E3F2FD !important;
+        color: #1565C0 !important;
+        border: 1px solid #2196F3 !important;
+    }
+
+    .comunicaciones-abm .status-baja {
+        background: #FFEBEE !important;
+        color: #C62828 !important;
+        border: 1px solid #F44336 !important;
+    }
+
+    .comunicaciones-abm .status-reparacion {
+        background: #FFFDE7 !important;
+        color: #F57F17 !important;
+        border: 1px solid #FFEB3B !important;
     }
 
     .comunicaciones-abm .status-inactivo {
@@ -355,41 +374,6 @@
                                         Sortable
                                         Width="150px" />
 
-                        <PropertyColumn Title="🔢 N° Serie"
-                                        Property="c => c.NroSerie"
-                                        Sortable
-                                        Width="150px" />
-
-                        <PropertyColumn Title="📊 Estado"
-                                        Property="c => c.Estado"
-                                        Sortable
-                                        Width="120px"
-                                        Filters="DiscriminadorFilter"
-                                        OnFilter="((value,name)=>Enum.GetName(typeof(TipoEstadoHandie), name).StartsWith(Enum.GetName(typeof(TipoEstadoHandie), value)))">
-                            <Template>
-                                @{
-                                    string statusClass = comunicacion.Estado == TipoEstadoHandie.Activo ? "status-activo" : "status-inactivo";
-                                    string icon = comunicacion.Estado == TipoEstadoHandie.Activo ? "check-circle" : "close-circle";
-                                }
-                                <Space>
-                                    <Icon Type="@icon" />
-                                    <span class="status-badge @statusClass">
-                                        @comunicacion.Estado.ToString()
-                                    </span>
-                                </Space>
-                            </Template>
-                        </PropertyColumn>
-
-                        <PropertyColumn Title="👤 Nombre"
-                                        Property="c => c.Nombre"
-                                        Sortable
-                                        Width="150px" />
-
-                        <PropertyColumn Title="👤 Apellido"
-                                        Property="c => c.Apellido"
-                                        Sortable
-                                        Width="150px" />
-
                         <PropertyColumn Title="📋 N° Legajo"
                                         Property="c => c.NroLegajo"
                                         Sortable
@@ -399,6 +383,45 @@
                                         Property="c => c.NumeroMovil"
                                         Sortable
                                         Width="120px" />
+
+                        <PropertyColumn Title="📊 Estado"
+                                        Property="c => c.Estado"
+                                        Sortable
+                                        Width="120px"
+                                        Filters="DiscriminadorFilter"
+                                        OnFilter="((value,name)=>Enum.GetName(typeof(TipoEstadoHandie), name).StartsWith(Enum.GetName(typeof(TipoEstadoHandie), value)))">
+                            <Template>
+                                @{
+                                    string statusClass = "";
+                                    string icon = "";
+                                    
+                                    switch (comunicacion.Estado)
+                                    {
+                                        case TipoEstadoHandie.Activo:
+                                            statusClass = "status-activo";
+                                            break;
+                                        case TipoEstadoHandie.Stock:
+                                            statusClass = "status-stock";
+                                            break;
+                                        case TipoEstadoHandie.Baja:
+                                            statusClass = "status-baja";
+                                            break;
+                                        case TipoEstadoHandie.Reparacion:
+                                            statusClass = "status-reparacion";
+                                            break;
+                                        default:
+                                            statusClass = "status-inactivo";
+                                            break;
+                                    }
+                                }
+                                <Space>
+                                    <Icon Type="@icon" />
+                                    <span class="status-badge @statusClass">
+                                        @comunicacion.Estado.ToString()
+                                    </span>
+                                </Space>
+                            </Template>
+                        </PropertyColumn>
 
                         <ActionColumn Title="⚙️ Acciones"
                                       Width="180px"

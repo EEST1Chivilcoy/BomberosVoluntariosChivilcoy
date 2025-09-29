@@ -18,92 +18,119 @@
         --fuerzas-accent-color: #FFD54F;
     }
 
-    .fuerzas-abm .fuerzas-container {
-        padding: 12px !important;
-        min-height: 100vh !important;
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;
-    }
+        .fuerzas-abm .fuerzas-container {
+            padding: 12px !important;
+            min-height: 100vh !important;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;
+        }
 
-    .fuerzas-abm .main-card {
-        background: rgba(255, 255, 255, 0.95) !important;
-        backdrop-filter: blur(10px) !important;
-        border-radius: 16px !important;
-        box-shadow: 0 8px 32px rgba(166, 51, 51, 0.1), 0 4px 16px rgba(0, 0, 0, 0.05) !important;
-        border: 1px solid rgba(255, 255, 255, 0.2) !important;
-        overflow: hidden !important;
-    }
+        .fuerzas-abm .main-card {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(10px) !important;
+            border-radius: 16px !important;
+            box-shadow: 0 8px 32px rgba(166, 51, 51, 0.1), 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            overflow: hidden !important;
+        }
 
-    .fuerzas-abm .header-section {
-        background: linear-gradient(135deg, var(--fuerzas-primary-color) 0%, var(--fuerzas-primary-dark) 100%) !important;
-        color: white !important;
-        padding: 28px !important;
-        position: relative !important;
-        overflow: hidden !important;
-        display: flex !important;
-        justify-content: space-between !important;
-        align-items: center !important;
-        flex-wrap: wrap;
-    }
+        .fuerzas-abm .header-section {
+            background: linear-gradient(135deg, var(--fuerzas-primary-color) 0%, var(--fuerzas-primary-dark) 100%) !important;
+            color: white !important;
+            padding: 28px !important;
+            position: relative !important;
+            overflow: hidden !important;
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            flex-wrap: wrap;
+        }
 
-    .fuerzas-abm .header-section .lava-bubbles {
-        position: absolute;
-        top: 0; left: 0; width: 100%; height: 100%;
-        pointer-events: none;
-        z-index: 1;
-        overflow: hidden;
-    }
-    .fuerzas-abm .header-section .lava-bubble {
-        position: absolute;
-        border-radius: 50%;
-        opacity: 0.45;
-        background: radial-gradient(circle at 60% 40%, #FFD54F 0%, #F9A825 80%, transparent 100%);
-        animation: lava-bubble-move 8s linear infinite;
-        filter: blur(1.5px);
-        mix-blend-mode: lighten;
-    }
-    .fuerzas-abm .header-section .lava-bubble.b1 {
-        left: 10%; width: 60px; height: 60px; bottom: -70px;
-        animation-delay: 0s;
-        animation-duration: 7.5s;
-    }
-    .fuerzas-abm .header-section .lava-bubble.b2 {
-        left: 35%; width: 90px; height: 90px; bottom: -100px;
-        animation-delay: 2s;
-        animation-duration: 9s;
-        background: radial-gradient(circle at 60% 40%, #FFEB3B 0%, #FFD54F 80%, transparent 100%);
-    }
-    .fuerzas-abm .header-section .lava-bubble.b3 {
-        left: 65%; width: 50px; height: 50px; bottom: -60px;
-        animation-delay: 1.5s;
-        animation-duration: 6.5s;
-        background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #FFD54F 80%, transparent 100%);
-    }
-    .fuerzas-abm .header-section .lava-bubble.b4 {
-        left: 80%; width: 70px; height: 70px; bottom: -80px;
-        animation-delay: 3.2s;
-        animation-duration: 8.5s;
-        background: radial-gradient(circle at 60% 40%, #F9A825 0%, #FFD54F 80%, transparent 100%);
-    }
-    .fuerzas-abm .header-section .lava-bubble.b5 {
-        left: 55%; width: 40px; height: 40px; bottom: -50px;
-        animation-delay: 5s;
-        animation-duration: 7.2s;
-        background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #F9A825 80%, transparent 100%);
-    }
+            .fuerzas-abm .header-section .lava-bubbles {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                z-index: 1;
+                overflow: hidden;
+            }
+
+            .fuerzas-abm .header-section .lava-bubble {
+                position: absolute;
+                border-radius: 50%;
+                opacity: 0.45;
+                background: radial-gradient(circle at 60% 40%, #FFD54F 0%, #F9A825 80%, transparent 100%);
+                animation: lava-bubble-move 8s linear infinite;
+                filter: blur(1.5px);
+                mix-blend-mode: lighten;
+            }
+
+                .fuerzas-abm .header-section .lava-bubble.b1 {
+                    left: 10%;
+                    width: 60px;
+                    height: 60px;
+                    bottom: -70px;
+                    animation-delay: 0s;
+                    animation-duration: 7.5s;
+                }
+
+                .fuerzas-abm .header-section .lava-bubble.b2 {
+                    left: 35%;
+                    width: 90px;
+                    height: 90px;
+                    bottom: -100px;
+                    animation-delay: 2s;
+                    animation-duration: 9s;
+                    background: radial-gradient(circle at 60% 40%, #FFEB3B 0%, #FFD54F 80%, transparent 100%);
+                }
+
+                .fuerzas-abm .header-section .lava-bubble.b3 {
+                    left: 65%;
+                    width: 50px;
+                    height: 50px;
+                    bottom: -60px;
+                    animation-delay: 1.5s;
+                    animation-duration: 6.5s;
+                    background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #FFD54F 80%, transparent 100%);
+                }
+
+                .fuerzas-abm .header-section .lava-bubble.b4 {
+                    left: 80%;
+                    width: 70px;
+                    height: 70px;
+                    bottom: -80px;
+                    animation-delay: 3.2s;
+                    animation-duration: 8.5s;
+                    background: radial-gradient(circle at 60% 40%, #F9A825 0%, #FFD54F 80%, transparent 100%);
+                }
+
+                .fuerzas-abm .header-section .lava-bubble.b5 {
+                    left: 55%;
+                    width: 40px;
+                    height: 40px;
+                    bottom: -50px;
+                    animation-delay: 5s;
+                    animation-duration: 7.2s;
+                    background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #F9A825 80%, transparent 100%);
+                }
 
     @@keyframes lava-bubble-move {
         0% {
             transform: translateY(0) scale(1) rotate(0deg);
             opacity: 0.45;
         }
+
         60% {
             opacity: 0.7;
             filter: blur(2.5px);
         }
+
         80% {
             transform: translateY(-220px) scale(1.15) rotate(10deg);
             opacity: 0.6;
         }
+
         100% {
             transform: translateY(-320px) scale(0.95) rotate(-8deg);
             opacity: 0;
@@ -123,15 +150,23 @@
         position: relative !important;
         z-index: 2 !important;
     }
+
     .fuerzas-abm .title-icon {
         color: var(--fuerzas-accent-color) !important;
         font-size: 2rem !important;
         filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25)) !important;
     }
+
     @@keyframes text-glow {
-        0%, 100% { text-shadow: 0 0 5px #F9A825, 0 0 10px #FFD54F; }
-        50% { text-shadow: 0 0 12px #F9A825, 0 0 22px #FFD54F; }
+        0%, 100% {
+            text-shadow: 0 0 5px #F9A825, 0 0 10px #FFD54F;
+        }
+
+        50% {
+            text-shadow: 0 0 12px #F9A825, 0 0 22px #FFD54F;
+        }
     }
+
     .fuerzas-abm .title-container {
         position: relative !important;
         z-index: 2 !important;
@@ -171,10 +206,11 @@
         border-radius: 8px !important;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
-    .fuerzas-abm .add-button:hover {
-        transform: translateY(-2px) !important;
-        box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4) !important;
-    }
+
+        .fuerzas-abm .add-button:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4) !important;
+        }
 
     .fuerzas-abm .ant-table-thead .ant-table-cell {
         background-color: #A63333 !important;
@@ -188,11 +224,11 @@
         padding: 16px !important;
     }
 
-        .fuerzas-abm .fade-in {
+    .fuerzas-abm .fade-in {
         animation: abm-fadeIn 0.5s ease-in-out !important;
     }
 
-@@keyframes abm-fadeIn {
+    @@keyframes abm-fadeIn {
         from {
             opacity: 0;
             transform: translateY(20px);
@@ -218,44 +254,50 @@
     }
 
     .modal-crear-fuerza .ant-modal-header {
-            background-color: #A63333;
-            padding: 16px 24px;
-
+        background-color: #A63333;
+        padding: 16px 24px;
     }
+
     .modal-crear-fuerza-content {
         padding: 24px;
     }
+
     .modal-crear-fuerza-form-item {
         margin-bottom: 20px;
         position: relative;
         padding-left: 10px;
     }
-    .modal-crear-fuerza-form-item::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        height: 100%;
-        width: 3px;
-        border-radius: 5px;
-    }
-    .modal-crear-fuerza-form-item .ant-form-item-label > label {
-        font-weight: 600;
-        color: #434343;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 14px;
-        transition: color 0.3s ease;
-    }
-    .modal-crear-fuerza-form-item .ant-form-item-label > label:hover {
-        color: #FFD700;
-    }
+
+        .modal-crear-fuerza-form-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            border-radius: 5px;
+        }
+
+        .modal-crear-fuerza-form-item .ant-form-item-label > label {
+            font-weight: 600;
+            color: #434343;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+            .modal-crear-fuerza-form-item .ant-form-item-label > label:hover {
+                color: #FFD700;
+            }
+
     .modal-crear-fuerza .ant-input:focus,
     .modal-crear-fuerza .ant-input:hover {
         border-color: #FFD700 !important;
         box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
     }
+
     .modal-crear-fuerza .ant-picker,
     .modal-crear-fuerza .ant-input,
     .modal-crear-fuerza .ant-select-selector,
@@ -267,6 +309,7 @@
         color: #434343 !important;
         transition: all 0.3s ease !important;
     }
+
     .modal-crear-fuerza .modal-crear-fuerza-footer {
         display: flex;
         justify-content: flex-end;
@@ -274,20 +317,22 @@
         margin-top: 18px;
         margin-bottom: 0px;
     }
+
     .modal-crear-fuerza .ant-btn-primary {
         background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
         border: none !important;
         color: #fff !important;
         font-weight: 600;
         box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
-        margin-top:  0;
+        margin-top: 0;
         margin-bottom: 0;
         padding: 0 20px !important;
     }
-    .modal-crear-fuerza .ant-btn-primary:hover {
-        background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
-        color: #fff !important;
-    }
+
+        .modal-crear-fuerza .ant-btn-primary:hover {
+            background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
+            color: #fff !important;
+        }
 
     @@media (max-width: 1199px) {
         .fuerzas-abm .fuerzas-container {
@@ -299,6 +344,7 @@
             flex-direction: column;
             align-items: flex-start !important;
         }
+
         .fuerzas-abm .actions-row {
             margin-top: 15px;
             justify-content: flex-start !important;
@@ -341,7 +387,7 @@
                 </div>
             </div>
             <div class="table-container">
-                <Table TItem="FuerzaViewModelTable"
+                <Table TItem="SimpleFuerzaViewModel"
                        DataSource="@FuerzaViewModels"
                        @bind-PageIndex="_pageIndex"
                        @bind-PageSize="_pageSize"
@@ -408,9 +454,7 @@
        Title="Editar Fuerza"
        Width="@("100%")"
        Style="max-width: 800px;"
-       OkText="@("Editar")"
-       CancelText="@("Cancelar")"
-       OnOk="@EditarFuerza"
+       Footer="null"
        DestroyOnClose
        WrapClassName="modal-crear-fuerza">
     <div class="modal-crear-fuerza-content">
@@ -435,123 +479,117 @@
 </Modal>
 
 @code {
-	// Variables
-	private FuerzaViewModelTable nuevaFuerza = new();
-	private FuerzaViewModelTable selFuerza = new();
+    // Variables
+    private SimpleFuerzaViewModel nuevaFuerza = new();
+    private SimpleFuerzaViewModel selFuerza = new();
 
-	// Modals
-	private bool _modalAñadirVisible = false;
-	private bool _modalEditarVisible = false;
+    // Modals
+    private bool _modalAñadirVisible = false;
+    private bool _modalEditarVisible = false;
 
-	// Lista de Fuerzas
-	private List<FuerzaInterviniente> Fuerzas = new();
+    // Lista de Fuerzas
+    private List<FuerzaInterviniente> Fuerzas = new();
 
-	// Variables de Tamaño de la Tabla
-	int _pageIndex = 1;
-	int _pageSize = 15;
+    // Variables de Tamaño de la Tabla
+    int _pageIndex = 1;
+    int _pageSize = 15;
 
-	// Lista de ViewModels de Dependencia
-	private List<FuerzaViewModelTable> FuerzaViewModels = new List<FuerzaViewModelTable>();
+    // Lista de ViewModels de Dependencia
+    private List<SimpleFuerzaViewModel> FuerzaViewModels = new List<SimpleFuerzaViewModel>();
 
-	public class FuerzaViewModelTable
-	{
-		public int Id { get; set; }
-		public string Nombre { get; set; } = null!;
-	}
+    protected override async Task OnInitializedAsync()
+    {
+        Fuerzas = await FuerzaIntervinienteService.ObtenerTodasLasFuerzasAsync();
+        FuerzaViewModels = await MapearFuerzasAsync(Fuerzas);
+        StateHasChanged();
+    }
 
-	protected override async Task OnInitializedAsync()
-	{
-		Fuerzas = await FuerzaIntervinienteService.ObtenerTodasLasFuerzasAsync();
-		FuerzaViewModels = await MapearFuerzasAsync(Fuerzas);
-		StateHasChanged();
-	}
+    public async Task<List<SimpleFuerzaViewModel>> MapearFuerzasAsync(List<FuerzaInterviniente> fuerzas)
+    {
+        return await Task.Run(() => fuerzas.Select(f => new SimpleFuerzaViewModel
+        {
+            Id = f.Id,
+            Nombre = f.NombreFuerza ?? string.Empty
+        }).ToList());
+    }
 
-	public async Task<List<FuerzaViewModelTable>> MapearFuerzasAsync(List<FuerzaInterviniente> fuerzas)
-	{
-		return await Task.Run(() => fuerzas.Select(f => new FuerzaViewModelTable
-			{
-				Id = f.Id,
-				Nombre = f.NombreFuerza ?? string.Empty
-			}).ToList());
-	}
+    private async Task AddFuerza()
+    {
+        if (string.IsNullOrWhiteSpace(nuevaFuerza.Nombre))
+        {
+            await MessageService.ErrorAsync("El campo 'Nombre' no puede estar vacío.");
+            return;
+        }
 
-	private async Task AddFuerza()
-	{
-		if (string.IsNullOrWhiteSpace(nuevaFuerza.Nombre))
-		{
-			await MessageService.ErrorAsync("El campo 'Nombre' no puede estar vacío.");
-			return;
-		}
+        var fuerza = new FuerzaInterviniente
+        {
+            NombreFuerza = nuevaFuerza.Nombre,
+        };
 
-		var fuerza = new FuerzaInterviniente
-			{
-				NombreFuerza = nuevaFuerza.Nombre,
-			};
-
-		await FuerzaIntervinienteService.AgregarFuerzaAsync(fuerza);
-		nuevaFuerza = new FuerzaViewModelTable();
-		_modalAñadirVisible = false;
-		await OnInitializedAsync();
-		await MessageService.SuccessAsync("Fuerza añadida correctamente.");
-	}
+        await FuerzaIntervinienteService.AgregarFuerzaAsync(fuerza);
+        nuevaFuerza = new SimpleFuerzaViewModel();
+        _modalAñadirVisible = false;
+        await OnInitializedAsync();
+        await MessageService.SuccessAsync("Fuerza añadida correctamente.");
+    }
 
 
-	private async Task EditarFuerza()
-	{
-		if (selFuerza.Id <= 0)
-		{
-			await MessageService.ErrorAsync("ID inválido. Por favor, proporcione un ID válido.");
-			return;
-		}
+    private async Task EditarFuerza()
+    {
+        if (selFuerza.Id <= 0)
+        {
+            await MessageService.ErrorAsync("ID inválido. Por favor, proporcione un ID válido.");
+            return;
+        }
 
-		if (string.IsNullOrWhiteSpace(selFuerza.Nombre))
-		{
-			await MessageService.ErrorAsync("El campo 'Nombre' no puede estar vacío.");
-			return;
-		}
+        if (string.IsNullOrWhiteSpace(selFuerza.Nombre))
+        {
+            await MessageService.ErrorAsync("El campo 'Nombre' no puede estar vacío.");
+            return;
+        }
 
-		var fuerza = new FuerzaInterviniente
-			{
-				Id = selFuerza.Id,
-				NombreFuerza = selFuerza.Nombre
-			};
+        var fuerza = new FuerzaInterviniente
+        {
+            Id = selFuerza.Id,
+            NombreFuerza = selFuerza.Nombre
+        };
 
-		await FuerzaIntervinienteService.EditarFuerzaAsync(fuerza);
-		selFuerza = new FuerzaViewModelTable();
-		_modalEditarVisible = false;
-		await OnInitializedAsync();
-		await MessageService.SuccessAsync("Fuerza editada correctamente.");
-	}
+        await FuerzaIntervinienteService.EditarFuerzaAsync(fuerza);
+        selFuerza = new SimpleFuerzaViewModel();
+        _modalEditarVisible = false;
+        await OnInitializedAsync();
+        await MessageService.SuccessAsync("Fuerza editada correctamente.");
+    }
 
-	private async Task VerEditarFuerza(int id)
-	{
-		if (id <= 0)
-		{
-			await MessageService.ErrorAsync("ID inválido. Por favor, proporcione un ID válido.");
-			return;
-		}
+    private async Task VerEditarFuerza(int id)
+    {
+        if (id <= 0)
+        {
+            await MessageService.ErrorAsync("ID inválido. Por favor, proporcione un ID válido.");
+            return;
+        }
 
-		var Fuerza = await FuerzaIntervinienteService.ObtenerFuerzaPorIdAsync(id);
+        var Fuerza = await FuerzaIntervinienteService.ObtenerFuerzaPorIdAsync(id);
 
-		if (Fuerza == null)
-		{
-			await MessageService.ErrorAsync("Error al intentar editar la fuerza: No se encontró.");
-			return;
-		}
+        if (Fuerza == null)
+        {
+            await MessageService.ErrorAsync("Error al intentar editar la fuerza: No se encontró.");
+            return;
+        }
 
-		selFuerza = new FuerzaViewModelTable
-			{
-				Id = Fuerza.Id,
-				Nombre = Fuerza.NombreFuerza ?? string.Empty
-			};
+        selFuerza = new SimpleFuerzaViewModel
+        {
+            Id = Fuerza.Id,
+            Nombre = Fuerza.NombreFuerza ?? string.Empty
+        };
 
-		_modalEditarVisible = true;
-	}
+        _modalEditarVisible = true;
+    }
 
-	private async Task BorrarFuerza(int id)
-	{
-		await FuerzaIntervinienteService.EliminarFuerzaAsync(id);
-		await OnInitializedAsync();
-		await MessageService.SuccessAsync("Fuerza eliminada correctamente.");
-	}
+    private async Task BorrarFuerza(int id)
+    {
+        await FuerzaIntervinienteService.EliminarFuerzaAsync(id);
+        await OnInitializedAsync();
+        await MessageService.SuccessAsync("Fuerza eliminada correctamente.");
+    }
 }

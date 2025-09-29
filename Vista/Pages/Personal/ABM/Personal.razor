@@ -12,11 +12,14 @@
 @using Vista.Data.Mappers
 
 @*Servicios utilizados*@
+
 @using Vista.Services
 @inject IMessageService message
 @inject NavigationManager navigationManager
+
 @inject IBomberoService BomberoService
 @inject IComisionDirectivaService ComisionDirectivaService
+@inject ICobradorService CobradorService
 
 <style>
     /* Variables CSS para colores principales - Prefijo para evitar conflictos */
@@ -482,15 +485,20 @@
                         }
                         else if (TipoPersonal.ToLower() == "cobradores")
                         {
+                            <EnumSelect DefaultValue="EstadoCobrador.Activo"
+                                        ValueChanged="(EstadoCobrador estado) => searchC(searchString, estado)"
+                                        TEnum="EstadoCobrador"
+                                        Class="abm-select-estado" />
+
                             <div class="search-container">
                                 <Search Placeholder="Buscar Cobrador"
                                         @bind-Value="@searchString"
-                                        OnSearch="@(()=>message.Error("Funcionalidad en desarrollo"))"
+                                        OnSearch="()=>searchC(searchString, EstadoC)"
                                         BindOnInput />
                             </div>
                             <Button Type="ButtonType.Primary"
                                     Class="add-button"
-                                    OnClick="@(() => message.Error("Funcionalidad en desarrollo"))">
+                                    OnClick="@(() => navigationManager.NavigateTo("/personal/cobrador/agregar"))">
                                 <Icon Type="plus" /> Agregar Cobrador
                             </Button>
                         }
@@ -521,7 +529,10 @@
                         </PropertyColumn>
                         <PropertyColumn Title="🆔 Legajo" Property="c => c.NumeroLegajo" Sortable>
                         </PropertyColumn>
-                        <PropertyColumn Title="🎖️ Jerarquía" Property="@(c => c.Grado.GetDisplayName())" Sortable>
+                        <PropertyColumn Title="🎖️ Jerarquía"
+                                        Property="@(c => c.Grado.GetDisplayName())"
+                                        SorterCompare="@((x, y) => ((int)Enum.Parse<EscalafonJerarquico>(x)).CompareTo((int)Enum.Parse<EscalafonJerarquico>(y)))"
+                                        Sortable>
                         </PropertyColumn>
                         <PropertyColumn Title="📊 Estado" Property="@(c => c.Estado.GetDisplayName())" Sortable>
 
@@ -637,7 +648,7 @@
                         </Column>
                         <PropertyColumn Property="c => c.ApellidoYNombre" Title="👤 Apellido y Nombre" Sortable />
                         <PropertyColumn Title="🆔 Documento" Property="c => c.Documento" Sortable />
-                        <PropertyColumn Title="🏘️ Zonas Asignadas" Property="@(c => c.ZonasAsignadas.GetDisplayName())" Sortable />
+                        <PropertyColumn Title="🏘️ Zonas Asignadas" Property="c => c.ZonasAsignadasAsString" Sortable />
                         <PropertyColumn Title="📊 Estado" Property="@(c => c.Estado.GetDisplayName())" Sortable />
 
                         <ActionColumn Title="⚙️ Acciones" Align=ColumnAlign.Center>
@@ -645,7 +656,7 @@
                                 <Button Type="default" OnClick="() => EditarPersonal(context.Id)" OnClickStopPropagation>
                                     <Icon Type="edit" /> Editar
                                 </Button>
-                                @if (context.Estado != EstadoCobrador.Activo)
+                                @if (context.Estado == EstadoCobrador.Activo)
                                 {
                                     <Popconfirm Title="¿Está seguro de dar de baja?"
                                                 OnConfirm="()=>CambiarEstadoComisionDirectiva(context.Id, EstadoComisionDirectiva.Baja)"
@@ -704,6 +715,10 @@
         {
             <DetallePersonal PersonalId="@PersonalId" Tipo="Data.Enums.Discriminadores.TipoPersonal.Bombero" />
         }
+        else if (TipoPersonal.ToLower() == "cobradores")
+        {
+            <DetallePersonal PersonalId="@PersonalId" Tipo="Data.Enums.Discriminadores.TipoPersonal.Cobrador" />
+        }
     </Modal>
 }
 
@@ -744,9 +759,6 @@
 
     // Estado seleccionado
     public EstadoBombero EstadoB = EstadoBombero.CuerpoActivo;
-
-    // Filtros de la Tabla de Bomberos
-    private TableFilter<EscalafonJerarquico>[] EscalafonJerarquicoFilter;
 
     // Tamaño de la tabla
     int _pageIndex = 1;
@@ -799,15 +811,6 @@
             SinFiltrarB = bomberos.ToBomberoViewModelList();
 
             searchB(searchString, EstadoB);
-
-            EscalafonJerarquicoFilter = new TableFilter<EscalafonJerarquico>[Enum.GetValues(typeof(EscalafonJerarquico)).Length];
-
-            int i = 0;
-            foreach (EscalafonJerarquico value in Enum.GetValues(typeof(EscalafonJerarquico)))
-            {
-                EscalafonJerarquicoFilter[i] = new() { Text = Enum.GetName(typeof(EscalafonJerarquico), value), Value = value };
-                i++;
-            }
         }
         else if (TipoPersonal.ToLower() == "comisiondirectiva")
         {
@@ -825,6 +828,13 @@
                 i++;
             }
         }
+        else if (TipoPersonal.ToLower() == "cobradores")
+        {
+            var cobradores = await CobradorService.ObtenerTodosLosCobradoresAsync(ConImagenes: true);
+            SinFiltrarC = cobradores.ToCobradorViewModelList();
+
+            searchC(searchString, EstadoC);
+        }
         else
         {
             navigationManager.NavigateTo("/personal/bomberos", true);
@@ -839,14 +849,24 @@
         {
             var bomberos = await BomberoService.ObtenerTodosLosBomberosAsync(ConImagenes: true);
             SinFiltrarB = bomberos.ToBomberoViewModelList();
+
             searchB(searchString, EstadoB);
         }
         else if (TipoPersonal.ToLower() == "comisiondirectiva")
         {
             var comisionDirectiva = await ComisionDirectivaService.ObtenerTodosLosMiembrosDeComisionDirectivaAsync(ConImagenes: true);
             SinFiltrarCD = comisionDirectiva.ToComisionDirectivaViewModelList();
+
             searchCD(searchString, EstadoCD);
         }
+        else if (TipoPersonal.ToLower() == "cobradores")
+        {
+            var cobradores = await CobradorService.ObtenerTodosLosCobradoresAsync(ConImagenes: true);
+            SinFiltrarC = cobradores.ToCobradorViewModelList();
+
+            searchC(searchString, EstadoC);
+        }
+
         await InvokeAsync(StateHasChanged);
     }
 
@@ -926,6 +946,32 @@
         if (int.TryParse(value, out number))
         {
             comisionDirectiva = comisionDirectiva.Where(d =>
+            d.Documento.Equals(number)).ToList();
+        }
+        StateHasChanged();
+    }
+
+    private void searchC(string value, EstadoCobrador estado)
+    {
+        int number;
+
+        EstadoC = estado;
+
+        cobradores = SinFiltrarC.Where(d => d.Estado == EstadoC).ToList();
+
+        if (string.IsNullOrEmpty(value))
+        {
+            StateHasChanged();
+            return;
+        }
+
+        cobradores = cobradores.Where(d =>
+        d.Nombre.Contains(value, StringComparison.OrdinalIgnoreCase) ||
+        d.Apellido.Contains(value, StringComparison.OrdinalIgnoreCase))
+        .ToList();
+        if (int.TryParse(value, out number))
+        {
+            cobradores = cobradores.Where(d =>
             d.Documento.Equals(number)).ToList();
         }
         StateHasChanged();
