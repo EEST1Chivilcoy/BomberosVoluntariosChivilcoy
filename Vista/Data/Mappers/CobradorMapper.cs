@@ -31,6 +31,7 @@ namespace Vista.Data.Mappers
                 FechaAceptacion = cobrador.FechaAceptacion,
                 GrupoSanguineo = cobrador.GrupoSanguineo,
                 LugarNacimiento = cobrador.LugarNacimiento,
+                EntraID = cobrador.EntraId,
 
                 // Mapeo de Contacto (si existe)
                 TelefonoCel = cobrador.Contacto?.TelefonoCel,
