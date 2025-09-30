@@ -211,6 +211,11 @@ namespace Vista.Data
 
             //Unique
 
+            // Personal
+            modelBuilder.Entity<Personal>()
+                .HasIndex(p => p.EntraId)
+                .IsUnique();
+
             //Brigadas
 
             modelBuilder.Entity<Brigada>()

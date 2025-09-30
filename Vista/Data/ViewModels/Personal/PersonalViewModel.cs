@@ -13,6 +13,11 @@ namespace Vista.Data.ViewModels.Personal
         /// </summary>
         public int Id { get; set; }
 
+        /// <summary>
+        /// ID de la cuenta de EntraID
+        /// </summary>
+        public Guid EntraID { get; set; }
+
         // --- Propiedades básicas del personal --- (Información Personal)
 
         /// <summary>
@@ -24,9 +29,14 @@ namespace Vista.Data.ViewModels.Personal
         /// <summary>
         /// Apellido del personal. Longitud máxima de 255 caracteres. Es obligatorio.
         /// </summary>
-
         [Required, StringLength(255)]
         public string? Apellido { get; set; }
+
+        /// <summary>
+        /// UPN (User Principal Name) del personal. Longitud máxima de 255 caracteres. Es obligatorio.
+        /// </summary>
+        [Required, StringLength(255)]
+        public string? UPN { get; set; }
 
         /// <summary>
         /// URL de la imagen de perfil del personal. Longitud máxima de 255 caracteres. Es opcional.
