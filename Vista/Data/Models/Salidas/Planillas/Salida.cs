@@ -137,6 +137,7 @@ namespace Vista.Data.Models.Salidas.Planillas
 
         public List<BomberoSalida> CuerpoParticipante { get; set; } = new();
         public List<FuerzaInterviniente_Salida> FuerzasIntervinientes { get; set; } = new();
+
         // Encargado (Obligatorio)
         public int EncargadoId { get; set; }
         [ForeignKey("EncargadoId")]

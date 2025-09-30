@@ -6,7 +6,5 @@ namespace Vista.Data.ViewModels.Rescates
     public class RescatePersonaViewModels : RescateViewModels
     {
         public TipoLugarRescatePersona TipoRescatePersona { get; set; }
-
-
     }
 }
