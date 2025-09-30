@@ -1,0 +1,174 @@
+@page "/inicio"
+@layout EmptyLayout
+@inject NavigationManager Navigation
+@using AntDesign
+
+<PageTitle>Inicio - Bomberos Voluntarios Chivilcoy</PageTitle>
+
+<HeadContent>
+    <link href="css/inicio.css" rel="stylesheet" />
+</HeadContent>
+
+<div class="inicio-page">
+    <AntDesign.Layout>
+        <AntDesign.Layout.Header Class="custom-header">
+            <div style="display: flex; justify-content: flex-end;">
+                <Menu Mode="@MenuMode.Horizontal" 
+                      SelectedKeys="@(new[]{"inicio"})" 
+                      Style="background: transparent; border-bottom: none;">
+                    <MenuItem Key="inicio">
+                        🏠 INICIO
+                    </MenuItem>
+                    <MenuItem Key="contacto">
+                        📞 CONTACTO
+                    </MenuItem>
+                    <MenuItem Key="cuerpo">
+                        👥 CUERPO ACTIVO
+                    </MenuItem>
+                    <MenuItem Key="historia">
+                        📖 NUESTRA HISTORIA
+                    </MenuItem>
+                </Menu>
+            </div>
+        </AntDesign.Layout.Header>
+
+        <AntDesign.Layout.Content Class="hero-section">
+            <Row Style="min-height: 100%; width: 100%;">
+                <AntDesign.Col Xs="24" Sm="24" Md="12" Lg="12" Xl="12">
+                    <div style="padding: 40px 20px;">
+                        <Title Level="1" Class="hero-title">
+                            Desde 1945 al Servicio de<br />
+                            la Comunidad.
+                        </Title>
+                        <Paragraph Class="hero-description">
+                            FUNDADA EL 7 DE JULIO DE 1945, LA SOCIEDAD DE BOMBEROS<br />
+                            VOLUNTARIOS DE CHIVILCOY ES FIEL A SUS PRINCIPIOS.
+                        </Paragraph>
+                    </div>
+                </AntDesign.Col>
+                <AntDesign.Col Xs="24" Sm="24" Md="12" Lg="12" Xl="12">
+                    <div style="padding: 40px 5px; text-align: center;">
+                        <img src="/Imagenes/Logos.png" 
+                             alt="Sociedad Bomberos Voluntarios Chivilcoy" 
+                             class="main-logo" />
+                    </div>
+                </AntDesign.Col>
+            </Row>
+        </AntDesign.Layout.Content>
+
+        <div class="section-separator">
+            <div class="separator-pattern"></div>
+        </div>
+
+        <div class="gallery-section">
+            <div class="gallery-header">
+                <Title Level="2" Class="gallery-title">
+                    SOCIEDAD DE BOMBEROS VOLUNTARIOS DE CHIVILCOY
+                </Title>
+                <Paragraph Class="gallery-subtitle">
+                    ABNEGACIÓN – DESINTERÉS – SACRIFICIO
+                </Paragraph>
+            </div>
+            
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="/Imagenes/Logos.png" alt="Historia Bomberos 1" class="gallery-image" />
+                    <div class="gallery-overlay">
+                        <h4>Fundación 1945</h4>
+                        <p>Los primeros años de la institución</p>
+                    </div>
+                </div>
+                
+                <div class="gallery-item">
+                    <img src="/Imagenes/FondoInicio.png" alt="Historia Bomberos 2" class="gallery-image" />
+                    <div class="gallery-overlay">
+                        <h4>Primeros Equipos</h4>
+                        <p>El crecimiento de la institución</p>
+                    </div>
+                </div>
+                
+                <div class="gallery-item">
+                    <img src="/Imagenes/FondoMenuArribaInicio.png" alt="Historia Bomberos 3" class="gallery-image" />
+                    <div class="gallery-overlay">
+                        <h4>Cuerpo Activo</h4>
+                        <p>Nuestros bomberos en acción</p>
+                    </div>
+                </div>
+                
+                <div class="gallery-item">
+                    <img src="/Imagenes/Logos.png" alt="Historia Bomberos 4" class="gallery-image" />
+                    <div class="gallery-overlay">
+                        <h4>Equipamiento Moderno</h4>
+                        <p>Tecnología al servicio de la comunidad</p>
+                    </div>
+                </div>
+                
+                <div class="gallery-item">
+                    <img src="/Imagenes/FondoInicio.png" alt="Historia Bomberos 5" class="gallery-image" />
+                    <div class="gallery-overlay">
+                        <h4>Servicio Comunitario</h4>
+                        <p>Compromiso con Chivilcoy</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-separator">
+            <div class="separator-pattern"></div>
+        </div>
+
+        <div class="emergency-section">
+            <img src="/Imagenes/EmergenciasPagina.png" 
+                 alt="Información de Emergencias" 
+                 class="emergency-image" />
+        </div>
+
+        <div class="footer-section">
+            <div class="footer-content">
+                <Row Gutter="40">
+                    <AntDesign.Col Xs="24" Sm="24" Md="12" Lg="12" Xl="12">
+                        <div class="footer-left">
+                            <img src="/Imagenes/Logos.png" 
+                                 alt="Logo Bomberos Voluntarios Chivilcoy" 
+                                 class="footer-logo" />
+                            <div class="footer-info">
+                                <Title Level="3" Style="color: white; font-size: 1.4rem; font-weight: 600; margin: 0 0 5px 0; text-transform: uppercase;">
+                                    Sociedad de Bomberos<br />Voluntarios de Chivilcoy
+                                </Title>
+                                <Paragraph Style="color: #ccc; font-size: 0.9rem; margin: 0; line-height: 1.4;">
+                                    Desde 1945 al Servicio de la Comunidad
+                                </Paragraph>
+                            </div>
+                        </div>
+                    </AntDesign.Col>
+                    <AntDesign.Col Xs="24" Sm="24" Md="12" Lg="12" Xl="12">
+                        <div class="footer-right">
+                            <div class="footer-contact">
+                                <Title Level="4" Style="color: white; font-size: 1.2rem; font-weight: 600; margin: 0 0 10px 0; text-transform: uppercase;">
+                                    Contacto
+                                </Title>
+                                <Paragraph Class="footer-phone" Style="color: #ccc; font-size: 1rem; margin: 0; display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
+                                    <span class="phone-icon">📞</span>
+                                    100 / 424319-426066
+                                </Paragraph>
+                            </div>
+                        </div>
+                    </AntDesign.Col>
+                </Row>
+            </div>
+        </div>
+    </AntDesign.Layout>
+</div>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        // Inicialización si es necesaria no se no soy backk
+    }
+
+    private void NavigateToTasks()
+    {
+        Navigation.NavigateTo("/");
+    }
+}
+

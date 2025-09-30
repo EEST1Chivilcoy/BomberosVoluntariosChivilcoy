@@ -1,0 +1,32 @@
+
+.btn-primary {
+    background: linear-gradient(135deg, #8b0000, #b22222);
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    color: white;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(139, 0, 0, 0.3);
+}
+.card-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.card-hover:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.section-separator {
+    height: 60px;
+    background: linear-gradient(45deg, #8b0000, #b22222, #8b0000);
+    position: relative;
+    overflow: hidden;
+}
