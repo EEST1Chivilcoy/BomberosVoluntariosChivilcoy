@@ -70,5 +70,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Pages\Firmas\Departamentos\" />
+    <Folder Include="Pages\Personal\ABM\Componentes\Comision\" />
   </ItemGroup>
 </Project>

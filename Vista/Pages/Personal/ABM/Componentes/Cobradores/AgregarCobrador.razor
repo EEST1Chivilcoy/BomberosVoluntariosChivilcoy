@@ -16,7 +16,7 @@
 @using AntDesign
 
 @attribute [Authorize]
-@page "/personal/bombero/agregar"
+@page "/personal/cobrador/agregar"
 
 @*Servicios Utilizados*@
 @using Vista.Services
@@ -24,7 +24,7 @@
 @inject NavigationManager navigationManager
 @inject Microsoft.Graph.GraphServiceClient GraphServiceClient
 @inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
-@inject IBomberoService BomberoService
+@inject ICobradorService CobradorService
 
 <style>
 	/* Estilos generales */
@@ -157,8 +157,8 @@
 <div class="container">
 	<div class="page-title">
 		<div>
-			<Icon Type="fire" Theme="IconThemeType.Fill" Class="page-title-icon" />
-			<span>Registro de Nuevo Bombero</span>
+			<Icon Type="fund" Theme="IconThemeType.Fill" Class="page-title-icon" />
+			<span>Registro de Nuevo Cobrador</span>
 		</div>
 	</div>
 
@@ -270,29 +270,19 @@
 			@*Información Profesional*@
 			<div class="card">
 				<div class="card-title">Información Profesional</div>
+
 				<AntDesign.Row Gutter="16">
 					<AntDesign.Col Span="6">
-						<FormItem Label="Número Legajo" Required>
-							<Input @bind-Value="@personalView.NumeroLegajo" Placeholder="Ingrese número de legajo" />
-						</FormItem>
-					</AntDesign.Col>
-					<AntDesign.Col Span="6">
-						<FormItem Label="Dotación" Required>
-							<EnumSelect TEnum="TipoDotaciones" @bind-Value="@personalView.Dotacion" />
-						</FormItem>
-					</AntDesign.Col>
-					<AntDesign.Col Span="6">
-						<FormItem Label="Grado">
-							<EnumSelect TEnum="EscalafonJerarquico" @bind-Value="@personalView.Grado" AllowClear />
-						</FormItem>
-					</AntDesign.Col>
-					<AntDesign.Col Span="6">
 						<FormItem Label="Estado">
-							<EnumSelect TEnum="EstadoBombero" @bind-Value="personalView.Estado" AllowClear />
+							<EnumSelect TEnum="EstadoCobrador" @bind-Value="@personalView.Estado" AllowClear />
+						</FormItem>
+					</AntDesign.Col>
+					<AntDesign.Col Span="6">
+						<FormItem Label="Zonas asignadas">
+							<EnumSelect Mode="SelectMode.Multiple" TEnum="Zona" @bind-Value="@personalView.ZonasAsignadas" AllowClear />
 						</FormItem>
 					</AntDesign.Col>
 				</AntDesign.Row>
-
 				<AntDesign.Row Gutter="16">
 					<AntDesign.Col Span="8">
 						<FormItem Label="Fecha de Aceptación">
@@ -303,63 +293,8 @@
 										AllowClear />
 						</FormItem>
 					</AntDesign.Col>
-					<AntDesign.Col Span="8">
-						<FormItem Label="Número IOMA">
-							<Input @bind-Value="personalView.NumeroIoma" Placeholder="Ingrese número IOMA" />
-						</FormItem>
-					</AntDesign.Col>
 				</AntDesign.Row>
 
-				<AntDesign.Row Gutter="16">
-					<AntDesign.Col Span="12">
-						<FormItem Label="¿Es chofer?">
-							<Switch @bind-Checked="personalView.EsChofer"></Switch>
-							@if (personalView.EsChofer)
-							{
-								<div class="conditional-field">
-									<FormItem Label="Fecha vencimiento del carnet">
-										<DatePicker @bind-Value="@personalView.VencimientoRegistro"
-													Picker="@DatePickerType.Date"
-													Style="width: 100%;"
-													Placeholder="@("Seleccione fecha de vencimiento")"
-													AllowClear />
-									</FormItem>
-								</div>
-							}
-						</FormItem>
-					</AntDesign.Col>
-				</AntDesign.Row>
-			</div>
-
-			@*Información Adicional*@
-			<div class="card">
-				<div class="card-title">Información Adicional</div>
-				<AntDesign.Row Gutter="16">
-					<AntDesign.Col Span="6">
-						<FormItem Label="Altura (cm)">
-							<AntDesign.InputNumber @bind-Value="@personalView.Altura" Style="width: 100%;" Placeholder="Ingrese altura" />
-						</FormItem>
-					</AntDesign.Col>
-					<AntDesign.Col Span="6">
-						<FormItem Label="Peso (kg)">
-							<AntDesign.InputNumber @bind-Value="@personalView.Peso" Style="width: 100%;" Placeholder="Ingrese peso" />
-						</FormItem>
-					</AntDesign.Col>
-					<AntDesign.Col Span="6">
-						<FormItem Label="Nivel de estudio">
-							<Input @bind-Value="@personalView.NivelEstudios" Placeholder="Ingrese nivel de estudios" />
-						</FormItem>
-					</AntDesign.Col>
-					<AntDesign.Col Span="6">
-						<FormItem Label="Profesión">
-							<Input @bind-Value="@personalView.Profesion" Placeholder="Ingrese profesión" />
-						</FormItem>
-					</AntDesign.Col>
-				</AntDesign.Row>
-
-				<FormItem Label="Observaciones">
-					<TextArea @bind-Value="@personalView.Observaciones" Placeholder="Ingrese observaciones" Rows="4" />
-				</FormItem>
 			</div>
 
 			@*Información de Contacto*@
@@ -394,8 +329,8 @@
 				<Button Type="@ButtonType.Default" OnClick="Cancelar">
 					Cancelar
 				</Button>
-				<Button Type="@ButtonType.Primary" HtmlType="submit" Class="primary-button" OnClick="CrearBombero">
-					Registrar Bombero
+				<Button Type="@ButtonType.Primary" HtmlType="submit" Class="primary-button" OnClick="CrearCobrador">
+					Registrar Cobrador
 				</Button>
 			</div>
 		</Form>
@@ -409,7 +344,7 @@
 </div>
 
 @code {
-	private BomberoViweModel? personalView = new();
+	private CobradorViewModel? personalView = new();
 	private ImageViewModel imageViewModel = new();
 	private CancellationTokenSource? _debounceTokenSource;
 	private bool isSearching = false;
@@ -427,17 +362,17 @@
 
 	public Task Cancelar()
 	{
-		navigationManager.NavigateTo($"/personal/bomberos", true);
+		navigationManager.NavigateTo($"/personal/cobradores", true);
 		return Task.CompletedTask;
 	}
 
-	public async Task CrearBombero()
+	public async Task CrearCobrador()
 	{
 		try
 		{
 			if (personalView == null)
 			{
-				await message.ErrorAsync("Ocurrió un error al crear el bombero.");
+				await message.ErrorAsync("Ocurrió un error al crear el cobrador.");
 				return;
 			}
 
@@ -447,53 +382,45 @@
 				return;
 			}
 
-			if (personalView is not BomberoViweModel bomberoView)
+			if (personalView is not CobradorViewModel cobradorView)
 			{
-				await message.ErrorAsync("Ocurrió un error al crear el bombero.");
+				await message.ErrorAsync("Ocurrió un error al crear el miembro de comisión directiva.");
 				return;
 			}
 
-			if (personalView.NumeroLegajo == 0)
+			// Preparar el objeto Cobrador para enviarlo al servicio
+			Cobrador cobrador = new Cobrador()
 			{
-				await message.ErrorAsync("El número de legajo no puede ser cero.");
-				return;
-			}
+				// --- Información Personal ---
 
-			// Preparar el objeto Bombero
-			Bombero bombero = new Bombero()
-			{
-				EntraId = personalView.EntraID,
-				FechaNacimiento = personalView.FechaNacimiento,
-				Sexo = personalView.Sexo,
-				Nombre = personalView.Nombre,
-				Apellido = personalView.Apellido,
-				Documento = personalView.Documento,
-				NumeroLegajo = personalView.NumeroLegajo,
-				NumeroIoma = personalView.NumeroIoma,
-				LugarNacimiento = personalView.LugarNacimiento,
-				Grado = personalView.Grado,
-				Dotacion = personalView.Dotacion,
-				GrupoSanguineo = personalView.GrupoSanguineo,
-				Altura = personalView.Altura,
-				Peso = personalView.Peso,
-				Estado = personalView.Estado,
-				Chofer = personalView.EsChofer,
-				VencimientoRegistro = personalView.VencimientoRegistro,
-				Direccion = personalView.Direccion,
-				Observaciones = personalView.Observaciones,
-				Profesion = personalView.Profesion,
-				NivelEstudios = personalView.NivelEstudios,
-				FechaAceptacion = personalView.FechaAceptacion,
+				Nombre = cobradorView.Nombre,
+				Apellido = cobradorView.Apellido,
+				EntraId = cobradorView.EntraID,
+				Documento = cobradorView.Documento,
+				FechaNacimiento = cobradorView.FechaNacimiento,
+				LugarNacimiento = cobradorView.LugarNacimiento,
+				Direccion = cobradorView.Direccion,
+				Sexo = cobradorView.Sexo,
+				GrupoSanguineo = cobradorView.GrupoSanguineo,
+
+				// --- Información Profesional ---
+
+				Estado = cobradorView.Estado,
+				ZonasAsignadas = cobradorView.ZonasAsignadas,
+				FechaAceptacion = cobradorView.FechaAceptacion,
+
+				// --- Información de Contacto ---
 				Contacto = new Contacto
 				{
-					TelefonoCel = personalView.TelefonoCel,
-					TelefonoFijo = personalView.TelefonoFijo,
-					TelefonoLaboral = personalView.TelefonoLaboral,
-					Email = personalView.Email
+					TelefonoCel = cobradorView.TelefonoCel,
+					TelefonoFijo = cobradorView.TelefonoFijo,
+					TelefonoLaboral = cobradorView.TelefonoLaboral,
+					Email = cobradorView.Email
 				}
 			};
 
 			// Preparar la foto si existe
+
 			Imagen_Personal? foto = null;
 
 			if (imageViewModel.Base64 != null && imageViewModel.TipoImagen != null && imageViewModel.NombreImagen != null)
@@ -506,25 +433,18 @@
 				};
 			}
 
-			// Creamos el bombero
-			await BomberoService.CrearBombero(bombero, foto);
+			// Creamos el cobrador
+			await CobradorService.CrearCobrador(cobrador, foto);
 
-			bomberoView = new BomberoViweModel();
+			cobrador = new();
 			StateHasChanged();
-			await message.SuccessAsync("Se agregó el bombero.");
-			navigationManager.NavigateTo($"/personal/bomberos", true);
+			message.Success("Se agregó el cobrador.");
+			navigationManager.NavigateTo($"/personal/cobradores", true);
 		}
 		catch (Exception ex)
 		{
-			if (ex.Message.Contains("legajo", StringComparison.OrdinalIgnoreCase))
-			{
-				await message.WarningAsync(ex.Message);
-			}
-			else
-			{
-				await message.ErrorAsync("Ocurrió un error al crear el bombero.");
-				await message.ErrorAsync($"Error: {ex.Message}");
-			}
+			await message.ErrorAsync("Ocurrió un error al crear el cobrador.");
+			await message.ErrorAsync($"Error: {ex.Message}");
 		}
 	}
 

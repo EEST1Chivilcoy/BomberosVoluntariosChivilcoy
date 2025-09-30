@@ -35,6 +35,7 @@ namespace Vista.Data.Mappers
                 Profesion = bombero.Profesion,
                 NivelEstudios = bombero.NivelEstudios,
                 NumeroIoma = bombero.NumeroIoma,
+                EntraID = bombero.EntraId,
 
                 // Propiedades específicas de Bombero
                 NumeroLegajo = bombero.NumeroLegajo,
