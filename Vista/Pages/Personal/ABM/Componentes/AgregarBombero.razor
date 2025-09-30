@@ -14,9 +14,10 @@
 @using Microsoft.Identity.Web
 @using Microsoft.Graph
 @using AntDesign
-@using AntDesign
 
 @page "/personal/bombero/agregar"
+
+@attribute [Authorize]
 
 @*Servicios Utilizados*@
 @using Vista.Services
@@ -24,7 +25,6 @@
 @inject NavigationManager navigationManager
 @inject Microsoft.Graph.GraphServiceClient GraphServiceClient
 @inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
-
 @inject IBomberoService BomberoService
 
 <style>
@@ -217,10 +217,12 @@
 							</AntDesign.Col>
 							<AntDesign.Col Span="8">
 								<FormItem Label="U.P.N" Required>
-									<AntDesign.Input @bind-Value="@personalView.UPN"
-													 OnPressEnter="@(() => BusquedaPorUPN(personalView.UPN))">
+									<AntDesign.Input @bind-Value="@personalView.UPN">
 										<AddOnAfter>
 											<label>@@bomberoschivilcoy.org.ar</label>
+											<AntDesign.Button Type="ButtonType.Primary" Size="ButtonSize.Small" OnClick="@(() => BusquedaPorUPN(personalView.UPN))">
+												<Icon Type="search" />
+											</AntDesign.Button>
 										</AddOnAfter>
 									</AntDesign.Input>
 								</FormItem>
@@ -428,6 +430,24 @@
 		public string? NombreImagen { get; set; }
 	}
 
+	protected override async Task OnInitializedAsync()
+	{
+		try
+		{
+			// Verificar si hay un usuario autenticado
+			var user = await GraphServiceClient.Me.Request().GetAsync();
+			if (user == null)
+			{
+				// Redirigir a login si es necesario
+				navigationManager.NavigateTo("/MicrosoftIdentity/Account/SignIn", true);
+			}
+		}
+		catch (ServiceException ex)
+		{
+			await message.ErrorAsync("No hay sesión activa.");
+		}
+	}
+
 	public Task Cancelar()
 	{
 		navigationManager.NavigateTo($"/personal/bomberos", true);
@@ -541,18 +561,16 @@
 			return;
 		}
 
-		// Cancelar cualquier búsqueda anterior en curso
 		_debounceTokenSource?.Cancel();
 		_debounceTokenSource = new CancellationTokenSource();
 		var token = _debounceTokenSource.Token;
 
 		try
 		{
-			// Esperar 500ms antes de ejecutar la búsqueda (debounce)
 			await Task.Delay(500, token);
 
-			// Obtener datos del usuario
-			var user = await GraphServiceClient.Users[upn]
+			// Buscar usuario con manejo de consentimiento
+			var user = await GraphServiceClient.Users[$"{upn}@bomberoschivilcoy.org.ar"]
 				.Request()
 				.Select(u => new
 				{
@@ -563,33 +581,34 @@
 				})
 				.GetAsync(token);
 
-			// Inicializar variables de imagen
 			string? photoBase64 = null;
 			string? contentType = null;
 			string? nombreImagen = null;
 
 			try
 			{
-				// Obtener tipo MIME y contenido de imagen
-				var response = await GraphServiceClient.Users[upn].Photo.Content.Request().GetResponseAsync(token);
-				contentType = response.Content.Headers.ContentType?.MediaType;
-				var extension = contentType?.Split('/').Last();
+				var photoStream = await GraphServiceClient.Users[$"{upn}@bomberoschivilcoy.org.ar"]
+					.Photo.Content.Request().GetAsync(token);
+
+				var response = await GraphServiceClient.Users[$"{upn}@bomberoschivilcoy.org.ar"]
+					.Photo.Request().GetAsync(token);
+
+				contentType = response?.AdditionalData.ContainsKey("@odata.mediaContentType") == true
+					? response.AdditionalData["@odata.mediaContentType"]?.ToString()
+					: "image/jpeg";
+
+				var extension = contentType?.Split('/').Last() ?? "jpg";
 				nombreImagen = $"foto_{upn.Replace('@', '_')}.{extension}";
 
-				var photoStream = await GraphServiceClient.Users[upn].Photo.Content.Request().GetAsync(token);
 				using var ms = new MemoryStream();
 				await photoStream.CopyToAsync(ms);
 				photoBase64 = Convert.ToBase64String(ms.ToArray());
 			}
 			catch
 			{
-				// Puede fallar si el usuario no tiene foto
-				photoBase64 = null;
-				contentType = null;
-				nombreImagen = $"foto_{upn.Replace('@', '_')}.bin";
+				nombreImagen = $"foto_{upn}.jpg";
 			}
 
-			// Asignar datos al modelo
 			personalView.Nombre = user.GivenName;
 			personalView.Apellido = user.Surname;
 			personalView.EntraID = Guid.Parse(user.Id);
@@ -597,7 +616,21 @@
 			imageViewModel.Base64 = photoBase64;
 			imageViewModel.TipoImagen = contentType;
 			imageViewModel.NombreImagen = nombreImagen;
+
 			StateHasChanged();
+		}
+		catch (ServiceException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+		{
+			await message.ErrorAsync($"No se encontró ningún usuario con el UPN '{upn}@bomberoschivilcoy.org.ar'.");
+		}
+		catch (ServiceException ex) when (ex.Error?.Code == "ErrorAccessDenied")
+		{
+			await message.ErrorAsync("No tienes permisos suficientes para buscar usuarios en Microsoft Graph.");
+		}
+		catch (MicrosoftIdentityWebChallengeUserException ex)
+		{
+			// El ConsentHandler se encargará de redirigir al usuario para obtener consentimiento
+			ConsentHandler.HandleException(ex);
 		}
 		catch (TaskCanceledException)
 		{
@@ -605,7 +638,7 @@
 		}
 		catch (Exception ex)
 		{
-			Console.WriteLine($"Error al buscar usuario: {ex.Message}");
+			await message.ErrorAsync($"Error al buscar usuario: {ex.Message}");
 		}
 	}
 
