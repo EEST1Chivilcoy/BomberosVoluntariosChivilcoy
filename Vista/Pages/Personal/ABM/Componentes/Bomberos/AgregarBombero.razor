@@ -612,7 +612,9 @@
 			catch (ServiceException photoEx) when (photoEx.StatusCode == System.Net.HttpStatusCode.NotFound)
 			{
 				// El usuario no tiene foto, continuar sin ella
-				nombreImagen = $"foto_{upn.Replace("@", "_").Replace(".", "_")}.jpg";
+				nombreImagen = null;
+				photoBase64 = null;
+				contentType = null;
 			}
 
 			// Asignar datos al modelo
