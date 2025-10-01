@@ -74,6 +74,9 @@
                     <MenuItem Key="brigadas" OnClick="@(() => navigationManager.NavigateTo("/Brigadas"))" class="compact-item">
                         <span class="compact-text">Brigadas</span>
                     </MenuItem>
+                    <MenuItem Key="equipos-autonomos" OnClick="@(() => navigationManager.NavigateTo("/EquiposAutonomos"))" class="compact-item">
+                        <span class="compact-text">Equipos Autónomos</span>
+                    </MenuItem>
                 </SubMenu>
             </Menu>
         </div>
@@ -219,6 +222,15 @@
                             <a class="menu-link" href="/Brigadas">Brigadas</a>
                         </ChildContent>
                     </MenuItem>
+
+                    <MenuItem Key="equipos-autonomos">
+                        <IconTemplate>
+                            <i class="fa-solid fa-mask-face submenu-icon"></i>
+                        </IconTemplate>
+                        <ChildContent>
+                            <a class="menu-link" href="/EquiposAutonomos">Equipos Autónomos</a>
+                        </ChildContent>
+                    </MenuItem>
                 </SubMenu>
 
                 <SubMenu Key="etica" TitleTemplate="@eticaTitle">
@@ -299,6 +311,8 @@
             return "HISTORIAL MÓVILES";
         if (uri.Contains("/brigadas"))
             return "BRIGADAS";
+        if (uri.Contains("/equiposautonomos"))
+            return "EQUIPOS AUTÓNOMOS";
         if (uri.Contains("/dependencias/comunicacion"))
             return "COMUNICACIÓN";
         if (uri.Contains("/dependencias/deposito"))
@@ -348,11 +362,13 @@
             return new[] { "reportes" };
         if (uri.Contains("/brigadas"))
             return new[] { "brigadas" };
+        if (uri.Contains("/equiposautonomos"))
+            return new[] { "equipos-autonomos" };
         if (uri.Contains("/dependencias/comunicacion"))
             return new[] { "comunicacion" };
         if (uri.Contains("/dependencias/deposito"))
             return new[] { "deposito" };
-        if (uri.Contains("/brigadas") || uri.Contains("/dependencias"))
+        if (uri.Contains("/brigadas") || uri.Contains("/dependencias") || uri.Contains("/equiposautonomos"))
             return new[] { "herramientas" };
         if (uri.Contains("/bomberos/sancionados") || uri.Contains("/bomberos/ascenso"))
             return new[] { "etica" };
