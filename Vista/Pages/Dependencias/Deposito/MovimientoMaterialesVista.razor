@@ -17,7 +17,6 @@
 @inject IMessageService message
 
 <style>
-    /* Estilos globales del contenedor principal */
     .movimientos-abm {
         font-family: 'Poppins', sans-serif !important;
         --primary-color: #f0f2f5;
@@ -32,7 +31,6 @@
         --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     }
 
-    /* Estilos del modal y sus componentes */
     .ant-modal-content {
         border: 2px solid #dc3545 !important;
         border-radius: 8px !important;
@@ -53,7 +51,6 @@
         color: white !important;
     }
 
-    /* Encabezado de sección dentro del formulario */
     .movimientos-abm .section-header-new-style {
         font-size: 1.1em;
         font-weight: 600;
@@ -64,61 +61,53 @@
         text-align: left;
     }
 
-    /* Grid de dos columnas para los campos del formulario */
     .movimientos-abm .form-grid-new-style {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 16px 60px; /* Aumentar el espacio horizontal */
+    gap: 16px 60px; 
     align-items: flex-start;
 }
 
-    /* Cambiar el comportamiento del FormItem para que los labels se apilen */
     .ant-form-item {
         display: flex;
-        flex-direction: column; /* Coloca la etiqueta y el input en columna */
-        align-items: flex-start; /* Alinea el contenido a la izquierda */
-        margin-bottom: 12px; /* Espacio entre campos */
+        flex-direction: column; 
+        align-items: flex-start; 
+        margin-bottom: 12px;
     }
 
-    /* Ajuste para que el label no ocupe un ancho fijo y se posicione arriba */
     .ant-form-item-label {
         padding: 0 !important;
         line-height: 1.2;
-        margin-bottom: 10px; /* Pequeño espacio entre el label y el input */
+        margin-bottom: 10px;
         text-align: left !important;
     }
 
-    /* Letras de etiquetas más gruesas */
     .ant-form-item-label > label {
         font-weight: 600 !important;
         font-size: 14px;
     }
 
-    /* Estilos para los íconos de los labels */
     .ant-form-item-label > label .anticon {
         margin-right: 8px;
     }
 
-    /* Ajuste para que el input ocupe el 100% del ancho disponible */
     .ant-form-item-control {
         width: 100%;
     }
 
-    /* Botonera de acciones */
     .movimientos-abm .form-buttons-container {
         display: flex;
-        justify-content: flex-end; /* Alinea los botones a la derecha */
+        justify-content: flex-end;
         gap: 10px;
         margin-top: 24px;
     }
 
-    /* Estilos de botones */
     .movimientos-abm .primary-button {
         background-color: var(--secondary-color);
         border: none;
         color: white;
         box-shadow: 0 2px 8px rgba(47, 84, 235, 0.3);
-        height: 32px; /* Botones más pequeños */
+        height: 32px; 
         font-weight: 500;
         border-radius: 6px;
         padding: 0 15px;
@@ -129,7 +118,7 @@
         border: none;
         color: white;
         box-shadow: none;
-        height: 32px; /* Botones más pequeños */
+        height: 32px; 
         font-weight: 500;
         border-radius: 6px;
         padding: 0 15px;
@@ -152,19 +141,17 @@
         color: white;
         box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
         font-weight: 600;
-        height: 32px; /* Botones más grandes */
+        height: 32px; 
         border-radius: 6px;
         padding: 0 15px;
     }
 
-    /* Separador visual */
     .movimientos-abm .section-separator {
         border: none;
         border-top: 1px dashed var(--border-color);
         margin: 24px 0;
     }
 
-    /* Estilos de inputs y selects */
     .ant-select:not(.ant-select-customize-input) .ant-select-selector {
         border-radius: 6px !important;
         height: 40px !important;
@@ -176,7 +163,6 @@
     line-height: 40px !important;
     display: block !important;
 }
-    /* Efecto hover */
     .ant-input:focus, .ant-input:hover,
     .ant-input-number:focus, .ant-input-number:hover,
     .ant-select-selector:focus, .ant-select-selector:hover {
@@ -184,7 +170,6 @@
         box-shadow: 0 0 0 2px rgba(255, 193, 7, 0.2) !important;
     }
 
-    /* Estilos de la tabla */
     .movimientos-abm .table-container {
         margin-top: 20px;
         border-radius: 8px;
@@ -208,8 +193,6 @@
 
 <div class="movimientos-abm">
     <div class="modal-content">
-
-        <h3 class="section-header">Tabla de Movimientos</h3>
 
         <div style="text-align: right; margin-bottom: 20px;">
             <Button Type="@ButtonType.Primary" OnClick="OpenFormModal" Class="primary-button">
@@ -299,7 +282,7 @@
                         LabelName="@nameof(MaterialVM.Descripcion)" ValueName="@nameof(MaterialVM.MaterialId)"
                         Placeholder="Seleccione el material" DefaultActiveFirstOption="false" AllowClear="true" EnableSearch />
                 </FormItem>
-                <FormItem WrapperColSpan="24" LabelColSpan="4" Label="Destino">
+                <FormItem WrapperColSpan="24" LabelColSpan="4" >
                     <CheckboxGroup Style="display: flex; gap: 20px;" @bind-Value="@_value" TValue="string" OnChange="OnChange">
                         <Checkbox Label="Bombero" @bind-Value="@chIsBombero">Bombero</Checkbox>
                         <Checkbox Label="Movil" @bind-Value="@chIsMovil">Móvil</Checkbox>
