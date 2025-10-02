@@ -45,10 +45,12 @@
             </div>
         </Card>
         <div style="text-align: center; margin-top: 10px;">
-            <label for="fotoMovil">
-                Cargar foto del móvil
-            </label>
-            <InputFile OnChange="SubirFoto" id="fotoMovil" accept=".jpg,.jpeg,.png" style="display: none;" />
+            <Button Type="@ButtonType.Primary">
+                <label for="fotoMovil" style="cursor: pointer; margin: 0;">
+                    <Icon Type="upload" /> Cargar foto del móvil
+                    <InputFile OnChange="SubirFoto" id="fotoMovil" accept=".jpg,.jpeg,.png" style="display: none;" />
+                </label>
+            </Button>
         </div>
     </div>
 
