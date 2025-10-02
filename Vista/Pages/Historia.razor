@@ -4,164 +4,162 @@
 @using AntDesign
 
 <HeadContent>
-    <link href="css/inicio.css" rel="stylesheet" />
+	<link href="css/inicio.css" rel="stylesheet" />
 </HeadContent>
 
 <div class="inicio-page">
-    <AntDesign.Layout>
-        <AntDesign.Layout.Header Class="custom-header">
-            <div style="display: flex; justify-content: flex-end;">
-                <Menu Mode="@MenuMode.Horizontal" 
-                      SelectedKeys="@(new[]{"historia"})" 
-                      Style="background: transparent; border-bottom: none;"
-                      OnMenuItemClicked="OnMenuItemClicked">
-                    <MenuItem Key="inicio">
-                        🏠 INICIO
-                    </MenuItem>
-                    <MenuItem Key="sesion">
-                        🏢 INICIAR SESIÓN
-                    </MenuItem>
-                    <MenuItem Key="contacto">
-                        📞 CONTACTO
-                    </MenuItem>
-                    <MenuItem Key="cuerpo">
-                        👥 CUERPO ACTIVO
-                    </MenuItem>
-                    <MenuItem Key="historia">
-                        📖 NUESTRA HISTORIA
-                    </MenuItem>
-                </Menu>
-            </div>
-        </AntDesign.Layout.Header>
+	<AntDesign.Layout>
+		<AntDesign.Layout.Header Class="custom-header">
+			<div style="display: flex; justify-content: flex-end;">
+				<Menu Mode="@MenuMode.Horizontal"
+					  SelectedKeys="@(new[]{"historia"})"
+					  Style="background: transparent; border-bottom: none;"
+					  OnMenuItemClicked="OnMenuItemClicked">
+					<MenuItem Key="inicio">
+						🏠 INICIO
+					</MenuItem>
+					<MenuItem Key="sesion">
+						🏢 INICIAR SESIÓN
+					</MenuItem>
+					<MenuItem Key="contacto">
+						📞 CONTACTO
+					</MenuItem>
+					<MenuItem Key="cuerpo">
+						👥 CUERPO ACTIVO
+					</MenuItem>
+					<MenuItem Key="historia">
+						📖 NUESTRA HISTORIA
+					</MenuItem>
+				</Menu>
+			</div>
+		</AntDesign.Layout.Header>
 
-        <AntDesign.Layout.Content Class="contact-section">
-            <div class="contact-container">
-                <div class="contact-header">
-                    <Title Level="1" Class="contact-title">
-                        NUESTRA HISTORIA
-                    </Title>
-                    <div class="contact-separator"></div>
-                    <Paragraph Style="font-size: 1.2rem; color: #666; letter-spacing: 1px; margin: 0;">
-                        Sociedad de Bomberos Voluntarios de Chivilcoy
-                    </Paragraph>
-                </div>
-                
-                <Row Style="display: flex; justify-content: center;">
-                    <AntDesign.Col Xs="24" Sm="22" Md="20" Lg="18" Xl="16">
-                        <Card Style="background: rgba(255, 255, 255, 0.9); border-radius: 20px; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1); border: 1px solid rgba(139, 0, 0, 0.1); padding: 40px;">
-                            <Title Level= "2" Style="color: #8b0000; margin-bottom: 30px; text-align: center; font-size: 2rem; font-weight: 700;">
-                                Reseña Histórica
-                            </Title>
-                            
-                            <div style="line-height: 1.8; font-size: 1.1rem; color: #444; text-align: justify;">
-                                <Paragraph Style="margin-bottom: 20px; text-indent: 2rem;">
-                                    En los últimos meses de 1944 por inquietud de un grupo de vecinos, se inician en Chivilcoy las primeras gestiones para la formación de un cuerpo de bomberos voluntarios. Iniciativa que es tomada por el Centro Comercial e Industrial de Chivilcoy que brinda su apoyo para concretarlo, con tal éxito que se logra una inscripción de 60 personas de las cuales se formarían cuatro dotaciones.
-                                </Paragraph>
-                                
-                                <Paragraph Style="margin-bottom: 20px; text-indent: 2rem;">
-                                    En 1945 se cristaliza este intento formándose el cuerpo activo y posteriormente el <Text Strong Style="color: #8b0000;">7 de julio del mismo año</Text>, surge la Institución con el nombre de <Text Strong Style="color: #8b0000;">Sociedad de Bomberos Voluntarios de Chivilcoy</Text>, cuya sede era el edificio del Centro Comercial e Industrial de Chivilcoy, ubicado en la Avenida Soarez Nº 33.
-                                </Paragraph>
-                                
-                                <Paragraph Style="margin-bottom: 20px; text-indent: 2rem;">
-                                    Fue precisamente el edificio de este organismo la primer sede utilizada como cuartel por el Cuerpo de Bomberos Voluntarios de Chivilcoy y casi como por obra del destino el grupo tuvo su <Text Strong Style="color: #b22222;">bautismo de fuego</Text>, en la Iglesia Parroquial Nuestra Señora del Rosario, cinco meses después de su creación.
-                                </Paragraph>
-                                
-                                <Paragraph Style="margin-bottom: 20px; text-indent: 2rem;">
-                                    Él <Text Strong>8 de diciembre de ese año a las 06.15 Hs.</Text> ardió el cielorraso de la sacristía mientras se ofrecía la misa de la 1º comunión. Los daños que originó el incendio fueron evaluados en aquella oportunidad en 4000 pesos.
-                                </Paragraph>
-                                
-                                <Paragraph Style="margin-bottom: 20px; text-indent: 2rem;">
-                                    La Institución se trasladó posteriormente el <Text Strong>6 de agosto de 1950</Text> a la calle Lavalle 28 entre las calles San Martín y la Avenida Villarino, en un inmueble cedido por la Municipalidad de Chivilcoy. En dicha oportunidad, conjuntamente con la inauguración de la sede, se procede a bendecir el <Text Strong Style="color: #8b0000;">autobomba Nº 1</Text> construido sobre un chasis Diamond modelo 1945, el acto religioso estuvo a cargo del Presbítero Luis Conti.
-                                </Paragraph>
-                                
-                                <Paragraph Style="margin-bottom: 20px; text-indent: 2rem;">
-                                    En ese local permanece la Institución hasta el <Text Strong>21 de noviembre de 1971</Text> fecha en que pasa a ocupar definitivamente su edificio propio ubicado en las intersecciones de las calles Gral. Pueyrredón y Gral. Rodríguez.
-                                </Paragraph>
-                                
-                                <Paragraph Style="margin-bottom: 0; text-indent: 2rem;">
-                                    El presidente de la Comisión Directiva actual es el Sr. <Text Strong Style="color: #8b0000;">Lizaur Jorge</Text> y el Jefe a Cargo del Cuerpo Activo es el Sr. <Text Strong Style="color: #8b0000;">Alagia Héctor</Text>.
-                                </Paragraph>
-                            </div>
-                            
-                            <div style="text-align: center; margin-top: 40px; padding-top: 30px; border-top: 2px solid rgba(139, 0, 0, 0.2);">
-                                <Title Level="3" Style="color: #8b0000; margin: 0; font-style: italic;">
-                                    "Desde 1945 al Servicio de la Comunidad"
-                                </Title>
-                                <Text Style="color: #666; font-size: 1rem; margin-top: 10px; display: block;">
-                                    ABNEGACIÓN – DESINTERÉS – SACRIFICIO
-                                </Text>
-                            </div>
-                        </Card>
-                    </AntDesign.Col>
-                </Row>
-                
-                <div style="text-align: center; margin-top: 60px; opacity: 0; animation: fadeInUp 1s ease 1s forwards;">
-                    <img src="/Imagenes/Logos.png" 
-                         alt="Logo Bomberos Voluntarios Chivilcoy" 
-                         style="max-width: 200px; width: 100%; height: auto; filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.2)); animation: float 3s ease-in-out infinite;" />
-                </div>
-            </div>
-        </AntDesign.Layout.Content>
+		<AntDesign.Layout.Content Class="contact-section">
+			<div class="contact-container">
+				<div class="contact-header">
+					<Title Level="1" Class="contact-title">
+						NUESTRA HISTORIA
+					</Title>
+					<div class="contact-separator"></div>
+					<Paragraph Style="font-size: 1.2rem; color: #666; letter-spacing: 1px; margin: 0;">
+						Sociedad de Bomberos Voluntarios de Chivilcoy
+					</Paragraph>
+				</div>
 
-        <div class="footer-section">
-            <div class="footer-content">
-                <Row Gutter="40">
-                    <AntDesign.Col Xs="24" Sm="24" Md="12" Lg="12" Xl="12">
-                        <div class="footer-left">
-                            <img src="/Imagenes/Logos.png" 
-                                 alt="Logo Bomberos Voluntarios Chivilcoy" 
-                                 class="footer-logo" />
-                            <div class="footer-info">
-                                <Title Level="3" Style="color: white; font-size: 1.4rem; font-weight: 600; margin: 0 0 5px 0; text-transform: uppercase;">
-                                    Sociedad de Bomberos<br />Voluntarios de Chivilcoy
-                                </Title>
-                                <Paragraph Style="color: #ccc; font-size: 0.9rem; margin: 0; line-height: 1.4;">
-                                    Desde 1945 al Servicio de la Comunidad
-                                </Paragraph>
-                            </div>
-                        </div>
-                    </AntDesign.Col>
-                    <AntDesign.Col Xs="24" Sm="24" Md="12" Lg="12" Xl="12">
-                        <div class="footer-right">
-                            <div class="footer-contact">
-                                <Title Level="4" Style="color: white; font-size: 1.2rem; font-weight: 600; margin: 0 0 10px 0; text-transform: uppercase;">
-                                    Contacto
-                                </Title>
-                                <Paragraph Class="footer-phone" Style="color: #ccc; font-size: 1rem; margin: 0; display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
-                                    <span class="phone-icon">📞</span>
-                                    100 / 424319-426066
-                                </Paragraph>
-                            </div>
-                        </div>
-                    </AntDesign.Col>
-                </Row>
-            </div>
-        </div>
-    </AntDesign.Layout>
+				<Row Style="display: flex; justify-content: center;">
+					<AntDesign.Col Xs="24" Sm="22" Md="20" Lg="18" Xl="16">
+						<Card Style="background: rgba(255, 255, 255, 0.9); border-radius: 20px; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1); border: 1px solid rgba(139, 0, 0, 0.1); padding: 40px;">
+							<Title Level="2" Style="color: #8b0000; margin-bottom: 30px; text-align: center; font-size: 2rem; font-weight: 700;">
+								Reseña Histórica
+							</Title>
+
+							<div style="line-height: 1.8; font-size: 1.1rem; color: #444; text-align: justify;">
+								<Paragraph Style="margin-bottom: 20px; text-indent: 2rem;">
+									En los últimos meses de 1944 por inquietud de un grupo de vecinos, se inician en Chivilcoy las primeras gestiones para la formación de un cuerpo de bomberos voluntarios. Iniciativa que es tomada por el Centro Comercial e Industrial de Chivilcoy que brinda su apoyo para concretarlo, con tal éxito que se logra una inscripción de 60 personas de las cuales se formarían cuatro dotaciones.
+								</Paragraph>
+
+								<Paragraph Style="margin-bottom: 20px; text-indent: 2rem;">
+									En 1945 se cristaliza este intento formándose el cuerpo activo y posteriormente el <Text Strong Style="color: #8b0000;">7 de julio del mismo año</Text>, surge la Institución con el nombre de <Text Strong Style="color: #8b0000;">Sociedad de Bomberos Voluntarios de Chivilcoy</Text>, cuya sede era el edificio del Centro Comercial e Industrial de Chivilcoy, ubicado en la Avenida Soarez Nº 33.
+								</Paragraph>
+
+								<Paragraph Style="margin-bottom: 20px; text-indent: 2rem;">
+									Fue precisamente el edificio de este organismo la primer sede utilizada como cuartel por el Cuerpo de Bomberos Voluntarios de Chivilcoy y casi como por obra del destino el grupo tuvo su <Text Strong Style="color: #b22222;">bautismo de fuego</Text>, en la Iglesia Parroquial Nuestra Señora del Rosario, cinco meses después de su creación.
+								</Paragraph>
+
+								<Paragraph Style="margin-bottom: 20px; text-indent: 2rem;">
+									Él <Text Strong>8 de diciembre de ese año a las 06.15 Hs.</Text> ardió el cielorraso de la sacristía mientras se ofrecía la misa de la 1º comunión. Los daños que originó el incendio fueron evaluados en aquella oportunidad en 4000 pesos.
+								</Paragraph>
+
+								<Paragraph Style="margin-bottom: 20px; text-indent: 2rem;">
+									La Institución se trasladó posteriormente el <Text Strong>6 de agosto de 1950</Text> a la calle Lavalle 28 entre las calles San Martín y la Avenida Villarino, en un inmueble cedido por la Municipalidad de Chivilcoy. En dicha oportunidad, conjuntamente con la inauguración de la sede, se procede a bendecir el <Text Strong Style="color: #8b0000;">autobomba Nº 1</Text> construido sobre un chasis Diamond modelo 1945, el acto religioso estuvo a cargo del Presbítero Luis Conti.
+								</Paragraph>
+
+								<Paragraph Style="margin-bottom: 20px; text-indent: 2rem;">
+									En ese local permanece la Institución hasta el <Text Strong>21 de noviembre de 1971</Text> fecha en que pasa a ocupar definitivamente su edificio propio ubicado en las intersecciones de las calles Gral. Pueyrredón y Gral. Rodríguez.
+								</Paragraph>
+
+								<Paragraph Style="margin-bottom: 0; text-indent: 2rem;">
+									El presidente de la Comisión Directiva actual es el Sr. <Text Strong Style="color: #8b0000;">Lizaur Jorge</Text> y el Jefe a Cargo del Cuerpo Activo es el Sr. <Text Strong Style="color: #8b0000;">Alagia Héctor</Text>.
+								</Paragraph>
+							</div>
+
+							<div style="text-align: center; margin-top: 40px; padding-top: 30px; border-top: 2px solid rgba(139, 0, 0, 0.2);">
+								<Title Level="3" Style="color: #8b0000; margin: 0; font-style: italic;">
+									"Desde 1945 al Servicio de la Comunidad"
+								</Title>
+								<Text Style="color: #666; font-size: 1rem; margin-top: 10px; display: block;">
+									ABNEGACIÓN – DESINTERÉS – SACRIFICIO
+								</Text>
+							</div>
+						</Card>
+					</AntDesign.Col>
+				</Row>
+
+				<div style="text-align: center; margin-top: 60px; opacity: 0; animation: fadeInUp 1s ease 1s forwards;">
+					<img src="/Imagenes/Logos.png"
+						 alt="Logo Bomberos Voluntarios Chivilcoy"
+						 style="max-width: 200px; width: 100%; height: auto; filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.2)); animation: float 3s ease-in-out infinite;" />
+				</div>
+			</div>
+		</AntDesign.Layout.Content>
+
+		<div class="footer-section">
+			<div class="footer-content">
+				<Row Gutter="40">
+					<AntDesign.Col Xs="24" Sm="24" Md="12" Lg="12" Xl="12">
+						<div class="footer-left">
+							<img src="/Imagenes/Logos.png"
+								 alt="Logo Bomberos Voluntarios Chivilcoy"
+								 class="footer-logo" />
+							<div class="footer-info">
+								<Title Level="3" Style="color: white; font-size: 1.4rem; font-weight: 600; margin: 0 0 5px 0; text-transform: uppercase;">
+									Sociedad de Bomberos<br />Voluntarios de Chivilcoy
+								</Title>
+								<Paragraph Style="color: #ccc; font-size: 0.9rem; margin: 0; line-height: 1.4;">
+									Desde 1945 al Servicio de la Comunidad
+								</Paragraph>
+							</div>
+						</div>
+					</AntDesign.Col>
+					<AntDesign.Col Xs="24" Sm="24" Md="12" Lg="12" Xl="12">
+						<div class="footer-right">
+							<div class="footer-contact">
+								<Title Level="4" Style="color: white; font-size: 1.2rem; font-weight: 600; margin: 0 0 10px 0; text-transform: uppercase;">
+									Contacto
+								</Title>
+								<Paragraph Class="footer-phone" Style="color: #ccc; font-size: 1rem; margin: 0; display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
+									<span class="phone-icon">📞</span>
+									100 / 424319-426066
+								</Paragraph>
+							</div>
+						</div>
+					</AntDesign.Col>
+				</Row>
+			</div>
+		</div>
+	</AntDesign.Layout>
 </div>
 
 @code {
-    private void OnMenuItemClicked(MenuItem menuItem)
-    {
-        switch (menuItem.Key)
-        {
-            case "inicio":
-                Navigation.NavigateTo("/inicio");
-                break;
-            case "contacto":
-                Navigation.NavigateTo("/contacto");
-                break;
-            case "cuerpo":
-                Navigation.NavigateTo("/cuerpo-activo");
-                break;
-            case "sesion":
-                Navigation.NavigateTo("/BomberosVoluntariosChivilcoy");
-                break;
-            case "historia":
-                Navigation.NavigateTo("/historia");
-                break;
-            default:
-                break;
-        }
-    }
+	private Dictionary<string, Action> menuActions;
+
+	protected override void OnInitialized()
+	{
+		menuActions = new Dictionary<string, Action>
+		{
+			["inicio"] = () => Navigation.NavigateTo("/inicio"),
+			["contacto"] = () => Navigation.NavigateTo("/contacto"),
+			["cuerpo"] = () => Navigation.NavigateTo("/cuerpo-activo"),
+			["historia"] = () => Navigation.NavigateTo("/historia"),
+			["sesion"] = () => Navigation.NavigateTo("/fire-force/")
+		};
+	}
+
+	private void OnMenuItemClicked(MenuItem menuItem)
+	{
+		if (menuActions.TryGetValue(menuItem.Key, out var action))
+		{
+			action.Invoke();
+		}
+	}
 }

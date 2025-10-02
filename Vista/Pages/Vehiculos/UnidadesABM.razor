@@ -9,7 +9,7 @@
 @inject NavigationManager navigationManager
 @inject IVehiculoSalidaService VehiculoSalidaService
 
-@page "/unidades/{Estado?}"
+@page "/fire-force/unidades/{Estado?}"
 
 <div class="container unidades-abm">
     <Content class="fade-in" Style ="padding: 16px;">
@@ -40,14 +40,14 @@
                                 <Icon Type="plus" />Nueva Unidad
                             </Button>
                             <Button Class="modern-button danger-button"
-                                    OnClick="@(() => navigationManager.NavigateTo("/unidades/baja", true))">
+                                    OnClick="@(() => navigationManager.NavigateTo("/fire-force/unidades/baja", true))">
                                 <Icon Type="folder" /> Unidades de baja
                             </Button>
                         }
                         else
                         {
                             <Button class="modern-button back-button"
-                                    OnClick="@(() => navigationManager.NavigateTo("/unidades/activas", true))">
+                                    OnClick="@(() => navigationManager.NavigateTo("/fire-force/unidades/activas", true))">
                                 <Icon Type="folder-open" />Volver a Unidades activas
                             </Button>
                         }
@@ -124,7 +124,7 @@
         }
         else
         {
-            navigationManager.NavigateTo("/unidades");
+            navigationManager.NavigateTo("/fire-force/unidades");
             return;
         }
 

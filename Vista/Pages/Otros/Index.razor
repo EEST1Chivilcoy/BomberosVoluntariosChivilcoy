@@ -1,7 +1,7 @@
 ﻿@using Vista.Helpers;
 @using Microsoft.AspNetCore.Authorization
 @inject NavigationManager navigationManager
-@page "/BomberosVoluntariosChivilcoy"
+@page "/fire-force/"
 
 
 <style>
@@ -278,7 +278,7 @@
 
         @*Legajo Section*@
         <AntDesign.Col Xs="24" Sm="12" Lg="8">
-            <div @onclick="@(() => { navigationManager.NavigateTo("/Bomberos/Legajo"); })" style="cursor: pointer;">
+            <div @onclick="@(() => { navigationManager.NavigateTo("/fire-force/Bomberos/Legajo"); })" style="cursor: pointer;">
                 <Card Class="dashboard-card legajo-card">
                     <i class="fa-solid fa-user card-icon"></i>
                     <h2>LEGAJO</h2>
@@ -289,7 +289,7 @@
 
         @*Salidas Section*@
         <AntDesign.Col Xs="24" Sm="12" Lg="8">
-            <div @onclick="@(() => { navigationManager.NavigateTo("/Salidas"); })" style="cursor: pointer;">
+            <div @onclick="@(() => { navigationManager.NavigateTo("/fire-force/Salidas"); })" style="cursor: pointer;">
                 <Card Class="dashboard-card salidas-card">
                     <Icon class="card-icon" Type="alert" Theme="IconThemeType.Fill" />
                     <h2>SALIDAS</h2>
@@ -300,7 +300,7 @@
 
         @* Personal/Bomberos Section *@
         <AntDesign.Col Xs="24" Sm="12" Lg="8">
-            <div @onclick="@(() => { navigationManager.NavigateTo("/personal/bomberos"); })" style="cursor: pointer;">
+            <div @onclick="@(() => { navigationManager.NavigateTo("/fire-force/personal/bomberos"); })" style="cursor: pointer;">
                 <Card Class="dashboard-card personal-card">
                     <i class="fa-solid fa-people-group card-icon"></i>
                     <h2>BOMBEROS</h2>
@@ -311,7 +311,7 @@
 
         @* Comisión Directiva Section *@
         <AntDesign.Col Xs="24" Sm="12" Lg="8">
-            <div @onclick="@(() => { navigationManager.NavigateTo("/personal/comisiondirectiva"); })" style="cursor: pointer;">
+            <div @onclick="@(() => { navigationManager.NavigateTo("/fire-force/personal/comisiondirectiva"); })" style="cursor: pointer;">
                 <Card Class="dashboard-card personal-card">
                     <i class="fa-solid fa-user-tie card-icon"></i>
                     <h2>COMISIÓN DIRECTIVA</h2>
@@ -322,7 +322,7 @@
 
         @*Licencias Section*@
         <AntDesign.Col Xs="24" Sm="12" Lg="8">
-            <div @onclick="@(() => { navigationManager.NavigateTo("/Licencias"); })" style="cursor: pointer;">
+            <div @onclick="@(() => { navigationManager.NavigateTo("/fire-force/Licencias"); })" style="cursor: pointer;">
                 <Card Class="dashboard-card licencias-card">
                     <i class="fa-solid fa-file-signature card-icon"></i>
                     <h2>LICENCIAS</h2>
@@ -333,7 +333,7 @@
 
         @* Unidades Section *@
         <AntDesign.Col Xs="24" Sm="12" Lg="8">
-            <div @onclick="@(() => { navigationManager.NavigateTo("/unidades"); })" style="cursor: pointer;">
+            <div @onclick="@(() => { navigationManager.NavigateTo("/fire-force/unidades"); })" style="cursor: pointer;">
                 <Card Class="dashboard-card unidades-card">
                     <i class="fa-solid fa-truck card-icon"></i>
                     <h2>UNIDADES</h2>
@@ -344,7 +344,7 @@
 
         @* Firmas Section *@
         <AntDesign.Col Xs="24" Sm="12" Lg="8">
-            <div @onclick="@(() => { navigationManager.NavigateTo("/incidentes-vehiculos"); })" style="cursor: pointer;">
+            <div @onclick="@(() => { navigationManager.NavigateTo("/fire-force/incidentes-vehiculos"); })" style="cursor: pointer;">
                 <Card Class="dashboard-card firmas-card">
                     <i class="fa-solid fa-scroll card-icon"></i>
                     <h2>FIRMAS</h2>
@@ -359,12 +359,12 @@
                 <h2>ÉTICA</h2>
                 <div class="ethics-buttons">
                     <span title="Sancionados">
-                        <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/bomberos/sancionados"); })">
+                        <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/fire-force/bomberos/sancionados"); })">
                             <i class="fa-solid fa-user-xmark"></i>
                         </Button>
                     </span>
                     <span title="Ascensos">
-                        <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/bomberos/ascenso"); })">
+                        <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/fire-force/bomberos/ascenso"); })">
                             <i class="fa-solid fa-user-plus"></i>
                         </Button>
                     </span>
@@ -378,17 +378,17 @@
                 <h2>REPORTES</h2>
                 <div class="report-buttons">
                     <span title="Historial Bomberos">
-                        <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/Reportes/HistorialBomberos"); })">
+                        <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/fire-force/Reportes/HistorialBomberos"); })">
                             <i class="fa-solid fa-user-clock"></i>
                         </Button>
                     </span>
                     <span title="Choferes">
-                        <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/Reportes/Reportes_Choferes"); })">
+                        <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/fire-force/Reportes/Reportes_Choferes"); })">
                             <i class="fa-solid fa-id-card"></i>
                         </Button>
                     </span>
                     <span title="Historial Móviles">
-                        <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/Reportes/HistorialMoviles"); })">
+                        <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/fire-force/Reportes/HistorialMoviles"); })">
                             <i class="fa-solid fa-truck"></i>
                         </Button>
                     </span>
@@ -402,27 +402,27 @@
                 <H2>UTILIDADES</H2>
                 <div class="department-buttons">
                     <span title="Comunicación">
-                        <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/Dependencias/Comunicacion"); })">
+                        <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/fire-force/Dependencias/Comunicacion"); })">
                             <i class="fa-solid fa-walkie-talkie"></i>
                         </Button>
                     </span>
                     <span title="Depósito">
-                        <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/Dependencias/Deposito"); })">
+                        <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/fire-force/Dependencias/Deposito"); })">
                             <i class="fa-solid fa-warehouse"></i>
                         </Button>
                     </span>
                     <span title="Dependencias">
-                        <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/Dependencias"); })">
+                        <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/fire-force/Dependencias"); })">
                             <i class="fa-solid fa-building"></i>
                         </Button>
                     </span>
                     <span title="Fuerzas Intervinientes">
-                        <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/FuerzasIntervinientes"); })">
+                        <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/fire-force/FuerzasIntervinientes"); })">
                             <i class="fa-solid fa-shield-halved"></i>
                         </Button>
                     </span>
                     <span title="Brigadas">
-                        <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/Brigadas"); })">
+                        <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/fire-force/Brigadas"); })">
                             <i class="fa-solid fa-users-gear"></i>
                         </Button>
                     </span>
@@ -432,7 +432,7 @@
 
         @* Cobradores Section *@
         <AntDesign.Col Xs="24" Sm="12" Lg="8">
-            <div @onclick="@(() => { navigationManager.NavigateTo("/personal/cobradores"); })" style="cursor: pointer;">
+            <div @onclick="@(() => { navigationManager.NavigateTo("/fire-force/personal/cobradores"); })" style="cursor: pointer;">
                 <Card Class="dashboard-card cobradores-card">
                     <i class="fa-solid fa-money-bill-wave card-icon"></i>
                     <h2>COBRADORES</h2>

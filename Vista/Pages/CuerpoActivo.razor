@@ -4,290 +4,288 @@
 @using AntDesign
 
 <HeadContent>
-    <link href="css/inicio.css" rel="stylesheet" />
+	<link href="css/inicio.css" rel="stylesheet" />
 </HeadContent>
 
 <div class="inicio-page">
-    <AntDesign.Layout>
-        <AntDesign.Layout.Header Class="custom-header">
-            <div style="display: flex; justify-content: flex-end;">
-                <Menu Mode="@MenuMode.Horizontal" 
-                      SelectedKeys="@(new[]{"cuerpo"})" 
-                      Style="background: transparent; border-bottom: none;"
-                      OnMenuItemClicked="OnMenuItemClicked">
-                    <MenuItem Key="inicio">
-                        🏠 INICIO
-                    </MenuItem>
-                    <MenuItem Key="sesion">
-                        🏢 INICIAR SESIÓN
-                    </MenuItem>
-                    <MenuItem Key="contacto">
-                        📞 CONTACTO
-                    </MenuItem>
-                    <MenuItem Key="cuerpo">
-                        👥 CUERPO ACTIVO
-                    </MenuItem>
-                    <MenuItem Key="historia">
-                        📖 NUESTRA HISTORIA
-                    </MenuItem>
-                </Menu>
-            </div>
-        </AntDesign.Layout.Header>
+	<AntDesign.Layout>
+		<AntDesign.Layout.Header Class="custom-header">
+			<div style="display: flex; justify-content: flex-end;">
+				<Menu Mode="@MenuMode.Horizontal"
+					  SelectedKeys="@(new[]{"cuerpo"})"
+					  Style="background: transparent; border-bottom: none;"
+					  OnMenuItemClicked="OnMenuItemClicked">
+					<MenuItem Key="inicio">
+						🏠 INICIO
+					</MenuItem>
+					<MenuItem Key="sesion">
+						🏢 INICIAR SESIÓN
+					</MenuItem>
+					<MenuItem Key="contacto">
+						📞 CONTACTO
+					</MenuItem>
+					<MenuItem Key="cuerpo">
+						👥 CUERPO ACTIVO
+					</MenuItem>
+					<MenuItem Key="historia">
+						📖 NUESTRA HISTORIA
+					</MenuItem>
+				</Menu>
+			</div>
+		</AntDesign.Layout.Header>
 
-        <AntDesign.Layout.Content Class="cuerpo-section">
-            <div class="cuerpo-container">
-                <div class="cuerpo-header">
-                    <Title Level="1" Class="cuerpo-title">
-                        CUERPO ACTIVO
-                    </Title>
-                    <div class="cuerpo-separator"></div>
-                    <Paragraph Class="cuerpo-subtitle">
-                        Nuestros Bomberos Voluntarios al Servicio de la Comunidad
-                    </Paragraph>
-                </div>
-                
-                <Row Gutter="30" Style="margin-bottom: 80px;">
-                    @foreach (var bombero in bomberos)
-                    {
-                        <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6" Xl="6" Style="margin-bottom: 30px; display: flex;">
-                            <Card Class="bombero-card" 
-                                  Style="border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); border: 1px solid rgba(139, 0, 0, 0.1); width: 100%; display: flex; flex-direction: column;"
-                                  Cover="@GetCardCover(bombero)">
-                                <div class="bombero-info" style="flex: 1; display: flex; flex-direction: column; padding: 25px;">
-                                    <Title Level="4" Style="margin: 0 0 8px 0; color: #333; font-size: 1.2rem; font-weight: 700; line-height: 1.3; height: 3.2rem; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
-                                        @bombero.Nombre
-                                    </Title>
-                                    <Paragraph Style="color: #8b0000; font-weight: 500; margin: 0 0 20px 0; text-transform: uppercase; letter-spacing: 0.5px; font-size: 0.95rem; height: 2.4rem; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
-                                        @bombero.Especialidad
-                                    </Paragraph>
-                                    <div class="bombero-stats" style="margin-top: auto;">
-                                        <div class="stat-item">
-                                            <span class="stat-icon">🚒</span>
-                                            <Text Style="font-weight: 500; color: #666;">@bombero.AniosServicio años</Text>
-                                        </div>
-                                        <div class="stat-item" style="margin-top: 10px;">
-                                            <span class="stat-icon">🏅</span>
-                                            <Text Style="font-weight: 500; color: #666;">@bombero.Intervenciones salidas</Text>
-                                        </div>
-                                    </div>
-                                </div>
-                            </Card>
-                        </AntDesign.Col>
-                    }
-                </Row>
+		<AntDesign.Layout.Content Class="cuerpo-section">
+			<div class="cuerpo-container">
+				<div class="cuerpo-header">
+					<Title Level="1" Class="cuerpo-title">
+						CUERPO ACTIVO
+					</Title>
+					<div class="cuerpo-separator"></div>
+					<Paragraph Class="cuerpo-subtitle">
+						Nuestros Bomberos Voluntarios al Servicio de la Comunidad
+					</Paragraph>
+				</div>
 
-                <Row Gutter="30" Style="justify-content: center;">
-                    <AntDesign.Col Xs="12" Sm="6" Md="6" Lg="6" Xl="6">
-                        <Card Style="text-align: center; padding: 30px 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); border: 1px solid rgba(139, 0, 0, 0.1);">
-                            <div class="stat-icon-large">👥</div>
-                            <Title Level="2" Style="color: #8b0000; margin: 15px 0 10px 0; font-size: 2.5rem; font-weight: 700; line-height: 1;">
-                                @bomberos.Count
-                            </Title>
-                            <Text Style="color: #666; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; font-size: 1rem;">
-                                Bomberos Activos
-                            </Text>
-                        </Card>
-                    </AntDesign.Col>
-                    <AntDesign.Col Xs="12" Sm="6" Md="6" Lg="6" Xl="6">
-                        <Card Style="text-align: center; padding: 30px 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); border: 1px solid rgba(139, 0, 0, 0.1);">
-                            <div class="stat-icon-large">🚒</div>
-                            <Title Level="2" Style="color: #8b0000; margin: 15px 0 10px 0; font-size: 2.5rem; font-weight: 700; line-height: 1;">
-                                @bomberos.Sum(b => b.AniosServicio)
-                            </Title>
-                            <Text Style="color: #666; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; font-size: 1rem;">
-                                Años de Experiencia
-                            </Text>
-                        </Card>
-                    </AntDesign.Col>
-                    <AntDesign.Col Xs="12" Sm="6" Md="6" Lg="6" Xl="6">
-                        <Card Style="text-align: center; padding: 30px 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); border: 1px solid rgba(139, 0, 0, 0.1);">
-                            <div class="stat-icon-large">🏅</div>
-                            <Title Level="2" Style="color: #8b0000; margin: 15px 0 10px 0; font-size: 2.5rem; font-weight: 700; line-height: 1;">
-                                @bomberos.Sum(b => b.Intervenciones)
-                            </Title>
-                            <Text Style="color: #666; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; font-size: 1rem;">
-                                Intervenciones Totales
-                            </Text>
-                        </Card>
-                    </AntDesign.Col>
-                    <AntDesign.Col Xs="12" Sm="6" Md="6" Lg="6" Xl="6">
-                        <Card Style="text-align: center; padding: 30px 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); border: 1px solid rgba(139, 0, 0, 0.1);">
-                            <div class="stat-icon-large">⏰</div>
-                            <Title Level="2" Style="color: #8b0000; margin: 15px 0 10px 0; font-size: 2.5rem; font-weight: 700; line-height: 1;">
-                                24/7
-                            </Title>
-                            <Text Style="color: #666; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; font-size: 1rem;">
-                                Disponibilidad
-                            </Text>
-                        </Card>
-                    </AntDesign.Col>
-                </Row>
-            </div>
-        </AntDesign.Layout.Content>
+				<Row Gutter="30" Style="margin-bottom: 80px;">
+					@foreach (var bombero in bomberos)
+					{
+						<AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6" Xl="6" Style="margin-bottom: 30px; display: flex;">
+							<Card Class="bombero-card"
+								  Style="border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); border: 1px solid rgba(139, 0, 0, 0.1); width: 100%; display: flex; flex-direction: column;"
+								  Cover="@GetCardCover(bombero)">
+								<div class="bombero-info" style="flex: 1; display: flex; flex-direction: column; padding: 25px;">
+									<Title Level="4" Style="margin: 0 0 8px 0; color: #333; font-size: 1.2rem; font-weight: 700; line-height: 1.3; height: 3.2rem; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
+										@bombero.Nombre
+									</Title>
+									<Paragraph Style="color: #8b0000; font-weight: 500; margin: 0 0 20px 0; text-transform: uppercase; letter-spacing: 0.5px; font-size: 0.95rem; height: 2.4rem; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
+										@bombero.Especialidad
+									</Paragraph>
+									<div class="bombero-stats" style="margin-top: auto;">
+										<div class="stat-item">
+											<span class="stat-icon">🚒</span>
+											<Text Style="font-weight: 500; color: #666;">@bombero.AniosServicio años</Text>
+										</div>
+										<div class="stat-item" style="margin-top: 10px;">
+											<span class="stat-icon">🏅</span>
+											<Text Style="font-weight: 500; color: #666;">@bombero.Intervenciones salidas</Text>
+										</div>
+									</div>
+								</div>
+							</Card>
+						</AntDesign.Col>
+					}
+				</Row>
 
-        <div class="footer-section">
-            <div class="footer-content">
-                <Row Gutter="40">
-                    <AntDesign.Col Xs="24" Sm="24" Md="12" Lg="12" Xl="12">
-                        <div class="footer-left">
-                            <img src="/Imagenes/Logos.png" 
-                                 alt="Logo Bomberos Voluntarios Chivilcoy" 
-                                 class="footer-logo" />
-                            <div class="footer-info">
-                                <Title Level="3" Style="color: white; font-size: 1.4rem; font-weight: 600; margin: 0 0 5px 0; text-transform: uppercase;">
-                                    Sociedad de Bomberos<br />Voluntarios de Chivilcoy
-                                </Title>
-                                <Paragraph Style="color: #ccc; font-size: 0.9rem; margin: 0; line-height: 1.4;">
-                                    Desde 1945 al Servicio de la Comunidad
-                                </Paragraph>
-                            </div>
-                        </div>
-                    </AntDesign.Col>
-                    <AntDesign.Col Xs="24" Sm="24" Md="12" Lg="12" Xl="12">
-                        <div class="footer-right">
-                            <div class="footer-contact">
-                                <Title Level="4" Style="color: white; font-size: 1.2rem; font-weight: 600; margin: 0 0 10px 0; text-transform: uppercase;">
-                                    Contacto
-                                </Title>
-                                <Paragraph Class="footer-phone" Style="color: #ccc; font-size: 1rem; margin: 0; display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
-                                    <span class="phone-icon">📞</span>
-                                    100 / 424319-426066
-                                </Paragraph>
-                            </div>
-                        </div>
-                    </AntDesign.Col>
-                </Row>
-            </div>
-        </div>
-    </AntDesign.Layout>
+				<Row Gutter="30" Style="justify-content: center;">
+					<AntDesign.Col Xs="12" Sm="6" Md="6" Lg="6" Xl="6">
+						<Card Style="text-align: center; padding: 30px 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); border: 1px solid rgba(139, 0, 0, 0.1);">
+							<div class="stat-icon-large">👥</div>
+							<Title Level="2" Style="color: #8b0000; margin: 15px 0 10px 0; font-size: 2.5rem; font-weight: 700; line-height: 1;">
+								@bomberos.Count
+							</Title>
+							<Text Style="color: #666; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; font-size: 1rem;">
+								Bomberos Activos
+							</Text>
+						</Card>
+					</AntDesign.Col>
+					<AntDesign.Col Xs="12" Sm="6" Md="6" Lg="6" Xl="6">
+						<Card Style="text-align: center; padding: 30px 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); border: 1px solid rgba(139, 0, 0, 0.1);">
+							<div class="stat-icon-large">🚒</div>
+							<Title Level="2" Style="color: #8b0000; margin: 15px 0 10px 0; font-size: 2.5rem; font-weight: 700; line-height: 1;">
+								@bomberos.Sum(b => b.AniosServicio)
+							</Title>
+							<Text Style="color: #666; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; font-size: 1rem;">
+								Años de Experiencia
+							</Text>
+						</Card>
+					</AntDesign.Col>
+					<AntDesign.Col Xs="12" Sm="6" Md="6" Lg="6" Xl="6">
+						<Card Style="text-align: center; padding: 30px 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); border: 1px solid rgba(139, 0, 0, 0.1);">
+							<div class="stat-icon-large">🏅</div>
+							<Title Level="2" Style="color: #8b0000; margin: 15px 0 10px 0; font-size: 2.5rem; font-weight: 700; line-height: 1;">
+								@bomberos.Sum(b => b.Intervenciones)
+							</Title>
+							<Text Style="color: #666; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; font-size: 1rem;">
+								Intervenciones Totales
+							</Text>
+						</Card>
+					</AntDesign.Col>
+					<AntDesign.Col Xs="12" Sm="6" Md="6" Lg="6" Xl="6">
+						<Card Style="text-align: center; padding: 30px 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); border: 1px solid rgba(139, 0, 0, 0.1);">
+							<div class="stat-icon-large">⏰</div>
+							<Title Level="2" Style="color: #8b0000; margin: 15px 0 10px 0; font-size: 2.5rem; font-weight: 700; line-height: 1;">
+								24/7
+							</Title>
+							<Text Style="color: #666; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; font-size: 1rem;">
+								Disponibilidad
+							</Text>
+						</Card>
+					</AntDesign.Col>
+				</Row>
+			</div>
+		</AntDesign.Layout.Content>
+
+		<div class="footer-section">
+			<div class="footer-content">
+				<Row Gutter="40">
+					<AntDesign.Col Xs="24" Sm="24" Md="12" Lg="12" Xl="12">
+						<div class="footer-left">
+							<img src="/Imagenes/Logos.png"
+								 alt="Logo Bomberos Voluntarios Chivilcoy"
+								 class="footer-logo" />
+							<div class="footer-info">
+								<Title Level="3" Style="color: white; font-size: 1.4rem; font-weight: 600; margin: 0 0 5px 0; text-transform: uppercase;">
+									Sociedad de Bomberos<br />Voluntarios de Chivilcoy
+								</Title>
+								<Paragraph Style="color: #ccc; font-size: 0.9rem; margin: 0; line-height: 1.4;">
+									Desde 1945 al Servicio de la Comunidad
+								</Paragraph>
+							</div>
+						</div>
+					</AntDesign.Col>
+					<AntDesign.Col Xs="24" Sm="24" Md="12" Lg="12" Xl="12">
+						<div class="footer-right">
+							<div class="footer-contact">
+								<Title Level="4" Style="color: white; font-size: 1.2rem; font-weight: 600; margin: 0 0 10px 0; text-transform: uppercase;">
+									Contacto
+								</Title>
+								<Paragraph Class="footer-phone" Style="color: #ccc; font-size: 1rem; margin: 0; display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
+									<span class="phone-icon">📞</span>
+									100 / 424319-426066
+								</Paragraph>
+							</div>
+						</div>
+					</AntDesign.Col>
+				</Row>
+			</div>
+		</div>
+	</AntDesign.Layout>
 </div>
 
 @code {
-    private List<BomberoViewModel> bomberos = new List<BomberoViewModel>();
+	private List<BomberoViewModel> bomberos = new List<BomberoViewModel>();
 
-    protected override async Task OnInitializedAsync()
-    {
-        // Datos de ejemplo - esto después se reemplazará con datos del backend
-        bomberos = new List<BomberoViewModel>
-        {
-            new BomberoViewModel 
-            { 
-                Nombre = "Juan Carlos Rodríguez", 
-                Rango = "Jefe", 
-                Especialidad = "Comandancia", 
-                AniosServicio = 25, 
-                Intervenciones = 1500,
-                Foto = "/Imagenes/Logos.png" 
-            },
-            new BomberoViewModel 
-            { 
-                Nombre = "María Elena González", 
-                Rango = "Subjefe", 
-                Especialidad = "Rescate Urbano", 
-                AniosServicio = 18, 
-                Intervenciones = 980,
-                Foto = "/Imagenes/Logos.png" 
-            },
-            new BomberoViewModel 
-            { 
-                Nombre = "Carlos Alberto", 
-                Rango = "Capitán", 
-                Especialidad = "Incendios", 
-                AniosServicio = 15, 
-                Intervenciones = 750,
-                Foto = "/Imagenes/Logos.png" 
-            },
-            new BomberoViewModel 
-            { 
-                Nombre = "Ana Sofía López", 
-                Rango = "Teniente", 
-                Especialidad = "Emergencias Médicas", 
-                AniosServicio = 12, 
-                Intervenciones = 600,
-                Foto = "/Imagenes/Logos.png" 
-            },
-            new BomberoViewModel 
-            { 
-                Nombre = "Roberto Daniel Silva", 
-                Rango = "Sargento", 
-                Especialidad = "Materiales Peligrosos", 
-                AniosServicio = 10, 
-                Intervenciones = 420,
-                Foto = "/Imagenes/Logos.png" 
-            },
-            new BomberoViewModel 
-            { 
-                Nombre = "Laura Patricia Fernández", 
-                Rango = "Cabo", 
-                Especialidad = "Rescate Vehicular", 
-                AniosServicio = 8, 
-                Intervenciones = 350,
-                Foto = "/Imagenes/Logos.png" 
-            },
-            new BomberoViewModel 
-            { 
-                Nombre = "Diego Alejandro Morales", 
-                Rango = "Bombero", 
-                Especialidad = "Incendios Forestales", 
-                AniosServicio = 6, 
-                Intervenciones = 280,
-                Foto = "/Imagenes/Logos.png" 
-            },
-            new BomberoViewModel 
-            { 
-                Nombre = "Valeria Beatriz Castro", 
-                Rango = "Bombero", 
-                Especialidad = "Prevención", 
-                AniosServicio = 4, 
-                Intervenciones = 150,
-                Foto = "/Imagenes/Logos.png" 
-            }
-        };
-    }
+	protected override async Task OnInitializedAsync()
+	{
+		// Datos de ejemplo - esto después se reemplazará con datos del backend
+		bomberos = new List<BomberoViewModel>
+		{
+			new BomberoViewModel
+			{
+				Nombre = "Juan Carlos Rodríguez",
+				Rango = "Jefe",
+				Especialidad = "Comandancia",
+				AniosServicio = 25,
+				Intervenciones = 1500,
+				Foto = "/Imagenes/Logos.png"
+			},
+			new BomberoViewModel
+			{
+				Nombre = "María Elena González",
+				Rango = "Subjefe",
+				Especialidad = "Rescate Urbano",
+				AniosServicio = 18,
+				Intervenciones = 980,
+				Foto = "/Imagenes/Logos.png"
+			},
+			new BomberoViewModel
+			{
+				Nombre = "Carlos Alberto",
+				Rango = "Capitán",
+				Especialidad = "Incendios",
+				AniosServicio = 15,
+				Intervenciones = 750,
+				Foto = "/Imagenes/Logos.png"
+			},
+			new BomberoViewModel
+			{
+				Nombre = "Ana Sofía López",
+				Rango = "Teniente",
+				Especialidad = "Emergencias Médicas",
+				AniosServicio = 12,
+				Intervenciones = 600,
+				Foto = "/Imagenes/Logos.png"
+			},
+			new BomberoViewModel
+			{
+				Nombre = "Roberto Daniel Silva",
+				Rango = "Sargento",
+				Especialidad = "Materiales Peligrosos",
+				AniosServicio = 10,
+				Intervenciones = 420,
+				Foto = "/Imagenes/Logos.png"
+			},
+			new BomberoViewModel
+			{
+				Nombre = "Laura Patricia Fernández",
+				Rango = "Cabo",
+				Especialidad = "Rescate Vehicular",
+				AniosServicio = 8,
+				Intervenciones = 350,
+				Foto = "/Imagenes/Logos.png"
+			},
+			new BomberoViewModel
+			{
+				Nombre = "Diego Alejandro Morales",
+				Rango = "Bombero",
+				Especialidad = "Incendios Forestales",
+				AniosServicio = 6,
+				Intervenciones = 280,
+				Foto = "/Imagenes/Logos.png"
+			},
+			new BomberoViewModel
+			{
+				Nombre = "Valeria Beatriz Castro",
+				Rango = "Bombero",
+				Especialidad = "Prevención",
+				AniosServicio = 4,
+				Intervenciones = 150,
+				Foto = "/Imagenes/Logos.png"
+			}
+		};
+	}
 
-    private void OnMenuItemClicked(MenuItem menuItem)
-    {
-        switch (menuItem.Key)
-        {
-            case "inicio":
-                Navigation.NavigateTo("/inicio");
-                break;
-            case "contacto":
-                Navigation.NavigateTo("/contacto");
-                break;
-            case "sesion":
-                Navigation.NavigateTo("/BomberosVoluntariosChivilcoy");
-                break;
-            case "cuerpo":
+	private Dictionary<string, Action> menuActions;
 
-                break;
-            case "historia":
-                Navigation.NavigateTo("/historia");
-                break;
-            default:
-                break;
-        }
-    }
+	protected override void OnInitialized()
+	{
+		menuActions = new Dictionary<string, Action>
+		{
+			["inicio"] = () => Navigation.NavigateTo("/inicio"),
+			["contacto"] = () => Navigation.NavigateTo("/contacto"),
+			["cuerpo"] = () => Navigation.NavigateTo("/cuerpo-activo"),
+			["historia"] = () => Navigation.NavigateTo("/historia"),
+			["sesion"] = () => Navigation.NavigateTo("/fire-force/")
+		};
+	}
 
-    private RenderFragment GetCardCover(BomberoViewModel bombero)
-    {
-        return @<div class="bombero-photo" style="position: relative; height: 200px; overflow: hidden; background: linear-gradient(135deg, #8b0000, #b22222);">
-            <img src="@bombero.Foto" alt="@bombero.Nombre" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.9;" />
-            <div class="bombero-badge" style="position: absolute; top: 15px; right: 15px; background: rgba(255, 255, 255, 0.95); padding: 5px 12px; border-radius: 20px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);">
-                <Text Style="font-size: 0.85rem; font-weight: 600; color: #8b0000; text-transform: uppercase; letter-spacing: 0.5px;">
-                    @bombero.Rango
-                </Text>
-            </div>
-        </div>;
-    }
+	private void OnMenuItemClicked(MenuItem menuItem)
+	{
+		if (menuActions.TryGetValue(menuItem.Key, out var action))
+		{
+			action.Invoke();
+		}
+	}
 
-    public class BomberoViewModel
-    {
-        public string Nombre { get; set; } = "";
-        public string Rango { get; set; } = "";
-        public string Especialidad { get; set; } = "";
-        public int AniosServicio { get; set; }
-        public int Intervenciones { get; set; }
-        public string Foto { get; set; } = "";
-    }
+	private RenderFragment GetCardCover(BomberoViewModel bombero)
+	{
+		return @<div class="bombero-photo" style="position: relative; height: 200px; overflow: hidden; background: linear-gradient(135deg, #8b0000, #b22222);">
+			<img src="@bombero.Foto" alt="@bombero.Nombre" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.9;" />
+			<div class="bombero-badge" style="position: absolute; top: 15px; right: 15px; background: rgba(255, 255, 255, 0.95); padding: 5px 12px; border-radius: 20px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);">
+				<Text Style="font-size: 0.85rem; font-weight: 600; color: #8b0000; text-transform: uppercase; letter-spacing: 0.5px;">
+					@bombero.Rango
+				</Text>
+			</div>
+		</div>;
+	}
+
+	public class BomberoViewModel
+	{
+		public string Nombre { get; set; } = "";
+		public string Rango { get; set; } = "";
+		public string Especialidad { get; set; } = "";
+		public int AniosServicio { get; set; }
+		public int Intervenciones { get; set; }
+		public string Foto { get; set; } = "";
+	}
 }
