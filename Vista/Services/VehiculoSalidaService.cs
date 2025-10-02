@@ -161,7 +161,7 @@ namespace Vista.Services
             {
                 ActualizarPropiedadesEscalares(existente, vehiculo);
                 await SetEncargadoAsync(existente, vehiculo);
-                await ProcesarImagenAsync(existente, vehiculo.Imagen);
+                await ProcesarImagenAsync(existente, imagen);
                 await _context.SaveChangesAsync();
             }
 
@@ -195,19 +195,33 @@ namespace Vista.Services
 
         private async Task ProcesarImagenAsync(VehiculoSalida vehiculo, Imagen? imagen)
         {
-            if (imagen is Imagen_VehiculoSalida imgVehiculo)
+            if (imagen != null)
             {
-                imgVehiculo.VehiculoId = vehiculo.VehiculoId;
-
-                if (vehiculo.ImagenId.HasValue)
+                if (vehiculo.Imagen != null)
                 {
-                    imgVehiculo.ImagenId = vehiculo.ImagenId.Value;
-                    await _imagenService.EditarImagenAsync(imgVehiculo);
+                    if (imagen is Imagen_VehiculoSalida imgVehiculo)
+                    {
+                        imgVehiculo.VehiculoId = vehiculo.VehiculoId;
+
+                        if (vehiculo.ImagenId.HasValue)
+                        {
+                            imgVehiculo.ImagenId = vehiculo.ImagenId.Value;
+                            await _imagenService.EditarImagenAsync(imgVehiculo);
+                        }
+                        else
+                        {
+                            await _imagenService.GuardarImagenAsync(imgVehiculo);
+                            vehiculo.ImagenId = imgVehiculo.ImagenId;
+                        }
+                    }
                 }
                 else
                 {
-                    await _imagenService.GuardarImagenAsync(imgVehiculo);
-                    vehiculo.ImagenId = imgVehiculo.ImagenId;
+                    if (imagen is Imagen_VehiculoSalida imagen_VehiculoSalida)
+                    {
+                        imagen_VehiculoSalida.VehiculoId = vehiculo.VehiculoId;
+                        await _imagenService.GuardarImagenAsync(imagen_VehiculoSalida);
+                    }
                 }
             }
         }
