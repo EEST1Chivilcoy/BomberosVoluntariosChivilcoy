@@ -14,6 +14,13 @@ namespace Vista.Data.Models.Personas.Personal
     public abstract class Personal : Persona
     {
         /// <summary>
+        /// ID de la cuenta de EntraID
+        /// </summary>
+        [Required]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public Guid EntraId { get; set; }
+
+        /// <summary>
         /// Grupo sanguíneo de la persona.
         /// </summary>
         public TipoGrupoSanguineo? GrupoSanguineo { get; set; }

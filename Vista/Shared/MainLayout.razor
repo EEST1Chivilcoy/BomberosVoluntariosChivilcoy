@@ -15,64 +15,67 @@
             </Button>
             <Menu Mode="MenuMode.Horizontal" Theme="MenuTheme.Light" class="top-menu compact-menu"
                   SelectedKeys="@GetSelectedMenuKeys()">
-                <MenuItem Key="home" OnClick="@(() => navigationManager.NavigateTo("/"))" class="compact-item">
+                <MenuItem Key="home" OnClick="@(() => navigationManager.NavigateTo("/fire-force/"))" class="compact-item">
                     <i class="fa-solid fa-house compact-icon"></i> <span class="compact-text">Home</span>
                 </MenuItem>
-                <MenuItem Key="legajo" OnClick="@(() => navigationManager.NavigateTo("/Bomberos/Legajo"))" class="compact-item">
+                <MenuItem Key="legajo" OnClick="@(() => navigationManager.NavigateTo("/fire-force/Bomberos/Legajo"))" class="compact-item">
                     <i class="fa-solid fa-id-card compact-icon"></i> <span class="compact-text">Legajo</span>
                 </MenuItem>
-                <MenuItem Key="salidas" OnClick="@(() => navigationManager.NavigateTo("/salidas"))" class="compact-item">
+                <MenuItem Key="salidas" OnClick="@(() => navigationManager.NavigateTo("/fire-force/salidas"))" class="compact-item">
                     <i class="fa-solid fa-sign-out-alt compact-icon"></i> <span class="compact-text">Salidas</span>
                 </MenuItem>
-                <MenuItem Key="personal" OnClick="@(() => navigationManager.NavigateTo("/personal/bomberos"))" class="compact-item">
+                <MenuItem Key="personal" OnClick="@(() => navigationManager.NavigateTo("/fire-force/personal/bomberos"))" class="compact-item">
                     <i class="fa-solid fa-user compact-icon"></i> <span class="compact-text">Personal</span>
                 </MenuItem>
-                <MenuItem Key="licencias" OnClick="@(() => navigationManager.NavigateTo("/licencias"))" class="compact-item">
+                <MenuItem Key="licencias" OnClick="@(() => navigationManager.NavigateTo("/fire-force/licencias"))" class="compact-item">
                     <i class="fa-solid fa-file-alt compact-icon"></i> <span class="compact-text">Licencias</span>
                 </MenuItem>
-                <MenuItem Key="moviles" OnClick="@(() => navigationManager.NavigateTo("/unidades"))" class="compact-item">
+                <MenuItem Key="moviles" OnClick="@(() => navigationManager.NavigateTo("/fire-force/unidades"))" class="compact-item">
                     <i class="fa-solid fa-car compact-icon"></i> <span class="compact-text">Unidades</span>
                 </MenuItem>
-                <MenuItem Key="firmas" OnClick="@(() => navigationManager.NavigateTo("/incidentes-vehiculos"))" class="compact-item">
+                <MenuItem Key="firmas" OnClick="@(() => navigationManager.NavigateTo("/fire-force/incidentes-vehiculos"))" class="compact-item">
                     <i class="fa-solid fa-signature compact-icon"></i> <span class="compact-text">Firmas</span>
                 </MenuItem>
                 <SubMenu Key="etica" TitleTemplate="@eticaCompactTitle" class="compact-submenu">
-                    <MenuItem Key="sanciones" OnClick="@(() => navigationManager.NavigateTo("/bomberos/sancionados"))" class="compact-item">
+                    <MenuItem Key="sanciones" OnClick="@(() => navigationManager.NavigateTo("/fire-force/bomberos/sancionados"))" class="compact-item">
                         <span class="compact-text">Sanciones</span>
                     </MenuItem>
-                    <MenuItem Key="ascensos" OnClick="@(() => navigationManager.NavigateTo("/bomberos/ascenso"))" class="compact-item">
+                    <MenuItem Key="ascensos" OnClick="@(() => navigationManager.NavigateTo("/fire-force/bomberos/ascenso"))" class="compact-item">
                         <span class="compact-text">Ascensos</span>
                     </MenuItem>
                 </SubMenu>
                 <SubMenu Key="reportes" TitleTemplate="@reportesCompactTitle" class="compact-submenu">
-                    <MenuItem Key="reportes-salidas" OnClick="@(() => navigationManager.NavigateTo("/Reportes/HistorialSalidas"))" class="compact-item">
+                    <MenuItem Key="reportes-salidas" OnClick="@(() => navigationManager.NavigateTo("/fire-force/Reportes/HistorialSalidas"))" class="compact-item">
                         <span class="compact-text">Historial Salidas</span>
                     </MenuItem>
-                    <MenuItem Key="reportes-bomberos" OnClick="@(() => navigationManager.NavigateTo("/Reportes/HistorialBomberos"))" class="compact-item">
+                    <MenuItem Key="reportes-bomberos" OnClick="@(() => navigationManager.NavigateTo("/fire-force/Reportes/HistorialBomberos"))" class="compact-item">
                         <span class="compact-text">Historial Bomberos</span>
                     </MenuItem>
-                    <MenuItem Key="reportes-choferes" OnClick="@(() => navigationManager.NavigateTo("/Reportes/Reportes_Choferes"))" class="compact-item">
+                    <MenuItem Key="reportes-choferes" OnClick="@(() => navigationManager.NavigateTo("/fire-force/Reportes/Reportes_Choferes"))" class="compact-item">
                         <span class="compact-text">Choferes</span>
                     </MenuItem>
-                    <MenuItem Key="reportes-moviles" OnClick="@(() => navigationManager.NavigateTo("/Reportes/HistorialMoviles"))" class="compact-item">
+                    <MenuItem Key="reportes-moviles" OnClick="@(() => navigationManager.NavigateTo("/fire-force/Reportes/HistorialMoviles"))" class="compact-item">
                         <span class="compact-text">Móviles</span>
                     </MenuItem>
                 </SubMenu>
                 <SubMenu Key="herramientas" TitleTemplate="@herramientasCompactTitle" class="compact-submenu">
-                    <MenuItem Key="fuerzas" OnClick="@(() => navigationManager.NavigateTo("/FuerzasIntervinientes"))" class="compact-item">
+                    <MenuItem Key="fuerzas" OnClick="@(() => navigationManager.NavigateTo("/fire-force/FuerzasIntervinientes"))" class="compact-item">
                         <span class="compact-text">Fuerzas Intervinientes</span>
                     </MenuItem>
-                    <MenuItem Key="comunicacion" OnClick="@(() => navigationManager.NavigateTo("/Dependencias/Comunicacion"))" class="compact-item">
+                    <MenuItem Key="comunicacion" OnClick="@(() => navigationManager.NavigateTo("/fire-force/Dependencias/Comunicacion"))" class="compact-item">
                         <span class="compact-text">Comunicación</span>
                     </MenuItem>
-                    <MenuItem Key="deposito" OnClick="@(() => navigationManager.NavigateTo("/Dependencias/Deposito"))" class="compact-item">
+                    <MenuItem Key="deposito" OnClick="@(() => navigationManager.NavigateTo("/fire-force/Dependencias/Deposito"))" class="compact-item">
                         <span class="compact-text">Depósito</span>
                     </MenuItem>
-                    <MenuItem Key="dependencias" OnClick="@(() => navigationManager.NavigateTo("/Dependencias"))" class="compact-item">
+                    <MenuItem Key="dependencias" OnClick="@(() => navigationManager.NavigateTo("/fire-force/Dependencias"))" class="compact-item">
                         <span class="compact-text">Dependencias</span>
                     </MenuItem>
-                    <MenuItem Key="brigadas" OnClick="@(() => navigationManager.NavigateTo("/Brigadas"))" class="compact-item">
+                    <MenuItem Key="brigadas" OnClick="@(() => navigationManager.NavigateTo("/fire-force/Brigadas"))" class="compact-item">
                         <span class="compact-text">Brigadas</span>
+                    </MenuItem>
+                    <MenuItem Key="equipos-autonomos" OnClick="@(() => navigationManager.NavigateTo("/fire-force/Dependencias/EquiposAutonomos"))" class="compact-item">
+                        <span class="compact-text">Equipos Autónomos</span>
                     </MenuItem>
                 </SubMenu>
             </Menu>
@@ -86,7 +89,7 @@
                   InlineCollapsed="collapsedMenu"
                   class="main-menu">
 
-                <MenuItem Key="legajo" OnClick="@(() => navigationManager.NavigateTo("/Bomberos/Legajo"))">
+                <MenuItem Key="legajo" OnClick="@(() => navigationManager.NavigateTo("/fire-force/Bomberos/Legajo"))">
                     <IconTemplate>
                         <i class="fa-solid fa-user menu-icon"></i>
                     </IconTemplate>
@@ -95,7 +98,7 @@
                     </ChildContent>
                 </MenuItem>
 
-                <MenuItem Key="licencias" OnClick="@(() => navigationManager.NavigateTo("/licencias"))">
+                <MenuItem Key="licencias" OnClick="@(() => navigationManager.NavigateTo("/fire-force/licencias"))">
                     <IconTemplate>
                         <i class="fa-solid fa-file-signature menu-icon"></i>
                     </IconTemplate>
@@ -104,7 +107,7 @@
                     </ChildContent>
                 </MenuItem>
 
-                <MenuItem Key="moviles" OnClick="@(() => navigationManager.NavigateTo("/unidades"))">
+                <MenuItem Key="moviles" OnClick="@(() => navigationManager.NavigateTo("/fire-force/unidades"))">
                     <IconTemplate>
                         <i class="fa-solid fa-truck menu-icon"></i>
                     </IconTemplate>
@@ -113,7 +116,7 @@
                     </ChildContent>
                 </MenuItem>
 
-                <MenuItem Key="personal" OnClick="@(() => navigationManager.NavigateTo("/personal/bomberos"))">
+                <MenuItem Key="personal" OnClick="@(() => navigationManager.NavigateTo("/fire-force/personal/bomberos"))">
                     <IconTemplate>
                         <i class="fa-solid fa-people-group menu-icon"></i>
                     </IconTemplate>
@@ -122,7 +125,7 @@
                     </ChildContent>
                 </MenuItem>
 
-                <MenuItem Key="salidas" OnClick="@(() => navigationManager.NavigateTo("/salidas"))">
+                <MenuItem Key="salidas" OnClick="@(() => navigationManager.NavigateTo("/fire-force/salidas"))">
                     <IconTemplate>
                         <i class="fa-solid fa-fire-extinguisher menu-icon"></i>
                     </IconTemplate>
@@ -131,7 +134,7 @@
                     </ChildContent>
                 </MenuItem>
 
-                <MenuItem Key="firmas" OnClick="@(() => navigationManager.NavigateTo("/incidentes-vehiculos"))">
+                <MenuItem Key="firmas" OnClick="@(() => navigationManager.NavigateTo("/fire-force/incidentes-vehiculos"))">
                     <IconTemplate>
                         <i class="fa-solid fa-scroll menu-icon"></i>
                     </IconTemplate>
@@ -219,6 +222,15 @@
                             <a class="menu-link" href="/Brigadas">Brigadas</a>
                         </ChildContent>
                     </MenuItem>
+
+                    <MenuItem Key="equipos-autonomos">
+                        <IconTemplate>
+                            <i class="fa-solid fa-mask-face submenu-icon"></i>
+                        </IconTemplate>
+                        <ChildContent>
+                            <a class="menu-link" href="/EquiposAutonomos">Equipos Autónomos</a>
+                        </ChildContent>
+                    </MenuItem>
                 </SubMenu>
 
                 <SubMenu Key="etica" TitleTemplate="@eticaTitle">
@@ -299,6 +311,8 @@
             return "HISTORIAL MÓVILES";
         if (uri.Contains("/brigadas"))
             return "BRIGADAS";
+        if (uri.Contains("/equiposautonomos"))
+            return "EQUIPOS AUTÓNOMOS";
         if (uri.Contains("/dependencias/comunicacion"))
             return "COMUNICACIÓN";
         if (uri.Contains("/dependencias/deposito"))
@@ -348,11 +362,13 @@
             return new[] { "reportes" };
         if (uri.Contains("/brigadas"))
             return new[] { "brigadas" };
+        if (uri.Contains("/equiposautonomos"))
+            return new[] { "equipos-autonomos" };
         if (uri.Contains("/dependencias/comunicacion"))
             return new[] { "comunicacion" };
         if (uri.Contains("/dependencias/deposito"))
             return new[] { "deposito" };
-        if (uri.Contains("/brigadas") || uri.Contains("/dependencias"))
+        if (uri.Contains("/brigadas") || uri.Contains("/dependencias") || uri.Contains("/equiposautonomos"))
             return new[] { "herramientas" };
         if (uri.Contains("/bomberos/sancionados") || uri.Contains("/bomberos/ascenso"))
             return new[] { "etica" };

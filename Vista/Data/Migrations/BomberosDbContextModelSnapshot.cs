@@ -1121,6 +1121,9 @@ namespace Vista.Data.Migrations
                 {
                     b.HasBaseType("Vista.Data.Models.Personas.Persona");
 
+                    b.Property<Guid>("EntraId")
+                        .HasColumnType("char(36)");
+
                     b.Property<DateTime?>("FechaAceptacion")
                         .HasColumnType("datetime(6)");
 
@@ -1134,6 +1137,9 @@ namespace Vista.Data.Migrations
                     b.Property<string>("LugarNacimiento")
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
+
+                    b.HasIndex("EntraId")
+                        .IsUnique();
                 });
 
             modelBuilder.Entity("Vista.Data.Models.Salidas.Componentes.SeguroVehiculo", b =>

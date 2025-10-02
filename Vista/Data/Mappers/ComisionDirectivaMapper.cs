@@ -31,6 +31,7 @@ namespace Vista.Data.Mappers
                 FechaAceptacion = comisionDirectiva.FechaAceptacion,
                 GrupoSanguineo = comisionDirectiva.GrupoSanguineo,
                 LugarNacimiento = comisionDirectiva.LugarNacimiento,
+                EntraID = comisionDirectiva.EntraId,
 
                 // Mapeo de Contacto (si existe)
                 TelefonoCel = comisionDirectiva.Contacto?.TelefonoCel,
