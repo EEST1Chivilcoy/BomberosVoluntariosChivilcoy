@@ -15,10 +15,10 @@
 <link rel="stylesheet" href="css/AgregarVehiculosEstilos.css">
 
 <div style="display: flex; align-items: center; justify-content: flex-start; padding-left: 20px;">
-    <Icon Type="car" Style="font-size: 24px; margin-right: 10px; color: #ff0000;" />
-    <Title Level="2" style="margin-bottom: 0;">
-        Agregar Unidad
-    </Title>
+	<Icon Type="car" Style="font-size: 24px; margin-right: 10px; color: #ff0000;" />
+	<Title Level="2" style="margin-bottom: 0;">
+		Agregar Unidad
+	</Title>
 </div>
 
 <div class="modal-body-content">
@@ -240,23 +240,22 @@
 		public string? Nombre { get; set; }
 	}
 
-	// Carga de datos
-
+	// MÉTODO MEJORADO PARA SUBIR FOTO
 	private async Task SubirFoto(InputFileChangeEventArgs e)
 	{
 		try
 		{
 			var archivo = e.File;
 
-			// Validar el tamaño del archivo (máximo 5MB)
-			const long maxSizeInBytes = 5 * 1024 * 1024; // 5 MB
+			// Validar tamaño
+			const long maxSizeInBytes = 5 * 1024 * 1024;
 			if (archivo.Size > maxSizeInBytes)
 			{
 				await message.ErrorAsync("El archivo no debe superar los 5MB");
 				return;
 			}
 
-			// Validar el tipo de archivo permitido
+			// Validar extensión
 			string[] allowedExtensions = { ".jpg", ".jpeg", ".png" };
 			string extension = Path.GetExtension(archivo.Name).ToLower();
 			if (!allowedExtensions.Contains(extension))
@@ -265,23 +264,32 @@
 				return;
 			}
 
-			// Convertir el archivo a Base64
-			string imagenBase64 = await Base64Helper.StreamToBase64(archivo.OpenReadStream(maxSizeInBytes));
+			Console.WriteLine($"📤 Procesando archivo: {archivo.Name}, Tamaño: {archivo.Size} bytes");
 
-			// Asignar los valores a la vista de la imagen
+			// Convertir a Base64
+			using var stream = archivo.OpenReadStream(maxSizeInBytes);
+			string imagenBase64 = await Base64Helper.StreamToBase64(stream);
+
+			// Verificar que el Base64 se generó correctamente
+			if (string.IsNullOrWhiteSpace(imagenBase64))
+			{
+				await message.ErrorAsync("Error al convertir la imagen a Base64");
+				return;
+			}
+
+			// Asignar valores
 			imagenView.Base64 = imagenBase64;
 			imagenView.TipoImagen = archivo.ContentType;
 			imagenView.Nombre = archivo.Name;
 
-			// Mostrar mensaje de éxito
+			Console.WriteLine($"✅ Imagen cargada: Base64 Length: {imagenBase64.Length}");
 			await message.SuccessAsync("Imagen cargada exitosamente");
 
-			// Actualizar el estado del componente
 			StateHasChanged();
 		}
 		catch (Exception ex)
 		{
-			// Manejar errores y mostrar un mensaje
+			Console.WriteLine($"❌ Error en SubirFoto: {ex}");
 			await message.ErrorAsync($"Error al procesar la imagen: {ex.Message}");
 		}
 	}
@@ -292,6 +300,10 @@
 
 		try
 		{
+			isLoading = true;
+			StateHasChanged();
+
+			// Validación del encargado
 			var encargado = await BomberoService.ObtenerBomberoPorIdAsync(vehiculoView.EncargadoId);
 			if (encargado is null)
 			{
@@ -299,19 +311,36 @@
 				return;
 			}
 
+			// Validación de vehículo existente
 			var vehiculoExistente = await VehiculoSalidaService.ObtenerVehiculoSalidaPorNumeroMovilAsync(vehiculoView.NumeroMovil);
 			if (vehiculoExistente is not null)
 			{
-				await message.ErrorAsync("Existe un vehiculo con el mismo Nº Móvil");
+				await message.ErrorAsync("Existe un vehículo con el mismo Nº Móvil");
 				return;
 			}
 
+			// ✅ VALIDACIÓN MEJORADA DE LA IMAGEN
 			if (string.IsNullOrEmpty(imagenView.Base64))
-				await message.WarningAsync("No se ingresó una foto del vehículo");
+			{
+				await message.WarningAsync("No se ingresó una foto del vehículo. ¿Desea continuar sin imagen?");
+				// Opcional: podrías agregar confirmación aquí
+			}
 
+			// Crear vehículo e imagen
 			var vehiculo = CrearEmbarcacion(encargado);
 			var imagen = CrearImagenVehiculo();
 
+			// ✅ DEBUG: Verificar si la imagen se creó correctamente
+			if (imagen != null)
+			{
+				Console.WriteLine($"Imagen creada: {imagen.NombreImagen}, Base64 Length: {imagen.Base64Imagen?.Length ?? 0}");
+			}
+			else
+			{
+				Console.WriteLine("⚠️ La imagen es NULL");
+			}
+
+			// Guardar según el tipo
 			if (!EsEmbarcacion)
 			{
 				var movil = Convertir<Movil>(vehiculo);
@@ -323,19 +352,19 @@
 				await VehiculoSalidaService.AgregarVehiculoSalidaAsync(vehiculo, imagen);
 			}
 
-			await message.SuccessAsync("Se agregó el móvil");
-
-			StateHasChanged();
+			await message.SuccessAsync("Se agregó el móvil correctamente");
 			await OnClose.InvokeAsync();
 		}
 		catch (Exception ex)
 		{
-			StateHasChanged();
-			await Init();
-
 			var errorMsg = ex.InnerException?.Message ?? ex.Message;
 			await message.ErrorAsync("Error inesperado: " + errorMsg, 5);
-			Console.WriteLine(errorMsg);
+			Console.WriteLine($"ERROR COMPLETO: {ex}");
+		}
+		finally
+		{
+			isLoading = false;
+			StateHasChanged();
 		}
 	}
 
@@ -355,16 +384,33 @@
 		Estado = vehiculoView.Estado == TipoEstadoMovil.Estado ? TipoEstadoMovil.Activo : vehiculoView.Estado
 	};
 
+	// MÉTODO MEJORADO PARA CREAR IMAGEN
 	private Imagen_VehiculoSalida? CrearImagenVehiculo()
 	{
-		if (string.IsNullOrEmpty(imagenView.Base64)) return null;
-
-		return new Imagen_VehiculoSalida
+		// Si no hay imagen, retornar null
+		if (imagenView == null || string.IsNullOrWhiteSpace(imagenView.Base64))
 		{
-			NombreImagen = imagenView.Nombre,
-			TipoImagen = imagenView.TipoImagen,
+			Console.WriteLine("⚠️ CrearImagenVehiculo: No hay datos de imagen");
+			return null;
+		}
+
+		// Validar que los datos estén completos
+		if (string.IsNullOrWhiteSpace(imagenView.Nombre) ||
+			string.IsNullOrWhiteSpace(imagenView.TipoImagen))
+		{
+			Console.WriteLine("⚠️ CrearImagenVehiculo: Nombre o TipoImagen vacío");
+			return null;
+		}
+
+		var imagen = new Imagen_VehiculoSalida
+		{
+			NombreImagen = imagenView.Nombre.Trim(),
+			TipoImagen = imagenView.TipoImagen.Trim(),
 			Base64Imagen = imagenView.Base64
 		};
+
+		Console.WriteLine($"✅ Imagen creada: {imagen.NombreImagen}, Tipo: {imagen.TipoImagen}");
+		return imagen;
 	}
 
 	private void MapearDatosMovil(Movil movil)

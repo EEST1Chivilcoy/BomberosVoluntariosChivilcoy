@@ -128,7 +128,7 @@ namespace Vista.Services
             await _context.SaveChangesAsync(); // Guardamos primero el vehículo para obtener su ID
 
             // Si hay imagen, la vinculamos y la guardamos
-            if (imagen is null)
+            if (imagen is not null)
             {
                 if (imagen is Imagen_VehiculoSalida imagenVehiculo)
                 {
