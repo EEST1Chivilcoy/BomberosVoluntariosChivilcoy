@@ -320,9 +320,11 @@
 					return;
 				}
 
-				if (string.IsNullOrEmpty(imagenView.Base64)) // Avisar si no se cargo una imagen
+				// Validación de la imagen
+				if (imagenView == null || string.IsNullOrWhiteSpace(imagenView.Base64))
 				{
-					message.Warning("No se ingreso una foto del vehiculo");
+					await message.ErrorAsync("No se ingresó una foto del vehículo");
+					return;
 				}
 
 				if (EncargadoNew == null) // Avisar si no se encontro el bombero encargado

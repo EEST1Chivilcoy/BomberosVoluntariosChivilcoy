@@ -305,6 +305,7 @@
 
 			// Validación del encargado
 			var encargado = await BomberoService.ObtenerBomberoPorIdAsync(vehiculoView.EncargadoId);
+
 			if (encargado is null)
 			{
 				await message.ErrorAsync("El bombero encargado no existe");
@@ -313,17 +314,18 @@
 
 			// Validación de vehículo existente
 			var vehiculoExistente = await VehiculoSalidaService.ObtenerVehiculoSalidaPorNumeroMovilAsync(vehiculoView.NumeroMovil);
+
 			if (vehiculoExistente is not null)
 			{
 				await message.ErrorAsync("Existe un vehículo con el mismo Nº Móvil");
 				return;
 			}
 
-			// ✅ VALIDACIÓN MEJORADA DE LA IMAGEN
-			if (string.IsNullOrEmpty(imagenView.Base64))
+			// Validación de la imagen
+			if (imagenView == null || string.IsNullOrWhiteSpace(imagenView.Base64))
 			{
-				await message.WarningAsync("No se ingresó una foto del vehículo. ¿Desea continuar sin imagen?");
-				// Opcional: podrías agregar confirmación aquí
+				await message.ErrorAsync("No se ingresó una foto del vehículo");
+				return;
 			}
 
 			// Crear vehículo e imagen

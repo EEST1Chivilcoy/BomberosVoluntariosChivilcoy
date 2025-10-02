@@ -10,7 +10,7 @@ namespace Vista.Services
         Task<ImagenResultado?> ObtenerImagenAsync(int id);
         Task<bool> GuardarImagenAsync(Imagen imagen);
         Task EditarImagenAsync(Imagen imagen);
-        Task EliminarImagenAsync(int id);
+        Task EliminarImagenAsync(int? id);
     }
 
     public class ImagenService : IImagenService
@@ -93,13 +93,32 @@ namespace Vista.Services
             }
         }
 
-        public async Task EliminarImagenAsync(int id)
+        public async Task EliminarImagenAsync(int? id)
         {
-            var imagen = await _context.Imagen.FindAsync(id);
-            if (imagen != null)
+            if (id == null || id <= 0)
             {
+                // Podés loguear esto como parte de un ritual de validación fallida
+                Console.WriteLine($"[❌] ID inválido para eliminación: {id}");
+            }
+
+            try
+            {
+                var imagen = await _context.Imagen.FindAsync(id);
+
+                if (imagen == null)
+                {
+                    Console.WriteLine($"[⚠️] No se encontró imagen con ID: {id}");
+                }
+
                 _context.Imagen.Remove(imagen);
                 await _context.SaveChangesAsync();
+
+                Console.WriteLine($"[✅] Imagen con ID {id} eliminada correctamente.");
+            }
+            catch (Exception ex)
+            {
+                // Ideal para logging con timestamp, emoji y separador de lore
+                Console.WriteLine($"[🔥] Error al eliminar imagen con ID {id}: {ex.Message}");
             }
         }
     }
