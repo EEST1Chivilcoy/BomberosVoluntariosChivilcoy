@@ -99,8 +99,10 @@ namespace Vista.Services
             }
         }
 
-        public async Task<VehiculoSalida> AgregarVehiculoSalidaAsync(VehiculoSalida vehiculo, Imagen? imagen = null)
+        public async Task<VehiculoSalida?> AgregarVehiculoSalidaAsync(VehiculoSalida vehiculo, Imagen? imagen = null)
         {
+            if (imagen == null && vehiculo == null && vehiculo.Encargado == null) return null;
+
             if (vehiculo?.Encargado is not null)
             {
                 var encargado = await _bomberosService.ObtenerBomberoPorIdAsync(vehiculo.Encargado.PersonaId);
@@ -128,8 +130,7 @@ namespace Vista.Services
             await _context.SaveChangesAsync(); // Guardamos primero el vehículo para obtener su ID
 
             // Si hay imagen, la vinculamos y la guardamos
-            if (imagen is null)
-            {
+
                 if (imagen is Imagen_VehiculoSalida imagenVehiculo)
                 {
                     imagenVehiculo.VehiculoId = vehiculo.VehiculoId; // Asignamos el ID recién generado
@@ -139,7 +140,7 @@ namespace Vista.Services
                 {
                     throw new InvalidOperationException("Tipo de imagen no soportado para vehículos.");
                 }
-            }
+         
 
             return vehiculo;
         }
@@ -161,7 +162,7 @@ namespace Vista.Services
             {
                 ActualizarPropiedadesEscalares(existente, vehiculo);
                 await SetEncargadoAsync(existente, vehiculo);
-                await ProcesarImagenAsync(existente, vehiculo.Imagen);
+                await ProcesarImagenAsync(existente, imagen);
                 await _context.SaveChangesAsync();
             }
 
@@ -195,20 +196,41 @@ namespace Vista.Services
 
         private async Task ProcesarImagenAsync(VehiculoSalida vehiculo, Imagen? imagen)
         {
-            if (imagen is Imagen_VehiculoSalida imgVehiculo)
+            try
             {
-                imgVehiculo.VehiculoId = vehiculo.VehiculoId;
+                if (imagen != null)
+                {
+                    if (vehiculo.Imagen != null)
+                    {
+                        if (imagen is Imagen_VehiculoSalida imgVehiculo)
+                        {
+                            imgVehiculo.VehiculoId = vehiculo.VehiculoId;
 
-                if (vehiculo.ImagenId.HasValue)
-                {
-                    imgVehiculo.ImagenId = vehiculo.ImagenId.Value;
-                    await _imagenService.EditarImagenAsync(imgVehiculo);
+                            if (vehiculo.ImagenId.HasValue)
+                            {
+                                imgVehiculo.ImagenId = vehiculo.ImagenId.Value;
+                                await _imagenService.EditarImagenAsync(imgVehiculo);
+                            }
+                            else
+                            {
+                                await _imagenService.GuardarImagenAsync(imgVehiculo);
+                                vehiculo.ImagenId = imgVehiculo.ImagenId;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (imagen is Imagen_VehiculoSalida imagen_VehiculoSalida)
+                        {
+                            imagen_VehiculoSalida.VehiculoId = vehiculo.VehiculoId;
+                            await _imagenService.GuardarImagenAsync(imagen_VehiculoSalida);
+                        }
+                    }
                 }
-                else
-                {
-                    await _imagenService.GuardarImagenAsync(imgVehiculo);
-                    vehiculo.ImagenId = imgVehiculo.ImagenId;
-                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[Error] : {ex.Message}");
             }
         }
 

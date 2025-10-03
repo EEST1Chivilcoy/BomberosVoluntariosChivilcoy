@@ -25,6 +25,7 @@
 @inject Microsoft.Graph.GraphServiceClient GraphServiceClient
 @inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
 @inject IBomberoService BomberoService
+@inject IEntraIDService EntraIDService
 
 <style>
 	/* Estilos generales */
@@ -199,29 +200,32 @@
 						<AntDesign.Row Gutter="16">
 							<AntDesign.Col Span="8">
 								<FormItem Label="Nombre" Required>
-									<Input @bind-Value="@personalView.Nombre" Disabled />
+									<Input @bind-Value="@personalView.Nombre" Disabled="@EntraIDisDisponbile" />
 								</FormItem>
 							</AntDesign.Col>
 							<AntDesign.Col Span="8">
 								<FormItem Label="Apellido" Required>
-									<Input @bind-Value="@personalView.Apellido" Disabled />
+									<Input @bind-Value="@personalView.Apellido" Disabled="@EntraIDisDisponbile" />
 								</FormItem>
 							</AntDesign.Col>
-							<AntDesign.Col Span="8">
-								<FormItem Label="U.P.N" Required>
-									<AntDesign.Input @bind-Value="@personalView.UPN">
-										<AddOnAfter>
-											<label>@@bomberoschivilcoy.org.ar</label>
-											<AntDesign.Button Type="ButtonType.Primary"
-															  Size="ButtonSize.Small"
-															  OnClick="@(() => BusquedaPorUPN(personalView.UPN))"
-															  Loading="@isSearching">
-												<Icon Type="search" />
-											</AntDesign.Button>
-										</AddOnAfter>
-									</AntDesign.Input>
-								</FormItem>
-							</AntDesign.Col>
+							@if (EntraIDisDisponbile)
+							{
+								<AntDesign.Col Span="8">
+									<FormItem Label="U.P.N" Required>
+										<AntDesign.Input @bind-Value="@personalView.UPN">
+											<AddOnAfter>
+												<label>@@bomberoschivilcoy.org.ar</label>
+												<AntDesign.Button Type="ButtonType.Primary"
+																  Size="ButtonSize.Small"
+																  OnClick="@(() => BusquedaPorUPN(personalView.UPN))"
+																  Loading="@isSearching">
+													<Icon Type="search" />
+												</AntDesign.Button>
+											</AddOnAfter>
+										</AntDesign.Input>
+									</FormItem>
+								</AntDesign.Col>
+							}
 						</AntDesign.Row>
 
 						<AntDesign.Row Gutter="16">
@@ -413,6 +417,7 @@
 	private ImageViewModel imageViewModel = new();
 	private CancellationTokenSource? _debounceTokenSource;
 	private bool isSearching = false;
+	private bool EntraIDisDisponbile = false;
 
 	private string? ImageUrlPreview => imageViewModel.Base64 != null
 		? $"data:{imageViewModel.TipoImagen};base64,{imageViewModel.Base64}"
@@ -427,7 +432,7 @@
 
 	public Task Cancelar()
 	{
-		navigationManager.NavigateTo($"/personal/bomberos", true);
+		navigationManager.NavigateTo($"/fire-force/personal/bomberos", true);
 		return Task.CompletedTask;
 	}
 
@@ -447,6 +452,12 @@
 				return;
 			}
 
+			if (personalView.Nombre == null && personalView.Apellido == null)
+			{
+				await message.ErrorAsync("El bombero no tiene asignado un nombre y apellido.");
+				return;
+			}
+
 			if (personalView is not BomberoViweModel bomberoView)
 			{
 				await message.ErrorAsync("Ocurrió un error al crear el bombero.");
@@ -457,6 +468,12 @@
 			{
 				await message.ErrorAsync("El número de legajo no puede ser cero.");
 				return;
+			}
+
+			if (EntraIDisDisponbile)
+			{
+				await message.WarningAsync("El Servicio de entra id no esta disponible.");
+				personalView.EntraID = Guid.NewGuid();
 			}
 
 			// Preparar el objeto Bombero
@@ -512,7 +529,7 @@
 			bomberoView = new BomberoViweModel();
 			StateHasChanged();
 			await message.SuccessAsync("Se agregó el bombero.");
-			navigationManager.NavigateTo($"/personal/bomberos", true);
+			navigationManager.NavigateTo($"/fire-force/personal/bomberos", true);
 		}
 		catch (Exception ex)
 		{
@@ -536,7 +553,6 @@
 			return;
 		}
 
-		// Cancelar cualquier búsqueda anterior
 		_debounceTokenSource?.Cancel();
 		_debounceTokenSource = new CancellationTokenSource();
 		var token = _debounceTokenSource.Token;
@@ -546,112 +562,44 @@
 			isSearching = true;
 			StateHasChanged();
 
-			// Debounce de 500ms
-			await Task.Delay(500, token);
+			await Task.Delay(500, token); // debounce
 
-			// Construir el UPN completo
-			string fullUpn = upn.Contains("@") ? upn : $"{upn}@bomberoschivilcoy.org.ar";
+			var (bombero, foto) = await EntraIDService.BuscarPorUPNAsync(upn, token);
 
-			// Buscar usuario
-			var user = await GraphServiceClient.Users[fullUpn]
-				.Request()
-				.Select(u => new
-				{
-					u.Id,
-					u.GivenName,
-					u.Surname,
-					u.UserPrincipalName
-				})
-				.GetAsync(token);
-
-			if (user == null)
+			if (bombero == null)
 			{
-				await message.ErrorAsync($"No se encontró ningún usuario con el UPN '{fullUpn}'.");
+				await message.ErrorAsync($"No se encontró ningún usuario con el UPN '{upn}@bomberoschivilcoy.org.ar'.");
 				return;
 			}
 
-			// Inicializar variables de imagen
-			string? photoBase64 = null;
-			string? contentType = null;
-			string? nombreImagen = null;
+			personalView.Nombre = bombero.Nombre;
+			personalView.Apellido = bombero.Apellido;
+			personalView.EntraID = bombero.EntraID;
+			personalView.UPN = bombero.UPN;
 
-			// Intentar obtener la foto del usuario
-			try
+			if (foto != null)
 			{
-				// Primero obtener metadata de la foto
-				var photoMetadata = await GraphServiceClient.Users[fullUpn]
-					.Photo
-					.Request()
-					.GetAsync(token);
-
-				if (photoMetadata != null)
+				if (foto.Datos != null && foto.Formato != null)
 				{
-					// Obtener el stream de la foto
-					var photoStream = await GraphServiceClient.Users[fullUpn]
-						.Photo
-						.Content
-						.Request()
-						.GetAsync(token);
+					var extension = foto.Formato.Split('/').LastOrDefault() ?? "jpg";
+					var nombreImagen = $"foto_{Guid.NewGuid()}.{extension}";
 
-					if (photoStream != null)
+					imageViewModel = new ImageViewModel
 					{
-						using var ms = new MemoryStream();
-						await photoStream.CopyToAsync(ms, token);
-						photoBase64 = Convert.ToBase64String(ms.ToArray());
-
-						// Determinar el tipo MIME
-						contentType = photoMetadata.AdditionalData?.ContainsKey("@odata.mediaContentType") == true
-							? photoMetadata.AdditionalData["@odata.mediaContentType"]?.ToString()
-							: "image/jpeg";
-
-						var extension = contentType?.Split('/').LastOrDefault() ?? "jpg";
-						nombreImagen = $"foto_{upn.Replace("@", "_").Replace(".", "_")}.{extension}";
-					}
+						Base64 = Convert.ToBase64String(foto.Datos),
+						TipoImagen = foto.Formato,
+						NombreImagen = nombreImagen
+					};
 				}
 			}
-			catch (ServiceException photoEx) when (photoEx.StatusCode == System.Net.HttpStatusCode.NotFound)
-			{
-				// El usuario no tiene foto, continuar sin ella
-				nombreImagen = null;
-				photoBase64 = null;
-				contentType = null;
-			}
 
-			// Asignar datos al modelo
-			personalView.Nombre = user.GivenName ?? string.Empty;
-			personalView.Apellido = user.Surname ?? string.Empty;
-			personalView.EntraID = Guid.Parse(user.Id);
-			personalView.UPN = upn; // Solo la parte antes del @
-
-			// Asignar imagen
-			imageViewModel.Base64 = photoBase64;
-			imageViewModel.TipoImagen = contentType;
-			imageViewModel.NombreImagen = nombreImagen;
-
-			await message.SuccessAsync($"Usuario encontrado: {user.GivenName} {user.Surname}");
+			await message.SuccessAsync($"Usuario encontrado: {bombero.Nombre} {bombero.Apellido}");
 			StateHasChanged();
 		}
-		catch (ServiceException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
-		{
-			await message.ErrorAsync($"No se encontró ningún usuario con el UPN '{upn}@bomberoschivilcoy.org.ar'.");
-		}
-		catch (ServiceException ex) when (ex.Error?.Code == "ErrorAccessDenied")
-		{
-			await message.ErrorAsync("No tienes permisos para buscar usuarios. Contacta al administrador.");
-		}
-		catch (MicrosoftIdentityWebChallengeUserException ex)
-		{
-			// Manejar el caso de consentimiento requerido
-			ConsentHandler.HandleException(ex);
-		}
-		catch (TaskCanceledException)
-		{
-			// Ignorar cancelaciones por debounce
-		}
+		catch (TaskCanceledException) { }
 		catch (Exception ex)
 		{
 			await message.ErrorAsync($"Error al buscar usuario: {ex.Message}");
-			Console.WriteLine($"Error detallado: {ex}");
 		}
 		finally
 		{
@@ -666,12 +614,17 @@
 	{
 		try
 		{
-			user = await GraphServiceClient.Me.Request().GetAsync();
+			user = await EntraIDService.GetUserAsync();
+			EntraIDisDisponbile = await EntraIDService.CheckDisponibilidadAsync();
+
+			if (EntraIDisDisponbile)
+				user = await EntraIDService.GetUserAsync(full: true);
 		}
 		catch (Exception ex)
 		{
 			ConsentHandler.HandleException(ex);
 		}
+
 	}
 
 	private void OnFinish(EditContext editContext)
