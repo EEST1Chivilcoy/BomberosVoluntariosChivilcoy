@@ -1,4 +1,5 @@
 ﻿using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Graph;
 using Microsoft.Identity.Web;
 using Vista.Data.ViewModels.Personal;
@@ -10,6 +11,8 @@ namespace Vista.Services
     {
         Task<(BomberoViweModel? bombero, ImagenResultado? foto)> BuscarPorUPNAsync(string upn, CancellationToken token);
         Task<bool> CheckDisponibilidadAsync();
+        Task<User> GetUserAsync(bool full = false);
+
     }
 
     public class EntraIDService : IEntraIDService
@@ -17,12 +20,14 @@ namespace Vista.Services
         private readonly GraphServiceClient _graphClient;
         private readonly MicrosoftIdentityConsentAndConditionalAccessHandler _consentHandler;
         private readonly IWebHostEnvironment _env;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public EntraIDService(GraphServiceClient graphClient, MicrosoftIdentityConsentAndConditionalAccessHandler consentHandler, IWebHostEnvironment env)
+        public EntraIDService(GraphServiceClient graphClient, MicrosoftIdentityConsentAndConditionalAccessHandler consentHandler, IWebHostEnvironment env, IHttpContextAccessor httpContextAccessor)
         {
             _graphClient = graphClient;
             _consentHandler = consentHandler;
             _env = env;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<(BomberoViweModel? bombero, ImagenResultado? foto)> BuscarPorUPNAsync(string upn, CancellationToken token)
@@ -130,6 +135,19 @@ namespace Vista.Services
                 // Si hubo error en la llamada (Graph no disponible, permisos, etc.)
                 return false;
             }
+        }
+
+        public async Task<User> GetUserAsync(bool full = false)
+        {
+            if (full)
+            {
+                Console.WriteLine("🔍 Obteniendo usuario completo desde Graph...");
+                return await _graphClient.Me.Request().GetAsync();
+            }
+
+            Console.WriteLine("⚡ Usando ObjectId directo desde token...");
+            var objectId = _httpContextAccessor.HttpContext?.User?.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value;
+            return new User { Id = objectId };
         }
     }
 }

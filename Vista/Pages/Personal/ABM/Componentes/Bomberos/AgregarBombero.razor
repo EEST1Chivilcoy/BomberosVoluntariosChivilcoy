@@ -614,8 +614,11 @@
 	{
 		try
 		{
-			user = await GraphServiceClient.Me.Request().GetAsync();
+			user = await EntraIDService.GetUserAsync();
 			EntraIDisDisponbile = await EntraIDService.CheckDisponibilidadAsync();
+
+			if (EntraIDisDisponbile)
+				user = await EntraIDService.GetUserAsync(full: true);
 		}
 		catch (Exception ex)
 		{
