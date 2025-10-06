@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Vista.Data.Models.Grupos.FuerzasIntervinientes;
+using Vista.Data.Models.Personas;
 using Vista.Data.Models.Salidas.Planillas;
 
 namespace Vista.Data.Models.Salidas.Componentes
@@ -38,6 +39,10 @@ namespace Vista.Data.Models.Salidas.Componentes
         /// </summary>
         [ForeignKey(nameof(FuerzaIntervinienteId))]
         public FuerzaInterviniente Fuerzainterviniente { get; set; } = null!;
+
+        // Relacion con Damnificado
+
+        public List<Damnificado_Salida> Damnificados { get; set; } = new();
 
         // Relación con la Salida
 
