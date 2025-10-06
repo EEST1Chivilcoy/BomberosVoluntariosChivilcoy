@@ -214,6 +214,8 @@ namespace Vista.Data.ViewModels
 
         public List<Damnificado_Salida> Damnificados { get; set; } = new();
 
+        public List<VehiculoAfectado> VehiculosAfectados { get; set; } = new();
+
         //datos del seguro 
         public string? CompaniaAseguradora { get; set; }
         public string? NumeroPoliza { get; set; }

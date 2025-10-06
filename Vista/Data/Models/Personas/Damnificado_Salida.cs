@@ -2,6 +2,7 @@
 using Vista.Data.Models.Salidas.Planillas;
 using System.ComponentModel.DataAnnotations;
 using Vista.Data.Models.Salidas.Componentes;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Vista.Data.Models.Personas
 {
@@ -19,20 +20,20 @@ namespace Vista.Data.Models.Personas
         /// Nombre del damnificado.
         /// Campo obligatorio con una longitud máxima de 255 caracteres.
         /// </summary>
-        [Required, StringLength(255)]
-        public string Nombre { get; set; } = null!;
+        [StringLength(255)]
+        public string? Nombre { get; set; } = null!;
 
         /// <summary>
         /// Apellido del damnificado.
         /// Campo obligatorio con una longitud máxima de 255 caracteres.
         /// </summary>
-        [Required, StringLength(255)]
-        public string Apellido { get; set; } = null!;
+        [StringLength(255)]
+        public string? Apellido { get; set; } = null!;
 
         /// <summary>
         /// Sexo del damnificado.
         /// </summary>
-        public TipoSexo Sexo { get; set; }
+        public TipoSexo? Sexo { get; set; }
 
         /// <summary>
         /// Lugar de nacimiento del damnificado.
@@ -42,7 +43,7 @@ namespace Vista.Data.Models.Personas
         /// <summary>
         /// Número de documento de identidad del damnificado.
         /// </summary>
-        public int Documento { get; set; }
+        public int? Documento { get; set; }
 
         /// <summary>
         /// Edad del damnificado.
@@ -55,6 +56,19 @@ namespace Vista.Data.Models.Personas
         /// </summary>
         public TipoDamnificado Estado { get; set; }
 
+        // Relacion con Fuerza Interviniente
+        public int? FuerzaIntervinienteID { get; set; }
+
+        [ForeignKey(nameof(FuerzaIntervinienteID))]
+        public FuerzaInterviniente_Salida? FuerzaInterviniente { get; set; }
+
+        /// <summary>
+        /// Hacia donde fue trasladado el damnificado
+        /// </summary>
+        public string? Destino { get; set; }
+
+
+        public int? VehiculoDamnificadoID { get; set; }
         /// <summary>
         /// Vehículo del damnificado.
         /// Representa el vehículo involucrado en el incidente.

@@ -20,7 +20,8 @@ namespace Vista.Data.Models.Salidas.Componentes
         public SeguroVehiculo? Seguro { get; set; }
 
         // -- Datos específicos del vehículo damnificado --
-
+        [StringLength(255)]
+        public string? Dueño { get; set; }
         /// <summary>
         /// Color del vehículo, con un máximo de 255 caracteres.
         /// </summary>
@@ -53,5 +54,10 @@ namespace Vista.Data.Models.Salidas.Componentes
         /// Damnificados pasajeros del vehículo.
         /// </summary>
         public List<Damnificado_Salida> PasajerosDamnificados { get; set; } = new();
+
+        /// <summary>
+        /// Identificador para la Salida
+        /// </summary>
+        public int SalidaID { get; set; }
     }
 }

@@ -5,24 +5,28 @@ namespace Vista.Data.ViewModels.Personal
 {
     public class VehiculoDamnificadoViewModels
     {
-        [Required, StringLength(255)]
-        public string Marca { get; set; }
-        [Required, StringLength(255)]
-        public string Modelo { get; set; }
-        public int Año { get; set; }
-        [Required, StringLength(255)]
-        public string Patente { get; set; }
-        [Required, StringLength(255)]
+        [StringLength(255)]
+        public string? Marca { get; set; }
+        [StringLength(255)]
+        public string? Modelo { get; set; }
+        public int? Año { get; set; }
+        [StringLength(255)]
+        public string? Patente { get; set; }
+        [StringLength(255)]
         public string Tipo { get; set; }
 
-        [Required, StringLength(255)]
-        public string Color { get; set; }
+        [StringLength(255)]
+        public string? Color { get; set; }
         public bool Airbag { get; set; }
+        public string? Observaciones { get; set; }
+        public bool seConoceConductor { get; set; }
+        public string? Dueño { get; set; }
         public string CompañiaAseguradora { get; set; }
         [Required, StringLength(255)]
         public string NumeroDePoliza { get; set; }
-        public DateTime FechaDeVencimineto { get; set; }
+        public DateTime? FechaDeVencimiento { get; set; }
         public int? DamnificadoId { get; set; }
-        public Damnificado_Salida? Damnificado { get; set; }
+        public Damnificado_Salida? Conductor { get; set; }
+        public IEnumerable<Damnificado_Salida> Pasajeros { get; set; } = new List<Damnificado_Salida>();
     }
 }
