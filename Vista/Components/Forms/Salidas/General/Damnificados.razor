@@ -215,15 +215,19 @@
                                 <Icon Type="delete" />
                             </Button>
                         </Popconfirm>
+                        <Button Type="@ButtonType.Primary" OnClick="@(() => EditarDamnificado(Damnificados))">
+                            <Icon Type="edit" />
+                        </Button>
                     </ActionColumn>
                 </ColumnDefinitions>
             </Table>
 
             <Modal @bind-Visible="visibleDamnificados"
-            Title="@("Datos del damnificado")"
-            OkText="@("Agregar")"
+            Title="@(editandoDamnificado ? "Editar Damnificado" : "Datos del damnificado")"
+            OkText="@(editandoDamnificado ? "Editar" : "Agregar")"
             CancelText="@("Cancelar")"
             OnOk="@AgregarDamnificado"
+            OnCancel="@(() => {editandoDamnificado = false; documentoOriginal = null; Damnificado = new();})"
             WrapClassName="modal-damnificado">
                 <div class="modal-damnificado-content">
                     <Form Model="Damnificado" Layout="FormLayout.Vertical" Class="modal-damnificado-form">
@@ -240,7 +244,7 @@
                             </AntDesign.Col>
                             <AntDesign.Col Span="8">
                                 <FormItem Label="Documento" Required="true" Class="modal-damnificado-form-item">
-                                    <Input @bind-Value="@Damnificado.Dni" />
+                                    <Input @bind-Value="@Damnificado.Dni" Disabled=editandoDamnificado/>
                                 </FormItem>
                             </AntDesign.Col>
                         </Row>
@@ -262,11 +266,14 @@
                             </AntDesign.Col>
                         </Row>
                         <Row Gutter="16">
-                            <AntDesign.Col Span="12">
-                                <FormItem Label="Fecha de Nacimiento" Class="modal-damnificado-form-item">
-                                    <DatePicker TValue="DateTime?" @bind-Value="@Damnificado.FechaDeNacimiento" OnChange="@CalcularEdad" />
-                                </FormItem>
-                            </AntDesign.Col>
+                            @if (!editandoDamnificado)
+                            {
+                                <AntDesign.Col Span="12">
+                                    <FormItem Label="Fecha de Nacimiento" Class="modal-damnificado-form-item">
+                                        <DatePicker TValue="DateTime?" @bind-Value="@Damnificado.FechaDeNacimiento" OnChange="@CalcularEdad" />
+                                    </FormItem>
+                                </AntDesign.Col>
+                            }
                             <AntDesign.Col Span="12">
                                 <FormItem Label="Estado" Class="modal-damnificado-form-item">
                                     <EnumSelect TEnum="TipoDamnificado" @bind-Value="@Damnificado.Estado" />
@@ -350,15 +357,19 @@
                                 <Icon Type="delete" />
                             </Button>
                         </Popconfirm>
+                        <Button Type="@ButtonType.Primary" OnClick="@(() => EditarVehiculo(Vehiculos))">
+                            <Icon Type="edit" />
+                        </Button>
                     </ActionColumn>
                 </ColumnDefinitions>
             </Table>
 
             <Modal @bind-Visible="visibleVehiculo"
-            Title="@("Datos del vehiculo")"
-            OkText="@("Agregar")"
+            Title="@(editandoVehiculo ? "Editar Vehiculo" : "Datos del vehiculo")"
+            OkText="@(editandoVehiculo ? "Editar" : "Agregar")"
             CancelText="@("Cancelar")"
             OnOk="@AgregarVehiculo"
+            OnCancel="@(() => {editandoVehiculo = false; patenteOriginal = null; Vehiculo = new();})"
             WrapClassName="modal-damnificado">
                 <div class="modal-damnificado-content">
                     <Form Model="Vehiculo" Layout="FormLayout.Vertical" Class="modal-damnificado-form">
@@ -382,7 +393,7 @@
                         <Row Gutter="16">
                             <AntDesign.Col Span="8">
                                 <FormItem Label="Patente" Class="modal-damnificado-form-item">
-                                    <Input @bind-Value="@Vehiculo.Patente" />
+                                    <Input @bind-Value="@Vehiculo.Patente" Disabled="@editandoVehiculo"/>
                                 </FormItem>
                             </AntDesign.Col>
                             <AntDesign.Col Span="8">
@@ -495,6 +506,8 @@
     private bool visibleDamnificados = false;
     private bool visibleVehiculo = false;
 
+    private bool editandoDamnificado = false, editandoVehiculo = false;
+    private int? documentoOriginal = null; private string? patenteOriginal = null;
     private async Task deleteRowDamnificados(int? DNI)
     {
         if (Model.Damnificados == null || !Model.Damnificados.Any())
@@ -529,40 +542,75 @@
         Model.VehiculosAfectados = Model.VehiculosAfectados.Where(v => v.Patente != Patente).ToList();
         await MessageService.SuccessAsync($"Vehiculo con patente {Patente} eliminado correctamente.");
     }
+
+    private void EditarDamnificado(Damnificado_Salida dam)
+    {
+        Damnificado = new()
+            {
+                Nombre = dam.Nombre,
+                Apellido = dam.Apellido,
+                Dni = dam.Documento,
+                Sexo = dam.Sexo,
+                LugarDeNacimiento = dam.LugarNacimiento,
+                Edad = dam.Edad,
+                Estado = dam.Estado,
+                FuerzaIntervinienteID = dam.FuerzaIntervinienteID,
+                Destino = dam.Destino
+            };
+        documentoOriginal = dam.Documento;
+        editandoDamnificado = true;
+        visibleDamnificados = true;
+    }
     private async Task AgregarDamnificado()
     {
         try
         {
-            Damnificado_Salida dp = new()
+            if (editandoDamnificado)
+            {
+                var actual = Model.Damnificados.First(d => d.Documento == documentoOriginal);
+                actual.Nombre = Damnificado.Nombre;
+                actual.Apellido = Damnificado.Apellido;
+                actual.Sexo = Damnificado.Sexo;
+                actual.LugarNacimiento = Damnificado.LugarDeNacimiento;
+                actual.Edad = Damnificado.Edad;
+                actual.Estado = Damnificado.Estado;
+                actual.FuerzaIntervinienteID = Damnificado.FuerzaIntervinienteID;
+                actual.Destino = Damnificado.Destino;
+                await MessageService.SuccessAsync("Damnificado actualizado correctamente");
+                editandoDamnificado = false; documentoOriginal = null;
+            }
+            else 
+            {
+                Damnificado_Salida dp = new()
+                    {
+                        Nombre = Damnificado.Nombre,
+                        Apellido = Damnificado.Apellido,
+                        Documento = Damnificado.Dni,
+                        Sexo = Damnificado.Sexo,
+                        LugarNacimiento = Damnificado.LugarDeNacimiento,
+                        Edad = Damnificado.Edad,
+                        Estado = Damnificado.Estado,
+                        FuerzaIntervinienteID = Damnificado.FuerzaIntervinienteID,
+                        Destino = Damnificado.Destino
+                    };
+
+                if (Model.Damnificados == null)
                 {
-                    Nombre = Damnificado.Nombre,
-                    Apellido = Damnificado.Apellido,
-                    Documento = Damnificado.Dni,
-                    Sexo = Damnificado.Sexo,
-                    LugarNacimiento = Damnificado.LugarDeNacimiento,
-                    Edad = Damnificado.Edad,
-                    Estado = Damnificado.Estado,
-                    FuerzaIntervinienteID = Damnificado.FuerzaIntervinienteID,
-                    Destino = Damnificado.Destino
-                };
+                    Model.Damnificados = new List<Damnificado_Salida>();
+                }
 
-            if (Model.Damnificados == null)
-            {
-                Model.Damnificados = new List<Damnificado_Salida>();
+                if (Model.Damnificados.Any(d => d.Documento == dp.Documento))
+                {
+                    await MessageService.ErrorAsync("Ya existe un damnificado con ese documento", 5);
+                    return;
+                }
+
+                Model.Damnificados.Add(dp);
+
+                await MessageService.SuccessAsync("Damnificado agregado correctamente");
             }
-
-            if (Model.Damnificados.Any(d => d.Documento == dp.Documento))
-            {
-                await MessageService.ErrorAsync("Ya existe un damnificado con ese documento", 5);
-                return;
-            }
-
-            Model.Damnificados.Add(dp);
-
             Damnificado = new DamnificadoViewModels();
-
             visibleDamnificados = false;
-            await MessageService.SuccessAsync("Damnificado agregado correctamente");
             StateHasChanged();
         }
         catch (Exception e)
@@ -575,48 +623,100 @@
                 await MessageService.ErrorAsync(e.Message, 5);
         }
     }
+
+    private void EditarVehiculo(VehiculoAfectado veh)
+    {
+        Vehiculo = new()
+            {
+                Marca = veh.Marca,
+                Modelo = veh.Modelo,
+                Año = veh.Año,
+                Patente = veh.Patente,
+                Tipo = veh.Tipo,
+                Color = veh.Color,
+                Airbag = veh.Airbag,
+                Observaciones = veh.Observaciones,
+                seConoceConductor = veh.seConoceConductor,
+                Dueño = veh.Dueño,
+                CompañiaAseguradora = veh.Seguro?.CompañiaAseguradora,
+                NumeroDePoliza = veh.Seguro?.NumeroDePoliza,
+                FechaDeVencimiento = veh.Seguro?.FechaDeVencimineto,
+                Conductor = veh.ConductorDamnificado,
+                Pasajeros = veh.PasajerosDamnificados
+            };
+        patenteOriginal = veh.Patente;
+        editandoVehiculo = true;
+        visibleVehiculo = true;
+    }
     private async Task AgregarVehiculo()
     {
         try
         {
-            SeguroVehiculo seguro = new()
-                {
-                    CompañiaAseguradora = Vehiculo.CompañiaAseguradora,
-                    NumeroDePoliza = Vehiculo.NumeroDePoliza,
-                    FechaDeVencimineto = Vehiculo.FechaDeVencimiento
-                };
-            VehiculoAfectado va = new()
-                {
-                    Tipo = Vehiculo.Tipo,
-                    Marca = Vehiculo.Marca,
-                    Modelo = Vehiculo.Modelo,
-                    Patente = Vehiculo.Patente,
-                    Año = Vehiculo.Año,
-                    Color = Vehiculo.Color,
-                    Dueño = Vehiculo.Dueño,
-                    Observaciones = Vehiculo.Observaciones,
-                    Airbag = Vehiculo.Airbag,
-                    Seguro = seguro,
-                    ConductorDamnificado = Vehiculo.Conductor,
-                    PasajerosDamnificados = Vehiculo.Pasajeros.ToList()
-                };
-            if (Model.VehiculosAfectados == null)
-                Model.VehiculosAfectados = new List<VehiculoAfectado>();
-            if (Model.VehiculosAfectados.Any(v => v.Patente == va.Patente))
+            if (editandoVehiculo)
             {
-                await MessageService.ErrorAsync("Ya existe un vehiculo con esa Patente");
-                return;
+                var actual = Model.VehiculosAfectados.First(p => p.Patente == patenteOriginal);
+                actual.Tipo = Vehiculo.Tipo;
+                actual.Marca = Vehiculo.Marca;
+                actual.Modelo = Vehiculo.Modelo;
+                actual.Año = Vehiculo.Año;
+                actual.Color = Vehiculo.Color;
+                actual.Dueño = Vehiculo.Dueño;
+                actual.Observaciones = Vehiculo.Observaciones;
+                actual.Airbag = Vehiculo.Airbag;
+                actual.seConoceConductor = Vehiculo.seConoceConductor;
+                actual.ConductorDamnificado = Vehiculo.Conductor;
+                actual.PasajerosDamnificados = Vehiculo.Pasajeros.ToList();
+                if (actual.Seguro != null)
+                {
+                    actual.Seguro.CompañiaAseguradora = Vehiculo.CompañiaAseguradora;
+                    actual.Seguro.NumeroDePoliza = Vehiculo.NumeroDePoliza;
+                    actual.Seguro.FechaDeVencimineto = Vehiculo.FechaDeVencimiento;
+                }
+                await MessageService.SuccessAsync("Vehiculo actualizado correctamente");
+                editandoVehiculo = false; patenteOriginal = null;
             }
-            if (Model.VehiculosAfectados.Any(v => v.Seguro.NumeroDePoliza == va.Seguro.NumeroDePoliza))
+            else 
             {
-                await MessageService.ErrorAsync("Ya existe un seguro con ese Numero de Poliza");
-                return;
+                SeguroVehiculo seguro = new()
+                    {
+                        CompañiaAseguradora = Vehiculo.CompañiaAseguradora,
+                        NumeroDePoliza = Vehiculo.NumeroDePoliza,
+                        FechaDeVencimineto = Vehiculo.FechaDeVencimiento
+                    };
+                VehiculoAfectado va = new()
+                    {
+                        Tipo = Vehiculo.Tipo,
+                        Marca = Vehiculo.Marca,
+                        Modelo = Vehiculo.Modelo,
+                        Patente = Vehiculo.Patente,
+                        Año = Vehiculo.Año,
+                        Color = Vehiculo.Color,
+                        Dueño = Vehiculo.Dueño,
+                        Observaciones = Vehiculo.Observaciones,
+                        Airbag = Vehiculo.Airbag,
+                        Seguro = seguro,
+                        seConoceConductor = Vehiculo.seConoceConductor,
+                        ConductorDamnificado = Vehiculo.Conductor,
+                        PasajerosDamnificados = Vehiculo.Pasajeros.ToList()
+                    };
+                if (Model.VehiculosAfectados == null)
+                    Model.VehiculosAfectados = new List<VehiculoAfectado>();
+                if (Model.VehiculosAfectados.Any(v => v.Patente == va.Patente))
+                {
+                    await MessageService.ErrorAsync("Ya existe un vehiculo con esa Patente");
+                    return;
+                }
+                if (Model.VehiculosAfectados.Any(v => v.Seguro.NumeroDePoliza == va.Seguro.NumeroDePoliza))
+                {
+                    await MessageService.ErrorAsync("Ya existe un seguro con ese Numero de Poliza");
+                    return;
+                }
+                Model.VehiculosAfectados.Add(va);
+                await MessageService.SuccessAsync("Vehiculo cargado correctamente"); 
             }
-
-            Model.VehiculosAfectados.Add(va);
             Vehiculo = new VehiculoDamnificadoViewModels();
             visibleVehiculo = false;
-            await MessageService.SuccessAsync("Vehiculo cargado correctamente"); StateHasChanged();
+            StateHasChanged();
         }
         catch (Exception e)
         {
