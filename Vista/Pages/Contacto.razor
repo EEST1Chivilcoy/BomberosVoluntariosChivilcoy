@@ -8,128 +8,129 @@
 </HeadContent>
 
 <div class="inicio-page">
-	<AntDesign.Layout>
-		<AntDesign.Layout.Header Class="custom-header">
-			<div style="display: flex; justify-content: flex-end;">
-				<Menu Mode="@MenuMode.Horizontal"
-					  SelectedKeys="@(new[]{"contacto"})"
-					  Style="background: transparent; border-bottom: none;"
-					  OnMenuItemClicked="OnMenuItemClicked">
-					<MenuItem Key="inicio">
-						🏠 INICIO
-					</MenuItem>
-					<MenuItem Key="sesion">
-						🏢 INICIAR SESIÓN
-					</MenuItem>
-					<MenuItem Key="contacto">
-						📞 CONTACTO
-					</MenuItem>
-					<MenuItem Key="cuerpo">
-						👥 CUERPO ACTIVO
-					</MenuItem>
-					<MenuItem Key="historia">
-						📖 NUESTRA HISTORIA
-					</MenuItem>
-				</Menu>
-			</div>
-		</AntDesign.Layout.Header>
+    <AntDesign.Layout>
+        <AntDesign.Layout.Header Class="custom-header">
+            <div style="display: flex; justify-content: flex-end;">
+                <Menu Mode="@MenuMode.Horizontal" 
+                      SelectedKeys="@(new[]{"contacto"})" 
+                      Style="background: transparent; border-bottom: none;"
+                      OnMenuItemClicked="OnMenuItemClicked">
+                    <MenuItem Key="inicio">
+                        🏠 INICIO
+                    </MenuItem>
+                    <MenuItem Key="contacto">
+                        📞 CONTACTO
+                    </MenuItem>
+                    <MenuItem Key="cuerpo">
+                        👥 CUERPO ACTIVO
+                    </MenuItem>
+                    <MenuItem Key="historia">
+                        📖 NUESTRA HISTORIA
+                    </MenuItem>
+                    <MenuItem Key="sesion">
+                        🏢 SISTEMA
+                    </MenuItem>
+                </Menu>
+            </div>
+        </AntDesign.Layout.Header>
 
-		<AntDesign.Layout.Content Class="contact-section">
-			<div class="contact-container">
-				<div class="contact-header">
-					<Title Level="1" Class="contact-title">
-						CONTACTO
-					</Title>
-					<div class="contact-separator"></div>
-				</div>
+        <Content Style="padding: 50px 20px; background: linear-gradient(135deg, #f0f2f5, #ffffff); min-height: calc(100vh - 120px);">>
+            <div style="max-width: 1200px; margin: 0 auto;">
+                <!-- Header -->
+                <div style="text-align: center; margin-bottom: 40px;">
+                    <Title Level="1" Style="color: #d32f2f; font-size: 3rem; font-weight: 700; text-transform: uppercase; margin-bottom: 10px;">
+                        CONTACTO
+                    </Title>
+                    <div style="width: 100px; height: 4px; background: linear-gradient(90deg, #d32f2f, #ff6b6b); margin: 0 auto; border-radius: 2px;"></div>
+                </div>
 
-				<div class="contact-content">
-					<div class="contact-info">
-						<div class="contact-item">
-							<div class="contact-icon">🏢</div>
-							<div class="contact-details">
-								<h3>Institución</h3>
-								<p>Sociedad de Bomberos Voluntarios de Chivilcoy</p>
-							</div>
-						</div>
+                <div class="contact-content">
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <div class="contact-icon">🏢</div>
+                            <div class="contact-details">
+                                <h3>Institución</h3>
+                                <p>Sociedad de Bomberos Voluntarios de Chivilcoy</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">📍</div>
+                            <div class="contact-details">
+                                <h3>Dirección</h3>
+                                <p>Gral. Pueyrredón N° 162 Chivilcoy - Bs. As. (Argentina)</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">✉️</div>
+                            <div class="contact-details">
+                                <h3>Email</h3>
+                                <p>bomberosvoluntarioschivilcoy@gmail.com</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">📱</div>
+                            <div class="contact-details">
+                                <h3>Teléfono</h3>
+                                <p>02346-424319/426066</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item" style="border-left-color: #dc3545; background: linear-gradient(135deg, rgba(220, 53, 69, 0.05), rgba(255, 255, 255, 0.95));">
+                            <div class="contact-icon" style="background: linear-gradient(135deg, #dc3545, #c82333); box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3); animation: emergencyPulse 2s infinite;">🚨</div>
+                            <div class="contact-details">
+                                <h3 style="color: #dc3545;">Emergencias</h3>
+                                <p style="font-size: 2rem; font-weight: 700; color: #dc3545;">100</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-logo">
+                        <img src="/Imagenes/Logos.png" 
+                             alt="Logo Bomberos Voluntarios Chivilcoy" 
+                             class="contact-main-logo" />
+                    </div>
+                </div>
+            </div>
+        </Content>
 
-						<div class="contact-item">
-							<div class="contact-icon">📍</div>
-							<div class="contact-details">
-								<h3>Dirección</h3>
-								<p>Gral. Pueyrredón N° 162 Chivilcoy - Bs. As. (Argentina)</p>
-							</div>
-						</div>
-
-						<div class="contact-item">
-							<div class="contact-icon">✉️</div>
-							<div class="contact-details">
-								<h3>Email</h3>
-								<p>bomberos.chivilcoy@gmail.com</p>
-							</div>
-						</div>
-
-						<div class="contact-item">
-							<div class="contact-icon">📱</div>
-							<div class="contact-details">
-								<h3>Teléfono</h3>
-								<p>+54 9 2346 15-424319</p>
-							</div>
-						</div>
-
-						<div class="contact-item" style="border-left-color: #dc3545; background: linear-gradient(135deg, rgba(220, 53, 69, 0.05), rgba(255, 255, 255, 0.95));">
-							<div class="contact-icon" style="background: linear-gradient(135deg, #dc3545, #c82333); box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3); animation: emergencyPulse 2s infinite;">�</div>
-							<div class="contact-details">
-								<h3 style="color: #dc3545;">Emergencias</h3>
-								<p style="font-size: 2rem; font-weight: 700; color: #dc3545;">100</p>
-							</div>
-						</div>
-					</div>
-
-					<div class="contact-logo">
-						<img src="/Imagenes/Logos.png"
-							 alt="Logo Bomberos Voluntarios Chivilcoy"
-							 class="contact-main-logo" />
-					</div>
-				</div>
-			</div>
-		</AntDesign.Layout.Content>
-
-		<div class="footer-section">
-			<div class="footer-content">
-				<Row Gutter="40">
-					<AntDesign.Col Xs="24" Sm="24" Md="12" Lg="12" Xl="12">
-						<div class="footer-left">
-							<img src="/Imagenes/Logos.png"
-								 alt="Logo Bomberos Voluntarios Chivilcoy"
-								 class="footer-logo" />
-							<div class="footer-info">
-								<Title Level="3" Style="color: white; font-size: 1.4rem; font-weight: 600; margin: 0 0 5px 0; text-transform: uppercase;">
-									Sociedad de Bomberos<br />Voluntarios de Chivilcoy
-								</Title>
-								<Paragraph Style="color: #ccc; font-size: 0.9rem; margin: 0; line-height: 1.4;">
-									Desde 1945 al Servicio de la Comunidad
-								</Paragraph>
-							</div>
-						</div>
-					</AntDesign.Col>
-					<AntDesign.Col Xs="24" Sm="24" Md="12" Lg="12" Xl="12">
-						<div class="footer-right">
-							<div class="footer-contact">
-								<Title Level="4" Style="color: white; font-size: 1.2rem; font-weight: 600; margin: 0 0 10px 0; text-transform: uppercase;">
-									Contacto
-								</Title>
-								<Paragraph Class="footer-phone" Style="color: #ccc; font-size: 1rem; margin: 0; display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
-									<span class="phone-icon">📞</span>
-									100 / 424319-426066
-								</Paragraph>
-							</div>
-						</div>
-					</AntDesign.Col>
-				</Row>
-			</div>
-		</div>
-	</AntDesign.Layout>
+        <div class="footer-section">
+            <div class="footer-content">
+                <Row Gutter="40">
+                    <AntDesign.Col Xs="24" Sm="24" Md="12" Lg="12" Xl="12">
+                        <div class="footer-left">
+                            <img src="/Imagenes/Logos.png" 
+                                 alt="Logo Bomberos Voluntarios Chivilcoy" 
+                                 class="footer-logo" />
+                            <div class="footer-info">
+                                <Title Level="3" Style="color: white; font-size: 1.4rem; font-weight: 600; margin: 0 0 5px 0; text-transform: uppercase;">
+                                    Sociedad de Bomberos<br />Voluntarios de Chivilcoy
+                                </Title>
+                                <Paragraph Style="color: #ccc; font-size: 0.9rem; margin: 0; line-height: 1.4;">
+                                    Desde 1945 al Servicio de la Comunidad
+                                </Paragraph>
+                            </div>
+                        </div>
+                    </AntDesign.Col>
+                    <Col Xs="24" Sm="24" Md="12" Lg="12" Xl="12">
+                        <div class="footer-right">
+                            <div class="footer-contact">
+                                <Title Level="4" Style="color: white; font-size: 1.2rem; font-weight: 600; margin: 0 0 10px 0; text-transform: uppercase;">
+                                    Contacto
+                                </Title>
+                                <Paragraph Class="footer-phone" Style="color: #ccc; font-size: 1rem; margin: 0; display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
+                                    <span class="phone-icon">📞</span>
+                                    100 / 424319-426066
+                                </Paragraph>
+                            </div>
+                        </div>
+                    </Col>
+                </Row>
+            </div>
+        </div>
+    </AntDesign.Layout>
 </div>
 
 @code {
