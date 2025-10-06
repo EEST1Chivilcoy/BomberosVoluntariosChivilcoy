@@ -65,6 +65,7 @@ builder.Services.AddScoped<IDependenciaService, DependenciaService>();
 builder.Services.AddScoped<ILicenciaService, LicenciaService>();
 builder.Services.AddScoped<IVehiculoSalidaService, VehiculoSalidaService>();
 builder.Services.AddScoped<IFuerzaIntervinienteService, FuerzaIntervinienteService>();
+builder.Services.AddScoped<IEntraIDService, EntraIDService>();
 builder.Services.AddScoped<IImagenService, ImagenService>();
 
 // Servicios HttpClient

@@ -4,7 +4,7 @@
 @using AntDesign
 
 <HeadContent>
-    <link href="css/inicio.css" rel="stylesheet" />
+	<link href="css/inicio.css" rel="stylesheet" />
 </HeadContent>
 
 <div class="inicio-page">
@@ -134,28 +134,25 @@
 </div>
 
 @code {
-    private void OnMenuItemClicked(MenuItem menuItem)
-    {
-        switch (menuItem.Key)
-        {
-            case "inicio":
-                Navigation.NavigateTo("/inicio");
-                break;
-            case "contacto":
+	private Dictionary<string, Action> menuActions;
 
-                break;
-            case "cuerpo":
-                Navigation.NavigateTo("/cuerpo-activo");
-                break;
-            case "historia":
-                Navigation.NavigateTo("/historia");
-                break;
-            case "sesion":
-                Navigation.NavigateTo("/BomberosVoluntariosChivilcoy");
-                break;
-            default:
+	protected override void OnInitialized()
+	{
+		menuActions = new Dictionary<string, Action>
+		{
+			["inicio"] = () => Navigation.NavigateTo("/inicio"),
+			["contacto"] = () => Navigation.NavigateTo("/contacto"),
+			["cuerpo"] = () => Navigation.NavigateTo("/cuerpo-activo"),
+			["historia"] = () => Navigation.NavigateTo("/historia"),
+			["sesion"] = () => Navigation.NavigateTo("/fire-force/")
+		};
+	}
 
-                break;
-        }
-    }
+	private void OnMenuItemClicked(MenuItem menuItem)
+	{
+		if (menuActions.TryGetValue(menuItem.Key, out var action))
+		{
+			action.Invoke();
+		}
+	}
 }

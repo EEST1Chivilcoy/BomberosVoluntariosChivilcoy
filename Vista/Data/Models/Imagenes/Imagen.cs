@@ -36,7 +36,7 @@ namespace Vista.Data.Models.Imagenes
         public string TipoImagen { get; set; } = null!;
 
         /// <summary>
-        /// Base64 de la imagen. Este campo no se almacena en la base de datos,
+        /// Base64 de la imagen. Este campo no se almacena en la base de datos.
         /// </summary>
         [NotMapped]
         public string Base64Imagen
