@@ -43,7 +43,7 @@
         border-radius: 15px !important;
         box-shadow: 0 4px 8px rgba(0,0,0,0.1) !important;
         background-color: var(--color-gris-fondo-tarjeta) !important;
-        padding-top: 60px !important;
+        padding-top: 75px !important;
     }
 
 
@@ -111,10 +111,11 @@
     }
 
     .services-card2 {
-        top: 15px;
+
         border-radius: 15px !important;
         box-shadow: 0 4px 8px rgba(0,0,0,0.1) !important;
         background-color: var(--color-gris-fondo-tarjeta) !important;
+        margin-bottom: 15px !important;
     }
 
     .header-servicios {
@@ -307,13 +308,14 @@
         font-size: 1.2em !important;
         color: #666 !important;
         margin-bottom: 0px !important;
-        margin-top: 5px !important;
+        margin-top: 0px !important;
     }
 
     .estadisticas-puntuaje .stats-divider {
         display: block !important;
         margin-top: 35px !important;
     }
+    
 
     .tools-card {
         border-radius: 15px !important;
