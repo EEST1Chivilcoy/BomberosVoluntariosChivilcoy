@@ -1,6 +1,7 @@
 ﻿@using Vista.Data.Models.Vehiculos.Flota
 @using Vista.Pages.Vehiculos.Componentes
 @using Vista.Pages.Vehiculos.ViewModel
+@using System.Text.RegularExpressions;
 
 <link rel="stylesheet" href="css/Unidades.css" />
 
@@ -12,142 +13,162 @@
 @page "/fire-force/unidades/{Estado?}"
 
 <div class="container unidades-abm">
-    <Content class="fade-in" Style ="padding: 16px;">
-        <Card Bordered="false"
-              Style="width: 100%; border-radius: 16px; box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.1); background: #ffffff;">
-            <div class="header-section">
-                <div class="lava-bubbles">
-                    <div class="lava-bubble b1"></div>
-                    <div class="lava-bubble b2"></div>
-                    <div class="lava-bubble b3"></div>
-                    <div class="lava-bubble b4"></div>
-                    <div class="lava-bubble b5"></div>
-                </div>
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <div class="title-container">
-                        <h2 class="main-title">
-                            <Icon Type="Car" Class="title-icon" /> UNIDADES
-                        </h2>
-                        <p class="subtitle">
-                            @vehiculos?.Count() unidades @(Estado.ToLower() == "activas" ? "activas" : "de baja")
-                        </p>
-                    </div>
-                    <div class="header-actions">
-                        @if (Estado.ToLower() == "activas")
-                        {
-                            <Button Class="modern-button add-button"
-                                    OnClick="@(() => AgregarVisible = true)">
-                                <Icon Type="plus" />Nueva Unidad
-                            </Button>
-                            <Button Class="modern-button danger-button"
-                                    OnClick="@(() => navigationManager.NavigateTo("/fire-force/unidades/baja", true))">
-                                <Icon Type="folder" /> Unidades de baja
-                            </Button>
-                        }
-                        else
-                        {
-                            <Button class="modern-button back-button"
-                                    OnClick="@(() => navigationManager.NavigateTo("/fire-force/unidades/activas", true))">
-                                <Icon Type="folder-open" />Volver a Unidades activas
-                            </Button>
-                        }
-                    </div>
-                </div>
-            </div>
+	<Content class="fade-in" Style="padding: 16px;">
+		<Card Bordered="false"
+			  Style="width: 100%; border-radius: 16px; box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.1); background: #ffffff;">
+			<div class="header-section">
+				<div class="lava-bubbles">
+					<div class="lava-bubble b1"></div>
+					<div class="lava-bubble b2"></div>
+					<div class="lava-bubble b3"></div>
+					<div class="lava-bubble b4"></div>
+					<div class="lava-bubble b5"></div>
+				</div>
+				<div style="display: flex; justify-content: space-between; align-items: center;">
+					<div class="title-container">
+						<h2 class="main-title">
+							<Icon Type="Car" Class="title-icon" /> UNIDADES
+						</h2>
+						<p class="subtitle">
+							@vehiculos?.Count() unidades @(Estado.ToLower() == "activas" ? "activas" : "de baja")
+						</p>
+					</div>
+					<div class="header-actions">
+						@if (Estado.ToLower() == "activas")
+						{
+							<Button Class="modern-button add-button"
+									OnClick="@(() => AgregarVisible = true)">
+								<Icon Type="plus" />Nueva Unidad
+							</Button>
+							<Button Class="modern-button danger-button"
+									OnClick="@(() => navigationManager.NavigateTo("/fire-force/unidades/baja", true))">
+								<Icon Type="folder" /> Unidades de baja
+							</Button>
+						}
+						else
+						{
+							<Button class="modern-button back-button"
+									OnClick="@(() => navigationManager.NavigateTo("/fire-force/unidades/activas", true))">
+								<Icon Type="folder-open" />Volver a Unidades activas
+							</Button>
+						}
+					</div>
+				</div>
+			</div>
 
-            <div style="margin-top: 24px;">
-                @if (vehiculos is not null)
-                {
-                    <div class="vehicles-grid">
-                        @foreach (var m in vehiculos)
-                        {
-                            <VehiculosCarta Vehiculo="m" OnChange="Init" />
-                        }
-                    </div>
-                }
-                else
-                {
-                    <div class="loading-container">
-                        <Spin Size="SpinSize.Large" Indicator="@LoadingIcon" />
-                    </div>
-                }
-            </div>
-        </Card>
-    </Content>
+			<div style="margin-top: 24px;">
+				@if (vehiculos is not null)
+				{
+					<div class="vehicles-grid">
+						@foreach (var m in vehiculos)
+						{
+							<VehiculosCarta Vehiculo="m" OnChange="Init" />
+						}
+					</div>
+				}
+				else
+				{
+					<div class="loading-container">
+						<Spin Size="SpinSize.Large" Indicator="@LoadingIcon" />
+					</div>
+				}
+			</div>
+		</Card>
+	</Content>
 
-    <Modal Title=''
-           Visible="@AgregarVisible"
-           OnCancel="@(() => AgregarVisible = false)"
-           Footer="null"
-             WrapClassName="fullscreen-modal" Style="max-width: unset; width: 100%; top: 0;">
-        <VehiculoAgregar OnClose="CloseVehiculo" />
-    </Modal>
+	<Modal Title=''
+		   Visible="@AgregarVisible"
+		   OnCancel="@(() => AgregarVisible = false)"
+		   Footer="null"
+		   WrapClassName="fullscreen-modal" Style="max-width: unset; width: 100%; top: 0;">
+		<VehiculoAgregar OnClose="CloseVehiculo" />
+	</Modal>
 </div>
 
 @code {
-    [Parameter]
-    public string Estado { get; set; } = "activas";
+	[Parameter]
+	public string Estado { get; set; } = "activas";
 
-    RenderFragment LoadingIcon => @<Icon Type="loading" Theme="IconThemeType.Outline" Style="font-size: 24px; color: rgb(62, 24, 24);" Spin />;
-    bool AgregarVisible { get; set; }
+	RenderFragment LoadingIcon => @<Icon Type="loading" Theme="IconThemeType.Outline" Style="font-size: 24px; color: rgb(62, 24, 24);" Spin />;
+	bool AgregarVisible { get; set; }
 
-    private List<UnidadSimpleViewModel> vehiculos = new();
+	private List<UnidadSimpleViewModel> vehiculos = new();
 
-    private async void CloseVehiculo()
-    {
-        AgregarVisible = false;
-        await Init();
-        StateHasChanged();
-    }
+	private async void CloseVehiculo()
+	{
+		AgregarVisible = false;
+		await Init();
+		StateHasChanged();
+	}
 
-    protected override async Task OnInitializedAsync()
-    {
-        await Init();
-    }
+	protected override async Task OnInitializedAsync()
+	{
+		await Init();
+	}
 
-    private async Task Init()
-    {
-        List<VehiculoSalida> flota = new();
+	private async Task Init()
+	{
+		List<VehiculoSalida> flota = new();
 
-        if (string.IsNullOrWhiteSpace(Estado))
-        {
-            Estado = "activas";
-        }
+		if (string.IsNullOrWhiteSpace(Estado))
+		{
+			Estado = "activas";
+		}
 
-        if (Estado.ToLower() == "activas")
-        {
-            flota = await VehiculoSalidaService.ObtenerVehiculosSalidasPorEstadoAsync(TipoEstadoMovil.Activo);
-        }
-        else if (Estado.ToLower() == "baja")
-        {
-            flota = await VehiculoSalidaService.ObtenerVehiculosSalidasPorEstadoAsync(TipoEstadoMovil.Inactivo);
-        }
-        else
-        {
-            navigationManager.NavigateTo("/fire-force/unidades");
-            return;
-        }
+		if (Estado.ToLower() == "activas")
+		{
+			flota = await VehiculoSalidaService.ObtenerVehiculosSalidasPorEstadoAsync(TipoEstadoMovil.Activo);
+		}
+		else if (Estado.ToLower() == "baja")
+		{
+			flota = await VehiculoSalidaService.ObtenerVehiculosSalidasPorEstadoAsync(TipoEstadoMovil.Inactivo);
+		}
+		else
+		{
+			navigationManager.NavigateTo("/fire-force/unidades");
+			return;
+		}
 
-        if (flota != null && flota.Any())
-        {
-            vehiculos = MapearVehiculos(flota);
-        }
-        else
-        {
-            vehiculos = new List<UnidadSimpleViewModel>();
-        }
-    }
+		if (flota != null && flota.Any())
+		{
+			vehiculos = OrdenarVehiculos(MapearVehiculos(flota));
+		}
+		else
+		{
+			vehiculos = new List<UnidadSimpleViewModel>();
+		}
+	}
 
-    private List<UnidadSimpleViewModel> MapearVehiculos(List<VehiculoSalida> vehiculos)
-    {
-        return vehiculos.Select(v => new UnidadSimpleViewModel
-        {
-            Id = v.VehiculoId,
-            NumeroMovil = v.NumeroMovil ?? "-",
-            Estado = v.Estado,
+	private List<UnidadSimpleViewModel> MapearVehiculos(List<VehiculoSalida> vehiculos)
+	{
+		return vehiculos.Select(v => new UnidadSimpleViewModel
+		{
+			Id = v.VehiculoId,
+			NumeroMovil = v.NumeroMovil ?? "-",
+			Estado = v.Estado,
 
-            // Mapeo de Imagen (si existe)
-            ImageUrl = v.Imagen != null ? $"/api/imagenes/{v.Imagen.ImagenId}" : null
-        }).ToList();
-    }
+			// Mapeo de Imagen (si existe)
+			ImageUrl = v.Imagen != null ? $"/api/imagenes/{v.Imagen.ImagenId}" : null
+		}).ToList();
+	}
+
+
+	private List<UnidadSimpleViewModel> OrdenarVehiculos(List<UnidadSimpleViewModel> lista)
+	{
+		return lista
+			.OrderBy(v => EsSoloNumero(v.NumeroMovil) ? 0 : 1) // Prioriza los que son solo números
+			.ThenBy(v => ExtraerNumero(v.NumeroMovil))         // Ordena por el número extraído
+			.ToList();
+	}
+
+	private bool EsSoloNumero(string texto)
+	{
+		return Regex.IsMatch(texto, @"^\d+$");
+	}
+
+	private int ExtraerNumero(string texto)
+	{
+		var match = Regex.Match(texto, @"\d+");
+		return match.Success ? int.Parse(match.Value) : int.MaxValue;
+	}
 }

@@ -20,10 +20,9 @@
 
 @*Servicios Utilizados*@
 @using Vista.Services
-@inject IMessageService message
 @inject NavigationManager navigationManager
-@inject Microsoft.Graph.GraphServiceClient GraphServiceClient
 @inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
+@inject IMessageService message
 @inject IBomberoService BomberoService
 @inject IEntraIDService EntraIDService
 
@@ -211,7 +210,7 @@
 							@if (EntraIDisDisponbile)
 							{
 								<AntDesign.Col Span="8">
-									<FormItem Label="U.P.N" Required>
+									<FormItem Label="UPN" Required>
 										<AntDesign.Input @bind-Value="@personalView.UPN">
 											<AddOnAfter>
 												<label>@@bomberoschivilcoy.org.ar</label>
@@ -452,9 +451,9 @@
 				return;
 			}
 
-			if (personalView.Nombre == null && personalView.Apellido == null)
+			if (string.IsNullOrWhiteSpace(personalView.Nombre) || string.IsNullOrWhiteSpace(personalView.Apellido))
 			{
-				await message.ErrorAsync("El bombero no tiene asignado un nombre y apellido.");
+				await message.ErrorAsync("Falta asignar nombre y apellido al bombero. Por favor, completá ambos campos antes de continuar.");
 				return;
 			}
 
