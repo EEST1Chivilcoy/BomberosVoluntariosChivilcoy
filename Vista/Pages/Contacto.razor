@@ -15,21 +15,21 @@
                       SelectedKeys="@(new[]{"contacto"})" 
                       Style="background: transparent; border-bottom: none;"
                       OnMenuItemClicked="OnMenuItemClicked">
-                    <MenuItem Key="inicio">
-                        🏠 INICIO
-                    </MenuItem>
-                    <MenuItem Key="contacto">
-                        📞 CONTACTO
-                    </MenuItem>
-                    <MenuItem Key="cuerpo">
-                        👥 CUERPO ACTIVO
-                    </MenuItem>
-                    <MenuItem Key="historia">
-                        📖 NUESTRA HISTORIA
-                    </MenuItem>
-                    <MenuItem Key="sesion">
-                        🏢 SISTEMA
-                    </MenuItem>
+                        <MenuItem Key="inicio">
+                            🏠 INICIO
+                        </MenuItem>
+                        <MenuItem Key="contacto">
+                            📞 CONTACTO
+                        </MenuItem>
+                        <MenuItem Key="cuerpo">
+                            👥 CUERPO ACTIVO
+                        </MenuItem>
+                        <MenuItem Key="historia">
+                            📖 NUESTRA HISTORIA
+                        </MenuItem>
+                        <MenuItem Key="sesion">
+                            🏢 SISTEMA
+                        </MenuItem>
                 </Menu>
             </div>
         </AntDesign.Layout.Header>
@@ -140,7 +140,7 @@
 	{
 		menuActions = new Dictionary<string, Action>
 		{
-			["inicio"] = () => Navigation.NavigateTo("/inicio"),
+              ["inicio"] = () => Navigation.NavigateTo("/"),
 			["contacto"] = () => Navigation.NavigateTo("/contacto"),
 			["cuerpo"] = () => Navigation.NavigateTo("/cuerpo-activo"),
 			["historia"] = () => Navigation.NavigateTo("/historia"),
