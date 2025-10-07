@@ -9,8 +9,11 @@
         border-radius: 12px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         border: 2px solid #732D2D;
-        margin-top: -50px;
+        margin-top: -100px;
+        margin-left: -125px;
         margin-bottom: 0px;
+        max-width: 800px; /* Aumenta el ancho máximo del modal */
+        width: 90vw;      /* Responsive: ocupa el 90% del viewport */
     }
 
     .modal-crear-equipo .ant-modal-title {
@@ -23,54 +26,39 @@
     }
 
     .modal-crear-equipo-content {
-        padding: 24px;
+        padding: 36px 32px; /* Más espacio interno */
     }
 
     .modal-crear-equipo-form-item {
-        margin-bottom: 24px;
+        margin-bottom: 24px; /* Más espacio entre items */
         position: relative;
         padding-left: 10px;
     }
 
-        .modal-crear-equipo-form-item::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            height: 100%;
-            width: 3px;
-            border-radius: 5px;
-        }
+    .modal-crear-equipo-form-item::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 3px;
+        border-radius: 5px;
+    }
 
-        .modal-crear-equipo-form-item .ant-form-item-label > label,
-        .modal-crear-equipo-form-full-width .ant-form-item-label > label {
-            font-weight: 700;
-            color: #434343;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 16px;
-            transition: color 0.3s ease;
-            margin-bottom: 8px;
-            min-height: 24px;
-        }
+    .modal-crear-equipo-form-item .ant-form-item-label > label,
+    .modal-crear-equipo-form-full-width .ant-form-item-label > label {
+        font-weight: 600;
+        color: #434343;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 15px;
+        transition: color 0.3s ease;
+    }
 
-            .modal-crear-equipo-form-item .ant-form-item-label > label:hover,
-            .modal-crear-equipo-form-full-width .ant-form-item-label > label:hover {
-                color: #A63333;
-            }
-
-    .modal-crear-equipo .ant-input,
-    .modal-crear-equipo .ant-select-selector,
-    .modal-crear-equipo .ant-picker,
-    .modal-crear-equipo .ant-input-number {
-        height: 44px !important;
-        border-radius: 8px !important;
-        border: 2px solid #d9d9d9 !important;
-        background: #fff !important;
-        color: #434343 !important;
-        font-size: 15px !important;
-        transition: all 0.3s ease !important;
+    .modal-crear-equipo-form-item .ant-form-item-label > label:hover,
+    .modal-crear-equipo-form-full-width .ant-form-item-label > label:hover {
+        color: #A63333;
     }
 
     .modal-crear-equipo .ant-input:focus,
@@ -84,15 +72,18 @@
     .modal-crear-equipo .ant-input-number-input:focus,
     .modal-crear-equipo .ant-input-number-input:hover {
         border-color: #FFD700 !important;
-        box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2) !important;
+        box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
     }
 
-    .modal-crear-equipo .ant-select-selection-item {
-        font-size: 15px !important;
-        line-height: 40px !important;
-    }
-
-    .modal-crear-equipo .ant-picker-input > input {
+    .modal-crear-equipo .ant-picker,
+    .modal-crear-equipo .ant-input,
+    .modal-crear-equipo .ant-select-selector,
+    .modal-crear-equipo .ant-input-number {
+        border-radius: 8px !important;
+        border: 1px solid #d9d9d9 !important;
+        background: #fff !important;
+        color: #434343 !important;
+        transition: all 0.3s ease !important;
         font-size: 15px !important;
     }
 
@@ -100,153 +91,142 @@
         display: flex;
         justify-content: flex-end;
         gap: 16px;
-        margin-top: 32px;
+        margin-top: 24px;
         margin-bottom: 0px;
-        padding-top: 20px;
-        border-top: 1px solid #f0f0f0;
-    }
-
-    .modal-crear-equipo .ant-btn {
-        height: 44px !important;
-        border-radius: 8px !important;
-        font-size: 15px !important;
-        font-weight: 600 !important;
-        padding: 0 24px !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
     }
 
     .modal-crear-equipo .ant-btn-primary {
         background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
         border: none !important;
         color: #fff !important;
+        font-weight: 600;
         box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
+        margin-top: 0;
+        margin-bottom: 0;
+        padding: 0 28px !important;
+        font-size: 16px !important;
     }
 
-        .modal-crear-equipo .ant-btn-primary:hover {
-            background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
-            color: #fff !important;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.25);
+    .modal-crear-equipo .ant-btn-primary:hover {
+        background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
+        color: #fff !important;
+    }
+
+    @@media (max-width: 1199px) {
+        .modal-crear-equipo .ant-modal-content {
+            max-width: 98vw;
         }
-
-    .modal-crear-equipo .ant-btn-default {
-        border: 2px solid #d9d9d9 !important;
-        color: #434343 !important;
-        background: #fff !important;
-    }
-
-        .modal-crear-equipo .ant-btn-default:hover {
-            border-color: #A63333 !important;
-            color: #A63333 !important;
-            background: #fff !important;
+        .modal-crear-equipo-content {
+            padding: 18px 10px;
+            gap: 16px;
         }
-
-    .modal-crear-equipo-prueba-section {
-        background: #f8f9fa;
-        border-radius: 12px;
-        padding: 20px;
-        border: 2px solid #e9ecef;
-        margin-top: 8px;
+        .modal-crear-equipo-form-row {
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
     }
-
-    .modal-crear-equipo-prueba-title {
-        font-size: 16px;
-        font-weight: 700;
-        color: #A63333;
-        margin-bottom: 16px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
+    @@media (max-width: 767px) {
+        .modal-crear-equipo .ant-modal-content {
+            max-width: 100vw;
+        }
+        .modal-crear-equipo-content {
+            padding: 8px 2px;
+            gap: 12px;
+        }
+        .modal-crear-equipo-form-row {
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
     }
 </style>
 
 <Form Loading="loading" Model="@equipoAutonomoModel"
-      LabelColSpan="8"
-      WrapperColSpan="16"
       OnFinish="OnFinish"
       OnFinishFailed="OnFinishFailed"
       @ref="@_form"
       Class="modal-crear-equipo"
-      Layout="FormLayout.Horizontal">
+      Layout="FormLayout.Vertical">
 
     <div class="modal-crear-equipo-content">
-        <Row Gutter="24">
+        <Row Class="modal-crear-equipo-row" Gutter="16">
             <AntDesign.Col Span="12">
                 <FormItem Label="📋 Número de Serie" Required Class="modal-crear-equipo-form-item">
-                    <Input @bind-Value="@equipoAutonomoModel.NroSerie" 
+                    <Input @bind-Value="@equipoAutonomoModel.NroSerie"
                            Placeholder="Ingrese el número de serie" />
                 </FormItem>
             </AntDesign.Col>
             <AntDesign.Col Span="12">
                 <FormItem Label="🔧 Número de Tubo" Class="modal-crear-equipo-form-item">
-                    <Input @bind-Value="@equipoAutonomoModel.NroTubo" 
+                    <Input @bind-Value="@equipoAutonomoModel.NroTubo"
                            Placeholder="Ingrese el número de tubo" />
                 </FormItem>
             </AntDesign.Col>
         </Row>
-        
-        <Row Gutter="24">
+        <Row Class="modal-crear-equipo-row" Gutter="16">
             <AntDesign.Col Span="12">
                 <FormItem Label="🏭 Marca" Class="modal-crear-equipo-form-item">
-                    <Input @bind-Value="@equipoAutonomoModel.Marca" 
+                    <Input @bind-Value="@equipoAutonomoModel.Marca"
                            Placeholder="Ingrese la marca" />
                 </FormItem>
             </AntDesign.Col>
             <AntDesign.Col Span="12">
                 <FormItem Label="📱 Modelo" Class="modal-crear-equipo-form-item">
-                    <Input @bind-Value="@equipoAutonomoModel.Modelo" 
+                    <Input @bind-Value="@equipoAutonomoModel.Modelo"
                            Placeholder="Ingrese el modelo" />
                 </FormItem>
             </AntDesign.Col>
         </Row>
-        
-        <Row Gutter="24">
+        <Row Class="modal-crear-equipo-row" Gutter="16">
             <AntDesign.Col Span="12">
                 <FormItem Label="🧱 Tipo de Material" Class="modal-crear-equipo-form-item">
-                    <Input @bind-Value="@equipoAutonomoModel.TipoMaterial" 
+                    <Input @bind-Value="@equipoAutonomoModel.TipoMaterial"
                            Placeholder="Ingrese el tipo de material" />
                 </FormItem>
             </AntDesign.Col>
             <AntDesign.Col Span="12">
                 <FormItem Label="📊 Estado del Equipo" Class="modal-crear-equipo-form-item">
-                    <EnumSelect TEnum="TipoEstadoEquipoAutonomo" 
-                               @bind-Value="@equipoAutonomoModel.Estado"
-                               Placeholder="Seleccione el estado" />
+                    <EnumSelect TEnum="TipoEstadoEquipoAutonomo"
+                                @bind-Value="@equipoAutonomoModel.Estado"
+                                Placeholder="Seleccione el estado"
+                                 />
                 </FormItem>
             </AntDesign.Col>
         </Row>
 
         @if (equipoAutonomoModel.Estado == TipoEstadoEquipoAutonomo.PruebaHidraulica)
         {
-                <Row Gutter="24">
-                    <AntDesign.Col Span="12">
-                        <FormItem Label="📅 Fecha de Inicio" Class="modal-crear-equipo-form-item">
-                            <DatePicker @bind-Value="@equipoAutonomoModel.FechaInicioPrueba" 
-                                       DefaultValue="DateTime.Today"
-                                       DisabledDate="@(date => date < DateTime.Today)"
-                                       Placeholder="@("Seleccione fecha de inicio")"
-                                       Size="InputSize.Large" />
-                        </FormItem>
-                    </AntDesign.Col>
-                    <AntDesign.Col Span="12">
-                        <FormItem Label="📅 Fecha de Finalización" Class="modal-crear-equipo-form-item">
-                            <DatePicker @bind-Value="@equipoAutonomoModel.FechaFinPrueba" 
-                                       DisabledDate="@(date => date < DateTime.Today)"
-                                       Placeholder="@("Seleccione fecha de finalización")"
-                                       Size="InputSize.Large" />
-                        </FormItem>
-                    </AntDesign.Col>
-                </Row>
+            <Row Class="modal-crear-equipo-row" Gutter="16">
+                <AntDesign.Col Span="12">
+                    <FormItem Label="📅 Fecha de Inicio Prueba" Class="modal-crear-equipo-form-item">
+                        <DatePicker @bind-Value="@equipoAutonomoModel.FechaInicioPrueba"
+                                    DefaultValue="DateTime.Today"
+                                    DisabledDate="@(date => date < DateTime.Today)"
+                                    Size="InputSize.Large" />
+                    </FormItem>
+                </AntDesign.Col>
+                <AntDesign.Col Span="12">
+                    <FormItem Label="📅 Fecha de Fin Prueba" Class="modal-crear-equipo-form-item">
+                        <DatePicker @bind-Value="@equipoAutonomoModel.FechaFinPrueba"
+                                    DisabledDate="@(date => date < DateTime.Today)"
+                                    Size="InputSize.Large" />
+                    </FormItem>
+                </AntDesign.Col>
+            </Row>
         }
-
+        <Row Class="modal-crear-equipo-row" Gutter="16">
+            <AntDesign.Col Span="24" Class="modal-crear-equipo-form-full-width">
+                <FormItem Label="👤 Asignado a" Class="modal-crear-equipo-form-item">
+                    <Input @bind-Value="@equipoAutonomoModel.AsignadoA"
+                           Placeholder="Nombre del bombero asignado (opcional)" />
+                </FormItem>
+            </AntDesign.Col>
+        </Row>
         <div class="modal-crear-equipo-footer">
             <Button Type="@ButtonType.Primary" HtmlType="submit">
-                ✅ Agregar Equipo
+                Agregar Equipo
             </Button>
             <Button Type="@ButtonType.Default" OnClick="Reset">
-                🔄 Limpiar
+                Limpiar
             </Button>
         </div>
     </div>
@@ -275,6 +255,7 @@
         public TipoEstadoEquipoAutonomo Estado { get; set; } = TipoEstadoEquipoAutonomo.Stock;
         public DateTime? FechaInicioPrueba { get; set; }
         public DateTime? FechaFinPrueba { get; set; }
+        public string? AsignadoA { get; set; }
     }
 
     private EquipoAutonomoModel equipoAutonomoModel = new();
@@ -288,7 +269,7 @@
         {
             // TODO: Implement actual database save when models are created
             await Task.Delay(1000); // Simulate save operation
-            
+
             await message.SuccessAsync("Equipo autónomo agregado correctamente.");
             Reset();
             await OnFinishCallback.InvokeAsync();
@@ -314,4 +295,6 @@
         _form?.Reset();
     }
 }
+
+
 
