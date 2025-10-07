@@ -343,7 +343,13 @@
                     <PropertyColumn Property="v => v.Seguro.CompañiaAseguradora"></PropertyColumn>
                     <PropertyColumn Property="v => v.Seguro.NumeroDePoliza"></PropertyColumn>
                     <PropertyColumn Property="v => v.Seguro.FechaDeVencimineto"></PropertyColumn>
-                    <PropertyColumn Title="Conductor" Property="v => ObtenerNombreCompleto(v.ConductorDamnificado.Nombre, v.ConductorDamnificado.Apellido)"></PropertyColumn>
+                    <PropertyColumn Title="Conductor" TItem="VehiculoAfectado" TProp="string?">
+                        <Template>
+                            @(Vehiculos.ConductorDamnificado != null
+                                ? ObtenerNombreCompleto(Vehiculos.ConductorDamnificado.Nombre, Vehiculos.ConductorDamnificado.Apellido)
+                                : "Sin conductor")
+                        </Template>
+                    </PropertyColumn>
 
                     @*Falta listar los pasajeros*@
 
@@ -735,7 +741,7 @@
 
         return Task.CompletedTask;
     }
-    private string ObtenerNombreCompleto(string Nombre, string Apellido)
+    private string ObtenerNombreCompleto(string? Nombre, string? Apellido)
     {
         if (string.IsNullOrEmpty(Nombre)) { Nombre = "Desconocido";}
         if (string.IsNullOrEmpty(Apellido)) {Apellido = "Desconocido";}
