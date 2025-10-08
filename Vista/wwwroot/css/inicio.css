@@ -321,7 +321,7 @@ html {
 .gallery-title::after {
     content: '';
     position: absolute;
-    bottom: -15px;
+    bottom: -5px;
     left: 50%;
     transform: translateX(-50%);
     width: 120px;
@@ -335,7 +335,7 @@ html {
     content: '★';
     position: absolute;
     left: 50%;
-    bottom: -35px;
+    bottom: -25px;
     transform: translateX(-50%);
     color: #b22222;
     font-size: 1.2rem;
