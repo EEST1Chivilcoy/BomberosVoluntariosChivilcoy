@@ -12,10 +12,10 @@
 	<AntDesign.Layout>
 		<AntDesign.Layout.Header Class="custom-header">
 			<div style="display: flex; justify-content: flex-end;">
-                <Menu Mode="@MenuMode.Horizontal" 
-                      SelectedKeys="@(new[]{"contacto"})" 
-                      Style="background: transparent; border-bottom: none;"
-                      OnMenuItemClicked="OnMenuItemClicked">
+		    <Menu Mode="@MenuMode.Horizontal" 
+			    SelectedKeys="@(new[]{"inicio"})" 
+			    Style="background: transparent; border-bottom: none;"
+			    OnMenuItemClicked="OnMenuItemClicked">
                         <MenuItem Key="inicio">
                             🏠 INICIO
                         </MenuItem>
@@ -50,10 +50,11 @@
 					</div>
 				</AntDesign.Col>
 				<AntDesign.Col Xs="24" Sm="24" Md="12" Lg="12" Xl="12">
-					<div style="padding: 40px 5px; text-align: center;">
-						<img src="/Imagenes/Logos.png"
-							 alt="Sociedad Bomberos Voluntarios Chivilcoy"
-							 class="main-logo" />
+					<div style="padding: 50px 5px; text-align: center;">
+				<img src="/Imagenes/Logos.png"
+					alt="Sociedad Bomberos Voluntarios Chivilcoy"
+					class="main-logo"
+					style="max-width: 350px; width: 100%; height: auto;" />
 					</div>
 				</AntDesign.Col>
 			</Row>
