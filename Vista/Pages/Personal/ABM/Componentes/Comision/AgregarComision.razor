@@ -433,23 +433,16 @@
 		}
 	}
 
-	User? user;
-
 	protected override async Task OnInitializedAsync()
 	{
 		try
 		{
-			user = await EntraIDService.GetUserAsync();
 			EntraIDisDisponbile = await EntraIDService.CheckDisponibilidadAsync();
-
-			if (EntraIDisDisponbile)
-				user = await EntraIDService.GetUserAsync(full: true);
 		}
 		catch (Exception ex)
 		{
 			ConsentHandler.HandleException(ex);
 		}
-
 	}
 
 	public async Task CrearComisionDirectiva()
@@ -478,6 +471,12 @@
 			{
 				await message.ErrorAsync("Ocurrió un error al crear el miembro de comisión directiva.");
 				return;
+			}
+
+			if (!EntraIDisDisponbile)
+			{
+				await message.WarningAsync("El Servicio de entra id no esta disponible.");
+				personalView.EntraID = Guid.NewGuid();
 			}
 
 			// Preparar el objeto ComisionDirectiva para enviarlo al servicio

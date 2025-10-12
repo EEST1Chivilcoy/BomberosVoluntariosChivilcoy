@@ -11,7 +11,7 @@ namespace Vista.Services
     {
         Task<(BomberoViweModel? bombero, ImagenResultado? foto)> BuscarPorUPNAsync(string upn, CancellationToken token);
         Task<bool> CheckDisponibilidadAsync();
-        Task<User> GetUserAsync(bool full = false);
+        Task<User> GetUserAsync();
 
     }
 
@@ -122,6 +122,8 @@ namespace Vista.Services
             if (_env.IsProduction())
                 return false;
 
+            var user = GetUserAsync();
+
             try
             {
                 // Ejemplo: consultar si el servicio de usuarios responde
@@ -137,17 +139,18 @@ namespace Vista.Services
             }
         }
 
-        public async Task<User> GetUserAsync(bool full = false)
+        public async Task<User> GetUserAsync()
         {
-            if (full)
+            try
             {
                 Console.WriteLine("🔍 Obteniendo usuario completo desde Graph...");
                 return await _graphClient.Me.Request().GetAsync();
             }
-
-            Console.WriteLine("⚡ Usando ObjectId directo desde token...");
-            var objectId = _httpContextAccessor.HttpContext?.User?.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value;
-            return new User { Id = objectId };
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                return null;
+            }
         }
     }
 }

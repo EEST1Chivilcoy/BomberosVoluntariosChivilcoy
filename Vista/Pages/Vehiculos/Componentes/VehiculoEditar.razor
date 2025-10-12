@@ -299,7 +299,7 @@
 				imagenView.Base64 = vehiculo.Imagen.Base64Imagen;
 			}
 
-			vehiculoView.NombreYApellido = vehiculo.Encargado != null ? vehiculo.Encargado.Nombre + " " + vehiculo.Encargado.Apellido : "";
+			vehiculoView.EncargadoId = vehiculo.Encargado.PersonaId;
 
 			StateHasChanged();
 		}
@@ -484,14 +484,13 @@
 		movilView = new();
 		imagenView = new();
 
-		await CargarMovil();
 		await CargarBomberos();
+		await CargarMovil();
 	}
 
 	private async Task CargarBomberos()
 	{
 		var BomberosObjectList = await BomberoService.ObtenerTodosLosBomberosAsync();
-
 		ListaBomberos = BomberosObjectList.ToBomberoViewModelList().ToList();
 	}
 }

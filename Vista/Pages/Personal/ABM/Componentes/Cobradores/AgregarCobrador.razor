@@ -398,7 +398,7 @@
 				return;
 			}
 
-			if (EntraIDisDisponbile)
+			if (!EntraIDisDisponbile)
 			{
 				await message.WarningAsync("El Servicio de entra id no esta disponible.");
 				personalView.EntraID = Guid.NewGuid();
@@ -527,23 +527,16 @@
 		}
 	}
 
-	User? user;
-
 	protected override async Task OnInitializedAsync()
 	{
 		try
 		{
-			user = await EntraIDService.GetUserAsync();
 			EntraIDisDisponbile = await EntraIDService.CheckDisponibilidadAsync();
-
-			if (EntraIDisDisponbile)
-				user = await EntraIDService.GetUserAsync(full: true);
 		}
 		catch (Exception ex)
 		{
 			ConsentHandler.HandleException(ex);
 		}
-
 	}
 
 	private void OnFinish(EditContext editContext)
