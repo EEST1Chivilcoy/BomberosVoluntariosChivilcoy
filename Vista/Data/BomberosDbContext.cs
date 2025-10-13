@@ -9,6 +9,7 @@ using Vista.Data.Models.Grupos.Brigadas;
 using Vista.Data.Models.Grupos.FuerzasIntervinientes;
 using Vista.Data.Models.Imagenes;
 using Vista.Data.Models.Grupos.Dependencias.Comunicaciones;
+using Vista.Data.Models.Grupos.Dependencias.EquiposAutonomos;
 using Vista.Data.Models.Vehiculos;
 using Vista.Data.Enums.Discriminadores;
 using Vista.Data.Models.Personas;
@@ -52,6 +53,9 @@ namespace Vista.Data
 
         public DbSet<Dependencia> Dependencias { get; set; }
 
+        // Equipos Autonomos
+
+        public DbSet<EquipoAutonomo> EquiposAutonomos { get; set; }
         // Vehiculos
 
         public DbSet<Movil> Moviles { get; set; }

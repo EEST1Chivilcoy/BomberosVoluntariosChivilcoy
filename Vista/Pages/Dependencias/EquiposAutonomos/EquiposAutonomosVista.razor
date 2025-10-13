@@ -462,15 +462,6 @@
 </Modal>
 
 @code {
-    public enum TipoEstadoEquipoAutonomo
-    {
-        Stock,
-        Activo,
-        Baja,
-        Reparacion,
-        PruebaHidraulica
-    }
-
     private class EquipoAutonomoViewModel
     {
         public int EquipoId { get; set; }
@@ -480,13 +471,15 @@
         public string? Modelo { get; set; }
         public string? TipoMaterial { get; set; }
         public TipoEstadoEquipoAutonomo Estado { get; set; }
-        public string? AsignadoA { get; set; }
+        public int? VehiculoSalidaId { get; set; }
+        public int? DependenciaId { get; set; }
+        public string? AsignadoA => VehiculoSalidaNombre ?? DependenciaNombre;
+        public string? VehiculoSalidaNombre { get; set; }
+        public string? DependenciaNombre { get; set; }
     }
 
     List<EquipoAutonomoViewModel> EquiposAutonomosViewModel { get; set; } = new();
     private EquipoAutonomoViewModel EquipoAutonomoVM { get; set; } = new();
-    
-    BomberosDbContext Context { get; set; }
     
     private TableFilter<TipoEstadoEquipoAutonomo>[] EstadoFilter;
     
@@ -499,7 +492,7 @@
     
     protected override async Task OnInitializedAsync()
     {
-        await Init();
+        await CargarEquiposAutonomos();
         filteredEquiposAutonomos = EquiposAutonomosViewModel;
         
         EstadoFilter = new TableFilter<TipoEstadoEquipoAutonomo>[Enum.GetValues(typeof(TipoEstadoEquipoAutonomo)).Length];
@@ -511,27 +504,39 @@
         }
     }
 
-    private async Task Init()
+    private async Task CargarEquiposAutonomos()
     {
-        EquipoAutonomoVM = new();
-        Context = DbFactory.CreateDbContext();
-        await CargarEquiposAutonomosVM();
-    }
-
-    public async Task CargarEquiposAutonomosVM()
-    {
-        EquiposAutonomosViewModel.Clear();
-        
-        // Sample data for testing
-        var sampleData = new List<EquipoAutonomoViewModel>
+        loading = true;
+        try
         {
-            new() { EquipoId = 1, NroSerie = "EA001", Marca = "Drager", Modelo = "PSS 7000", TipoMaterial = "Equipo Respiración", Estado = TipoEstadoEquipoAutonomo.Activo, AsignadoA = "Bombero 1" },
-            new() { EquipoId = 2, NroSerie = "EA002", Marca = "MSA", Modelo = "G1", TipoMaterial = "Equipo Respiración", Estado = TipoEstadoEquipoAutonomo.Stock },
-            new() { EquipoId = 3, NroSerie = "EA003", Marca = "Scott", Modelo = "X3", TipoMaterial = "Equipo Respiración", Estado = TipoEstadoEquipoAutonomo.Reparacion }
-        };
-        
-        EquiposAutonomosViewModel.AddRange(sampleData);
-        await Task.CompletedTask;
+            using var context = DbFactory.CreateDbContext();
+            var equipos = await context.EquiposAutonomos
+                .Include(e => e.VehiculoSalida)
+                .Include(e => e.Dependencia)
+                .ToListAsync();
+
+            EquiposAutonomosViewModel = equipos.Select(e => new EquipoAutonomoViewModel
+                {
+                    EquipoId = e.Id,
+                    NroSerie = e.NroSerie,
+                    Marca = e.Marca,
+                    Modelo = e.Modelo,
+                    TipoMaterial = e.TipoMaterial,
+                    Estado = e.Estado,
+                    VehiculoSalidaId = e.VehiculoSalidaId,
+                    DependenciaId = e.DependenciaId,
+                    VehiculoSalidaNombre = e.VehiculoSalida?.NumeroMovil,
+                    DependenciaNombre = e.Dependencia?.NombreDependencia
+                }).ToList();
+        }
+        catch (Exception ex)
+        {
+            await message.ErrorAsync($"Error al cargar equipos: {ex.Message}", 5);
+        }
+        finally
+        {
+            loading = false;
+        }
     }
 
     private void Search(ChangeEventArgs e)
@@ -603,7 +608,8 @@
                 Modelo = equipo.Modelo,
                 TipoMaterial = equipo.TipoMaterial,
                 Estado = equipo.Estado,
-                AsignadoA = equipo.AsignadoA
+                VehiculoSalidaId = equipo.VehiculoSalidaId,
+                DependenciaId = equipo.DependenciaId
             };
             _visible = true;
         }
@@ -613,26 +619,69 @@
     {
         try
         {
-            EquiposAutonomosViewModel = EquiposAutonomosViewModel.Where(x => x.EquipoId != equipoId).ToList();
+            using var context = DbFactory.CreateDbContext();
+
+            var equipo = await context.EquiposAutonomos.FindAsync(equipoId);
+            if (equipo != null)
+            {
+                context.EquiposAutonomos.Remove(equipo);
+                await context.SaveChangesAsync();
+                await message.SuccessAsync("Equipo eliminado correctamente.");
+            }
+
+            await CargarEquiposAutonomos();
             filteredEquiposAutonomos = EquiposAutonomosViewModel;
             StateHasChanged();
-            await message.SuccessAsync("Equipo eliminado correctamente.");
         }
         catch (Exception ex)
         {
-            await message.ErrorAsync(ex.Message, 5);
+            await message.ErrorAsync($"Error al eliminar: {ex.Message}", 5);
         }
     }
 
     private void HandleCancel(MouseEventArgs e) => _visible = false;
     private void HandleCancelAgregar(MouseEventArgs e) => _visibleAgregar = false;
-    private void HandleOk(MouseEventArgs e) => _visible = false;
+    private async void HandleOk(MouseEventArgs e)
+    {
+        loading = true;
+        try
+        {
+            using var context = DbFactory.CreateDbContext();
+
+            var equipo = await context.EquiposAutonomos.FindAsync(EquipoAutonomoVM.EquipoId);
+            if (equipo != null)
+            {
+                equipo.NroSerie = EquipoAutonomoVM.NroSerie;
+                equipo.Marca = EquipoAutonomoVM.Marca;
+                equipo.Modelo = EquipoAutonomoVM.Modelo;
+                equipo.TipoMaterial = EquipoAutonomoVM.TipoMaterial;
+                equipo.Estado = EquipoAutonomoVM.Estado;
+                equipo.VehiculoSalidaId = EquipoAutonomoVM.VehiculoSalidaId;
+                equipo.DependenciaId = EquipoAutonomoVM.DependenciaId;
+
+                await context.SaveChangesAsync();
+                await message.SuccessAsync("Equipo actualizado correctamente.");
+            }
+
+            _visible = false;
+            await CargarEquiposAutonomos();
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            await message.ErrorAsync($"Error al actualizar: {ex.Message}", 5);
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
     private void OnFinish(EditContext editContext) => _visible = false;
     private void OnFinishFailed(EditContext editContext) { }
     private async Task OnFinishAdd()
     {
         _visibleAgregar = false;
-        await Init();
+        await CargarEquiposAutonomos();
         StateHasChanged();
     }
     private void Cancel() => message.Error("Operación cancelada.");
