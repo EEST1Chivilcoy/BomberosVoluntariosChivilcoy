@@ -696,14 +696,7 @@
 @if (EditarVisible == true)
 {
 	<Modal Footer="null" OnClose="@CloseModals" Visible="@EditarVisible" Centered="@true" DefaultMaximized="@true">
-		@if (TipoPersonal.ToLower() == "comisiondirectiva")
-		{
-			<EditarPersonal PersonalId="@PersonalId" Tipo="Data.Enums.Discriminadores.TipoPersonal.ComisionDirectiva" />
-		}
-		else if (TipoPersonal.ToLower() == "bomberos")
-		{
-			<EditarPersonal PersonalId="@PersonalId" Tipo="Data.Enums.Discriminadores.TipoPersonal.Bombero" />
-		}
+		@*En implementación*@
 	</Modal>
 }
 @if (DetallesVisible == true)
