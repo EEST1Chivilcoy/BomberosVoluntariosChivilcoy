@@ -2,16 +2,20 @@
 @using System.ComponentModel
 @using AntDesign.TableModels
 @using System.Text.Json
+@using Vista.Data.Models.Grupos.Dependencias
 @using Vista.Data.ViewModels.Personal
 @using Vista.Data.Models.Vehiculos.Flota
 @using Vista.Data.Models.Personas.Personal
 @using Vista.Data.Models.Personas.Personal.Componentes
+@using Vista.Services
 
 @*Servicios Utilizados*@
 
 @inject NavigationManager navigationManager
 @inject IDbContextFactory<BomberosDbContext> DbFactory
 @inject IMessageService message
+@inject IVehiculoSalidaService VehiculoSalidaService
+@inject IDependenciaService DependenciaService
 
 @*Direccion de la Pagina*|*@
 @page "/fire-force/Dependencias/EquiposAutonomos"
@@ -457,6 +461,30 @@
                     </FormItem>
                 </AntDesign.Col>
             </Row>
+            <Row Class="modal-crear-equipo-row" Gutter="24">
+    <AntDesign.Col Span="12">
+        <FormItem Label="Asignar a Móvil" Class="modal-crear-equipo-form-item">
+            <Select TItem="VehiculoSalida" TItemValue="int?"
+                    DataSource="vehiculos"
+                    ValueName="VehiculoId"
+                    LabelName="NumeroMovil"
+                    @bind-Value="EquipoAutonomoVM.VehiculoSalidaId"
+                    Placeholder="Seleccione un móvil"
+                    AllowClear />
+        </FormItem>
+    </AntDesign.Col>
+    <AntDesign.Col Span="12">
+        <FormItem Label="Asignar a Dependencia" Class="modal-crear-equipo-form-item">
+            <Select TItem="Dependencia" TItemValue="int?"
+                    DataSource="dependencias"
+                    ValueName="DependenciaId"
+                    LabelName="NombreDependencia"
+                    @bind-Value="EquipoAutonomoVM.DependenciaId"
+                    Placeholder="Seleccione una dependencia"
+                    AllowClear />
+        </FormItem>
+    </AntDesign.Col>
+</Row>
         </Form>
     </div>
 </Modal>
@@ -480,6 +508,9 @@
 
     List<EquipoAutonomoViewModel> EquiposAutonomosViewModel { get; set; } = new();
     private EquipoAutonomoViewModel EquipoAutonomoVM { get; set; } = new();
+    List<VehiculoSalida> vehiculos = new();
+    List<Dependencia> dependencias = new();
+
     
     private TableFilter<TipoEstadoEquipoAutonomo>[] EstadoFilter;
     
@@ -492,6 +523,8 @@
     
     protected override async Task OnInitializedAsync()
     {
+        vehiculos = await VehiculoSalidaService.ObtenerTodosLosVehiculosSalidasAsync();
+        dependencias = await DependenciaService.ObtenerTodasLasDependenciasAsync();
         await CargarEquiposAutonomos();
         filteredEquiposAutonomos = EquiposAutonomosViewModel;
         
