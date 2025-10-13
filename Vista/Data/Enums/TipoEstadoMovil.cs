@@ -2,7 +2,6 @@
 {
     public enum TipoEstadoMovil
     {
-        Estado,
         Activo,
         Inactivo,
         Reparacion,

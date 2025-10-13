@@ -385,6 +385,8 @@ namespace Vista.Data
 
             // Enum Conversiones a INT (Enteros)
 
+            // Bombero - Enum EscalafonJerarquico (Grado)
+
             modelBuilder
                 .Entity<Bombero>()
                 .Property(b => b.Grado)
