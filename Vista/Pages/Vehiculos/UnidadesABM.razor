@@ -10,7 +10,7 @@
 @inject NavigationManager navigationManager
 @inject IVehiculoSalidaService VehiculoSalidaService
 
-@page "/fire-force/unidades/{Estado?}"
+@page "/fire-force/unidades/"
 
 <div class="container unidades-abm">
 	<Content class="fade-in" Style="padding: 16px;">
@@ -29,29 +29,13 @@
 						<h2 class="main-title">
 							<Icon Type="Car" Class="title-icon" /> UNIDADES
 						</h2>
-						<p class="subtitle">
-							@vehiculos?.Count() unidades @(Estado.ToLower() == "activas" ? "activas" : "de baja")
-						</p>
 					</div>
 					<div class="header-actions">
-						@if (Estado.ToLower() == "activas")
-						{
-							<Button Class="modern-button add-button"
-									OnClick="@(() => AgregarVisible = true)">
-								<Icon Type="plus" />Nueva Unidad
-							</Button>
-							<Button Class="modern-button danger-button"
-									OnClick="@(() => navigationManager.NavigateTo("/fire-force/unidades/baja", true))">
-								<Icon Type="folder" /> Unidades de baja
-							</Button>
-						}
-						else
-						{
-							<Button class="modern-button back-button"
-									OnClick="@(() => navigationManager.NavigateTo("/fire-force/unidades/activas", true))">
-								<Icon Type="folder-open" />Volver a Unidades activas
-							</Button>
-						}
+						<Button Class="modern-button add-button"
+								OnClick="@(() => AgregarVisible = true)">
+							<Icon Type="plus" />Nueva Unidad
+						</Button>
+						<EnumSelect TEnum="TipoEstadoMovil" Placeholder="Seleccionar estado..." OnSelectedItemChanged="CambioEstado" @bind-value="Estado" />
 					</div>
 				</div>
 			</div>
@@ -86,12 +70,10 @@
 </div>
 
 @code {
-	[Parameter]
-	public string Estado { get; set; } = "activas";
-
 	RenderFragment LoadingIcon => @<Icon Type="loading" Theme="IconThemeType.Outline" Style="font-size: 24px; color: rgb(62, 24, 24);" Spin />;
 	bool AgregarVisible { get; set; }
 
+	private TipoEstadoMovil Estado = TipoEstadoMovil.Activo;
 	private List<UnidadSimpleViewModel> vehiculos = new();
 
 	private async void CloseVehiculo()
@@ -106,28 +88,16 @@
 		await Init();
 	}
 
+	private async Task CambioEstado()
+	{
+		await Init();
+	}
+
 	private async Task Init()
 	{
 		List<VehiculoSalida> flota = new();
 
-		if (string.IsNullOrWhiteSpace(Estado))
-		{
-			Estado = "activas";
-		}
-
-		if (Estado.ToLower() == "activas")
-		{
-			flota = await VehiculoSalidaService.ObtenerVehiculosSalidasPorEstadoAsync(TipoEstadoMovil.Activo);
-		}
-		else if (Estado.ToLower() == "baja")
-		{
-			flota = await VehiculoSalidaService.ObtenerVehiculosSalidasPorEstadoAsync(TipoEstadoMovil.Inactivo);
-		}
-		else
-		{
-			navigationManager.NavigateTo("/fire-force/unidades");
-			return;
-		}
+		flota = await VehiculoSalidaService.ObtenerVehiculosSalidasPorEstadoAsync(Estado);
 
 		if (flota != null && flota.Any())
 		{
