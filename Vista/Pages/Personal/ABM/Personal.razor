@@ -540,8 +540,8 @@
 
 						</PropertyColumn>
 						<ActionColumn Title="⚙️ Acciones" Align=ColumnAlign.Center>
-							<div class="abm-action-buttons">
-								<Button Type="default" OnClick="() => EditarPersonal(context.Id)" OnClickStopPropagation>
+							<div class="abm-action-buttons" @onclick:stopPropagation>
+								<Button Type="default" OnClick="() => EditarPersonal(context.Id)">
 									<Icon Type="edit" /> Editar
 								</Button>
 								@if (context.Estado != EstadoBombero.Baja)
@@ -549,7 +549,7 @@
 									<Popconfirm Title="¿Está seguro de dar de baja?"
 												OnConfirm="()=>CambiarEstadoBombero(context.Id, EstadoBombero.Baja)"
 												OkText="Sí" CancelText="No">
-										<Button Danger OnClickStopPropagation>
+										<Button Danger>
 											<Icon Type="down" /> Baja
 										</Button>
 									</Popconfirm>
@@ -559,7 +559,7 @@
 									<Popconfirm Title="¿Está seguro de dar de alta?"
 												OnConfirm="()=>CambiarEstadoBombero(context.Id, EstadoBombero.CuerpoActivo)"
 												OkText="Sí" CancelText="No">
-										<Button Color="Color.Green2" OnClickStopPropagation>
+										<Button Color="Color.Green2">
 											<Icon Type="up" /> Alta
 										</Button>
 									</Popconfirm>
@@ -599,8 +599,8 @@
 
 						</PropertyColumn>
 						<ActionColumn Title="⚙️ Acciones" Align=ColumnAlign.Center>
-							<div class="abm-action-buttons">
-								<Button Type="default" OnClick="() => EditarPersonal(context.Id)" OnClickStopPropagation>
+							<div class="abm-action-buttons" @onclick:stopPropagation>
+								<Button Type="default" OnClick="() => EditarPersonal(context.Id)">
 									<Icon Type="edit" /> Editar
 								</Button>
 								@if (context.Estado != EstadoComisionDirectiva.Baja)
@@ -608,7 +608,7 @@
 									<Popconfirm Title="¿Está seguro de dar de baja?"
 												OnConfirm="()=>CambiarEstadoComisionDirectiva(context.Id, EstadoComisionDirectiva.Baja)"
 												OkText="Sí" CancelText="No">
-										<Button Danger OnClickStopPropagation>
+										<Button Danger>
 											<Icon Type="down" /> Baja
 										</Button>
 									</Popconfirm>
@@ -618,7 +618,7 @@
 									<Popconfirm Title="¿Está seguro de dar de alta?"
 												OnConfirm="()=>CambiarEstadoComisionDirectiva(context.Id, EstadoComisionDirectiva.Activo)"
 												OkText="Sí" CancelText="No">
-										<Button Color="Color.Green2" OnClickStopPropagation>
+										<Button Color="Color.Green2">
 											<Icon Type="up" /> Alta
 										</Button>
 									</Popconfirm>
@@ -654,8 +654,8 @@
 						<PropertyColumn Title="📊 Estado" Property="@(c => c.Estado.GetDisplayName())" Sortable />
 
 						<ActionColumn Title="⚙️ Acciones" Align=ColumnAlign.Center>
-							<div class="abm-action-buttons">
-								<Button Type="default" OnClick="() => EditarPersonal(context.Id)" OnClickStopPropagation>
+							<div class="abm-action-buttons" @onclick:stopPropagation>
+								<Button Type="default" OnClick="() => EditarPersonal(context.Id)">
 									<Icon Type="edit" /> Editar
 								</Button>
 								@if (context.Estado == EstadoCobrador.Activo)
@@ -663,7 +663,7 @@
 									<Popconfirm Title="¿Está seguro de dar de baja?"
 												OnConfirm="()=>CambiarEstadoComisionDirectiva(context.Id, EstadoComisionDirectiva.Baja)"
 												OkText="Sí" CancelText="No">
-										<Button Danger OnClickStopPropagation>
+										<Button Danger>
 											<Icon Type="down" /> Baja
 										</Button>
 									</Popconfirm>
@@ -673,7 +673,7 @@
 									<Popconfirm Title="¿Está seguro de dar de alta?"
 												OnConfirm="()=>CambiarEstadoComisionDirectiva(context.Id, EstadoComisionDirectiva.Activo)"
 												OkText="Sí" CancelText="No">
-										<Button Color="Color.Green2" OnClickStopPropagation>
+										<Button Color="Color.Green2">
 											<Icon Type="up" /> Alta
 										</Button>
 									</Popconfirm>
