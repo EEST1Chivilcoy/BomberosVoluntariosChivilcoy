@@ -314,6 +314,138 @@
         transform: translateY(-2px) !important;
         box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4) !important;
     }
+
+    .modal-crear-licencia .ant-modal-content {
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: 2px solid #732D2D;
+    margin-top: 55px;
+    max-width: 800px;
+}
+
+.modal-crear-licencia .ant-modal {
+    top: 25px !important;
+    padding-bottom: 0 !important;
+}
+
+.modal-crear-licencia .ant-modal-title {
+    color: white !important;
+}
+
+.modal-crear-licencia .ant-modal-header {
+        background-color: #A63333;
+        padding: 16px 24px;
+}
+
+
+
+.modal-crear-licencia-row {
+    margin-bottom: 16px !important;
+}
+
+
+
+    .modal-crear-licencia-form-item .ant-form-item-label > label,
+    .modal-crear-licencia-form-full-width .ant-form-item-label > label {
+        font-weight: 600;
+        color: #434343;
+        transition: color 0.3s ease;
+    }
+
+    .modal-crear-licencia-form-item .ant-form-item-label > label:hover,
+    .modal-crear-licencia-form-full-width .ant-form-item-label > label:hover {
+        color: #FFD700;
+    }
+
+    .modal-crear-licencia .ant-input:focus,
+    .modal-crear-licencia .ant-input:hover,
+    .modal-crear-licencia .ant-select-selector:focus,
+    .modal-crear-licencia .ant-select-selector:hover,
+    .modal-crear-licencia .ant-picker:focus,
+    .modal-crear-licencia .ant-picker:hover,
+    .modal-crear-licencia .ant-picker-input > input:focus,
+    .modal-crear-licencia .ant-picker-input > input:hover,
+    .modal-crear-licencia .ant-input-number-input:focus,
+    .modal-crear-licencia .ant-input-number-input:hover,
+    .modal-crear-licencia .ant-textarea:focus,
+    .modal-crear-licencia .ant-textarea:hover {
+        border-color: #FFD700 !important;
+        box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
+    }
+
+    .modal-crear-licencia .ant-picker,
+    .modal-crear-licencia .ant-input,
+    .modal-crear-licencia .ant-select-selector,
+    .modal-crear-licencia .ant-input-number,
+    .modal-crear-licencia .ant-textarea {
+        border-radius: 8px !important;
+        border: 1px solid #d9d9d9 !important;
+        background: #fff !important;
+        color: #434343 !important;
+        transition: all 0.3s ease !important;
+    }
+
+    .modal-crear-licencia-footer {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 16px;
+        margin-top: 18px;
+        margin-bottom: 0px;
+        width: 100%;
+    }
+
+    .modal-crear-licencia .ant-btn-primary {
+        background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
+        border: none !important;
+        color: #fff !important;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
+        margin-top: 0;
+        margin-bottom: 0;
+        padding: 0 20px !important;
+        border-radius: 8px !important;
+        transition: background 0.3s;
+    }
+
+    .modal-crear-licencia .ant-btn-primary:hover {
+        background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
+        color: #fff !important;
+    }
+
+    .boton-agregar {
+        background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
+        border: none !important;
+        color: #fff !important;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
+        padding: 0 20px !important;
+        border-radius: 8px !important;
+        transition: background 0.3s;
+    }
+
+    .boton-agregar:hover {
+        background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
+        color: #fff !important;
+    }
+
+    @@media (max-width: 767px) {
+        .modal-crear-licencia-content {
+            padding: 16px;
+        }
+        
+        .modal-crear-licencia .ant-modal-content {
+            width: 95vw !important;
+            margin: 10px auto !important;
+            top: 20px !important;
+            transform: none !important;
+        }
+        
+        .modal-crear-licencia .ant-modal-wrap {
+            align-items: flex-start !important;
+            padding-top: 20px !important;
+        }
+    }   
 </style>
 
 <div class="comunicaciones-abm">
@@ -480,8 +612,6 @@
        WrapClassName="modal-crear-licencia">
     <div class="modal-crear-licencia-content">
         <Form Loading="loading" Model="@ComunicacionVM"
-          LabelColSpan="8"
-          WrapperColSpan="16"
           OnFinish="OnFinish"
           OnFinishFailed="OnFinishFailed"
           @ref="@_form">
