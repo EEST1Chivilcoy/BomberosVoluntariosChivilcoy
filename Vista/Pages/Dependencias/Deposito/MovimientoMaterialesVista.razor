@@ -242,14 +242,14 @@
                     <Row Gutter="16">
                         <AntDesign.Col Span="12">
                             <div class="modal-crear-movimiento-form-item">
-                                <FormItem Label="Rubro" Required>
+                                <FormItem Label="🏷️ Rubro" Required>
                                     <EnumSelect TEnum="@TipoMovimiento" @bind-Value="@MovimientoVM.TipoMovimiento" />
                                 </FormItem>
                             </div>
                         </AntDesign.Col>
                         <AntDesign.Col Span="12">
                             <div class="modal-crear-movimiento-form-item">
-                                <FormItem Label="Cantidad" Required>
+                               <FormItem  Label="🔢 Cantidad" Required>
                                     <AntDesign.InputNumber @bind-Value="MovimientoVM.Cantidad" />
                                 </FormItem>
                             </div>
@@ -258,7 +258,7 @@
                     <Row Gutter="16">
                         <AntDesign.Col Span="24">
                             <div class="modal-crear-movimiento-form-item">
-                                <FormItem Label="Material otorgado" Required>
+                                <FormItem Label="🧱 Material otorgado" Required>
                                     <Select TItem="MaterialVM" TItemValue="int" DataSource="@MaterialesVM" @bind-Value="@MovimientoVM.MaterialId"
                                         LabelName="@nameof(MaterialVM.Descripcion)" ValueName="@nameof(MaterialVM.MaterialId)"
                                         Placeholder="Seleccione el material" DefaultActiveFirstOption="false" AllowClear="true" EnableSearch />
@@ -307,7 +307,7 @@
                     <Row Gutter="24">
                         <AntDesign.Col Span="24">
                             <div class="modal-crear-movimiento-form-full-width">
-                                <FormItem Label="Observaciones">
+                                <FormItem Label="🧾 Observaciones">
                                     <TextArea @bind-Value="MovimientoVM.Observaciones" 
                                         Placeholder="Ingrese una descripción detallada de la licencia"
                                         Rows="4"/>
@@ -315,7 +315,7 @@
                             </div>
                         </AntDesign.Col>
                     </Row>
-                    <div class="modal-crear-movimiento-footer">
+                    <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;" class="modal-crear-movimiento-footer">
                          <Button Class="ant-btn-primary" HtmlType="submit">
                             Guardar
                         </Button>
