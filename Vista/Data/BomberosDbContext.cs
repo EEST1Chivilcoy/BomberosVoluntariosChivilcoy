@@ -36,6 +36,7 @@ namespace Vista.Data
         // Personas Assets
 
         public DbSet<Contacto> Contactos { get; set; }
+        public DbSet<OcupanteVehiculo> OcupantesVehiculos { get; set; }
 
         // Socios
 
@@ -134,25 +135,6 @@ namespace Vista.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Relacion de Damnificado con VehiculoAfectado
-            modelBuilder.Entity<Damnificado_Salida>()
-                .HasOne(ds => ds.VehiculoDamnificado)
-                .WithMany() // No navegamos de vuelta desde VehiculoAfectado
-                .HasForeignKey("VehiculoDamnificadoId") // FK implícita
-                .IsRequired(false); // Porque puede no tener vehículo
-
-            modelBuilder.Entity<VehiculoAfectado>()
-                .HasOne(va => va.ConductorDamnificado)
-                .WithOne() // No navegamos de vuelta desde Damnificado_Salida
-                .HasForeignKey<VehiculoAfectado>("ConductorDamnificadoId")
-                .IsRequired(false);
-
-            modelBuilder.Entity<VehiculoAfectado>()
-                .HasMany(va => va.PasajerosDamnificados)
-                .WithOne() // No navegamos de vuelta desde Damnificado_Salida
-                .HasForeignKey("VehiculoPasajeroId")
-                .IsRequired(false);
-
             // Relaciónes 1:1
 
             // Relación uno a uno entre Personal e Imagen_Personal
@@ -160,6 +142,17 @@ namespace Vista.Data
                 .HasOne(p => p.Imagen)
                 .WithOne(pi => pi.Personal)
                 .HasForeignKey<Imagen_Personal>(pi => pi.PersonalId); // Clave foránea en ProfileImage
+
+            // --- Configuración para VehiculoAfectado ---
+            modelBuilder.Entity<VehiculoAfectado>(entity =>
+            {
+                // Relación Uno a Uno (Opcional): Un vehículo afectado PUEDE tener UN seguro.
+                entity.HasOne(va => va.Seguro)
+                      .WithOne() // Asumiendo que SeguroVehiculo no tiene navegación inversa
+                      .HasForeignKey<VehiculoAfectado>(va => va.SeguroId)
+                      .IsRequired(false)
+                      .OnDelete(DeleteBehavior.SetNull);
+            });
 
             // Relaciónes 1:N (uno a muchos)
 
@@ -176,6 +169,39 @@ namespace Vista.Data
                 .WithMany(s => s.Historial)         // Un socio tiene muchos movimientos en su historial
                 .HasForeignKey(hs => hs.SocioId)      // Clave foránea en HistorialSocio
                 .OnDelete(DeleteBehavior.Cascade);    // Borrado en cascada si se borra el socio
+
+            // --- Configuración para FuerzaInterviniente_Salida ---
+            modelBuilder.Entity<FuerzaInterviniente_Salida>(entity =>
+            {
+                // Relación Muchos a Uno: Muchas intervenciones pertenecen a UNA Salida.
+                entity.HasOne(fis => fis.Salida)
+                      .WithMany(s => s.FuerzasIntervinientes)
+                      .HasForeignKey(fis => fis.SalidaId)
+                      .OnDelete(DeleteBehavior.Cascade); // Si se borra la Salida, se borra la intervención.
+
+                // Relación Muchos a Uno: Muchas intervenciones son de UNA FuerzaInterviniente.
+                entity.HasOne(fis => fis.Fuerzainterviniente)
+                      .WithMany() // Asumiendo que FuerzaInterviniente no tiene lista de intervenciones
+                      .HasForeignKey(fis => fis.FuerzaIntervinienteId)
+                      .OnDelete(DeleteBehavior.Restrict); // No permitir borrar una Fuerza si tiene intervenciones.
+            });
+
+            // --- Configuración para Damnificado_Salida ---
+            modelBuilder.Entity<Damnificado_Salida>(entity =>
+            {
+                // Relación Muchos a Uno: Muchos damnificados pertenecen a UNA Salida.
+                entity.HasOne(d => d.Salida)
+                      .WithMany(s => s.Damnificados)
+                      .HasForeignKey(d => d.SalidaId)
+                      .OnDelete(DeleteBehavior.Cascade);
+
+                // Relación Muchos a Uno (Opcional): Un damnificado PUEDE ser atendido por UNA FuerzaInterviniente_Salida.
+                entity.HasOne(d => d.FuerzaInterviniente)
+                      .WithMany(fis => fis.Damnificados)
+                      .HasForeignKey(d => d.FuerzaIntervinienteId)
+                      .IsRequired(false) // Indica que la relación es opcional (FK puede ser NULL).
+                      .OnDelete(DeleteBehavior.SetNull); // Si se borra la intervención, el FK en damnificado se pone a NULL.
+            });
 
             // Relaciones mucho a muchos
 
@@ -208,6 +234,22 @@ namespace Vista.Data
                 .HasOne(bb => bb.Brigada)
                 .WithMany(b => b.Bomberos) // Asegúrate de que en Brigada tienes una colección de BomberoBrigada
                 .HasForeignKey(bb => bb.BrigadaId);
+
+            // --- Configuración para OcupanteVehiculo (la tabla intermedia) ---
+            modelBuilder.Entity<OcupanteVehiculo>(entity =>
+            {
+                // Relación Muchos a Uno: Muchos registros de "Ocupante" pertenecen a UN VehiculoAfectado.
+                entity.HasOne(ov => ov.VehiculoAfectado)
+                      .WithMany(va => va.Ocupantes) // La lista en VehiculoAfectado
+                      .HasForeignKey(ov => ov.VehiculoAfectadoId)
+                      .OnDelete(DeleteBehavior.Cascade); // Si se borra el vehículo, se borran sus ocupantes.
+
+                // Relación Uno a Uno: Un registro de "Ocupante" corresponde a UN Damnificado.
+                entity.HasOne(ov => ov.Damnificado)
+                      .WithOne(d => d.OcupanteInfo) // La propiedad de navegación en Damnificado_Salida
+                      .HasForeignKey<OcupanteVehiculo>(ov => ov.DamnificadoSalidaId)
+                      .OnDelete(DeleteBehavior.Cascade); // Si se borra el damnificado, se borra su registro como ocupante.
+            });
 
             //Unique
 
