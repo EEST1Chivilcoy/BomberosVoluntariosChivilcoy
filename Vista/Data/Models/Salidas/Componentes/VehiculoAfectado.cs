@@ -7,8 +7,6 @@ namespace Vista.Data.Models.Salidas.Componentes
 {
     public class VehiculoAfectado  : Vehiculo
     {
-        // -- Seguro del vehículo --
-
         /// <summary>
         /// Identificador único del seguro asociado al vehículo.
         /// </summary>
@@ -17,11 +15,15 @@ namespace Vista.Data.Models.Salidas.Componentes
         /// <summary>
         /// Objeto que representa el seguro del vehículo.
         /// </summary>
+        [ForeignKey(nameof(SeguroId))]
         public SeguroVehiculo? Seguro { get; set; }
 
-        // -- Datos específicos del vehículo damnificado --
+        /// <summary>
+        /// Nombre y apellido del dueño del vehículo, con un máximo de 255 caracteres.
+        /// </summary>
         [StringLength(255)]
-        public string? Dueño { get; set; }
+        public string? NombreYApellidoDuenio { get; set; }
+
         /// <summary>
         /// Color del vehículo, con un máximo de 255 caracteres.
         /// </summary>
@@ -38,26 +40,14 @@ namespace Vista.Data.Models.Salidas.Componentes
         /// </summary>
         public string? Observaciones { get; set; }
 
-        // -- Relaciones con damnificados --
-
         /// <summary>
         /// Indica si se sabe quién era el conductor del vehículo.
         /// </summary>
         public bool seConoceConductor { get; set; } = false;
 
         /// <summary>
-        /// Relación con el damnificado chofer del vehículo.
+        /// Todos los ocupantes del vehículo (conductor y pasajeros).
         /// </summary>
-        public Damnificado_Salida? ConductorDamnificado { get; set; } = null!;
-
-        /// <summary>
-        /// Damnificados pasajeros del vehículo.
-        /// </summary>
-        public List<Damnificado_Salida> PasajerosDamnificados { get; set; } = new();
-
-        /// <summary>
-        /// Identificador para la Salida
-        /// </summary>
-        public int SalidaID { get; set; }
+        public List<OcupanteVehiculo> Ocupantes { get; set; } = new();
     }
 }
