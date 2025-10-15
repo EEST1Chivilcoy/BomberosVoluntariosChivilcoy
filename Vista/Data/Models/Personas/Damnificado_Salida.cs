@@ -1,8 +1,9 @@
-﻿using Vista.Data.Enums;
-using Vista.Data.Models.Salidas.Planillas;
-using System.ComponentModel.DataAnnotations;
-using Vista.Data.Models.Salidas.Componentes;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Vista.Data.Enums;
+using Vista.Data.Models.Grupos.FuerzasIntervinientes;
+using Vista.Data.Models.Salidas.Componentes;
+using Vista.Data.Models.Salidas.Planillas;
 
 namespace Vista.Data.Models.Personas
 {
@@ -48,18 +49,23 @@ namespace Vista.Data.Models.Personas
         /// <summary>
         /// Edad del damnificado.
         /// </summary>
-        public int Edad { get; set; }
+        public int? Edad { get; set; }
 
         /// <summary>
         /// Estado del damnificado.
         /// Herido, Fallecido o Desaparecido.
         /// </summary>
-        public TipoDamnificado Estado { get; set; }
+        public TipoDamnificado? Estado { get; set; }
 
-        // Relacion con Fuerza Interviniente
-        public int? FuerzaIntervinienteID { get; set; }
+        /// <summary>
+        /// Identificador de la fuerza interviniente.
+        /// </summary>
+        public int? FuerzaIntervinienteId { get; set; }
 
-        [ForeignKey(nameof(FuerzaIntervinienteID))]
+        /// <summary>
+        /// Fuerza interviniente asociada al damnificado.
+        /// </summary>
+        [ForeignKey(nameof(FuerzaIntervinienteId))]
         public FuerzaInterviniente_Salida? FuerzaInterviniente { get; set; }
 
         /// <summary>
@@ -67,15 +73,10 @@ namespace Vista.Data.Models.Personas
         /// </summary>
         public string? Destino { get; set; }
 
-
-        public int? VehiculoDamnificadoID { get; set; }
         /// <summary>
-        /// Vehículo del damnificado.
-        /// Representa el vehículo involucrado en el incidente.
-        /// Relacionado con la clase VehiculoDamnificado.
-        /// No es obligatorio.
+        /// Propiedad inversa para la relación uno a muchos con OcupanteVehiculo.
         /// </summary>
-        public VehiculoAfectado? VehiculoDamnificado { get; set; }
+        public OcupanteVehiculo? OcupanteInfo { get; set; }
 
         /// <summary>
         /// Identificador único de la salida a la que pertenece el damnificado.
@@ -85,6 +86,7 @@ namespace Vista.Data.Models.Personas
         /// <summary>
         /// Referencia a la salida a la que pertenece el damnificado.
         /// </summary>
+        [ForeignKey(nameof(SalidaId))]
         public Salida Salida { get; set; } = null!;
     }
 }

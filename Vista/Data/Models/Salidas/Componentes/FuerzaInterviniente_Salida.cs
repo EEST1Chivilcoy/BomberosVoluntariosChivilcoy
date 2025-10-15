@@ -15,8 +15,6 @@ namespace Vista.Data.Models.Salidas.Componentes
         /// </summary>
         public int Id { get; set; }
 
-        // Datos específicos de la fuerza interviniente en la salida
-
         /// <summary>
         /// Numero de unidad del vehiculo de la fuerza interviniente que participó en la salida.
         /// </summary>
@@ -26,8 +24,6 @@ namespace Vista.Data.Models.Salidas.Componentes
         /// Nombre y apellido del encargado de la fuerza interviniente que participó en la salida.
         /// </summary>
         public string EncargadoApellidoyNombre { get; set; } = null!;
-
-        // Relación con la Fuerza Interviniente
 
         /// <summary>
         /// Identificador de la fuerza interviniente asociada a la salida.
@@ -40,11 +36,10 @@ namespace Vista.Data.Models.Salidas.Componentes
         [ForeignKey(nameof(FuerzaIntervinienteId))]
         public FuerzaInterviniente Fuerzainterviniente { get; set; } = null!;
 
-        // Relacion con Damnificado
-
+        /// <summary>
+        /// Lista de damnificados asociados a la fuerza interviniente en la salida.
+        /// </summary>
         public List<Damnificado_Salida> Damnificados { get; set; } = new();
-
-        // Relación con la Salida
 
         /// <summary>
         /// Identificador de la salida asociada.
