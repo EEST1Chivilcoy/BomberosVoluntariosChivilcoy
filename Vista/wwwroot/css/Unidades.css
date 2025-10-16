@@ -244,24 +244,6 @@ button.ant-btn-primary {
 
 
 
-.unidades-abm .estado-filter {
-	width: 100%;
-	margin-top: 16px;
-}
-
-.unidades-abm .estado-filter :deep(.ant-select-selector) {
-	height: 42px !important;
-	border-radius: 8px !important;
-	font-size: 16px !important;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
-}
-.unidades-abm .filter-label {
-        font-weight: 600 !important;
-        color: rgba(255, 255, 255, 0.9) !important;
-        font-size: 0.9rem !important;
-        text-transform: uppercase !important;
-        letter-spacing: 0.5px !important;
-}
 
 
 /*
