@@ -222,7 +222,7 @@
 				
 			};
 
-			await EquipoAutonomoService.CrearEquipoAutonomo(equipo);
+			await EquipoAutonomoService.CrearEquipoAutonomoAsync(equipo);
 			await message.SuccessAsync("Equipo autónomo agregado correctamente.");
 			equipoAutonomo = new EquipoAutonomoViewModel();
 			await OnFinishCallback.InvokeAsync();

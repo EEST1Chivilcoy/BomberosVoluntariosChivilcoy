@@ -1,14 +1,17 @@
 ﻿using Vista.Data;
 using Vista.Data.Models.Grupos.Dependencias.EquiposAutonomos;
+using Microsoft.EntityFrameworkCore;
+using Vista.Data.Enums;
 
 namespace Vista.Services
 {
     public interface IEquipoAutonomoService
     {
-        Task CrearEquipoAutonomo(EquipoAutonomo equipo);
+        Task CrearEquipoAutonomoAsync(EquipoAutonomo equipo);
         //Task EditarEquipoAutonomo(EquipoAutonomo equipo);
-        //Task BorrarEquipoAutonomo(int equipoId);
-        //Task <List<EquipoAutonomo>> ObtenerEquiposAutonomos();
+        Task <List<EquipoAutonomo>> ObtenerEquiposAutonomosAsync();
+        Task <List<EquipoAutonomo>> ObtenerEquiposAutonomosPorEstadoAsync(TipoEstadoEquipoAutonomo estado);
+        Task CambiarEstadoEquipoAutonomoAsync(int equipoId, TipoEstadoEquipoAutonomo nuevoEstado);
     }
     public class EquipoAutonomoService : IEquipoAutonomoService
     {
@@ -19,9 +22,8 @@ namespace Vista.Services
             _context = context;
         }
 
-        public async Task CrearEquipoAutonomo(EquipoAutonomo equipo)
+        public async Task CrearEquipoAutonomoAsync(EquipoAutonomo equipo)
         {
-            // Validaciones
             if (string.IsNullOrWhiteSpace(equipo.NroSerie))
             {
                 throw new ArgumentException("El número de serie es obligatorio.");
@@ -29,6 +31,32 @@ namespace Vista.Services
 
             _context.EquiposAutonomos.Add(equipo);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task CambiarEstadoEquipoAutonomoAsync(int equipoId, TipoEstadoEquipoAutonomo nuevoEstado)
+        {
+            var equipo = await _context.EquiposAutonomos.FindAsync(equipoId);
+
+            if (equipo == null)
+            {
+                throw new KeyNotFoundException("Equipo autónomo no encontrado.");
+            }
+
+            equipo.Estado = nuevoEstado;
+            _context.EquiposAutonomos.Update(equipo);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<EquipoAutonomo>> ObtenerEquiposAutonomosAsync()
+        {
+            return await _context.EquiposAutonomos.ToListAsync();
+        }
+
+        public async Task<List<EquipoAutonomo>> ObtenerEquiposAutonomosPorEstadoAsync(TipoEstadoEquipoAutonomo estado)
+        {
+            return await _context.EquiposAutonomos
+                                 .Where(e => e.Estado == estado)
+                                 .ToListAsync();
         }
     }
 }
