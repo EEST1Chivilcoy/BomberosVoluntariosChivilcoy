@@ -51,49 +51,7 @@
         color: white !important;
     }
 
-    .movimientos-abm .section-header-new-style {
-        font-size: 1.1em;
-        font-weight: 600;
-        color: var(--text-color);
-        margin-bottom: 20px;
-        border-bottom: 2px solid var(--primary-dark);
-        padding-bottom: 8px;
-        text-align: left;
-    }
 
-    .movimientos-abm .form-grid-new-style {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px 60px; 
-    align-items: flex-start;
-}
-
-    .ant-form-item {
-        display: flex;
-        flex-direction: column; 
-        align-items: flex-start; 
-        margin-bottom: 12px;
-    }
-
-    .ant-form-item-label {
-        padding: 0 !important;
-        line-height: 1.2;
-        margin-bottom: 10px;
-        text-align: left !important;
-    }
-
-    .ant-form-item-label > label {
-        font-weight: 600 !important;
-        font-size: 14px;
-    }
-
-    .ant-form-item-label > label .anticon {
-        margin-right: 8px;
-    }
-
-    .ant-form-item-control {
-        width: 100%;
-    }
 
     .movimientos-abm .form-buttons-container {
         display: flex;
@@ -184,93 +142,24 @@
         background-color: #f8f8f8 !important;
     }
 
-
-    .modal-crear-movimiento .ant-modal-content {
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        border: 2px solid #732D2D;
-        margin-top: -50px;
-        margin-bottom: 0px;
-    }
-
-    .modal-crear-movimiento .ant-modal-title {
-        color: white !important;
-    }
-
-    .modal-crear-movimiento .ant-modal-header {
-        background-color: #A63333;
-        padding: 16px 24px;
-    }
-    .modal-crear-movimiento-content {
-        padding: 24px;
-    }
-    .modal-crear-movimiento-form-item {
-        margin-bottom: 20px;
-        position: relative;
-        padding-left: 10px;
-    }
-    .modal-crear-movimiento-form-item .ant-form-item-label > label,
-    .modal-crear-movimiento-form-full-width .ant-form-item-label > label {
-        font-weight: 600;
-        color: #434343;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 14px;
-        transition: color 0.3s ease;
-    }
-    .modal-crear-movimiento-form-item .ant-form-item-label > label:hover,
-    .modal-crear-movimiento-form-full-width .ant-form-item-label > label:hover {
-        color: #A63333;
-    }
-    .modal-crear-licencia .ant-input:focus,
-    .modal-crear-licencia .ant-input:hover,
-    .modal-crear-licencia .ant-select-selector:focus,
-    .modal-crear-licencia .ant-select-selector:hover,
-    .modal-crear-licencia .ant-picker:focus,
-    .modal-crear-licencia .ant-picker:hover,
-    .modal-crear-licencia .ant-picker-input > input:focus,
-    .modal-crear-licencia .ant-picker-input > input:hover,
-    .modal-crear-licencia .ant-input-number-input:focus,
-    .modal-crear-licencia .ant-input-number-input:hover,
-    .modal-crear-licencia .ant-textarea:focus,
-    .modal-crear-licencia .ant-textarea:hover {
-        border-color: #FFD700 !important;
-        box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
-    }
-    .modal-crear-licencia .ant-picker,
-    .modal-crear-licencia .ant-input,
-    .modal-crear-licencia .ant-select-selector,
-    .modal-crear-licencia .ant-input-number,
-    .modal-crear-licencia .ant-textarea {
-        border-radius: 8px !important;
-        border: 1px solid #d9d9d9 !important;
-        background: #fff !important;
-        color: #434343 !important;
-        transition: all 0.3s ease !important;
-    }
-
-    .modal-crear-movimiento-footer {
-        display: flex;
-        justify-content: flex-end;
-        gap: 12px;
-        margin-top: 18px;
-        margin-bottom: 0px;
-    }
-    .modal-crear-movimiento .ant-btn-primary {
+    .ant-modal .ant-btn-primary {
         background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
         border: none !important;
         color: #fff !important;
         font-weight: 600;
         box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
-        margin-top:  0;
+        margin-top: 0;
         margin-bottom: 0;
         padding: 0 20px !important;
     }
-    .modal-crear-movimiento .ant-btn-primary:hover {
-        background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
-        color: #fff !important;
-    }
+
+        .modal-crear-licencia .ant-btn-primary:hover {
+            background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
+            color: #fff !important;
+        }
+
+
+    
 </style>
 
 <div class="movimientos-abm">
@@ -353,14 +242,14 @@
                     <Row Gutter="16">
                         <AntDesign.Col Span="12">
                             <div class="modal-crear-movimiento-form-item">
-                                <FormItem Label="Rubro" Required>
+                                <FormItem Label="🏷️ Rubro" Required>
                                     <EnumSelect TEnum="@TipoMovimiento" @bind-Value="@MovimientoVM.TipoMovimiento" />
                                 </FormItem>
                             </div>
                         </AntDesign.Col>
                         <AntDesign.Col Span="12">
                             <div class="modal-crear-movimiento-form-item">
-                                <FormItem Label="Cantidad" Required>
+                               <FormItem  Label="🔢 Cantidad" Required>
                                     <AntDesign.InputNumber @bind-Value="MovimientoVM.Cantidad" />
                                 </FormItem>
                             </div>
@@ -369,7 +258,7 @@
                     <Row Gutter="16">
                         <AntDesign.Col Span="24">
                             <div class="modal-crear-movimiento-form-item">
-                                <FormItem Label="Material otorgado" Required>
+                                <FormItem Label="🧱 Material otorgado" Required>
                                     <Select TItem="MaterialVM" TItemValue="int" DataSource="@MaterialesVM" @bind-Value="@MovimientoVM.MaterialId"
                                         LabelName="@nameof(MaterialVM.Descripcion)" ValueName="@nameof(MaterialVM.MaterialId)"
                                         Placeholder="Seleccione el material" DefaultActiveFirstOption="false" AllowClear="true" EnableSearch />
@@ -418,7 +307,7 @@
                     <Row Gutter="24">
                         <AntDesign.Col Span="24">
                             <div class="modal-crear-movimiento-form-full-width">
-                                <FormItem Label="Observaciones">
+                                <FormItem Label="🧾 Observaciones">
                                     <TextArea @bind-Value="MovimientoVM.Observaciones" 
                                         Placeholder="Ingrese una descripción detallada de la licencia"
                                         Rows="4"/>
@@ -426,12 +315,12 @@
                             </div>
                         </AntDesign.Col>
                     </Row>
-                    <div class="modal-crear-movimiento-footer">
+                    <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;" class="modal-crear-movimiento-footer">
+                         <Button Class="ant-btn-primary" HtmlType="submit">
+                            Guardar
+                        </Button>
                         <Button Type="ButtonType.Default" OnClick="HandleModalClose">
                             Cancelar
-                        </Button>
-                        <Button Class="ant-btn-primary" HtmlType="submit">
-                            Guardar
                         </Button>
                     </div>
                 </Form>
