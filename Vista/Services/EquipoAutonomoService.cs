@@ -8,9 +8,10 @@ namespace Vista.Services
     public interface IEquipoAutonomoService
     {
         Task CrearEquipoAutonomoAsync(EquipoAutonomo equipo);
-        //Task EditarEquipoAutonomo(EquipoAutonomo equipo);
-        Task <List<EquipoAutonomo>> ObtenerEquiposAutonomosAsync();
-        Task <List<EquipoAutonomo>> ObtenerEquiposAutonomosPorEstadoAsync(TipoEstadoEquipoAutonomo estado);
+        Task<EquipoAutonomo?> ObtenerEquipoAutonomoAsync(int equipoId);
+        Task EditarEquipoAutonomoAsync(EquipoAutonomo equipo);
+        Task<List<EquipoAutonomo>> ObtenerEquiposAutonomosAsync();
+        Task<List<EquipoAutonomo>> ObtenerEquiposAutonomosPorEstadoAsync(TipoEstadoEquipoAutonomo estado);
         Task CambiarEstadoEquipoAutonomoAsync(int equipoId, TipoEstadoEquipoAutonomo nuevoEstado);
     }
     public class EquipoAutonomoService : IEquipoAutonomoService
@@ -30,6 +31,24 @@ namespace Vista.Services
             }
 
             _context.EquiposAutonomos.Add(equipo);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task EditarEquipoAutonomoAsync(EquipoAutonomo equipo)
+        {
+            var existingEquipo = await _context.EquiposAutonomos.FindAsync(equipo.EquipoAutonomoId);
+
+            if (existingEquipo == null)
+            {
+                throw new KeyNotFoundException("Equipo autónomo no encontrado.");
+            }
+
+            existingEquipo.NroSerie = equipo.NroSerie;
+            existingEquipo.NroTubo = equipo.NroTubo;
+            existingEquipo.Marca = equipo.Marca;
+            existingEquipo.Modelo = equipo.Modelo;
+            existingEquipo.TipoMaterial = equipo.TipoMaterial;
+
             await _context.SaveChangesAsync();
         }
 
@@ -57,6 +76,12 @@ namespace Vista.Services
             return await _context.EquiposAutonomos
                                  .Where(e => e.Estado == estado)
                                  .ToListAsync();
+        }
+
+        public async Task<EquipoAutonomo?> ObtenerEquipoAutonomoAsync(int equipoId)
+        {
+            return await _context.EquiposAutonomos
+                                 .FirstOrDefaultAsync(e => e.EquipoAutonomoId == equipoId);
         }
     }
 }

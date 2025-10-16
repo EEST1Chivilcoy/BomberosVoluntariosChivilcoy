@@ -2,12 +2,14 @@
 @using System.ComponentModel
 @using AntDesign.TableModels
 @using System.Text.Json
+@using System.Threading.Tasks
 @using Vista.Data.Models.Grupos.Dependencias
 @using Vista.Data.ViewModels.Personal
 @using Vista.Data.Models.Vehiculos.Flota
 @using Vista.Data.Models.Personas.Personal
 @using Vista.Data.Models.Personas.Personal.Componentes
 @using Vista.Services
+@using Vista.Data.Models.Grupos.Dependencias.EquiposAutonomos
 
 @*Servicios Utilizados*@
 
@@ -506,6 +508,7 @@
 					   Responsive
 					   TItem="EquipoAutonomoViewModel"
 					   Loading="@loading"
+					   PaginationPosition="bottomCenter"
 					   ScrollX="800px">
 
 					<ColumnDefinitions Context="equipo">
@@ -576,16 +579,21 @@
 
 <Modal Footer="null" Title="@("Nuevo Equipo Autónomo")"
 	   Visible="@_visibleAgregar"
-	   WrapClassName="modal-crear-equipo">
+	   WrapClassName="modal-crear-equipo"
+	   OnCancel="@(() => _visibleAgregar = false)"
+	   Centered="@true">
 	<div class="modal-crear-equipo-content">
 		<AgregarEquipoAutonomo OnFinishCallback="OnFinishAdd" />
 	</div>
 </Modal>
 
-<Modal Title="@("Editar Equipo Autónomo")"
+<Modal Footer="null" Title="@("Editar Equipo Autónomo")"
 	   Visible="@_visibleEditar"
+	   OnCancel="@(() => _visibleEditar = false)"
+	   Centered="@true"
 	   WrapClassName="modal-crear-equipo">
 	<div class="modal-crear-equipo-content">
+		<EditarEquipoAutonomo EquipoAutonomo="SelEquipoAutonomo" OnFinishCallback="OnFinishEdit" />
 	</div>
 </Modal>
 
@@ -608,13 +616,14 @@
 	private bool _visibleEditar = false;
 	private bool _visibleAgregar = false;
 	private bool _visibleMovimientos = false;
+	private EquipoAutonomo? SelEquipoAutonomo;
 
 	// ViewModel para mostrar en la tabla
 	private class EquipoAutonomoViewModel
 	{
 		public int EquipoId { get; set; }
 		[Required, StringLength(255)]
-		public string NroSerie { get; set; }
+		public string NroSerie { get; set; } = null!;
 		public string? Marca { get; set; }
 		public string? Modelo { get; set; }
 		public string? TipoMaterial { get; set; }
@@ -712,8 +721,23 @@
 		_visibleAgregar = true;
 	}
 
-	private void ShowModalEditar(int equipoId)
+	private async Task ShowModalEditar(int equipoId)
 	{
+		try
+		{
+			SelEquipoAutonomo = await EquipoAutonomoService.ObtenerEquipoAutonomoAsync(equipoId);
+
+			if (SelEquipoAutonomo == null)
+			{
+				message.Error("No se encontró el equipo seleccionado.");
+				return;
+			}
+		}
+		catch (Exception ex)
+		{
+			message.Error($"Error al cargar equipo: {ex.Message}");
+			return;
+		}
 		_visibleEditar = true;
 	}
 
@@ -725,6 +749,12 @@
 	private async Task OnFinishAdd()
 	{
 		_visibleAgregar = false;
+		await Init();
+	}
+
+	private async Task OnFinishEdit()
+	{
+		_visibleEditar = false;
 		await Init();
 	}
 }
