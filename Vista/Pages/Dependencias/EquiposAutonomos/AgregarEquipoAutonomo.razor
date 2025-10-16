@@ -6,8 +6,6 @@
 @using Vista.Services
 
 @inject IMessageService message
-@inject IVehiculoSalidaService VehiculoSalidaService
-@inject IDependenciaService DependenciaService
 @inject IEquipoAutonomoService EquipoAutonomoService
 
 <style>
@@ -149,7 +147,6 @@
 <Form Loading="loading" Model="@equipoAutonomo"
 	  OnFinish="OnFinish"
 	  OnFinishFailed="OnFinishFailed"
-	  @ref="@_form"
 	  Class="modal-crear-equipo"
 	  Layout="FormLayout.Vertical">
 
@@ -189,75 +186,10 @@
 						   Placeholder="Ingrese el tipo de material" />
 				</FormItem>
 			</AntDesign.Col>
-			<AntDesign.Col Span="12">
-				<FormItem Label="📊 Estado del Equipo" Class="modal-crear-equipo-form-item">
-					<EnumSelect TEnum="TipoEstadoEquipoAutonomo"
-								@bind-Value="@equipoAutonomo.Estado"
-								Placeholder="Seleccione el estado" />
-				</FormItem>
-			</AntDesign.Col>
-		</Row>
-
-		@if (equipoAutonomo.Estado == TipoEstadoEquipoAutonomo.PruebaHidraulica)
-		{
-			<Row Class="modal-crear-equipo-row" Gutter="16">
-				<AntDesign.Col Span="12">
-					<FormItem Label="📅 Fecha de Inicio Prueba" Class="modal-crear-equipo-form-item">
-						<DatePicker @bind-Value="@equipoAutonomo.FechaInicioPrueba"
-									DefaultValue="DateTime.Today"
-									DisabledDate="@(date => date < DateTime.Today)"
-									Size="InputSize.Large" />
-					</FormItem>
-				</AntDesign.Col>
-				<AntDesign.Col Span="12">
-					<FormItem Label="📅 Fecha de Fin Prueba" Class="modal-crear-equipo-form-item">
-						<DatePicker @bind-Value="@equipoAutonomo.FechaFinPrueba"
-									DisabledDate="@(date => date < DateTime.Today)"
-									Size="InputSize.Large" />
-					</FormItem>
-				</AntDesign.Col>
-			</Row>
-		}
-		<Row Class="modal-crear-equipo-row" Gutter="16">
-			@if (equipoAutonomo.DependenciaId == null)
-			{
-				<AntDesign.Col Span="12">
-					<FormItem Label="🚓 Asignado a Móvil" Class="modal-crear-equipo-form-item">
-						<Select TItem="VehiculoSalida"
-								TItemValue="int?"
-								ValueName="VehiculoId"
-								LabelName="NumeroMovil"
-								DataSource="vehiculos"
-								@bind-Value="equipoAutonomo.VehiculoSalidaId"
-								Placeholder="Seleccione un vehiculo"
-								AllowClear>
-						</Select>
-					</FormItem>
-				</AntDesign.Col>
-			}
-			@if (equipoAutonomo.VehiculoSalidaId == null)
-			{
-				<AntDesign.Col Span="12">
-					<FormItem Label="🏢 Asignado a Dependencia" Class="modal-crear-equipo-form-item">
-						<Select TItem="Dependencia"
-								TItemValue="int?"
-								ValueName="DependenciaId"
-								LabelName="NombreDependencia"
-								DataSource="dependencias"
-								@bind-Value="equipoAutonomo.DependenciaId"
-								Placeholder="Seleccione una dependencia"
-								AllowClear>
-						</Select>
-					</FormItem>
-				</AntDesign.Col>
-			}
 		</Row>
 		<div class="modal-crear-equipo-footer">
 			<Button Type="@ButtonType.Primary" HtmlType="submit">
 				Agregar Equipo
-			</Button>
-			<Button Type="@ButtonType.Default" OnClick="Reset">
-				Limpiar
 			</Button>
 		</div>
 	</div>
@@ -265,19 +197,20 @@
 
 @code {
 	[Parameter] public EventCallback OnFinishCallback { get; set; }
-
-	private EquipoAutonomo equipoAutonomo = new();
-	private Form<EquipoAutonomo> _form;
 	private bool loading = false;
+	private EquipoAutonomoViewModel equipoAutonomo = new EquipoAutonomoViewModel();
 
-	private List<VehiculoSalida> vehiculos = new();
-	private List<Dependencia> dependencias = new();
-
-	protected override async Task OnInitializedAsync()
+	private class EquipoAutonomoViewModel
 	{
-		vehiculos = await VehiculoSalidaService.ObtenerTodosLosVehiculosSalidasAsync();
-		dependencias = await DependenciaService.ObtenerTodasLasDependenciasAsync();
+		[Required(ErrorMessage = "El número de serie es obligatorio.")]
+		public string NroSerie { get; set; } = string.Empty;
+		public string? NroTubo { get; set; }
+		public string? Marca { get; set; }
+		public string? Modelo { get; set; }
+		public string? TipoMaterial { get; set; }
+		public TipoEstadoEquipoAutonomo Estado { get; set; } = TipoEstadoEquipoAutonomo.Stock;
 	}
+
 	private async Task OnFinish(EditContext editContext)
 	{
 		loading = true;
@@ -286,21 +219,12 @@
 
 			var equipo = new EquipoAutonomo
 			{
-				NroSerie = equipoAutonomo.NroSerie,
-				NroTubo = equipoAutonomo.NroTubo,
-				Marca = equipoAutonomo.Marca,
-				Modelo = equipoAutonomo.Modelo,
-				TipoMaterial = equipoAutonomo.TipoMaterial,
-				Estado = equipoAutonomo.Estado,
-				FechaInicioPrueba = equipoAutonomo.FechaInicioPrueba,
-				FechaFinPrueba = equipoAutonomo.FechaFinPrueba,
-				VehiculoSalidaId = equipoAutonomo.VehiculoSalidaId,
-				DependenciaId = equipoAutonomo.DependenciaId
+				
 			};
 
 			await EquipoAutonomoService.CrearEquipoAutonomo(equipo);
 			await message.SuccessAsync("Equipo autónomo agregado correctamente.");
-			Reset();
+			equipoAutonomo = new EquipoAutonomoViewModel();
 			await OnFinishCallback.InvokeAsync();
 		}
 		catch (Exception ex)
@@ -317,13 +241,4 @@
 	{
 		message.Error("Error en el formulario. Verifique los datos.");
 	}
-
-	private void Reset()
-	{
-		equipoAutonomo = new();
-		_form?.Reset();
-	}
 }
-
-
-

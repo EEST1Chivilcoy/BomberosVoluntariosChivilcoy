@@ -57,6 +57,7 @@ namespace Vista.Data
         // Equipos Autonomos
 
         public DbSet<EquipoAutonomo> EquiposAutonomos { get; set; }
+        public DbSet<Movimiento_EquipoAutonomo> MovimientosEquiposAutonomos { get; set; }
         // Vehiculos
 
         public DbSet<Movil> Moviles { get; set; }
@@ -159,6 +160,13 @@ namespace Vista.Data
             });
 
             // Relaciónes 1:N (uno a muchos)
+
+            // Relación uno a muchos entre EquipoAutonomo y Movimiento_EquipoAutonomo
+            modelBuilder.Entity<Movimiento_EquipoAutonomo>()
+                .HasOne(me => me.EquipoAutonomo)      // Un movimiento tiene un equipo autónomo
+                .WithMany(e => e.Movimientos)         // Un equipo autónomo tiene muchos movimientos
+                .HasForeignKey(me => me.EquipoAutonomoId) // Clave foránea en Movimiento_EquipoAutonomo
+                .OnDelete(DeleteBehavior.Cascade);    // Borrado en cascada si se borra el equipo autónomo
 
             // Relación uno a muchos entre Bombero y Licencia
             modelBuilder.Entity<Licencia>()

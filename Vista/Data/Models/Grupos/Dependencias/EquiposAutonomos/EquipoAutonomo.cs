@@ -49,31 +49,8 @@ namespace Vista.Data.Models.Grupos.Dependencias.EquiposAutonomos
         public TipoEstadoEquipoAutonomo Estado { get; set; } = TipoEstadoEquipoAutonomo.Stock;
 
         /// <summary>
-        /// Fecha de inicio de la prueba del equipo autónomo. Opcional.
+        /// Movimientos históricos del equipo autónomo.
         /// </summary>
-        public DateTime? FechaInicioPrueba { get; set; }
-
-        /// <summary>
-        /// Fecha de fin de la prueba del equipo autónomo. Opcional.
-        /// </summary>
-        public DateTime? FechaFinPrueba { get; set; }
-
-        /// ---- Relaciones ----
-
-        public int? VehiculoSalidaId { get; set; }
-
-        /// <summary>
-        /// Vehículo de salida asociado al equipo autónomo. Opcional.
-        /// </summary>
-        [ForeignKey(nameof(VehiculoSalidaId))]
-        public VehiculoSalida? VehiculoSalida { get; set; }
-
-        public int? DependenciaId { get; set; }
-
-        /// <summary>
-        /// Dependencia asociada al equipo autónomo. Opcional.
-        /// </summary>
-        [ForeignKey(nameof(DependenciaId))]
-        public Dependencia? Dependencia { get; set; }
+        public List<Movimiento_EquipoAutonomo> Movimientos { get; set; } = new();
     }
 }
