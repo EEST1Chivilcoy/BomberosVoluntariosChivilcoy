@@ -3,6 +3,8 @@ using Vista.Data;
 using Vista.Data.Models.Grupos.Dependencias;
 using Vista.Data.Models.Grupos.Dependencias.EquiposAutonomos;
 using Vista.Data.Models.Personas.Personal;
+using Vista.Data.Models.Vehiculos;
+using Vista.Data.Models.Vehiculos.Flota;
 
 namespace Vista.Services
 {
@@ -17,13 +19,15 @@ namespace Vista.Services
         private readonly BomberosDbContext _context;
         private readonly IBomberoService _bomberoService;
         private readonly IDependenciaService _dependenciaService;
+        private readonly IVehiculoSalidaService _vehiculoSalidaService;
         private readonly IEquipoAutonomoService _equipoAutonomoService;
 
-        public MovimientoEquipoAutonomoService(BomberosDbContext context, IBomberoService bomberoService, IDependenciaService dependenciaService, IEquipoAutonomoService equipoAutonomoService)
+        public MovimientoEquipoAutonomoService(BomberosDbContext context, IBomberoService bomberoService, IDependenciaService dependenciaService, IVehiculoSalidaService vehiculoSalidaService, IEquipoAutonomoService equipoAutonomoService)
         {
             _context = context;
             _bomberoService = bomberoService;
             _dependenciaService = dependenciaService;
+            _vehiculoSalidaService = vehiculoSalidaService;
             _equipoAutonomoService = equipoAutonomoService;
         }
 
@@ -33,7 +37,7 @@ namespace Vista.Services
             var encargado = await _bomberoService.ObtenerBomberoPorIdAsync(Movimiento.EncargadoId);
 
             Dependencia? dependencia = null;
-            Bombero? bombero = null;
+            VehiculoSalida? vehiculo = null;
 
             // ---- Validaciónes ----
 
@@ -57,6 +61,7 @@ namespace Vista.Services
             if (Movimiento.DependenciaAgenteId.HasValue)
             {
                 dependencia = await _dependenciaService.ObtenerDependenciaPorIdAsync(Movimiento.DependenciaAgenteId.Value);
+
                 if (dependencia == null)
                 {
                     throw new KeyNotFoundException($"No se encontró la dependencia con ID: {Movimiento.DependenciaAgenteId}");
@@ -64,15 +69,12 @@ namespace Vista.Services
             }
             else if (Movimiento.VehiculoAgenteId.HasValue)
             {
-                bombero = await _bomberoService.ObtenerBomberoPorIdAsync(Movimiento.VehiculoAgenteId.Value);
-                if (bombero == null)
+                vehiculo = await _vehiculoSalidaService.ObtenerVehiculoSalidaPorIdAsync(Movimiento.VehiculoAgenteId.Value);
+
+                if (vehiculo == null)
                 {
-                    throw new KeyNotFoundException($"No se encontró el bombero con ID: {Movimiento.VehiculoAgenteId}");
+                    throw new KeyNotFoundException($"No se encontró el vehículo de salida con ID: {Movimiento.VehiculoAgenteId}");
                 }
-            }
-            else
-            {
-                throw new InvalidOperationException("El movimiento debe tener asignado al menos una dependencia o un vehículo.");
             }
 
             // Asigna el estado actual del equipo como el "EstadoAnterior" del movimiento.

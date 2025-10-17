@@ -509,6 +509,7 @@
 					   Responsive
 					   TItem="EquipoAutonomoViewModel"
 					   Loading="@loading"
+					   OnRow="@OnRowClick"
 					   PaginationPosition="bottomCenter"
 					   ScrollX="800px">
 
@@ -598,14 +599,12 @@
 	</div>
 </Modal>
 
-<Modal Title="@("Movimientos")"
+<Modal Footer="null" Title="@("Movimientos")"
 	   Visible="@_visibleMovimientos"
+	   OnCancel="@(() => _visibleMovimientos = false)"
 	   Centered="@true"
-	   DefaultMaximized="@true"
 	   WrapClassName="modal-crear-equipo">
-	<div class="modal-crear-equipo-content">
-		<MovimientosEquipoAutonomo EquipoAutonomo="SelEquipoAutonomo" />
-	</div>
+	<MovimientosEquipoAutonomo EquipoAutonomo="SelEquipoAutonomo" />
 </Modal>
 
 @code {
@@ -745,11 +744,11 @@
 		_visibleEditar = true;
 	}
 
-	private Dictionary<string, object> OnRowClick(RowData<EquipoAutonomo> rowData)
+	private Dictionary<string, object> OnRowClick(RowData<EquipoAutonomoViewModel> rowData)
 	{
 		return new Dictionary<string, object>
 		{
-			["onclick"] = Microsoft.AspNetCore.Components.EventCallback.Factory.Create<Microsoft.AspNetCore.Components.Web.MouseEventArgs>(this, () => ShowModalMovimientos(rowData.Data.EquipoAutonomoId))
+			["onclick"] = Microsoft.AspNetCore.Components.EventCallback.Factory.Create<Microsoft.AspNetCore.Components.Web.MouseEventArgs>(this, () => ShowModalMovimientos(rowData.Data.EquipoId))
 		};
 	}
 
