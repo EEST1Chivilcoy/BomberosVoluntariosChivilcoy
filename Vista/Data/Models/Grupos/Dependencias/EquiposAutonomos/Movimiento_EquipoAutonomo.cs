@@ -55,13 +55,30 @@ namespace Vista.Data.Models.Grupos.Dependencias.EquiposAutonomos
         public TipoEstadoEquipoAutonomo EstadoNuevo { get; set; }
 
         /// <summary>
+        /// Agente anterior asociado al movimiento, si aplica.
+        /// </summary>
+        public string? AgenteAnterior { get; set; } = null;
+
+        /// <summary>
+        /// Identificador opcional del vehículo de salida asociado al movimiento, si aplica.
+        /// </summary>
+        public int? VehiculoAgenteId { get; set; } = null;
+
+        /// <summary>
         /// Propiedad opcional para la relación con el vehículo de salida, si aplica.
         /// </summary>
+        [ForeignKey(nameof(VehiculoAgenteId))]
         public VehiculoSalida? VehiculoAgente { get; set; } = null;
+
+        /// <summary>
+        /// Identificador opcional de la dependencia asociada al movimiento, si aplica.
+        /// </summary>
+        public int? DependenciaAgenteId { get; set; } = null;
 
         /// <summary>
         /// Propiedad opcional para la relación con la dependencia, si aplica.
         /// </summary>
+        [ForeignKey(nameof(DependenciaAgenteId))]
         public Dependencia? DependenciaAgente { get; set; } = null;
     }
 }

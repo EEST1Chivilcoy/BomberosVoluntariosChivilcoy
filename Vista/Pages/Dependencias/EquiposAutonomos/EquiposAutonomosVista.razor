@@ -10,6 +10,7 @@
 @using Vista.Data.Models.Personas.Personal.Componentes
 @using Vista.Services
 @using Vista.Data.Models.Grupos.Dependencias.EquiposAutonomos
+@using Vista.Pages.Dependencias.EquiposAutonomos.Movimientos
 
 @*Servicios Utilizados*@
 
@@ -564,7 +565,7 @@
 									  Fixed="ColumnFixPlacement.Right">
 							<Space>
 								<SpaceItem>
-									<Button Type="@ButtonType.Primary" OnClick="() => ShowModalEditar(equipo.EquipoId)" Ghost>
+									<Button Type="@ButtonType.Primary" OnClick="() => ShowModalEditar(equipo.EquipoId)" Ghost OnClickStopPropagation>
 										<Icon Type="edit" />
 									</Button>
 								</SpaceItem>
@@ -599,8 +600,11 @@
 
 <Modal Title="@("Movimientos")"
 	   Visible="@_visibleMovimientos"
+	   Centered="@true"
+	   DefaultMaximized="@true"
 	   WrapClassName="modal-crear-equipo">
 	<div class="modal-crear-equipo-content">
+		<MovimientosEquipoAutonomo EquipoAutonomo="SelEquipoAutonomo" />
 	</div>
 </Modal>
 
@@ -741,8 +745,31 @@
 		_visibleEditar = true;
 	}
 
-	private void ShowModalMovimientos(int equipoId)
+	private Dictionary<string, object> OnRowClick(RowData<EquipoAutonomo> rowData)
 	{
+		return new Dictionary<string, object>
+		{
+			["onclick"] = Microsoft.AspNetCore.Components.EventCallback.Factory.Create<Microsoft.AspNetCore.Components.Web.MouseEventArgs>(this, () => ShowModalMovimientos(rowData.Data.EquipoAutonomoId))
+		};
+	}
+
+	private async Task ShowModalMovimientos(int equipoId)
+	{
+		try
+		{
+			SelEquipoAutonomo = await EquipoAutonomoService.ObtenerEquipoAutonomoAsync(equipoId);
+
+			if (SelEquipoAutonomo == null)
+			{
+				message.Error("No se encontró el equipo seleccionado.");
+				return;
+			}
+		}
+		catch (Exception ex)
+		{
+			message.Error($"Error al cargar equipo: {ex.Message}");
+			return;
+		}
 		_visibleMovimientos = true;
 	}
 

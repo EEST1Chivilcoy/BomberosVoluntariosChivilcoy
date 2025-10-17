@@ -1,0 +1,48 @@
+﻿@using Microsoft.AspNetCore.Components.Forms
+@using System.ComponentModel.DataAnnotations
+@using Vista.Data.Models.Grupos.Dependencias
+@using Vista.Data.Models.Grupos.Dependencias.EquiposAutonomos
+@using Vista.Data.Models.Vehiculos.Flota
+@using Vista.Services
+
+@inject IMessageService message
+@inject IMovimientoEquipoAutonomoService MovimientoEquipoAutonomoService
+
+
+
+@code {
+	[Parameter] public EquipoAutonomo EquipoAutonomo { get; set; } = new();
+
+	private List<MovimientoTablaViewModel> movimientosTabla = new();
+	private bool isLoading = true;
+
+	protected override async Task OnInitializedAsync()
+	{
+		await Init();
+	}
+
+	private async Task Init()
+	{
+		try
+		{
+			var movimientos = await MovimientoEquipoAutonomoService.ObtenerMovimientosPorEquipoAsync(EquipoAutonomo.EquipoAutonomoId);
+		}
+		catch (Exception ex)
+		{
+			await message.ErrorAsync($"Error: Se produjo un error al cargar los movimientos del equipo autónomo.\nDetalles: {ex.Message}");
+		}
+		isLoading = false;
+		StateHasChanged();
+	}
+
+	// --- View Models ---
+	private class MovimientoTablaViewModel
+	{
+		public int Id { get; set; }
+		public DateTime FechaMovimiento { get; set; }
+		public string TipoMovimiento { get; set; } = string.Empty;
+		public string UbicacionOrigen { get; set; } = string.Empty;
+		public string UbicacionDestino { get; set; } = string.Empty;
+		public string Observaciones { get; set; } = string.Empty;
+	}
+}

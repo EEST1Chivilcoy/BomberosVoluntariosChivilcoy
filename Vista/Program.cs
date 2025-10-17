@@ -60,6 +60,7 @@ builder.Services.AddScoped<ICobradorService, CobradorService>();
 builder.Services.AddScoped<IBrigadaService, BrigadaService>();
 builder.Services.AddScoped<IDepositoService, DepositoService>();
 builder.Services.AddScoped<IEquipoAutonomoService, EquipoAutonomoService>();
+builder.Services.AddScoped<IMovimientoEquipoAutonomoService, MovimientoEquipoAutonomoService>();
 builder.Services.AddScoped<IVehiculoService, VehiculoService>();
 builder.Services.AddScoped<ISalidaService, SalidaService>();
 builder.Services.AddScoped<IDependenciaService, DependenciaService>();
