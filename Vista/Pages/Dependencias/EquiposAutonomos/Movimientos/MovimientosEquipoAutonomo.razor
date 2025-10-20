@@ -204,6 +204,7 @@
 		try
 		{
 			var movimientos = await MovimientoEquipoAutonomoService.ObtenerMovimientosPorEquipoAsync(EquipoAutonomo.EquipoAutonomoId);
+			movimientosTabla = MapToViewModelList(movimientos);
 		}
 		catch (Exception ex)
 		{
@@ -218,7 +219,6 @@
 
 	private MovimientoTablaViewModel MapToViewModel(Movimiento_EquipoAutonomo movimiento) => new MovimientoTablaViewModel
 	{
-		Id = movimiento.Movimiento_EquipoAutonomoId,
 		EncargadoApellidoYNombre = movimiento.Encargado is not null
 			? $"{movimiento.Encargado.Apellido}, {movimiento.Encargado.Nombre}"
 			: "N/A",
@@ -234,10 +234,19 @@
 				: "N/A"
 	};
 
+	private List<MovimientoTablaViewModel> MapToViewModelList(List<Movimiento_EquipoAutonomo> movimientos)
+	{
+		var listaViewModel = new List<MovimientoTablaViewModel>();
+		foreach (var movimiento in movimientos)
+		{
+			listaViewModel.Add(MapToViewModel(movimiento));
+		}
+		return listaViewModel;
+	}
+
 	// --- View Models ---
 	private class MovimientoTablaViewModel
 	{
-		public int Id { get; set; }
 		public string EncargadoApellidoYNombre { get; set; } = string.Empty;
 		public DateTime FechaMovimiento { get; set; }
 		public string TipoMovimiento { get; set; } = string.Empty;

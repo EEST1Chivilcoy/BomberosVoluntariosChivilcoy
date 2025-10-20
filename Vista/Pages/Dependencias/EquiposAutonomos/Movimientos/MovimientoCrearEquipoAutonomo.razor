@@ -307,20 +307,25 @@
 	private async Task OnFinish(EditContext editContext)
 	{
 		// Validaciones todas piola
-		if (_valueSel == 1 && movimientoViewModel.DependenciaDestino == null)
+		if (movimientoViewModel.TipoMovimiento == TipoMovimiento.Asignar ||
+								movimientoViewModel.TipoMovimiento == TipoMovimiento.Reparar ||
+								movimientoViewModel.TipoMovimiento == TipoMovimiento.Prueba)
 		{
-			await message.ErrorAsync("Error: Debe seleccionar una dependencia de destino.");
-			return;
-		}
-		else if (_valueSel == 2 && movimientoViewModel.UnidadDestino == null)
-		{
-			await message.ErrorAsync("Error: Debe seleccionar una unidad de destino.");
-			return;
-		}
-		else if (_valueSel == 3 && string.IsNullOrWhiteSpace(movimientoViewModel.OtroDestino))
-		{
-			await message.ErrorAsync("Error: Debe ingresar un destino.");
-			return;
+			if (_valueSel == 1 && movimientoViewModel.DependenciaDestino == null)
+			{
+				await message.ErrorAsync("Error: Debe seleccionar una dependencia de destino.");
+				return;
+			}
+			else if (_valueSel == 2 && movimientoViewModel.UnidadDestino == null)
+			{
+				await message.ErrorAsync("Error: Debe seleccionar una unidad de destino.");
+				return;
+			}
+			else if (_valueSel == 3 && string.IsNullOrWhiteSpace(movimientoViewModel.OtroDestino))
+			{
+				await message.ErrorAsync("Error: Debe ingresar un destino.");
+				return;
+			}
 		}
 
 		TipoMovimiento tipoMovimientoSeleccionado = movimientoViewModel.TipoMovimiento;
