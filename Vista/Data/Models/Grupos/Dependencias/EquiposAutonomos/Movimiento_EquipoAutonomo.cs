@@ -62,23 +62,28 @@ namespace Vista.Data.Models.Grupos.Dependencias.EquiposAutonomos
         /// <summary>
         /// Identificador opcional del vehículo de salida asociado al movimiento, si aplica.
         /// </summary>
-        public int? VehiculoAgenteId { get; set; } = null;
+        public int? VehiculoDestinoId { get; set; } = null;
 
         /// <summary>
         /// Propiedad opcional para la relación con el vehículo de salida, si aplica.
         /// </summary>
-        [ForeignKey(nameof(VehiculoAgenteId))]
-        public VehiculoSalida? VehiculoAgente { get; set; } = null;
+        [ForeignKey(nameof(VehiculoDestinoId))]
+        public VehiculoSalida? VehiculoDestino { get; set; } = null;
 
         /// <summary>
         /// Identificador opcional de la dependencia asociada al movimiento, si aplica.
         /// </summary>
-        public int? DependenciaAgenteId { get; set; } = null;
+        public int? DependenciaDestinoId { get; set; } = null;
 
         /// <summary>
         /// Propiedad opcional para la relación con la dependencia, si aplica.
         /// </summary>
-        [ForeignKey(nameof(DependenciaAgenteId))]
-        public Dependencia? DependenciaAgente { get; set; } = null;
+        [ForeignKey(nameof(DependenciaDestinoId))]
+        public Dependencia? DependenciaDestino { get; set; } = null;
+
+        /// <summary>
+        /// Si el destino no es un vehículo ni una dependencia registrada, se puede especificar aquí.
+        /// </summary>
+        public string? OtroDestino { get; set; } = null;
     }
 }
