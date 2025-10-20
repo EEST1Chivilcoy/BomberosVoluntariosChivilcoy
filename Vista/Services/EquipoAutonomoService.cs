@@ -68,7 +68,13 @@ namespace Vista.Services
 
         public async Task<List<EquipoAutonomo>> ObtenerEquiposAutonomosAsync()
         {
-            return await _context.EquiposAutonomos.ToListAsync();
+            return await _context.EquiposAutonomos
+                .Include(e => e.Movimientos)
+                    .ThenInclude(m => m.VehiculoDestino)
+                .Include(e => e.Movimientos)
+                    .ThenInclude(m => m.DependenciaDestino)
+                .AsNoTracking() // Recomendado para vistas de solo lectura
+                .ToListAsync();
         }
 
         public async Task<List<EquipoAutonomo>> ObtenerEquiposAutonomosPorEstadoAsync(TipoEstadoEquipoAutonomo estado)

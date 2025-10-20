@@ -601,7 +601,7 @@
 
 <Modal Footer="null" Title="@("Movimientos")"
 	   Visible="@_visibleMovimientos"
-	   OnCancel="@(() => _visibleMovimientos = false)"
+	   OnCancel="Init"
 	   Centered="@true"
 	   WrapClassName="modal-crear-equipo">
 	<MovimientosEquipoAutonomo EquipoAutonomo="SelEquipoAutonomo" />
@@ -641,6 +641,7 @@
 
 	private async Task Init()
 	{
+		_visibleMovimientos = false;
 		await CargarEquiposAutonomos();
 		filteredEquiposAutonomos = EquiposAutonomosViewModel;
 
@@ -660,15 +661,30 @@
 		{
 			var equipos = await EquipoAutonomoService.ObtenerEquiposAutonomosAsync();
 
-			EquiposAutonomosViewModel = equipos.Select(e => new EquipoAutonomoViewModel
+			// Usamos un primer 'Select' para crear un objeto anónimo que contenga
+			// el equipo y su último movimiento. Esto evita repetir la consulta.
+			EquiposAutonomosViewModel = equipos.Select(e => new
 			{
-				EquipoId = e.EquipoAutonomoId,
-				NroSerie = e.NroSerie,
-				Marca = e.Marca,
-				Modelo = e.Modelo,
-				TipoMaterial = e.TipoMaterial,
-				Estado = e.Estado,
-				AsignadoA = e.Estado == TipoEstadoEquipoAutonomo.Stock ? "Deposito" : "Desconocido"
+				Equipo = e,
+				UltimoMovimiento = e.Movimientos
+									.OrderByDescending(m => m.FechaMovimiento)
+									.FirstOrDefault()
+			})
+
+			.Select(data => new EquipoAutonomoViewModel
+			{
+				EquipoId = data.Equipo.EquipoAutonomoId,
+				NroSerie = data.Equipo.NroSerie,
+				Marca = data.Equipo.Marca,
+				Modelo = data.Equipo.Modelo,
+				TipoMaterial = data.Equipo.TipoMaterial,
+				Estado = data.Equipo.Estado,
+
+				// la lógica para 'AsignadoA':
+				AsignadoA = data.UltimoMovimiento?.VehiculoDestino?.NumeroMovil
+							   ?? data.UltimoMovimiento?.DependenciaDestino?.NombreDependencia 
+							   ?? data.UltimoMovimiento?.OtroDestino
+							   ?? "N/A"
 			}).ToList();
 		}
 		catch (Exception ex)
