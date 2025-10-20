@@ -10,9 +10,9 @@
             Title="Se cargo correctamente la salida"
             SubTitle="">
     </Result>
-    <p style="font-size: 20px;">Imprimir con croquis</p>
+    <p style="font-size: 20px; text-align: center;">¿Desea imprimir la planilla de intervención?</p>
     <button @onclick="@(() => { navigationManager.NavigateTo($"/PlanillasIntervencion/Imprimir/{AnioNumeroParte}/{NumeroParte}/{true}", true); })">Si</button>
-    <button @onclick="@(() => { navigationManager.NavigateTo($"/PlanillasIntervencion/Imprimir/{AnioNumeroParte}/{NumeroParte}/{false}", true); })">No</button>
+    <button @onclick="@(() => { navigationManager.NavigateTo("/fire-force/Salidas"); })">No</button>
 </Modal>
 
 @code {

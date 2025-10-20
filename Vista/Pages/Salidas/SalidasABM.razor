@@ -603,7 +603,29 @@
 
     private async Task VerEditarSalida(int id)
     {
+        try
+        {
+            var salida = await SalidaService.ObtenerSalidaPorIdAsync(id);
+            if (salida == null)
+            {
+                await MessageService.ErrorAsync("No se encontró la salida para editar.");
+                return;
+            }
 
+            if (RutasEmergencia.TryGetValue(salida.TipoEmergencia, out var rutaBase))
+            {
+                var urlCompleta = $"{rutaBase}/{salida.AnioNumeroParte}/{salida.NumeroParte}";
+                NavigationManager.NavigateTo(urlCompleta);
+            }
+            else
+            {
+                await MessageService.ErrorAsync("No se encontró una ruta de edición para este tipo de emergencia.");
+            }
+        }
+        catch (Exception ex)
+        {
+            await MessageService.ErrorAsync($"Ocurrió un error al intentar editar la salida: {ex.Message}");
+        }
     }
 
     private async Task VerAñadirSalida()
