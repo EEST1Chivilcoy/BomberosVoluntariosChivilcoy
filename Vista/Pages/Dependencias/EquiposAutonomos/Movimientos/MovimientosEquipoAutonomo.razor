@@ -228,10 +228,12 @@
 			? movimiento.AgenteAnterior
 			: "N/A",
 		UbicacionDestino = !string.IsNullOrWhiteSpace(movimiento.DependenciaDestino?.NombreDependencia)
-			? movimiento.DependenciaDestino.NombreDependencia
-			: !string.IsNullOrWhiteSpace(movimiento.VehiculoDestino?.NumeroMovil)
-				? movimiento.VehiculoDestino.NumeroMovil
-				: "N/A"
+	? movimiento.DependenciaDestino.NombreDependencia
+	: !string.IsNullOrWhiteSpace(movimiento.VehiculoDestino?.NumeroMovil)
+		? movimiento.VehiculoDestino.NumeroMovil
+		: !string.IsNullOrWhiteSpace(movimiento.OtroDestino)
+			? movimiento.OtroDestino
+			: "N/A"
 	};
 
 	private List<MovimientoTablaViewModel> MapToViewModelList(List<Movimiento_EquipoAutonomo> movimientos)
