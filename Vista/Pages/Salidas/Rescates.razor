@@ -1,7 +1,4 @@
-﻿@inject IMessageService message
-@inject NavigationManager navigationManager
-@page "/fire-force/salidas/rescate/{TipoRescate:int}/{AnioSalida:int}/{NumeroSalida:int}"
-
+﻿@page "/fire-force/salidas/rescate/{TipoRescate:int}/{AnioSalida:int}/{NumeroSalida:int}"
 @using Vista.Data.ViewModels.Personal;
 @using Vista.Data.ViewModels.Rescates;
 @using Vista.Data.Enums.Salidas;
@@ -13,9 +10,12 @@
 @inject IVehiculoSalidaService VehiculoSalidaService
 @inject INavigationInterception NavigationInterception
 @inject IFuerzaIntervinienteService FuerzaIntervinienteService
+@inject IMessageService message
+@inject NavigationManager navigationManager
 
 @*Componentes Generales*@
 @using Vista.Components.Forms.Salidas.General;
+@using Vista.Data.Models.Salidas.Componentes;
 @using Vista.Components.Forms.Salidas;
 
 <Form Model="@PersonaViewModel"
@@ -62,8 +62,8 @@
                 <FuerzasIntervinientes Model="@PersonaViewModel" />
             </TabPane>
 
-            <TabPane Key="4" Tab="⚠️ Afectado">
-                <Damnificados Model="@PersonaViewModel" />
+            <TabPane Key="4" Tab="⚠️ Afectados">
+                
             </TabPane>
 
             <TabPane Key="5" Tab="🚒 Unidades">

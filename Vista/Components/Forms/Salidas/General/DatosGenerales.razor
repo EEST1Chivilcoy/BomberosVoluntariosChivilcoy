@@ -274,6 +274,12 @@
             esDepartamento = !string.IsNullOrEmpty(Model.PisoNumero) ||
                               !string.IsNullOrEmpty(Model.Depto);
 
+            // Activa el switch si ya se había convocado una guardia
+            SeConvocoGuardia = Model.GuardiaSelecionada != default(Guardia);
+
+            // Activa el switch si ya hay fuerzas intervinientes al cargar en modo edición
+            IntervencionDeFuerzasIntervinientes = Model.FuerzasIntervinientesParticipantes?.Any() == true;
+
 
             try
             {
