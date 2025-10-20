@@ -1,7 +1,10 @@
 @page "/cuerpo-activo"
 @layout EmptyLayout
 @inject NavigationManager Navigation
+@inject IBomberoService BomberoService
 @using AntDesign
+@using Vista.Data.Models.Personas.Personal
+@using Vista.Services
 
 <HeadContent>
 	<link href="css/inicio.css" rel="stylesheet" />
@@ -11,26 +14,26 @@
 	<AntDesign.Layout>
 		<AntDesign.Layout.Header Class="custom-header">
 			<div style="display: flex; justify-content: flex-end;">
-                <Menu Mode="@MenuMode.Horizontal" 
-                      SelectedKeys="@(new[]{"cuerpo"})"
-                      Style="background: transparent; border-bottom: none;"
-                      OnMenuItemClicked="OnMenuItemClicked">
-                        <MenuItem Key="inicio">
-                            🏠 INICIO
-                        </MenuItem>
-                        <MenuItem Key="contacto">
-                            📞 CONTACTO
-                        </MenuItem>
-                        <MenuItem Key="cuerpo">
-                            👥 CUERPO ACTIVO
-                        </MenuItem>
-                        <MenuItem Key="historia">
-                            📖 NUESTRA HISTORIA
-                        </MenuItem>
-                        <MenuItem Key="sesion">
-                            🏢 SISTEMA
-                        </MenuItem>
-                </Menu>
+				<Menu Mode="@MenuMode.Horizontal" 
+				SelectedKeys="@(new[]{"cuerpo"})"
+				Style="background: transparent; border-bottom: none;"
+				OnMenuItemClicked="OnMenuItemClicked">
+					<MenuItem Key="inicio">
+						🏠 INICIO
+					</MenuItem>
+					<MenuItem Key="contacto">
+						📞 CONTACTO
+					</MenuItem>
+					<MenuItem Key="cuerpo">
+						👥 CUERPO ACTIVO
+					</MenuItem>
+					<MenuItem Key="historia">
+						📖 NUESTRA HISTORIA
+					</MenuItem>
+					<MenuItem Key="sesion">
+						🏢 SISTEMA
+					</MenuItem>
+				</Menu>
 			</div>
 		</AntDesign.Layout.Header>
 
@@ -51,8 +54,8 @@
 					{
 						<AntDesign.Col Xs="24" Sm="12" Md="8" Lg="6" Xl="6" Style="margin-bottom: 30px; display: flex;">
 							<Card Class="bombero-card"
-								  Style="border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); border: 1px solid rgba(139, 0, 0, 0.1); width: 100%; display: flex; flex-direction: column;"
-								  Cover="@GetCardCover(bombero)">
+							Style="border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); border: 1px solid rgba(139, 0, 0, 0.1); width: 100%; display: flex; flex-direction: column;"
+							Cover="@GetCardCover(bombero)">
 								<div class="bombero-info" style="flex: 1; display: flex; flex-direction: column; padding: 25px;">
 									<Title Level="4" Style="margin: 0 0 8px 0; color: #333; font-size: 1.2rem; font-weight: 700; line-height: 1.3; height: 3.2rem; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
 										@bombero.Nombre
@@ -131,8 +134,8 @@
 					<AntDesign.Col Xs="24" Sm="24" Md="12" Lg="12" Xl="12">
 						<div class="footer-left">
 							<img src="/Imagenes/Logos.png"
-								 alt="Logo Bomberos Voluntarios Chivilcoy"
-								 class="footer-logo" />
+							alt="Logo Bomberos Voluntarios Chivilcoy"
+							class="footer-logo" />
 							<div class="footer-info">
 								<Title Level="3" Style="color: white; font-size: 1.4rem; font-weight: 600; margin: 0 0 5px 0; text-transform: uppercase;">
 									Sociedad de Bomberos<br />Voluntarios de Chivilcoy
@@ -164,85 +167,34 @@
 
 @code {
 	private List<BomberoViewModel> bomberos = new List<BomberoViewModel>();
-
 	protected override async Task OnInitializedAsync()
 	{
-		// Datos de ejemplo - esto después se reemplazará con datos del backend
-		bomberos = new List<BomberoViewModel>
+		try
 		{
-			new BomberoViewModel
+			var todos = await BomberoService.ObtenerTodosLosBomberosAsync(true);
+			var activos = todos.Where(b => b.Estado == EstadoBombero.CuerpoActivo).OrderBy(b => b.Grado).ToList();
+
+			bomberos = activos.Select(b => new BomberoViewModel
 			{
-				Nombre = "Juan Carlos Rodríguez",
-				Rango = "Jefe",
-				Especialidad = "Comandancia",
-				AniosServicio = 25,
-				Intervenciones = 1500,
-				Foto = "/Imagenes/Logos.png"
-			},
-			new BomberoViewModel
-			{
-				Nombre = "María Elena González",
-				Rango = "Subjefe",
-				Especialidad = "Rescate Urbano",
-				AniosServicio = 18,
-				Intervenciones = 980,
-				Foto = "/Imagenes/Logos.png"
-			},
-			new BomberoViewModel
-			{
-				Nombre = "Carlos Alberto",
-				Rango = "Capitán",
-				Especialidad = "Incendios",
-				AniosServicio = 15,
-				Intervenciones = 750,
-				Foto = "/Imagenes/Logos.png"
-			},
-			new BomberoViewModel
-			{
-				Nombre = "Ana Sofía López",
-				Rango = "Teniente",
-				Especialidad = "Emergencias Médicas",
-				AniosServicio = 12,
-				Intervenciones = 600,
-				Foto = "/Imagenes/Logos.png"
-			},
-			new BomberoViewModel
-			{
-				Nombre = "Roberto Daniel Silva",
-				Rango = "Sargento",
-				Especialidad = "Materiales Peligrosos",
-				AniosServicio = 10,
-				Intervenciones = 420,
-				Foto = "/Imagenes/Logos.png"
-			},
-			new BomberoViewModel
-			{
-				Nombre = "Laura Patricia Fernández",
-				Rango = "Cabo",
-				Especialidad = "Rescate Vehicular",
-				AniosServicio = 8,
-				Intervenciones = 350,
-				Foto = "/Imagenes/Logos.png"
-			},
-			new BomberoViewModel
-			{
-				Nombre = "Diego Alejandro Morales",
-				Rango = "Bombero",
-				Especialidad = "Incendios Forestales",
-				AniosServicio = 6,
-				Intervenciones = 280,
-				Foto = "/Imagenes/Logos.png"
-			},
-			new BomberoViewModel
-			{
-				Nombre = "Valeria Beatriz Castro",
-				Rango = "Bombero",
-				Especialidad = "Prevención",
-				AniosServicio = 4,
-				Intervenciones = 150,
-				Foto = "/Imagenes/Logos.png"
-			}
-		};
+				Nombre = $"{b.Nombre} {b.Apellido}",
+				Rango = b.Grado.GetDisplayName(),
+				AniosServicio = CalcularAniosServicio(b),
+				Intervenciones = b.Salidas?.Count ?? 0,
+				Foto = b.Imagen != null ? $"data:image/{b.Imagen.TipoImagen};base64,{b.Imagen.Base64Imagen}" : "/Imagenes/Logos.png"
+			}).ToList();
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine($"Error al cargar bomberos: {ex.Message}");
+		}
+	}
+	private int CalcularAniosServicio(Bombero b)
+	{
+		if (b.FechaAceptacion == null) return 0;
+		var hoy = DateTime.Today;
+		var ingreso = b.FechaAceptacion.Value;
+		var anios = hoy.Year - ingreso.Year;
+		return anios;
 	}
 
 	private string currentSection = "cuerpo";
