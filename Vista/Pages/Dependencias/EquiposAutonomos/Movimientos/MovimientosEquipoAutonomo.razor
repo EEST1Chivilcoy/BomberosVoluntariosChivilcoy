@@ -1,0 +1,230 @@
+﻿@using Microsoft.AspNetCore.Components.Forms
+@using System.ComponentModel.DataAnnotations
+@using Vista.Data.Models.Grupos.Dependencias
+@using Vista.Data.Models.Grupos.Dependencias.EquiposAutonomos
+@using Vista.Data.Models.Vehiculos.Flota
+@using Vista.Services
+
+@inject IMessageService message
+@inject IMovimientoEquipoAutonomoService MovimientoEquipoAutonomoService
+
+<style>
+	.movimientos-abm {
+		font-family: 'Poppins', sans-serif !important;
+		--primary-color: #f0f2f5;
+		--primary-dark: #d9d9d9;
+		--secondary-color: #2F54EB;
+		--success-color: #52C41A;
+		--success-dark: #449E17;
+		--background-card: #FFFFFF;
+		--background-body: #FFFFFF;
+		--text-color: #262626;
+		--border-color: #D9D9D9;
+		--shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+	}
+
+	.ant-modal-content {
+		border: 2px solid #A63333 !important;
+		border-radius: 8px !important;
+		overflow: hidden !important;
+	}
+
+	.ant-modal-header {
+		background-color: #A63333 !important;
+		border-radius: 8px 8px 0 0 !important;
+		border-bottom: none !important;
+	}
+
+		.ant-modal-header .ant-modal-title {
+			color: white !important;
+		}
+
+	.ant-modal-close {
+		color: white !important;
+	}
+
+
+
+	.movimientos-abm .form-buttons-container {
+		display: flex;
+		justify-content: flex-end;
+		gap: 10px;
+		margin-top: 24px;
+	}
+
+	.movimientos-abm .primary-button {
+		background-color: var(--secondary-color);
+		border: none;
+		color: white;
+		box-shadow: 0 2px 8px rgba(47, 84, 235, 0.3);
+		height: 32px;
+		font-weight: 500;
+		border-radius: 6px;
+		padding: 0 15px;
+	}
+
+	.movimientos-abm .secondary-button {
+		background-color: #6c757d;
+		border: none;
+		color: white;
+		box-shadow: none;
+		height: 32px;
+		font-weight: 500;
+		border-radius: 6px;
+		padding: 0 15px;
+	}
+
+	.movimientos-abm .cancel-button-white {
+		background-color: white !important;
+		color: black !important;
+		font-weight: 500 !important;
+		border: 1px solid #d9d9d9;
+		box-shadow: none;
+		height: 32px;
+		border-radius: 6px;
+		padding: 0 15px;
+	}
+
+	.movimientos-abm .save-button {
+		background: #4CAF50;
+		border: none;
+		color: white;
+		box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+		font-weight: 600;
+		height: 32px;
+		border-radius: 6px;
+		padding: 0 15px;
+	}
+
+	.movimientos-abm .section-separator {
+		border: none;
+		border-top: 1px dashed var(--border-color);
+		margin: 24px 0;
+	}
+
+	.ant-select:not(.ant-select-customize-input) .ant-select-selector {
+		border-radius: 6px !important;
+		height: 40px !important;
+	}
+
+	.ant-input:focus, .ant-input:hover,
+	.ant-input-number:focus, .ant-input-number:hover,
+	.ant-select-selector:focus, .ant-select-selector:hover {
+		border-color: #FFC107 !important;
+		box-shadow: 0 0 0 2px rgba(255, 193, 7, 0.2) !important;
+	}
+
+	.movimientos-abm .table-container {
+		margin-top: 20px;
+		border-radius: 8px;
+		overflow: hidden;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+	}
+
+	.movimientos-abm .ant-table-wrapper {
+		border-radius: 8px;
+	}
+
+	.movimientos-abm .ant-table-thead > tr > th {
+		background-color: #fafafa !important;
+		font-weight: bold;
+	}
+
+	.movimientos-abm .ant-table-tbody > tr:nth-child(even) > td {
+		background-color: #f8f8f8 !important;
+	}
+
+	.ant-modal .ant-btn-primary {
+		background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
+		border: none !important;
+		color: #fff !important;
+		font-weight: 600;
+		box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
+		margin-top: 0;
+		margin-bottom: 0;
+		padding: 0 20px !important;
+	}
+
+	.modal-crear-licencia .ant-btn-primary:hover {
+		background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
+		color: #fff !important;
+	}
+</style>
+
+<div class="movimientos-abm">
+	<div class="modal-content">
+
+		<div style="text-align: right; margin-bottom: 20px;">
+			<Button Type="@ButtonType.Primary" Class="primary-button">
+				<Icon Type="plus-circle" Theme="IconThemeType.Outline" /> Nuevo Movimiento
+			</Button>
+		</div>
+
+		<div class="table-container">
+			<Table DataSource="movimientosTabla" Bordered Responsive PageSize="10" Size="TableSize.Small" Loading="@isLoading">
+				<ColumnDefinitions Context="movimiento">
+					<PropertyColumn Property="c => c.EncargadoApellidoYNombre" Title="Encargado" Sortable />
+					<PropertyColumn Property="c => c.UbicacionOrigen" Title="Origen" Sortable />
+					<PropertyColumn Property="c => c.FechaMovimiento" Title="Fecha" Format="dd/MM/yyyy" Sortable />
+					<PropertyColumn Property="c => c.TipoMovimiento" Title="Tipo de Movimiento" Sortable />
+					<PropertyColumn Property="c => c.UbicacionDestino" Title="Destino" Sortable />
+				</ColumnDefinitions>
+			</Table>
+		</div>
+	</div>
+</div>
+
+@code {
+	[Parameter] public EquipoAutonomo EquipoAutonomo { get; set; } = new();
+
+	private List<MovimientoTablaViewModel> movimientosTabla = new();
+	private bool isLoading = true;
+
+	protected override async Task OnInitializedAsync()
+	{
+		await Init();
+	}
+
+	private async Task Init()
+	{
+		try
+		{
+			var movimientos = await MovimientoEquipoAutonomoService.ObtenerMovimientosPorEquipoAsync(EquipoAutonomo.EquipoAutonomoId);
+		}
+		catch (Exception ex)
+		{
+			await message.ErrorAsync($"Error: Se produjo un error al cargar los movimientos del equipo autónomo.\nDetalles: {ex.Message}");
+		}
+		isLoading = false;
+		StateHasChanged();
+	}
+
+	private MovimientoTablaViewModel MapToViewModel(Movimiento_EquipoAutonomo movimiento) => new MovimientoTablaViewModel
+	{
+		Id = movimiento.Movimiento_EquipoAutonomoId,
+		EncargadoApellidoYNombre = movimiento.Encargado is not null
+			? $"{movimiento.Encargado.Apellido}, {movimiento.Encargado.Nombre}"
+			: "N/A",
+		FechaMovimiento = movimiento.FechaMovimiento,
+		TipoMovimiento = movimiento.EstadoNuevo.GetDisplayName() ?? "N/A",
+		UbicacionOrigen = !string.IsNullOrWhiteSpace(movimiento.AgenteAnterior)
+			? movimiento.AgenteAnterior
+			: "N/A",
+		UbicacionDestino = !string.IsNullOrWhiteSpace(movimiento.DependenciaAgente?.NombreDependencia)
+			? movimiento.DependenciaAgente.NombreDependencia
+			: !string.IsNullOrWhiteSpace(movimiento.VehiculoAgente?.NumeroMovil)
+				? movimiento.VehiculoAgente.NumeroMovil
+				: "N/A"
+	};
+
+	// --- View Models ---
+	private class MovimientoTablaViewModel
+	{
+		public int Id { get; set; }
+		public string EncargadoApellidoYNombre { get; set; } = string.Empty;
+		public DateTime FechaMovimiento { get; set; }
+		public string TipoMovimiento { get; set; } = string.Empty;
+		public string UbicacionOrigen { get; set; } = string.Empty;
+		public string UbicacionDestino { get; set; } = string.Empty;
+	}
+}
