@@ -12,7 +12,7 @@
 		<AntDesign.Layout.Header Class="custom-header">
 			<div style="display: flex; justify-content: flex-end;">
                 <Menu Mode="@MenuMode.Horizontal" 
-                      SelectedKeys="@(new[]{"contacto"})" 
+                      SelectedKeys="@(new[]{"historia"})"
                       Style="background: transparent; border-bottom: none;"
                       OnMenuItemClicked="OnMenuItemClicked">
                         <MenuItem Key="inicio">
@@ -141,17 +141,18 @@
 </div>
 
 @code {
+	private string currentSection = "historia";
 	private Dictionary<string, Action> menuActions;
 
 	protected override void OnInitialized()
 	{
 		menuActions = new Dictionary<string, Action>
 		{
-			["inicio"] = () => Navigation.NavigateTo("/"),
-			["contacto"] = () => Navigation.NavigateTo("/contacto"),
-			["cuerpo"] = () => Navigation.NavigateTo("/cuerpo-activo"),
-			["historia"] = () => Navigation.NavigateTo("/historia"),
-			["sesion"] = () => Navigation.NavigateTo("/fire-force/")
+				["inicio"] = () => Navigation.NavigateTo("/"),
+				["contacto"] = () => Navigation.NavigateTo("/contacto"),
+				["cuerpo"] = () => Navigation.NavigateTo("/cuerpo-activo"),
+				["historia"] = () => Navigation.NavigateTo("/historia"),
+				["sesion"] = () => Navigation.NavigateTo("/fire-force/")
 		};
 	}
 
