@@ -155,7 +155,7 @@
 	<div class="modal-content">
 
 		<div style="text-align: right; margin-bottom: 20px;">
-			<Button Type="@ButtonType.Primary" Class="primary-button">
+			<Button Type="@ButtonType.Primary" Class="primary-button" OnClick="@(() => _visibleAgregar = true)">
 				<Icon Type="plus-circle" Theme="IconThemeType.Outline" /> Nuevo Movimiento
 			</Button>
 		</div>
@@ -174,11 +174,22 @@
 	</div>
 </div>
 
+<Modal Footer="null" Title="@("Nuevo Movimiento de Equipo Autónomo")"
+	   Visible="@_visibleAgregar"
+	   WrapClassName="modal-crear-equipo"
+	   OnCancel="@(() => _visibleAgregar = false)"
+	   Centered="@true">
+	<div class="modal-crear-equipo-content">
+		<MovimientoCrearEquipoAutonomo OnFinishCallback="Init" EquipoIDSel="EquipoAutonomo.EquipoAutonomoId" />
+	</div>
+</Modal>
+
 @code {
 	[Parameter] public EquipoAutonomo EquipoAutonomo { get; set; } = new();
 
 	private List<MovimientoTablaViewModel> movimientosTabla = new();
 	private bool isLoading = true;
+	private bool _visibleAgregar = false;
 
 	protected override async Task OnInitializedAsync()
 	{
@@ -187,6 +198,9 @@
 
 	private async Task Init()
 	{
+		_visibleAgregar = false;
+		isLoading = true;
+
 		try
 		{
 			var movimientos = await MovimientoEquipoAutonomoService.ObtenerMovimientosPorEquipoAsync(EquipoAutonomo.EquipoAutonomoId);
@@ -195,8 +209,11 @@
 		{
 			await message.ErrorAsync($"Error: Se produjo un error al cargar los movimientos del equipo autónomo.\nDetalles: {ex.Message}");
 		}
-		isLoading = false;
-		StateHasChanged();
+		finally
+		{
+			isLoading = false;
+			StateHasChanged();
+		}
 	}
 
 	private MovimientoTablaViewModel MapToViewModel(Movimiento_EquipoAutonomo movimiento) => new MovimientoTablaViewModel
@@ -210,10 +227,10 @@
 		UbicacionOrigen = !string.IsNullOrWhiteSpace(movimiento.AgenteAnterior)
 			? movimiento.AgenteAnterior
 			: "N/A",
-		UbicacionDestino = !string.IsNullOrWhiteSpace(movimiento.DependenciaAgente?.NombreDependencia)
-			? movimiento.DependenciaAgente.NombreDependencia
-			: !string.IsNullOrWhiteSpace(movimiento.VehiculoAgente?.NumeroMovil)
-				? movimiento.VehiculoAgente.NumeroMovil
+		UbicacionDestino = !string.IsNullOrWhiteSpace(movimiento.DependenciaDestino?.NombreDependencia)
+			? movimiento.DependenciaDestino.NombreDependencia
+			: !string.IsNullOrWhiteSpace(movimiento.VehiculoDestino?.NumeroMovil)
+				? movimiento.VehiculoDestino.NumeroMovil
 				: "N/A"
 	};
 

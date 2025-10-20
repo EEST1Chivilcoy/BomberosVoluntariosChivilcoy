@@ -10,7 +10,7 @@ namespace Vista.Services
 {
     public interface IMovimientoEquipoAutonomoService
     {
-        Task CargarMovimientoAsync(int EquipoId, Movimiento_EquipoAutonomo Movimiento);
+        Task CargarMovimientoAsync(Movimiento_EquipoAutonomo Movimiento);
         Task<List<Movimiento_EquipoAutonomo>> ObtenerMovimientosPorEquipoAsync(int EquipoId);
     }
 
@@ -31,9 +31,9 @@ namespace Vista.Services
             _equipoAutonomoService = equipoAutonomoService;
         }
 
-        public async Task CargarMovimientoAsync(int EquipoId, Movimiento_EquipoAutonomo Movimiento)
+        public async Task CargarMovimientoAsync(Movimiento_EquipoAutonomo Movimiento)
         {
-            var equipo = await _equipoAutonomoService.ObtenerEquipoAutonomoAsync(EquipoId);
+            var equipo = await _equipoAutonomoService.ObtenerEquipoAutonomoAsync(Movimiento.EquipoAutonomoId);
             var encargado = await _bomberoService.ObtenerBomberoPorIdAsync(Movimiento.EncargadoId);
 
             Dependencia? dependencia = null;
@@ -44,7 +44,7 @@ namespace Vista.Services
             // Valida si el equipo existe. Si no, lanza una excepción para notificar el error.
             if (equipo == null)
             {
-                throw new KeyNotFoundException($"No se encontró el equipo autónomo con el ID {EquipoId}.");
+                throw new KeyNotFoundException($"No se encontró el equipo autónomo con el ID {Movimiento.EquipoAutonomoId}.");
             }
 
             // Valida si el encargado existe. Si no, lanza una excepción para notificar el error.
@@ -53,34 +53,59 @@ namespace Vista.Services
                 throw new KeyNotFoundException($"No se encontró el bombero encargado con el ID {Movimiento.EncargadoId}.");
             }
 
-            if (Movimiento.DependenciaAgenteId.HasValue && Movimiento.VehiculoAgenteId.HasValue)
+            if (Movimiento.DependenciaDestinoId.HasValue &&
+    Movimiento.VehiculoDestinoId.HasValue &&
+    !string.IsNullOrWhiteSpace(Movimiento.OtroDestino))
             {
-                throw new InvalidOperationException("El movimiento no puede tener asignados simultáneamente una dependencia y un vehículo.");
+                throw new InvalidOperationException("El movimiento no puede tener asignados simultáneamente una dependencia y un vehículo o otro destino.");
             }
 
-            if (Movimiento.DependenciaAgenteId.HasValue)
+            if (Movimiento.DependenciaDestinoId.HasValue)
             {
-                dependencia = await _dependenciaService.ObtenerDependenciaPorIdAsync(Movimiento.DependenciaAgenteId.Value);
+                dependencia = await _dependenciaService.ObtenerDependenciaPorIdAsync(Movimiento.DependenciaDestinoId.Value);
 
                 if (dependencia == null)
                 {
-                    throw new KeyNotFoundException($"No se encontró la dependencia con ID: {Movimiento.DependenciaAgenteId}");
+                    throw new KeyNotFoundException($"No se encontró la dependencia con ID: {Movimiento.DependenciaDestinoId}");
                 }
             }
-            else if (Movimiento.VehiculoAgenteId.HasValue)
+            else if (Movimiento.VehiculoDestinoId.HasValue)
             {
-                vehiculo = await _vehiculoSalidaService.ObtenerVehiculoSalidaPorIdAsync(Movimiento.VehiculoAgenteId.Value);
+                vehiculo = await _vehiculoSalidaService.ObtenerVehiculoSalidaPorIdAsync(Movimiento.VehiculoDestinoId.Value);
 
                 if (vehiculo == null)
                 {
-                    throw new KeyNotFoundException($"No se encontró el vehículo de salida con ID: {Movimiento.VehiculoAgenteId}");
+                    throw new KeyNotFoundException($"No se encontró el vehículo de salida con ID: {Movimiento.VehiculoDestinoId}");
                 }
+            }
+
+            // Ejecutamos una consulta que trae SOLO el string que necesitamos.
+            var agenteAnterior = await _context.MovimientosEquiposAutonomos
+                .Where(m => m.EquipoAutonomoId == Movimiento.EquipoAutonomoId)
+                .OrderByDescending(m => m.FechaMovimiento)
+                .Select(m =>
+                    m.DependenciaDestinoId.HasValue ? m.DependenciaDestino.NombreDependencia :
+                    m.VehiculoDestinoId.HasValue ? m.VehiculoDestino.NumeroMovil :
+                    m.OtroDestino
+                )
+                .FirstOrDefaultAsync(); // Esto devuelve un string o null
+
+            // 2. Asignamos el valor
+            if (!string.IsNullOrWhiteSpace(agenteAnterior))
+            {
+                Movimiento.AgenteAnterior = agenteAnterior;
+            }
+            else
+            {
+                // Asignamos "N/A" si la consulta no devolvió nada
+                // o si el valor de OtroDestino era null o vacío.
+                Movimiento.AgenteAnterior = "N/A";
             }
 
             // Asigna el estado actual del equipo como el "EstadoAnterior" del movimiento.
             Movimiento.EstadoAnterior = equipo.Estado;
 
-            _equipoAutonomoService.CambiarEstadoEquipoAutonomoAsync(EquipoId, Movimiento.EstadoNuevo).Wait();
+            _equipoAutonomoService.CambiarEstadoEquipoAutonomoAsync(Movimiento.EquipoAutonomoId, Movimiento.EstadoNuevo).Wait();
 
             Movimiento.EquipoAutonomo = equipo;
             Movimiento.FechaMovimiento = DateTime.Now;
@@ -96,8 +121,8 @@ namespace Vista.Services
         {
             return await _context.MovimientosEquiposAutonomos
                 .Include(m => m.Encargado)
-                .Include(m => m.DependenciaAgente)
-                .Include(m => m.VehiculoAgente)
+                .Include(m => m.DependenciaDestino)
+                .Include(m => m.VehiculoDestino)
                 .Where(m => m.EquipoAutonomoId == EquipoId)
                 .OrderByDescending(m => m.FechaMovimiento)
                 .ToListAsync();
