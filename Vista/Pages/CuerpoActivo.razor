@@ -60,17 +60,10 @@
 									<Title Level="4" Style="margin: 0 0 8px 0; color: #333; font-size: 1.2rem; font-weight: 700; line-height: 1.3; height: 3.2rem; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
 										@bombero.Nombre
 									</Title>
-									<Paragraph Style="color: #8b0000; font-weight: 500; margin: 0 0 20px 0; text-transform: uppercase; letter-spacing: 0.5px; font-size: 0.95rem; height: 2.4rem; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
-										@bombero.Especialidad
-									</Paragraph>
 									<div class="bombero-stats" style="margin-top: auto;">
 										<div class="stat-item">
 											<span class="stat-icon">🚒</span>
 											<Text Style="font-weight: 500; color: #666;">@bombero.AniosServicio años</Text>
-										</div>
-										<div class="stat-item" style="margin-top: 10px;">
-											<span class="stat-icon">🏅</span>
-											<Text Style="font-weight: 500; color: #666;">@bombero.Intervenciones salidas</Text>
 										</div>
 									</div>
 								</div>
@@ -99,17 +92,6 @@
 							</Title>
 							<Text Style="color: #666; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; font-size: 1rem;">
 								Años de Experiencia
-							</Text>
-						</Card>
-					</AntDesign.Col>
-					<AntDesign.Col Xs="12" Sm="6" Md="6" Lg="6" Xl="6">
-						<Card Style="text-align: center; padding: 30px 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); border: 1px solid rgba(139, 0, 0, 0.1);">
-							<div class="stat-icon-large">🏅</div>
-							<Title Level="2" Style="color: #8b0000; margin: 15px 0 10px 0; font-size: 2.5rem; font-weight: 700; line-height: 1;">
-								@bomberos.Sum(b => b.Intervenciones)
-							</Title>
-							<Text Style="color: #666; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; font-size: 1rem;">
-								Intervenciones Totales
 							</Text>
 						</Card>
 					</AntDesign.Col>
@@ -179,8 +161,8 @@
 				Nombre = $"{b.Nombre} {b.Apellido}",
 				Rango = b.Grado.GetDisplayName(),
 				AniosServicio = CalcularAniosServicio(b),
-				Intervenciones = b.Salidas?.Count ?? 0,
-				Foto = b.Imagen != null ? $"data:image/{b.Imagen.TipoImagen};base64,{b.Imagen.Base64Imagen}" : "/Imagenes/Logos.png"
+				Foto = b.Imagen != null ? $"/api/Imagenes/{b.Imagen.ImagenId}" : "/Imagenes/Logos.png"
+
 			}).ToList();
 		}
 		catch (Exception ex)
@@ -236,9 +218,7 @@
 	{
 		public string Nombre { get; set; } = "";
 		public string Rango { get; set; } = "";
-		public string Especialidad { get; set; } = "";
 		public int AniosServicio { get; set; }
-		public int Intervenciones { get; set; }
 		public string Foto { get; set; } = "";
 	}
 }
