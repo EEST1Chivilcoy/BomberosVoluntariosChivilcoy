@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿﻿﻿﻿﻿﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using System.Text.Json;
 using Vista.Data.Models.Personas.Personal;
@@ -7,8 +7,10 @@ using Vista.Data.ViewModels.Rescates;
 using Vista.Services;
 using AntDesign;
 using Vista.Data.Models.Vehiculos.Flota;
+using Vista.Data.Mappers;
 using DocumentFormat.OpenXml.Office2010.Drawing;
 using System.Threading.Tasks;
+using Vista.Data.ViewModels.Personal;
 using Vista.Data.Enums;
 
 namespace Vista.Pages.Salidas
@@ -23,6 +25,7 @@ namespace Vista.Pages.Salidas
 
         // Lista con todos los vehiculos de la flota del sistema.
         private List<VehiculoSalida> MovilesTodos = new();
+        private bool _isEditMode = false;
 
         // Variables tipo boolean para indicar las partes del formulario completadas.
         private bool _parte1Completa = false;
@@ -33,11 +36,11 @@ namespace Vista.Pages.Salidas
 
         // Numero de Salida del Año en Seleccionado.
         [Parameter]
-        public int? NumeroSalida { get; set; } = 0;
+        [SupplyParameterFromQuery] public int? NumeroSalida { get; set; }
 
         // Anio de Salida del Año en Seleccionado.
         [Parameter]
-        public int? AnioSalida { get; set; } = 0;
+        [SupplyParameterFromQuery] public int? AnioSalida { get; set; }
         
         // Tipo de Rescate.
         [Parameter]
@@ -45,87 +48,48 @@ namespace Vista.Pages.Salidas
 
 
         // Funcion de Carga de Salida.
-        private async void OnFinish(EditContext editContext)
+        private async Task OnFinish(EditContext editContext)
         {
-
             try
             {
-                Bombero? bomberoEncargado = await BomberoService.ObtenerBomberoObjetoPorLegajoAsync(PersonaViewModel.LegajoEncargado);
-                Bombero? BomberoLlenoPlanilla = await BomberoService.ObtenerBomberoObjetoPorLegajoAsync(PersonaViewModel.LegajoLLenoPlanilla);
+                var rescate = PersonaViewModel.ToSalida() as RescatePersona
+                    ?? throw new InvalidOperationException("Error al convertir el ViewModel a la entidad de rescate.");
 
-                var numeroParteRescate = await SalidaService.ObtenerSalidaPorNumeroParteAsync<RescatePersona>(
-                    PersonaViewModel.NumeroParte,
-                    m => m.NumeroParte == PersonaViewModel.NumeroParte
-                );
+                Salida salidaGuardada;
 
-                if (numeroParteRescate != null)
+                if (_isEditMode)
                 {
-                    await message.WarningAsync("Numero parte ya existente.");
-                    return;
+                    // Modo edición
+                    salidaGuardada = await SalidaService.EditarSalida(rescate);
+                    await message.SuccessAsync("Salida editada correctamente.");
+                    HandleOk1(salidaGuardada.AnioNumeroParte, salidaGuardada.NumeroParte);
+                }
+                else
+                {
+                    // Modo creación
+                    var numeroParteExistente = await SalidaService.ObtenerSalidaPorNumeroParteAsync<RescatePersona>(
+                        PersonaViewModel.NumeroParte,
+                        m => m.NumeroParte == PersonaViewModel.NumeroParte && m.AnioNumeroParte == PersonaViewModel.AnioNumeroParte
+                    );
+
+                    if (numeroParteExistente != null)
+                    {
+                        await message.WarningAsync("El número de parte ya existe para el año seleccionado.");
+                        return;
+                    }
+
+                    salidaGuardada = await SalidaService.GuardarSalida(rescate);
+                    await message.SuccessAsync("Salida guardada correctamente.");
+                    HandleOk1(salidaGuardada.AnioNumeroParte, salidaGuardada.NumeroParte);
                 }
 
-                RescatePersona Rescates = new()
-                {
-                    NumeroParte = PersonaViewModel.NumeroParte,
-                    AnioNumeroParte = PersonaViewModel.AnioNumeroParte,
-                    HoraSalida = PersonaViewModel.HoraSalida,
-                    HoraLlegada = PersonaViewModel.HoraLLegada,
-                    Descripcion = PersonaViewModel.Descripcion,
-                    Direccion = PersonaViewModel.CalleORuta,
-                    PisoNumero = PersonaViewModel.PisoNumero,
-                    Depto = PersonaViewModel.Depto,
-                    NombreYApellidoReceptor = PersonaViewModel.NombreYApellidoReceptor,
-                    TipoZona = PersonaViewModel.TipoZona,
-                    NombreSolicitante = PersonaViewModel.NombreSolicitante,
-                    ApellidoSolicitante = PersonaViewModel.ApellidoSolicitante,
-                    DniSolicitante = PersonaViewModel.DniSolicitante,
-                    TelefonoSolicitante = PersonaViewModel.TelefonoSolicitante,
-                    TipoServicio = PersonaViewModel.TipoServicio,
-                    QuienLleno = BomberoLlenoPlanilla,
-                    Encargado = bomberoEncargado,
-                    //Carga propio de rescates
-                    LugarRescatePersona = PersonaViewModel.TipoRescatePersona,
-
-                    //Seguro = new() <-- Consultar si es requerido
-                    //{
-                    //    CompañiaAseguradora = PersonaViewModel.CompaniaAseguradora,
-                    //    NumeroDePoliza = PersonaViewModel.NumeroPoliza,
-                    //    FechaDeVencimineto = PersonaViewModel.FechaVencimineto,
-                    //},
-
-                    //Iniciación de Listas
-                    Damnificados = new(),
-                    Moviles = new(),
-                    CuerpoParticipante = new()
-
-                };
-
-                //Verifica si hay Bomberos en la Salida y los carga a el modelo de la salida.
-                if (PersonaViewModel.CuerpoParticipante != null && PersonaViewModel.CuerpoParticipante.Any())
-                {
-                    Rescates.CuerpoParticipante = PersonaViewModel.CuerpoParticipante.ToList();
-                }
-
-                //Verifica si hay Moviles en la Salida y los carga a el modelo de la salida.
-                if (PersonaViewModel.Moviles != null && PersonaViewModel.Moviles.Any())
-                {
-                    Rescates.Moviles = PersonaViewModel.Moviles.ToList();
-                }
-
-                //Verifica si hay Damnificados en la Salida y los carga a el modelo de la salida.
-                if (PersonaViewModel.Damnificados != null && PersonaViewModel.Damnificados.Any())
-                {
-                    Rescates.Damnificados = PersonaViewModel.Damnificados.ToList();
-                }
-
-                await SalidaService.GuardarSalida(Rescates);
-                HandleOk1(Rescates.AnioNumeroParte, Rescates.NumeroParte);
-                Init();
+                if (salidaGuardada == null)
+                    throw new Exception("No se pudo guardar o editar la salida.");
+                await Init();
                 StateHasChanged();
             }
             catch (Exception e)
             {
-                // Notificar al usuario
                 if (e.InnerException != null)
                     await message.ErrorAsync(e.InnerException.Message, 5);
                 else
@@ -141,24 +105,52 @@ namespace Vista.Pages.Salidas
 
         private async Task Init()
         {
-            PersonaViewModel = new();
-
-            if (NumeroSalida.HasValue && NumeroSalida > 0)
-            {
-                PersonaViewModel.NumeroParte = NumeroSalida.Value;
-            }
-
-            if (AnioSalida.HasValue && AnioSalida > 0)
-            {
-                PersonaViewModel.AnioNumeroParte = AnioSalida.Value;
-            }
-
             BomberosTodos = await BomberoService.ObtenerTodosLosBomberosAsync();
-
-            // Obtenemos todos los vehiculos de la flota (activos).
             MovilesTodos = await VehiculoSalidaService.ObtenerVehiculosSalidasPorEstadoAsync(TipoEstadoMovil.Activo);
-        }
 
+            // Inicial defaults
+            _isEditMode = false;
+            PersonaViewModel = new RescatePersonaViewModels();
+
+            // Modo edición
+            if (NumeroSalida.HasValue && AnioSalida.HasValue && NumeroSalida.Value > 0 && AnioSalida.Value > 0)
+            {
+                var salidaAEditar = await SalidaService.ObtenerSalidaParaEditarAsync<RescatePersona>(NumeroSalida.Value, AnioSalida.Value);
+
+                if (salidaAEditar != null && salidaAEditar is RescatePersona rp)
+                {
+                    var todasLasFuerzas = await FuerzaIntervinienteService.ObtenerTodasLasFuerzasAsync();
+                    var fuerzasVM = todasLasFuerzas.Select(f => new Vista.Data.ViewModels.Personal.SimpleFuerzaViewModel { Id = f.Id, Nombre = f.NombreFuerza }).ToList();
+
+                    PersonaViewModel = rp.ToRescatePersonaViewModels(fuerzasVM);
+                   _isEditMode = true;
+                }
+                else
+                {
+                    await message.WarningAsync("No se encontró la salida solicitada. Se abrirá el formulario en modo creación.");
+                    PersonaViewModel = new RescatePersonaViewModels();
+                    if (AnioSalida.HasValue && AnioSalida.Value > 0) PersonaViewModel.AnioNumeroParte = AnioSalida.Value;
+                    if (NumeroSalida.HasValue && NumeroSalida.Value > 0) PersonaViewModel.NumeroParte = NumeroSalida.Value;
+                    _isEditMode = false;
+                }
+
+                return;
+            }
+
+            // Modo crear
+            PersonaViewModel = new RescatePersonaViewModels();
+            if (AnioSalida.HasValue && AnioSalida.Value > 0)
+                PersonaViewModel.AnioNumeroParte = AnioSalida.Value;
+            else
+                PersonaViewModel.AnioNumeroParte = DateTime.Now.Year;
+
+            if (NumeroSalida.HasValue && NumeroSalida.Value > 0)
+                PersonaViewModel.NumeroParte = NumeroSalida.Value;
+            else
+                PersonaViewModel.NumeroParte = await SalidaService.ObtenerUltimoNumeroParteDelAnioAsync(PersonaViewModel.AnioNumeroParte) + 1;
+
+            _isEditMode = false;
+        }
         //Finish Failed
         private void OnFinishFailed(EditContext editContext)
         {
