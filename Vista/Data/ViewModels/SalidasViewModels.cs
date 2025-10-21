@@ -3,6 +3,7 @@ using Vista.Data.Models.Salidas.Componentes;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Vista.Data.Enums.Salidas;
+using Vista.Data.Enums.Discriminadores;
 using Vista.Data.Models.Personas;
 using Vista.DTOs.Nominatim;
 using Vista.Data.Models.Grupos.FuerzasIntervinientes;
@@ -19,6 +20,11 @@ namespace Vista.Data.ViewModels
         /// Identificador único de la salida.
         /// </summary>
         public int SalidaId { get; set; }
+
+        /// <summary>
+        /// Tipo de emergencia que originó la salida.
+        /// </summary>
+        public TipoDeEmergencia TipoEmergencia { get; set; }
 
         // Sección de Datos pasados por Parametros.
 
@@ -223,6 +229,8 @@ namespace Vista.Data.ViewModels
 
         public List<Movil_Salida> Moviles { get; set; } = new();
         public List<BomberoSalida> CuerpoParticipante { get; set; } = new();
+
+        public List<BomberoViweModel> BomberosParticipantes { get; set; } = new();
 
         //Bombero encargado
         public string NombreEncargado { get; set; }

@@ -76,6 +76,8 @@
     overflow: visible !important;
 }
 
+
+
 .top-menu .ant-menu-item,
 .top-menu .ant-menu-submenu,
 .top-menu .ant-menu-submenu-title {
@@ -426,15 +428,7 @@
    Menú Colapsado - Fix para centrar iconos
    ========================================================================== */
 
-.main-menu.ant-menu-inline-collapsed .ant-menu-item,
-.main-menu.ant-menu-inline-collapsed .ant-menu-submenu-title {
-    padding: 0 !important;
-    text-align: center !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    flex-direction: column !important;
-}
+
 
 
 .main-menu.ant-menu-inline-collapsed .ant-menu-item {
@@ -585,6 +579,11 @@
         color: var(--text-light) !important;
         fill: var(--text-light) !important;
     }
+
+
+    .ant-menu-submenu .ant-menu-sub{
+            transform: translateY(-14px) !important;
+}
 
 /* =========================================================
    MEDIA QUERIES

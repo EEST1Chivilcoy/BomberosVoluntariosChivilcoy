@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Vista.Data;
 
@@ -11,9 +12,11 @@ using Vista.Data;
 namespace Vista.Data.Migrations
 {
     [DbContext(typeof(BomberosDbContext))]
-    partial class BomberosDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251016131517_EquiposAutonomos")]
+    partial class EquiposAutonomos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -175,10 +178,7 @@ namespace Vista.Data.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Movimiento_EquipoAutonomoId"));
 
-                    b.Property<string>("AgenteAnterior")
-                        .HasColumnType("longtext");
-
-                    b.Property<int?>("DependenciaDestinoId")
+                    b.Property<int?>("DependenciaAgenteDependenciaId")
                         .HasColumnType("int");
 
                     b.Property<int>("EncargadoId")
@@ -196,21 +196,18 @@ namespace Vista.Data.Migrations
                     b.Property<DateTime>("FechaMovimiento")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("OtroDestino")
-                        .HasColumnType("longtext");
-
-                    b.Property<int?>("VehiculoDestinoId")
+                    b.Property<int?>("VehiculoAgenteVehiculoId")
                         .HasColumnType("int");
 
                     b.HasKey("Movimiento_EquipoAutonomoId");
 
-                    b.HasIndex("DependenciaDestinoId");
+                    b.HasIndex("DependenciaAgenteDependenciaId");
 
                     b.HasIndex("EncargadoId");
 
                     b.HasIndex("EquipoAutonomoId");
 
-                    b.HasIndex("VehiculoDestinoId");
+                    b.HasIndex("VehiculoAgenteVehiculoId");
 
                     b.ToTable("MovimientosEquiposAutonomos");
                 });
@@ -2170,9 +2167,9 @@ namespace Vista.Data.Migrations
 
             modelBuilder.Entity("Vista.Data.Models.Grupos.Dependencias.EquiposAutonomos.Movimiento_EquipoAutonomo", b =>
                 {
-                    b.HasOne("Vista.Data.Models.Grupos.Dependencias.Dependencia", "DependenciaDestino")
+                    b.HasOne("Vista.Data.Models.Grupos.Dependencias.Dependencia", "DependenciaAgente")
                         .WithMany()
-                        .HasForeignKey("DependenciaDestinoId");
+                        .HasForeignKey("DependenciaAgenteDependenciaId");
 
                     b.HasOne("Vista.Data.Models.Personas.Personal.Bombero", "Encargado")
                         .WithMany()
@@ -2186,17 +2183,17 @@ namespace Vista.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Vista.Data.Models.Vehiculos.Flota.VehiculoSalida", "VehiculoDestino")
+                    b.HasOne("Vista.Data.Models.Vehiculos.Flota.VehiculoSalida", "VehiculoAgente")
                         .WithMany()
-                        .HasForeignKey("VehiculoDestinoId");
+                        .HasForeignKey("VehiculoAgenteVehiculoId");
 
-                    b.Navigation("DependenciaDestino");
+                    b.Navigation("DependenciaAgente");
 
                     b.Navigation("Encargado");
 
                     b.Navigation("EquipoAutonomo");
 
-                    b.Navigation("VehiculoDestino");
+                    b.Navigation("VehiculoAgente");
                 });
 
             modelBuilder.Entity("Vista.Data.Models.Objetos.Componentes.MovimientoMaterial", b =>

@@ -1,10 +1,15 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Vista.Data.Models.Personas.Personal;
 using Vista.Data.Models.Salidas.Planillas;
 using Vista.Data.ViewModels.Accidente;
 using Vista.Data.Models.Salidas.Componentes;
 using Vista.Data.ViewModels;
-using System.Linq;
+using Vista.Data.Models.Grupos.FuerzasIntervinientes;
+using Vista.Data.ViewModels.Personal;
 using Vista.Data.ViewModels.Rescates;
+using Vista.Data.Models.Personas;
 
 namespace Vista.Data.Mappers
 {   
@@ -17,14 +22,20 @@ namespace Vista.Data.Mappers
                 return null;
             }
 
-            // Usamos un switch de tipos para determinar qué ViewModel concreto es y llamar al mapper correspondiente.
             return viewModel switch
             {
                 RescatePersonaViewModels rpvm => MapToRescatePersona(rpvm),
-                // Agrega aquí otros casos para los diferentes tipos de salidas que tengas
-                // case IncendioViewModel ivm => MapToIncendio(ivm),
-                _ => throw new ArgumentException($"Tipo de ViewModel de salida no soportado: {viewModel.GetType().Name}")
+                _ => throw new ArgumentException($"Tipo de ViewModel de salida no soportado: {viewModel.GetType().Name}"),
             };
+        }
+
+        private static RescatePersona MapToRescatePersona(RescatePersonaViewModels viewModel)
+        {
+            var rescate = new RescatePersona();
+            MapBaseProperties(viewModel, rescate);
+            rescate.LugarRescatePersona = viewModel.TipoRescatePersona;
+            rescate.OtroLugarRescate = viewModel.Otro;
+            return rescate;
         }
 
         /// <summary>
@@ -32,10 +43,13 @@ namespace Vista.Data.Mappers
         /// </summary>
         private static void MapBaseProperties(SalidasViewModels source, Salida destination)
         {
+            // Mapeo de propiedades directas
+            destination.SalidaId = source.SalidaId;
+            destination.TipoEmergencia = source.TipoEmergencia;
             destination.NumeroParte = source.NumeroParte;
             destination.AnioNumeroParte = source.AnioNumeroParte;
             destination.HoraSalida = source.HoraSalida;
-            destination.HoraLlegada = source.HoraLLegada; // Nota: Tienes un typo "HoraLLegada" en tu ViewModel
+            destination.HoraLlegada = source.HoraLLegada;
             destination.Descripcion = source.Descripcion;
             destination.Direccion = source.CalleORuta;
             destination.PisoNumero = source.PisoNumero;
@@ -51,39 +65,77 @@ namespace Vista.Data.Mappers
             destination.NombreYApellidoReceptor = source.NombreYApellidoReceptor;
             destination.TipoServicio = source.TipoServicio;
 
-            // Para las entidades relacionadas, solo transferimos el identificador.
-            // El servicio se encargará de buscar y adjuntar la entidad completa.
-            destination.Encargado = new Bombero { NumeroLegajo = source.LegajoEncargado };
-            destination.QuienLleno = new Bombero { NumeroLegajo = source.LegajoLLenoPlanilla };
+           
+            if (source.LegajoEncargado > 0)
+                destination.Encargado = new Bombero { NumeroLegajo = source.LegajoEncargado };
 
-            // Mapeo de listas
+            if (source.LegajoLLenoPlanilla > 0)
+                destination.QuienLleno = new Bombero { NumeroLegajo = source.LegajoLLenoPlanilla };
 
-            destination.Damnificados = source.Damnificados.ToList();
+            // Mapeo de colecciones
+            //destination.Damnificados = source.Damnificados?.Select(d => new Damnificado_Salida
+            //{
+            //    Damnificado_SalidaId = d.Damnificado_SalidaId,
+            //    Nombre = d.Nombre,
+            //    Apellido = d.Apellido,
+            //    Documento = d.Documento,
+            //    Edad = d.Edad,
+            //    Sexo = d.Sexo,
+            //    Estado = d.Estado,
+            //    Destino = d.Destino,
+            //    FuerzaIntervinienteId = d.FuerzaIntervinienteId,
+            //    FuerzaInterviniente = null
+            //}).ToList() ?? new List<Damnificado_Salida>();
+
             destination.Moviles = source.Moviles.ToList();
-            destination.CuerpoParticipante = source.CuerpoParticipante.ToList();
-            // destination.FuerzasIntervinientes = source.FuerzasIntervinientes.ToList(); <-- Error en la conversión la lista de source es ViewModel, realizar la conversión.
 
+            destination.CuerpoParticipante = source.CuerpoParticipante?.Select(cp => new BomberoSalida
+            {
+                BomberoSalidaId = cp.BomberoSalidaId,
+                PersonaId = cp.PersonaId,
+                Bombero = (cp.Bombero != null && cp.Bombero.NumeroLegajo > 0) ? new Bombero { NumeroLegajo = cp.Bombero.NumeroLegajo } : null,
+                Grado = cp.Grado,
+                MovilId = cp.MovilId,
+            }).ToList() ?? new List<BomberoSalida>();
+
+            destination.FuerzasIntervinientes = source.FuerzasIntervinientes?.Select(fvm =>
+            {
+                var fi = new FuerzaInterviniente_Salida
+                {
+                    Id = (fvm?.Id) ?? 0,
+                    FuerzaIntervinienteId = (fvm?.FuerzaViewModel?.Id) ?? 0,
+                    EncargadoApellidoyNombre = fvm?.EncargadoApellidoyNombre,
+                    NumeroUnidad = fvm?.NumeroUnidad,
+                    // Damnificados = new List<Damnificado_Salida>() 
+                };
+                if (!string.IsNullOrWhiteSpace(fvm?.FuerzaViewModel?.Nombre))
+                {
+                    fi.Fuerzainterviniente = new FuerzaInterviniente
+                    {
+                        Id = fvm.FuerzaViewModel.Id,
+                        NombreFuerza = fvm.FuerzaViewModel.Nombre
+                    };
+                }
+
+                // if (fvm.Damnificados != null)
+                // {
+                //     fi.Damnificados = fvm.Damnificados.Select(dvm => new Damnificado_Salida {
+                //     }).ToList();
+                // }
+
+                return fi;
+            }).ToList() ?? new List<FuerzaInterviniente_Salida>();
         }
-
-        private static RescatePersona MapToRescatePersona(RescatePersonaViewModels viewModel)
-        {
-            var rescate = new RescatePersona();
-            MapBaseProperties(viewModel, rescate);
-
-            // Mapeo de propiedades específicas de RescatePersona
-            rescate.LugarRescatePersona = viewModel.TipoRescatePersona;
-            rescate.OtroLugarRescate = viewModel.Otro;
-
-            return rescate;
-        }                                   
-
-        public static RescatePersonaViewModels ToRescatePersonaViewModels(this RescatePersona model)
+        
+        public static RescatePersonaViewModels ToRescatePersonaViewModels(this RescatePersona model, List<SimpleFuerzaViewModel> todasLasFuerzas)
         {
             if (model == null) return null;
 
-            var viewModel = new RescatePersonaViewModels
+            var idsFuerzasParticipantes = model.FuerzasIntervinientes.Select(fi => fi.FuerzaIntervinienteId).ToHashSet();
+             var viewModel = new RescatePersonaViewModels
             {
                 SalidaId = model.SalidaId,
+                TipoEmergencia = model.TipoEmergencia,
                 NumeroParte = model.NumeroParte,
                 AnioNumeroParte = model.AnioNumeroParte,
                 FechaSalida = model.HoraSalida.Date,
@@ -101,10 +153,10 @@ namespace Vista.Data.Mappers
                 ApellidoSolicitante = model.ApellidoSolicitante,
                 DniSolicitante = model.DniSolicitante,
                 TelefonoSolicitante = model.TelefonoSolicitante,
-                NombreReceptor = model.NombreYApellidoReceptor?.Split(',').LastOrDefault()?.Trim(),
-                ApellidoReceptor = model.NombreYApellidoReceptor?.Split(',').FirstOrDefault()?.Trim(),
-                TipoServicio = model.TipoServicio,
+                NombreReceptor = model.NombreYApellidoReceptor?.Split(new[] { ',' }, 2).LastOrDefault()?.Trim(),
+                ApellidoReceptor = model.NombreYApellidoReceptor?.Split(new[] { ',' }, 2).FirstOrDefault()?.Trim(),
 
+                TipoServicio = model.TipoServicio,
                 // especificos de RescatePersona
                 TipoRescatePersona = model.LugarRescatePersona,
                 Otro = model.OtroLugarRescate,
@@ -118,14 +170,53 @@ namespace Vista.Data.Mappers
                 ApllidoLLenoPlanilla = model.QuienLleno?.Apellido ?? string.Empty,
 
                 // Colecciones
-                Damnificados = model.Damnificados.ToList(),
-                CuerpoParticipante = model.CuerpoParticipante.ToList(),
+                //Damnificados = model.Damnificados?.Select(d => new Damnificado_Salida
+                //{
+                //    Damnificado_SalidaId = d.Damnificado_SalidaId,
+                //    Nombre = d.Nombre,
+                //    Apellido = d.Apellido,
+                //    Documento = d.Documento,
+                //    Edad = d.Edad,
+                //    Sexo = d.Sexo,
+                //    Estado = d.Estado,
+                //    Destino = d.Destino,
+                //    FuerzaIntervinienteId = d.FuerzaIntervinienteId,
+                //    FuerzaInterviniente = d.FuerzaInterviniente // Incluimos el objeto para la UI
+                //}).ToList() ?? new List<Damnificado_Salida>(),
+                CuerpoParticipante = model.CuerpoParticipante?.Select(cp => new BomberoSalida
+                {
+                    BomberoSalidaId = cp.BomberoSalidaId,
+                    PersonaId = cp.PersonaId,
+                    Bombero = cp.Bombero,
+                    Grado = cp.Grado, // Aseguramos consistencia aquí también
+                    MovilId = cp.MovilId,
+                    MovilAsignado = cp.MovilAsignado
+                }).ToList() ?? new List<BomberoSalida>(),
+                BomberosParticipantes = model.CuerpoParticipante?.Select(cp => new BomberoViweModel
+                {
+                    Id = cp.PersonaId,
+                    Nombre = cp.Bombero?.Nombre,
+                    Apellido = cp.Bombero?.Apellido,
+                    NumeroLegajo = cp.Bombero?.NumeroLegajo ?? 0
+                }).ToList() ?? new List<BomberoViweModel>(),
                 Moviles = model.Moviles.ToList(),
+                FuerzasIntervinientes = model.FuerzasIntervinientes?.Select(f => new FuerzaIntervinienteViewModel
+                {
+                    Id = f.Id,
+                    EncargadoApellidoyNombre = f.EncargadoApellidoyNombre,
+                    NumeroUnidad = f.NumeroUnidad,
+                    FuerzaViewModel = new SimpleFuerzaViewModel
+                    {
+                        Id = f.FuerzaIntervinienteId,
+                        Nombre = f.Fuerzainterviniente?.NombreFuerza ?? string.Empty
+                    }
+                    // Damnificados mapping commented out by request
+                }).ToList() ?? new List<FuerzaIntervinienteViewModel>(),
+                FuerzasIntervinientesParticipantes = todasLasFuerzas.Where(f => idsFuerzasParticipantes.Contains(f.Id)).ToList()
 
-                // FuerzasIntervinientes = model.FuerzasIntervinientes.ToList() <-- Error en la conversión la lista de model es ViewModel, realizar la conversión.
             };
 
             return viewModel;
-        }
+       }
     }
 }

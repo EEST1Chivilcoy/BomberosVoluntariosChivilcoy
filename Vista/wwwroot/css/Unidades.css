@@ -242,6 +242,10 @@ button.ant-btn-primary {
     width: 35% !important;
 }
 
+
+
+
+
 /*
  * =============================================================================
  * CSS para VehiculosCarta.Razor
@@ -351,11 +355,6 @@ button.ant-btn-primary {
     box-shadow: 0 4px 8px rgba(0,0,0,0.3);
 }
 
-/*
- * =============================================================================
- * Estilos para botones estilo Licencias
- * =============================================================================
- */
 
 .unidades-abm .modern-button {
     height: 40px !important;

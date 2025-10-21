@@ -1,0 +1,429 @@
+﻿@using Microsoft.AspNetCore.Components.Forms
+@using System.ComponentModel.DataAnnotations
+@using Vista.Data.Models.Grupos.Dependencias
+@using Vista.Data.Models.Grupos.Dependencias.EquiposAutonomos
+@using Vista.Data.Models.Vehiculos.Flota
+@using Vista.Services
+
+@inject IMessageService message
+@inject IEquipoAutonomoService EquipoAutonomoService
+@inject IMovimientoEquipoAutonomoService MovimientoEquipoAutonomoService
+@inject IBomberoService BomberoService
+@inject IDependenciaService DependenciaService
+@inject IVehiculoSalidaService VehiculoSalidaService
+
+<style>
+	.modal-crear-equipo .ant-modal-content {
+		border-radius: 12px;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+		border: 2px solid #732D2D;
+		margin-top: -100px;
+		margin-left: -125px;
+		margin-bottom: 0px;
+		max-width: 800px; /* Aumenta el ancho máximo del modal */
+		width: 90vw; /* Responsive: ocupa el 90% del viewport */
+	}
+
+	.modal-crear-equipo .ant-modal-title {
+		color: white !important;
+	}
+
+	.modal-crear-equipo .ant-modal-header {
+		background-color: #A63333;
+		padding: 16px 24px;
+	}
+
+	.modal-crear-equipo-content {
+		padding: 36px 32px; /* Más espacio interno */
+	}
+
+	.modal-crear-equipo-form-item {
+		margin-bottom: 24px; /* Más espacio entre items */
+		position: relative;
+		padding-left: 10px;
+	}
+
+		.modal-crear-equipo-form-item::before {
+			content: '';
+			position: absolute;
+			left: 0;
+			top: 0;
+			height: 100%;
+			width: 3px;
+			border-radius: 5px;
+		}
+
+		.modal-crear-equipo-form-item .ant-form-item-label > label,
+		.modal-crear-equipo-form-full-width .ant-form-item-label > label {
+			font-weight: 600;
+			color: #434343;
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			font-size: 15px;
+			transition: color 0.3s ease;
+		}
+
+			.modal-crear-equipo-form-item .ant-form-item-label > label:hover,
+			.modal-crear-equipo-form-full-width .ant-form-item-label > label:hover {
+				color: #A63333;
+			}
+
+	.modal-crear-equipo .ant-input:focus,
+	.modal-crear-equipo .ant-input:hover,
+	.modal-crear-equipo .ant-select-selector:focus,
+	.modal-crear-equipo .ant-select-selector:hover,
+	.modal-crear-equipo .ant-picker:focus,
+	.modal-crear-equipo .ant-picker:hover,
+	.modal-crear-equipo .ant-picker-input > input:focus,
+	.modal-crear-equipo .ant-picker-input > input:hover,
+	.modal-crear-equipo .ant-input-number-input:focus,
+	.modal-crear-equipo .ant-input-number-input:hover {
+		border-color: #FFD700 !important;
+		box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
+	}
+
+	.modal-crear-equipo .ant-picker,
+	.modal-crear-equipo .ant-input,
+	.modal-crear-equipo .ant-select-selector,
+	.modal-crear-equipo .ant-input-number {
+		border-radius: 8px !important;
+		border: 1px solid #d9d9d9 !important;
+		background: #fff !important;
+		color: #434343 !important;
+		transition: all 0.3s ease !important;
+		font-size: 15px !important;
+	}
+
+	.modal-crear-equipo-footer {
+		display: flex;
+		justify-content: flex-end;
+		gap: 16px;
+		margin-top: 24px;
+		margin-bottom: 0px;
+	}
+
+	.modal-crear-equipo .ant-btn-primary {
+		background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
+		border: none !important;
+		color: #fff !important;
+		font-weight: 600;
+		box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
+		margin-top: 0;
+		margin-bottom: 0;
+		padding: 0 28px !important;
+		font-size: 16px !important;
+	}
+
+		.modal-crear-equipo .ant-btn-primary:hover {
+			background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
+			color: #fff !important;
+		}
+
+	@@media (max-width: 1199px) {
+		.modal-crear-equipo .ant-modal-content {
+			max-width: 98vw;
+		}
+
+		.modal-crear-equipo-content {
+			padding: 18px 10px;
+			gap: 16px;
+		}
+
+		.modal-crear-equipo-form-row {
+			grid-template-columns: 1fr;
+			gap: 16px;
+		}
+	}
+
+	@@media (max-width: 767px) {
+		.modal-crear-equipo .ant-modal-content {
+			max-width: 100vw;
+		}
+
+		.modal-crear-equipo-content {
+			padding: 8px 2px;
+			gap: 12px;
+		}
+
+		.modal-crear-equipo-form-row {
+			grid-template-columns: 1fr;
+			gap: 12px;
+		}
+	}
+</style>
+
+<Form Loading="loading" Model="@movimientoViewModel"
+	  OnFinish="OnFinish"
+	  OnFinishFailed="OnFinishFailed"
+	  Class="modal-crear-equipo"
+	  Layout="FormLayout.Vertical">
+
+	<div class="modal-crear-equipo-content">
+		<Row Class="modal-crear-equipo-row" Gutter="16">
+			<FormItem Label="🧑‍💼 Encargado" Required Class="modal-crear-equipo-form-item">
+				<Select TItem="BomberoViewModel"
+						TItemValue="BomberoViewModel"
+						DataSource="@bomberoViewModels"
+						@bind-value="@movimientoViewModel.Encargado"
+						LabelName="@nameof(BomberoViewModel.NombreCompleto)"
+						Placeholder="Seleccione a un bombero"
+						EnableSearch
+						AllowClear="true" />
+			</FormItem>
+		</Row>
+		<Row Class="modal-crear-equipo-row" Gutter="16">
+			<AntDesign.Col Span="12">
+				<FormItem Label="↔️ Tipo Movimiento" Class="modal-crear-equipo-form-item">
+					<EnumSelect TEnum="TipoMovimiento"
+								@bind-Value="@movimientoViewModel.TipoMovimiento"
+								Placeholder="Seleccione el tipo de movimiento"
+								AllowClear="true" />
+				</FormItem>
+			</AntDesign.Col>
+			@if (movimientoViewModel.TipoMovimiento == TipoMovimiento.Asignar ||
+						movimientoViewModel.TipoMovimiento == TipoMovimiento.Reparar ||
+						movimientoViewModel.TipoMovimiento == TipoMovimiento.Prueba)
+			{
+				<AntDesign.Col Span="12">
+					<FormItem Label="📍 Tipo Destino" Class="modal-crear-equipo-form-item">
+						<RadioGroup @bind-Value="@_valueSel">
+							<Radio Value="1">Dependencia</Radio>
+							<Radio Value="2">Unidad</Radio>
+							<Radio Value="3">Otro</Radio>
+						</RadioGroup>
+					</FormItem>
+				</AntDesign.Col>
+			}
+		</Row>
+		<Row Class="modal-crear-equipo-row" Gutter="16">
+			<AntDesign.Col Span="12">
+				@if (movimientoViewModel.TipoMovimiento == TipoMovimiento.Asignar ||
+								movimientoViewModel.TipoMovimiento == TipoMovimiento.Reparar ||
+								movimientoViewModel.TipoMovimiento == TipoMovimiento.Prueba)
+				{
+					<FormItem Label="📍 Destino" Class="modal-crear-equipo-form-item">
+						@if (_valueSel == 1)
+						{
+							<Select TItem="DependenciaViewModel"
+									TItemValue="DependenciaViewModel"
+									DataSource="@dependenciaViewModels"
+									@bind-value="@movimientoViewModel.DependenciaDestino"
+									LabelName="@nameof(DependenciaViewModel.Nombre)"
+									Placeholder="Seleccione una dependencia"
+									EnableSearch
+									AllowClear="true" />
+						}
+						else if (_valueSel == 2)
+						{
+							<Select TItem="UnidadViewModel"
+									TItemValue="UnidadViewModel"
+									DataSource="@unidadViewModels"
+									@bind-value="@movimientoViewModel.UnidadDestino"
+									LabelName="@nameof(UnidadViewModel.Nombre)"
+									Placeholder="Seleccione una unidad"
+									EnableSearch
+									AllowClear="true" />
+						}
+						else if (_valueSel == 3)
+						{
+							<Input @bind-Value="@movimientoViewModel.OtroDestino"
+								   Placeholder="Ingrese otro destino" />
+						}
+					</FormItem>
+				}
+			</AntDesign.Col>
+		</Row>
+		<div class="modal-crear-equipo-footer">
+			<Button Type="@ButtonType.Primary" HtmlType="submit">
+				Agregar Movimiento
+			</Button>
+		</div>
+	</div>
+</Form>
+
+@code {
+	[Parameter] public EventCallback OnFinishCallback { get; set; }
+	[Parameter] public int EquipoIDSel { get; set; }
+
+	private bool loading = false;
+	private int _valueSel = 0;
+	private EquipoAutonomoMovimientoViewModel movimientoViewModel = new EquipoAutonomoMovimientoViewModel();
+
+	List<BomberoViewModel?> bomberoViewModels = new();
+	List<DependenciaViewModel?> dependenciaViewModels = new();
+	List<UnidadViewModel?> unidadViewModels = new();
+
+	private class EquipoAutonomoMovimientoViewModel
+	{
+		[Required(ErrorMessage = "El encargo del movimiento es obligatoria.")]
+		public BomberoViewModel Encargado = null!;
+
+		public TipoMovimiento TipoMovimiento;
+
+		public DependenciaViewModel? DependenciaDestino;
+
+		public UnidadViewModel? UnidadDestino;
+
+		public string? OtroDestino;
+	}
+
+	private enum TipoMovimiento
+	{
+		[Display(Name = "Dar de Baja")]
+		DarDeBaja = 1,
+
+		[Display(Name = "Asignar")]
+		Asignar = 2,
+
+		[Display(Name = "Devolver al Stock")]
+		DevolverAlStock = 3,
+
+		[Display(Name = "Reparación")]
+		Reparar = 4,
+
+		[Display(Name = "Prueba Hidráulica")]
+		Prueba = 5
+	}
+
+	private class BomberoViewModel
+	{
+		public int BomberoId { get; set; }
+		public string NombreCompleto { get; set; } = string.Empty;
+	}
+
+	private class DependenciaViewModel
+	{
+		public int DependenciaId { get; set; }
+		public string Nombre { get; set; } = string.Empty;
+	}
+
+	private class UnidadViewModel
+	{
+		public int UnidadId { get; set; }
+		public string Nombre { get; set; } = string.Empty;
+	}
+
+	private async Task OnFinish(EditContext editContext)
+	{
+		// Validaciones todas piola
+		if (movimientoViewModel.TipoMovimiento == TipoMovimiento.Asignar ||
+								movimientoViewModel.TipoMovimiento == TipoMovimiento.Reparar ||
+								movimientoViewModel.TipoMovimiento == TipoMovimiento.Prueba)
+		{
+			if (_valueSel == 1 && movimientoViewModel.DependenciaDestino == null)
+			{
+				await message.ErrorAsync("Error: Debe seleccionar una dependencia de destino.");
+				return;
+			}
+			else if (_valueSel == 2 && movimientoViewModel.UnidadDestino == null)
+			{
+				await message.ErrorAsync("Error: Debe seleccionar una unidad de destino.");
+				return;
+			}
+			else if (_valueSel == 3 && string.IsNullOrWhiteSpace(movimientoViewModel.OtroDestino))
+			{
+				await message.ErrorAsync("Error: Debe ingresar un destino.");
+				return;
+			}
+		}
+
+		TipoMovimiento tipoMovimientoSeleccionado = movimientoViewModel.TipoMovimiento;
+
+		TipoEstadoEquipoAutonomo estadoEquipoAutonomo = tipoMovimientoSeleccionado switch
+		{
+			TipoMovimiento.Asignar => TipoEstadoEquipoAutonomo.Activo,
+			TipoMovimiento.DarDeBaja => TipoEstadoEquipoAutonomo.Baja,
+			TipoMovimiento.DevolverAlStock => TipoEstadoEquipoAutonomo.Stock,
+			TipoMovimiento.Reparar => TipoEstadoEquipoAutonomo.Reparacion,
+			TipoMovimiento.Prueba => TipoEstadoEquipoAutonomo.PruebaHidraulica,
+
+			_ => throw new ArgumentOutOfRangeException(nameof(tipoMovimientoSeleccionado), "Tipo de movimiento no tiene un estado correspondiente.")
+		};
+
+		loading = true;
+
+		try
+		{
+			var movimiento = new Movimiento_EquipoAutonomo
+			{
+				EquipoAutonomoId = EquipoIDSel,
+				EncargadoId = movimientoViewModel.Encargado.BomberoId,
+				EstadoNuevo = estadoEquipoAutonomo,
+				DependenciaDestinoId = movimientoViewModel.DependenciaDestino?.DependenciaId,
+				VehiculoDestinoId = movimientoViewModel.UnidadDestino?.UnidadId,
+				OtroDestino = movimientoViewModel.OtroDestino,
+			};
+
+			await MovimientoEquipoAutonomoService.CargarMovimientoAsync(movimiento);
+			await message.SuccessAsync("Movimiento agregado correctamente.");
+			movimientoViewModel = new EquipoAutonomoMovimientoViewModel();
+			await OnFinishCallback.InvokeAsync();
+		}
+		catch (Exception ex)
+		{
+			await message.ErrorAsync($"Error: Se produjo un error al agregar el movimiento.\nDetalles: {ex.Message}");
+		}
+		finally
+		{
+			loading = false;
+		}
+	}
+
+	private void OnFinishFailed(EditContext editContext)
+	{
+		message.Error("Error en el formulario. Verifique los datos.");
+	}
+
+	protected override async Task OnInitializedAsync()
+	{
+		loading = true;
+		try
+		{
+			await LoadBomberosAsync();
+			await LoadDependenciasAsync();
+			await LoadUnidadesAsync();
+		}
+		catch (Exception ex)
+		{
+			await message.ErrorAsync($"Error: Se produjo un error al inicializar el formulario.\nDetalles: {ex.Message}");
+		}
+		finally
+		{
+			loading = false;
+		}
+	}
+
+	private async Task LoadBomberosAsync()
+	{
+		var bomberos = await BomberoService.ObtenerTodosLosBomberosAsync();
+
+		bomberoViewModels = bomberos.Select(b => new BomberoViewModel
+		{
+			BomberoId = b.PersonaId,
+			NombreCompleto = $"{b.Apellido}, {b.Nombre}"
+		}).ToList();
+	}
+
+	private async Task LoadDependenciasAsync()
+	{
+		var dependencias = await DependenciaService.ObtenerTodasLasDependenciasAsync();
+
+		dependenciaViewModels = dependencias.Select(d => new DependenciaViewModel
+		{
+			DependenciaId = d.DependenciaId,
+			Nombre = d.NombreDependencia
+		}).ToList();
+	}
+
+	private async Task LoadUnidadesAsync()
+	{
+		var unidades = await VehiculoSalidaService.ObtenerTodosLosVehiculosSalidasAsync();
+
+		unidadViewModels = unidades.Select(u => new UnidadViewModel
+		{
+			UnidadId = u.VehiculoId,
+			Nombre = u.NumeroMovil
+		}).ToList();
+	}
+}
