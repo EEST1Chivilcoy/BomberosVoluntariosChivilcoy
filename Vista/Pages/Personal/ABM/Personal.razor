@@ -532,9 +532,13 @@
 						<PropertyColumn Title="🆔 Legajo" Property="c => c.NumeroLegajo" Sortable>
 						</PropertyColumn>
 						<PropertyColumn Title="🎖️ Jerarquía"
-										Property="@(c => c.Grado.GetDisplayName())"
-										SorterCompare="@((x, y) => ((int)Enum.Parse<EscalafonJerarquico>(x)).CompareTo((int)Enum.Parse<EscalafonJerarquico>(y)))"
-										Sortable>
+										Property="@(c => c.Grado)"
+										SorterCompare="@((x, y) => ((EscalafonJerarquico)x).CompareTo((EscalafonJerarquico)y))"
+										Sortable
+										DefaultSortOrder="SortDirection.Ascending">
+										<Template>
+											@context.Grado.GetDisplayName()
+										</Template>
 						</PropertyColumn>
 						<PropertyColumn Title="📊 Estado" Property="@(c => c.Estado.GetDisplayName())" Sortable>
 
@@ -593,7 +597,14 @@
 						</PropertyColumn>
 						<PropertyColumn Title="🆔 Documento" Property="c => c.Documento" Sortable>
 						</PropertyColumn>
-						<PropertyColumn Title="🎖️ Jerarquía" Property="@(c => c.Grado.GetDisplayName())" Sortable>
+						<PropertyColumn Title="🎖️ Jerarquía"
+										Property="@(c => c.Grado)"
+										SorterCompare="@((x, y) => ((GradoComisionDirectiva)x).CompareTo((GradoComisionDirectiva)y))"
+										Sortable
+										DefaultSortOrder="SortDirection.Ascending">
+										<Template>
+											@context.Grado.GetDisplayName()
+										</Template>
 						</PropertyColumn>
 						<PropertyColumn Title="📊 Estado" Property="@(c => c.Estado.GetDisplayName())" Sortable>
 

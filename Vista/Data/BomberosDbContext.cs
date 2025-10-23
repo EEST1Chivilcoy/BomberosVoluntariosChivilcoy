@@ -446,6 +446,13 @@ namespace Vista.Data
                 .Property(b => b.Grado)
                 .HasConversion<int>();
 
+            // Comision Directiva - Enum GradoComisionDirectiva (Grado)
+
+            modelBuilder
+                .Entity<ComisionDirectiva>()
+                .Property(b => b.Grado)
+                .HasConversion<int>();
+
             // Licencia - Enum TipoLicencia
 
             modelBuilder
