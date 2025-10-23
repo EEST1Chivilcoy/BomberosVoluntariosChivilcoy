@@ -95,7 +95,7 @@
     <div class="modal-content">
 
         <div class="section-header">
-            Agregar Nuevo Material
+            Editar Material
         </div>
 
         <div class="form-card">
@@ -129,7 +129,7 @@
 
                 <div class="form-buttons-container">
                     <Button Type="@ButtonType.Primary" HtmlType="submit" Class="save-button">
-                        Cargar Material
+                        Guardar Cambios
                     </Button>
                 </div>
             </Form>
@@ -139,15 +139,17 @@
 
 @code {
     [Parameter] public EventCallback OnFinishCallback { get; set; }
+    [Parameter] public Material Material { get; set; } = new();
     [Parameter] public List<Material>? MaterialesExistentes { get; set; }
 
     public class MaterialVM
     {
-        [Required(ErrorMessage = "El Producto es obligatorio")]
-        public string? Descripcion { get; set; }
-        [Required(ErrorMessage = "El Codigo es obligatorio")]
-        public string? Codigo { get; set; }
+        public int ID { get; set; }
         public DateTime FechaAlta { get; set; }
+        [Required]
+        public string? Descripcion { get; set; }
+        [Required]
+        public string? Codigo { get; set; }
         public int Stock { get; set; }
         public TipoRubro Rubro { get; set; }
     }
@@ -155,25 +157,41 @@
     //variables locales
     public MaterialVM MaterialViewModel { get; set; } = new();
 
-    private async void OnFinish()
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Material is null) return;
+
+        MaterialViewModel = new MaterialVM
+            {
+                ID = Material.MaterialId,
+                Descripcion = Material.Descripcion,
+                Codigo = Material.Codigo,
+                FechaAlta = Material.FechaAlta,
+                Stock = Material.Stock,
+                Rubro = Material.Rubro
+            };
+    }
+    private async Task OnFinish()
     {
         try
         {
-            if (MaterialesExistentes.Any(m => m.Codigo == MaterialViewModel.Codigo)) 
+            if (MaterialesExistentes.Any(m => m.Codigo == MaterialViewModel.Codigo && m.Codigo != Material.Codigo)) 
             {
                 await message.ErrorAsync("Ya existe un producto con ese Codigo");
                 return;
             }
             Material material = new Material()
-            {
-                Codigo = MaterialViewModel.Codigo,
-                Descripcion = MaterialViewModel.Descripcion,
-                FechaAlta = MaterialViewModel.FechaAlta,
-                Rubro = MaterialViewModel.Rubro,
-                Stock = MaterialViewModel.Stock
-            };
-            await DepositoService.AgregarMaterial(material);
-            await message.SuccessAsync("Material creado correctamente");
+                {
+                    MaterialId = MaterialViewModel.ID,
+                    Codigo = MaterialViewModel.Codigo,
+                    Descripcion = MaterialViewModel.Descripcion,
+                    FechaAlta = MaterialViewModel.FechaAlta,
+                    Rubro = MaterialViewModel.Rubro,
+                    Stock = MaterialViewModel.Stock
+                };
+            await DepositoService.EditarMaterialAsync(material);
+            await message.SuccessAsync("Material actualizado correctamente");
             MaterialViewModel = new();
             await OnFinishCallback.InvokeAsync();
         }
@@ -187,5 +205,4 @@
     {
         message.Error("Error en el formulario. Verifique los datos");
     }
-
 }
