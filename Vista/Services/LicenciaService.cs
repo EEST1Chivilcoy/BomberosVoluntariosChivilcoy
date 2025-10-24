@@ -3,6 +3,7 @@ using System;
 using Vista.Data;
 using Vista.Data.Models.Personas.Personal.Componentes;
 using Vista.Data.Enums;
+using Vista.Data.Models.Grupos.Dependencias.EquiposAutonomos;
 
 namespace Vista.Services
 {
@@ -10,6 +11,7 @@ namespace Vista.Services
     {
         Task<List<Licencia>> ObtenerTodasLasLicencias();
         Task<Licencia?> ObtenerLicenciaPorId(int licenciaId);
+        Task EditarLicenciaAsync(Licencia licencia);
         Task AgregarLicencia(Licencia licencia);
         Task CambiarEstadoLicencia (int licenciaId, TipoEstadoLicencia nuevoEstado);
     }
@@ -64,7 +66,23 @@ namespace Vista.Services
             _context.Licencias.Add(licencia);
             await _context.SaveChangesAsync();
         }
+        public async Task EditarLicenciaAsync(Licencia licencia)
+        {
+            var licenciaExistente = await _context.Licencias.FindAsync(licencia.LicenciaId);
 
+            if (licenciaExistente == null)
+            {
+                throw new KeyNotFoundException("Licencia no encontrada.");
+            }
+
+            licenciaExistente.TipoLicencia = licencia.TipoLicencia;
+            licenciaExistente.Descripcion = licencia.Descripcion;
+            licenciaExistente.Desde = licencia.Desde;
+            licenciaExistente.Hasta = licencia.Hasta;
+            licenciaExistente.RazonRechazo = licencia.RazonRechazo;
+
+            await _context.SaveChangesAsync();
+        }
         public async Task CambiarEstadoLicencia(int licenciaId, TipoEstadoLicencia nuevoEstado)
         {
             var licencia = await _context.Licencias.FindAsync(licenciaId);
