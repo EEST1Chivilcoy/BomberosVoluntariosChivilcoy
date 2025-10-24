@@ -35,12 +35,14 @@
 								OnClick="@(() => AgregarVisible = true)">
 							<Icon Type="plus" />Nueva Unidad
 						</Button>
-						
+
 						<div>
 							<EnumSelect TEnum="TipoEstadoMovil"
-								OnSelectedItemChanged="CambioEstado"
-								@bind-Value="@Estado"
-								Size="InputSize.Large" />
+										OnSelectedItemChanged="CambioEstado"
+										@bind-Value="@Estado"
+										Size="InputSize.Large"
+										Class="estado-movil-select">
+							</EnumSelect>
 						</div>
 					</div>
 				</div>
