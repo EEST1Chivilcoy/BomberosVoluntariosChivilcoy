@@ -10,378 +10,378 @@
 <style>
     /* Variables CSS específicas para el componente de aprobación con prefijo único */
     .licencias-aprobar {
-        --apr-primary-color: #A63333;
-        --apr-primary-dark: #732D2D;
-        --apr-success-color: #4CAF50;
-        --apr-success-dark: #438E46;
-        --apr-warning-color: #F57F17;
-        --apr-warning-light: #FFF8E1;
-        --apr-error-color: #C62828;
-        --apr-error-light: #FFEBEE;
-        --apr-approved-color: #2E7D32;
-        --apr-approved-light: #E6F7E9;
-        --apr-gold-color: #FFD700;
+    --apr-primary-color: #A63333;
+    --apr-primary-dark: #732D2D;
+    --apr-success-color: #4CAF50;
+    --apr-success-dark: #438E46;
+    --apr-warning-color: #F57F17;
+    --apr-warning-light: #FFF8E1;
+    --apr-error-color: #C62828;
+    --apr-error-light: #FFEBEE;
+    --apr-approved-color: #2E7D32;
+    --apr-approved-light: #E6F7E9;
+    --apr-gold-color: #FFD700;
     }
 
-        .licencias-aprobar .approval-container {
-            background: white !important;
-            border-radius: 12px !important;
-            overflow: hidden !important;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
-            border: 1px solid #f0f0f0 !important;
-        }
+    .licencias-aprobar .approval-container {
+    background: white !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
+    border: 1px solid #f0f0f0 !important;
+    }
 
-        .licencias-aprobar .approval-header {
-            background: linear-gradient(135deg, var(--apr-primary-color) 0%, var(--apr-primary-dark) 100%) !important;
-            padding: 16px 20px !important;
-            color: white !important;
-            display: flex !important;
-            align-items: center !important;
-            gap: 12px !important;
-        }
+    .licencias-aprobar .approval-header {
+    background: linear-gradient(135deg, var(--apr-primary-color) 0%, var(--apr-primary-dark) 100%) !important;
+    padding: 16px 20px !important;
+    color: white !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    }
 
-        .licencias-aprobar .approval-title {
-            font-weight: 700 !important;
-            font-size: 1.1rem !important;
-            margin: 0 !important;
-            display: flex !important;
-            align-items: center !important;
-            gap: 8px !important;
-        }
+    .licencias-aprobar .approval-title {
+    font-weight: 700 !important;
+    font-size: 1.1rem !important;
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    }
 
-        .licencias-aprobar .approval-content {
-            padding: 0 !important;
-            max-height: 70vh !important;
-            overflow-y: auto !important;
-        }
+    .licencias-aprobar .approval-content {
+    padding: 0 !important;
+    max-height: 70vh !important;
+    overflow-y: auto !important;
+    }
 
-        .licencias-aprobar .empty-state {
-            padding: 40px 20px !important;
-            text-align: center !important;
-            color: #666 !important;
-        }
+    .licencias-aprobar .empty-state {
+    padding: 40px 20px !important;
+    text-align: center !important;
+    color: #666 !important;
+    }
 
-        .licencias-aprobar .empty-icon {
-            font-size: 3rem !important;
-            color: var(--apr-primary-color) !important;
-            margin-bottom: 16px !important;
-        }
+    .licencias-aprobar .empty-icon {
+    font-size: 3rem !important;
+    color: var(--apr-primary-color) !important;
+    margin-bottom: 16px !important;
+    }
 
-        .licencias-aprobar .empty-title {
-            font-size: 1.2rem !important;
-            font-weight: 600 !important;
-            color: #333 !important;
-            margin-bottom: 8px !important;
-        }
+    .licencias-aprobar .empty-title {
+    font-size: 1.2rem !important;
+    font-weight: 600 !important;
+    color: #333 !important;
+    margin-bottom: 8px !important;
+    }
 
-        .licencias-aprobar .empty-description {
-            color: #666 !important;
-            font-size: 0.95rem !important;
-        }
+    .licencias-aprobar .empty-description {
+    color: #666 !important;
+    font-size: 0.95rem !important;
+    }
 
-        /* Estilos específicos para la tabla de aprobación */
-        .licencias-aprobar :deep(.ant-table) {
-            font-size: 0.9rem !important;
-        }
+    /* Estilos específicos para la tabla de aprobación */
+    .licencias-aprobar :deep(.ant-table) {
+    font-size: 0.9rem !important;
+    }
 
-        .licencias-aprobar :deep(.ant-table-thead > tr > th) {
-            background: linear-gradient(135deg, var(--apr-primary-color) 0%, var(--apr-primary-dark) 100%) !important;
-            color: white !important;
-            font-weight: 600 !important;
-            border: none !important;
-            padding: 12px 8px !important;
-            font-size: 0.85rem !important;
-        }
+    .licencias-aprobar :deep(.ant-table-thead > tr > th) {
+    background: linear-gradient(135deg, var(--apr-primary-color) 0%, var(--apr-primary-dark) 100%) !important;
+    color: white !important;
+    font-weight: 600 !important;
+    border: none !important;
+    padding: 12px 8px !important;
+    font-size: 0.85rem !important;
+    }
 
-        .licencias-aprobar :deep(.ant-table-tbody > tr > td) {
-            padding: 12px 8px !important;
-            border-bottom: 1px solid #f0f0f0 !important;
-            color: #333 !important;
-            background-color: white !important;
-            transition: all 0.3s ease !important;
-        }
+    .licencias-aprobar :deep(.ant-table-tbody > tr > td) {
+    padding: 12px 8px !important;
+    border-bottom: 1px solid #f0f0f0 !important;
+    color: #333 !important;
+    background-color: white !important;
+    transition: all 0.3s ease !important;
+    }
 
-        .licencias-aprobar :deep(.ant-table-tbody > tr:hover > td) {
-            background-color: rgba(166, 51, 51, 0.05) !important;
-            transform: translateX(2px) !important;
-        }
+    .licencias-aprobar :deep(.ant-table-tbody > tr:hover > td) {
+    background-color: rgba(166, 51, 51, 0.05) !important;
+    transform: translateX(2px) !important;
+    }
 
-        /* Botones de acción específicos para aprobación */
-        .licencias-aprobar .action-buttons {
-            display: flex !important;
-            justify-content: center !important;
-            gap: 12px !important;
-            align-items: center !important;
-        }
+    /* Botones de acción específicos para aprobación */
+    .licencias-aprobar .action-buttons {
+    display: flex !important;
+    justify-content: center !important;
+    gap: 12px !important;
+    align-items: center !important;
+    }
 
-        .licencias-aprobar .approve-button {
-            color: var(--apr-success-color) !important;
-            font-size: 1.2rem !important;
-            cursor: pointer !important;
-            transition: all 0.3s ease !important;
-            padding: 8px !important;
-            border-radius: 50% !important;
-            background: rgba(76, 175, 80, 0.1) !important;
-            width: 36px !important;
-            height: 36px !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-        }
+    .licencias-aprobar .approve-button {
+    color: var(--apr-success-color) !important;
+    font-size: 1.2rem !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    padding: 8px !important;
+    border-radius: 50% !important;
+    background: rgba(76, 175, 80, 0.1) !important;
+    width: 36px !important;
+    height: 36px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    }
 
-            .licencias-aprobar .approve-button:hover {
-                color: white !important;
-                background: var(--apr-success-color) !important;
-                transform: scale(1.1) !important;
-                box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3) !important;
-            }
+    .licencias-aprobar .approve-button:hover {
+    color: white !important;
+    background: var(--apr-success-color) !important;
+    transform: scale(1.1) !important;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3) !important;
+    }
 
-        .licencias-aprobar .reject-button {
-            color: var(--apr-error-color) !important;
-            font-size: 1.2rem !important;
-            cursor: pointer !important;
-            transition: all 0.3s ease !important;
-            padding: 8px !important;
-            border-radius: 50% !important;
-            background: rgba(198, 40, 40, 0.1) !important;
-            width: 36px !important;
-            height: 36px !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-        }
+    .licencias-aprobar .reject-button {
+    color: var(--apr-error-color) !important;
+    font-size: 1.2rem !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    padding: 8px !important;
+    border-radius: 50% !important;
+    background: rgba(198, 40, 40, 0.1) !important;
+    width: 36px !important;
+    height: 36px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    }
 
-            .licencias-aprobar .reject-button:hover {
-                color: white !important;
-                background: var(--apr-error-color) !important;
-                transform: scale(1.1) !important;
-                box-shadow: 0 4px 12px rgba(198, 40, 40, 0.3) !important;
-            }
+    .licencias-aprobar .reject-button:hover {
+    color: white !important;
+    background: var(--apr-error-color) !important;
+    transform: scale(1.1) !important;
+    box-shadow: 0 4px 12px rgba(198, 40, 40, 0.3) !important;
+    }
 
-        .licencias-aprobar .status-badge {
-            padding: 4px 10px !important;
-            border-radius: 12px !important;
-            font-weight: 600 !important;
-            font-size: 0.8rem !important;
-            text-transform: uppercase !important;
-            letter-spacing: 0.5px !important;
-            background: var(--apr-warning-light) !important;
-            color: var(--apr-warning-color) !important;
-            display: inline-flex !important;
-            align-items: center !important;
-            gap: 4px !important;
-        }
+    .licencias-aprobar .status-badge {
+    padding: 4px 10px !important;
+    border-radius: 12px !important;
+    font-weight: 600 !important;
+    font-size: 0.8rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    background: var(--apr-warning-light) !important;
+    color: var(--apr-warning-color) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    }
 
     /* Responsive design específico para aprobación */
     @@media (max-width: 768px) {
-        .licencias-aprobar .approval-header {
-            padding: 12px 16px !important;
-        }
+    .licencias-aprobar .approval-header {
+    padding: 12px 16px !important;
+    }
 
-        .licencias-aprobar .approval-title {
-            font-size: 1rem !important;
-        }
+    .licencias-aprobar .approval-title {
+    font-size: 1rem !important;
+    }
 
-        .licencias-aprobar :deep(.ant-table-thead > tr > th),
-        .licencias-aprobar :deep(.ant-table-tbody > tr > td) {
-            padding: 8px 4px !important;
-            font-size: 0.8rem !important;
-        }
+    .licencias-aprobar :deep(.ant-table-thead > tr > th),
+    .licencias-aprobar :deep(.ant-table-tbody > tr > td) {
+    padding: 8px 4px !important;
+    font-size: 0.8rem !important;
+    }
 
-        .licencias-aprobar .action-buttons {
-            gap: 8px !important;
-        }
+    .licencias-aprobar .action-buttons {
+    gap: 8px !important;
+    }
 
-        .licencias-aprobar .approve-button,
-        .licencias-aprobar .reject-button {
-            width: 32px !important;
-            height: 32px !important;
-            font-size: 1rem !important;
-        }
-        /* Hide less important columns on mobile */
-        .licencias-aprobar :deep(.ant-table-cell:nth-child(3)),
-        .licencias-aprobar :deep(.ant-table-cell:nth-child(4)) {
-            display: none !important;
-        }
+    .licencias-aprobar .approve-button,
+    .licencias-aprobar .reject-button {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 1rem !important;
+    }
+    /* Hide less important columns on mobile */
+    .licencias-aprobar :deep(.ant-table-cell:nth-child(3)),
+    .licencias-aprobar :deep(.ant-table-cell:nth-child(4)) {
+    display: none !important;
+    }
     }
 
     @@media (max-width: 480px) {
-        .licencias-aprobar .approval-content {
-            max-height: 50vh !important;
-        }
+    .licencias-aprobar .approval-content {
+    max-height: 50vh !important;
+    }
 
-        .licencias-aprobar :deep(.ant-table-cell:nth-child(5)) {
-            display: none !important;
-        }
+    .licencias-aprobar :deep(.ant-table-cell:nth-child(5)) {
+    display: none !important;
+    }
     }
 
     /* Loading state */
     .licencias-aprobar .loading-container {
-        padding: 40px 20px !important;
-        display: flex !important;
-        justify-content: center !important;
-        align-items: center !important;
-        gap: 12px !important;
-        color: var(--apr-primary-color) !important;
+    padding: 40px 20px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 12px !important;
+    color: var(--apr-primary-color) !important;
     }
 
     /* Enhanced popconfirm styling específicos para aprobación */
     .licencias-aprobar :deep(.ant-popconfirm .ant-popconfirm-message) {
-        font-weight: 500 !important;
+    font-weight: 500 !important;
     }
 
     .licencias-aprobar :deep(.ant-popconfirm .ant-btn-primary) {
-        background: var(--apr-success-color) !important;
-        border-color: var(--apr-success-color) !important;
+    background: var(--apr-success-color) !important;
+    border-color: var(--apr-success-color) !important;
     }
 
     .licencias-aprobar :deep(.ant-popconfirm .ant-btn-primary:hover) {
-        background: var(--apr-success-dark) !important;
-        border-color: var(--apr-success-dark) !important;
+    background: var(--apr-success-dark) !important;
+    border-color: var(--apr-success-dark) !important;
     }
 
     /* Estilos para el modal de rechazo - actualizados para coincidir con sanciones */
     .modal-rechazar-licencia .ant-modal-content {
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        border: 2px solid #732D2D;
-        margin-top: -50px;
-        margin-bottom: 0px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: 2px solid #732D2D;
+    margin-top: -50px;
+    margin-bottom: 0px;
     }
 
     .modal-rechazar-licencia .ant-modal-header {
-        background-color: #A63333;
-        border-radius: 10px 10px 0 0;
-        padding: 16px 24px;
+    background-color: #A63333;
+    border-radius: 10px 10px 0 0;
+    padding: 16px 24px;
     }
 
     .modal-rechazar-licencia .ant-modal-title {
-        color: white !important;
-        font-weight: 700;
-        display: flex;
-        align-items: center;
-        gap: 8px;
+    color: white !important;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
     }
 
     .modal-rechazar-licencia .modal-rechazo-content {
-        padding: 24px;
+    padding: 24px;
     }
 
     .modal-rechazar-licencia .licencia-info-card {
-        background: rgba(198, 40, 40, 0.05);
-        border: 1px solid rgba(198, 40, 40, 0.2);
-        border-radius: 8px;
-        padding: 16px;
-        margin-bottom: 20px;
+    background: rgba(198, 40, 40, 0.05);
+    border: 1px solid rgba(198, 40, 40, 0.2);
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 20px;
     }
 
     .modal-rechazar-licencia .licencia-info-title {
-        font-weight: 700;
-        color: var(--apr-error-color);
-        margin-bottom: 16px;
-        font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--apr-error-color);
+    margin-bottom: 16px;
+    font-size: 1.1rem;
     }
 
     .modal-rechazar-licencia .licencia-info-item {
-        background: white;
-        border: 1px solid rgba(198, 40, 40, 0.15);
-        border-radius: 6px;
-        padding: 12px;
-        margin-bottom: 8px;
-        transition: all 0.3s ease;
+    background: white;
+    border: 1px solid rgba(198, 40, 40, 0.15);
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 8px;
+    transition: all 0.3s ease;
     }
 
-        .modal-rechazar-licencia .licencia-info-item:hover {
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            transform: translateY(-1px);
-            border: 2px solid #A63333;
-        }
+    .modal-rechazar-licencia .licencia-info-item:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
+    border: 2px solid #A63333;
+    }
 
     .modal-rechazar-licencia .licencia-info-label {
-        font-size: 0.8rem;
-        color: #666;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        margin-bottom: 4px;
-        display: block;
+    font-size: 0.8rem;
+    color: #666;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+    display: block;
     }
 
     .modal-rechazar-licencia .licencia-info-value {
-        font-size: 0.95rem;
-        color: #333;
-        font-weight: 500;
-        word-break: break-word;
+    font-size: 0.95rem;
+    color: #333;
+    font-weight: 500;
+    word-break: break-word;
     }
 
     .modal-rechazar-licencia .reason-form-item {
-        margin-bottom: 16px;
+    margin-bottom: 16px;
     }
 
     .modal-rechazar-licencia .reason-form-item .ant-form-item-label > label {
-        font-weight: 600;
-        color: var(--apr-error-color);
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 1rem;
+    font-weight: 600;
+    color: var(--apr-error-color);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
     }
 
     .modal-rechazar-licencia .reason-textarea {
-        border-radius: 8px !important;
-        border: 2px solid #d9d9d9 !important;
-        transition: all 0.3s ease !important;
+    border-radius: 8px !important;
+    border: 2px solid #d9d9d9 !important;
+    transition: all 0.3s ease !important;
     }
 
     .modal-rechazar-licencia .reason-textarea:focus,
     .modal-rechazar-licencia .reason-textarea:hover {
-        border-color: #A63333 !important;
-        box-shadow: 0 0 0 2px rgba(166, 51, 51, 0.1) !important;
+    border-color: #A63333 !important;
+    box-shadow: 0 0 0 2px rgba(166, 51, 51, 0.1) !important;
     }
 
     .modal-rechazar-licencia .button-row-right {
-        display: flex !important;
-        width: 100% !important;
-        margin-top: 20px !important;
+    display: flex !important;
+    width: 100% !important;
+    margin-top: 20px !important;
     }
 
     .modal-rechazar-licencia .button-container-right {
-        display: flex !important;
-        gap: 12px !important;
-        margin-left: auto !important;
+    display: flex !important;
+    gap: 12px !important;
+    margin-left: auto !important;
     }
 
     .modal-rechazar-licencia .btn-confirm-reject {
-        background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
-        border: none !important;
-        color: white !important;
-        font-weight: 600;
-        padding: 0 24px !important;
-        height: 40px !important;
-        border-radius: 8px !important;
-        box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+    background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
+    border: none !important;
+    color: white !important;
+    font-weight: 600;
+    padding: 0 24px !important;
+    height: 40px !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
     }
 
     .modal-rechazar-licencia .btn-confirm-reject:hover {
-        background: linear-gradient(135deg, #438E46 0%, #4CAF50 100%) !important;
-        transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
+    background: linear-gradient(135deg, #438E46 0%, #4CAF50 100%) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
     }
 
     .modal-rechazar-licencia .btn-cancel-reject {
-        background: #f5f5f5 !important;
-        border: 1px solid #d9d9d9 !important;
-        color: #666 !important;
-        font-weight: 500;
-        padding: 0 20px !important;
-        height: 40px !important;
-        border-radius: 8px !important;
+    background: #f5f5f5 !important;
+    border: 1px solid #d9d9d9 !important;
+    color: #666 !important;
+    font-weight: 500;
+    padding: 0 20px !important;
+    height: 40px !important;
+    border-radius: 8px !important;
     }
 
     .modal-rechazar-licencia .btn-cancel-reject:hover {
-        background: #e6f7ff !important;
-        border-color: #1890ff !important;
-        color: #1890ff !important;
+    background: #e6f7ff !important;
+    border-color: #1890ff !important;
+    color: #1890ff !important;
     }
 </style>
 
@@ -394,7 +394,7 @@
                 @if (LicenciasVM_PendientesDeAprobacion.Any())
                 {
                     <Badge Count="@LicenciasVM_PendientesDeAprobacion.Count"
-                           Style="background: var(--apr-gold-color); color: var(--apr-primary-color); font-weight: bold;" />
+                    Style="background: var(--apr-gold-color); color: var(--apr-primary-color); font-weight: bold;" />
                 }
             </h3>
         </div>
@@ -420,18 +420,18 @@
             else
             {
                 <Table DataSource="LicenciasVM_PendientesDeAprobacion"
-                       Bordered
-                       Responsive
-                       Size="TableSize.Small"
-                       PageSize="5"
-                       HidePagination="@(LicenciasVM_PendientesDeAprobacion.Count > 5)"
-                       ScrollX="600px">
+                Bordered
+                Responsive
+                Size="TableSize.Small"
+                PageSize="5"
+                HidePagination="@(LicenciasVM_PendientesDeAprobacion.Count > 5)"
+                ScrollX="600px">
 
                     <ColumnDefinitions Context="licencia">
                         <PropertyColumn Title="👤 Bombero"
-                                        Property="c => c.ApellidoYNombre"
-                                        Width="200px"
-                                        Fixed="ColumnFixPlacement.Left">
+                        Property="c => c.ApellidoYNombre"
+                        Width="200px"
+                        Fixed="ColumnFixPlacement.Left">
                             <Template>
                                 <div style="font-weight: 600; color: #333;">
                                     @licencia.ApellidoYNombre
@@ -443,9 +443,9 @@
                         </PropertyColumn>
 
                         <PropertyColumn Title="📅 Desde"
-                                        Property="c => c.Desde"
-                                        Format="dd/MM/yyyy"
-                                        Width="100px">
+                        Property="c => c.Desde"
+                        Format="dd/MM/yyyy"
+                        Width="100px">
                             <Template>
                                 <Tag Color="TagColor.Processing" Style="font-size: 0.75rem;">
                                     @licencia.Desde.ToString("dd/MM")
@@ -454,9 +454,9 @@
                         </PropertyColumn>
 
                         <PropertyColumn Title="📅 Hasta"
-                                        Property="c => c.Hasta"
-                                        Format="dd/MM/yyyy"
-                                        Width="100px">
+                        Property="c => c.Hasta"
+                        Format="dd/MM/yyyy"
+                        Width="100px">
                             <Template>
                                 <Tag Color="TagColor.Processing" Style="font-size: 0.75rem;">
                                     @licencia.Hasta.ToString("dd/MM")
@@ -465,8 +465,8 @@
                         </PropertyColumn>
 
                         <PropertyColumn Title="⏱️ Días"
-                                        Property="c => c.DuracionEnDias"
-                                        Width="80px">
+                        Property="c => c.DuracionEnDias"
+                        Width="80px">
                             <Template>
                                 <div style="text-align: center; font-weight: 600; color: var(--apr-warning-color);">
                                     @licencia.DuracionEnDias
@@ -475,8 +475,8 @@
                         </PropertyColumn>
 
                         <PropertyColumn Title="🏷️ Tipo"
-                                        Property="@(c => c.TipoLicencia.GetDisplayName())"
-                                        Width="150px">
+                        Property="@(c => c.TipoLicencia.GetDisplayName())"
+                        Width="150px">
                             <Template>
                                 <div style="font-size: 0.85rem; color: #333;">
                                     @licencia.TipoLicencia?.GetDisplayName()
@@ -485,8 +485,8 @@
                         </PropertyColumn>
 
                         <PropertyColumn Title="📊 Estado"
-                                        Property="c => c.EstadoLicencia"
-                                        Width="100px">
+                        Property="c => c.EstadoLicencia"
+                        Width="100px">
                             <Template>
                                 <div class="status-badge">
                                     <Icon Type="clock-circle" />
@@ -496,16 +496,16 @@
                         </PropertyColumn>
 
                         <ActionColumn Title="⚙️ Acciones"
-                                      Fixed="ColumnFixPlacement.Right"
-                                      Width="120px">
+                        Fixed="ColumnFixPlacement.Right"
+                        Width="120px">
                             <Template>
                                 <div class="action-buttons">
                                     <Tooltip Title="Aprobar licencia">
                                         <Popconfirm Title="¿Confirma que desea aprobar esta licencia?"
-                                                    OnConfirm="() => AprobarLicencia(licencia.Id)"
-                                                    OkText="✅ Aprobar"
-                                                    CancelText="❌ Cancelar"
-                                                    Icon="@IconType.Outline.CheckCircle">
+                                        OnConfirm="() => AprobarLicencia(licencia.Id)"
+                                        OkText="✅ Aprobar"
+                                        CancelText="❌ Cancelar"
+                                        Icon="@IconType.Outline.CheckCircle">
                                             <div class="approve-button">
                                                 <Icon Type="check" />
                                             </div>
@@ -529,13 +529,13 @@
 
 @* Modal para rechazar licencia con motivo *@
 <Modal @bind-Visible="_modalRechazoVisible"
-       Title="❌ Rechazar Licencia"
-       Width="@("90%")"
-       Style="max-width: 900px;"
-       Footer="null"
-       DestroyOnClose
-       WrapClassName="modal-rechazar-licencia">
-    
+Title="❌ Rechazar Licencia"
+Width="@("90%")"
+Style="max-width: 900px;"
+Footer="null"
+DestroyOnClose
+WrapClassName="modal-rechazar-licencia">
+
     <div class="modal-rechazo-content">
         @if (_licenciaParaRechazar != null)
         {
@@ -543,7 +543,7 @@
                 <div class="licencia-info-title">
                     📋 Información de la Licencia a Rechazar
                 </div>
-                
+
                 <Row Gutter="12">
                     <AntDesign.Col Xs="24" Sm="12" Md="8">
                         <div class="licencia-info-item">
@@ -589,14 +589,14 @@
                 </Row>
             </div>
 
-            <Form Model="_motivoRechazo" Layout="FormLayout.Vertical">
+            <Form Model="_licenciaParaRechazar" Layout="FormLayout.Vertical">
                 <FormItem Label="📝 Motivo del Rechazo" Required Class="reason-form-item">
-                    <TextArea @bind-Value="_motivoRechazo"
-                              Placeholder="Ingrese el motivo detallado por el cual se rechaza esta licencia..."
-                              Rows="4"
-                              ShowCounts
-                              MaxLength="500"
-                              Class="reason-textarea" />
+                    <TextArea @bind-Value="_licenciaParaRechazar.RazonRechazo"
+                    Placeholder="Ingrese el motivo detallado por el cual se rechaza esta licencia..."
+                    Rows="4"
+                    ShowCounts
+                    MaxLength="500"
+                    Class="reason-textarea" />
                     <div style="margin-top: 8px; color: #666; font-size: 0.9rem;">
                         💡 Proporcione una explicación clara y detallada para que el bombero comprenda la razón del rechazo.
                     </div>
@@ -606,14 +606,14 @@
             <Row Gutter="12" Class="button-row-right">
                 <div class="button-container-right">
                     <Button Class="btn-confirm-reject"
-                            OnClick="ConfirmarRechazo"
-                            Disabled="@(string.IsNullOrWhiteSpace(_motivoRechazo))"
-                            Loading="_procesandoRechazo">
+                    OnClick="ConfirmarRechazo"
+                    Disabled="@(string.IsNullOrWhiteSpace(_licenciaParaRechazar.RazonRechazo))"
+                    Loading="_procesandoRechazo">
                         ✅ Confirmar Rechazo
                     </Button>
 
                     <Button Class="btn-cancel-reject"
-                            OnClick="CerrarModalRechazo">
+                    OnClick="CerrarModalRechazo">
                         ↩️ Cancelar
                     </Button>
                 </div>
@@ -637,7 +637,6 @@
     // Variables para el modal de rechazo
     private bool _modalRechazoVisible = false;
     private LicenciaViewModel? _licenciaParaRechazar;
-    private string _motivoRechazo = string.Empty;
     private bool _procesandoRechazo = false;
 
     // Método que se ejecuta al inicializar el componente
@@ -734,7 +733,6 @@
     private void MostrarModalRechazo(LicenciaViewModel licencia)
     {
         _licenciaParaRechazar = licencia;
-        _motivoRechazo = string.Empty;
         _modalRechazoVisible = true;
     }
 
@@ -742,14 +740,13 @@
     private void CerrarModalRechazo()
     {
         _modalRechazoVisible = false;
-        _licenciaParaRechazar = null;
-        _motivoRechazo = string.Empty;
+        _licenciaParaRechazar = null;;
     }
 
     // Confirma el rechazo de la licencia con motivo
     private async Task ConfirmarRechazo()
     {
-        if (_licenciaParaRechazar == null || string.IsNullOrWhiteSpace(_motivoRechazo))
+        if (_licenciaParaRechazar == null || string.IsNullOrWhiteSpace(_licenciaParaRechazar.RazonRechazo))
         {
             await message.ErrorAsync("⚠️ Debe ingresar un motivo para rechazar la licencia.");
             return;
@@ -760,27 +757,19 @@
 
         try
         {
-            // Primero actualizamos la descripción con el motivo del rechazo
-            var licenciaCompleta = LicenciasVM_SinFiltro.FirstOrDefault(l => l.Id == _licenciaParaRechazar.Id);
-            if (licenciaCompleta != null)
-            {
-                // Agregamos el motivo del rechazo a la descripción existente
-                string descripcionActualizada = string.IsNullOrEmpty(licenciaCompleta.Descripcion) 
-                    ? $"MOTIVO DE RECHAZO: {_motivoRechazo}"
-                    : $"{licenciaCompleta.Descripcion}\n\nMOTIVO DE RECHAZO: {_motivoRechazo}";
-                
-                // Aquí deberías llamar a un método para actualizar la descripción si existe
-                // await LicenciaService.ActualizarDescripcionLicencia(_licenciaParaRechazar.Id, descripcionActualizada);
-            }
-
             // Llamamos al servicio para rechazar la licencia (método con 2 parámetros)
             await LicenciaService.CambiarEstadoLicencia(_licenciaParaRechazar.Id, TipoEstadoLicencia.Rechazada);
-
+            await message.WarningAsync($"⚠️ Licencia de {_licenciaParaRechazar.ApellidoYNombre} rechazada correctamente.");
+            var licenciaRechazada = await LicenciaService.ObtenerLicenciaPorId(_licenciaParaRechazar.Id);
+            if (licenciaRechazada != null) 
+            {
+                licenciaRechazada.RazonRechazo = _licenciaParaRechazar.RazonRechazo;
+				await LicenciaService.EditarLicenciaAsync(licenciaRechazada);
+            }
             // Cerramos el modal
             CerrarModalRechazo();
             
             await Init();
-            await message.WarningAsync($"⚠️ Licencia de {_licenciaParaRechazar.ApellidoYNombre} rechazada correctamente.");
             await OnCompleted.InvokeAsync(); // Notificamos que se completó la acción
         }
         catch (Exception ex)
@@ -791,17 +780,6 @@
         {
             _procesandoRechazo = false;
             StateHasChanged();
-        }
-    }
-
-    // Rechaza la licencia que esta en pendiente (método obsoleto - mantenido por compatibilidad)
-    private async Task RechazarLicencia(int IdLicencia)
-    {
-        // Este método ya no se usa directamente, pero se mantiene por si acaso
-        var licencia = LicenciasVM_PendientesDeAprobacion.FirstOrDefault(l => l.Id == IdLicencia);
-        if (licencia != null)
-        {
-            MostrarModalRechazo(licencia);
         }
     }
 }

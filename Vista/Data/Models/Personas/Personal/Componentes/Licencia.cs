@@ -42,6 +42,11 @@ namespace Vista.Data.Models.Personas.Personal.Componentes
         public TipoEstadoLicencia EstadoLicencia { get; set; }
 
         /// <summary>
+        /// Razon de rechazo de la licencia, si aplica.
+        /// </summary>
+        public string? RazonRechazo { get; set; }
+
+        /// <summary>
         /// Identificador único de la personal a la que se asigna la licencia.
         /// </summary>
         public int PersonalId { get; set; }
