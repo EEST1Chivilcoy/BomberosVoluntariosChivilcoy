@@ -13,308 +13,308 @@
 
 <style>
     .brigadas-abm {
-        --brigadas-primary-color: #A63333;
-        --brigadas-primary-dark: #732D2D;
-        --brigadas-success-color: #4CAF50;
-        --brigadas-success-dark: #438E46;
-        --brigadas-accent-color: #FFD54F;
-        --brigadas-warning-color: #F9A825;
+    --brigadas-primary-color: #A63333;
+    --brigadas-primary-dark: #732D2D;
+    --brigadas-success-color: #4CAF50;
+    --brigadas-success-dark: #438E46;
+    --brigadas-accent-color: #FFD54F;
+    --brigadas-warning-color: #F9A825;
     }
 
     .brigadas-abm .brigadas-container {
-        padding: 12px !important;
-        min-height: 100vh !important;
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;
+    padding: 12px !important;
+    min-height: 100vh !important;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;
     }
 
     .brigadas-abm .main-card {
-        background: rgba(255, 255, 255, 0.95) !important;
-        backdrop-filter: blur(10px) !important;
-        border-radius: 16px !important;
-        box-shadow: 0 8px 32px rgba(166, 51, 51, 0.1), 0 4px 16px rgba(0, 0, 0, 0.05) !important;
-        border: 1px solid rgba(255, 255, 255, 0.2) !important;
-        overflow: hidden !important;
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(10px) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 8px 32px rgba(166, 51, 51, 0.1), 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    overflow: hidden !important;
     }
 
     .brigadas-abm .header-section {
-        background: linear-gradient(135deg, var(--brigadas-primary-color) 0%, var(--brigadas-primary-dark) 100%) !important;
-        color: white !important;
-        padding: 28px !important;
-        position: relative !important;
-        overflow: hidden !important;
-        display: flex !important;
-        justify-content: space-between !important;
-        align-items: center !important;
-        flex-wrap: wrap;
+    background: linear-gradient(135deg, var(--brigadas-primary-color) 0%, var(--brigadas-primary-dark) 100%) !important;
+    color: white !important;
+    padding: 28px !important;
+    position: relative !important;
+    overflow: hidden !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    flex-wrap: wrap;
     }
 
     .brigadas-abm .header-section .lava-bubbles {
-        position: absolute;
-        top: 0; left: 0; width: 100%; height: 100%;
-        pointer-events: none;
-        z-index: 1;
-        overflow: hidden;
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
     }
     .brigadas-abm .header-section .lava-bubble {
-        position: absolute;
-        border-radius: 50%;
-        opacity: 0.45;
-        background: radial-gradient(circle at 60% 40%, #FFD54F 0%, #F9A825 80%, transparent 100%);
-        animation: lava-bubble-move 8s linear infinite;
-        filter: blur(1.5px);
-        mix-blend-mode: lighten;
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.45;
+    background: radial-gradient(circle at 60% 40%, #FFD54F 0%, #F9A825 80%, transparent 100%);
+    animation: lava-bubble-move 8s linear infinite;
+    filter: blur(1.5px);
+    mix-blend-mode: lighten;
     }
     .brigadas-abm .header-section .lava-bubble.b1 {
-        left: 10%; width: 60px; height: 60px; bottom: -70px;
-        animation-delay: 0s;
-        animation-duration: 7.5s;
+    left: 10%; width: 60px; height: 60px; bottom: -70px;
+    animation-delay: 0s;
+    animation-duration: 7.5s;
     }
     .brigadas-abm .header-section .lava-bubble.b2 {
-        left: 35%; width: 90px; height: 90px; bottom: -100px;
-        animation-delay: 2s;
-        animation-duration: 9s;
-        background: radial-gradient(circle at 60% 40%, #FFEB3B 0%, #FFD54F 80%, transparent 100%);
+    left: 35%; width: 90px; height: 90px; bottom: -100px;
+    animation-delay: 2s;
+    animation-duration: 9s;
+    background: radial-gradient(circle at 60% 40%, #FFEB3B 0%, #FFD54F 80%, transparent 100%);
     }
     .brigadas-abm .header-section .lava-bubble.b3 {
-        left: 65%; width: 50px; height: 50px; bottom: -60px;
-        animation-delay: 1.5s;
-        animation-duration: 6.5s;
-        background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #FFD54F 80%, transparent 100%);
+    left: 65%; width: 50px; height: 50px; bottom: -60px;
+    animation-delay: 1.5s;
+    animation-duration: 6.5s;
+    background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #FFD54F 80%, transparent 100%);
     }
     .brigadas-abm .header-section .lava-bubble.b4 {
-        left: 80%; width: 70px; height: 70px; bottom: -80px;
-        animation-delay: 3.2s;
-        animation-duration: 8.5s;
-        background: radial-gradient(circle at 60% 40%, #F9A825 0%, #FFD54F 80%, transparent 100%);
+    left: 80%; width: 70px; height: 70px; bottom: -80px;
+    animation-delay: 3.2s;
+    animation-duration: 8.5s;
+    background: radial-gradient(circle at 60% 40%, #F9A825 0%, #FFD54F 80%, transparent 100%);
     }
     .brigadas-abm .header-section .lava-bubble.b5 {
-        left: 55%; width: 40px; height: 40px; bottom: -50px;
-        animation-delay: 5s;
-        animation-duration: 7.2s;
-        background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #F9A825 80%, transparent 100%);
+    left: 55%; width: 40px; height: 40px; bottom: -50px;
+    animation-delay: 5s;
+    animation-duration: 7.2s;
+    background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #F9A825 80%, transparent 100%);
     }
 
     @@keyframes lava-bubble-move {
-        0% {
-            transform: translateY(0) scale(1) rotate(0deg);
-            opacity: 0.45;
-        }
-        60% {
-            opacity: 0.7;
-            filter: blur(2.5px);
-        }
-        80% {
-            transform: translateY(-220px) scale(1.15) rotate(10deg);
-            opacity: 0.6;
-        }
-        100% {
-            transform: translateY(-320px) scale(0.95) rotate(-8deg);
-            opacity: 0;
-        }
+    0% {
+    transform: translateY(0) scale(1) rotate(0deg);
+    opacity: 0.45;
+    }
+    60% {
+    opacity: 0.7;
+    filter: blur(2.5px);
+    }
+    80% {
+    transform: translateY(-220px) scale(1.15) rotate(10deg);
+    opacity: 0.6;
+    }
+    100% {
+    transform: translateY(-320px) scale(0.95) rotate(-8deg);
+    opacity: 0;
+    }
     }
 
     .brigadas-abm .main-title {
-        font-family: 'Poppins', 'Fjalla One', sans-serif !important;
-        font-size: 2.2rem !important;
-        font-weight: 700 !important;
-        letter-spacing: 1px !important;
-        margin: 0 !important;
-        display: flex !important;
-        align-items: center !important;
-        gap: 12px !important;
-        animation: text-glow 2.5s ease-in-out infinite alternate !important;
-        position: relative !important;
-        z-index: 2 !important;
+    font-family: 'Poppins', 'Fjalla One', sans-serif !important;
+    font-size: 2.2rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 1px !important;
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    animation: text-glow 2.5s ease-in-out infinite alternate !important;
+    position: relative !important;
+    z-index: 2 !important;
     }
     .brigadas-abm .title-icon {
-        color: #FFD54F !important;
-        font-size: 2rem !important;
-        filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25)) !important;
+    color: #FFD54F !important;
+    font-size: 2rem !important;
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25)) !important;
     }
     @@keyframes text-glow {
-        0%, 100% { text-shadow: 0 0 5px #F9A825, 0 0 10px #FFD54F; }
-        50% { text-shadow: 0 0 12px #F9A825, 0 0 22px #FFD54F; }
+    0%, 100% { text-shadow: 0 0 5px #F9A825, 0 0 10px #FFD54F; }
+    50% { text-shadow: 0 0 12px #F9A825, 0 0 22px #FFD54F; }
     }
     .brigadas-abm .title-container {
-        position: relative !important;
-        z-index: 2 !important;
+    position: relative !important;
+    z-index: 2 !important;
     }
 
     .brigadas-abm .actions-row {
-        display: flex !important;
-        gap: 10px !important;
-        align-items: center !important;
-        z-index: 2 !important;
+    display: flex !important;
+    gap: 10px !important;
+    align-items: center !important;
+    z-index: 2 !important;
     }
 
     .brigadas-abm .table-container {
-        padding: 0 !important;
-        overflow: hidden !important;
+    padding: 0 !important;
+    overflow: hidden !important;
     }
 
     .brigadas-abm .modern-button {
-        height: 40px !important;
-        border-radius: 8px !important;
-        font-weight: 600 !important;
-        display: flex !important;
-        align-items: center !important;
-        gap: 8px !important;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-        position: relative !important;
-        overflow: hidden !important;
+    height: 40px !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    position: relative !important;
+    overflow: hidden !important;
     }
 
     .brigadas-abm .add-button {
-        background: linear-gradient(135deg, var(--brigadas-success-color) 0%, var(--brigadas-success-dark) 100%) !important;
-        border: none !important;
-        color: white !important;
-        box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3) !important;
-        padding: 0 20px !important;
-        font-weight: 600 !important;
-        border-radius: 8px !important;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    background: linear-gradient(135deg, var(--brigadas-success-color) 0%, var(--brigadas-success-dark) 100%) !important;
+    border: none !important;
+    color: white !important;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3) !important;
+    padding: 0 20px !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
     .brigadas-abm .add-button:hover {
-        transform: translateY(-2px) !important;
-        box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4) !important;
     }
 
     .brigadas-abm .ant-table-thead .ant-table-cell {
-        background-color: #A63333 !important;
-        color: #fff !important;
-        font-weight: bold !important;
-        padding: 16px !important;
-        border: none !important;
+    background-color: #A63333 !important;
+    color: #fff !important;
+    font-weight: bold !important;
+    padding: 16px !important;
+    border: none !important;
     }
 
     .brigadas-abm .ant-table-cell {
-        padding: 16px !important;
+    padding: 16px !important;
     }
 
-        .brigadas-abm .fade-in {
-        animation: abm-fadeIn 0.5s ease-in-out !important;
+    .brigadas-abm .fade-in {
+    animation: abm-fadeIn 0.5s ease-in-out !important;
     }
 
-@@keyframes abm-fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    @@keyframes abm-fadeIn {
+    from {
+    opacity: 0;
+    transform: translateY(20px);
     }
 
-        .modal-crear-brigada .ant-modal-content {
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        border: 2px solid #732D2D;
-        margin-top: -50px;
-        margin-bottom: 0px;
+    to {
+    opacity: 1;
+    transform: translateY(0);
+    }
+    }
+
+    .modal-crear-brigada .ant-modal-content {
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: 2px solid #732D2D;
+    margin-top: -50px;
+    margin-bottom: 0px;
     }
 
     .modal-crear-brigada .ant-modal-title {
-        color: white !important;
+    color: white !important;
     }
 
     .modal-crear-brigada .ant-modal-header {
-            background-color: #A63333;
-            padding: 16px 24px;
+    background-color: #A63333;
+    padding: 16px 24px;
 
     }
     .modal-crear-brigada-content {
-        padding: 24px;
+    padding: 24px;
     }
     .modal-crear-brigada-form-item {
-        margin-bottom: 20px;
-        position: relative;
-        padding-left: 10px;
+    margin-bottom: 20px;
+    position: relative;
+    padding-left: 10px;
     }
     .modal-crear-brigada-form-item::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        height: 100%;
-        width: 3px;
-        border-radius: 5px;
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 3px;
+    border-radius: 5px;
     }
     .modal-crear-brigada-form-item .ant-form-item-label > label {
-        font-weight: 600;
-        color: #434343;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 14px;
-        transition: color 0.3s ease;
+    font-weight: 600;
+    color: #434343;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    transition: color 0.3s ease;
     }
     .modal-crear-brigada-form-item .ant-form-item-label > label:hover {
-        color: #FFD700;
+    color: #FFD700;
     }
     .modal-crear-brigada .ant-input:focus,
     .modal-crear-brigada .ant-input:hover,
     .modal-crear-brigada .ant-select-selector:focus,
     .modal-crear-brigada .ant-select-selector:hover {
-        border-color: #FFD700 !important;
-        box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
+    border-color: #FFD700 !important;
+    box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
     }
     .modal-crear-brigada .ant-picker,
     .modal-crear-brigada .ant-input,
     .modal-crear-brigada .ant-select-selector,
     .modal-crear-brigada .ant-input-number,
     .modal-crear-brigada .ant-textarea {
-        border-radius: 8px !important;
-        border: 1px solid #d9d9d9 !important;
-        background: #fff !important;
-        color: #434343 !important;
-        transition: all 0.3s ease !important;
+    border-radius: 8px !important;
+    border: 1px solid #d9d9d9 !important;
+    background: #fff !important;
+    color: #434343 !important;
+    transition: all 0.3s ease !important;
     }
     .modal-crear-brigada .modal-crear-brigada-footer {
-        display: flex;
-        justify-content: flex-end;
-        gap: 12px;
-        margin-top: 18px;
-        margin-bottom: 0px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 18px;
+    margin-bottom: 0px;
     }
     .modal-crear-brigada .ant-btn-primary {
-        background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
-        border: none !important;
-        color: #fff !important;
-        font-weight: 600;
-        box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
-        margin-top:  0;
-        margin-bottom: 0;
-        padding: 0 20px !important;
+    background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
+    border: none !important;
+    color: #fff !important;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
+    margin-top:  0;
+    margin-bottom: 0;
+    padding: 0 20px !important;
     }
     .modal-crear-brigada .ant-btn-primary:hover {
-        background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
-        color: #fff !important;
+    background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
+    color: #fff !important;
     }
 
     @@media (max-width: 1199px) {
-        .brigadas-abm .brigadas-container {
-            padding: 8px !important;
-        }
+    .brigadas-abm .brigadas-container {
+    padding: 8px !important;
+    }
 
-        .brigadas-abm .header-section {
-            padding: 20px !important;
-            flex-direction: column;
-            align-items: flex-start !important;
-        }
-        .brigadas-abm .actions-row {
-            margin-top: 15px;
-            justify-content: flex-start !important;
-            width: 100%;
-        }
+    .brigadas-abm .header-section {
+    padding: 20px !important;
+    flex-direction: column;
+    align-items: flex-start !important;
+    }
+    .brigadas-abm .actions-row {
+    margin-top: 15px;
+    justify-content: flex-start !important;
+    width: 100%;
+    }
 
-        .brigadas-abm .main-title {
-            font-size: 2rem !important;
-            flex-direction: column !important;
-            text-align: center !important;
-            gap: 8px !important;
-        }
+    .brigadas-abm .main-title {
+    font-size: 2rem !important;
+    flex-direction: column !important;
+    text-align: center !important;
+    gap: 8px !important;
+    }
     }
 </style>
 
@@ -337,30 +337,30 @@
                 </div>
                 <div class="actions-row">
                     <Button Class="modern-button add-button"
-                            OnClick="() => ViewAddBrigade()"
-                            Icon="plus"
-                            Size="ButtonSize.Large">
+                    OnClick="() => ViewAddBrigade()"
+                    Icon="plus"
+                    Size="ButtonSize.Large">
                         Nueva Brigada
                     </Button>
                 </div>
             </div>
             <div class="table-container">
                 <Table TItem="BrigadaViewModelTable"
-                       DataSource="@BrigadaViewModels"
-                       @bind-PageIndex="_pageIndex"
-                       @bind-PageSize="_pageSize"
-                       Responsive>
+                DataSource="@BrigadaViewModels"
+                @bind-PageIndex="_pageIndex"
+                @bind-PageSize="_pageSize"
+                Responsive>
                     <ColumnDefinitions Context="brigada">
                         <PropertyColumn Title="🏷️ Nombre"
-                                        Property="b => b.Nombre"
-                                        Sortable
-                                        Width="220px"
-                                        Fixed="ColumnFixPlacement.Left">
+                        Property="b => b.Nombre"
+                        Sortable
+                        Width="220px"
+                        Fixed="ColumnFixPlacement.Left">
                         </PropertyColumn>
                         <PropertyColumn Title="👤 Encargado"
-                                        Property="b => b.EncargadoApellidoYNombre"
-                                        Sortable
-                                        Width="220px">
+                        Property="b => b.EncargadoApellidoYNombre"
+                        Sortable
+                        Width="220px">
                         </PropertyColumn>
                         <ActionColumn Title="⚙️ Acciones" Align=ColumnAlign.Center Width="180px">
                             <Space>
@@ -371,9 +371,9 @@
                                 </SpaceItem>
                                 <SpaceItem>
                                     <Popconfirm Title="¿Eliminar esta brigada?"
-                                                OnConfirm="() => DeleteBrigade(brigada.Id)"
-                                                OkText="Si"
-                                                CancelText="No">
+                                    OnConfirm="() => DeleteBrigade(brigada.Id)"
+                                    OkText="Si"
+                                    CancelText="No">
                                         <Button Danger>
                                             <Icon Type="delete" />
                                         </Button>
@@ -395,14 +395,14 @@
 
 @*Modal para Añadir Brigada con diseño de Licencias*@
 <Modal @bind-Visible="_modalAñadirVisible"
-       Title="Añadir Brigada"
-       Width="@("100%")"
-       Style="max-width: 800px;"
-       OkText="@("Guardar")"
-       CancelText="@("Cancelar")"
-       OnOk="@AddBrigade"
-       DestroyOnClose
-       WrapClassName="modal-crear-brigada">
+Title="Añadir Brigada"
+Width="@("100%")"
+Style="max-width: 800px;"
+OkText="@("Guardar")"
+CancelText="@("Cancelar")"
+OnOk="@AddBrigade"
+DestroyOnClose
+WrapClassName="modal-crear-brigada">
     <div class="modal-crear-brigada-content">
         <Form Model="newBrigada" Layout="FormLayout.Vertical" Class="modal-crear-brigada-form">
             <Row Class="modal-crear-brigada-row" Gutter="16">
@@ -414,15 +414,15 @@
                 <AntDesign.Col Span="8">
                     <FormItem Label="Encargado" Required Class="modal-crear-brigada-form-item">
                         <Select TItem="BomberoViweModel"
-                                TItemValue="BomberoViweModel"
-                                DataSource="@bomberosTodosViewModel"
-                                @bind-Value="newBrigada.Encargado"
-                                LabelName="@nameof(BomberoViweModel.ApellidoYNombre)"
-                                Placeholder="Seleccione un bombero"
-                                DefaultActiveFirstOption="false"
-                                AllowClear="true"
-                                EnableSearch
-                                Size="InputSize.Large" />
+                        TItemValue="BomberoViweModel"
+                        DataSource="@bomberosTodosViewModel"
+                        @bind-Value="newBrigada.Encargado"
+                        LabelName="@nameof(BomberoViweModel.ApellidoYNombre)"
+                        Placeholder="Seleccione un bombero"
+                        DefaultActiveFirstOption="false"
+                        AllowClear="true"
+                        EnableSearch
+                        Size="InputSize.Large" />
                     </FormItem>
                 </AntDesign.Col>
             </Row>
@@ -432,14 +432,14 @@
 
 @*Modal para Editar Brigada con diseño de Licencias*@
 <Modal @bind-Visible="_modalEditarVisible"
-       Title="Editar Brigada"
-       Width="@("100%")"
-       Style="max-width: 800px;"
-       OkText="@("Editar")"
-       CancelText="@("Cancelar")"
-       OnOk="@EditBrigade"
-       DestroyOnClose
-       WrapClassName="modal-crear-brigada">
+Title="Editar Brigada"
+Width="@("100%")"
+Style="max-width: 800px;"
+OkText="@("Editar")"
+CancelText="@("Cancelar")"
+OnOk="@EditBrigade"
+DestroyOnClose
+WrapClassName="modal-crear-brigada">
     <div class="modal-crear-brigada-content">
         <Form Model="selBrigada" Layout="FormLayout.Vertical" Class="modal-crear-brigada-form">
             <Row Class="modal-crear-brigada-row" Gutter="16">
@@ -451,15 +451,15 @@
                 <AntDesign.Col Span="8">
                     <FormItem Label="Encargado" Required Class="modal-crear-brigada-form-item">
                         <Select TItem="BomberoViweModel"
-                                TItemValue="BomberoViweModel"
-                                DataSource="@bomberosTodosViewModel"
-                                @bind-Value="selBrigada.Encargado"
-                                LabelName="@nameof(BomberoViweModel.ApellidoYNombre)"
-                                Placeholder="Seleccione un bombero"
-                                DefaultActiveFirstOption="false"
-                                AllowClear="true"
-                                EnableSearch
-                                Size="InputSize.Large" />
+                        TItemValue="BomberoViweModel"
+                        DataSource="@bomberosTodosViewModel"
+                        @bind-Value="selBrigada.Encargado"
+                        LabelName="@nameof(BomberoViweModel.ApellidoYNombre)"
+                        Placeholder="Seleccione un bombero"
+                        DefaultActiveFirstOption="false"
+                        AllowClear="true"
+                        EnableSearch
+                        Size="InputSize.Large" />
                     </FormItem>
                 </AntDesign.Col>
             </Row>
@@ -475,9 +475,15 @@
 @code {
     // Lista con todos los bomberos
     private List<Bombero> bomberosTodos = new();
-
-    // Lista con todos los bomberos en formato ViewModel
     private List<BomberoViweModel> bomberosTodosViewModel = new();
+    // Lista de Brigadas
+    private List<Brigada> Brigadas = new List<Brigada>();
+    private List<BrigadaViewModelTable> BrigadaViewModels = new List<BrigadaViewModelTable>();
+
+    // Modals
+    private bool _modalAñadirVisible = false;
+    private bool _modalDetallesVisible = false;
+    private bool _modalEditarVisible = false;
 
     // Variables
     private BrigadaViewModelTable newBrigada = new();
@@ -485,20 +491,9 @@
     private string? TitleBrigadaSel;
     private int IdBrigadaSel;
 
-    // Modals
-    private bool _modalAñadirVisible = false;
-    private bool _modalDetallesVisible = false;
-    private bool _modalEditarVisible = false;
-
-    // Lista de Brigadas
-    private List<Brigada> Brigadas = new List<Brigada>();
-
     // Variables de Tamaño de la Tabla
     int _pageIndex = 1;
     int _pageSize = 5;
-
-    // Lista de ViewModels de Brigada
-    private List<BrigadaViewModelTable> BrigadaViewModels = new List<BrigadaViewModelTable>();
 
     public class BrigadaViewModelTable
     {
@@ -510,54 +505,45 @@
 
     protected override async Task OnInitializedAsync()
     {
-        // Validamos si el servicio de Bombero está disponible.
-        if (BomberoService == null)
-        {
-            await MessageService.ErrorAsync("El servicio de bomberos no está disponible.");
-            return;
-        }
-
-        bomberosTodos = await BomberoService.ObtenerTodosLosBomberosAsync(); // Obtiene todos los Bomberos.
-
-        // Verifica si la lista de bomberos está vacía.
-        if (bomberosTodos == null || bomberosTodos.Count == 0)
+        await CargarBomberos();
+        await CargarBrigadas();
+    }
+    private async Task CargarBomberos() 
+    {
+        bomberosTodos = await BomberoService.ObtenerTodosLosBomberosAsync();
+        if (bomberosTodos == null)
         {
             await MessageService.ErrorAsync("No se encontraron bomberos disponibles.");
             return;
         }
 
-        bomberosTodosViewModel = bomberosTodos.ToBomberoViewModelList(); // Convierte la lista de Bomberos a ViewModel.
-
-        // Verifica si la lista de Bomberos a ViewModel.
-        if (bomberosTodosViewModel == null || bomberosTodosViewModel.Count == 0)
-        {
+        bomberosTodosViewModel = bomberosTodos.ToBomberoViewModelList();
+        if (bomberosTodosViewModel == null)
             bomberosTodosViewModel = new List<BomberoViweModel>();
-        }
-
-        // Obtiene todas las brigadas.
+    }
+    private async Task CargarBrigadas() 
+    {
         Brigadas = await BrigadaService.ObtenerTodasLasBrigadasAsync();
-
-        // Verifica si la lista de Brigadas está vacía. (Si no hay brigadas, se muestra un mensaje de advertencia).
         if (Brigadas == null || Brigadas.Count == 0)
         {
             await MessageService.WarningAsync("No se encontraron brigadas disponibles en la base de datos.");
             return;
         }
 
-        // Mapea las Brigadas a ViewModels.
-        BrigadaViewModels = await MapBrigadesAsync(Brigadas);
-
-        // Verifica si la lista de BrigadaViewModels está vacía. Pero tambien verifica si la lista de Brigadas está vacía. Esto para determinar si es un error de mapeo.
-        if (BrigadaViewModels == null || BrigadaViewModels.Count == 0 || Brigadas != null || Brigadas.Count != 0)
+        BrigadaViewModels = Brigadas.Select(b => new BrigadaViewModelTable
+        {
+            Id = b.BrigadaId,
+            Nombre = b.NombreBrigada,
+            EncargadoApellidoYNombre = b.Encargado != null
+                ? $"{b.Encargado.Apellido}, {b.Encargado.Nombre}"
+                : "Sin Encargado"
+        }).ToList();
+        if (BrigadaViewModels == null || BrigadaViewModels.Count == 0 && Brigadas.Count > 0)
         {
             await MessageService.ErrorAsync("Error al mapear las brigadas. Por favor, intente nuevamente más tarde.");
             return;
         }
-
-        // Si todo está bien, actualiza el estado del componente.
-        StateHasChanged();
     }
-
     private async Task ViewAddBrigade()
     {
         if (bomberosTodos.Count == 0)
@@ -570,18 +556,6 @@
         _modalAñadirVisible = true;
     }
 
-    public async Task<List<BrigadaViewModelTable>> MapBrigadesAsync(List<Brigada> brigadas)
-    {
-        return await Task.Run(() => brigadas.Select(b => new BrigadaViewModelTable
-        {
-            Id = b.BrigadaId,
-            Nombre = b.NombreBrigada,
-            EncargadoApellidoYNombre = b.Encargado != null
-                ? $"{b.Encargado.Apellido}, {b.Encargado.Nombre}"
-                : "Sin Encargado"
-        }).ToList());
-    }
-
     private async Task AddBrigade()
     {
         if (newBrigada.Encargado == null)
@@ -589,7 +563,6 @@
             await MessageService.ErrorAsync("El encargado de la brigada no puede estar vacío.");
             return;
         }
-
         if (string.IsNullOrWhiteSpace(newBrigada.Nombre))
         {
             await MessageService.ErrorAsync("El nombre de la brigada no puede estar vacío.");
@@ -597,7 +570,6 @@
         }
 
         Bombero BomberoEncargado = await BomberoService.ObtenerBomberoObjetoPorLegajoAsync(newBrigada.Encargado.NumeroLegajo);
-
         if (BomberoEncargado == null)
         {
             await MessageService.ErrorAsync("El encargado seleccionado no es válido.");
@@ -613,49 +585,8 @@
         await BrigadaService.AgregarBrigadaAsync(brigada);
         newBrigada = new BrigadaViewModelTable();
         _modalAñadirVisible = false;
-        await OnInitializedAsync();
+        await CargarBrigadas();
         await MessageService.SuccessAsync("Brigada añadida correctamente.");
-    }
-
-    private async Task EditBrigade()
-    {
-        if (selBrigada.Encargado == null)
-        {
-            await MessageService.ErrorAsync("El encargado de la brigada no puede estar vacío.");
-            return;
-        }
-
-        if (string.IsNullOrWhiteSpace(selBrigada.Nombre))
-        {
-            await MessageService.ErrorAsync("El nombre de la brigada no puede estar vacío.");
-            return;
-        }
-
-        if (selBrigada.Id <= 0)
-        {
-            await MessageService.ErrorAsync("ID inválido. Por favor, proporcione un ID válido.");
-            return;
-        }
-
-        var BomberoEncargado = await BomberoService.ObtenerBomberoObjetoPorLegajoAsync(selBrigada.Encargado.NumeroLegajo);
-
-        if (BomberoEncargado == null)
-        {
-            await MessageService.ErrorAsync("El encargado seleccionado no es válido.");
-            return;
-        }
-
-        var brigada = new Brigada
-        {
-            BrigadaId = selBrigada.Id,
-            NombreBrigada = selBrigada.Nombre,
-            Encargado = BomberoEncargado
-        };
-
-        await BrigadaService.EditarBrigadaAsync(brigada);
-        _modalEditarVisible = false;
-        await OnInitializedAsync();
-        await MessageService.SuccessAsync("Brigada editada correctamente.");
     }
 
     private async Task ViewEditBrigade(int id)
@@ -667,7 +598,6 @@
         }
 
         var brigada = await BrigadaService.ObtenerBrigadaPorIdAsync(id);
-
         if (brigada == null)
         {
             await MessageService.ErrorAsync("Error al intentar editar la brigada: No se encontró.");
@@ -675,7 +605,6 @@
         }
 
         var encargado = bomberosTodosViewModel.FirstOrDefault(b => b.NumeroLegajo == brigada.Encargado.NumeroLegajo);
-
         if (encargado == null)
         {
             await MessageService.ErrorAsync("Error al intentar editar la dependencia: No se encontró un encargado válido.");
@@ -692,24 +621,62 @@
         _modalEditarVisible = true;
     }
 
+    private async Task EditBrigade()
+    {
+        if (selBrigada.Encargado == null)
+        {
+            await MessageService.ErrorAsync("El encargado de la brigada no puede estar vacío.");
+            return;
+        }
+        if (string.IsNullOrWhiteSpace(selBrigada.Nombre))
+        {
+            await MessageService.ErrorAsync("El nombre de la brigada no puede estar vacío.");
+            return;
+        }
+        if (selBrigada.Id <= 0)
+        {
+            await MessageService.ErrorAsync("ID inválido. Por favor, proporcione un ID válido.");
+            return;
+        }
+
+        var BomberoEncargado = await BomberoService.ObtenerBomberoObjetoPorLegajoAsync(selBrigada.Encargado.NumeroLegajo);
+        if (BomberoEncargado == null)
+        {
+            await MessageService.ErrorAsync("El encargado seleccionado no es válido.");
+            return;
+        }
+
+        var brigada = new Brigada
+        {
+            BrigadaId = selBrigada.Id,
+            NombreBrigada = selBrigada.Nombre,
+            Encargado = BomberoEncargado
+        };
+
+        await BrigadaService.EditarBrigadaAsync(brigada);
+        _modalEditarVisible = false;
+        await CargarBrigadas();
+        await MessageService.SuccessAsync("Brigada editada correctamente.");
+    }
+
     private async Task ViewBrigadeDetails(int id)
     {
         var brigada = await BrigadaService.ObtenerBrigadaPorIdAsync(id);
-
-        if (brigada != null!)
+        if (brigada == null)
         {
-            TitleBrigadaSel = brigada.NombreBrigada;
-            IdBrigadaSel = brigada.BrigadaId;
-            _modalDetallesVisible = true;
-        }
-        else
             await MessageService.ErrorAsync("Error al abrir la brigada: No se encontró.");
+            return;
+        }
+
+        TitleBrigadaSel = brigada.NombreBrigada;
+        IdBrigadaSel = brigada.BrigadaId;
+        _modalDetallesVisible = true;
     }
 
     private async Task DeleteBrigade(int id)
     {
         await BrigadaService.EliminarBrigadaAsync(id);
-        await OnInitializedAsync();
+        await CargarBrigadas();
         await MessageService.SuccessAsync("Brigada eliminada con éxito.");
     }
 }
