@@ -67,6 +67,11 @@ namespace Vista.Data.ViewModels.Personal
         public TipoEstadoLicencia EstadoLicencia { get; set; }
 
         /// <summary>
+        /// Razon de rechazo de la licencia, si aplica.
+        /// </summary>
+        public string? RazonRechazo { get; set; }
+
+        /// <summary>
         /// Duración de la licencia en días (inclusive).
         /// </summary>
         public int DuracionEnDias => (Hasta - Desde).Days + 1;

@@ -972,8 +972,8 @@ Style="max-width: 1000px;">
 						<div class="detail-label">🏷️ Tipo</div>
 						<div class="detail-value">
 							@(licenciaSeleccionada.TipoLicencia != null
-																				? licenciaSeleccionada.TipoLicencia.GetDisplayName()
-																				: "Desconocido")
+																											? licenciaSeleccionada.TipoLicencia.GetDisplayName()
+																											: "Desconocido")
 						</div>
 					</div>
 
@@ -1052,6 +1052,17 @@ Style="max-width: 1000px;">
 						<div class="detail-item detail-description">
 							<div class="detail-label">📝 Descripción</div>
 							<div class="detail-value">@licenciaSeleccionada.Descripcion</div>
+						</div>
+					}
+					@if (licenciaSeleccionada.EstadoLicencia == TipoEstadoLicencia.Rechazada)
+					{
+						@if (string.IsNullOrEmpty(licenciaSeleccionada.RazonRechazo))
+						{
+							licenciaSeleccionada.RazonRechazo = "Sin razon";
+						}
+						<div class="detail-item detail-description">
+							<div class="detail-label">❌ Razon Rechazo</div>
+							<div class="detail-value">@licenciaSeleccionada.RazonRechazo</div>
 						</div>
 					}
 				</div>
@@ -1184,7 +1195,8 @@ Style="max-width: 1000px;">
 				Descripcion = l.Descripcion,
 				Desde = l.Desde,
 				Hasta = l.Hasta,
-				EstadoLicencia = l.EstadoLicencia
+				EstadoLicencia = l.EstadoLicencia,
+				RazonRechazo = l.RazonRechazo
 			};
 
 			licenciasVM.Add(licVm);

@@ -4,6 +4,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using Vista.Data;
 using Vista.Data.Enums;
+using Vista.Data.Models.Grupos.Dependencias.EquiposAutonomos;
 using Vista.Data.Models.Objetos;
 using Vista.Data.Models.Objetos.Componentes;
 
@@ -13,6 +14,9 @@ namespace Vista.Services
     {
         Task<Material> AgregarMaterial(Material material);
         Task<MovimientoMaterial> CargarMovimiento(MovimientoMaterial material);
+        Task EditarMaterialAsync(Material material);
+        Task<List<Material>> ObtenerMaterialesAsync();
+        Task<Material?> ObtenerMaterialAsync(int materialId);
     }
 
     public class DepositoService : IDepositoService
@@ -69,12 +73,39 @@ namespace Vista.Services
                 throw;
             }
         }
+        public async Task EditarMaterialAsync(Material material) 
+        {
+            var materialExistente = await _context.Materiales.FindAsync(material.MaterialId);
+
+            if (materialExistente == null)
+            {
+                throw new KeyNotFoundException("Material no encontrado.");
+            }
+
+            materialExistente.Codigo = material.Codigo;
+            materialExistente.Descripcion = material.Descripcion;
+            materialExistente.FechaAlta = material.FechaAlta;
+            materialExistente.Stock = material.Stock;
+            materialExistente.Rubro = material.Rubro;
+
+            await _context.SaveChangesAsync();
+        }
+        public async Task<Material?> ObtenerMaterialAsync(int materialId) 
+        {
+            return await _context.Materiales.FirstOrDefaultAsync(m => m.MaterialId == materialId);
+        }
+        public async Task<List<Material>> ObtenerMaterialesAsync() 
+        {
+            return await _context.Materiales
+                .AsNoTracking()
+                .ToListAsync();
+        }
         void ActualizarStock(MovimientoMaterial movimiento, Material material)
         {
             try
             {
 
-                if(movimiento.TipoMovimiento == TipoMovimiento.Entrada)
+                if (movimiento.TipoMovimiento == TipoMovimiento.Entrada)
                 {
                     material.Stock = material.Stock + movimiento.Cantidad;
                 }
@@ -91,7 +122,7 @@ namespace Vista.Services
                 {
                     throw new Exception("Stock insuficiente");
                 }
-                
+
                 _context.SaveChanges();
                 return;
             }
