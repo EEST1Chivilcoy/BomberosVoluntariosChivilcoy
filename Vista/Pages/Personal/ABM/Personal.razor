@@ -515,6 +515,7 @@
 					   OnRow="@OnRowClick"
 					   @bind-PageIndex="_pageIndex"
 					   @bind-PageSize="_pageSize"
+					   Loading="isLoading"
 					   Responsive>
 					<ColumnDefinitions>
 						<Column TData="Bombero" Title="Foto" Width="100">
@@ -536,9 +537,9 @@
 										SorterCompare="@((x, y) => ((EscalafonJerarquico)x).CompareTo((EscalafonJerarquico)y))"
 										Sortable
 										DefaultSortOrder="SortDirection.Ascending">
-										<Template>
-											@context.Grado.GetDisplayName()
-										</Template>
+							<Template>
+								@context.Grado.GetDisplayName()
+							</Template>
 						</PropertyColumn>
 						<PropertyColumn Title="📊 Estado" Property="@(c => c.Estado.GetDisplayName())" Sortable>
 
@@ -581,6 +582,7 @@
 					   OnRow="@OnRowClick"
 					   @bind-PageIndex="_pageIndex"
 					   @bind-PageSize="_pageSize"
+					   Loading="isLoading"
 					   Responsive>
 					<ColumnDefinitions>
 						<Column TData="ComisionDirectiva" Title="Foto" Width="100">
@@ -602,9 +604,9 @@
 										SorterCompare="@((x, y) => ((GradoComisionDirectiva)x).CompareTo((GradoComisionDirectiva)y))"
 										Sortable
 										DefaultSortOrder="SortDirection.Ascending">
-										<Template>
-											@context.Grado.GetDisplayName()
-										</Template>
+							<Template>
+								@context.Grado.GetDisplayName()
+							</Template>
 						</PropertyColumn>
 						<PropertyColumn Title="📊 Estado" Property="@(c => c.Estado.GetDisplayName())" Sortable>
 
@@ -647,6 +649,7 @@
 					   OnRow="@OnRowClick"
 					   @bind-PageIndex="_pageIndex"
 					   @bind-PageSize="_pageSize"
+					   Loading="isLoading"
 					   Responsive>
 					<ColumnDefinitions>
 						<Column TData="CobradorViewModel" Title="Foto" Width="100">
@@ -704,29 +707,24 @@
 	</Template>;
 }
 
-@if (EditarVisible == true)
-{
-	<Modal Footer="null" OnClose="@CloseModals" Visible="@EditarVisible" Centered="@true" DefaultMaximized="@true">
-		@*En implementación*@
-	</Modal>
-}
-@if (DetallesVisible == true)
-{
-	<Modal Visible="@DetallesVisible" OnCancel="@CloseModals" Footer="@footer" Centered="@true" DefaultMaximized="@true">
-		@if (TipoPersonal.ToLower() == "comisiondirectiva")
-		{
-			<DetallePersonal PersonalId="@PersonalId" Tipo="Data.Enums.Discriminadores.TipoPersonal.ComisionDirectiva" />
-		}
-		else if (TipoPersonal.ToLower() == "bomberos")
-		{
-			<DetallePersonal PersonalId="@PersonalId" Tipo="Data.Enums.Discriminadores.TipoPersonal.Bombero" />
-		}
-		else if (TipoPersonal.ToLower() == "cobradores")
-		{
-			<DetallePersonal PersonalId="@PersonalId" Tipo="Data.Enums.Discriminadores.TipoPersonal.Cobrador" />
-		}
-	</Modal>
-}
+<Modal Footer="null" Visible="@EditarVisible" Centered="@true" DefaultMaximized="@true">
+	@*En implementación*@
+</Modal>
+
+<Modal Visible="@DetallesVisible" OnCancel="@CloseModals" Footer="@footer" Centered="@true" DefaultMaximized="@true">
+	@if (TipoPersonal.ToLower() == "comisiondirectiva")
+	{
+		<DetallePersonal PersonalId="@PersonalId" Tipo="Data.Enums.Discriminadores.TipoPersonal.ComisionDirectiva" OnFinishCallback="CloseModals" />
+	}
+	else if (TipoPersonal.ToLower() == "bomberos")
+	{
+		<DetallePersonal PersonalId="@PersonalId" Tipo="Data.Enums.Discriminadores.TipoPersonal.Bombero" OnFinishCallback="CloseModals" />
+	}
+	else if (TipoPersonal.ToLower() == "cobradores")
+	{
+		<DetallePersonal PersonalId="@PersonalId" Tipo="Data.Enums.Discriminadores.TipoPersonal.Cobrador" OnFinishCallback="CloseModals" />
+	}
+</Modal>
 
 @code {
 	[Parameter] public string TipoPersonal { get; set; } = null!; // Parámetro para el tipo de personal (comisión directiva o bombero)
@@ -777,6 +775,9 @@
 	private bool EditarVisible { get; set; }
 	private bool DetallesVisible { get; set; }
 
+	// Variable de Carga
+	private bool isLoading { get; set; } = true; // <-- AÑADIDO
+
 	private async Task CambiarEstadoBombero(int BomberoId, EstadoBombero estado)
 	{
 		await BomberoService.CambiarEstado(BomberoId, estado);
@@ -811,6 +812,8 @@
 	// Init, OnChange y Carga de datos
 	protected override async Task OnInitializedAsync()
 	{
+		isLoading = true; // <-- AÑADIDO
+
 		if (TipoPersonal.ToLower() == "bomberos")
 		{
 			var bomberos = await BomberoService.ObtenerTodosLosBomberosAsync(ConImagenes: true);
@@ -846,11 +849,14 @@
 			navigationManager.NavigateTo("/fire-force/personal/bomberos", true);
 		}
 
+		isLoading = false; // <-- AÑADIDO
 		StateHasChanged();
 	}
 
 	private async Task RefreshData()
 	{
+		isLoading = true; // <-- AÑADIDO
+
 		if (TipoPersonal.ToLower() == "bomberos")
 		{
 			var bomberos = await BomberoService.ObtenerTodosLosBomberosAsync(ConImagenes: true);
@@ -873,6 +879,7 @@
 			searchC(searchString, EstadoC);
 		}
 
+		isLoading = false; // <-- AÑADIDO
 		await InvokeAsync(StateHasChanged);
 	}
 

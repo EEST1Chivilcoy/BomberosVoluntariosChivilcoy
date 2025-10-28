@@ -172,7 +172,8 @@
 	@if (personalView != null)
 	{
 		<Form Model="@personalView"
-			  Layout="FormLayout.Vertical">
+			  Layout="FormLayout.Vertical"
+			  Loading="isLoading">
 
 			@*Información Personal (Común para todos)*@
 
@@ -440,95 +441,76 @@
 </div>
 
 @code {
-	[Parameter] public int PersonalId { get; set; }
-	[Parameter] public TipoPersonal Tipo { get; set; } // Puede ser "bombero" o "comisiondirectiva"
+	[Parameter, Required, EditorRequired] public int PersonalId { get; set; }
+	[Parameter, Required, EditorRequired] public TipoPersonal Tipo { get; set; } // Puede ser "bombero" o "comisiondirectiva" o "cobrador"
+	[Parameter, Required, EditorRequired] public EventCallback OnFinishCallback { get; set; }
 
 	private PersonalViewModel? personalView = new(); // ViewModel base para el personal
+	private bool isLoading = true;
 
 	protected override async Task OnParametersSetAsync()
 	{
-		// Inicializamos el ViewModel según el tipo de personal
-		if (Tipo == TipoPersonal.Bombero)
+		isLoading = true;
+
+		try
 		{
-			personalView = new BomberoViweModel();
-			Bombero? bombero = null;
-
-			try
+			switch (Tipo)
 			{
-				bombero = await BomberoService.ObtenerBomberoPorIdAsync(id: PersonalId, asnotracking: true, conRelaciones: true);
-			}
-			catch (Exception ex)
-			{
-				await message.ErrorAsync($"Error al obtener el bombero: {ex.Message}");
-				navigationManager.NavigateTo($"/personal/bomberos", true);
-				return;
-			}
+				case TipoPersonal.Bombero:
+					{
+						var bombero = await BomberoService.ObtenerBomberoPorIdAsync(PersonalId, true, true);
+						if (bombero == null)
+						{
+							await HandleErrorAndFinishAsync("No se encontró el bombero especificado.");
+							return;
+						}
+						personalView = bombero.ToBomberoViewModel();
+						break;
+					}
 
-			if (bombero == null)
-			{
-				await message.ErrorAsync("No se encontró el bombero especificado.");
-				navigationManager.NavigateTo($"/personal/bomberos", true);
-				return;
-			}
+				case TipoPersonal.ComisionDirectiva:
+					{
+						var comision = await ComisionDirectivaService.ObtenerMiembroComisionDirectivaPorIdAsync(PersonalId, true, true);
+						if (comision == null)
+						{
+							await HandleErrorAndFinishAsync("No se encontró el miembro de comisión directiva especificado.");
+							return;
+						}
+						personalView = comision.ToComisionDirectivaViewModel();
+						break;
+					}
 
-			personalView = bombero.ToBomberoViewModel();
+				case TipoPersonal.Cobrador:
+					{
+						var cobrador = await CobradorService.ObtenerCobradorPorIdAsync(PersonalId, true, true);
+						if (cobrador == null)
+						{
+							await HandleErrorAndFinishAsync("No se encontró el cobrador especificado.");
+							return;
+						}
+						personalView = cobrador.ToCobradorViewModel();
+						break;
+					}
+
+				default:
+					await HandleErrorAndFinishAsync("Tipo de personal no válido. Debe ser 'Bombero', 'Comisión Directiva' o 'Cobrador'.");
+					return;
+			}
 		}
-		else if (Tipo == TipoPersonal.ComisionDirectiva)
+		catch (Exception ex)
 		{
-			personalView = new ComisionDirectivaViewModel();
-			ComisionDirectiva? comisionDirectiva = null;
-
-			try
-			{
-				comisionDirectiva = await ComisionDirectivaService.ObtenerMiembroComisionDirectivaPorIdAsync(id: PersonalId, asnotracking: true, conRelaciones: true);
-			}
-			catch (Exception ex)
-			{
-				await message.ErrorAsync($"Error al obtener el miembro de comisión directiva: {ex.Message}");
-				navigationManager.NavigateTo($"/personal/comisiondirectiva", true);
-				return;
-			}
-
-			if (comisionDirectiva == null)
-			{
-				await message.ErrorAsync("No se encontró el miembro de comisión directiva especificado.");
-				navigationManager.NavigateTo($"/personal/comisiondirectiva", true);
-				return;
-			}
-
-			personalView = comisionDirectiva.ToComisionDirectivaViewModel();
-		}
-		else if (Tipo == TipoPersonal.Cobrador)
-		{
-			personalView = new CobradorViewModel();
-			Cobrador? cobrador = null;
-
-			try
-			{
-				cobrador = await CobradorService.ObtenerCobradorPorIdAsync(id: PersonalId, asnotracking: true, conRelaciones: true);
-			}
-			catch (Exception ex)
-			{
-				await message.ErrorAsync($"Error al obtener el cobrador: {ex.Message}");
-				navigationManager.NavigateTo($"/personal/cobradores", true);
-				return;
-			}
-
-			if (cobrador == null)
-			{
-				await message.ErrorAsync("No se encontró el cobrador especificado.");
-				navigationManager.NavigateTo($"/personal/cobradores", true);
-				return;
-			}
-
-			personalView = cobrador.ToCobradorViewModel();
-		}
-		else
-		{
-			await message.ErrorAsync("Tipo de personal no válido. Debe ser 'Bombero' o 'Comision Directiva'.");
-			navigationManager.NavigateTo($"/personal/bomberos", true);
+			await HandleErrorAndFinishAsync($"Error al obtener el {Tipo.ToString().ToLower()}: {ex.Message}");
+			return;
 		}
 
-		StateHasChanged();
+		await Task.Delay(300); // Pequeña demora para mejorar la experiencia de usuario
+		isLoading = false;
+	}
+
+
+	private async Task HandleErrorAndFinishAsync(string mensaje)
+	{
+		await message.ErrorAsync(mensaje);
+		await OnFinishCallback.InvokeAsync();
 	}
 }

@@ -158,12 +158,26 @@ namespace Vista.Services
 
         public async Task<bool> EditarBombero(Bombero bombero)
         {
+            // --- 1. Validaciones ---
+
+            // --- Paso A: Validaciones "Baratas" (en memoria) ---
             if (bombero == null)
             {
-                Console.WriteLine("ERROR: El bombero no puede ser nulo.");
-                return false;
+                throw new ArgumentNullException(nameof(bombero), "El bombero no puede ser nulo.");
             }
 
+            var validationContext = new ValidationContext(bombero, serviceProvider: null, items: null);
+            var validationResults = new List<ValidationResult>();
+            bool esValido = Validator.TryValidateObject(bombero, validationContext, validationResults, validateAllProperties: true);
+
+            if (!esValido)
+            {
+                string errores = string.Join(Environment.NewLine, validationResults.Select(r => r.ErrorMessage));
+                throw new ValidationException($"El modelo Bombero no es válido: {Environment.NewLine}{errores}");
+            }
+
+            // --- 2. Inicio de la Transacción ---
+            // Esta será la transacción "principal" que controlará todo.
             using var transaction = await _context.Database.BeginTransactionAsync();
 
             try
@@ -175,8 +189,7 @@ namespace Vista.Services
 
                 if (bomberoExistente == null)
                 {
-                    Console.WriteLine($"ERROR: No se encontró el bombero con ID {bombero.PersonaId}.");
-                    return false;
+                    throw new KeyNotFoundException($"No se encontró un bombero con el ID {bombero.PersonaId}.");
                 }
 
                 // Validar que no exista otro bombero con el mismo número de legajo (si se cambió)
@@ -187,9 +200,7 @@ namespace Vista.Services
 
                     if (legajoExistente)
                     {
-                        Console.WriteLine($"ERROR: Ya existe un bombero con el número de legajo {bombero.NumeroLegajo}.");
-                        await transaction.RollbackAsync();
-                        return false;
+                        throw new InvalidOperationException("Número de legajo ya existente para otro bombero.");
                     }
                 }
 
@@ -246,24 +257,25 @@ namespace Vista.Services
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
 
-                Console.WriteLine($"INFO: Bombero con ID {bombero.PersonaId} actualizado correctamente.");
                 return true;
-            }
-            catch (DbUpdateException ex)
-            {
-                await transaction.RollbackAsync();
-                Console.WriteLine($"ERROR: Error de base de datos al editar el bombero con ID {bombero.PersonaId}. {ex.Message}");
-                if (ex.InnerException != null)
-                {
-                    Console.WriteLine($"ERROR: Detalle interno: {ex.InnerException.Message}");
-                }
-                return false;
             }
             catch (Exception ex)
             {
+                // --- Manejo de Error ---
+                // Si CUALQUIER operación falla (el primer SaveChanges,
+                // la lógica del service, o el segundo SaveChanges dentro del service),
+                // revertimos TODA la operación.
                 await transaction.RollbackAsync();
-                Console.WriteLine($"ERROR: Error inesperado al editar el bombero con ID {bombero.PersonaId}. {ex.Message}");
-                return false;
+
+                // Lanza una excepción genérica o la 'ex' original
+                // para que la capa superior sepa que algo falló.
+                if (ex is DbUpdateException)
+                {
+                    throw new Exception("Error al guardar en la base de datos. Verifique datos duplicados.", ex);
+                }
+
+                // Re-lanza la excepción (ej. la ValidationException del service)
+                throw;
             }
         }
 
