@@ -29,7 +29,9 @@ namespace Vista.Services
 
         public async Task<List<Brigada>> ObtenerTodasLasBrigadasAsync()
         {
-            return await _context.Brigadas.ToListAsync();
+            return await _context.Brigadas
+                .Include(b => b.Encargado)
+                .ToListAsync();
         }
 
         public async Task<Brigada?> ObtenerBrigadaPorIdAsync(int id)
@@ -71,6 +73,7 @@ namespace Vista.Services
         {
             var brigada = await _context.Brigadas
                 .Include(b => b.Bomberos) // Aquí Bomberos es de tipo List<Bombero_Brigada>
+                .ThenInclude(bd => bd.Bombero) // Incluye los detalles del Bombero
                 .FirstOrDefaultAsync(b => b.BrigadaId == brigadaId);
 
             return brigada?.Bomberos
