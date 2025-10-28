@@ -19,20 +19,22 @@ namespace Vista.Data.Models.Imagenes
         /// <summary>
         /// Nombre de la imagen. Campo obligatorio con una longitud máxima de 255 caracteres.
         /// </summary>
-        [Required, StringLength(255)]
+        [Required(ErrorMessage = "El nombre de la imagen es obligatorio.")]
+        [StringLength(255, ErrorMessage = "El nombre de la imagen no puede superar los 255 caracteres.")]
         public string NombreImagen { get; set; } = null!;
 
         /// <summary>
         /// Datos de la imagen en formato binario.
         /// </summary>
-        [Required]
+        [Required(ErrorMessage = "Los datos binarios de la imagen son obligatorios.")]
         public byte[] DatosImagen { get; set; } = null!;
 
         /// <summary>
         /// Tipo o formato de la imagen (por ejemplo, JPEG, PNG). 
         /// Campo obligatorio con una longitud máxima de 255 caracteres.
         /// </summary>
-        [Required, StringLength(255)]
+        [Required(ErrorMessage = "El tipo de imagen es obligatorio.")]
+        [StringLength(255, ErrorMessage = "El tipo de imagen no puede superar los 255 caracteres.")]
         public string TipoImagen { get; set; } = null!;
 
         /// <summary>

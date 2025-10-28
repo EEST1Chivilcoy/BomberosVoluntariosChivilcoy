@@ -69,64 +69,90 @@ namespace Vista.Services
 
         public async Task CrearBomberoAsync(Bombero bombero, Imagen? imagen = null)
         {
-            // --- Validaciones Previas ---
+            // --- 1. Validaciones ---
 
+            // --- Paso A: Validaciones "Baratas" (en memoria) ---
             if (bombero == null)
             {
                 throw new ArgumentNullException(nameof(bombero), "El bombero no puede ser nulo.");
             }
 
-            if (await _context.Bomberos.AnyAsync(b => b.PersonaId == bombero.PersonaId))
-            {
-                throw new InvalidOperationException("Ya existe un bombero con este ID.");
-            }
-
-            if(await _context.Bomberos.AnyAsync(b => b.Documento == bombero.Documento))
-            {
-                throw new Exception("Número de documento ya existente.");
-            }
-
-            if (await _context.Bomberos.AnyAsync(b => b.NumeroLegajo == bombero.NumeroLegajo))
-            {
-                throw new Exception("Número de legajo ya existente.");
-            }
-
-            // --- Validación del Modelo (DataAnnotations) ---
-            // Esto lanzará una 'ValidationException' si falla,
-            // usando el ErrorMessage que se definio en el modelo (ej. [Required]).
-
             var validationContext = new ValidationContext(bombero, serviceProvider: null, items: null);
             var validationResults = new List<ValidationResult>();
-
-            // 'true' si es válido, 'false' si falla.
             bool esValido = Validator.TryValidateObject(bombero, validationContext, validationResults, validateAllProperties: true);
 
             if (!esValido)
             {
-                // Si no es válido, agrupamos todos los mensajes de error.
-                string errores = string.Join(Environment.NewLine,
-                    validationResults.Select(r => r.ErrorMessage));
-
-                // Lanzamos una excepción con TODOS los fallos.
+                string errores = string.Join(Environment.NewLine, validationResults.Select(r => r.ErrorMessage));
                 throw new ValidationException($"El modelo Bombero no es válido: {Environment.NewLine}{errores}");
             }
 
-            _context.Bomberos.Add(bombero);
+            // --- Paso B: Validaciones "Caras" (contra la BD) ---
+            // (Se hacen antes de iniciar la transacción para no abrirla innecesariamente)
 
-            await _context.SaveChangesAsync(); // Guardar el bombero primero para obtener su PersonaId
-
-            // Si hay una imagen, asociarla al bombero
-            if (imagen != null)
+            if (await _context.Bomberos.AnyAsync(b => b.Documento == bombero.Documento))
             {
-                if (imagen is Imagen_Personal imagenPersonal)
+                throw new InvalidOperationException("Número de documento ya existente.");
+            }
+            if (await _context.Bomberos.AnyAsync(b => b.NumeroLegajo == bombero.NumeroLegajo))
+            {
+                throw new InvalidOperationException("Número de legajo ya existente.");
+            }
+
+            // --- 2. Inicio de la Transacción ---
+            // Esta será la transacción "principal" que controlará todo.
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+
+            try
+            {
+                // --- Paso A: Guardar el Bombero ---
+                _context.Bomberos.Add(bombero);
+
+                // Guardamos para que la BD genere el 'bombero.PersonaId'
+                await _context.SaveChangesAsync();
+
+                // --- Paso B: Guardar la Imagen (usando el Service) ---
+                if (imagen != null)
                 {
-                    imagenPersonal.PersonalId = bombero.PersonaId;
-                    await _imagenService.GuardarImagenAsync(imagenPersonal);
+                    if (imagen is Imagen_Personal imagenPersonal)
+                    {
+                        // Asignamos el ID del bombero recién creado
+                        imagenPersonal.PersonalId = bombero.PersonaId;
+
+                        // Llamamos al servicio.
+                        // Si GuardarImagenAsync falla, lanzará una excepción
+                        // que será capturada por nuestro bloque 'catch' más abajo.
+                        await _imagenService.GuardarImagenAsync(imagenPersonal);
+                    }
+                    else
+                    {
+                        // Esta excepción también será capturada y provocará un Rollback.
+                        throw new InvalidOperationException("La imagen proporcionada no es del tipo correcto para un bombero.");
+                    }
                 }
-                else
+
+                // --- Paso C: Confirmar la Transacción ---
+                // Si llegamos aquí, tanto el SaveChanges del Bombero como
+                // el SaveChanges (dentro del service) de la Imagen fueron exitosos.
+                await transaction.CommitAsync();
+            }
+            catch (Exception ex)
+            {
+                // --- Manejo de Error ---
+                // Si CUALQUIER operación falla (el primer SaveChanges,
+                // la lógica del service, o el segundo SaveChanges dentro del service),
+                // revertimos TODA la operación.
+                await transaction.RollbackAsync();
+
+                // Lanza una excepción genérica o la 'ex' original
+                // para que la capa superior sepa que algo falló.
+                if (ex is DbUpdateException)
                 {
-                    throw new InvalidOperationException("La imagen proporcionada no es del tipo correcto para un bombero.");
+                    throw new Exception("Error al guardar en la base de datos. Verifique datos duplicados.", ex);
                 }
+
+                // Re-lanza la excepción (ej. la ValidationException del service)
+                throw;
             }
         }
 
@@ -244,7 +270,7 @@ namespace Vista.Services
         public async Task<bool> CambiarEstado(int id, EstadoBombero estado)
         {
             Bombero? BomberoE = await _context.Bomberos.SingleOrDefaultAsync(b => b.PersonaId == id);
-            
+
             if (BomberoE == null)
             {
                 return false;

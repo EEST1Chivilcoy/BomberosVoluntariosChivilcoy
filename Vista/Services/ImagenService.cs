@@ -1,6 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AntDesign;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using Vista.Data;
 using Vista.Data.Models.Imagenes;
+using Vista.Data.Models.Personas.Personal;
 using Vista.DTOs;
 
 namespace Vista.Services
@@ -35,48 +38,57 @@ namespace Vista.Services
             };
         }
 
+        // Dentro de ImagenService:
+        // NOTA: Se ha quitado la lógica de BeginTransaction y Commit/Rollback.
         public async Task<bool> GuardarImagenAsync(Imagen imagen)
         {
-            try
+            // --- 1. Validación del Modelo (DataAnnotations) ---
+            var validationContext = new ValidationContext(imagen, serviceProvider: null, items: null);
+            var validationResults = new List<ValidationResult>();
+            bool esValido = Validator.TryValidateObject(imagen, validationContext, validationResults, validateAllProperties: true);
+
+            if (!esValido)
             {
-                // Manejar las relaciones según el tipo de imagen
-                switch (imagen)
-                {
-                    case Imagen_VehiculoSalida imagen_VehiculoSalida:
-                        if (imagen_VehiculoSalida.VehiculoId != 0)
-                        {
-                            var vehiculo = await _context.VehiculoSalidas.FindAsync(imagen_VehiculoSalida.VehiculoId);
-
-                            if (vehiculo != null)
-                            {
-                                imagen_VehiculoSalida.Vehiculo = vehiculo;
-                            }
-                        }
-                        break;
-                    case Imagen_Personal imagen_Personal:
-                        if (imagen_Personal.PersonalId != 0)
-                        {
-                            var personal = await _context.Bomberos.FindAsync(imagen_Personal.PersonalId);
-
-                            if (personal != null)
-                            {
-                                imagen_Personal.Personal = personal;
-                            }
-                        }
-                        break;
-                    default:
-                        throw new InvalidOperationException("Tipo de imagen no soportado para guardar.");
-                }
-
-                _context.Imagen.Add(imagen);
-                await _context.SaveChangesAsync();
-                return true;
+                string errores = string.Join(Environment.NewLine, validationResults.Select(r => r.ErrorMessage));
+                // Lanza la excepción. Será capturada por el 'catch' del método que lo llamó.
+                throw new ValidationException($"El modelo Imagen no es válido: {Environment.NewLine}{errores}");
             }
-            catch (Exception ex)
+
+            // --- 2. Manejar las relaciones ---
+            switch (imagen)
             {
-                Console.WriteLine(ex.Message);
-                throw new InvalidOperationException("Error inesperado al guardar una Imagen.");
+                case Imagen_VehiculoSalida imagen_VehiculoSalida:
+                    if (imagen_VehiculoSalida.VehiculoId == 0)
+                        throw new ArgumentException("El ID del vehículo no puede ser cero.");
+
+                    var vehiculo = await _context.VehiculoSalidas.FindAsync(imagen_VehiculoSalida.VehiculoId);
+                    if (vehiculo == null)
+                        throw new InvalidOperationException($"No se encontró el vehículo con ID {imagen_VehiculoSalida.VehiculoId}.");
+
+                    imagen_VehiculoSalida.Vehiculo = vehiculo;
+                    break;
+
+                case Imagen_Personal imagen_Personal:
+                    if (imagen_Personal.PersonalId == 0)
+                        throw new ArgumentException("El ID del personal no puede ser cero.");
+
+                    var personal = await _context.Bomberos.FindAsync(imagen_Personal.PersonalId);
+                    if (personal == null)
+                        throw new InvalidOperationException($"No se encontró el personal con ID {imagen_Personal.PersonalId}.");
+
+                    imagen_Personal.Personal = personal;
+                    break;
+
+                default:
+                    throw new InvalidOperationException($"Tipo de imagen '{imagen.GetType().Name}' no soportado para guardar.");
             }
+
+
+            // --- 3. Añadir y Guardar ---
+            _context.Imagen.Add(imagen);
+
+            await _context.SaveChangesAsync();
+            return true;
         }
 
         public async Task EditarImagenAsync(Imagen imagen)
