@@ -123,9 +123,6 @@ namespace Vista.Services
 
         public async Task<bool> CheckDisponibilidadAsync()
         {
-            if (_env.IsProduction())
-                return false;
-
             var userPrincipal = _httpContextAccessor.HttpContext?.User;
 
             if (userPrincipal == null || !userPrincipal.Identity?.IsAuthenticated == true)
