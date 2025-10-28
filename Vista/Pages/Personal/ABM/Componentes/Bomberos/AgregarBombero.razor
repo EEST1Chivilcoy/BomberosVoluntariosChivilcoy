@@ -208,23 +208,23 @@
 									<Input @bind-Value="@personalView.Apellido" Disabled="@EntraIDisDisponbile" />
 								</FormItem>
 							</AntDesign.Col>
-							@if (EntraIDisDisponbile)
-							{
-								<AntDesign.Col Span="8">
-									<FormItem Label="UPN" Required>
-										<AntDesign.Input @bind-Value="@personalView.UPN">
-											<AddOnAfter>
-												<label>@@bomberoschivilcoy.org.ar</label>
-												<AntDesign.Button Type="ButtonType.Primary"
-																  Size="ButtonSize.Small"
-																  OnClick="@(() => BusquedaPorUPN(personalView.UPN))">
-													<Icon Type="search" />
-												</AntDesign.Button>
-											</AddOnAfter>
-										</AntDesign.Input>
-									</FormItem>
-								</AntDesign.Col>
-							}
+						</AntDesign.Row>
+
+						<AntDesign.Row Gutter="16">
+							<AntDesign.Col Span="24">
+								<FormItem Label="UPN" Required>
+									<AntDesign.Input @bind-Value="@personalView.UPN">
+										<AddOnAfter>
+											<label>@@bomberoschivilcoy.org.ar</label>
+											<AntDesign.Button Type="ButtonType.Primary"
+															  Size="ButtonSize.Small"
+															  OnClick="@(() => BusquedaPorUPN(personalView.UPN))">
+												<Icon Type="search" />
+											</AntDesign.Button>
+										</AddOnAfter>
+									</AntDesign.Input>
+								</FormItem>
+							</AntDesign.Col>
 						</AntDesign.Row>
 
 						<AntDesign.Row Gutter="16">
@@ -443,14 +443,15 @@
 		{
 			if (!EntraIDisDisponbile)
 			{
-				message.Warning("El Servicio de entra id no esta disponible.");
-				personalView.EntraID = Guid.NewGuid();
+				message.Error("El Servicio de entra id no esta disponible.");
+				return;
 			}
 
 			// Preparar el objeto Bombero
 			Bombero bombero = new Bombero()
 			{
 				EntraId = personalView.EntraID,
+				UPN = personalView.UPN + "@bomberoschivilcoy.org.ar",
 				FechaNacimiento = personalView.FechaNacimiento,
 				Sexo = personalView.Sexo,
 				Nombre = personalView.Nombre,
@@ -580,6 +581,12 @@
 		try
 		{
 			EntraIDisDisponbile = await EntraIDService.CheckDisponibilidadAsync();
+
+			if (!EntraIDisDisponbile)
+			{
+				await message.ErrorAsync("El Servicio de Entra ID no está disponible. Por favor, intente más tarde.");
+				navigationManager.NavigateTo($"/fire-force/personal/bomberos", true);
+			}
 		}
 		catch (Exception ex)
 		{
