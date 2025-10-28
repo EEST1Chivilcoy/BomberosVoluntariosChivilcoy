@@ -103,7 +103,8 @@
             OnFinish="OnFinish"
             OnFinishFailed="OnFinishFailed"
             LabelColSpan="8"
-            WrapperColSpan="16">
+            WrapperColSpan="16"
+            Loading="isLoading">
 
                 <div class="form-grid">
                     <FormItem Label="Producto">
@@ -140,6 +141,7 @@
 @code {
     [Parameter] public EventCallback OnFinishCallback { get; set; }
     [Parameter] public List<Material>? MaterialesExistentes { get; set; }
+    bool isLoading = false;
 
     public class MaterialVM
     {
@@ -159,6 +161,7 @@
     {
         try
         {
+            isLoading = true;
             if (MaterialesExistentes.Any(m => m.Codigo == MaterialViewModel.Codigo)) 
             {
                 await message.ErrorAsync("Ya existe un producto con ese Codigo");
@@ -173,13 +176,17 @@
                 Stock = MaterialViewModel.Stock
             };
             await DepositoService.AgregarMaterial(material);
-            await message.SuccessAsync("Material creado correctamente");
+            message.Success("Material creado correctamente");
             MaterialViewModel = new();
             await OnFinishCallback.InvokeAsync();
         }
         catch (Exception e)
         {
             await message.ErrorAsync(e.Message, 5);
+        }
+        finally
+        {
+            isLoading = false;
         }
     }
 

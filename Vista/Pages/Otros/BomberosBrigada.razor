@@ -197,10 +197,12 @@ Responsive>
     {
         await CargarBomberos();
     }
+
     protected override async Task OnParametersSetAsync() 
     {
         await CargarBrigada();
     }
+
     private async Task CargarBomberos()
     {
         BomberosTodos = await BomberoService.ObtenerTodosLosBomberosAsync();
