@@ -20,6 +20,11 @@ namespace Vista.Data.Models.Personas.Personal
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public Guid EntraId { get; set; }
 
+        [Required(ErrorMessage = "El UPN es obligatorio.")]
+        [MaxLength(50, ErrorMessage = "El UPN no puede superar los 50 caracteres.")]
+        [RegularExpression(@"^[^@\s]+@bomberoschivilcoy\.org\.ar$", ErrorMessage = "El UPN debe tener el dominio @bomberoschivilcoy.org.ar y contenido antes del @.")]
+        public string UPN { get; set; } = string.Empty;
+
         /// <summary>
         /// Grupo sanguíneo de la persona.
         /// </summary>
