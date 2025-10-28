@@ -23,26 +23,29 @@ namespace Vista.Data.Models.Personas
         /// <summary>
         /// Sexo de la persona.
         /// </summary>
+        [Required(ErrorMessage = "El sexo de la persona es obligatorio.")]
         public TipoSexo Sexo { get; set; }
 
         /// <summary>
         /// Nombre de la persona. Campo obligatorio con una longitud máxima de 255 caracteres.
         /// </summary>
-        [Required, StringLength(255)]
+        [Required(ErrorMessage = "El nombre de la persona es obligatorio.")]
+        [StringLength(255, ErrorMessage = "El nombre no puede superar los 255 caracteres.")]
         public string Nombre { get; set; } = null!;
 
         /// <summary>
         /// Apellido de la persona. Campo obligatorio con una longitud máxima de 255 caracteres.
         /// </summary>
-        [Required, StringLength(255)]
+        [Required(ErrorMessage = "El apellido de la persona es obligatorio.")]
+        [StringLength(255, ErrorMessage = "El apellido no puede superar los 255 caracteres.")]
         public string Apellido { get; set; } = null!;
 
         /// <summary>
         /// Número de documento de identidad de la persona. Campo obligatorio.
         /// </summary>
-        [Required]
+        [Required(ErrorMessage = "El número de documento es obligatorio.")]
+        [Range(1000000, 99999999, ErrorMessage = "El número de documento debe estar entre 1.000.000 y 99.999.999 para documentos argentinos.")]
         public int Documento { get; set; }
-
 
         /// <summary>
         /// Residencia habitual de la persona. Longitud máxima de 255 caracteres.

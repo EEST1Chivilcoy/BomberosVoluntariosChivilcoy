@@ -15,7 +15,7 @@ namespace Vista.Services
 {
     public interface IBomberoService
     {
-        Task CrearBombero(Bombero bombero, Imagen? imagen = null);
+        Task CrearBomberoAsync(Bombero bombero, Imagen? imagen = null);
         Task<bool> BorrarBombero(Bombero bombero);
         Task<bool> EditarBombero(Bombero bombero);
         Task<Sancion> SancionarBombero(Sancion sancion);
@@ -67,19 +67,48 @@ namespace Vista.Services
             return bombero;
         }
 
-        public async Task CrearBombero(Bombero bombero, Imagen? imagen = null)
+        public async Task CrearBomberoAsync(Bombero bombero, Imagen? imagen = null)
         {
-            // Asumiendo que Id es la clave primaria
+            // --- Validaciones Previas ---
+
+            if (bombero == null)
+            {
+                throw new ArgumentNullException(nameof(bombero), "El bombero no puede ser nulo.");
+            }
+
             if (await _context.Bomberos.AnyAsync(b => b.PersonaId == bombero.PersonaId))
             {
                 throw new InvalidOperationException("Ya existe un bombero con este ID.");
             }
 
-            bool legajoExistente = await _context.Bomberos.AnyAsync(b => b.NumeroLegajo == bombero.NumeroLegajo);
+            if(await _context.Bomberos.AnyAsync(b => b.Documento == bombero.Documento))
+            {
+                throw new Exception("Número de documento ya existente.");
+            }
 
-            if (legajoExistente)
+            if (await _context.Bomberos.AnyAsync(b => b.NumeroLegajo == bombero.NumeroLegajo))
             {
                 throw new Exception("Número de legajo ya existente.");
+            }
+
+            // --- Validación del Modelo (DataAnnotations) ---
+            // Esto lanzará una 'ValidationException' si falla,
+            // usando el ErrorMessage que se definio en el modelo (ej. [Required]).
+
+            var validationContext = new ValidationContext(bombero, serviceProvider: null, items: null);
+            var validationResults = new List<ValidationResult>();
+
+            // 'true' si es válido, 'false' si falla.
+            bool esValido = Validator.TryValidateObject(bombero, validationContext, validationResults, validateAllProperties: true);
+
+            if (!esValido)
+            {
+                // Si no es válido, agrupamos todos los mensajes de error.
+                string errores = string.Join(Environment.NewLine,
+                    validationResults.Select(r => r.ErrorMessage));
+
+                // Lanzamos una excepción con TODOS los fallos.
+                throw new ValidationException($"El modelo Bombero no es válido: {Environment.NewLine}{errores}");
             }
 
             _context.Bomberos.Add(bombero);

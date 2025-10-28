@@ -1,7 +1,10 @@
 ﻿using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Graph;
+using Microsoft.Identity.Client;
 using Microsoft.Identity.Web;
+using System.Net.Http.Headers;
+using System.Security.Claims;
 using Vista.Data.ViewModels.Personal;
 using Vista.DTOs;
 
@@ -21,13 +24,15 @@ namespace Vista.Services
         private readonly MicrosoftIdentityConsentAndConditionalAccessHandler _consentHandler;
         private readonly IWebHostEnvironment _env;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ITokenAcquisition _tokenAcquisition;
 
-        public EntraIDService(GraphServiceClient graphClient, MicrosoftIdentityConsentAndConditionalAccessHandler consentHandler, IWebHostEnvironment env, IHttpContextAccessor httpContextAccessor)
+        public EntraIDService(GraphServiceClient graphClient, MicrosoftIdentityConsentAndConditionalAccessHandler consentHandler, IWebHostEnvironment env, IHttpContextAccessor httpContextAccessor, ITokenAcquisition tokenAcquisition)
         {
             _graphClient = graphClient;
             _consentHandler = consentHandler;
             _env = env;
             _httpContextAccessor = httpContextAccessor;
+            _tokenAcquisition = tokenAcquisition;
         }
 
         public async Task<(BomberoViweModel? bombero, ImagenResultado? foto)> BuscarPorUPNAsync(string upn, CancellationToken token)
@@ -118,38 +123,58 @@ namespace Vista.Services
 
         public async Task<bool> CheckDisponibilidadAsync()
         {
-            // Si está en producción, siempre false
             if (_env.IsProduction())
                 return false;
 
-            var user = GetUserAsync();
+            var userPrincipal = _httpContextAccessor.HttpContext?.User;
+
+            if (userPrincipal == null || !userPrincipal.Identity?.IsAuthenticated == true)
+                throw new InvalidOperationException("🔒 No hay usuario autenticado en el contexto actual.");
 
             try
             {
-                // Ejemplo: consultar si el servicio de usuarios responde
-                var users = await _graphClient.Users.Request().Top(1).GetAsync();
+                var graphUser = await GetUserAsync();
 
-                // Si la respuesta trae datos, entonces el servicio está OK
+                if (graphUser == null)
+                    throw new InvalidOperationException("⚠️ No se pudo obtener el usuario actual desde Graph.");
+
+                var users = await _graphClient.Users.Request().Top(1).GetAsync();
                 return users?.Count > 0;
             }
-            catch (ServiceException)
+            catch (ServiceException ex)
             {
-                // Si hubo error en la llamada (Graph no disponible, permisos, etc.)
-                return false;
+                throw new InvalidOperationException("🚫 Error al verificar disponibilidad de Microsoft Graph.", ex);
             }
         }
 
         public async Task<User> GetUserAsync()
         {
+            var userPrincipal = _httpContextAccessor.HttpContext?.User;
+
+            if (userPrincipal == null || !userPrincipal.Identity?.IsAuthenticated == true)
+                throw new InvalidOperationException("🔒 No hay usuario autenticado en el contexto actual.");
+
             try
             {
-                Console.WriteLine("🔍 Obteniendo usuario completo desde Graph...");
-                return await _graphClient.Me.Request().GetAsync();
+                var token = await _tokenAcquisition.GetAccessTokenForUserAsync(new[] { "User.Read" });
+
+                var authProvider = new DelegateAuthenticationProvider(request =>
+                {
+                    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                    return Task.CompletedTask;
+                });
+
+                var graphClient = new GraphServiceClient(authProvider);
+
+                return await graphClient.Me.Request().GetAsync();
             }
-            catch (Exception ex)
+            catch (MsalUiRequiredException ex)
             {
-                Console.WriteLine($"Error: {ex.Message}");
-                return null;
+                throw new InvalidOperationException("🧠 Se requiere interacción del usuario para obtener el token.", ex);
+            }
+            catch (ServiceException ex)
+            {
+                throw new InvalidOperationException("📡 Error al comunicarse con Microsoft Graph.", ex);
             }
         }
     }

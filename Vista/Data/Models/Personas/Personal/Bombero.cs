@@ -27,13 +27,14 @@ namespace Vista.Data.Models.Personas.Personal
         /// <summary>
         /// Número de legajo único del bombero.
         /// </summary>
-        [Required]
+        [Required(ErrorMessage = "El número de legajo del bombero es obligatorio.")]
+        [Range(1, int.MaxValue, ErrorMessage = "El número de legajo debe ser mayor que cero.")]
         public int NumeroLegajo { get; set; }
 
         /// <summary>
         /// Estado actual del bombero (activo, baja, etc.).
         /// </summary>
-        public EstadoBombero Estado { get; set; }
+        public EstadoBombero Estado { get; set; } = EstadoBombero.CuerpoActivo;
 
         /// <summary>
         /// Observaciones adicionales sobre la persona.
@@ -66,6 +67,7 @@ namespace Vista.Data.Models.Personas.Personal
         /// <summary>
         /// Grado jerárquico del bombero dentro del escalafón.
         /// </summary>
+        [Required(ErrorMessage = "El grado jerárquico del bombero es obligatorio.")]
         public EscalafonJerarquico Grado { get; set; }
 
         /// <summary>

@@ -167,7 +167,8 @@
 		<Form Model="@personalView"
 			  Layout="FormLayout.Vertical"
 			  OnFinish="OnFinish"
-			  OnFinishFailed="OnFinishFailed">
+			  OnFinishFailed="OnFinishFailed"
+			  Loading="isLoading">
 
 			@*Información Personal (Común para todos)*@
 			<div class="card">
@@ -216,8 +217,7 @@
 												<label>@@bomberoschivilcoy.org.ar</label>
 												<AntDesign.Button Type="ButtonType.Primary"
 																  Size="ButtonSize.Small"
-																  OnClick="@(() => BusquedaPorUPN(personalView.UPN))"
-																  Loading="@isSearching">
+																  OnClick="@(() => BusquedaPorUPN(personalView.UPN))">
 													<Icon Type="search" />
 												</AntDesign.Button>
 											</AddOnAfter>
@@ -415,8 +415,8 @@
 	private BomberoViweModel? personalView = new();
 	private ImageViewModel imageViewModel = new();
 	private CancellationTokenSource? _debounceTokenSource;
-	private bool isSearching = false;
 	private bool EntraIDisDisponbile = false;
+	private bool isLoading = true;
 
 	private string? ImageUrlPreview => imageViewModel.Base64 != null
 		? $"data:{imageViewModel.TipoImagen};base64,{imageViewModel.Base64}"
@@ -437,41 +437,13 @@
 
 	public async Task CrearBombero()
 	{
+		isLoading = true;
+
 		try
 		{
-			if (personalView == null)
-			{
-				await message.ErrorAsync("Ocurrió un error al crear el bombero.");
-				return;
-			}
-
-			if (personalView.Documento == 0)
-			{
-				await message.ErrorAsync("El número de documento no puede ser cero.");
-				return;
-			}
-
-			if (string.IsNullOrWhiteSpace(personalView.Nombre) || string.IsNullOrWhiteSpace(personalView.Apellido))
-			{
-				await message.ErrorAsync("Falta asignar nombre y apellido al bombero. Por favor, completá ambos campos antes de continuar.");
-				return;
-			}
-
-			if (personalView is not BomberoViweModel bomberoView)
-			{
-				await message.ErrorAsync("Ocurrió un error al crear el bombero.");
-				return;
-			}
-
-			if (personalView.NumeroLegajo == 0)
-			{
-				await message.ErrorAsync("El número de legajo no puede ser cero.");
-				return;
-			}
-
 			if (!EntraIDisDisponbile)
 			{
-				await message.WarningAsync("El Servicio de entra id no esta disponible.");
+				message.Warning("El Servicio de entra id no esta disponible.");
 				personalView.EntraID = Guid.NewGuid();
 			}
 
@@ -500,6 +472,7 @@
 				Profesion = personalView.Profesion,
 				NivelEstudios = personalView.NivelEstudios,
 				FechaAceptacion = personalView.FechaAceptacion,
+
 				Contacto = new Contacto
 				{
 					TelefonoCel = personalView.TelefonoCel,
@@ -523,24 +496,17 @@
 			}
 
 			// Creamos el bombero
-			await BomberoService.CrearBombero(bombero, foto);
-
-			bomberoView = new BomberoViweModel();
-			StateHasChanged();
-			await message.SuccessAsync("Se agregó el bombero.");
+			await BomberoService.CrearBomberoAsync(bombero, foto);
+			message.Success("Se agregó el bombero.");
 			navigationManager.NavigateTo($"/fire-force/personal/bomberos", true);
 		}
 		catch (Exception ex)
 		{
-			if (ex.Message.Contains("legajo", StringComparison.OrdinalIgnoreCase))
-			{
-				await message.WarningAsync(ex.Message);
-			}
-			else
-			{
-				await message.ErrorAsync("Ocurrió un error al crear el bombero.");
-				await message.ErrorAsync($"Error: {ex.Message}");
-			}
+			message.Error($"Error: {ex.Message}");
+		}
+		finally
+		{
+			isLoading = false;
 		}
 	}
 
@@ -558,7 +524,8 @@
 
 		try
 		{
-			isSearching = true;
+			isLoading = true;
+
 			StateHasChanged();
 
 			await Task.Delay(500, token); // debounce
@@ -592,23 +559,24 @@
 				}
 			}
 
-			await message.SuccessAsync($"Usuario encontrado: {bombero.Nombre} {bombero.Apellido}");
+			message.Success($"Usuario encontrado: {bombero.Nombre} {bombero.Apellido}");
 			StateHasChanged();
 		}
-		catch (TaskCanceledException) { }
 		catch (Exception ex)
 		{
-			await message.ErrorAsync($"Error al buscar usuario: {ex.Message}");
+			message.Error($"Error al buscar usuario: {ex.Message}");
 		}
 		finally
 		{
-			isSearching = false;
+			isLoading = false;
 			StateHasChanged();
 		}
 	}
 
 	protected override async Task OnInitializedAsync()
 	{
+		isLoading = true;
+
 		try
 		{
 			EntraIDisDisponbile = await EntraIDService.CheckDisponibilidadAsync();
@@ -616,6 +584,12 @@
 		catch (Exception ex)
 		{
 			ConsentHandler.HandleException(ex);
+			await message.ErrorAsync($"Error: {ex.Message}");
+			navigationManager.NavigateTo($"/fire-force/personal/bomberos", true);
+		}
+		finally
+		{
+			isLoading = false;
 		}
 	}
 
