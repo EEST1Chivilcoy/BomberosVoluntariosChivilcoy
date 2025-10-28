@@ -12,115 +12,115 @@
 
 <style>
     .ant-table {
-        width: 100%;
-        background-color: white;
-        border-radius: 8px;
-        overflow: hidden;
+    width: 100%;
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
     }
 
     .ant-table-title {
-        background-color: #A63333
+    background-color: #A63333
     }
 
     .ant-table-thead .ant-table-cell {
-        background-color: #A63333 !important;
-        color: white !important;
-        font-weight: bold;
+    background-color: #A63333 !important;
+    color: white !important;
+    font-weight: bold;
     }
 
     .ant-table-cell {
-        padding: 16px !important;
+    padding: 16px !important;
     }
 
     .title-template-container {
-        background-color: #A63333;
-        padding: 16px;
-        border-top-left-radius: 8px;
-        border-top-right-radius: 8px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+    background-color: #A63333;
+    padding: 16px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     }
 
     .search-input {
-        width: 250px;
+    width: 250px;
     }
 
-        .search-input input {
-            background-color: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: none;
-        }
+    .search-input input {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: none;
+    }
 
-            .search-input input::placeholder {
-                color: rgba(255, 255, 255, 0.7);
-            }
+    .search-input input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+    }
 
     .add-button {
-        background-color: #4CAF50 !important;
-        border-color: #438E46 !important;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #4CAF50 !important;
+    border-color: #438E46 !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     .boton_p {
-        background-color: #732D2D !important;
-        color: white !important;
-        border: none;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #732D2D !important;
+    color: white !important;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     @@media (max-width: 960px) {
-        .title-template-container {
-            flex-direction: column;
-            align-items: stretch;
-        }
+    .title-template-container {
+    flex-direction: column;
+    align-items: stretch;
+    }
     }
 
     .ant-form-horizontal .ant-form-item-label {
-        flex-grow: 1;
-        background: #A63333;
+    flex-grow: 1;
+    background: #A63333;
     }
 
-        .ant-form-horizontal .ant-form-item-label > label {
-            color: #FFFFFF;
-            padding: 2px 4px;
-        }
+    .ant-form-horizontal .ant-form-item-label > label {
+    color: #FFFFFF;
+    padding: 2px 4px;
+    }
 
     .ant-form-item {
-        box-sizing: border-box;
-        margin: 0;
-        margin-bottom: 0px;
-        padding: 0;
-        color: rgba(0, 0, 0, 0.85);
-        font-size: 14px;
-        font-variant: tabular-nums;
-        line-height: 1.5715;
-        list-style: none;
-        font-feature-settings: 'tnum';
-        margin-bottom: 8px !important;
-        vertical-align: top;
-        font-weight: bold;
+    box-sizing: border-box;
+    margin: 0;
+    margin-bottom: 0px;
+    padding: 0;
+    color: rgba(0, 0, 0, 0.85);
+    font-size: 14px;
+    font-variant: tabular-nums;
+    line-height: 1.5715;
+    list-style: none;
+    font-feature-settings: 'tnum';
+    margin-bottom: 8px !important;
+    vertical-align: top;
+    font-weight: bold;
     }
 
     .ant-modal-content {
-        position: relative;
-        background-color: #fff;
-        background-clip: padding-box;
-        border: 0;
-        border-radius: 2px;
-        box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
-        pointer-events: auto;
-        border: 1px solid red !important;
+    position: relative;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 0;
+    border-radius: 2px;
+    box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+    pointer-events: auto;
+    border: 1px solid red !important;
     }
 </style>
 
 
 <Table TItem="BomberoBrigadaViewModel"
-       DataSource="@BomberosViewModel"
-       @bind-PageIndex="_pageIndex"
-       @bind-PageSize="_pageSize"
-       Title="Bomberos de la Brigada"
-       Responsive>
+DataSource="@BomberosBrigadaViewModel"
+@bind-PageIndex="_pageIndex"
+@bind-PageSize="_pageSize"
+Title="Bomberos de la Brigada"
+Responsive>
     <TitleTemplate>
         <Flex Justify="FlexJustify.FlexEnd">
             <Space>
@@ -141,9 +141,9 @@
             <Space>
                 <SpaceItem>
                     <Popconfirm Title="¿Deseas remover a este bombero de la brigada?"
-                                OnConfirm="() => QuitarBoberoBrigada(context.Id, BrigadaId)"
-                                OkText="Si"
-                                CancelText="No">
+                    OnConfirm="() => QuitarBomberoBrigada(context.Id, BrigadaId)"
+                    OkText="Si"
+                    CancelText="No">
                         <Button Danger>
                             <Icon Type="close" />
                         </Button>
@@ -157,25 +157,27 @@
 
 <Modal @bind-Visible="_modalAñadirBomberosVisible" Title="Añadir Bomberos" OkText="@("Guardar")" CancelText="@("Cancelar")" OnOk="@AddBomberoToBrigada">
     <Select Mode="SelectMode.Multiple"
-            Placeholder="Elige los bomberos a agregar a la brigada"
-            DataSource="@BomberosTodosViewModel"
-            Values="@BomberosSeleccionados"
-            TItem="BomberoViweModel"
-            TItemValue="int"
-            LabelName="@nameof(BomberoViweModel.ApellidoYNombre)"
-            ValueName="@nameof(BomberoViweModel.Id)"
-            EnableSearch="true"
-            ValuesChanged="@(async (values) => await HandleValuesChange(values))" />
+    Placeholder="Elige los bomberos a agregar a la brigada"
+    DataSource="@BomberosCandidatosViewModel"
+    Values="@BomberosSeleccionados"
+    TItem="BomberoViweModel"
+    TItemValue="int"
+    LabelName="@nameof(BomberoViweModel.ApellidoYNombre)"
+    ValueName="@nameof(BomberoViweModel.Id)"
+    EnableSearch="true"
+    ValuesChanged="@(async (values) => await HandleValuesChange(values))" />
     <p>Seleccionados: @String.Join(", ", BomberosSeleccionados)</p>
 </Modal>
 
 @code {
     [Parameter] public int BrigadaId { get; set; } // ID de la Brigada que se está editando
+
     private List<Bombero?> BrigadaBomberos = new(); // Lista de Bomberos de la Brigada
-    public List<BomberoBrigadaViewModel?> BomberosViewModel { get; set; } = new(); // Lista de Bomberos en formato ViewModel para la Brigada
+    public List<BomberoBrigadaViewModel?> BomberosBrigadaViewModel { get; set; } = new(); // Lista de Bomberos de la Brigada en formato ViewModel para la Brigada
     private List<int> BomberosSeleccionados = new List<int>(); // Lista de IDs de Bomberos seleccionados para agregar a la Brigada
     public List<BomberoViweModel?> BomberosTodosViewModel { get; set; } = new(); // Lista de Bomberos en formato ViewModel para todos los Bomberos disponibles
     public List<Bombero> BomberosTodos { get; set; } = new(); // Lista de todos los Bomberos disponibles
+    private List<BomberoViweModel> BomberosCandidatosViewModel = new();
 
     // Variables de Tamaño de la Tabla
     int _pageIndex = 1;
@@ -193,121 +195,87 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await OnInit();
+        await CargarBomberos();
     }
 
-    public async Task OnInit()
+    protected override async Task OnParametersSetAsync() 
     {
-        // Validamos el ID de la Brigada
+        await CargarBrigada();
+    }
+
+    private async Task CargarBomberos()
+    {
+        BomberosTodos = await BomberoService.ObtenerTodosLosBomberosAsync();
+        if (BomberosTodos == null)
+        {
+            await MessageService.ErrorAsync("No se encontraron bomberos disponibles.");
+            return;
+        }
+
+        BomberosTodosViewModel = BomberosTodos.ToBomberoViewModelList();
+        if (BomberosTodosViewModel == null)
+            BomberosTodosViewModel = new List<BomberoViweModel>();
+    }
+
+    private async Task CargarBrigada()
+    {
         if (BrigadaId <= 0)
         {
             await MessageService.ErrorAsync("El ID de la Brigada es inválido.");
             return;
         }
 
-        // Validamos que el servicio de Brigada esté disponible
-        if (BrigadaService == null)
-        {
-            await MessageService.ErrorAsync("El servicio de Brigada no está disponible.");
-            return;
-        }
-
-        // Validamos que la Brigada exista
         var brigada = await BrigadaService.ObtenerBrigadaPorIdAsync(BrigadaId);
-
         if (brigada == null)
         {
             await MessageService.ErrorAsync("La Brigada no existe.");
             return;
         }
 
-        // Validamos que el servicio de Bombero esté disponible
-        if (BomberoService == null)
-        {
-            await MessageService.ErrorAsync("El servicio de Bombero no está disponible.");
-            return;
-        }
-
-        // Si todo está bien, obtenemos todos los bomberos de la base de datos
-        BomberosTodos = await BomberoService.ObtenerTodosLosBomberosAsync();
-
-        // Si no hay bomberos, mostramos un mensaje
-        if (BomberosTodos == null || !BomberosTodos.Any())
-        {
-            await MessageService.ErrorAsync("No hay bomberos disponibles en la base de datos.");
-            return;
-        }
-
-        // Los mapeamos a ViewModel
-        BomberosTodosViewModel = BomberosTodos.ToBomberoViewModelList();
-
-        // Si no hay bomberos disponibles en la lista, mostramos un mensaje de error indicando que fue un error de mapeo
-        if (BomberosTodosViewModel == null || !BomberosTodosViewModel.Any())
-        {
-            await MessageService.ErrorAsync("Error al mapear los bomberos a la lista de ViewModel.");
-            return;
-        }
-
-        // Obtenemos los bomberos de la Brigada específica
         BrigadaBomberos = await BrigadaService.ObtenerBomberosDeBrigadaAsync(BrigadaId);
+        var bomberosActuales = BrigadaBomberos.Where(b => b != null).Select(b => b.NumeroLegajo);
+        BomberosCandidatosViewModel = BomberosTodosViewModel
+        .Where(b => b.NumeroLegajo != brigada.Encargado?.NumeroLegajo && !bomberosActuales.Contains(b.NumeroLegajo))
+        .ToList();
 
-        // Mapeamos los bomberos de la Brigada a ViewModel
-        BomberosViewModel = MapearBrigada(BrigadaBomberos);
-
-        // Si no se pudieron mapear los bomberos a ViewModel, mostramos un mensaje de error
-        if (BomberosViewModel == null || !BomberosViewModel.Any() || BrigadaBomberos != null || BrigadaBomberos.Any())
+        BomberosBrigadaViewModel = BrigadaBomberos.Where(b => b != null).Select(b => new BomberoBrigadaViewModel
+        {
+            Id = b.PersonaId,
+            NroLeg = b.NumeroLegajo,
+            ApellidoYNombre = $"{b.Apellido}, {b.Nombre}"
+        }).ToList();
+        if (!BomberosBrigadaViewModel.Any() && BrigadaBomberos.Any())
         {
             await MessageService.ErrorAsync("Error al mapear los bomberos de la Brigada a ViewModel.");
             return;
         }
 
-        // Limpiamos la lista de bomberos seleccionados
         BomberosSeleccionados = new();
-
-        // Si todo salió bien, actualizamos el estado del componente
         StateHasChanged();
     }
 
-    public List<BomberoBrigadaViewModel?> MapearBrigada(List<Bombero?> bomberos)
+    private async Task AddBomberoToBrigada()
     {
-        if (bomberos.Any())
+        if (!BomberosSeleccionados.Any())
         {
-            return BrigadaBomberos.Select(b => new BomberoBrigadaViewModel
-                {
-                    Id = b.PersonaId,
-                    NroLeg = b.NumeroLegajo,
-                    ApellidoYNombre = $"{b.Apellido}, {b.Nombre}"
-                }).ToList();
+            _modalAñadirBomberosVisible = false;
+            return;
         }
-        return null;
+
+        foreach (int BomberoSelId in BomberosSeleccionados.Where(id => id > 0))
+        {
+            await BrigadaService.AgregarBomberoABrigadaAsync(BrigadaId, BomberoSelId);
+        }
+
+        await MessageService.SuccessAsync($"Se añadieron {BomberosSeleccionados.Count} Bomberos a la Brigada");
+        _modalAñadirBomberosVisible = false;
+        await CargarBrigada();
     }
 
-    public async Task QuitarBoberoBrigada(int BomberoId, int BrigadaId)
+    private async Task QuitarBomberoBrigada(int BomberoId, int BrigadaId)
     {
         await BrigadaService.QuitarBomberoDeBrigadaAsync(BrigadaId, BomberoId);
-        await OnInit();
-    }
-
-    public async Task AddBomberoToBrigada()
-    {
-        if (BomberosSeleccionados.Any())
-        {
-            foreach (int BomberoSelId in BomberosSeleccionados)
-            {
-                if (BomberoSelId > 0)
-                {
-                    await BrigadaService.AgregarBomberoABrigadaAsync(BrigadaId, BomberoSelId);
-                }
-            }
-
-            await MessageService.SuccessAsync($"Se añadieron {BomberosSeleccionados.Count} Bomberos a la Brigada");
-            _modalAñadirBomberosVisible = false;
-            await OnInit();
-        }
-        else
-        {
-            _modalAñadirBomberosVisible = false;
-        }
+        await CargarBrigada();
     }
 
     private async Task HandleValuesChange(IEnumerable<int> values)
