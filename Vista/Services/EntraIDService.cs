@@ -1,10 +1,7 @@
-﻿using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Graph;
+﻿using Microsoft.Graph;
 using Microsoft.Identity.Client;
 using Microsoft.Identity.Web;
 using System.Net.Http.Headers;
-using System.Security.Claims;
 using Vista.Data.ViewModels.Personal;
 using Vista.DTOs;
 
@@ -14,25 +11,29 @@ namespace Vista.Services
     {
         Task<(BomberoViweModel? bombero, ImagenResultado? foto)> BuscarPorUPNAsync(string upn, CancellationToken token);
         Task<bool> CheckDisponibilidadAsync();
-        Task<User> GetUserAsync();
-
+        Task<User?> GetUserAsync();
     }
 
     public class EntraIDService : IEntraIDService
     {
         private readonly GraphServiceClient _graphClient;
         private readonly MicrosoftIdentityConsentAndConditionalAccessHandler _consentHandler;
-        private readonly IWebHostEnvironment _env;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ITokenAcquisition _tokenAcquisition;
+        private readonly ILogger<EntraIDService> _logger;
 
-        public EntraIDService(GraphServiceClient graphClient, MicrosoftIdentityConsentAndConditionalAccessHandler consentHandler, IWebHostEnvironment env, IHttpContextAccessor httpContextAccessor, ITokenAcquisition tokenAcquisition)
+        public EntraIDService(
+            GraphServiceClient graphClient,
+            MicrosoftIdentityConsentAndConditionalAccessHandler consentHandler,
+            IHttpContextAccessor httpContextAccessor,
+            ITokenAcquisition tokenAcquisition,
+            ILogger<EntraIDService> logger)
         {
-            _graphClient = graphClient;
-            _consentHandler = consentHandler;
-            _env = env;
-            _httpContextAccessor = httpContextAccessor;
-            _tokenAcquisition = tokenAcquisition;
+            _graphClient = graphClient ?? throw new ArgumentNullException(nameof(graphClient));
+            _consentHandler = consentHandler ?? throw new ArgumentNullException(nameof(consentHandler));
+            _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
+            _tokenAcquisition = tokenAcquisition ?? throw new ArgumentNullException(nameof(tokenAcquisition));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<(BomberoViweModel? bombero, ImagenResultado? foto)> BuscarPorUPNAsync(string upn, CancellationToken token)
@@ -40,12 +41,18 @@ namespace Vista.Services
             if (string.IsNullOrWhiteSpace(upn))
                 throw new ArgumentException("El UPN no puede estar vacío.");
 
-            // Construir UPN completo
+            // Verificar autenticación primero
+            if (!IsUserAuthenticated())
+            {
+                throw new InvalidOperationException("Usuario no autenticado. Por favor, inicie sesión.");
+            }
+
             string fullUpn = upn.Contains("@") ? upn : $"{upn}@bomberoschivilcoy.org.ar";
 
             try
             {
-                // Buscar usuario
+                _logger.LogInformation("Buscando usuario con UPN: {Upn}", fullUpn);
+
                 var user = await _graphClient.Users[fullUpn]
                     .Request()
                     .Select(u => new
@@ -58,9 +65,11 @@ namespace Vista.Services
                     .GetAsync(token);
 
                 if (user == null)
+                {
+                    _logger.LogWarning("No se encontró usuario con UPN: {Upn}", fullUpn);
                     return (null, null);
+                }
 
-                // Intentar obtener foto
                 byte[]? fotoBytes = null;
                 string? contentType = null;
 
@@ -81,23 +90,18 @@ namespace Vista.Services
 
                         using var ms = new MemoryStream();
                         await photoStream.CopyToAsync(ms, token);
-
-                        // Ahora guardamos los bytes crudos, no en Base64
                         fotoBytes = ms.ToArray();
 
                         contentType = photoMetadata.AdditionalData?.ContainsKey("@odata.mediaContentType") == true
                             ? photoMetadata.AdditionalData["@odata.mediaContentType"]?.ToString()
                             : "image/jpeg";
-
-                        var extension = contentType?.Split('/').LastOrDefault() ?? "jpg";
                     }
                 }
                 catch (ServiceException photoEx) when (photoEx.StatusCode == System.Net.HttpStatusCode.NotFound)
                 {
-                    // No tiene foto, continuar
+                    _logger.LogInformation("Usuario {Upn} no tiene foto de perfil", fullUpn);
                 }
 
-                // Mapear al ViewModel
                 var bomberoView = new BomberoViweModel
                 {
                     Nombre = user.GivenName ?? string.Empty,
@@ -112,67 +116,112 @@ namespace Vista.Services
                     Formato = contentType
                 };
 
+                _logger.LogInformation("Usuario encontrado exitosamente: {Nombre} {Apellido}", bomberoView.Nombre, bomberoView.Apellido);
                 return (bomberoView, foto);
             }
             catch (MicrosoftIdentityWebChallengeUserException ex)
             {
+                _logger.LogError(ex, "Se requiere consentimiento del usuario para acceder a Graph");
                 _consentHandler.HandleException(ex);
                 throw;
+            }
+            catch (MsalUiRequiredException ex)
+            {
+                _logger.LogError(ex, "Se requiere interacción del usuario para obtener el token");
+                throw new InvalidOperationException("Se requiere iniciar sesión nuevamente. Por favor, cierre sesión y vuelva a ingresar.", ex);
+            }
+            catch (ServiceException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                _logger.LogError(ex, "Token inválido o expirado");
+                throw new InvalidOperationException("Su sesión ha expirado. Por favor, cierre sesión y vuelva a ingresar.", ex);
+            }
+            catch (ServiceException ex)
+            {
+                _logger.LogError(ex, "Error de servicio de Graph: {Message}", ex.Message);
+                throw new InvalidOperationException($"Error al comunicarse con Microsoft Graph: {ex.Message}", ex);
             }
         }
 
         public async Task<bool> CheckDisponibilidadAsync()
         {
-            var userPrincipal = _httpContextAccessor.HttpContext?.User;
-
-            if (userPrincipal == null || !userPrincipal.Identity?.IsAuthenticated == true)
-                throw new InvalidOperationException("🔒 No hay usuario autenticado en el contexto actual.");
-
             try
             {
-                var graphUser = await GetUserAsync();
-
-                if (graphUser == null)
-                    throw new InvalidOperationException("⚠️ No se pudo obtener el usuario actual desde Graph.");
-
-                var users = await _graphClient.Users.Request().Top(1).GetAsync();
-                return users?.Count > 0;
-            }
-            catch (ServiceException ex)
-            {
-                throw new InvalidOperationException("🚫 Error al verificar disponibilidad de Microsoft Graph.", ex);
-            }
-        }
-
-        public async Task<User> GetUserAsync()
-        {
-            var userPrincipal = _httpContextAccessor.HttpContext?.User;
-
-            if (userPrincipal == null || !userPrincipal.Identity?.IsAuthenticated == true)
-                throw new InvalidOperationException("🔒 No hay usuario autenticado en el contexto actual.");
-
-            try
-            {
-                var token = await _tokenAcquisition.GetAccessTokenForUserAsync(new[] { "User.Read" });
-
-                var authProvider = new DelegateAuthenticationProvider(request =>
+                if (!IsUserAuthenticated())
                 {
-                    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                    return Task.CompletedTask;
-                });
+                    _logger.LogWarning("Intento de verificar disponibilidad sin usuario autenticado");
+                    return false;
+                }
 
-                var graphClient = new GraphServiceClient(authProvider);
+                // Intentar obtener un solo usuario para verificar conectividad
+                var users = await _graphClient.Users
+                    .Request()
+                    .Top(1)
+                    .Select("id")
+                    .GetAsync();
 
-                return await graphClient.Me.Request().GetAsync();
+                bool isAvailable = users?.Count > 0;
+                _logger.LogInformation("Verificación de disponibilidad de Graph: {IsAvailable}", isAvailable);
+
+                return isAvailable;
             }
             catch (MsalUiRequiredException ex)
             {
-                throw new InvalidOperationException("🧠 Se requiere interacción del usuario para obtener el token.", ex);
+                _logger.LogWarning(ex, "Token expirado al verificar disponibilidad");
+                return false;
             }
             catch (ServiceException ex)
             {
-                throw new InvalidOperationException("📡 Error al comunicarse con Microsoft Graph.", ex);
+                _logger.LogError(ex, "Error al verificar disponibilidad de Graph: {StatusCode}", ex.StatusCode);
+                return false;
             }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error inesperado al verificar disponibilidad de Graph");
+                return false;
+            }
+        }
+
+        public async Task<User?> GetUserAsync()
+        {
+            try
+            {
+                if (!IsUserAuthenticated())
+                {
+                    _logger.LogWarning("Intento de obtener usuario sin autenticación");
+                    return null;
+                }
+
+                // Usar el GraphClient ya configurado en lugar de crear uno nuevo
+                var user = await _graphClient.Me
+                    .Request()
+                    .GetAsync();
+
+                _logger.LogInformation("Usuario obtenido exitosamente: {Upn}", user?.UserPrincipalName);
+                return user;
+            }
+            catch (MsalUiRequiredException ex)
+            {
+                _logger.LogError(ex, "Token expirado al obtener usuario");
+                throw new InvalidOperationException("Se requiere iniciar sesión nuevamente.", ex);
+            }
+            catch (ServiceException ex)
+            {
+                _logger.LogError(ex, "Error de Graph al obtener usuario: {StatusCode}", ex.StatusCode);
+                throw new InvalidOperationException($"Error al obtener información del usuario: {ex.Message}", ex);
+            }
+        }
+
+        private bool IsUserAuthenticated()
+        {
+            var user = _httpContextAccessor.HttpContext?.User;
+            bool isAuthenticated = user?.Identity?.IsAuthenticated == true;
+
+            if (!isAuthenticated)
+            {
+                _logger.LogWarning("Usuario no autenticado en HttpContext");
+            }
+
+            return isAuthenticated;
         }
     }
 }

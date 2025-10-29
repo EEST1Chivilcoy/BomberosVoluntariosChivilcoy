@@ -14,11 +14,9 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration["ConnectionString"];
-
 var serverVersion = ServerVersion.AutoDetect(connectionString);
 
 builder.Services.AddDbContextFactory<BomberosDbContext>(
@@ -27,18 +25,59 @@ builder.Services.AddDbContextFactory<BomberosDbContext>(
     .LogTo(Console.WriteLine, LogLevel.Information)
     .EnableSensitiveDataLogging()
     .EnableDetailedErrors()
-    );
+);
 
-var initialScopes = builder.Configuration["DownstreamApi:Scopes"]?.Split(' ') ?? builder.Configuration["MicrosoftGraph:Scopes"]?.Split(' ');
+var initialScopes = builder.Configuration["DownstreamApi:Scopes"]?.Split(' ')
+    ?? builder.Configuration["MicrosoftGraph:Scopes"]?.Split(' ');
 
+// Agregar cache distribuido ANTES de la autenticación
+builder.Services.AddDistributedMemoryCache();
+
+// Configuración de autenticación CON configuraciones para Azure
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-.AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"))
-        .EnableTokenAcquisitionToCallDownstreamApi(initialScopes)
-.AddMicrosoftGraph(builder.Configuration.GetSection("MicrosoftGraph"))
-            .AddInMemoryTokenCaches();
+    .AddMicrosoftIdentityWebApp(options =>
+    {
+        builder.Configuration.Bind("AzureAd", options);
+
+        // CRÍTICO: Configuración para Azure Web Apps
+        options.Events = new OpenIdConnectEvents
+        {
+            OnRemoteFailure = context =>
+            {
+                context.HandleResponse();
+                context.Response.Redirect("/Error?message=" + context.Failure?.Message);
+                return Task.CompletedTask;
+            },
+            OnAuthenticationFailed = context =>
+            {
+                Console.WriteLine($"Authentication failed: {context.Exception?.Message}");
+                return Task.CompletedTask;
+            }
+        };
+    })
+    .EnableTokenAcquisitionToCallDownstreamApi(initialScopes)
+    .AddMicrosoftGraph(builder.Configuration.GetSection("MicrosoftGraph"))
+    .AddInMemoryTokenCaches();
+
+// Configuración de cookies para Azure Web Apps
+builder.Services.Configure<CookiePolicyOptions>(options =>
+{
+    options.CheckConsentNeeded = context => false; // Deshabilitar en Azure
+    options.MinimumSameSitePolicy = SameSiteMode.Unspecified;
+    options.HandleSameSiteCookieCompatibility();
+});
+
+// Configuración adicional de cookies de autenticación
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.SameSite = SameSiteMode.Lax;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 builder.Services.AddControllersWithViews()
-.AddMicrosoftIdentityUI();
+    .AddMicrosoftIdentityUI();
 
 builder.Services.AddAuthorization(options =>
 {
@@ -48,7 +87,15 @@ builder.Services.AddAuthorization(options =>
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor()
-    .AddMicrosoftIdentityConsentHandler();
+    .AddMicrosoftIdentityConsentHandler()
+    .AddCircuitOptions(options =>
+    {
+        options.DetailedErrors = true;
+        // Aumentar timeout para Azure
+        options.DisconnectedCircuitMaxRetained = 100;
+        options.DisconnectedCircuitRetentionPeriod = TimeSpan.FromMinutes(3);
+    });
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAntDesign();
 builder.Services.AddHostedService<InitData>();
@@ -73,7 +120,7 @@ builder.Services.AddScoped<IImagenService, ImagenService>();
 // Servicios HttpClient
 builder.Services.AddHttpClient<INominatimService, NominatimService>();
 
-// Configurar la localizaci�n
+// Configurar la localización
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
 builder.Services.Configure<RequestLocalizationOptions>(options =>
@@ -88,27 +135,27 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
     options.SupportedUICultures = supportedCultures;
 });
 
-//Errores detallados
-builder.Services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+else
+{
+    app.UseDeveloperExceptionPage();
+}
 
-//Localizacion AntDesign
+// Localizacion AntDesign
 LocaleProvider.SetLocale("es-Es");
-
-// Habilitar controllers (Es necesario para que el controlador de imágenes funcione)
-app.MapControllers();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+// IMPORTANTE: El orden de estos middleware es crítico
+app.UseCookiePolicy();
 app.UseRouting();
 
 app.UseAuthentication();
@@ -123,11 +170,12 @@ if (localizationOptions != null)
 }
 else
 {
-    // Manejar el caso en que localizationOptions sea null
     Console.WriteLine("Error: RequestLocalizationOptions no está configurado correctamente.");
 }
 
+app.MapControllers();
 app.MapBlazorHub();
 app.MapRazorPages();
 app.MapFallbackToPage("/_Host");
+
 app.Run();
