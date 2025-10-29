@@ -14,6 +14,7 @@
 @using Microsoft.Identity.Web
 @using Microsoft.Graph
 @using AntDesign
+@using Microsoft.AspNetCore.Components.Authorization
 
 @attribute [Authorize]
 @page "/fire-force/personal/bombero/agregar"
@@ -25,6 +26,7 @@
 @inject IMessageService message
 @inject IBomberoService BomberoService
 @inject IEntraIDService EntraIDService
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <style>
 	/* Estilos generales */
@@ -162,13 +164,32 @@
 		</div>
 	</div>
 
-	@if (personalView != null)
+	@if (isLoading)
+	{
+		<div style="text-align: center; padding: 50px;">
+			<Spin Size="SpinSize.Large" Tip="Verificando disponibilidad del servicio..." />
+		</div>
+	}
+	else if (!EntraIDisDisponbile)
+	{
+		<Result Status="ResultStatus.Error"
+				Title="Servicio no disponible"
+				SubTitle="El servicio de Entra ID no está disponible en este momento. Por favor, intente más tarde.">
+			<Extra>
+				<Button Type="@ButtonType.Primary" OnClick="Cancelar">
+					Volver al listado
+				</Button>
+			</Extra>
+		</Result>
+	}
+	else if (personalView != null)
 	{
 		<Form Model="@personalView"
 			  Layout="FormLayout.Vertical"
 			  OnFinish="OnFinish"
 			  OnFinishFailed="OnFinishFailed"
 			  Loading="isLoading">
+
 
 			@*Información Personal (Común para todos)*@
 			<div class="card">
@@ -200,12 +221,12 @@
 						<AntDesign.Row Gutter="16">
 							<AntDesign.Col Span="8">
 								<FormItem Label="Nombre" Required>
-									<Input @bind-Value="@personalView.Nombre" Disabled="@EntraIDisDisponbile" />
+									<Input @bind-Value="@personalView.Nombre" Disabled="@(!EntraIDisDisponbile)" />
 								</FormItem>
 							</AntDesign.Col>
 							<AntDesign.Col Span="8">
 								<FormItem Label="Apellido" Required>
-									<Input @bind-Value="@personalView.Apellido" Disabled="@EntraIDisDisponbile" />
+									<Input @bind-Value="@personalView.Apellido" Disabled="@(!EntraIDisDisponbile)" />
 								</FormItem>
 							</AntDesign.Col>
 						</AntDesign.Row>
@@ -213,11 +234,12 @@
 						<AntDesign.Row Gutter="16">
 							<AntDesign.Col Span="24">
 								<FormItem Label="UPN" Required>
-									<AntDesign.Input @bind-Value="@personalView.UPN">
+									<AntDesign.Input @bind-Value="@personalView.UPN" Disabled="@(!EntraIDisDisponbile)">
 										<AddOnAfter>
 											<label>@@bomberoschivilcoy.org.ar</label>
 											<AntDesign.Button Type="ButtonType.Primary"
 															  Size="ButtonSize.Small"
+															  Disabled="@(!EntraIDisDisponbile)"
 															  OnClick="@(() => BusquedaPorUPN(personalView.UPN))">
 												<Icon Type="search" />
 											</AntDesign.Button>
@@ -397,7 +419,7 @@
 				<Button Type="@ButtonType.Default" OnClick="Cancelar">
 					Cancelar
 				</Button>
-				<Button Type="@ButtonType.Primary" HtmlType="submit" Class="primary-button" OnClick="CrearBombero">
+				<Button Type="@ButtonType.Primary" HtmlType="submit" Class="primary-button" OnClick="CrearBombero" Disabled="@(!EntraIDisDisponbile)">
 					Registrar Bombero
 				</Button>
 			</div>
@@ -405,9 +427,15 @@
 	}
 	else
 	{
-		<div>
-			<p>Error: No se ha inicializado correctamente el formulario.</p>
-		</div>
+		<Result Status="ResultStatus.Error"
+				Title="Error"
+				SubTitle="No se ha inicializado correctamente el formulario.">
+			<Extra>
+				<Button Type="@ButtonType.Primary" OnClick="Cancelar">
+					Volver al listado
+				</Button>
+			</Extra>
+		</Result>
 	}
 </div>
 
@@ -443,11 +471,10 @@
 		{
 			if (!EntraIDisDisponbile)
 			{
-				message.Error("El Servicio de entra id no esta disponible.");
+				await message.ErrorAsync("El Servicio de Entra ID no está disponible.");
 				return;
 			}
 
-			// Preparar el objeto Bombero
 			Bombero bombero = new Bombero()
 			{
 				EntraId = personalView.EntraID,
@@ -483,7 +510,6 @@
 				}
 			};
 
-			// Preparar la foto si existe
 			Imagen_Personal? foto = null;
 
 			if (imageViewModel.Base64 != null && imageViewModel.TipoImagen != null && imageViewModel.NombreImagen != null)
@@ -496,14 +522,13 @@
 				};
 			}
 
-			// Creamos el bombero
 			await BomberoService.CrearBomberoAsync(bombero, foto);
-			message.Success("Se agregó el bombero.");
+			message.Success("Se agregó el bombero correctamente.");
 			navigationManager.NavigateTo($"/fire-force/personal/bomberos", true);
 		}
 		catch (Exception ex)
 		{
-			message.Error($"Error: {ex.Message}");
+			await message.ErrorAsync($"Error al crear bombero: {ex.Message}");
 		}
 		finally
 		{
@@ -519,6 +544,12 @@
 			return;
 		}
 
+		if (!EntraIDisDisponbile)
+		{
+			await message.ErrorAsync("El servicio de Entra ID no está disponible.");
+			return;
+		}
+
 		_debounceTokenSource?.Cancel();
 		_debounceTokenSource = new CancellationTokenSource();
 		var token = _debounceTokenSource.Token;
@@ -526,10 +557,9 @@
 		try
 		{
 			isLoading = true;
-
 			StateHasChanged();
 
-			await Task.Delay(500, token); // debounce
+			await Task.Delay(500, token);
 
 			var (bombero, foto) = await EntraIDService.BuscarPorUPNAsync(upn, token);
 
@@ -544,24 +574,25 @@
 			personalView.EntraID = bombero.EntraID;
 			personalView.UPN = bombero.UPN;
 
-			if (foto != null)
+			if (foto != null && foto.Datos != null && foto.Formato != null)
 			{
-				if (foto.Datos != null && foto.Formato != null)
-				{
-					var extension = foto.Formato.Split('/').LastOrDefault() ?? "jpg";
-					var nombreImagen = $"foto_{Guid.NewGuid()}.{extension}";
+				var extension = foto.Formato.Split('/').LastOrDefault() ?? "jpg";
+				var nombreImagen = $"foto_{Guid.NewGuid()}.{extension}";
 
-					imageViewModel = new ImageViewModel
-					{
-						Base64 = Convert.ToBase64String(foto.Datos),
-						TipoImagen = foto.Formato,
-						NombreImagen = nombreImagen
-					};
-				}
+				imageViewModel = new ImageViewModel
+				{
+					Base64 = Convert.ToBase64String(foto.Datos),
+					TipoImagen = foto.Formato,
+					NombreImagen = nombreImagen
+				};
 			}
 
 			message.Success($"Usuario encontrado: {bombero.Nombre} {bombero.Apellido}");
 			StateHasChanged();
+		}
+		catch (InvalidOperationException ex)
+		{
+			message.Error(ex.Message);
 		}
 		catch (Exception ex)
 		{
@@ -580,23 +611,32 @@
 
 		try
 		{
-			EntraIDisDisponbile = await EntraIDService.CheckDisponibilidadAsync();
+			var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+			var user = authState.User;
 
-			if (!EntraIDisDisponbile)
+			if (!user.Identity?.IsAuthenticated ?? true)
 			{
-				await message.ErrorAsync("El Servicio de Entra ID no está disponible. Por favor, intente más tarde.");
-				navigationManager.NavigateTo($"/fire-force/personal/bomberos", true);
+				await message.WarningAsync("Debe iniciar sesión para acceder a esta página.");
+				navigationManager.NavigateTo("/", true);
+				return;
 			}
+
+			// Ahora sí verificamos la disponibilidad con el usuario autenticado
+			EntraIDisDisponbile = await EntraIDService.CheckDisponibilidadAsync();
+		}
+		catch (MicrosoftIdentityWebChallengeUserException ex)
+		{
+			ConsentHandler.HandleException(ex);
 		}
 		catch (Exception ex)
 		{
-			ConsentHandler.HandleException(ex);
-			await message.ErrorAsync($"Error: {ex.Message}");
-			navigationManager.NavigateTo($"/fire-force/personal/bomberos", true);
+			message.Error($"Error al inicializar: {ex.Message}");
+			EntraIDisDisponbile = false;
 		}
 		finally
 		{
 			isLoading = false;
+			StateHasChanged();
 		}
 	}
 
