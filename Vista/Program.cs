@@ -128,5 +128,6 @@ else
 }
 
 app.MapBlazorHub();
+app.MapRazorPages();
 app.MapFallbackToPage("/_Host");
 app.Run();
