@@ -611,6 +611,7 @@
 
 		try
 		{
+			// CRÍTICO: Esperar a que el usuario esté autenticado antes de verificar disponibilidad
 			var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
 			var user = authState.User;
 
@@ -621,8 +622,16 @@
 				return;
 			}
 
+			// Delay adicional para asegurar que el HttpContext esté disponible en el circuito
+			await Task.Delay(500);
+
 			// Ahora sí verificamos la disponibilidad con el usuario autenticado
 			EntraIDisDisponbile = await EntraIDService.CheckDisponibilidadAsync();
+
+			if (!EntraIDisDisponbile)
+			{
+			  await message.ErrorAsync("El Servicio de Entra ID no está disponible.");
+			}
 		}
 		catch (MicrosoftIdentityWebChallengeUserException ex)
 		{

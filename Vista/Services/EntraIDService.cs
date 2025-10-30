@@ -146,32 +146,64 @@ namespace Vista.Services
         {
             try
             {
-                if (!IsUserAuthenticated())
+                var httpContext = _httpContextAccessor.HttpContext;
+
+                if (httpContext == null)
                 {
-                    _logger.LogWarning("Intento de verificar disponibilidad sin usuario autenticado");
+                    _logger.LogError("HttpContext es null en CheckDisponibilidadAsync");
                     return false;
                 }
 
-                // Intentar obtener un solo usuario para verificar conectividad
-                var users = await _graphClient.Users
+                var user = httpContext.User;
+
+                if (user?.Identity?.IsAuthenticated != true)
+                {
+                    _logger.LogWarning("Usuario no autenticado. Identity: {Identity}, IsAuth: {IsAuth}",
+                        user?.Identity?.Name,
+                        user?.Identity?.IsAuthenticated);
+                    return false;
+                }
+
+                _logger.LogInformation("Usuario autenticado: {User}, Claims: {ClaimCount}",
+                    user.Identity.Name,
+                    user.Claims.Count());
+
+                // Intentar obtener información del usuario actual primero (no requiere permisos adicionales)
+                var me = await _graphClient.Me
                     .Request()
-                    .Top(1)
-                    .Select("id")
+                    .Select("id,displayName")
                     .GetAsync();
 
-                bool isAvailable = users?.Count > 0;
-                _logger.LogInformation("Verificación de disponibilidad de Graph: {IsAvailable}", isAvailable);
+                if (me != null)
+                {
+                    _logger.LogInformation("Graph API disponible. Usuario: {DisplayName}", me.DisplayName);
+                    return true;
+                }
 
-                return isAvailable;
+                return false;
             }
             catch (MsalUiRequiredException ex)
             {
-                _logger.LogWarning(ex, "Token expirado al verificar disponibilidad");
+                _logger.LogWarning(ex, "Se requiere consentimiento del usuario. ErrorCode: {ErrorCode}", ex.ErrorCode);
+
+                // Si es user_null, el problema es de autenticación
+                if (ex.ErrorCode == "user_null")
+                {
+                    _logger.LogError("Error user_null: El usuario no está correctamente autenticado en el contexto");
+                }
+
                 return false;
+            }
+            catch (MicrosoftIdentityWebChallengeUserException ex)
+            {
+                _logger.LogWarning(ex, "Se requiere challenge de usuario");
+                throw; // Re-lanzar para que el ConsentHandler lo maneje
             }
             catch (ServiceException ex)
             {
-                _logger.LogError(ex, "Error al verificar disponibilidad de Graph: {StatusCode}", ex.StatusCode);
+                _logger.LogError(ex, "Error al verificar disponibilidad de Graph: {StatusCode}, {ErrorCode}",
+                    ex.StatusCode,
+                    ex.Error?.Code);
                 return false;
             }
             catch (Exception ex)

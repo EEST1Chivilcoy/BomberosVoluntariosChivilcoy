@@ -13,6 +13,7 @@ using Microsoft.Identity.Web.UI;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Components.Server.Circuits;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -86,6 +87,10 @@ builder.Services.AddAuthorization(options =>
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+// CRÍTICO: Agregar HttpContextAccessor ANTES de Blazor
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddServerSideBlazor()
     .AddMicrosoftIdentityConsentHandler()
     .AddCircuitOptions(options =>
@@ -96,7 +101,8 @@ builder.Services.AddServerSideBlazor()
         options.DisconnectedCircuitRetentionPeriod = TimeSpan.FromMinutes(3);
     });
 
-builder.Services.AddHttpContextAccessor();
+// Habilitar HttpContext en circuitos de Blazor
+builder.Services.AddScoped<CircuitHandler, CircuitHandlerService>();
 builder.Services.AddAntDesign();
 builder.Services.AddHostedService<InitData>();
 
