@@ -12,7 +12,7 @@ namespace Vista.Services
 {
     public interface IEntraIDService
     {
-        Task<(BomberoViweModel? bombero, ImagenResultado? foto)> BuscarPorUPNAsync(string upn, CancellationToken token);
+        Task<(PersonalViewModel? personal, ImagenResultado? foto)> BuscarPorUPNAsync(string upn, CancellationToken token);
         Task<bool> CheckDisponibilidadAsync();
         Task<User> GetUserAsync();
 
@@ -35,7 +35,7 @@ namespace Vista.Services
             _tokenAcquisition = tokenAcquisition;
         }
 
-        public async Task<(BomberoViweModel? bombero, ImagenResultado? foto)> BuscarPorUPNAsync(string upn, CancellationToken token)
+        public async Task<(PersonalViewModel? personal, ImagenResultado? foto)> BuscarPorUPNAsync(string upn, CancellationToken token)
         {
             if (string.IsNullOrWhiteSpace(upn))
                 throw new ArgumentException("El UPN no puede estar vacío.");
@@ -98,7 +98,7 @@ namespace Vista.Services
                 }
 
                 // Mapear al ViewModel
-                var bomberoView = new BomberoViweModel
+                var personalView = new PersonalViewModel
                 {
                     Nombre = user.GivenName ?? string.Empty,
                     Apellido = user.Surname ?? string.Empty,
@@ -112,7 +112,7 @@ namespace Vista.Services
                     Formato = contentType
                 };
 
-                return (bomberoView, foto);
+                return (personalView, foto);
             }
             catch (MicrosoftIdentityWebChallengeUserException ex)
             {

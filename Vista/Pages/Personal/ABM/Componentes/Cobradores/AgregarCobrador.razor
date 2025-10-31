@@ -167,7 +167,8 @@
 		<Form Model="@personalView"
 			  Layout="FormLayout.Vertical"
 			  OnFinish="OnFinish"
-			  OnFinishFailed="OnFinishFailed">
+			  OnFinishFailed="OnFinishFailed"
+			  Loading="isLoading">
 
 			@*Información Personal (Común para todos)*@
 			<div class="card">
@@ -207,24 +208,24 @@
 									<Input @bind-Value="@personalView.Apellido" Disabled="@EntraIDisDisponbile" />
 								</FormItem>
 							</AntDesign.Col>
-							@if (EntraIDisDisponbile)
-							{
-								<AntDesign.Col Span="8">
-									<FormItem Label="UPN" Required>
-										<AntDesign.Input @bind-Value="@personalView.UPN">
-											<AddOnAfter>
-												<label>@@bomberoschivilcoy.org.ar</label>
-												<AntDesign.Button Type="ButtonType.Primary"
-																  Size="ButtonSize.Small"
-																  OnClick="@(() => BusquedaPorUPN(personalView.UPN))"
-																  Loading="@isSearching">
-													<Icon Type="search" />
-												</AntDesign.Button>
-											</AddOnAfter>
-										</AntDesign.Input>
-									</FormItem>
-								</AntDesign.Col>
-							}
+						</AntDesign.Row>
+
+						<AntDesign.Row Gutter="16">
+							<AntDesign.Col Span="24">
+								<FormItem Label="UPN" Required>
+									<AntDesign.Input @bind-Value="@personalView.UPN" Disabled="@(!EntraIDisDisponbile)">
+										<AddOnAfter>
+											<label>@@bomberoschivilcoy.org.ar</label>
+											<AntDesign.Button Type="ButtonType.Primary"
+															  Size="ButtonSize.Small"
+															  Disabled="@(!EntraIDisDisponbile)"
+															  OnClick="@(() => BusquedaPorUPN(personalView.UPN))">
+												<Icon Type="search" />
+											</AntDesign.Button>
+										</AddOnAfter>
+									</AntDesign.Input>
+								</FormItem>
+							</AntDesign.Col>
 						</AntDesign.Row>
 
 						<AntDesign.Row Gutter="16">
@@ -332,7 +333,7 @@
 				<Button Type="@ButtonType.Default" OnClick="Cancelar">
 					Cancelar
 				</Button>
-				<Button Type="@ButtonType.Primary" HtmlType="submit" Class="primary-button" OnClick="CrearCobrador">
+				<Button Type="@ButtonType.Primary" HtmlType="submit" Class="primary-button" OnClick="CrearCobrador" Disabled="@(!EntraIDisDisponbile)">
 					Registrar Cobrador
 				</Button>
 			</div>
@@ -340,9 +341,15 @@
 	}
 	else
 	{
-		<div>
-			<p>Error: No se ha inicializado correctamente el formulario.</p>
-		</div>
+		<Result Status="ResultStatus.Error"
+				Title="Error"
+				SubTitle="No se ha inicializado correctamente el formulario.">
+			<Extra>
+				<Button Type="@ButtonType.Primary" OnClick="Cancelar">
+					Volver al listado
+				</Button>
+			</Extra>
+		</Result>
 	}
 </div>
 
@@ -350,8 +357,8 @@
 	private CobradorViewModel? personalView = new();
 	private ImageViewModel imageViewModel = new();
 	private CancellationTokenSource? _debounceTokenSource;
-	private bool isSearching = false;
 	private bool EntraIDisDisponbile = false;
+	private bool isLoading = true;
 
 	private string? ImageUrlPreview => imageViewModel.Base64 != null
 		? $"data:{imageViewModel.TipoImagen};base64,{imageViewModel.Base64}"
@@ -372,36 +379,14 @@
 
 	public async Task CrearCobrador()
 	{
+		isLoading = true;
+
 		try
 		{
-			if (personalView == null)
-			{
-				await message.ErrorAsync("Ocurrió un error al crear el cobrador.");
-				return;
-			}
-
-			if (personalView.Documento == 0)
-			{
-				await message.ErrorAsync("El número de documento no puede ser cero.");
-				return;
-			}
-
-			if (personalView is not CobradorViewModel cobradorView)
-			{
-				await message.ErrorAsync("Ocurrió un error al crear el miembro de comisión directiva.");
-				return;
-			}
-
-			if (string.IsNullOrWhiteSpace(personalView.Nombre) || string.IsNullOrWhiteSpace(personalView.Apellido))
-			{
-				await message.ErrorAsync("Falta asignar nombre y apellido al cobrador. Por favor, completá ambos campos antes de continuar.");
-				return;
-			}
-
 			if (!EntraIDisDisponbile)
 			{
-				await message.WarningAsync("El Servicio de entra id no esta disponible.");
-				personalView.EntraID = Guid.NewGuid();
+				message.Error("El Servicio de entra id no esta disponible.");
+				return;
 			}
 
 			// Preparar el objeto Cobrador para enviarlo al servicio
@@ -409,34 +394,34 @@
 			{
 				// --- Información Personal ---
 
-				Nombre = cobradorView.Nombre,
-				Apellido = cobradorView.Apellido,
-				EntraId = cobradorView.EntraID,
-				Documento = cobradorView.Documento,
-				FechaNacimiento = cobradorView.FechaNacimiento,
-				LugarNacimiento = cobradorView.LugarNacimiento,
-				Direccion = cobradorView.Direccion,
-				Sexo = cobradorView.Sexo,
-				GrupoSanguineo = cobradorView.GrupoSanguineo,
+				Nombre = personalView.Nombre,
+				Apellido = personalView.Apellido,
+				EntraId = personalView.EntraID,
+				UPN = personalView.UPN + "@bomberoschivilcoy.org.ar",
+				Documento = personalView.Documento,
+				FechaNacimiento = personalView.FechaNacimiento,
+				LugarNacimiento = personalView.LugarNacimiento,
+				Direccion = personalView.Direccion,
+				Sexo = personalView.Sexo,
+				GrupoSanguineo = personalView.GrupoSanguineo,
 
 				// --- Información Profesional ---
 
-				Estado = cobradorView.Estado,
-				ZonasAsignadas = cobradorView.ZonasAsignadas,
-				FechaAceptacion = cobradorView.FechaAceptacion,
+				Estado = personalView.Estado,
+				ZonasAsignadas = personalView.ZonasAsignadas,
+				FechaAceptacion = personalView.FechaAceptacion,
 
 				// --- Información de Contacto ---
 				Contacto = new Contacto
 				{
-					TelefonoCel = cobradorView.TelefonoCel,
-					TelefonoFijo = cobradorView.TelefonoFijo,
-					TelefonoLaboral = cobradorView.TelefonoLaboral,
-					Email = cobradorView.Email
+					TelefonoCel = personalView.TelefonoCel,
+					TelefonoFijo = personalView.TelefonoFijo,
+					TelefonoLaboral = personalView.TelefonoLaboral,
+					Email = personalView.Email
 				}
 			};
 
 			// Preparar la foto si existe
-
 			Imagen_Personal? foto = null;
 
 			if (imageViewModel.Base64 != null && imageViewModel.TipoImagen != null && imageViewModel.NombreImagen != null)
@@ -451,16 +436,16 @@
 
 			// Creamos el cobrador
 			await CobradorService.CrearCobrador(cobrador, foto);
-
-			cobrador = new();
-			StateHasChanged();
 			message.Success("Se agregó el cobrador.");
 			navigationManager.NavigateTo($"/fire-force/personal/cobradores", true);
 		}
 		catch (Exception ex)
 		{
-			await message.ErrorAsync("Ocurrió un error al crear el cobrador.");
-			await message.ErrorAsync($"Error: {ex.Message}");
+			message.Error($"Error: {ex.Message}");
+		}
+		finally
+		{
+			isLoading = false;
 		}
 	}
 
@@ -478,7 +463,8 @@
 
 		try
 		{
-			isSearching = true;
+			isLoading = true;
+
 			StateHasChanged();
 
 			await Task.Delay(500, token); // debounce
@@ -512,30 +498,43 @@
 				}
 			}
 
-			await message.SuccessAsync($"Usuario encontrado: {bombero.Nombre} {bombero.Apellido}");
+			message.Success($"Usuario encontrado: {bombero.Nombre} {bombero.Apellido}");
 			StateHasChanged();
 		}
-		catch (TaskCanceledException) { }
 		catch (Exception ex)
 		{
-			await message.ErrorAsync($"Error al buscar usuario: {ex.Message}");
+			message.Error($"Error al buscar usuario: {ex.Message}");
 		}
 		finally
 		{
-			isSearching = false;
+			isLoading = false;
 			StateHasChanged();
 		}
 	}
 
 	protected override async Task OnInitializedAsync()
 	{
+		isLoading = true;
+
 		try
 		{
 			EntraIDisDisponbile = await EntraIDService.CheckDisponibilidadAsync();
+
+			if (!EntraIDisDisponbile)
+			{
+				await message.ErrorAsync("El Servicio de Entra ID no está disponible. Por favor, intente más tarde.");
+				navigationManager.NavigateTo($"/fire-force/personal/cobradores", true);
+			}
 		}
 		catch (Exception ex)
 		{
 			ConsentHandler.HandleException(ex);
+			await message.ErrorAsync($"Error: {ex.Message}");
+			navigationManager.NavigateTo($"/fire-force/personal/cobradores", true);
+		}
+		finally
+		{
+			isLoading = false;
 		}
 	}
 
