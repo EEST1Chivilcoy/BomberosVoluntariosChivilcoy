@@ -522,7 +522,7 @@
 			}
 
 			// Creamos el miembro de comisión directiva
-			await ComisionDirectivaService.CrearComisionDirectiva(comisionDirectiva, foto);
+			await ComisionDirectivaService.CrearComisionDirectivaAsync(comisionDirectiva, foto);
 
 			comisionDirectiva = new();
 			StateHasChanged();
