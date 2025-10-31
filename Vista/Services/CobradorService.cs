@@ -17,7 +17,7 @@ namespace Vista.Services
 {
     public interface ICobradorService
     {
-        Task CrearCobrador(Cobrador cobrador, Imagen? imagen = null);
+        Task CrearCobradorAsync(Cobrador cobrador, Imagen? imagen = null);
         Task<List<Cobrador>> ObtenerTodosLosCobradoresAsync(bool ConImagenes = false);
         Task<Cobrador> ObtenerCobradorPorIdAsync(int id, bool asnotracking = false, bool conRelaciones = true);
     }
@@ -33,30 +33,88 @@ namespace Vista.Services
             _imagenService = imagenService;
         }
 
-        public async Task CrearCobrador(Cobrador cobrador, Imagen? imagen = null)
+        public async Task CrearCobradorAsync(Cobrador cobrador, Imagen? imagen = null)
         {
-            // Asumiendo que Id es la clave primaria
-            if (await _context.Cobradores.AnyAsync(c => c.PersonaId == cobrador.PersonaId))
+            // --- 1. Validaciones ---
+
+            // --- Paso A: Validaciones "Baratas" (en memoria) ---
+            if (cobrador == null)
             {
-                throw new InvalidOperationException("Ya existe una Persona con este ID.");
+                throw new ArgumentNullException(nameof(cobrador), "El cobrador no puede ser nulo.");
             }
 
-            _context.Cobradores.Add(cobrador);
+            var validationContext = new ValidationContext(cobrador, serviceProvider: null, items: null);
+            var validationResults = new List<ValidationResult>();
+            bool esValido = Validator.TryValidateObject(cobrador, validationContext, validationResults, validateAllProperties: true);
 
-            await _context.SaveChangesAsync(); // Guardar el miembro de comisión directiva primero para obtener su PersonaId
-
-            // Si hay una imagen, asociarla al bombero
-            if (imagen != null)
+            if (!esValido)
             {
-                if (imagen is Imagen_Personal imagenPersonal)
+                string errores = string.Join(Environment.NewLine, validationResults.Select(r => r.ErrorMessage));
+                throw new ValidationException($"El modelo Cobrador no es válido: {Environment.NewLine}{errores}");
+            }
+
+            // --- Paso B: Validaciones "Caras" (contra la BD) ---
+            // (Se hacen antes de iniciar la transacción para no abrirla innecesariamente)
+
+            if (await _context.Cobradores.AnyAsync(b => b.Documento == cobrador.Documento))
+            {
+                throw new InvalidOperationException("Número de documento ya existente.");
+            }
+
+            // --- 2. Inicio de la Transacción ---
+            // Esta será la transacción "principal" que controlará todo.
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+
+            try
+            {
+                // --- Paso A: Guardar el Cobrador ---
+                _context.Cobradores.Add(cobrador);
+
+                // Guardamos para que la BD genere el 'cobrador.PersonaId'
+                await _context.SaveChangesAsync();
+
+                // --- Paso B: Guardar la Imagen (usando el Service) ---
+                if (imagen != null)
                 {
-                    imagenPersonal.PersonalId = cobrador.PersonaId;
-                    await _imagenService.GuardarImagenAsync(imagenPersonal);
+                    if (imagen is Imagen_Personal imagenPersonal)
+                    {
+                        // Asignamos el ID del cobrador recién creado
+                        imagenPersonal.PersonalId = cobrador.PersonaId;
+
+                        // Llamamos al servicio.
+                        // Si GuardarImagenAsync falla, lanzará una excepción
+                        // que será capturada por nuestro bloque 'catch' más abajo.
+                        await _imagenService.GuardarImagenAsync(imagenPersonal);
+                    }
+                    else
+                    {
+                        // Esta excepción también será capturada y provocará un Rollback.
+                        throw new InvalidOperationException("La imagen proporcionada no es del tipo correcto para un bombero.");
+                    }
                 }
-                else
+
+                // --- Paso C: Confirmar la Transacción ---
+                // Si llegamos aquí, tanto el SaveChanges del Bombero como
+                // el SaveChanges (dentro del service) de la Imagen fueron exitosos.
+                await transaction.CommitAsync();
+            }
+            catch (Exception ex)
+            {
+                // --- Manejo de Error ---
+                // Si CUALQUIER operación falla (el primer SaveChanges,
+                // la lógica del service, o el segundo SaveChanges dentro del service),
+                // revertimos TODA la operación.
+                await transaction.RollbackAsync();
+
+                // Lanza una excepción genérica o la 'ex' original
+                // para que la capa superior sepa que algo falló.
+                if (ex is DbUpdateException)
                 {
-                    throw new InvalidOperationException("La imagen proporcionada no es del tipo correcto para un personal.");
+                    throw new Exception("Error al guardar en la base de datos. Verifique datos duplicados.", ex);
                 }
+
+                // Re-lanza la excepción (ej. la ValidationException del service)
+                throw;
             }
         }
 

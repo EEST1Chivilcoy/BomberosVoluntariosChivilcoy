@@ -435,7 +435,7 @@
 			}
 
 			// Creamos el cobrador
-			await CobradorService.CrearCobrador(cobrador, foto);
+			await CobradorService.CrearCobradorAsync(cobrador, foto);
 			message.Success("Se agregó el cobrador.");
 			navigationManager.NavigateTo($"/fire-force/personal/cobradores", true);
 		}
