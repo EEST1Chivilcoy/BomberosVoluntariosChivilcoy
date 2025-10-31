@@ -32,6 +32,7 @@ namespace Vista.Data.Mappers
                 GrupoSanguineo = cobrador.GrupoSanguineo,
                 LugarNacimiento = cobrador.LugarNacimiento,
                 EntraID = cobrador.EntraId,
+                UPN = cobrador.UPN,
 
                 // Mapeo de Contacto (si existe)
                 TelefonoCel = cobrador.Contacto?.TelefonoCel,
