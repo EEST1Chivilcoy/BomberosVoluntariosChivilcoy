@@ -506,7 +506,7 @@
     [Parameter, EditorRequired] public SalidasViewModels Model { get; set; } = null!;
     [Parameter, EditorRequired] public List<Bombero> BomberosTodos { get; set; } = null!;
     [Parameter, EditorRequired] public List<VehiculoSalida> Flota { get; set; } = null!;
-
+    [Parameter]public bool IsFormDisabled { get; set; }
     private List<BomberoViweModel> bomberoChoferes { get; set; } = new();
     private List<BomberoViweModel> bomberoChoferesSalir { get; set; } = new();
     private List<BomberoViweModel> BomberosViewModelTodos { get; set; } = null!;

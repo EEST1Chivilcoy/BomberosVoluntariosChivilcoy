@@ -1,26 +1,25 @@
-﻿﻿﻿﻿﻿﻿﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using System.Text.Json;
 using Vista.Data.Models.Personas.Personal;
 using Vista.Data.Models.Salidas.Planillas;
-using Vista.Data.ViewModels.Rescates;
 using Vista.Services;
 using AntDesign;
 using Vista.Data.Models.Vehiculos.Flota;
 using Vista.Data.Mappers;
-using DocumentFormat.OpenXml.Office2010.Drawing;
+using Vista.Data.Enums.Discriminadores;
 using Vista.Data.Enums.Salidas;
 using System.Threading.Tasks;
 using Vista.Data.ViewModels.Personal;
 using Vista.Data.Enums;
 using Vista.Data.ViewModels;
-using Vista.Data.ViewModels.Rescates;
+using Vista.Data.ViewModels.FactorClimatico;
+
 namespace Vista.Pages.Salidas
 {
-    public partial class Rescates
+    public partial class FactoresClimaticos
     {
-        // ViewModel para la carga de Rescates.
-        private SalidasViewModels RescateViewModel = new RescatePersonaViewModels();
+        // ViewModel para la carga de Factores Climáticos.
+        private FactorClimaticoViewModel FactorClimaticoViewModel = new FactorClimaticoViewModel();
 
         // Listas de datos
         private List<Bombero> BomberosTodos = new();
@@ -32,7 +31,7 @@ namespace Vista.Pages.Salidas
         private bool _parte2Completa = false;
         private bool _parte3Completa = false;
 
-        // Variables parametros para la carga de Rescates.
+        // Variables parametros para la carga de Factores Climáticos.
 
         // Numero de Salida del Año en Seleccionado.
         [Parameter]
@@ -42,9 +41,9 @@ namespace Vista.Pages.Salidas
         [Parameter]
         [SupplyParameterFromQuery] public int? AnioSalida { get; set; }
         
-        // Tipo de Rescate.
+        // Tipo de Factor Climático.
         [Parameter]
-        public int TipoRescate { get; set; }
+        public int TipoFactorClimatico { get; set; }
 
 
         // Funcion de Carga de Salida.
@@ -52,32 +51,33 @@ namespace Vista.Pages.Salidas
         {
             try
             {
-                var rescate = RescateViewModel.ToSalida() as Rescate
-                    ?? throw new InvalidOperationException("Error al convertir el ViewModel a la entidad de rescate.");
+                var factorClimatico = FactorClimaticoViewModel.ToSalida() as FactorClimatico
+                    ?? throw new InvalidOperationException("Error al convertir el ViewModel a la entidad de Factor Climático.");
 
                 Salida salidaGuardada;
 
-                if (RescateViewModel.SalidaId > 0)
+                if (FactorClimaticoViewModel.SalidaId > 0)
                 {
-                    salidaGuardada = await SalidaService.EditarSalida(rescate);
+                    salidaGuardada = await SalidaService.EditarSalida(factorClimatico);
                     await message.SuccessAsync("Salida editada correctamente.");
                     HandleOk1(salidaGuardada.AnioNumeroParte, salidaGuardada.NumeroParte);
                 }
                 else
                 {
                     // Modo creación
-                    var numeroParteExistente = await SalidaService.ObtenerSalidaPorNumeroParteAsync<Salida>(
-                        RescateViewModel.NumeroParte,
-                        m => m.NumeroParte == RescateViewModel.NumeroParte && m.AnioNumeroParte == RescateViewModel.AnioNumeroParte
+                    var numeroParteExistente = await SalidaService.ObtenerSalidaPorNumeroParteAsync<FactorClimatico>(
+                        FactorClimaticoViewModel.NumeroParte,
+                        m => m.NumeroParte == FactorClimaticoViewModel.NumeroParte && m.AnioNumeroParte == FactorClimaticoViewModel.AnioNumeroParte
                     );
 
                     if (numeroParteExistente != null)
                     {
-                        await message.WarningAsync($"El número de parte {RescateViewModel.NumeroParte}/{RescateViewModel.AnioNumeroParte} ya existe.");
+                        await message.WarningAsync($"El número de parte {FactorClimaticoViewModel.NumeroParte}/{FactorClimaticoViewModel.AnioNumeroParte} ya existe.");
                         return;
                     }
 
-                    salidaGuardada = await SalidaService.GuardarSalida(rescate);
+
+                    salidaGuardada = await SalidaService.GuardarSalida(factorClimatico);
                     await message.SuccessAsync("Salida guardada correctamente.");
                     HandleOk1(salidaGuardada.AnioNumeroParte, salidaGuardada.NumeroParte);
                 }
@@ -106,55 +106,53 @@ namespace Vista.Pages.Salidas
         {
             BomberosTodos = await BomberoService.ObtenerTodosLosBomberosAsync();
             MovilesTodos = await VehiculoSalidaService.ObtenerVehiculosSalidasPorEstadoAsync(TipoEstadoMovil.Activo);
+            
+           FactorClimaticoViewModel = new FactorClimaticoViewModel();
 
-            if ((RescateTipo)TipoRescate == RescateTipo.Animal)
-            {
-                RescateViewModel = new RescateAnimaViewModels();
-            }
-            else
-            {
-                RescateViewModel = new RescatePersonaViewModels();
-            }
+
+            
 
 
             // Si se pasan parámetros, puede ser modo Visualización/Edición
             if (NumeroSalida.HasValue && AnioSalida.HasValue && NumeroSalida.Value > 0 && AnioSalida.Value > 0)
             {
-                var salidaAEditar = await SalidaService.ObtenerSalidaParaEditarAsync<Salida>(NumeroSalida.Value, AnioSalida.Value);
+                var salidaAEditar = await SalidaService.ObtenerSalidaParaEditarAsync<FactorClimatico>(NumeroSalida.Value, AnioSalida.Value);
 
                 if (salidaAEditar != null)
                 {
                     var todasLasFuerzas = await FuerzaIntervinienteService.ObtenerTodasLasFuerzasAsync();
                     var fuerzasVM = todasLasFuerzas.Select(f => new Vista.Data.ViewModels.Personal.SimpleFuerzaViewModel { Id = f.Id, Nombre = f.NombreFuerza }).ToList();
 
-                    RescateViewModel = salidaAEditar.ToViewModel(fuerzasVM);
+                    FactorClimaticoViewModel = (FactorClimaticoViewModel)salidaAEditar.ToViewModel(fuerzasVM);
                 }
                 else
                 {
                     await message.WarningAsync("No se encontró la salida solicitada. Se abrirá el formulario en modo creación.");
-                    if (AnioSalida.HasValue && AnioSalida.Value > 0) RescateViewModel.AnioNumeroParte = AnioSalida.Value;
-                    if (NumeroSalida.HasValue && NumeroSalida.Value > 0) RescateViewModel.NumeroParte = NumeroSalida.Value;
+                    if (AnioSalida.HasValue && AnioSalida.Value > 0) FactorClimaticoViewModel.AnioNumeroParte = AnioSalida.Value;
+                    if (NumeroSalida.HasValue && NumeroSalida.Value > 0) FactorClimaticoViewModel.NumeroParte = NumeroSalida.Value;
                 }
 
                 return;
             }
 
             // Modo crear (se inicializa arriba, aquí se setean los valores por defecto)
+            FactorClimaticoViewModel.TipoEmergencia = TipoDeEmergencia.FactorClimatico;
+            FactorClimaticoViewModel.Tipo = (TipoFactoresClimaticos)TipoFactorClimatico;
             if (AnioSalida.HasValue && AnioSalida.Value > 0)
-                RescateViewModel.AnioNumeroParte = AnioSalida.Value;
+                FactorClimaticoViewModel.AnioNumeroParte = AnioSalida.Value;
             else
-                RescateViewModel.AnioNumeroParte = DateTime.Now.Year;
+            FactorClimaticoViewModel.AnioNumeroParte = DateTime.Now.Year;
 
             if (NumeroSalida.HasValue && NumeroSalida.Value > 0)
-                RescateViewModel.NumeroParte = NumeroSalida.Value;
+                FactorClimaticoViewModel.NumeroParte = NumeroSalida.Value;
             else
-                RescateViewModel.NumeroParte = await SalidaService.ObtenerUltimoNumeroParteDelAnioAsync(RescateViewModel.AnioNumeroParte) + 1;
+                FactorClimaticoViewModel.NumeroParte = await SalidaService.ObtenerUltimoNumeroParteDelAnioAsync(FactorClimaticoViewModel.AnioNumeroParte) + 1;
         }
         //Finish Failed
         private void OnFinishFailed(EditContext editContext)
         {
-            message.Error("Error al cargar, posible información ausente");
-             Console.WriteLine($"Failed:{JsonSerializer.Serialize(RescateViewModel)}");
+            message.Error("Error al cargar, posible información ausente.");
+             Console.WriteLine($"Failed:{System.Text.Json.JsonSerializer.Serialize(FactorClimaticoViewModel)}");
         }
         //Impresión
         bool _visible1;

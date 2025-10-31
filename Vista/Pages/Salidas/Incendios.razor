@@ -1,10 +1,11 @@
-﻿@page "/fire-force/salidas/rescate/{TipoRescate:int}/{AnioSalida:int}/{NumeroSalida:int}"
+@page "/fire-force/salidas/incendio/{TipoIncendio:int}/{AnioSalida:int}/{NumeroSalida:int}"
 @using Vista.Data.ViewModels.Personal;
 @using Vista.Data.ViewModels.Rescates;
 @using Vista.Data.Enums.Salidas;
+@using Vista.Data.Enums.Discriminadores;
 
 @*Servicios Utilizados*@
-@using Vista.Services;
+@using Vista.Services
 @inject ISalidaService SalidaService
 @inject IBomberoService BomberoService
 @inject IVehiculoSalidaService VehiculoSalidaService
@@ -17,8 +18,8 @@
 @using Vista.Components.Forms.Salidas.General;
 @using Vista.Data.Models.Salidas.Componentes;
 @using Vista.Components.Forms.Salidas;
-
-<Form Model="@RescateViewModel"
+@* Componentes de Incendio *@
+<Form Model="@IncendioViewModel"
       LabelColSpan="8"
       WrapperColSpan="16"
       OnFinish="OnFinish"
@@ -29,17 +30,58 @@
 
         <!-- Encabezado -->
         <div style="text-align: center; margin-bottom: 3rem; padding-bottom: 1rem; border-bottom: 2px solid #f0f0f0;">
-            @if (TipoRescate == 1)
+            @switch ((TipoDeEmergencia)TipoIncendio)
             {
-                <h1 style="margin: 0; color: #1890ff; font-size: 2.5rem; font-weight: 600;">
-                    RESCATE PERSONA
-                </h1>
-            }
-            else if (TipoRescate == 2)
-            {
-                <h1 style="margin: 0; color: #1890ff; font-size: 2.5rem; font-weight: 600;">
-                    RESCATE ANIMAL
-                </h1>
+                case TipoDeEmergencia.IncendioComercio:
+                    <h1 style="margin: 0; color: #1890ff; font-size: 2.5rem; font-weight: 600;">
+                        INCENDIO COMERCIO
+                    </h1>
+                    break;
+                case TipoDeEmergencia.IncendioEstablecimientoEducativo:
+                    <h1 style="margin: 0; color: #1890ff; font-size: 2.5rem; font-weight: 600;">
+                        INCENDIO ESTABLECIMIENTO EDUCATIVO
+                    </h1>
+                    break;
+                case TipoDeEmergencia.IncendioEstablecimientoPublico:
+                    <h1 style="margin: 0; color: #1890ff; font-size: 2.5rem; font-weight: 600;">
+                        INCENDIO ESTABLECIMIENTO PÚBLICO
+                    </h1>
+                    break;
+                case TipoDeEmergencia.IncendioForestal:
+                    <h1 style="margin: 0; color: #1890ff; font-size: 2.5rem; font-weight: 600;">
+                        INCENDIO FORESTAL
+                    </h1>
+                    break;
+                case TipoDeEmergencia.IncendioHospitalesYClinicas:
+                    <h1 style="margin: 0; color: #1890ff; font-size: 2.5rem; font-weight: 600;">
+                        INCENDIO HOSPITALES Y CLÍNICAS
+                    </h1>
+                    break;
+                case TipoDeEmergencia.IncendioIndustria:
+                    <h1 style="margin: 0; color: #1890ff; font-size: 2.5rem; font-weight: 600;">
+                        INCENDIO INDUSTRIA
+                    </h1>
+                    break;
+                case TipoDeEmergencia.IncendioVivienda:
+                    <h1 style="margin: 0; color: #1890ff; font-size: 2.5rem; font-weight: 600;">
+                        INCENDIO VIVIENDA
+                    </h1>
+                    break;
+                case TipoDeEmergencia.IncendioAeronaves:
+                    <h1 style="margin: 0; color: #1890ff; font-size: 2.5rem; font-weight: 600;">
+                        INCENDIO DE AERONAVES
+                    </h1>
+                    break;
+                case TipoDeEmergencia.Incendio:
+                    <h1 style="margin: 0; color: #1890ff; font-size: 2.5rem; font-weight: 600;">
+                        INCENDIO (OTRO)
+                    </h1>
+                    break;
+                default:
+                    <h1 style="margin: 0; color: #1890ff; font-size: 2.5rem; font-weight: 600;">
+                        INCENDIO (Tipo no reconocido)
+                    </h1>
+                    break;
             }
 
             <p style="margin: 0.5rem 0 0 0; color: #666; font-size: 1.1rem;">
@@ -50,15 +92,16 @@
         <!-- Tabs container -->
         <Tabs DefaultActiveKey="1" Class="custom-tabs" Style="box-shadow: 0 4px 16px rgba(24,144,255,0.08); border-radius: 12px;">
             <TabPane Key="1" Tab="📋 Datos-Generales" Class="tab-general">
-                <DatosGenerales Model="@RescateViewModel" OnCompleted="@((bool done) => _parte1Completa = done)" />
+                <DatosGenerales Model="@IncendioViewModel" OnCompleted="@((bool done) => _parte1Completa = done)" />
             </TabPane>
 
             <TabPane Key="2" Tab="📞 Datos Telefónicos">
-                <Participantes Model="@RescateViewModel" OnCompleted="@((bool done) => _parte2Completa = done)" />
+                <Participantes Model="@IncendioViewModel"
+                               OnCompleted="@((bool done) => _parte2Completa = done)" />
             </TabPane>
 
-            <TabPane Key="3" Tab="🛡️ Fuerzas Intervinientes" Disabled="@(RescateViewModel.FuerzasIntervinientesParticipantes?.Any() != true)">
-                <FuerzasIntervinientes Model="@RescateViewModel" />
+            <TabPane Key="3" Tab="🛡️ Fuerzas Intervinientes" Disabled="@(IncendioViewModel.FuerzasIntervinientesParticipantes?.Any() != true)">
+                <FuerzasIntervinientes Model="@IncendioViewModel" />
             </TabPane>
 
             <TabPane Key="4" Tab="⚠️ Afectados">
@@ -66,15 +109,15 @@
             </TabPane>
 
             <TabPane Key="5" Tab="🚒 Unidades">
-                <Vehiculos Model="@RescateViewModel" BomberosTodos="@BomberosTodos" Flota="@MovilesTodos" />
+                <Vehiculos Model="@IncendioViewModel" BomberosTodos="@BomberosTodos" Flota="@MovilesTodos" />
             </TabPane>
 
             <TabPane Key="6" Tab="🪪 Personal">
-                <Personal Model="@RescateViewModel" BomberosTodos="@BomberosTodos" />
+                <Personal Model="@IncendioViewModel" BomberosTodos="@BomberosTodos" />
             </TabPane>
 
             <TabPane Key="7" Tab="🛠️ Tipo de Servicio">
-                <TipoDeServicio Model="@RescateViewModel" isUnlocked="true" OnCompleted="@((bool done) => {/* noop */})" />
+                <TipoDeServicio Model="@IncendioViewModel" isUnlocked="true" OnCompleted="@((bool done) => {/* noop */})" />
                 <div class="submit-section-firmas">
                     <FormItem WrapperColSpan="24" Style="margin: 0;">
                         <Button HtmlType="submit" Size="ButtonSize.Large" class="submit-button-firmas">

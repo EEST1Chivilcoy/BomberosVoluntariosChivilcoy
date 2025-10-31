@@ -256,7 +256,7 @@
 @code {
     [Parameter, EditorRequired] public SalidasViewModels Model { get; set; } = null!;
     [Parameter, EditorRequired] public List<Bombero> BomberosTodos { get; set; } = null!;
-
+    [Parameter] public bool IsFormDisabled { get; set; }
     private IEnumerable<BomberoSalidaViewModels> _selectedRows = new List<BomberoSalidaViewModels>(); //Bomberos Seleccionados
     private List<BomberoViweModel> bomberosTodosView = new(); //Lista con todos los bomberos
     private List<BomberoViweModel> bomberosSalirTodos = new(); //Lista con todos los bomberos para salida
