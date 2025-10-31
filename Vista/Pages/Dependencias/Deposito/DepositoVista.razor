@@ -505,15 +505,15 @@
     }
 </div>
 
-<Modal Footer="null" Title="@("")"
+<Modal Footer="null" Title="@("Cargar Material")"
        Visible="@_visibleAgregar"
-       Width="1300"
+       Width="800"
        OnCancel="@(() => _visibleAgregar = false)">
     <AgregarMaterial MaterialesExistentes="Materiales" OnFinishCallback="OnFinish" />
 </Modal>
-<Modal Footer="null" Title="@("")"
+<Modal Footer="null" Title="@("Editar Material")"
        Visible="@_visibleEditar"
-       Width="1300"
+       Width="800"
        OnCancel="@(() => _visibleEditar = false)">
     <EditarMaterial Material="MaterialSeleccionado" MaterialesExistentes="Materiales" OnFinishCallback="OnFinish" />
 </Modal>

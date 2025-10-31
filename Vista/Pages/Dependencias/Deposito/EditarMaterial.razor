@@ -4,136 +4,132 @@
 @inject IMessageService message
 
 <style>
-    .material-abm {
-    font-family: 'Poppins', sans-serif !important;
-    --primary-color: #e4e4e4; 
-    --primary-dark: #e4e4e4;
-    --secondary-color: #2F54EB; 
-    --success-color: #52C41A;
-    --success-dark: #449E17;
-    --background-card: #FFFFFF;
-    --background-body: #F0F2F5; 
-    --text-color: #262626;
-    --border-color: #E8E8E8;
-    --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    .movimientos-abm {
+        font-family: 'Poppins', sans-serif !important;
+        --primary-color: #f0f2f5;
+        --primary-dark: #d9d9d9;
+        --secondary-color: #2F54EB;
+        --success-color: #52C41A;
+        --success-dark: #449E17;
+        --background-card: #FFFFFF;
+        --background-body: #FFFFFF;
+        --text-color: #262626;
+        --border-color: #D9D9D9;
+        --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     }
 
-    .material-abm .modal-content {
-    background: var(--background-body);
-    border-radius: 16px;
-    box-shadow: var(--shadow);
-    padding: 40px;
-    max-height: 95vh;
-    overflow-y: auto;
+    .ant-modal-content {
+        border: 2px solid #A63333 !important;
+        border-radius: 8px !important;
+        overflow: hidden !important;
     }
 
-    .material-abm .section-header {
-    background: linear-gradient(90deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-    color: rgb(0, 0, 0);
-    padding: 18px 40px;
-    font-size: 1.5em;
-    font-weight: 600;
-    border-radius: 16px 16px 0 0;
-    margin: -40px -40px 20px -40px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    .ant-modal-header {
+        background-color: #A63333 !important;
+        border-radius: 8px 8px 0 0 !important;
+        border-bottom: none !important;
     }
 
-    .material-abm .form-card {
-    background-color: var(--background-card);
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    .ant-modal-header .ant-modal-title {
+        color: white !important;
     }
 
-    .material-abm .form-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
+    .ant-modal-close {
+        color: white !important;
     }
 
-    .material-abm .form-item-full-width {
-    grid-column: span 2;
+    .movimientos-abm .cancel-button-white {
+        background-color: white !important;
+        color: black !important;
+        font-weight: 500 !important;
+        border: 1px solid #d9d9d9;
+        box-shadow: none;
+        height: 32px;
+        border-radius: 6px;
+        padding: 0 15px;
     }
 
-    .material-abm .form-buttons-container {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 20px;
+    .ant-select:not(.ant-select-customize-input) .ant-select-selector {
+        border-radius: 6px !important;
+        height: 40px !important;
     }
 
-    .material-abm .secondary-button {
-    background: transparent;
-    border: 1px solid var(--border-color);
-    color: var(--text-color);
-    height: 40px;
-    font-weight: 500;
-    border-radius: 6px;
+    .ant-input:focus, .ant-input:hover,
+    .ant-input-number:focus, .ant-input-number:hover,
+    .ant-select-selector:focus, .ant-select-selector:hover {
+        border-color: #FFC107 !important;
+        box-shadow: 0 0 0 2px rgba(255, 193, 7, 0.2) !important;
     }
 
-    .material-abm .save-button {
-    background: linear-gradient(135deg, var(--success-color) 0%, var(--success-dark) 100%);
-    border: none;
-    color: white;
-    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
-    font-weight: 600;
-    height: 40px;
-    border-radius: 6px;
-    }
-
-    .ant-input, .ant-picker, .ant-select:not(.ant-select-customize-input) .ant-select-selector {
-    border-radius: 6px !important;
-    background-color: #fafafa !important;
-    }
-    .ant-input:focus, .ant-picker-focused, .ant-select-focused:not(.ant-select-disabled) .ant-select-selector {
-    border-color: var(--primary-color) !important;
-    box-shadow: 0 0 0 2px rgba(166, 51, 51, 0.2) !important;
+    .ant-modal .ant-btn-primary {
+        background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
+        border: none !important;
+        color: #fff !important;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
+        margin-top: 0;
+        margin-bottom: 0;
+        padding: 0 20px !important;
     }
 </style>
 
 <div class="material-abm">
-    <div class="modal-content">
-
-        <div class="section-header">
-            Editar Material
-        </div>
-
-        <div class="form-card">
-            <Form Model="@MaterialViewModel"
+    <div class="modal-crear-movimiento-content">
+        <Form Model="@MaterialViewModel"
+            Style="max-width: 800px;"
+            Class="modal-crear-movimiento-form"
+            Layout="FormLayout.Vertical"
             OnFinish="OnFinish"
-            OnFinishFailed="OnFinishFailed"
-            LabelColSpan="8"
-            WrapperColSpan="16">
+            OnFinishFailed="OnFinishFailed">
 
-                <div class="form-grid">
-                    <FormItem Label="Producto">
+            <Row Gutter="16">
+                <AntDesign.Col Span="12">
+                    <div class="modal-crear-movimiento-form-item">
+                    <FormItem Label="🏷️ Producto" Required>
                         <Input @bind-Value="MaterialViewModel.Descripcion" Placeholder="Ingrese el nombre del producto" />
                     </FormItem>
-
-                    <FormItem Label="Código de Barra">
-                        <Input @bind-Value="MaterialViewModel.Codigo" Placeholder="Ingrese el código" />
+                    </div>
+                </AntDesign.Col>
+                <AntDesign.Col Span="12">
+                    <div class="modal-crear-movimiento-form-item">
+                    <FormItem Label="🔢 Código" Required>
+                        <Input @bind-Value="MaterialViewModel.Codigo" Placeholder="Ingrese el código del producto" />
                     </FormItem>
-
-                    <FormItem Label="Fecha">
-                        <DatePicker TValue="DateTime" DefaultValue="DateTime.Now" @bind-Value="MaterialViewModel.FechaAlta" />
+                    </div>
+                </AntDesign.Col>
+            </Row>
+            <Row Gutter="16">
+                <AntDesign.Col Span="12">
+                    <div class="modal-crear-movimiento-form-item">
+                    <FormItem Label="📦 Stock" Required>
+                        <AntDesign.InputNumber @bind-Value="MaterialViewModel.Stock" Style="width: 100%;" />
                     </FormItem>
-
-                    <FormItem Label="Stock">
-                        <AntDesign.InputNumber @bind-Value="MaterialViewModel.Stock" />
+                    </div>
+                </AntDesign.Col>
+                <AntDesign.Col Span="12">
+                    <div class="modal-crear-movimiento-form-item">
+                    <FormItem Label="🗂️ Rubro" Required>
+                            <EnumSelect TEnum="TipoRubro" @bind-Value="MaterialViewModel.Rubro" Style="width: 100%;" />
                     </FormItem>
-
-                    <FormItem Label="Rubro">
-                        <EnumSelect TEnum="TipoRubro" @bind-Value="MaterialViewModel.Rubro" />
+                    </div>
+                </AntDesign.Col>
+            </Row>
+            <Row Gutter="16">
+                <AntDesign.Col Span="12">
+                    <div class="modal-crear-movimiento-form-item">
+                    <FormItem Label="📅 Fecha" Required>
+                        <DatePicker TValue="DateTime" DefaultValue="DateTime.Now" @bind-Value="MaterialViewModel.FechaAlta" Style="width: 100%;" />
                     </FormItem>
-                </div>
+                    </div>
+                </AntDesign.Col>
+            </Row>
 
-                <div class="form-buttons-container">
-                    <Button Type="@ButtonType.Primary" HtmlType="submit" Class="save-button">
+                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;" class="modal-crear-movimiento-footer">
+                    <Button Class="ant-btn-primary" HtmlType="submit">
                         Guardar Cambios
                     </Button>
                 </div>
-            </Form>
-        </div>
+        </Form>
     </div>
 </div>
 
