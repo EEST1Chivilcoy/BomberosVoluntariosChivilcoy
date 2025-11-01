@@ -157,15 +157,7 @@ namespace Vista.Services
                 throw new ArgumentNullException(nameof(bombero), "El bombero no puede ser nulo.");
             }
 
-            var validationContext = new ValidationContext(bombero, serviceProvider: null, items: null);
-            var validationResults = new List<ValidationResult>();
-            bool esValido = Validator.TryValidateObject(bombero, validationContext, validationResults, validateAllProperties: true);
-
-            if (!esValido)
-            {
-                string errores = string.Join(Environment.NewLine, validationResults.Select(r => r.ErrorMessage));
-                throw new ValidationException($"El modelo Bombero no es válido: {Environment.NewLine}{errores}");
-            }
+            ValidationHelper.Validar(bombero);
 
             // --- 2. Inicio de la Transacción ---
             // Esta será la transacción "principal" que controlará todo.
