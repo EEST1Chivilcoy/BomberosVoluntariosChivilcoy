@@ -18,7 +18,8 @@ namespace Vista.Data.Models.Vehiculos.Flota
         /// Este campo es obligatorio y debe ser unico.
         /// Se asigna a las embarcaciones, y a los vehiculos (moviles) de la institucion.
         /// </summary>
-        [StringLength(255)]
+        [Required(ErrorMessage = "El número de móvil es obligatorio.")]
+        [StringLength(255, ErrorMessage = "El número de móvil no puede superar los 255 caracteres.")]
         public string? NumeroMovil { get; set; }
 
         /// <summary>

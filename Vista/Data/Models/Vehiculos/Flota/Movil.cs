@@ -108,7 +108,7 @@ namespace Vista.Data.Models.Vehiculos.Flota
         /// <summary>
         /// Kilometraje actual del vehículo móvil.
         /// </summary>
-        public int Kilometraje { get; set; }
+        public int? Kilometraje { get; set; }
 
         /// <summary>
         /// Lista de salidas o misiones en las que el vehículo móvil ha participado.

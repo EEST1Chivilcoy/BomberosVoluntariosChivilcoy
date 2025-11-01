@@ -4,7 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Vista.Data;
 using Vista.Data.Enums;
 using Vista.Data.Models.Imagenes;
+using Vista.Data.Models.Personas.Personal;
 using Vista.Data.Models.Vehiculos.Flota;
+using Vista.Helpers;
 
 namespace Vista.Services
 {
@@ -101,35 +103,36 @@ namespace Vista.Services
 
         public async Task<VehiculoSalida?> AgregarVehiculoSalidaAsync(VehiculoSalida vehiculo, Imagen? imagen = null)
         {
-            if (imagen == null && vehiculo == null && vehiculo.Encargado == null) return null;
+            // --- 1. Validaciones ---
 
-            if (vehiculo?.Encargado is not null)
+            // --- Paso A: Validaciones "Baratas" (en memoria) ---
+            if (imagen == null || vehiculo == null)
+                throw new ArgumentException("Debe proporcionar al menos una imagen y un vehículo.");
+
+            ValidationHelper.Validar(vehiculo);
+
+            // --- 2. Inicio de la Transacción ---
+            // Esta será la transacción "principal" que controlará todo.
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+
+            try
             {
-                var encargado = await _bomberosService.ObtenerBomberoPorIdAsync(vehiculo.Encargado.PersonaId);
-
-                if (encargado is not null)
+                // --- Paso B: Asignación de Encargado (si corresponde) ---
+                if (vehiculo.EncargadoId.HasValue)
                 {
-                    vehiculo.Encargado = encargado;
-                    encargado.VehiculosEncargado ??= new List<VehiculoSalida>();
-                    encargado.VehiculosEncargado.Add(vehiculo);
+                    var encargado = await _bomberosService.ObtenerBomberoPorIdAsync(vehiculo.EncargadoId.Value);
+
+                    if (encargado is not null)
+                    {
+                        vehiculo.EncargadoId = vehiculo.EncargadoId.Value;
+                    }
                 }
-            }
 
-            switch (vehiculo)
-            {
-                case Movil movil:
-                    _context.Moviles.Add(movil);
-                    break;
-                case Embarcacion embarcacion:
-                    _context.Embarcacion.Add(embarcacion);
-                    break;
-                default:
-                    throw new InvalidOperationException("Tipo de vehículo no soportado.");
-            }
+                _context.VehiculoSalidas.Add(vehiculo);
 
-            await _context.SaveChangesAsync(); // Guardamos primero el vehículo para obtener su ID
+                await _context.SaveChangesAsync(); // Guardamos primero el vehículo para obtener su ID
 
-            // Si hay imagen, la vinculamos y la guardamos
+                // Si hay imagen, la vinculamos y la guardamos
 
                 if (imagen is Imagen_VehiculoSalida imagenVehiculo)
                 {
@@ -140,7 +143,30 @@ namespace Vista.Services
                 {
                     throw new InvalidOperationException("Tipo de imagen no soportado para vehículos.");
                 }
-         
+
+                await transaction.CommitAsync(); // Confirmamos la transacción si todo salió bien
+            }
+            catch (Exception ex)
+            {
+                // --- Manejo de Error ---
+                // Si CUALQUIER operación falla (el primer SaveChanges,
+                // la lógica del service, o el segundo SaveChanges dentro del service),
+                // revertimos TODA la operación.
+                await transaction.RollbackAsync();
+
+                // Limpiar el contexto para evitar conflictos futuros
+                _context.ChangeTracker.Clear();
+
+                // Lanza una excepción genérica o la 'ex' original
+                // para que la capa superior sepa que algo falló.
+                if (ex is DbUpdateException)
+                {
+                    throw new Exception("Error al guardar en la base de datos. Verifique datos duplicados.", ex);
+                }
+
+                // Re-lanza la excepción (ej. la ValidationException del service)
+                throw;
+            }
 
             return vehiculo;
         }
