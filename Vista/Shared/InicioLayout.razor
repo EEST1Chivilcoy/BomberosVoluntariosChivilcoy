@@ -1,0 +1,129 @@
+﻿@inherits LayoutComponentBase
+@inject NavigationManager NavManager
+@inject IJSRuntime JS
+@implements IDisposable
+
+<PageTitle>Bomberos Chivilcoy</PageTitle>
+
+<HeadContent>
+    <link href="css/inicio.css" rel="stylesheet" />
+</HeadContent>
+
+<div class="inicio-page">
+    <AntDesign.Layout>
+        <Header Class="custom-header">
+            <div style="display: flex; justify-content: flex-end;">
+                <Menu Mode="@MenuMode.Horizontal"
+                      SelectedKeys="@(new[]{currentSection})"
+                      Style="background: transparent; border-bottom: none;"
+                      OnMenuItemClicked="OnMenuItemClicked">
+                    <MenuItem Key="inicio">
+                        🏠 INICIO
+                    </MenuItem>
+                    <MenuItem Key="contacto">
+                        📞 CONTACTO
+                    </MenuItem>
+                    <MenuItem Key="cuerpo">
+                        👥 CUERPO ACTIVO
+                    </MenuItem>
+                    <MenuItem Key="historia">
+                        📖 NUESTRA HISTORIA
+                    </MenuItem>
+                    <MenuItem Key="sesion">
+                        🏢 SISTEMA
+                    </MenuItem>
+                </Menu>
+            </div>
+        </Header>
+
+        @Body
+
+        <div class="footer-section">
+            <div class="footer-content">
+                <Row Gutter="40">
+                    <AntDesign.Col Xs="24" Sm="24" Md="12" Lg="12" Xl="12">
+                        <div class="footer-left">
+                            <img src="/Imagenes/Logos.png"
+                                 alt="Logo Bomberos Voluntarios Chivilcoy"
+                                 class="footer-logo" />
+                            <div class="footer-info">
+                                <Title Level="3" Style="color: white; font-size: 1.4rem; font-weight: 600; margin: 0 0 5px 0; text-transform: uppercase;">
+                                    Sociedad de Bomberos<br />Voluntarios de Chivilcoy
+                                </Title>
+                                <Paragraph Style="color: #ccc; font-size: 0.9rem; margin: 0; line-height: 1.4;">
+                                    Desde 1945 al Servicio de la Comunidad
+                                </Paragraph>
+                            </div>
+                        </div>
+                    </AntDesign.Col>
+                    <AntDesign.Col Xs="24" Sm="24" Md="12" Lg="12" Xl="12">
+                        <div class="footer-right">
+                            <div class="footer-contact">
+                                <Title Level="4" Style="color: white; font-size: 1.2rem; font-weight: 600; margin: 0 0 10px 0; text-transform: uppercase;">
+                                    Contacto
+                                </Title>
+                                <Paragraph Class="footer-phone" Style="color: #ccc; font-size: 1rem; margin: 0; display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
+                                    <span class="phone-icon">📞</span>
+                                    100 / 424319-426066
+                                </Paragraph>
+                            </div>
+                        </div>
+                    </AntDesign.Col>
+                </Row>
+            </div>
+        </div>
+    </AntDesign.Layout>
+</div>
+
+@code {
+    private string currentSection = "inicio";
+    private Dictionary<string, Func<Task>> menuActions;
+
+    protected override void OnInitialized()
+    {
+        menuActions = new Dictionary<string, Func<Task>>
+        {
+            ["inicio"] = async () => NavManager.NavigateTo("/"),
+            ["contacto"] = async () => NavManager.NavigateTo("/contacto"),
+            ["cuerpo"] = async () => NavManager.NavigateTo("/cuerpo-activo"),
+            ["historia"] = async () => NavManager.NavigateTo("/historia"),
+            ["sesion"] = async () => await JS.InvokeVoidAsync("open", "/fire-force/", "_blank")
+        };
+
+        UpdateCurrentSection();
+        NavManager.LocationChanged += OnLocationChanged;
+    }
+
+    private void UpdateCurrentSection()
+    {
+        var path = new Uri(NavManager.Uri).AbsolutePath.ToLower();
+
+        currentSection = path switch
+        {
+            "/" => "inicio",
+            "/contacto" => "contacto",
+            "/cuerpo-activo" => "cuerpo",
+            "/historia" => "historia",
+            _ => "inicio"
+        };
+    }
+
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        UpdateCurrentSection();
+        StateHasChanged();
+    }
+
+    private async Task OnMenuItemClicked(MenuItem menuItem)
+    {
+        if (menuActions.TryGetValue(menuItem.Key, out var action))
+        {
+            await action.Invoke();
+        }
+    }
+
+    public void Dispose()
+    {
+        NavManager.LocationChanged -= OnLocationChanged;
+    }
+}
