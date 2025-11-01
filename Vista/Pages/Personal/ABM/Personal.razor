@@ -708,7 +708,10 @@
 }
 
 <Modal Footer="null" Visible="@EditarVisible" Centered="@true" DefaultMaximized="@true">
-	@*En implementación*@
+	@if (TipoPersonal.ToLower() == "bomberos")
+	{
+		<EditarBombero BomberoId="@PersonalId" OnCancel="CloseModals" />
+	}
 </Modal>
 
 <Modal Visible="@DetallesVisible" OnCancel="@CloseModals" Footer="@footer" Centered="@true" DefaultMaximized="@true">
