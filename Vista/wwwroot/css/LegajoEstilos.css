@@ -5,71 +5,73 @@
     }
 
     .main-container {
-        margin-top: 50px;
-        padding: 30px;
+margin-top: 50px;
+        padding: 20px 15px;
     }
 
     .header-row {
-        margin-bottom: 20px;
+  margin-bottom: 20px;
     }
 
     .logout-button {
-        color: #555 !important;
+      color: #555 !important;
         border-color: #ccc !important;
     }
 
     .profile-section {
         height: 100%;
-        position: relative;
+   position: relative;
     }
 
     .avatar-container {
-        position: absolute;
-        top: -90px;
+      position: absolute;
+    top: -90px;
         left: 50%;
-        transform: translateX(-50%);
-        z-index: 10;
+   transform: translateX(-50%);
+     z-index: 10;
     }
 
     .profile-avatar {
         width: 160px !important;
         height: 160px !important;
-        border: 10px solid var(--color-amarillo-acento) !important;
-        border-radius: 50% !important;
+    border: 10px solid var(--color-amarillo-acento) !important;
+border-radius: 50% !important;
     }
 
     .profile-card {
-        height: 100%;
-        border-radius: 15px !important;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1) !important;
-        background-color: var(--color-gris-fondo-tarjeta) !important;
-        padding-top: 60px !important;
+    height: 100%;
+    border-radius: 15px !important;
+ box-shadow: 0 4px 8px rgba(0,0,0,0.1) !important;
+   background-color: var(--color-gris-fondo-tarjeta) !important;
+    padding-top: 60px !important;
     }
 
 
     .profile-content {
-        padding-bottom: 2px;
+      padding-bottom: 2px;
     }
 
-    .profile-header {
+  .profile-header {
         text-align: center;
         margin-bottom: 15px;
-        margin-top: 5px;
+      margin-top: 5px;
     }
 
     .name-box {
-        background-color: var(--color-amarillo-acento);
+    background-color: var(--color-amarillo-acento);
         color: white;
         padding: 8px 15px;
         font-weight: bold;
         margin-bottom: 5px;
-        font-size: 1.4em;
+font-size: clamp(1em, 3vw, 1.4em);
         display: inline-block;
-        border-radius: 6px;
+   border-radius: 6px;
+        word-wrap: break-word;
+        max-width: 95%;
     }
 
     .subtitle-text {
-        font-size: 1.2em;
+        font-size: clamp(0.9em, 2.5vw, 1.2em);
         color: #6e6e6e;
         font-weight: 700;
     }
@@ -79,43 +81,44 @@
     }
 
     .info-block .label {
-        color: #555;
+     color: #555;
         margin-bottom: 2px;
-        font-weight: bold;
+     font-weight: bold;
+        font-size: clamp(0.85em, 2vw, 1em);
     }
 
     .ant-input[disabled], .ant-input-disabled {
         color: #7c7c7c !important;
         border: 1px solid #e0e0e0 !important;
-        border-radius: 8px !important;
+  border-radius: 8px !important;
         font-weight: bold !important;
         height: 30px !important;
-        line-height: 130px !important;
-        cursor: default;
+        line-height: 30px !important;
+ cursor: default;
+        font-size: clamp(0.85em, 2vw, 1em) !important;
     }
 
     .value-box {
-        background-color: white;
+     background-color: white;
         font-weight: bold;
         border: 1px solid #e0e0e0;
         border-radius: 8px;
         padding: 6px 11px;
         color: #7c7c7c;
-        font-size: 14px;
+        font-size: clamp(0.85em, 2vw, 1em);
     }
 
-    .services-card {
+ .services-card {
         border-radius: 15px !important;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1) !important;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1) !important;
         background-color: var(--color-gris-fondo-tarjeta) !important;
     }
 
     .services-card2 {
-
         border-radius: 15px !important;
         box-shadow: 0 4px 8px rgba(0,0,0,0.1) !important;
         background-color: var(--color-gris-fondo-tarjeta) !important;
-        margin-bottom: 15px !important;
+margin-bottom: 15px !important;
     }
 
     .header-servicios {
@@ -127,8 +130,9 @@
 
     .banner-container {
         display: flex;
-        justify-content: flex-end;
+ justify-content: flex-end;
         margin-left: 50px;
+    width: 100%;
     }
 
     .banner-container2 {
@@ -140,14 +144,15 @@
     .servicios-banner {
         display: flex;
         align-items: center;
-        background-color: var(--color-amarillo-acento);
+background-color: var(--color-amarillo-acento);
         height: 50px;
         position: relative;
         padding-left: 150px;
         padding-right: 40px;
         border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         margin-top: 50px;
+        max-width: 100%;
     }
 
     .servicios-banner2 {
@@ -156,13 +161,13 @@
         background-color: var(--color-amarillo-acento);
         height: 50px;
         position: relative;
-        padding-left: 150px;
+     padding-left: 150px;
         padding-right: 40px;
         border-radius: 8px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         margin-top: -5px;
         margin-bottom: 40px; 
-        width: 400px;
+  max-width: 100%;
     }
 
     .banner-image-container {
@@ -171,21 +176,21 @@
         top: -38px;
         height: 135px;
         width: 140px;
-        z-index: 10;
+   z-index: 10;
     }
 
     .banderin-image {
         width: 100%;
         height: 100%;
         object-fit: contain;
-    }
+ }
 
     .banner-number-overlay {
         position: absolute;
-        left: 53%;
-        top: 41%;
-        transform: translate(-50%, -50%);
-        font-size: 4em;
+      left: 53%;
+   top: 41%;
+      transform: translate(-50%, -50%);
+        font-size: clamp(2.5em, 6vw, 4em);
         font-weight: 1000;
         color: white;
         z-index: 20;
@@ -193,36 +198,37 @@
     }
 
     .banner-text {
-        font-size: 1.2em;
-        font-weight: bold;
-        color: white;
-        white-space: nowrap;
+        font-size: clamp(0.8em, 2vw, 1.2em);
+  font-weight: bold;
+   color: white;
+        white-space: normal;
+      word-wrap: break-word;
         margin-left: 10px;
-        z-index: 1;
+  z-index: 1;
         flex-grow: 1;
         min-width: 0;
     }
 
     .banner-text2 {
-        font-size: 2.4em; 
+        font-size: clamp(1.2em, 3vw, 2.4em); 
         font-weight: bold;
-        color: white;
+    color: white;
         white-space: nowrap;
         margin-left: 10px;
         z-index: 1;
         flex-grow: 1;
-        min-width: 0;
+     min-width: 0;
     }
 
     .report-button {
         height: 40px !important;
-        padding: 0 15px !important;
-        font-size: 1em !important;
+      padding: 0 15px !important;
+     font-size: clamp(0.85em, 2vw, 1em) !important;
         font-weight: bold !important;
         gap: 8px !important;
-        border-radius: 8px !important;
+      border-radius: 8px !important;
         border: 1px solid #d9d9d9 !important;
-        color: #ffffff !important;
+   color: #ffffff !important;
         background-color: #3150eb !important;
         box-shadow: 0 2px 0 rgba(0, 0, 0, 0.02) !important;
         display: flex !important;
@@ -242,38 +248,39 @@
     }
 
     .estadisticas-servicios .ant-statistic {
-        display: flex;
+      display: flex;
         flex-direction: column-reverse;
         align-items: center;
-        text-align: center;
-        flex-grow: 1;
+      text-align: center;
+flex-grow: 1;
         margin: 0 10px;
+      min-width: 100px;
     }
 
     .ant-statistic-title {
         text-transform: uppercase;
-        font-size: 0.8em !important;
+        font-size: clamp(0.7em, 1.5vw, 0.8em) !important;
         font-weight: bold !important;
         color: #333;
-        margin-bottom: 5px !important;
-        white-space: normal;
+  margin-bottom: 5px !important;
+     white-space: normal;
         height: auto;
     }
 
     .estadisticas-servicios .ant-statistic-title {
-        font-size: 1.2em !important;
+        font-size: clamp(0.85em, 1.8vw, 1.2em) !important;
         color: #666 !important;
-        margin-bottom: 0px !important;
+   margin-bottom: 0px !important;
         margin-top: 5px !important;
     }
 
     .ant-statistic-content {
         font-weight: bold !important;
-        font-size: 2em !important;
+        font-size: clamp(1.5em, 3vw, 2em) !important;
     }
 
     .estadisticas-servicios .ant-statistic-content {
-        font-size: 3.5em !important;
+   font-size: clamp(2em, 5vw, 3.5em) !important;
         font-weight: 900 !important;
     }
 
@@ -286,26 +293,26 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        align-items: center;
-        gap: 20px; 
+     align-items: center;
+      gap: 15px; 
         margin-top: 50px; 
     }
 
     .estadisticas-puntuaje .ant-statistic {
         flex-direction: column-reverse;
-        align-items: center;
+      align-items: center;
         text-align: center;
-        margin: 0 1px;
-        min-width: 10px;
+        margin: 0 5px;
+        min-width: 80px;
     }
 
     .estadisticas-puntuaje .ant-statistic-content {
-        font-size: 3.5em !important;
-        font-weight: 900 !important;
+        font-size: clamp(2em, 5vw, 3.5em) !important;
+ font-weight: 900 !important;
     }
 
     .estadisticas-puntuaje .ant-statistic-title {
-        font-size: 1.2em !important;
+      font-size: clamp(0.75em, 1.8vw, 1.2em) !important;
         color: #666 !important;
         margin-bottom: 0px !important;
         margin-top: 0px !important;
@@ -315,18 +322,18 @@
         display: block !important;
         margin-top: 35px !important;
     }
-    
+  
 
     .tools-card {
         border-radius: 15px !important;
         box-shadow: 0 4px 8px rgba(0,0,0,0.1) !important;
-        background-color: var(--color-gris-fondo-tarjeta) !important;
+  background-color: var(--color-gris-fondo-tarjeta) !important;
         margin-top: 30px !important;
         min-height: 230px !important;
-    }
+  }
 
     .tools-title {
-        font-size: 2.5em;
+        font-size: clamp(1.5em, 4vw, 2.5em);
         font-weight: bold;
         color: #696969;
         margin-bottom: 20px;
@@ -338,73 +345,299 @@
 
     .tool-button {
         background-color: var(--color-amarillo-acento) !important;
-        color: white !important;
+    color: white !important;
         border: 1px solid var(--color-amarillo-acento) !important;
-        font-size: 1.1em !important;
+      font-size: clamp(0.9em, 2vw, 1.1em) !important;
         padding: 10px 10px !important;
         font-weight: bold !important;
         display: flex !important;
-        align-items: center !important;
+    align-items: center !important;
         justify-content: center !important;
         width: 100% !important;
-        height: 100% !important;
+ height: 100% !important;
         text-align: center !important;
         border-radius: 12px !important;
     }
 
-    @media (max-width: 991px) {
-        .ant-col-lg-8, .ant-col-lg-16 {
-            max-width: 100%;
-            flex: 0 0 100%;
-        }
-
-        .profile-card {
-            padding-top: 20px !important;
-        }
-
-        .profile-avatar {
-            width: 120px !important;
-            height: 120px !important;
-            border-width: 5px !important;
-        }
-
-        .avatar-container {
-            top: -60px;
-        }
-
-        .header-servicios {
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        .header-servicios2 {
-            display: flex;
-            justify-content: center; 
-            margin-bottom: 10px;
-        }
-
-        .estadisticas-servicios, .estadisticas-puntuaje {
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .ant-statistic-content {
-            font-size: 1.8em !important;
-        }
-
-        .report-button {
-            width: 100% !important;
-            justify-content: center !important;
-            font-size: 0.9em !important;
-            height: 35px !important;
-        }
-
-        .stats-divider {
-            display: none !important;
+    /* Media Queries para tablets (pantallas medianas) */
+    @media (max-width: 1200px) {
+        .main-container {
+            padding: 20px 10px;
         }
 
         .banner-container {
-            margin-left: 0;
+   margin-left: 20px;
+        }
+
+        .servicios-banner {
+        padding-left: 120px;
+padding-right: 20px;
+  }
+
+        .banner-image-container {
+  height: 120px;
+            width: 120px;
+            top: -35px;
+        }
+
+        .estadisticas-puntuaje {
+            gap: 10px;
+        }
+
+        .estadisticas-puntuaje .stats-divider {
+        margin-top: 25px !important;
+  }
+    }
+
+    /* Media Queries para tablets pequeñas y monitores viejos */
+    @media (max-width: 991px) {
+.ant-col-lg-8, .ant-col-lg-16 {
+    max-width: 100%;
+            flex: 0 0 100%;
+ }
+
+        .main-container {
+        margin-top: 30px;
+            padding: 15px 10px;
+        }
+
+        .profile-card {
+    padding-top: 20px !important;
+            margin-bottom: 20px;
+        }
+
+    .profile-avatar {
+    width: 100px !important;
+          height: 100px !important;
+       border-width: 6px !important;
+ }
+
+        .avatar-container {
+   top: -50px;
+        }
+
+        .header-servicios {
+  flex-direction: column;
+          align-items: center;
+gap: 15px;
+            margin-bottom: 15px;
+        }
+    
+      .header-servicios2 {
+        display: flex;
+ justify-content: center; 
+            margin-bottom: 10px;
+   }
+
+      .banner-container {
+ margin-left: 0;
+       justify-content: center;
+      }
+
+   .servicios-banner {
+            padding-left: 100px;
+            padding-right: 15px;
+     height: 45px;
+     margin-top: 40px;
+        }
+
+        .banner-image-container {
+     height: 100px;
+            width: 100px;
+            top: -30px;
+        }
+
+        .estadisticas-servicios, .estadisticas-puntuaje {
+            flex-direction: row;
+     gap: 10px;
+        }
+
+        .estadisticas-servicios .ant-statistic,
+        .estadisticas-puntuaje .ant-statistic {
+         min-width: 70px;
+        }
+
+   .report-button {
+  width: 100% !important;
+     justify-content: center !important;
+          font-size: 0.9em !important;
+        height: 35px !important;
+      }
+
+        .stats-divider {
+        height: 40px !important;
+}
+
+ .estadisticas-puntuaje {
+            margin-top: 30px;
+      }
+
+        .estadisticas-puntuaje .stats-divider {
+            margin-top: 20px !important;
+     }
+    }
+
+    /* Media Queries para dispositivos móviles grandes */
+    @media (max-width: 768px) {
+        .main-container {
+            margin-top: 20px;
+    padding: 10px 8px;
+     }
+
+        .profile-avatar {
+ width: 80px !important;
+        height: 80px !important;
+   border-width: 5px !important;
+   }
+
+        .avatar-container {
+  top: -40px;
+      }
+
+   .servicios-banner {
+        padding-left: 80px;
+        padding-right: 10px;
+    height: 40px;
+   margin-top: 35px;
+   }
+
+        .servicios-banner2 {
+ padding-left: 80px;
+         padding-right: 10px;
+         height: 40px;
+        }
+
+        .banner-image-container {
+          height: 85px;
+         width: 85px;
+        top: -25px;
+     }
+
+        .estadisticas-servicios,
+   .estadisticas-puntuaje {
+            gap: 8px;
+        }
+
+        .estadisticas-servicios .ant-statistic,
+        .estadisticas-puntuaje .ant-statistic {
+    min-width: 60px;
+ margin: 0 3px;
+        }
+
+     .stats-divider {
+    height: 35px !important;
+        }
+
+        .estadisticas-puntuaje {
+            margin-top: 20px;
+  gap: 5px;
+        }
+
+        .estadisticas-puntuaje .stats-divider {
+         margin-top: 15px !important;
+}
+  }
+
+    /* Media Queries para dispositivos móviles pequeños */
+    @media (max-width: 576px) {
+      .main-container {
+     margin-top: 15px;
+            padding: 8px 5px;
+        }
+
+        .profile-section {
+      margin-bottom: 20px;
+        }
+
+        .profile-avatar {
+            width: 70px !important;
+            height: 70px !important;
+        border-width: 4px !important;
+      }
+
+        .avatar-container {
+ top: -35px;
+        }
+
+  .profile-card {
+   padding: 15px !important;
+  padding-top: 25px !important;
+  }
+
+        .servicios-banner,
+        .servicios-banner2 {
+            padding-left: 70px;
+            padding-right: 8px;
+     height: 35px;
+     margin-top: 30px;
+     }
+
+        .banner-image-container {
+    height: 70px;
+  width: 70px;
+            top: -20px;
+      }
+
+        .banner-container {
+   margin-left: 0;
+        }
+
+        /* Reorganizar estadísticas en columnas para móviles pequeños */
+        .estadisticas-servicios {
+            flex-direction: column;
+            gap: 15px;
+      }
+
+     .estadisticas-puntuaje {
+        flex-wrap: wrap;
+      gap: 10px;
+   margin-top: 15px;
+ }
+
+    .estadisticas-servicios .ant-statistic,
+        .estadisticas-puntuaje .ant-statistic {
+    min-width: 45%;
+        }
+
+.stats-divider {
+   display: none !important;
+        }
+
+        .estadisticas-puntuaje .stats-divider {
+          display: none !important;
+        }
+
+        .services-card,
+    .services-card2 {
+     padding: 10px !important;
+    }
+
+  .header-servicios {
+  margin-bottom: 10px;
+        }
+    }
+
+    /* Media Queries para dispositivos muy pequeños (320px y similares) */
+    @media (max-width: 400px) {
+      .name-box {
+            font-size: 0.95em !important;
+         padding: 6px 10px;
+        }
+
+        .servicios-banner,
+        .servicios-banner2 {
+            padding-left: 60px;
+  padding-right: 5px;
+        height: 32px;
+        }
+
+        .banner-image-container {
+  height: 60px;
+            width: 60px;
+      top: -18px;
+}
+
+        .estadisticas-puntuaje .ant-statistic {
+            min-width: 40%;
         }
     }
