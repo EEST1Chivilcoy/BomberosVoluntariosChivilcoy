@@ -34,6 +34,7 @@ namespace Vista.Data.Models.Vehiculos
         /// <summary>
         /// Año de fabricación del vehículo.
         /// </summary>
+        [Range(1900, 2100, ErrorMessage = "El año debe estar entre 1900 y 2100.")]
         public int? Año { get; set; }
 
         /// <summary>
@@ -41,8 +42,7 @@ namespace Vista.Data.Models.Vehiculos
         /// Este campo es obligatorio.
         /// </summary>
         [StringLength(255)]
-        [Required]
-        public string Patente { get; set; } = null!;
+        public string? Patente { get; set; }
 
         /// <summary>
         /// Tipo de vehículo (por ejemplo, automóvil, camioneta, etc.), con un máximo de 255 caracteres.
