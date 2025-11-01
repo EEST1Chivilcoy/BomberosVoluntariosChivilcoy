@@ -118,7 +118,7 @@ padding: 8px 15px;
         border-radius: 15px !important;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1) !important;
         background-color: var(--color-gris-fondo-tarjeta) !important;
-   margin-bottom: 15px !important;
+   margin-bottom: 30px !important;
     }
 
     .header-servicios {
@@ -297,16 +297,15 @@ height: 100%;
         justify-content: space-around;
         align-items: center;
         gap: 10px;
-   margin-top: 50px;
+        margin-top: 90px;
     }
 
     .estadisticas-puntuaje .ant-statistic {
         flex-direction: column-reverse;
         align-items: center;
-     text-align: center;
+        text-align: center;
         margin: 0 3px;
-  min-width: 70px;
-        flex-grow: 1;
+        min-width: 70px;
     }
 
     .estadisticas-puntuaje .ant-statistic-content {
@@ -404,7 +403,7 @@ margin-top: 0px !important;
         }
     }
 
-    /* Media Queries para tablets pequeñas y monitores viejos */
+    /* Media Queries para tablets pequeï¿½as y monitores viejos */
     @media (max-width: 991px) {
         .ant-col-lg-8, .ant-col-lg-16 {
        max-width: 100%;
@@ -497,7 +496,7 @@ margin-top: 0px !important;
         }
  }
 
-    /* Media Queries para dispositivos móviles grandes */
+    /* Media Queries para dispositivos mï¿½viles grandes */
     @media (max-width: 768px) {
         .main-container {
     margin-top: 20px;
@@ -558,7 +557,7 @@ min-width: 50px;
         }
     }
 
-    /* Media Queries para dispositivos móviles pequeños */
+    /* Media Queries para dispositivos mï¿½viles pequeï¿½os */
     @media (max-width: 576px) {
         .main-container {
          margin-top: 15px;
@@ -602,7 +601,7 @@ margin-bottom: 20px;
         justify-content: center;
       }
 
-   /* Mantener estadísticas en fila pero más compactas */
+   /* Mantener estadï¿½sticas en fila pero mï¿½s compactas */
         .estadisticas-servicios {
         flex-direction: column;
       gap: 15px;
@@ -644,7 +643,7 @@ margin-bottom: 20px;
  }
     }
 
-    /* Media Queries para dispositivos muy pequeños (320px y similares) */
+    /* Media Queries para dispositivos muy pequeï¿½os (320px y similares) */
  @media (max-width: 400px) {
     .name-box {
             font-size: 0.95em !important;
@@ -668,3 +667,12 @@ margin-bottom: 20px;
     min-width: calc(50% - 10px);
         }
     }
+    .modal-footer {
+    border-radius: 7px !important;
+    background-color: #ce0f05 !important;
+    border-top: 1px solid #d9d9d9;
+    box-shadow: 0 -2px 8px rgb(255, 255, 255);
+    color: white !important;
+    margin-left: 70px !important;
+    margin-top: 10px !important;
+}
