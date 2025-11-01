@@ -199,12 +199,12 @@
 					<AntDesign.Col Span="18">
 						<AntDesign.Row Gutter="16">
 							<AntDesign.Col Span="8">
-								<FormItem Label="Nombre" Required>
+								<FormItem Label="Nombre">
 									<Input @bind-Value="@personalView.Nombre" Disabled="@EntraIDisDisponbile" />
 								</FormItem>
 							</AntDesign.Col>
 							<AntDesign.Col Span="8">
-								<FormItem Label="Apellido" Required>
+								<FormItem Label="Apellido">
 									<Input @bind-Value="@personalView.Apellido" Disabled="@EntraIDisDisponbile" />
 								</FormItem>
 							</AntDesign.Col>
@@ -212,7 +212,7 @@
 
 						<AntDesign.Row Gutter="16">
 							<AntDesign.Col Span="24">
-								<FormItem Label="UPN" Required>
+								<FormItem Label="UPN">
 									<AntDesign.Input @bind-Value="@personalView.UPN" Disabled="@(!EntraIDisDisponbile)">
 										<AddOnAfter>
 											<label>@@bomberoschivilcoy.org.ar</label>
@@ -230,7 +230,7 @@
 
 						<AntDesign.Row Gutter="16">
 							<AntDesign.Col Span="8">
-								<FormItem Label="DNI" Required>
+								<FormItem Label="DNI">
 									<Input @bind-Value="@personalView.Documento" Placeholder="Ingrese el DNI" />
 								</FormItem>
 							</AntDesign.Col>
@@ -258,7 +258,7 @@
 							</AntDesign.Col>
 							<AntDesign.Col Span="6">
 								<FormItem Label="Sexo">
-									<EnumSelect TEnum="TipoSexo" @bind-Value="@personalView.Sexo" />
+									<EnumSelect TEnum="TipoSexo ?" @bind-Value="@personalView.Sexo" />
 								</FormItem>
 							</AntDesign.Col>
 							<AntDesign.Col Span="6">
@@ -398,11 +398,11 @@
 				Apellido = personalView.Apellido,
 				EntraId = personalView.EntraID,
 				UPN = personalView.UPN + "@bomberoschivilcoy.org.ar",
-				Documento = personalView.Documento,
+				Documento = personalView.Documento.Value,
 				FechaNacimiento = personalView.FechaNacimiento,
 				LugarNacimiento = personalView.LugarNacimiento,
 				Direccion = personalView.Direccion,
-				Sexo = personalView.Sexo,
+				Sexo = personalView.Sexo.Value,
 				GrupoSanguineo = personalView.GrupoSanguineo,
 
 				// --- Información Profesional ---

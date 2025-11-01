@@ -569,7 +569,7 @@ WrapClassName="modal-crear-brigada">
             return;
         }
 
-        Bombero BomberoEncargado = await BomberoService.ObtenerBomberoObjetoPorLegajoAsync(newBrigada.Encargado.NumeroLegajo);
+        Bombero BomberoEncargado = await BomberoService.ObtenerBomberoObjetoPorLegajoAsync(newBrigada.Encargado.NumeroLegajo.Value);
         if (BomberoEncargado == null)
         {
             await MessageService.ErrorAsync("El encargado seleccionado no es válido.");
@@ -639,7 +639,7 @@ WrapClassName="modal-crear-brigada">
             return;
         }
 
-        var BomberoEncargado = await BomberoService.ObtenerBomberoObjetoPorLegajoAsync(selBrigada.Encargado.NumeroLegajo);
+        var BomberoEncargado = await BomberoService.ObtenerBomberoObjetoPorLegajoAsync(selBrigada.Encargado.NumeroLegajo.Value);
         if (BomberoEncargado == null)
         {
             await MessageService.ErrorAsync("El encargado seleccionado no es válido.");

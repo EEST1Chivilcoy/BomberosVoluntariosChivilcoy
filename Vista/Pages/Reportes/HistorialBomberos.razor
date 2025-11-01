@@ -313,12 +313,9 @@
             <div class="table-container">
                 <Table DataSource="BomberosVM" PageSize="6" Responsive Bordered Style="min-width: 400px;">
                     <ColumnDefinitions>
-                        <PropertyColumn Property="c=>c.NumeroLegajo" Title="Numero de Legajo" Sortable></PropertyColumn>
+                        <PropertyColumn Property="c=>c.NumeroLegajo.Value" Title="Numero de Legajo" Sortable></PropertyColumn>
                         <PropertyColumn Property="c=>c.NombreYApellido" Title="Nombre Y Apellido" Sortable></PropertyColumn>
-                        <PropertyColumn Property="c=>c.Grado"
-                                        SortDirections="new[] { SortDirection.Descending }"
-                                        Filters="EscalafonJerarquicoFilter"
-                                        OnFilter="((value,name)=>Enum.GetName(typeof(EscalafonJerarquico), name).StartsWith(Enum.GetName(typeof(EscalafonJerarquico), value)))" />
+                        <PropertyColumn Property="c=>c.Grado" />
                         <PropertyColumn Property="c=>c.TelefonoCel" Title="Telefono Cel" Sortable></PropertyColumn>
                         <PropertyColumn Property="c=>c.TelefonoFijo" Title="Telefono Fijo" Sortable></PropertyColumn>
                         <PropertyColumn Property="c=>c.TelefonoLaboral" Title="Telefono Laboral" Sortable></PropertyColumn>
@@ -357,7 +354,7 @@
         ExportarAPDF crear = new ExportarAPDF();
         var datos = BomberosVM.Select(b => new
         {
-            b.NumeroLegajo,
+            b.NumeroLegajo.Value,
             b.Nombre,
             b.Apellido,
             b.Grado,
@@ -376,7 +373,7 @@
         CrearExcel crear = new CrearExcel();
         var datos = BomberosVM.Select(b => new
         {
-            b.NumeroLegajo,
+            b.NumeroLegajo.Value,
             b.Nombre,
             b.Apellido,
             b.Grado,

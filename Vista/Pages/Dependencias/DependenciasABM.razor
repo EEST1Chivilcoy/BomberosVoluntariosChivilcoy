@@ -623,7 +623,7 @@
             return;
         }
 
-        Bombero BomberoEncargado = await BomberoService.ObtenerBomberoObjetoPorLegajoAsync(newDependencia.Encargado.NumeroLegajo);
+        Bombero BomberoEncargado = await BomberoService.ObtenerBomberoObjetoPorLegajoAsync(newDependencia.Encargado.NumeroLegajo.Value);
 
         if (BomberoEncargado == null)
         {
@@ -664,7 +664,7 @@
             return;
         }
 
-        var BomberoEncargado = await BomberoService.ObtenerBomberoObjetoPorLegajoAsync(selDependencia.Encargado.NumeroLegajo);
+        var BomberoEncargado = await BomberoService.ObtenerBomberoObjetoPorLegajoAsync(selDependencia.Encargado.NumeroLegajo.Value);
 
         if (BomberoEncargado == null)
         {

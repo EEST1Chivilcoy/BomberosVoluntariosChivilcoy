@@ -168,7 +168,6 @@
 		<Form Model="@personalView"
 			  Layout="FormLayout.Vertical"
 			  OnFinish="OnFinish"
-			  OnFinishFailed="OnFinishFailed"
 			  Loading="isLoading">
 
 			@*Información Personal (Común para todos)*@
@@ -200,12 +199,12 @@
 					<AntDesign.Col Span="18">
 						<AntDesign.Row Gutter="16">
 							<AntDesign.Col Span="8">
-								<FormItem Label="Nombre" Required>
+								<FormItem Label="Nombre">
 									<Input @bind-Value="@personalView.Nombre" Disabled="@EntraIDisDisponbile" />
 								</FormItem>
 							</AntDesign.Col>
 							<AntDesign.Col Span="8">
-								<FormItem Label="Apellido" Required>
+								<FormItem Label="Apellido">
 									<Input @bind-Value="@personalView.Apellido" Disabled="@EntraIDisDisponbile" />
 								</FormItem>
 							</AntDesign.Col>
@@ -213,7 +212,7 @@
 
 						<AntDesign.Row Gutter="16">
 							<AntDesign.Col Span="24">
-								<FormItem Label="UPN" Required>
+								<FormItem Label="UPN">
 									<AntDesign.Input @bind-Value="@personalView.UPN" Disabled="@(!EntraIDisDisponbile)">
 										<AddOnAfter>
 											<label>@@bomberoschivilcoy.org.ar</label>
@@ -231,7 +230,7 @@
 
 						<AntDesign.Row Gutter="16">
 							<AntDesign.Col Span="8">
-								<FormItem Label="DNI" Required>
+								<FormItem Label="DNI">
 									<Input @bind-Value="@personalView.Documento" Placeholder="Ingrese el DNI" />
 								</FormItem>
 							</AntDesign.Col>
@@ -259,7 +258,7 @@
 							</AntDesign.Col>
 							<AntDesign.Col Span="6">
 								<FormItem Label="Sexo">
-									<EnumSelect TEnum="TipoSexo" @bind-Value="@personalView.Sexo" />
+									<EnumSelect TEnum="TipoSexo ?" @bind-Value="@personalView.Sexo" />
 								</FormItem>
 							</AntDesign.Col>
 							<AntDesign.Col Span="6">
@@ -334,7 +333,7 @@
 				<Button Type="@ButtonType.Default" OnClick="Cancelar">
 					Cancelar
 				</Button>
-				<Button Type="@ButtonType.Primary" HtmlType="submit" Class="primary-button" OnClick="CrearComisionDirectiva" Disabled="@(!EntraIDisDisponbile)">
+				<Button Type="@ButtonType.Primary" HtmlType="submit" Class="primary-button" Disabled="@(!EntraIDisDisponbile)">
 					Registrar Comisión Directiva
 				</Button>
 			</div>
@@ -378,76 +377,6 @@
 		return Task.CompletedTask;
 	}
 
-	public async Task CrearComisionDirectiva()
-	{
-		isLoading = true;
-
-		try
-		{
-			if (!EntraIDisDisponbile)
-			{
-				message.Error("El Servicio de entra id no esta disponible.");
-				return;
-			}
-
-			// Preparar el objeto ComisionDirectiva para enviarlo al servicio
-			ComisionDirectiva comisionDirectiva = new ComisionDirectiva()
-			{
-				// --- Información Personal ---
-				Nombre = personalView.Nombre,
-				Apellido = personalView.Apellido,
-				EntraId = personalView.EntraID,
-				UPN = personalView.UPN + "@bomberoschivilcoy.org.ar",
-				Documento = personalView.Documento,
-				FechaNacimiento = personalView.FechaNacimiento,
-				LugarNacimiento = personalView.LugarNacimiento,
-				Direccion = personalView.Direccion,
-				Sexo = personalView.Sexo,
-				GrupoSanguineo = personalView.GrupoSanguineo,
-
-				// --- Información Profesional ---
-				Grado = personalView.Grado,
-				Estado = personalView.Estado,
-				FechaAceptacion = personalView.FechaAceptacion,
-
-				// --- Información de Contacto ---
-				Contacto = new Contacto
-				{
-					TelefonoCel = personalView.TelefonoCel,
-					TelefonoFijo = personalView.TelefonoFijo,
-					TelefonoLaboral = personalView.TelefonoLaboral,
-					Email = personalView.Email
-				}
-			};
-
-			// Preparar la foto si existe
-			Imagen_Personal? foto = null;
-
-			if (imageViewModel.Base64 != null && imageViewModel.TipoImagen != null && imageViewModel.NombreImagen != null)
-			{
-				foto = new Imagen_Personal
-				{
-					NombreImagen = imageViewModel.NombreImagen,
-					TipoImagen = imageViewModel.TipoImagen,
-					Base64Imagen = imageViewModel.Base64
-				};
-			}
-
-			// Creamos el ComisionDirectiva
-			await ComisionDirectivaService.CrearComisionDirectivaAsync(comisionDirectiva, foto);
-			message.Success("Se agregó el comisión directiva.");
-			navigationManager.NavigateTo($"/fire-force/personal/comisiondirectiva", true);
-		}
-		catch (Exception ex)
-		{
-			message.Error($"Error: {ex.Message}");
-		}
-		finally
-		{
-			isLoading = false;
-		}
-	}
-
 	public async Task BusquedaPorUPN(string upn)
 	{
 		if (string.IsNullOrWhiteSpace(upn))
@@ -466,7 +395,7 @@
 
 			StateHasChanged();
 
-			await Task.Delay(500, token); // debounce
+			await Task.Delay(300, token); // debounce
 
 			var (bombero, foto) = await EntraIDService.BuscarPorUPNAsync(upn, token);
 
@@ -537,13 +466,73 @@
 		}
 	}
 
-	private void OnFinish(EditContext editContext)
+	private async Task OnFinish(EditContext editContext)
 	{
-		Console.WriteLine($"Success:{JsonSerializer.Serialize(personalView)}");
-	}
+		isLoading = true;
 
-	private void OnFinishFailed(EditContext editContext)
-	{
-		Console.WriteLine($"Failed:{JsonSerializer.Serialize(personalView)}");
+		try
+		{
+			if (!EntraIDisDisponbile)
+			{
+				message.Error("El Servicio de entra id no esta disponible.");
+				return;
+			}
+
+			// Preparar el objeto ComisionDirectiva para enviarlo al servicio
+			ComisionDirectiva comisionDirectiva = new ComisionDirectiva()
+			{
+				// --- Información Personal ---
+				Nombre = personalView.Nombre,
+				Apellido = personalView.Apellido,
+				EntraId = personalView.EntraID,
+				UPN = personalView.UPN + "@bomberoschivilcoy.org.ar",
+				Documento = personalView.Documento.Value,
+				FechaNacimiento = personalView.FechaNacimiento,
+				LugarNacimiento = personalView.LugarNacimiento,
+				Direccion = personalView.Direccion,
+				Sexo = personalView.Sexo.Value,
+				GrupoSanguineo = personalView.GrupoSanguineo,
+
+				// --- Información Profesional ---
+				Grado = personalView.Grado,
+				Estado = personalView.Estado,
+				FechaAceptacion = personalView.FechaAceptacion,
+
+				// --- Información de Contacto ---
+				Contacto = new Contacto
+				{
+					TelefonoCel = personalView.TelefonoCel,
+					TelefonoFijo = personalView.TelefonoFijo,
+					TelefonoLaboral = personalView.TelefonoLaboral,
+					Email = personalView.Email
+				}
+			};
+
+			// Preparar la foto si existe
+			Imagen_Personal? foto = null;
+
+			if (imageViewModel.Base64 != null && imageViewModel.TipoImagen != null && imageViewModel.NombreImagen != null)
+			{
+				foto = new Imagen_Personal
+				{
+					NombreImagen = imageViewModel.NombreImagen,
+					TipoImagen = imageViewModel.TipoImagen,
+					Base64Imagen = imageViewModel.Base64
+				};
+			}
+
+			// Creamos el ComisionDirectiva
+			await ComisionDirectivaService.CrearComisionDirectivaAsync(comisionDirectiva, foto);
+			message.Success("Se agregó el comisión directiva.");
+			navigationManager.NavigateTo($"/fire-force/personal/comisiondirectiva", true);
+		}
+		catch (Exception ex)
+		{
+			message.Error($"Error: {ex.Message}");
+		}
+		finally
+		{
+			isLoading = false;
+		}
 	}
 }
