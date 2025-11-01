@@ -149,6 +149,11 @@
           OnFinishFailed="OnFinishFailed">
         
         <Row Class="modal-crear-licencia-row" Gutter="16">
+                  <AntDesign.Col Span="12">
+                <FormItem Label="Num. Serie" Class="modal-crear-licencia-form-item">
+                    <Input @bind-Value="@ComunicacionVM.NroSerie" />
+                </FormItem>
+            </AntDesign.Col>
             <AntDesign.Col Span="12">
                 <FormItem Label="Num. Equipo" Class="modal-crear-licencia-form-item">
                     <Input @bind-Value="@ComunicacionVM.NroEquipo" />
