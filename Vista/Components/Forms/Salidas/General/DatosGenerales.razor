@@ -240,7 +240,7 @@
 
 @code {
     [Parameter, EditorRequired] public required SalidasViewModels Model { get; set; } // Modelo de datos para el formulario
-
+    [Parameter] public bool IsFormDisabled { get; set; }
     [Parameter] public bool MostrarOpcionDepartamento { get; set; } = true; // Indica si se muestra la opción de departamento (En algunos casos es imposible que sea un deparatamento)
 
     [Parameter] public bool MostrarSwitchFuerzasIntervinientes { get; set; } = true; // Indica si se muestra el switch de la opción de fuerzas intervinientes (En algunos casos es obligatorio por lo que no se muestra el switch)

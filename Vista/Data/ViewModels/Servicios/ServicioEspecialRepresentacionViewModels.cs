@@ -1,9 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿﻿using System.ComponentModel.DataAnnotations;
 using Vista.Data.Enums;
 
 namespace Vista.Data.ViewModels.Servicios
 {
-    public class ServicioEspecialRepresentacionViewModels : SalidasViewModels
+    public class ServicioEspecialRepresentacionViewModels : ServicioEspecialViewModel
     {
        
         public TipoServicioRepresentaciones TipoServicioRepresentacion { get; set; }

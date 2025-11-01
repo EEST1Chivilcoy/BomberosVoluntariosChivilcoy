@@ -1,10 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿﻿using System.ComponentModel.DataAnnotations;
 using Vista.Data.Enums;
-using Vista.Data.Models.Salidas.Componentes;
-
 namespace Vista.Data.ViewModels.Servicios
 {
-    public class ServicioEspecialPrevencionViewModels : SalidasViewModels
+    public class ServicioEspecialPrevencionViewModels : ServicioEspecialViewModel
     {
         [StringLength(255)]
         public TipoOrganizacionBeneficiada TipoOrganizacion { get; set; }

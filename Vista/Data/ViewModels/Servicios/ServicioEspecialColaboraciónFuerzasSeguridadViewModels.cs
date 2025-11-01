@@ -2,7 +2,7 @@
 
 namespace Vista.Data.ViewModels.Servicios
 {
-    public class ServicioEspecialColaboraciónFuerzasSeguridadViewModels : SalidasViewModels
+    public class ServicioEspecialColaboraciónFuerzasSeguridadViewModels : ServicioEspecialViewModel
     {
         [StringLength(255)]
         public string? DetallesColaboFuerzasSeguridad { get; set; }

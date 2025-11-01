@@ -1,6 +1,6 @@
-﻿﻿﻿﻿﻿﻿﻿using Microsoft.AspNetCore.Components;
+﻿﻿﻿﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using System.Text.Json;
 using Vista.Data.Models.Personas.Personal;
 using Vista.Data.Models.Salidas.Planillas;
 using Vista.Data.ViewModels.Rescates;
@@ -13,14 +13,17 @@ using Vista.Data.Enums.Salidas;
 using System.Threading.Tasks;
 using Vista.Data.ViewModels.Personal;
 using Vista.Data.Enums;
-using Vista.Data.ViewModels;
-using Vista.Data.ViewModels.Rescates;
+using Vista.Data.Enums.Discriminadores;
+using Vista.Data.ViewModels.Incendios;
+using Vista.Data.ViewModels; // Asegúrate de que este using esté presente para SalidasViewModels
+using Vista.Data.Models.Salidas.Planillas.Incendios;
+
 namespace Vista.Pages.Salidas
 {
-    public partial class Rescates
+    public partial class Incendios
     {
-        // ViewModel para la carga de Rescates.
-        private SalidasViewModels RescateViewModel = new RescatePersonaViewModels();
+        // ViewModel para la carga de Incendios.
+        private SalidasViewModels IncendioViewModel = new IncendioComercioViewModels();
 
         // Listas de datos
         private List<Bombero> BomberosTodos = new();
@@ -42,9 +45,9 @@ namespace Vista.Pages.Salidas
         [Parameter]
         [SupplyParameterFromQuery] public int? AnioSalida { get; set; }
         
-        // Tipo de Rescate.
+        // Tipo de Incendio.
         [Parameter]
-        public int TipoRescate { get; set; }
+        public int TipoIncendio { get; set; }
 
 
         // Funcion de Carga de Salida.
@@ -52,32 +55,30 @@ namespace Vista.Pages.Salidas
         {
             try
             {
-                var rescate = RescateViewModel.ToSalida() as Rescate
-                    ?? throw new InvalidOperationException("Error al convertir el ViewModel a la entidad de rescate.");
+                var incendio = IncendioViewModel.ToSalida() as Incendio
+                    ?? throw new InvalidOperationException("Error al convertir el ViewModel a la entidad de incendio.");
 
                 Salida salidaGuardada;
 
-                if (RescateViewModel.SalidaId > 0)
-                {
-                    salidaGuardada = await SalidaService.EditarSalida(rescate);
+                if (IncendioViewModel.SalidaId > 0) // Asumimos que si tiene ID, es una edición
+                {                    salidaGuardada = await SalidaService.EditarSalida(incendio);
                     await message.SuccessAsync("Salida editada correctamente.");
-                    HandleOk1(salidaGuardada.AnioNumeroParte, salidaGuardada.NumeroParte);
-                }
+                    HandleOk1(salidaGuardada.AnioNumeroParte, salidaGuardada.NumeroParte);                }
                 else
                 {
                     // Modo creación
-                    var numeroParteExistente = await SalidaService.ObtenerSalidaPorNumeroParteAsync<Salida>(
-                        RescateViewModel.NumeroParte,
-                        m => m.NumeroParte == RescateViewModel.NumeroParte && m.AnioNumeroParte == RescateViewModel.AnioNumeroParte
+                    var numeroParteExistente = await SalidaService.ObtenerSalidaPorNumeroParteAsync<Incendio>(
+                        IncendioViewModel.NumeroParte,
+                        m => m.NumeroParte == IncendioViewModel.NumeroParte && m.AnioNumeroParte == IncendioViewModel.AnioNumeroParte
                     );
 
                     if (numeroParteExistente != null)
                     {
-                        await message.WarningAsync($"El número de parte {RescateViewModel.NumeroParte}/{RescateViewModel.AnioNumeroParte} ya existe.");
+                        await message.WarningAsync($"El número de parte {IncendioViewModel.NumeroParte}/{IncendioViewModel.AnioNumeroParte} ya existe.");
                         return;
                     }
 
-                    salidaGuardada = await SalidaService.GuardarSalida(rescate);
+                    salidaGuardada = await SalidaService.GuardarSalida(incendio);
                     await message.SuccessAsync("Salida guardada correctamente.");
                     HandleOk1(salidaGuardada.AnioNumeroParte, salidaGuardada.NumeroParte);
                 }
@@ -107,55 +108,74 @@ namespace Vista.Pages.Salidas
             BomberosTodos = await BomberoService.ObtenerTodosLosBomberosAsync();
             MovilesTodos = await VehiculoSalidaService.ObtenerVehiculosSalidasPorEstadoAsync(TipoEstadoMovil.Activo);
 
-            if ((RescateTipo)TipoRescate == RescateTipo.Animal)
-            {
-                RescateViewModel = new RescateAnimaViewModels();
-            }
-            else
-            {
-                RescateViewModel = new RescatePersonaViewModels();
-            }
-
-
             // Si se pasan parámetros, puede ser modo Visualización/Edición
             if (NumeroSalida.HasValue && AnioSalida.HasValue && NumeroSalida.Value > 0 && AnioSalida.Value > 0)
             {
-                var salidaAEditar = await SalidaService.ObtenerSalidaParaEditarAsync<Salida>(NumeroSalida.Value, AnioSalida.Value);
+                var salidaAEditar = await SalidaService.ObtenerSalidaParaEditarAsync<Incendio>(NumeroSalida.Value, AnioSalida.Value);
 
                 if (salidaAEditar != null)
                 {
                     var todasLasFuerzas = await FuerzaIntervinienteService.ObtenerTodasLasFuerzasAsync();
                     var fuerzasVM = todasLasFuerzas.Select(f => new Vista.Data.ViewModels.Personal.SimpleFuerzaViewModel { Id = f.Id, Nombre = f.NombreFuerza }).ToList();
 
-                    RescateViewModel = salidaAEditar.ToViewModel(fuerzasVM);
+                    IncendioViewModel = salidaAEditar.ToViewModel(fuerzasVM);
                 }
                 else
                 {
                     await message.WarningAsync("No se encontró la salida solicitada. Se abrirá el formulario en modo creación.");
-                    if (AnioSalida.HasValue && AnioSalida.Value > 0) RescateViewModel.AnioNumeroParte = AnioSalida.Value;
-                    if (NumeroSalida.HasValue && NumeroSalida.Value > 0) RescateViewModel.NumeroParte = NumeroSalida.Value;
+                    if (AnioSalida.HasValue && AnioSalida.Value > 0) IncendioViewModel.AnioNumeroParte = AnioSalida.Value;
+                    if (NumeroSalida.HasValue && NumeroSalida.Value > 0) IncendioViewModel.NumeroParte = NumeroSalida.Value;
                 }
 
-                return;
+                return; // Finaliza la inicialización aquí para el modo edición/visualización
             }
+
+            // Modo Creación
+            IncendioViewModel = CrearViewModelPorTipo((TipoDeEmergencia)TipoIncendio);
 
             // Modo crear (se inicializa arriba, aquí se setean los valores por defecto)
             if (AnioSalida.HasValue && AnioSalida.Value > 0)
-                RescateViewModel.AnioNumeroParte = AnioSalida.Value;
+                IncendioViewModel.AnioNumeroParte = AnioSalida.Value;
             else
-                RescateViewModel.AnioNumeroParte = DateTime.Now.Year;
+                IncendioViewModel.AnioNumeroParte = DateTime.Now.Year;
 
             if (NumeroSalida.HasValue && NumeroSalida.Value > 0)
-                RescateViewModel.NumeroParte = NumeroSalida.Value;
+                IncendioViewModel.NumeroParte = NumeroSalida.Value;
             else
-                RescateViewModel.NumeroParte = await SalidaService.ObtenerUltimoNumeroParteDelAnioAsync(RescateViewModel.AnioNumeroParte) + 1;
+                IncendioViewModel.NumeroParte = await SalidaService.ObtenerUltimoNumeroParteDelAnioAsync(IncendioViewModel.AnioNumeroParte) + 1;
         }
+
+        private SalidasViewModels CrearViewModelPorTipo(TipoDeEmergencia tipo)
+        {
+            return tipo switch
+            {
+                TipoDeEmergencia.IncendioComercio => new IncendioComercioViewModels(),
+                TipoDeEmergencia.IncendioEstablecimientoEducativo => new IncendioEstablecimientoEducativoViewModels(),
+                TipoDeEmergencia.IncendioEstablecimientoPublico => new IncendioEstablecimientoPublicoViewModels(),
+                TipoDeEmergencia.IncendioForestal => new IncendioForestaViewModels(),
+                TipoDeEmergencia.IncendioHospitalesYClinicas => new IncendioHospitalesYClinicasViewModels(),
+                TipoDeEmergencia.IncendioIndustria => new IncendioIndustriaViewModels(),
+                TipoDeEmergencia.IncendioVivienda => new IncendioViviendaViewModels(),
+                TipoDeEmergencia.IncendioAeronaves => new IncendioAeronavesViewModels(),
+                TipoDeEmergencia.Incendio => new IncendioOtroViewModels(),
+                _ => CrearViewModelNoReconocido()
+            };
+        }
+
+        private SalidasViewModels CrearViewModelNoReconocido()
+        {
+            message.ErrorAsync("Tipo de incendio no reconocido. Se usará un formulario base.");
+            // Devuelve un ViewModel por defecto para evitar un NullReferenceException
+            return new IncendioComercioViewModels();
+        }
+
         //Finish Failed
         private void OnFinishFailed(EditContext editContext)
         {
             message.Error("Error al cargar, posible información ausente");
-             Console.WriteLine($"Failed:{JsonSerializer.Serialize(RescateViewModel)}");
+             Console.WriteLine($"Failed:{System.Text.Json.JsonSerializer.Serialize(IncendioViewModel)}");
         }
+
         //Impresión
         bool _visible1;
 
