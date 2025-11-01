@@ -235,7 +235,7 @@ Responsive>
         BrigadaBomberos = await BrigadaService.ObtenerBomberosDeBrigadaAsync(BrigadaId);
         var bomberosActuales = BrigadaBomberos.Where(b => b != null).Select(b => b.NumeroLegajo);
         BomberosCandidatosViewModel = BomberosTodosViewModel
-        .Where(b => b.NumeroLegajo != brigada.Encargado?.NumeroLegajo && !bomberosActuales.Contains(b.NumeroLegajo))
+        .Where(b => b.NumeroLegajo != brigada.Encargado?.NumeroLegajo && !bomberosActuales.Contains(b.NumeroLegajo.Value))
         .ToList();
 
         BomberosBrigadaViewModel = BrigadaBomberos.Where(b => b != null).Select(b => new BomberoBrigadaViewModel

@@ -57,10 +57,7 @@ namespace Vista.Data.Mappers
                 // Mapeo de Imagen (si existe)
                 UrlImagen = bombero.Imagen != null ? $"/api/imagenes/{bombero.Imagen.ImagenId}" : null,
 
-                // Mapeo de Brigada (primera brigada si existe)
-                Brigada = bombero.Brigadas?.FirstOrDefault()?.Brigada,
-                BrigadaId = bombero.Brigadas?.FirstOrDefault()?.BrigadaId ?? 0,
-                NombreBrigada = bombero.Brigadas?.FirstOrDefault()?.Brigada?.NombreBrigada ?? string.Empty,
+                // Mapeo de Brigada (hacer que mapee solo los nombres)
             };
 
             return viewModel;
@@ -77,30 +74,6 @@ namespace Vista.Data.Mappers
                 return new List<BomberoViweModel>();
 
             return bomberos.Select(b => b.ToBomberoViewModel()).ToList();
-        }
-
-        /// <summary>
-        /// Convierte un objeto Bombero a su ViewModel con una brigada específica seleccionada.
-        /// </summary>
-        /// <param name="bombero">El objeto Bombero a convertir</param>
-        /// <param name="brigadaId">ID de la brigada a marcar como seleccionada</param>
-        /// <returns>BomberoViweModel con la brigada específica</returns>
-        public static BomberoViweModel ToBomberoViewModel(this Bombero bombero, int brigadaId)
-        {
-            var viewModel = bombero.ToBomberoViewModel();
-
-            if (viewModel != null && bombero.Brigadas?.Any() == true)
-            {
-                var brigadaSeleccionada = bombero.Brigadas.FirstOrDefault(bb => bb.BrigadaId == brigadaId);
-                if (brigadaSeleccionada != null)
-                {
-                    viewModel.Brigada = brigadaSeleccionada.Brigada;
-                    viewModel.BrigadaId = brigadaSeleccionada.BrigadaId ?? 0;
-                    viewModel.NombreBrigada = brigadaSeleccionada.Brigada?.NombreBrigada ?? string.Empty;
-                }
-            }
-
-            return viewModel;
         }
     }
 }

@@ -199,12 +199,12 @@
 					<AntDesign.Col Span="18">
 						<AntDesign.Row Gutter="16">
 							<AntDesign.Col Span="8">
-								<FormItem Label="Nombre" Required>
+								<FormItem Label="Nombre">
 									<Input @bind-Value="@personalView.Nombre" Disabled="@EntraIDisDisponbile" />
 								</FormItem>
 							</AntDesign.Col>
 							<AntDesign.Col Span="8">
-								<FormItem Label="Apellido" Required>
+								<FormItem Label="Apellido">
 									<Input @bind-Value="@personalView.Apellido" Disabled="@EntraIDisDisponbile" />
 								</FormItem>
 							</AntDesign.Col>
@@ -212,7 +212,7 @@
 
 						<AntDesign.Row Gutter="16">
 							<AntDesign.Col Span="24">
-								<FormItem Label="UPN" Required>
+								<FormItem Label="UPN">
 									<AntDesign.Input @bind-Value="@personalView.UPN" Disabled="@(!EntraIDisDisponbile)">
 										<AddOnAfter>
 											<label>@@bomberoschivilcoy.org.ar</label>
@@ -230,7 +230,7 @@
 
 						<AntDesign.Row Gutter="16">
 							<AntDesign.Col Span="8">
-								<FormItem Label="DNI" Required>
+								<FormItem Label="DNI">
 									<Input @bind-Value="@personalView.Documento" Placeholder="Ingrese el DNI" />
 								</FormItem>
 							</AntDesign.Col>
@@ -258,7 +258,7 @@
 							</AntDesign.Col>
 							<AntDesign.Col Span="6">
 								<FormItem Label="Sexo">
-									<EnumSelect TEnum="TipoSexo" @bind-Value="@personalView.Sexo" />
+									<EnumSelect TEnum="TipoSexo ?" @bind-Value="@personalView.Sexo" />
 								</FormItem>
 							</AntDesign.Col>
 							<AntDesign.Col Span="6">
@@ -276,23 +276,23 @@
 				<div class="card-title">Información Profesional</div>
 				<AntDesign.Row Gutter="16">
 					<AntDesign.Col Span="6">
-						<FormItem Label="Número Legajo" Required>
+						<FormItem Label="Número Legajo">
 							<Input @bind-Value="@personalView.NumeroLegajo" Placeholder="Ingrese número de legajo" />
 						</FormItem>
 					</AntDesign.Col>
 					<AntDesign.Col Span="6">
-						<FormItem Label="Dotación" Required>
-							<EnumSelect TEnum="TipoDotaciones" @bind-Value="@personalView.Dotacion" />
+						<FormItem Label="Dotación">
+							<EnumSelect TEnum="TipoDotaciones ?" @bind-Value="@personalView.Dotacion" />
 						</FormItem>
 					</AntDesign.Col>
 					<AntDesign.Col Span="6">
 						<FormItem Label="Grado">
-							<EnumSelect TEnum="EscalafonJerarquico" @bind-Value="@personalView.Grado" AllowClear />
+							<EnumSelect TEnum="EscalafonJerarquico ?" @bind-Value="@personalView.Grado" AllowClear />
 						</FormItem>
 					</AntDesign.Col>
 					<AntDesign.Col Span="6">
 						<FormItem Label="Estado">
-							<EnumSelect TEnum="EstadoBombero" @bind-Value="personalView.Estado" AllowClear />
+							<EnumSelect TEnum="EstadoBombero ?" @bind-Value="personalView.Estado" AllowClear />
 						</FormItem>
 					</AntDesign.Col>
 				</AntDesign.Row>
@@ -549,19 +549,19 @@
 				EntraId = personalView.EntraID,
 				UPN = personalView.UPN + "@bomberoschivilcoy.org.ar",
 				FechaNacimiento = personalView.FechaNacimiento,
-				Sexo = personalView.Sexo,
+				Sexo = personalView.Sexo.Value,
 				Nombre = personalView.Nombre,
 				Apellido = personalView.Apellido,
-				Documento = personalView.Documento,
-				NumeroLegajo = personalView.NumeroLegajo,
+				Documento = personalView.Documento.Value,
+				NumeroLegajo = personalView.NumeroLegajo.Value,
 				NumeroIoma = personalView.NumeroIoma,
 				LugarNacimiento = personalView.LugarNacimiento,
-				Grado = personalView.Grado,
-				Dotacion = personalView.Dotacion,
+				Grado = personalView.Grado.Value,
+				Dotacion = personalView.Dotacion.Value,
 				GrupoSanguineo = personalView.GrupoSanguineo,
 				Altura = personalView.Altura,
 				Peso = personalView.Peso,
-				Estado = personalView.Estado,
+				Estado = personalView.Estado.Value,
 				Chofer = personalView.EsChofer,
 				VencimientoRegistro = personalView.VencimientoRegistro,
 				Direccion = personalView.Direccion,

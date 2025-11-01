@@ -308,7 +308,7 @@
                 {
                     BomberoSalidaViewModels bomberoSalidaViewModel = new()
                     {
-                        NumeroLegajo = bombero.NumeroLegajo,
+                        NumeroLegajo = bombero.NumeroLegajo.Value,
                         Nombre = bombero.Nombre,
                         Apellido = bombero.Apellido,
                         MovilAsignado = participante.MovilAsignado
@@ -369,7 +369,7 @@
                 MovilAsignado = MovilParaAsignar,
                 Nombre = bomberoSeleccionado.Nombre,
                 Apellido = bomberoSeleccionado.Apellido,
-                NumeroLegajo = bomberoSeleccionado.NumeroLegajo
+                NumeroLegajo = bomberoSeleccionado.NumeroLegajo ?? 0
             };
 
             // Añade el nuevo bombero a la lista de salidas

@@ -23,19 +23,22 @@ namespace Vista.Data.ViewModels.Personal
         /// <summary>
         /// Nombre del personal. Longitud máxima de 255 caracteres. Es obligatorio.
         /// </summary>
-        [Required, StringLength(255)]
+        [Required(ErrorMessage = "El nombre es obligatorio.")]
+        [StringLength(255, ErrorMessage = "El nombre no puede superar los 255 caracteres.")]
         public string? Nombre { get; set; }
 
         /// <summary>
         /// Apellido del personal. Longitud máxima de 255 caracteres. Es obligatorio.
         /// </summary>
-        [Required, StringLength(255)]
+        [Required(ErrorMessage = "El apellido es obligatorio.")]
+        [StringLength(255, ErrorMessage = "El apellido no puede superar los 255 caracteres.")]
         public string? Apellido { get; set; }
 
         /// <summary>
         /// UPN (User Principal Name) del personal. Longitud máxima de 255 caracteres. Es obligatorio.
         /// </summary>
-        [Required, StringLength(255)]
+        [Required(ErrorMessage = "El UPN es obligatorio.")]
+        [StringLength(255, ErrorMessage = "El UPN no puede superar los 255 caracteres.")]
         public string? UPN { get; set; }
 
         /// <summary>
@@ -46,8 +49,9 @@ namespace Vista.Data.ViewModels.Personal
         /// <summary>
         /// Documento del personal. Es obligatorio.
         /// </summary>
-        [Required]
-        public int Documento { get; set; }
+        [Required(ErrorMessage = "El número de documento es obligatorio.")]
+        [Range(1000000, 99999999, ErrorMessage = "El número de documento debe estar entre 1.000.000 y 99.999.999 para documentos argentinos.")]
+        public int? Documento { get; set; }
 
         /// <summary>
         /// Fecha de nacimiento del personal. Es opcional.
@@ -62,8 +66,8 @@ namespace Vista.Data.ViewModels.Personal
         /// <summary>
         /// Sexo del personal. Es Obligatorio. (M o F)
         /// </summary>
-        [Required]
-        public TipoSexo Sexo { get; set; }
+        [Required(ErrorMessage = "El sexo es obligatorio.")]
+        public TipoSexo? Sexo { get; set; }
 
         /// <summary>
         /// Dirección del personal. Longitud máxima de 255 caracteres. Es opcional.
@@ -89,25 +93,29 @@ namespace Vista.Data.ViewModels.Personal
         /// <summary>
         /// Número de teléfono celular del personal. Longitud máxima de 255 caracteres. Es opcional.
         /// </summary>
-        [StringLength(255)]
+        [StringLength(255, ErrorMessage = "El número de celular no puede superar los 255 caracteres.")]
+        [Phone(ErrorMessage = "El número de celular no tiene un formato válido.")]
         public string? TelefonoCel { get; set; }
 
         /// <summary>
         /// Número de teléfono laboral del personal. Longitud máxima de 255 caracteres. Es opcional.
         /// </summary>
-        [StringLength(255)]
+        [StringLength(255, ErrorMessage = "El número laboral no puede superar los 255 caracteres.")]
+        [Phone(ErrorMessage = "El número laboral no tiene un formato válido.")]
         public string? TelefonoLaboral { get; set; }
 
         /// <summary>
         /// Número de teléfono fijo del personal. Longitud máxima de 255 caracteres. Es opcional.
         /// </summary>
-        [StringLength(255)]
+        [StringLength(255, ErrorMessage = "El número fijo no puede superar los 255 caracteres.")]
+        [Phone(ErrorMessage = "El número fijo no tiene un formato válido.")]
         public string? TelefonoFijo { get; set; }
 
         /// <summary>
         /// Email del personal. Longitud máxima de 255 caracteres. Es opcional.
         /// </summary>
-        [StringLength(255)]
+        [StringLength(255, ErrorMessage = "El email no puede superar los 255 caracteres.")]
+        [EmailAddress(ErrorMessage = "El email no tiene un formato válido.")]
         public string? Email { get; set; }
 
         // --- Variables calculadas --- (No asignables directamente) (Solo lectura)
