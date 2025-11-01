@@ -398,7 +398,7 @@
 				<Button Type="@ButtonType.Default" OnClick="Cancelar">
 					Cancelar
 				</Button>
-				<Button Type="@ButtonType.Primary" HtmlType="submit" Class="primary-button" OnClick="CrearBombero" Disabled="@(!EntraIDisDisponbile)">
+				<Button Type="@ButtonType.Primary" HtmlType="submit" Class="primary-button" Disabled="@(!EntraIDisDisponbile)">
 					Registrar Bombero
 				</Button>
 			</div>
@@ -442,82 +442,6 @@
 		return Task.CompletedTask;
 	}
 
-	public async Task CrearBombero()
-	{
-		isLoading = true;
-
-		try
-		{
-			if (!EntraIDisDisponbile)
-			{
-				message.Error("El Servicio de entra id no esta disponible.");
-				return;
-			}
-
-			// Preparar el objeto Bombero
-			Bombero bombero = new Bombero()
-			{
-				EntraId = personalView.EntraID,
-				UPN = personalView.UPN + "@bomberoschivilcoy.org.ar",
-				FechaNacimiento = personalView.FechaNacimiento,
-				Sexo = personalView.Sexo,
-				Nombre = personalView.Nombre,
-				Apellido = personalView.Apellido,
-				Documento = personalView.Documento,
-				NumeroLegajo = personalView.NumeroLegajo,
-				NumeroIoma = personalView.NumeroIoma,
-				LugarNacimiento = personalView.LugarNacimiento,
-				Grado = personalView.Grado,
-				Dotacion = personalView.Dotacion,
-				GrupoSanguineo = personalView.GrupoSanguineo,
-				Altura = personalView.Altura,
-				Peso = personalView.Peso,
-				Estado = personalView.Estado,
-				Chofer = personalView.EsChofer,
-				VencimientoRegistro = personalView.VencimientoRegistro,
-				Direccion = personalView.Direccion,
-				Observaciones = personalView.Observaciones,
-				Profesion = personalView.Profesion,
-				NivelEstudios = personalView.NivelEstudios,
-				FechaAceptacion = personalView.FechaAceptacion,
-
-				Contacto = new Contacto
-				{
-					TelefonoCel = personalView.TelefonoCel,
-					TelefonoFijo = personalView.TelefonoFijo,
-					TelefonoLaboral = personalView.TelefonoLaboral,
-					Email = personalView.Email
-				}
-			};
-
-			// Preparar la foto si existe
-			Imagen_Personal? foto = null;
-
-			if (imageViewModel.Base64 != null && imageViewModel.TipoImagen != null && imageViewModel.NombreImagen != null)
-			{
-				foto = new Imagen_Personal
-				{
-					NombreImagen = imageViewModel.NombreImagen,
-					TipoImagen = imageViewModel.TipoImagen,
-					Base64Imagen = imageViewModel.Base64
-				};
-			}
-
-			// Creamos el bombero
-			await BomberoService.CrearBomberoAsync(bombero, foto);
-			message.Success("Se agregó el bombero.");
-			navigationManager.NavigateTo($"/fire-force/personal/bomberos", true);
-		}
-		catch (Exception ex)
-		{
-			message.Error($"Error: {ex.Message}");
-		}
-		finally
-		{
-			isLoading = false;
-		}
-	}
-
 	public async Task BusquedaPorUPN(string upn)
 	{
 		if (string.IsNullOrWhiteSpace(upn))
@@ -536,7 +460,7 @@
 
 			StateHasChanged();
 
-			await Task.Delay(500, token); // debounce
+			await Task.Delay(300, token); // debounce
 
 			var (bombero, foto) = await EntraIDService.BuscarPorUPNAsync(upn, token);
 
@@ -607,9 +531,80 @@
 		}
 	}
 
-	private void OnFinish(EditContext editContext)
+	private async Task OnFinish(EditContext editContext)
 	{
-		Console.WriteLine($"Success:{JsonSerializer.Serialize(personalView)}");
+		isLoading = true;
+
+		try
+		{
+			if (!EntraIDisDisponbile)
+			{
+				message.Error("El Servicio de entra id no esta disponible.");
+				return;
+			}
+
+			// Preparar el objeto Bombero
+			Bombero bombero = new Bombero()
+			{
+				EntraId = personalView.EntraID,
+				UPN = personalView.UPN + "@bomberoschivilcoy.org.ar",
+				FechaNacimiento = personalView.FechaNacimiento,
+				Sexo = personalView.Sexo,
+				Nombre = null,
+				Apellido = personalView.Apellido,
+				Documento = personalView.Documento,
+				NumeroLegajo = personalView.NumeroLegajo,
+				NumeroIoma = personalView.NumeroIoma,
+				LugarNacimiento = personalView.LugarNacimiento,
+				Grado = personalView.Grado,
+				Dotacion = personalView.Dotacion,
+				GrupoSanguineo = personalView.GrupoSanguineo,
+				Altura = personalView.Altura,
+				Peso = personalView.Peso,
+				Estado = personalView.Estado,
+				Chofer = personalView.EsChofer,
+				VencimientoRegistro = personalView.VencimientoRegistro,
+				Direccion = personalView.Direccion,
+				Observaciones = personalView.Observaciones,
+				Profesion = personalView.Profesion,
+				NivelEstudios = personalView.NivelEstudios,
+				FechaAceptacion = personalView.FechaAceptacion,
+
+				Contacto = new Contacto
+				{
+					TelefonoCel = personalView.TelefonoCel,
+					TelefonoFijo = personalView.TelefonoFijo,
+					TelefonoLaboral = personalView.TelefonoLaboral,
+					Email = personalView.Email
+				}
+			};
+
+			// Preparar la foto si existe
+			Imagen_Personal? foto = null;
+
+			if (imageViewModel.Base64 != null && imageViewModel.TipoImagen != null && imageViewModel.NombreImagen != null)
+			{
+				foto = new Imagen_Personal
+				{
+					NombreImagen = imageViewModel.NombreImagen,
+					TipoImagen = imageViewModel.TipoImagen,
+					Base64Imagen = imageViewModel.Base64
+				};
+			}
+
+			// Creamos el bombero
+			await BomberoService.CrearBomberoAsync(bombero, foto);
+			message.Success("Se agregó el bombero.");
+			navigationManager.NavigateTo($"/fire-force/personal/bomberos", true);
+		}
+		catch (Exception ex)
+		{
+			message.Error($"Error: {ex.Message}");
+		}
+		finally
+		{
+			isLoading = false;
+		}
 	}
 
 	private void OnFinishFailed(EditContext editContext)

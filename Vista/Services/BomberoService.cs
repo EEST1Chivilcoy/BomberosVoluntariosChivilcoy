@@ -1,15 +1,11 @@
-﻿using DocumentFormat.OpenXml.InkML;
-using Microsoft.AspNetCore.Components;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using Vista.Data;
 using Vista.Data.Enums;
-using Vista.Data.Models.Grupos.Brigadas;
 using Vista.Data.Models.Personas.Personal;
 using Vista.Data.Models.Personas.Personal.Componentes;
 using Vista.Data.Models.Imagenes;
-using Vista.Data.ViewModels.Personal;
+using Vista.Helpers;
 
 namespace Vista.Services
 {
@@ -77,15 +73,7 @@ namespace Vista.Services
                 throw new ArgumentNullException(nameof(bombero), "El bombero no puede ser nulo.");
             }
 
-            var validationContext = new ValidationContext(bombero, serviceProvider: null, items: null);
-            var validationResults = new List<ValidationResult>();
-            bool esValido = Validator.TryValidateObject(bombero, validationContext, validationResults, validateAllProperties: true);
-
-            if (!esValido)
-            {
-                string errores = string.Join(Environment.NewLine, validationResults.Select(r => r.ErrorMessage));
-                throw new ValidationException($"El modelo Bombero no es válido: {Environment.NewLine}{errores}");
-            }
+            ValidationHelper.Validar(bombero);
 
             // --- Paso B: Validaciones "Caras" (contra la BD) ---
             // (Se hacen antes de iniciar la transacción para no abrirla innecesariamente)
@@ -143,6 +131,9 @@ namespace Vista.Services
                 // la lógica del service, o el segundo SaveChanges dentro del service),
                 // revertimos TODA la operación.
                 await transaction.RollbackAsync();
+
+                // Limpiar el contexto para evitar conflictos futuros
+                _context.ChangeTracker.Clear();
 
                 // Lanza una excepción genérica o la 'ex' original
                 // para que la capa superior sepa que algo falló.
