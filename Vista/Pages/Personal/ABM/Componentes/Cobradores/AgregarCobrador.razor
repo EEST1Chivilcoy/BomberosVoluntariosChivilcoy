@@ -167,7 +167,6 @@
 		<Form Model="@personalView"
 			  Layout="FormLayout.Vertical"
 			  OnFinish="OnFinish"
-			  OnFinishFailed="OnFinishFailed"
 			  Loading="isLoading">
 
 			@*Información Personal (Común para todos)*@
@@ -333,7 +332,7 @@
 				<Button Type="@ButtonType.Default" OnClick="Cancelar">
 					Cancelar
 				</Button>
-				<Button Type="@ButtonType.Primary" HtmlType="submit" Class="primary-button" OnClick="CrearCobrador" Disabled="@(!EntraIDisDisponbile)">
+				<Button Type="@ButtonType.Primary" HtmlType="submit" Class="primary-button" Disabled="@(!EntraIDisDisponbile)">
 					Registrar Cobrador
 				</Button>
 			</div>
@@ -375,78 +374,6 @@
 	{
 		navigationManager.NavigateTo($"/fire-force/personal/cobradores", true);
 		return Task.CompletedTask;
-	}
-
-	public async Task CrearCobrador()
-	{
-		isLoading = true;
-
-		try
-		{
-			if (!EntraIDisDisponbile)
-			{
-				message.Error("El Servicio de entra id no esta disponible.");
-				return;
-			}
-
-			// Preparar el objeto Cobrador para enviarlo al servicio
-			Cobrador cobrador = new Cobrador()
-			{
-				// --- Información Personal ---
-
-				Nombre = personalView.Nombre,
-				Apellido = personalView.Apellido,
-				EntraId = personalView.EntraID,
-				UPN = personalView.UPN + "@bomberoschivilcoy.org.ar",
-				Documento = personalView.Documento.Value,
-				FechaNacimiento = personalView.FechaNacimiento,
-				LugarNacimiento = personalView.LugarNacimiento,
-				Direccion = personalView.Direccion,
-				Sexo = personalView.Sexo.Value,
-				GrupoSanguineo = personalView.GrupoSanguineo,
-
-				// --- Información Profesional ---
-
-				Estado = personalView.Estado,
-				ZonasAsignadas = personalView.ZonasAsignadas,
-				FechaAceptacion = personalView.FechaAceptacion,
-
-				// --- Información de Contacto ---
-				Contacto = new Contacto
-				{
-					TelefonoCel = personalView.TelefonoCel,
-					TelefonoFijo = personalView.TelefonoFijo,
-					TelefonoLaboral = personalView.TelefonoLaboral,
-					Email = personalView.Email
-				}
-			};
-
-			// Preparar la foto si existe
-			Imagen_Personal? foto = null;
-
-			if (imageViewModel.Base64 != null && imageViewModel.TipoImagen != null && imageViewModel.NombreImagen != null)
-			{
-				foto = new Imagen_Personal
-				{
-					NombreImagen = imageViewModel.NombreImagen,
-					TipoImagen = imageViewModel.TipoImagen,
-					Base64Imagen = imageViewModel.Base64
-				};
-			}
-
-			// Creamos el cobrador
-			await CobradorService.CrearCobradorAsync(cobrador, foto);
-			message.Success("Se agregó el cobrador.");
-			navigationManager.NavigateTo($"/fire-force/personal/cobradores", true);
-		}
-		catch (Exception ex)
-		{
-			message.Error($"Error: {ex.Message}");
-		}
-		finally
-		{
-			isLoading = false;
-		}
 	}
 
 	public async Task BusquedaPorUPN(string upn)
@@ -538,13 +465,75 @@
 		}
 	}
 
-	private void OnFinish(EditContext editContext)
+	private async Task OnFinish(EditContext editContext)
 	{
-		Console.WriteLine($"Success:{JsonSerializer.Serialize(personalView)}");
-	}
+		isLoading = true;
 
-	private void OnFinishFailed(EditContext editContext)
-	{
-		Console.WriteLine($"Failed:{JsonSerializer.Serialize(personalView)}");
+		try
+		{
+			if (!EntraIDisDisponbile)
+			{
+				message.Error("El Servicio de entra id no esta disponible.");
+				return;
+			}
+
+			// Preparar el objeto Cobrador para enviarlo al servicio
+			Cobrador cobrador = new Cobrador()
+			{
+				// --- Información Personal ---
+
+				Nombre = personalView.Nombre,
+				Apellido = personalView.Apellido,
+				EntraId = personalView.EntraID,
+				UPN = personalView.UPN + "@bomberoschivilcoy.org.ar",
+				Documento = personalView.Documento.Value,
+				FechaNacimiento = personalView.FechaNacimiento,
+				LugarNacimiento = personalView.LugarNacimiento,
+				Direccion = personalView.Direccion,
+				Sexo = personalView.Sexo.Value,
+				GrupoSanguineo = personalView.GrupoSanguineo,
+
+				// --- Información Profesional ---
+
+				Estado = personalView.Estado,
+				ZonasAsignadas = personalView.ZonasAsignadas,
+				FechaAceptacion = personalView.FechaAceptacion,
+
+				// --- Información de Contacto ---
+				Contacto = new Contacto
+				{
+					TelefonoCel = personalView.TelefonoCel,
+					TelefonoFijo = personalView.TelefonoFijo,
+					TelefonoLaboral = personalView.TelefonoLaboral,
+					Email = personalView.Email
+				}
+			};
+
+			// Preparar la foto si existe
+			Imagen_Personal? foto = null;
+
+			if (imageViewModel.Base64 != null && imageViewModel.TipoImagen != null && imageViewModel.NombreImagen != null)
+			{
+				foto = new Imagen_Personal
+				{
+					NombreImagen = imageViewModel.NombreImagen,
+					TipoImagen = imageViewModel.TipoImagen,
+					Base64Imagen = imageViewModel.Base64
+				};
+			}
+
+			// Creamos el cobrador
+			await CobradorService.CrearCobradorAsync(cobrador, foto);
+			message.Success("Se agregó el cobrador.");
+			navigationManager.NavigateTo($"/fire-force/personal/cobradores", true);
+		}
+		catch (Exception ex)
+		{
+			message.Error($"Error: {ex.Message}");
+		}
+		finally
+		{
+			isLoading = false;
+		}
 	}
 }
