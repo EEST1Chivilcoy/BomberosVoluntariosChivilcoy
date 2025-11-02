@@ -17,11 +17,8 @@
 
 @*Servicios Utilizados*@
 @using Vista.Services
-@inject NavigationManager navigationManager
-@inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
 @inject IMessageService message
 @inject IBomberoService BomberoService
-@inject IEntraIDService EntraIDService
 
 <style>
 	/* Estilos generales */
@@ -430,6 +427,13 @@
 	{
 		isLoading = true;
 
+		if (BomberoId <= 0)
+		{
+			await message.ErrorAsync("BomberoId no es válido.");
+			await OnCancel.InvokeAsync();
+			return;
+		}
+
 		try
 		{
 			Bombero? bombero = await BomberoService.ObtenerBomberoPorIdAsync(BomberoId);
@@ -444,7 +448,6 @@
 		}
 		catch (Exception ex)
 		{
-			ConsentHandler.HandleException(ex);
 			await message.ErrorAsync($"Error: {ex.Message}");
 		}
 		finally
@@ -516,7 +519,7 @@
 			// Creamos el bombero
 			await BomberoService.EditarBombero(bombero);
 			message.Success("Se agregó el bombero.");
-			navigationManager.NavigateTo($"/fire-force/personal/bomberos", true);
+			await OnCancel.InvokeAsync();
 		}
 		catch (Exception ex)
 		{
