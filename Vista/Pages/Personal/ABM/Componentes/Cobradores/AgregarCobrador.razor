@@ -394,7 +394,7 @@
 
 			StateHasChanged();
 
-			await Task.Delay(500, token); // debounce
+			await Task.Delay(300, token); // debounce
 
 			var (bombero, foto) = await EntraIDService.BuscarPorUPNAsync(upn, token);
 
