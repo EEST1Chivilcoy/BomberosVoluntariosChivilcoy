@@ -164,7 +164,6 @@
 		<Form Model="@personalView"
 			  Layout="FormLayout.Vertical"
 			  OnFinish="OnFinish"
-			  OnFinishFailed="OnFinishFailed"
 			  Loading="isLoading">
 
 			@*Información Personal (Común para todos)*@
@@ -386,8 +385,8 @@
 				<Button Type="@ButtonType.Default" OnClick="Cancelar">
 					Cancelar
 				</Button>
-				<Button Type="@ButtonType.Primary" HtmlType="submit" Class="primary-button" Disabled="@(!EntraIDisDisponbile)">
-					Registrar Bombero
+				<Button Type="@ButtonType.Primary" HtmlType="submit" Class="primary-button">
+					Editar Bombero
 				</Button>
 			</div>
 		</Form>
@@ -527,10 +526,5 @@
 		{
 			isLoading = false;
 		}
-	}
-
-	private void OnFinishFailed(EditContext editContext)
-	{
-		Console.WriteLine($"Failed:{JsonSerializer.Serialize(personalView)}");
 	}
 }
