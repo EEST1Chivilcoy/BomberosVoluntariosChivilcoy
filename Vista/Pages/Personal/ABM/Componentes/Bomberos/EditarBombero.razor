@@ -426,7 +426,7 @@
 		public string? NombreImagen { get; set; }
 	}
 
-	protected override async Task OnInitializedAsync()
+	protected override async Task OnParametersSetAsync()	
 	{
 		isLoading = true;
 
