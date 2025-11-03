@@ -1769,9 +1769,6 @@ namespace Vista.Data.Migrations
                 {
                     b.HasBaseType("Vista.Data.Models.Salidas.Planillas.Incendios.Incendio");
 
-                    b.Property<int>("TipoAeronave")
-                        .HasColumnType("int");
-
                     b.HasDiscriminator().HasValue(17);
                 });
 
