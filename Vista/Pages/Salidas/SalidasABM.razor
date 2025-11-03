@@ -542,6 +542,13 @@
                             <EnumSelect @bind-Value="@newSalida.TipoServicioEspecial" Placeholder="Seleccione un tipo de servicio especial" Size="InputSize.Large" />
                         </FormItem>
                     }
+
+                    @if (newSalida.Categoria == CategoriaEmergencia.FactorClimatico)
+                    {
+                        <FormItem Label="🌪️ Tipo de Factor Climático" Required Class="modal-crear-salidas-form-item">
+                            <EnumSelect @bind-Value="@newSalida.TipoFactorClimatico" Placeholder="Seleccione un tipo de factor climático" Size="InputSize.Large" />
+                        </FormItem>
+                    }
                 </AntDesign.Col>
             </Row>
         </Form>
@@ -585,6 +592,8 @@
         public IncendioTipo? TipoIncendio { get; set; }
         public RescateTipo? TipoRescate { get; set; }
         public ServicioEspecialTipo? TipoServicioEspecial { get; set; }
+        public int? TipoMaterialPeligroso { get; set; }
+        public TipoFactoresClimaticos? TipoFactorClimatico { get; set; }
     }
 
     protected override async Task OnInitializedAsync()
@@ -612,10 +621,18 @@
                 return;
             }
 
-            if (RutasEmergencia.TryGetValue(salida.TipoEmergencia, out var rutaBase))
+            if (RutasEmergencia.TryGetValue(salida.TipoEmergencia, out var rutaTemplate))
             {
-                var urlCompleta = $"{rutaBase}/{salida.AnioNumeroParte}/{salida.NumeroParte}";
-                NavigationManager.NavigateTo(urlCompleta);
+                string finalRoute;
+                if (rutaTemplate.Contains("{0}"))
+                {
+                    finalRoute = string.Format(rutaTemplate, salida.AnioNumeroParte, salida.NumeroParte);
+                }
+                else
+                {
+                    finalRoute = $"{rutaTemplate}/{salida.AnioNumeroParte}/{salida.NumeroParte}";
+                }
+                NavigationManager.NavigateTo(finalRoute);
             }
             else
             {
@@ -624,14 +641,21 @@
         }
         catch (Exception ex)
         {
-            await MessageService.ErrorAsync($"Ocurrió un error al intentar editar la salida: {ex.Message}");
+            await MessageService.ErrorAsync($"Ocurrió un error al intentar editar la salida: {ex.InnerException?.Message ?? ex.Message}");
         }
     }
 
     private async Task VerAñadirSalida()
     {
         _modalAñadirVisible = true;
-        newSalida = new();
+        newSalida = new()
+        {
+            // Asegurarse de que los subtipos se inicialicen a null para evitar selecciones predeterminadas no deseadas
+            TipoIncendio = null,
+            TipoRescate = null,
+            TipoServicioEspecial = null,
+            TipoFactorClimatico = null
+        };
 
         newSalida.Anio = DateTime.Now.Year;
 
@@ -676,8 +700,13 @@
             await MessageService.ErrorAsync("Debe seleccionar un tipo de servicio especial.");
             return;
         }
+        if (newSalida.Categoria == CategoriaEmergencia.FactorClimatico && newSalida.TipoFactorClimatico == null)
+        {
+            await MessageService.ErrorAsync("Debe seleccionar un tipo de factor climático.");
+            return;
+        }
 
-        // Dar valor al tipo de emergencia según la categoría
+        // Determinar TipoEmergencia y su parámetro de tipo específico
         switch (newSalida.Categoria)
         {
             case CategoriaEmergencia.Incendio:
@@ -690,10 +719,10 @@
                     IncendioTipo.HospitalesYClinicas => TipoDeEmergencia.IncendioHospitalesYClinicas,
                     IncendioTipo.Industria => TipoDeEmergencia.IncendioIndustria,
                     IncendioTipo.Forestal => TipoDeEmergencia.IncendioForestal,
-                    IncendioTipo.Aeronaves => TipoDeEmergencia.IncendioAeronaves,
+                    IncendioTipo.Aeronaves => TipoDeEmergencia.IncendioAeronaves, // Ya estaba, se confirma
                     IncendioTipo.Otro => TipoDeEmergencia.Incendio,
                     _ => throw new InvalidOperationException("Tipo de incendio no reconocido.")
-                };
+                };                
                 break;
 
             case CategoriaEmergencia.Rescate:
@@ -702,7 +731,7 @@
                     RescateTipo.Persona => TipoDeEmergencia.RescatePersona,
                     RescateTipo.Animal => TipoDeEmergencia.RescateAnimal,
                     _ => throw new InvalidOperationException("Tipo de rescate no reconocido.")
-                };
+                };                
                 break;
 
             case CategoriaEmergencia.ServicioEspecial:
@@ -717,7 +746,7 @@
                     ServicioEspecialTipo.RetiradoDeObito => TipoDeEmergencia.ServicioEspecialRetiradoDeObito,
                     ServicioEspecialTipo.ColaboracionFuerzasSeguridad => TipoDeEmergencia.ServicioEspecialColaboracionFuerzasSeguridad,
                     _ => throw new InvalidOperationException("Tipo de servicio especial no reconocido.")
-                };
+                };                
                 break;
 
             case CategoriaEmergencia.Accidente:
@@ -726,20 +755,40 @@
 
             case CategoriaEmergencia.MaterialPeligroso:
                 newSalida.TipoEmergencia = TipoDeEmergencia.MaterialPeligroso;
+                newSalida.TipoMaterialPeligroso = (int)TipoDeEmergencia.MaterialPeligroso; // Para MaterialPeligroso, el tipo es su propio valor de enum
                 break;
 
             case CategoriaEmergencia.FactorClimatico:
                 newSalida.TipoEmergencia = TipoDeEmergencia.FactorClimatico;
+                // El tipo específico ya está en newSalida.TipoFactorClimatico
                 break;
-
             default:
                 throw new InvalidOperationException("Categoría no reconocida.");
         }
 
-        if (RutasEmergencia.TryGetValue(newSalida.TipoEmergencia, out var ruta))
+        if (RutasEmergencia.TryGetValue(newSalida.TipoEmergencia, out var rutaTemplate))
         {
-            ruta += $"/{newSalida.Anio}/{newSalida.NumeroSalida}";
-            NavigationManager?.NavigateTo(ruta);
+            string finalRoute;
+            if (newSalida.Categoria == CategoriaEmergencia.FactorClimatico)
+            {
+                // Para FactorClimatico, el parámetro es el TipoFactorClimatico que se seleccionó en el modal.
+                finalRoute = string.Format(rutaTemplate, (int)newSalida.TipoFactorClimatico.Value);
+            }
+            else if (newSalida.Categoria == CategoriaEmergencia.ServicioEspecial)
+            {
+                // Para ServicioEspecial, el parámetro es el TipoServicioEspecial que se seleccionó en el modal.
+                finalRoute = string.Format(rutaTemplate, (int)newSalida.TipoServicioEspecial.Value);
+            }
+            else if (newSalida.Categoria == CategoriaEmergencia.MaterialPeligroso)
+            {
+                finalRoute = string.Format(rutaTemplate, newSalida.Anio, newSalida.NumeroSalida);
+            }
+            else
+            {
+                // Para Incendio, Rescate, Accidente, etc.
+                finalRoute = $"{rutaTemplate}/{(int)newSalida.TipoEmergencia}/{newSalida.Anio}/{newSalida.NumeroSalida}";
+            }
+            NavigationManager?.NavigateTo(finalRoute);
         }
         else
         {
@@ -750,11 +799,10 @@
     private async Task ObtenerSalidas(int anio)
     {
         var salidas = await SalidaService.ObtenerSalidasPorAnioAsync(anio);
-
         SalidaViewModels = salidas.Select(s => new SalidaViewModelTable
         {
             Id = s.SalidaId,
-            Numero = $"{s.NumeroParte}/{s.HoraSalida.Year}",
+            Numero = $"{s.NumeroParte}/{s.AnioNumeroParte}",
             TipoSalida = s.TipoEmergencia.GetDisplayName(),
             Descripcion = string.IsNullOrWhiteSpace(s.Descripcion) ? "Sin descripción" : s.Descripcion,
             Direccion = string.IsNullOrWhiteSpace(s.Direccion) ? "Desconocida" : s.Direccion,
@@ -763,34 +811,33 @@
             Latitud = s.Latitud,
             Longitud = s.Longitud
         }).ToList();
-
         StateHasChanged();
     }
 
     // Diccionario de rutas según el tipo de emergencia
     public Dictionary<TipoDeEmergencia, string> RutasEmergencia = new()
-    {
-            { TipoDeEmergencia.Accidente, "/salidas/accidentes" },
-            { TipoDeEmergencia.FactorClimatico, "/salidas/factores-climaticos" },
-            { TipoDeEmergencia.MaterialPeligroso, "/salidas/materiales-peligrosos" },
-            { TipoDeEmergencia.ServicioEspecialRepresentacion, "/salidas/serviciosRepresentacion" },
-            { TipoDeEmergencia.RescateAnimal, "/fire-force/salidas/rescate/2" },
-            { TipoDeEmergencia.RescatePersona, "/fire-force/salidas/rescate/1" },
-            { TipoDeEmergencia.IncendioComercio, "/salidas/incendios-comercio" },
-            { TipoDeEmergencia.IncendioEstablecimientoEducativo, "/salidas/incendios-establecimientoEducativo" },
-            { TipoDeEmergencia.IncendioEstablecimientoPublico, "/salidas/incendios-establecimientoPublico" },
-            { TipoDeEmergencia.IncendioForestal, "/salidas/incendios-forestales" },
-            { TipoDeEmergencia.IncendioHospitalesYClinicas, "/salidas/incendios-HospitalesClinicas" },
-            { TipoDeEmergencia.IncendioIndustria, "/salidas/incendios-industriales" },
-            { TipoDeEmergencia.IncendioVivienda, "/salidas/incendios-viviendas" },
-            { TipoDeEmergencia.ServicioEspecialPrevencion, "/salidas/serviciosPrevencion" },
-            { TipoDeEmergencia.Incendio, "/salidas/incendios-Otro" },
-            { TipoDeEmergencia.IncendioAeronaves, "/salidas/incendios-Aereonaves" },
-            { TipoDeEmergencia.ServicioEspecialCapacitacion, "/salidas/serviciosCapacitacion" },
-            { TipoDeEmergencia.ServicioEspecialColocacionDriza, "/salidas/serviciosColocacionDriza" },
-            { TipoDeEmergencia.ServicioEspecialSuministroAgua, "/salidas/serviciosSuministroAgua" },
-            { TipoDeEmergencia.ServicioEspecialFalsaAlarma, "/salidas/serviciosFalsaAlarmas" },
-            { TipoDeEmergencia.ServicioEspecialRetiradoDeObito, "/salidas/serviciosRetiradoDeObito" },
-            { TipoDeEmergencia.ServicioEspecialColaboracionFuerzasSeguridad, "/salidas/serviciosColaboraciónFuerzasSeguridad" }
+    {        
+        { TipoDeEmergencia.IncendioComercio, "/fire-force/salidas/incendio" },
+        { TipoDeEmergencia.IncendioEstablecimientoEducativo, "/fire-force/salidas/incendio" },
+        { TipoDeEmergencia.IncendioEstablecimientoPublico, "/fire-force/salidas/incendio" },
+        { TipoDeEmergencia.IncendioForestal, "/fire-force/salidas/incendio" },
+        { TipoDeEmergencia.IncendioHospitalesYClinicas, "/fire-force/salidas/incendio" },
+        { TipoDeEmergencia.IncendioIndustria, "/fire-force/salidas/incendio" },
+        { TipoDeEmergencia.IncendioVivienda, "/fire-force/salidas/incendio" },
+        { TipoDeEmergencia.Incendio, "/fire-force/salidas/incendio" },
+        { TipoDeEmergencia.IncendioAeronaves, "/fire-force/salidas/incendio" },
+        { TipoDeEmergencia.RescateAnimal, "/fire-force/salidas/rescate" },
+        { TipoDeEmergencia.RescatePersona, "/fire-force/salidas/rescate" },
+        { TipoDeEmergencia.ServicioEspecialRepresentacion, "/fire-force/salidas/servicio-especial/{0}" },
+        { TipoDeEmergencia.ServicioEspecialPrevencion, "/fire-force/salidas/servicio-especial/{0}" },
+        { TipoDeEmergencia.ServicioEspecialCapacitacion, "/fire-force/salidas/servicio-especial/{0}" },
+        { TipoDeEmergencia.ServicioEspecialColocacionDriza, "/fire-force/salidas/servicio-especial/{0}" },
+        { TipoDeEmergencia.ServicioEspecialSuministroAgua, "/fire-force/salidas/servicio-especial/{0}" },
+        { TipoDeEmergencia.ServicioEspecialFalsaAlarma, "/fire-force/salidas/servicio-especial/{0}" },
+        { TipoDeEmergencia.ServicioEspecialRetiradoDeObito, "/fire-force/salidas/servicio-especial/{0}" },
+        { TipoDeEmergencia.ServicioEspecialColaboracionFuerzasSeguridad, "/fire-force/salidas/servicio-especial/{0}" },
+        { TipoDeEmergencia.Accidente, "/fire-force/salidas/accidente/{0}" },
+        { TipoDeEmergencia.FactorClimatico, "/fire-force/salidas/factores-climaticos/{0}" }, // La ruta está bien, el problema era el parámetro que se le pasaba
+        { TipoDeEmergencia.MaterialPeligroso, "/fire-force/salidas/materiales-peligrosos/{0}/{1}" }
     };
 }

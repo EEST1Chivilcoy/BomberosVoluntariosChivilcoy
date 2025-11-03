@@ -1,26 +1,25 @@
-﻿﻿﻿﻿﻿﻿﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using System.Text.Json;
 using Vista.Data.Models.Personas.Personal;
 using Vista.Data.Models.Salidas.Planillas;
-using Vista.Data.ViewModels.Rescates;
 using Vista.Services;
 using AntDesign;
 using Vista.Data.Models.Vehiculos.Flota;
 using Vista.Data.Mappers;
-using DocumentFormat.OpenXml.Office2010.Drawing;
+using Vista.Data.Enums.Discriminadores;
 using Vista.Data.Enums.Salidas;
 using System.Threading.Tasks;
 using Vista.Data.ViewModels.Personal;
 using Vista.Data.Enums;
 using Vista.Data.ViewModels;
-using Vista.Data.ViewModels.Rescates;
+using Vista.Data.ViewModels.Accidente;
+
 namespace Vista.Pages.Salidas
 {
-    public partial class Rescates
+    public partial class Accidentes
     {
-        // ViewModel para la carga de Rescates.
-        private SalidasViewModels RescateViewModel = new RescatePersonaViewModels();
+        // ViewModel para la carga de Accidentes.
+        private AccidenteViewModels AccidenteViewModel = new AccidenteViewModels();
 
         // Listas de datos
         private List<Bombero> BomberosTodos = new();
@@ -32,7 +31,7 @@ namespace Vista.Pages.Salidas
         private bool _parte2Completa = false;
         private bool _parte3Completa = false;
 
-        // Variables parametros para la carga de Rescates.
+        // Variables parametros para la carga de Accidentes.
 
         // Numero de Salida del Año en Seleccionado.
         [Parameter]
@@ -42,9 +41,9 @@ namespace Vista.Pages.Salidas
         [Parameter]
         [SupplyParameterFromQuery] public int? AnioSalida { get; set; }
         
-        // Tipo de Rescate.
+        // Tipo de Accidente.
         [Parameter]
-        public int TipoRescate { get; set; }
+        public int TipoAccidente { get; set; }
 
 
         // Funcion de Carga de Salida.
@@ -52,32 +51,33 @@ namespace Vista.Pages.Salidas
         {
             try
             {
-                var rescate = RescateViewModel.ToSalida() as Rescate
-                    ?? throw new InvalidOperationException("Error al convertir el ViewModel a la entidad de rescate.");
+                var accidente = AccidenteViewModel.ToSalida() as Accidente
+                    ?? throw new InvalidOperationException("Error al convertir el ViewModel a la entidad de accidente.");
 
                 Salida salidaGuardada;
 
-                if (RescateViewModel.SalidaId > 0)
+                if (AccidenteViewModel.SalidaId > 0)
                 {
-                    salidaGuardada = await SalidaService.EditarSalida(rescate);
+                    salidaGuardada = await SalidaService.EditarSalida(accidente);
                     await message.SuccessAsync("Salida editada correctamente.");
                     HandleOk1(salidaGuardada.AnioNumeroParte, salidaGuardada.NumeroParte);
                 }
                 else
                 {
                     // Modo creación
-                    var numeroParteExistente = await SalidaService.ObtenerSalidaPorNumeroParteAsync<Salida>(
-                        RescateViewModel.NumeroParte,
-                        m => m.NumeroParte == RescateViewModel.NumeroParte && m.AnioNumeroParte == RescateViewModel.AnioNumeroParte
+                    var numeroParteExistente = await SalidaService.ObtenerSalidaPorNumeroParteAsync<Accidente>(
+                        AccidenteViewModel.NumeroParte,
+                        m => m.NumeroParte == AccidenteViewModel.NumeroParte && m.AnioNumeroParte == AccidenteViewModel.AnioNumeroParte
                     );
 
                     if (numeroParteExistente != null)
                     {
-                        await message.WarningAsync($"El número de parte {RescateViewModel.NumeroParte}/{RescateViewModel.AnioNumeroParte} ya existe.");
+                        await message.WarningAsync($"El número de parte {AccidenteViewModel.NumeroParte}/{AccidenteViewModel.AnioNumeroParte} ya existe.");
                         return;
                     }
 
-                    salidaGuardada = await SalidaService.GuardarSalida(rescate);
+
+                    salidaGuardada = await SalidaService.GuardarSalida(accidente);
                     await message.SuccessAsync("Salida guardada correctamente.");
                     HandleOk1(salidaGuardada.AnioNumeroParte, salidaGuardada.NumeroParte);
                 }
@@ -106,55 +106,53 @@ namespace Vista.Pages.Salidas
         {
             BomberosTodos = await BomberoService.ObtenerTodosLosBomberosAsync();
             MovilesTodos = await VehiculoSalidaService.ObtenerVehiculosSalidasPorEstadoAsync(TipoEstadoMovil.Activo);
+            
+           AccidenteViewModel = new AccidenteViewModels();
 
-            if ((RescateTipo)TipoRescate == RescateTipo.Animal)
-            {
-                RescateViewModel = new RescateAnimaViewModels();
-            }
-            else
-            {
-                RescateViewModel = new RescatePersonaViewModels();
-            }
+
+            
 
 
             // Si se pasan parámetros, puede ser modo Visualización/Edición
             if (NumeroSalida.HasValue && AnioSalida.HasValue && NumeroSalida.Value > 0 && AnioSalida.Value > 0)
             {
-                var salidaAEditar = await SalidaService.ObtenerSalidaParaEditarAsync<Salida>(NumeroSalida.Value, AnioSalida.Value);
+                var salidaAEditar = await SalidaService.ObtenerSalidaParaEditarAsync<Accidente>(NumeroSalida.Value, AnioSalida.Value);
 
                 if (salidaAEditar != null)
                 {
                     var todasLasFuerzas = await FuerzaIntervinienteService.ObtenerTodasLasFuerzasAsync();
                     var fuerzasVM = todasLasFuerzas.Select(f => new Vista.Data.ViewModels.Personal.SimpleFuerzaViewModel { Id = f.Id, Nombre = f.NombreFuerza }).ToList();
 
-                    RescateViewModel = salidaAEditar.ToViewModel(fuerzasVM);
+                    AccidenteViewModel = (AccidenteViewModels)salidaAEditar.ToViewModel(fuerzasVM);
                 }
                 else
                 {
                     await message.WarningAsync("No se encontró la salida solicitada. Se abrirá el formulario en modo creación.");
-                    if (AnioSalida.HasValue && AnioSalida.Value > 0) RescateViewModel.AnioNumeroParte = AnioSalida.Value;
-                    if (NumeroSalida.HasValue && NumeroSalida.Value > 0) RescateViewModel.NumeroParte = NumeroSalida.Value;
+                    if (AnioSalida.HasValue && AnioSalida.Value > 0) AccidenteViewModel.AnioNumeroParte = AnioSalida.Value;
+                    if (NumeroSalida.HasValue && NumeroSalida.Value > 0) AccidenteViewModel.NumeroParte = NumeroSalida.Value;
                 }
 
                 return;
             }
 
             // Modo crear (se inicializa arriba, aquí se setean los valores por defecto)
+            AccidenteViewModel.TipoEmergencia = TipoDeEmergencia.Accidente;
+            AccidenteViewModel.Tipo = (Vista.Data.Enums.TipoAccidente)TipoAccidente;
             if (AnioSalida.HasValue && AnioSalida.Value > 0)
-                RescateViewModel.AnioNumeroParte = AnioSalida.Value;
+                AccidenteViewModel.AnioNumeroParte = AnioSalida.Value;
             else
-                RescateViewModel.AnioNumeroParte = DateTime.Now.Year;
+            AccidenteViewModel.AnioNumeroParte = DateTime.Now.Year;
 
             if (NumeroSalida.HasValue && NumeroSalida.Value > 0)
-                RescateViewModel.NumeroParte = NumeroSalida.Value;
+                AccidenteViewModel.NumeroParte = NumeroSalida.Value;
             else
-                RescateViewModel.NumeroParte = await SalidaService.ObtenerUltimoNumeroParteDelAnioAsync(RescateViewModel.AnioNumeroParte) + 1;
+                AccidenteViewModel.NumeroParte = await SalidaService.ObtenerUltimoNumeroParteDelAnioAsync(AccidenteViewModel.AnioNumeroParte) + 1;
         }
         //Finish Failed
         private void OnFinishFailed(EditContext editContext)
         {
-            message.Error("Error al cargar, posible información ausente");
-             Console.WriteLine($"Failed:{JsonSerializer.Serialize(RescateViewModel)}");
+            message.Error("Error al cargar, posible información ausente.");
+             Console.WriteLine($"Failed:{System.Text.Json.JsonSerializer.Serialize(AccidenteViewModel)}");
         }
         //Impresión
         bool _visible1;

@@ -1,6 +1,8 @@
-﻿namespace Vista.Data.Models.Salidas.Planillas.Incendios
+﻿using Vista.Data.Enums;
+namespace Vista.Data.Models.Salidas.Planillas.Incendios
 {
     public class IncendioOtro : Incendio
     {
+        public TipoIncendioOtro OtroIncendio{ get; set; }
     }
 }

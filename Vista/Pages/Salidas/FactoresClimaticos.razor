@@ -1,14 +1,14 @@
-﻿@page "/fire-force/salidas/rescate/{TipoRescate:int}/{AnioSalida:int}/{NumeroSalida:int}"
+@page "/fire-force/salidas/factores-climaticos/{TipoFactorClimatico:int}"
+@page "/fire-force/salidas/factores-climaticos/{TipoFactorClimatico:int}/{AnioSalida:int}/{NumeroSalida:int}"
 @using Vista.Data.ViewModels.Personal;
-@using Vista.Data.ViewModels.Rescates;
+@using Vista.Data.ViewModels.FactorClimatico;
 @using Vista.Data.Enums.Salidas;
 
 @*Servicios Utilizados*@
-@using Vista.Services;
+@using Vista.Services
 @inject ISalidaService SalidaService
 @inject IBomberoService BomberoService
 @inject IVehiculoSalidaService VehiculoSalidaService
-@inject INavigationInterception NavigationInterception
 @inject IFuerzaIntervinienteService FuerzaIntervinienteService
 @inject IMessageService message
 @inject NavigationManager navigationManager
@@ -18,7 +18,7 @@
 @using Vista.Data.Models.Salidas.Componentes;
 @using Vista.Components.Forms.Salidas;
 
-<Form Model="@RescateViewModel"
+<Form Model="@FactorClimaticoViewModel"
       LabelColSpan="8"
       WrapperColSpan="16"
       OnFinish="OnFinish"
@@ -29,19 +29,9 @@
 
         <!-- Encabezado -->
         <div style="text-align: center; margin-bottom: 3rem; padding-bottom: 1rem; border-bottom: 2px solid #f0f0f0;">
-            @if (TipoRescate == 1)
-            {
-                <h1 style="margin: 0; color: #1890ff; font-size: 2.5rem; font-weight: 600;">
-                    RESCATE PERSONA
-                </h1>
-            }
-            else if (TipoRescate == 2)
-            {
-                <h1 style="margin: 0; color: #1890ff; font-size: 2.5rem; font-weight: 600;">
-                    RESCATE ANIMAL
-                </h1>
-            }
-
+            <h1 style="margin: 0; color: #1890ff; font-size: 2.5rem; font-weight: 600;">
+                FACTOR CLIMÁTICO
+            </h1>
             <p style="margin: 0.5rem 0 0 0; color: #666; font-size: 1.1rem;">
                 Complete todos los campos requeridos para registrar la salida
             </p>
@@ -50,31 +40,33 @@
         <!-- Tabs container -->
         <Tabs DefaultActiveKey="1" Class="custom-tabs" Style="box-shadow: 0 4px 16px rgba(24,144,255,0.08); border-radius: 12px;">
             <TabPane Key="1" Tab="📋 Datos-Generales" Class="tab-general">
-                <DatosGenerales Model="@RescateViewModel" OnCompleted="@((bool done) => _parte1Completa = done)" />
+                <DatosGenerales Model="@FactorClimaticoViewModel" OnCompleted="@((bool done) => _parte1Completa = done)" />
             </TabPane>
 
             <TabPane Key="2" Tab="📞 Datos Telefónicos">
-                <Participantes Model="@RescateViewModel" OnCompleted="@((bool done) => _parte2Completa = done)" />
+                <Participantes Model="@FactorClimaticoViewModel"
+                               OnCompleted="@((bool done) => _parte2Completa = done)" />
             </TabPane>
 
-            <TabPane Key="3" Tab="🛡️ Fuerzas Intervinientes" Disabled="@(RescateViewModel.FuerzasIntervinientesParticipantes?.Any() != true)">
-                <FuerzasIntervinientes Model="@RescateViewModel" />
+            <TabPane Key="3" Tab="🛡️ Fuerzas Intervinientes" Disabled="@(FactorClimaticoViewModel.FuerzasIntervinientesParticipantes?.Any() != true)">
+                <FuerzasIntervinientes Model="@FactorClimaticoViewModel" />
             </TabPane>
 
             <TabPane Key="4" Tab="⚠️ Afectados">
-                
+                <Damnificados Model="@FactorClimaticoViewModel" />
+                <VehiculosAfectados Model="@FactorClimaticoViewModel" />
             </TabPane>
 
             <TabPane Key="5" Tab="🚒 Unidades">
-                <Vehiculos Model="@RescateViewModel" BomberosTodos="@BomberosTodos" Flota="@MovilesTodos" />
+                <Vehiculos Model="@FactorClimaticoViewModel" BomberosTodos="@BomberosTodos" Flota="@MovilesTodos" />
             </TabPane>
 
             <TabPane Key="6" Tab="🪪 Personal">
-                <Personal Model="@RescateViewModel" BomberosTodos="@BomberosTodos" />
+                <Personal Model="@FactorClimaticoViewModel" BomberosTodos="@BomberosTodos" />
             </TabPane>
 
             <TabPane Key="7" Tab="🛠️ Tipo de Servicio">
-                <TipoDeServicio Model="@RescateViewModel" isUnlocked="true" OnCompleted="@((bool done) => {/* noop */})" />
+                <TipoDeServicio Model="@FactorClimaticoViewModel" isUnlocked="true" OnCompleted="@((bool done) => {/* noop */})" />
                 <div class="submit-section-firmas">
                     <FormItem WrapperColSpan="24" Style="margin: 0;">
                         <Button HtmlType="submit" Size="ButtonSize.Large" class="submit-button-firmas">

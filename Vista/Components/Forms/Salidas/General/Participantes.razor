@@ -92,7 +92,7 @@
 @code {
     [Parameter, EditorRequired] public SalidasViewModels Model { get; set; } = null!;
     [Parameter, EditorRequired] public EventCallback<bool> OnCompleted { get; set; } // Evento para notificar que se ha completado el formulario
-
+    [Parameter] public bool IsFormDisabled { get; set; }
     // Variable del Formulario utilizada para la validación
     private EditContext editContext;
 

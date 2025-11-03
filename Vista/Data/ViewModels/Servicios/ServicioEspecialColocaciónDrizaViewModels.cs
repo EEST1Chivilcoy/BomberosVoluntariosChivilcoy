@@ -2,7 +2,7 @@
 
 namespace Vista.Data.ViewModels.Servicios
 {
-    public class ServicioEspecialColocaciónDrizaViewModels : SalidasViewModels
+    public class ServicioEspecialColocaciónDrizaViewModels : ServicioEspecialViewModel
     {
         [Required, StringLength(255)]
         public string TipoLugar { get; set; }

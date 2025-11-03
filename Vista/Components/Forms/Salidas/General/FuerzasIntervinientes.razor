@@ -200,6 +200,7 @@
 
 @code {
     [Parameter, EditorRequired] public SalidasViewModels Model { get; set; } = null!;
+    public bool IsFormDisabled { get; set; }
     private FuerzaIntervinienteViewModel fuerzaForm = new();
     private bool _isLoading = true;
 

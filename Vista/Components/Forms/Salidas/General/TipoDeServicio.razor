@@ -1,5 +1,11 @@
-﻿@using Vista.Data.ViewModels;
+﻿@using Vista.Data.Enums;
+@using Vista.Data.Enums.Salidas;
+@using Vista.Data.ViewModels;
 @using Vista.Data.ViewModels.Incendios;
+@using Vista.Data.ViewModels.MaterialesPeligrosos;
+@using Vista.Data.ViewModels.Accidente;
+@using Vista.Data.ViewModels.FactorClimatico;
+@using Vista.Data.ViewModels.Servicios;
 
 <Form Model="Model">
     <FormItem Label="Tipo de Servicio" Required>
@@ -23,27 +29,187 @@
         <FormItem Label="Detalle de la superficie afectada" Required>
             <TextArea Placeholder="Describí qué zonas fueron afectadas y en qué medida" @bind-Value="@incendioView.DetalleSuperficieAfectadaIncendio" />
         </FormItem>
+
+        @if (incendioView is IncendioAeronavesViewModels incendioAeronavesView)
+        {
+            <FormItem Label="Tipo de Aeronave" Required>
+                <EnumSelect TEnum="TipoIncendioAeronaves" @bind-Value="@incendioAeronavesView.TipoAeronave" />
+            </FormItem>
+        }
+
+        @if (incendioView is IncendioOtroViewModels incendioOtroView)
+        {
+            <FormItem Label="Tipo de Incendio (Otro)" Required>
+                <EnumSelect TEnum="TipoIncendioOtro" @bind-Value="@incendioOtroView.OtroIncendio" />
+            </FormItem>
+        }
     }
 
+    @if (Model is MaterialPeligrosoViewModels matpelView)
+    {
+        <FormItem Label="Tipo de Material Peligroso" Required>
+            <EnumSelect TEnum="TipoMaterialPeligroso" @bind-Value="@matpelView.Tipo" />
+        </FormItem>
+        <FormItem Label="Sustancias Involucradas" Required>
+            <TextArea @bind-Value="@matpelView.Sustancias" Placeholder="Describa las sustancias involucradas" />
+        </FormItem>
+        <Row Gutter="16">
+            <AntDesign.Col Span="8"><Checkbox @bind-Checked="@matpelView.Controlada">Controlada</Checkbox></AntDesign.Col>
+            <AntDesign.Col Span="8"><Checkbox @bind-Checked="@matpelView.Venteo">Venteo</Checkbox></AntDesign.Col>
+            <AntDesign.Col Span="8"><Checkbox @bind-Checked="@matpelView.DilucionDeVapores">Dilución de Vapores</Checkbox></AntDesign.Col>
+            <AntDesign.Col Span="8"><Checkbox @bind-Checked="@matpelView.Neutralizacion">Neutralización</Checkbox></AntDesign.Col>
+            <AntDesign.Col Span="8"><Checkbox @bind-Checked="@matpelView.Trasvase">Trasvase</Checkbox></AntDesign.Col>
+            <AntDesign.Col Span="8"><Checkbox @bind-Checked="@matpelView.OtraAccionesMateriales">Otra</Checkbox></AntDesign.Col>
+        </Row>
+        @if (matpelView.OtraAccionesMateriales)
+        {
+            <FormItem Label="Detalles de Otras Acciones (Materiales)">
+                <Input @bind-Value="@matpelView.DetallesAccionesMateriales" Placeholder="Especifique la otra acción" />
+            </FormItem>
+        }
+
+        <Row Gutter="16">
+            <AntDesign.Col Span="12">
+                <FormItem Label="Evacuación">
+                    <EnumSelect TEnum="TipoEvacuacion" @bind-Value="@matpelView.Evacuacion" />
+                </FormItem>
+            </AntDesign.Col>
+            <AntDesign.Col Span="12" Style="padding-top: 32px;">
+                <Checkbox @bind-Checked="@matpelView.Descontaminacion">Descontaminación</Checkbox>
+                <Checkbox @bind-Checked="@matpelView.Confinamiento">Confinamiento</Checkbox>
+                <Checkbox @bind-Checked="@matpelView.SinAccion">Sin Acción</Checkbox>
+                <Checkbox @bind-Checked="@matpelView.OtraAccionesPersonas">Otra</Checkbox>
+            </AntDesign.Col>
+        </Row>
+        @if (matpelView.OtraAccionesPersonas)
+        {
+            <FormItem Label="Detalles de Otras Acciones (Personas)">
+                <Input @bind-Value="@matpelView.DetallesAccionesPersonas" Placeholder="Especifique la otra acción" />
+            </FormItem>
+        }
+        <Row Gutter="16">
+            <AntDesign.Col Span="12">
+                <FormItem Label="Tipo de Superficie">
+                    <EnumSelect TEnum="TipoSuperficie" @bind-Value="@matpelView.TipoSuperficie" />
+                </FormItem>
+            </AntDesign.Col>
+            <AntDesign.Col Span="12">
+                <FormItem Label="Cantidad Afectada (m²)">
+                    <AntDesign.InputNumber @bind-Value="@matpelView.Cantidad" />
+                </FormItem>
+            </AntDesign.Col>
+        </Row>
+        <FormItem Label="Situación de la Explosión">
+            <EnumSelect TEnum="TipoSituacionExplosion" @bind-Value="@matpelView.TipoSituacion" />
+        </FormItem>
+    }
+
+    @if (Model is AccidenteViewModels accidenteView)
+    {
+        <FormItem Label="Tipo de Accidente" Required>
+            <EnumSelect TEnum="TipoAccidente" @bind-Value="@accidenteView.Tipo" />
+        </FormItem>
+        <FormItem Label="Condiciones Climáticas" Required>
+            <EnumSelect TEnum="TipoCondicionesClimaticas" @bind-Value="@accidenteView.CondicionesClimaticas" />
+        </FormItem>
+    }
+
+    @if (Model is FactorClimaticoViewModel factorClimaticoView)
+    {
+        <FormItem Label="Tipo de Factor Climático" Required>
+            <EnumSelect TEnum="TipoFactoresClimaticos" @bind-Value="@factorClimaticoView.Tipo" />
+        </FormItem>
+        <FormItem Label="Tipo de Evacuación">
+            <EnumSelect TEnum="TipoEvacuacion" @bind-Value="@factorClimaticoView.Evacuacion" />
+        </FormItem>
+        <FormItem Label="Tipo de Superficie">
+            <EnumSelect TEnum="TipoSuperficie" @bind-Value="@factorClimaticoView.Superficie" />
+        </FormItem>
+        <FormItem Label="Cantidad Afectada (m²)">
+            <AntDesign.InputNumber @bind-Value="@factorClimaticoView.CantidadAfectada" />
+        </FormItem>
+    }
+
+    @if (Model is ServicioEspecialViewModel servicioEspecialView)
+    {
+        @switch (servicioEspecialView.Tipo)
+        {
+            case ServicioEspecialTipo.Representacion:
+                var representacionView = (ServicioEspecialRepresentacionViewModels)servicioEspecialView;
+                <FormItem Label="Tipo de Representación" Required>
+                    <EnumSelect TEnum="TipoServicioRepresentaciones" @bind-Value="@representacionView.TipoServicioRepresentacion" />
+                </FormItem>
+                @if (representacionView.TipoServicioRepresentacion == TipoServicioRepresentaciones.Otro)
+                {
+                    <FormItem Label="Especifique Otro" Required>
+                        <Input @bind-Value="@representacionView.OtroRepresentacion" />
+                    </FormItem>
+                }
+                <FormItem Label="Organización Beneficiada" Required>
+                    <EnumSelect TEnum="TipoOrganizacionBeneficiada" @bind-Value="@representacionView.TipoOrganizacion" />
+                </FormItem>
+                break;
+
+            case ServicioEspecialTipo.Prevencion:
+                var prevencionView = (ServicioEspecialPrevencionViewModels)servicioEspecialView;
+                <FormItem Label="Tipo de Prevención" Required>
+                    <EnumSelect TEnum="TipoServicioPrevencion" @bind-Value="@prevencionView.TipoPrevencion" />
+                </FormItem>
+                <FormItem Label="Organización Beneficiada" Required>
+                    <EnumSelect TEnum="TipoOrganizacionBeneficiada" @bind-Value="@prevencionView.TipoOrganizacion" />
+                </FormItem>
+                break;
+
+            case ServicioEspecialTipo.Capacitacion:
+                var capacitacionView = (ServicioEspecialCapacitacionViewModel)servicioEspecialView;
+                <FormItem Label="Nivel de Capacitación" Required>
+                    <EnumSelect TEnum="TipoNivelCapacitacion" @bind-Value="@capacitacionView.NivelDeCapacitacion" />
+                </FormItem>
+                @if (capacitacionView.NivelDeCapacitacion == TipoNivelCapacitacion.Otro)
+                {
+                    <FormItem Label="Especifique Otro Nivel" Required>
+                        <Input @bind-Value="@capacitacionView.NivelDeCapacitacionOtro" />
+                    </FormItem>
+                }
+                <FormItem Label="Tipo de Capacitación" Required>
+                    <EnumSelect TEnum="TipoCapacitacion" @bind-Value="@capacitacionView.TipoCapacitacion" />
+                </FormItem>
+                @if (capacitacionView.TipoCapacitacion == TipoCapacitacion.Otro)
+                {
+                    <FormItem Label="Especifique Otro Tipo" Required>
+                        <Input @bind-Value="@capacitacionView.TipoCapacitacionOtra" />
+                    </FormItem>
+                }
+                <FormItem Label="Día y Hora">
+                    <DatePicker @bind-Value="@capacitacionView.DiaHora" ShowTime="true" />
+                </FormItem>
+                break;
+
+            case ServicioEspecialTipo.ColocacionDriza:
+            case ServicioEspecialTipo.SuministroAgua:
+            case ServicioEspecialTipo.FalsaAlarma:
+            case ServicioEspecialTipo.RetiradoDeObito:
+            case ServicioEspecialTipo.ColaboracionFuerzasSeguridad:
+                <p>Formulario para @servicioEspecialView.Tipo.GetDisplayName() en construcción.</p>
+                break;
+        }
+    }
 
 
     @if (Model is IncendioViewModels incendioView1)
     {
         <FormItem>
-            <Checkbox Checked="incendioView1.DeteccionAutomaticaId"
-                      CheckedChanged="@(value => incendioView1.DeteccionAutomaticaId = value)">
+            <Checkbox @bind-Checked="incendioView1.DeteccionAutomaticaId">
                 Detección Automática
             </Checkbox>
         </FormItem>
         <FormItem>
-            <Checkbox Checked="incendioView1.Extintor"
-                      CheckedChanged="@(value => incendioView1.Extintor = value)">
+            <Checkbox @bind-Checked="incendioView1.Extintor">
                 Extintor
             </Checkbox>
         </FormItem>
         <FormItem>
-            <Checkbox Checked="incendioView1.Hidrante"
-                      CheckedChanged="@(value => incendioView1.Hidrante = value)">
+            <Checkbox @bind-Checked="incendioView1.Hidrante">
                 Hidrante
             </Checkbox>
         </FormItem>
