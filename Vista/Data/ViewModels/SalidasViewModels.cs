@@ -152,12 +152,12 @@ namespace Vista.Data.ViewModels
         /// <summary>
         /// Latitud de la ubicación del incidente o lugar de la salida.
         /// </summary>
-        public double Latitud { get; set; }
+        public double? Latitud { get; set; }
 
         /// <summary>
         /// Longitud de la ubicación del incidente o lugar de la salida.
         /// </summary>
-        public double Longitud { get; set; }
+        public double? Longitud { get; set; }
 
         // Sección de Datos del Solicitante y Receptor. (Datos telefónicos)
 

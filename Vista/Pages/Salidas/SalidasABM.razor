@@ -577,8 +577,8 @@
         public string Direccion { get; set; } = null!;
         public string Fecha { get; set; } = null!;
         public string Hora { get; set; } = null!;
-        public double Latitud { get; set; }
-        public double Longitud { get; set; }
+        public double? Latitud { get; set; }
+        public double? Longitud { get; set; }
     }
 
     public class SalidaCrearViewModel
@@ -605,7 +605,7 @@
     {
     }
     */
-    private async Task VerUbicacionSalida(double Longitud, double Latitud)
+    private async Task VerUbicacionSalida(double? Longitud, double? Latitud)
     {
 
     }

@@ -43,7 +43,7 @@ namespace Vista.Data.Models.Salidas.Componentes
         /// <summary>
         /// Indica si se sabe quién era el conductor del vehículo.
         /// </summary>
-        public bool seConoceConductor { get; set; } = false;
+        public bool SeConoceConductor { get; set; } = false;
 
         /// <summary>
         /// Todos los ocupantes del vehículo (conductor y pasajeros).

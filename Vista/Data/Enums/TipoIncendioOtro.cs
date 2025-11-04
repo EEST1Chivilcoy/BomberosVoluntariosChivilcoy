@@ -9,18 +9,10 @@ namespace Vista.Data.Enums
         Vehiculo,
         [Display(Name = "Tendido Eléctrico")]
         TendidoElectrico,
-        [Display(Name = "Lancha")]
-        Lancha,
-        [Display(Name = "Yate")]
-        Yate,
-        [Display(Name = "Barco Pesquero")]
-        BarcoPesquero,
-        [Display(Name = "Buque de Carga")]
-        BuqueDeCarga,
-        [Display(Name = "Crucero")]
-        Crucero,
-        [Display(Name = "Moto de Agua")]
-        MotoDeAgua,
+        [Display(Name = "Contenedor")]
+        Contenedor,
+        [Display(Name = "Medidor Eléctrico")]
+        MedidorEléctrico,   
         [Display(Name = "Otro")]
         Otro
     }

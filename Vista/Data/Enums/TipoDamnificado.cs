@@ -5,6 +5,5 @@
         Herido,
         Fallecido,
         Desaparecido
-
     }
 }

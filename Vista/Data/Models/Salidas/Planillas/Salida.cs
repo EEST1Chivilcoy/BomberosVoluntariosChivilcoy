@@ -62,15 +62,13 @@ namespace Vista.Data.Models.Salidas.Planillas
 
         /// <summary>
         /// Latitud de la ubicación del incidente o lugar de la salida.
-        /// </summary>
-        [Required]
-        public double Latitud { get; set; }
+        /// </summary>        
+        public double? Latitud { get; set; }
 
         /// <summary>
         /// Longitud de la ubicación del incidente o lugar de la salida.
         /// </summary>
-        [Required]
-        public double Longitud { get; set; }
+        public double? Longitud { get; set; }
 
         /// <summary>
         /// Representa a una región de Chivilcoy.

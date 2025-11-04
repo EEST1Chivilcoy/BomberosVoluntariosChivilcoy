@@ -195,7 +195,7 @@ namespace Vista.Data.Mappers
 
         private static void MapIncendioCommonProperties(IncendioViewModels source, Incendio destination)
         {
-            destination.DeteccionAutomaticaId = source.DeteccionAutomaticaId;
+            destination.DeteccionAutomatica = source.DeteccionAutomaticaId;
             destination.Extintor = source.Extintor;
             destination.Hidrante = source.Hidrante;
             destination.TipoEvacuacion = source.TipoEvacuacion;
@@ -572,7 +572,7 @@ namespace Vista.Data.Mappers
         // Helper para mapear propiedades comunes de Incendio a IncendioViewModels
         private static void MapIncendioCommonViewModelProperties(Incendio source, IncendioViewModels destination)
         {
-            destination.DeteccionAutomaticaId = source.DeteccionAutomaticaId;
+            destination.DeteccionAutomaticaId = source.DeteccionAutomatica;
             destination.Extintor = source.Extintor;
             destination.Hidrante = source.Hidrante;
             destination.TipoEvacuacion = source.TipoEvacuacion;

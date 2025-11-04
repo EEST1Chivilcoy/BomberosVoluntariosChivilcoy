@@ -7,7 +7,7 @@ namespace Vista.Data.Models.Salidas.Planillas.Incendios
     public class Incendio : Salida
     {
         //Localización, datos del solicitante, personas damnificadas y datos del seguro
-        public bool DeteccionAutomaticaId { get; set; }
+        public bool DeteccionAutomatica { get; set; }
         public bool Extintor { get; set; }
         public bool Hidrante { get; set; }
         public TipoEvacuacion TipoEvacuacion { get; set; }

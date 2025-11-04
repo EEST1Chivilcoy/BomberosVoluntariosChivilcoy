@@ -141,11 +141,11 @@
                 </AntDesign.Col>
             </Row>
 
-            @if (Model.Latitud != 0.0 && Model.Longitud != 0.0)
+            @if (Model.Latitud.HasValue && Model.Longitud.HasValue)
             {
                 <div class="map-container">
                     <iframe style="border:0; width: 100%; aspect-ratio: 1 / 1;"
-                            src="@GetOpenStreetMapUrl(Model.Latitud, Model.Longitud)"
+                            src="@GetOpenStreetMapUrl(Model.Latitud.Value, Model.Longitud.Value)"
                             frameborder="0"
                             allowfullscreen>
                     </iframe>
