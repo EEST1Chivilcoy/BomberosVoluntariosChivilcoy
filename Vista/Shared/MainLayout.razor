@@ -324,8 +324,9 @@
 
     bool IsHome()
     {
-        var uri = navigationManager.Uri.ToLower();
-        return uri.TrimEnd('/').Equals(navigationManager.BaseUri.TrimEnd('/').ToLower());
+    var uri = navigationManager.Uri.ToLower().TrimEnd('/');
+    var baseUri = navigationManager.BaseUri.ToLower().TrimEnd('/');
+    return uri == baseUri || uri == $"{baseUri}/fire-force";
     }
 
     string[] GetSelectedMenuKeys()
