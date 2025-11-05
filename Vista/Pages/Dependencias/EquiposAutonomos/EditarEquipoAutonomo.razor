@@ -150,12 +150,12 @@
 </style>
 
 <Form Loading="isLoading" Model="@viewModel"
-	  OnFinish="OnFinish"
-	  OnFinishFailed="OnFinishFailed"
-	  Class="modal-crear-equipo"
-	  Layout="FormLayout.Vertical">
+              Layout="FormLayout.Vertical"
+              Class="modal-crear-equipo-form"
+              OnFinish="OnFinish"
+              OnFinishFailed="OnFinishFailed">
 
-	<div class="modal-crear-equipo-content">
+
 		<Row Class="modal-crear-equipo-row" Gutter="16">
 			<AntDesign.Col Span="12">
 				<FormItem Label="📋 Número de Serie" Required Class="modal-crear-equipo-form-item">
@@ -197,7 +197,6 @@
 				Editar Equipo
 			</Button>
 		</div>
-	</div>
 </Form>
 
 @code {
