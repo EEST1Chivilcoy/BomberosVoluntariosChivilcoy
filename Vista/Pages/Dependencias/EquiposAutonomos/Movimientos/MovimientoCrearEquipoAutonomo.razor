@@ -153,94 +153,110 @@
 	}
 </style>
 
-<Form Loading="loading" Model="@movimientoViewModel"
-	  OnFinish="OnFinish"
-	  OnFinishFailed="OnFinishFailed"
-	  Class="modal-crear-equipo"
-	  Layout="FormLayout.Vertical">
 
-	<div class="modal-crear-equipo-content">
-		<Row Class="modal-crear-equipo-row" Gutter="16">
-			<FormItem Label="🧑‍💼 Encargado" Required Class="modal-crear-equipo-form-item">
-				<Select TItem="BomberoViewModel"
-						TItemValue="BomberoViewModel"
-						DataSource="@bomberoViewModels"
-						@bind-value="@movimientoViewModel.Encargado"
-						LabelName="@nameof(BomberoViewModel.NombreCompleto)"
-						Placeholder="Seleccione a un bombero"
-						EnableSearch
-						AllowClear="true" />
-			</FormItem>
-		</Row>
-		<Row Class="modal-crear-equipo-row" Gutter="16">
-			<AntDesign.Col Span="12">
-				<FormItem Label="↔️ Tipo Movimiento" Class="modal-crear-equipo-form-item">
-					<EnumSelect TEnum="TipoMovimiento"
-								@bind-Value="@movimientoViewModel.TipoMovimiento"
-								Placeholder="Seleccione el tipo de movimiento"
-								AllowClear="true" />
-				</FormItem>
-			</AntDesign.Col>
-			@if (movimientoViewModel.TipoMovimiento == TipoMovimiento.Asignar ||
-						movimientoViewModel.TipoMovimiento == TipoMovimiento.Reparar ||
-						movimientoViewModel.TipoMovimiento == TipoMovimiento.Prueba)
-			{
-				<AntDesign.Col Span="12">
-					<FormItem Label="📍 Tipo Destino" Class="modal-crear-equipo-form-item">
-						<RadioGroup @bind-Value="@_valueSel">
-							<Radio Value="1">Dependencia</Radio>
-							<Radio Value="2">Unidad</Radio>
-							<Radio Value="3">Otro</Radio>
-						</RadioGroup>
-					</FormItem>
-				</AntDesign.Col>
-			}
-		</Row>
-		<Row Class="modal-crear-equipo-row" Gutter="16">
-			<AntDesign.Col Span="12">
-				@if (movimientoViewModel.TipoMovimiento == TipoMovimiento.Asignar ||
-								movimientoViewModel.TipoMovimiento == TipoMovimiento.Reparar ||
-								movimientoViewModel.TipoMovimiento == TipoMovimiento.Prueba)
-				{
-					<FormItem Label="📍 Destino" Class="modal-crear-equipo-form-item">
-						@if (_valueSel == 1)
-						{
-							<Select TItem="DependenciaViewModel"
-									TItemValue="DependenciaViewModel"
-									DataSource="@dependenciaViewModels"
-									@bind-value="@movimientoViewModel.DependenciaDestino"
-									LabelName="@nameof(DependenciaViewModel.Nombre)"
-									Placeholder="Seleccione una dependencia"
-									EnableSearch
-									AllowClear="true" />
-						}
-						else if (_valueSel == 2)
-						{
-							<Select TItem="UnidadViewModel"
-									TItemValue="UnidadViewModel"
-									DataSource="@unidadViewModels"
-									@bind-value="@movimientoViewModel.UnidadDestino"
-									LabelName="@nameof(UnidadViewModel.Nombre)"
-									Placeholder="Seleccione una unidad"
-									EnableSearch
-									AllowClear="true" />
-						}
-						else if (_valueSel == 3)
-						{
-							<Input @bind-Value="@movimientoViewModel.OtroDestino"
-								   Placeholder="Ingrese otro destino" />
-						}
-					</FormItem>
-				}
-			</AntDesign.Col>
-		</Row>
-		<div class="modal-crear-equipo-footer">
-			<Button Type="@ButtonType.Primary" HtmlType="submit">
-				Agregar Movimiento
-			</Button>
-		</div>
-	</div>
-</Form>
+        <Form Loading="loading"
+              Model="@movimientoViewModel"
+              Layout="FormLayout.Vertical"
+              Class="modal-crear-equipo-form"
+              OnFinish="OnFinish"
+              OnFinishFailed="OnFinishFailed">
+
+            <Row Class="modal-crear-equipo-row" Gutter="16">
+                <AntDesign.Col Span="24">
+                    <FormItem Label="🧑‍💼 Encargado" Required Class="modal-crear-equipo-form-item">
+                        <Select TItem="BomberoViewModel"
+                                TItemValue="BomberoViewModel"
+                                DataSource="@bomberoViewModels"
+                                @bind-value="@movimientoViewModel.Encargado"
+                                LabelName="@nameof(BomberoViewModel.NombreCompleto)"
+                                Placeholder="Seleccione a un bombero"
+                                EnableSearch
+                                AllowClear="true"
+                                Size="InputSize.Large" />
+                    </FormItem>
+                </AntDesign.Col>
+            </Row>
+
+            <Row Class="modal-crear-equipo-row" Gutter="16">
+                <AntDesign.Col Span="12">
+                    <FormItem Label="↔️ Tipo Movimiento" Class="modal-crear-equipo-form-item">
+                        <EnumSelect TEnum="TipoMovimiento"
+                                    @bind-Value="@movimientoViewModel.TipoMovimiento"
+                                    Placeholder="Seleccione el tipo de movimiento"
+                                    AllowClear="true"
+                                    Size="InputSize.Large" />
+                    </FormItem>
+                </AntDesign.Col>
+
+                @if (movimientoViewModel.TipoMovimiento == TipoMovimiento.Asignar ||
+                     movimientoViewModel.TipoMovimiento == TipoMovimiento.Reparar ||
+                     movimientoViewModel.TipoMovimiento == TipoMovimiento.Prueba)
+                {
+                    <AntDesign.Col Span="12">
+                        <FormItem Label="📍 Tipo Destino" Class="modal-crear-equipo-form-item">
+                            <RadioGroup @bind-Value="@_valueSel">
+                                <Radio Value="1">Dependencia</Radio>
+                                <Radio Value="2">Unidad</Radio>
+                                <Radio Value="3">Otro</Radio>
+                            </RadioGroup>
+                        </FormItem>
+                    </AntDesign.Col>
+                }
+            </Row>
+
+            @if (movimientoViewModel.TipoMovimiento == TipoMovimiento.Asignar ||
+                 movimientoViewModel.TipoMovimiento == TipoMovimiento.Reparar ||
+                 movimientoViewModel.TipoMovimiento == TipoMovimiento.Prueba)
+            {
+                <Row Class="modal-crear-equipo-row" Gutter="16">
+                    <AntDesign.Col Span="12">
+                        <FormItem Label="📍 Destino" Class="modal-crear-equipo-form-item">
+                            @if (_valueSel == 1)
+                            {
+                                <Select TItem="DependenciaViewModel"
+                                        TItemValue="DependenciaViewModel"
+                                        DataSource="@dependenciaViewModels"
+                                        @bind-value="@movimientoViewModel.DependenciaDestino"
+                                        LabelName="@nameof(DependenciaViewModel.Nombre)"
+                                        Placeholder="Seleccione una dependencia"
+                                        EnableSearch
+                                        AllowClear="true"
+                                        Size="InputSize.Large" />
+                            }
+                            else if (_valueSel == 2)
+                            {
+                                <Select TItem="UnidadViewModel"
+                                        TItemValue="UnidadViewModel"
+                                        DataSource="@unidadViewModels"
+                                        @bind-value="@movimientoViewModel.UnidadDestino"
+                                        LabelName="@nameof(UnidadViewModel.Nombre)"
+                                        Placeholder="Seleccione una unidad"
+                                        EnableSearch
+                                        AllowClear="true"
+                                        Size="InputSize.Large" />
+                            }
+                            else if (_valueSel == 3)
+                            {
+                                <Input @bind-Value="@movimientoViewModel.OtroDestino"
+                                       Placeholder="Ingrese otro destino"
+                                       Size="InputSize.Large" />
+                            }
+                        </FormItem>
+                    </AntDesign.Col>
+                </Row>
+            }
+
+            <Row Class="modal-crear-equipo-row" Gutter="16">
+                <AntDesign.Col Span="24" Class="modal-crear-equipo-form-full-width" style="text-align: right;">
+                    <Button Type="@ButtonType.Primary" HtmlType="submit">
+                        Agregar Movimiento
+                    </Button>
+                </AntDesign.Col>
+            </Row>
+
+        </Form>
+
+
 
 @code {
 	[Parameter] public EventCallback OnFinishCallback { get; set; }
