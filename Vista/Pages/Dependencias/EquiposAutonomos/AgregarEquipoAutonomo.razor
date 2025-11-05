@@ -144,56 +144,66 @@
 	}
 </style>
 
-<Form Loading="loading" Model="@equipoAutonomo"
-	  OnFinish="OnFinish"
-	  OnFinishFailed="OnFinishFailed"
-	  Class="modal-crear-equipo"
-	  Layout="FormLayout.Vertical">
+        <Form Model="@equipoAutonomo"
+              Layout="FormLayout.Vertical"
+              Class="modal-crear-equipo-form"
+              OnFinish="OnFinish"
+              OnFinishFailed="OnFinishFailed">
 
-	<div class="modal-crear-equipo-content">
-		<Row Class="modal-crear-equipo-row" Gutter="16">
-			<AntDesign.Col Span="12">
-				<FormItem Label="📋 Número de Serie" Required Class="modal-crear-equipo-form-item">
-					<Input @bind-Value="@equipoAutonomo.NroSerie"
-						   Placeholder="Ingrese el número de serie" />
-				</FormItem>
-			</AntDesign.Col>
-			<AntDesign.Col Span="12">
-				<FormItem Label="🔧 Número de Tubo" Class="modal-crear-equipo-form-item">
-					<Input @bind-Value="@equipoAutonomo.NroTubo"
-						   Placeholder="Ingrese el número de tubo" />
-				</FormItem>
-			</AntDesign.Col>
-		</Row>
-		<Row Class="modal-crear-equipo-row" Gutter="16">
-			<AntDesign.Col Span="12">
-				<FormItem Label="🏭 Marca" Class="modal-crear-equipo-form-item">
-					<Input @bind-Value="@equipoAutonomo.Marca"
-						   Placeholder="Ingrese la marca" />
-				</FormItem>
-			</AntDesign.Col>
-			<AntDesign.Col Span="12">
-				<FormItem Label="📱 Modelo" Class="modal-crear-equipo-form-item">
-					<Input @bind-Value="@equipoAutonomo.Modelo"
-						   Placeholder="Ingrese el modelo" />
-				</FormItem>
-			</AntDesign.Col>
-		</Row>
-		<Row Class="modal-crear-equipo-row" Gutter="16">
-			<AntDesign.Col Span="12">
-				<FormItem Label="🧱 Tipo de Material" Class="modal-crear-equipo-form-item">
-					<Input @bind-Value="@equipoAutonomo.TipoMaterial"
-						   Placeholder="Ingrese el tipo de material" />
-				</FormItem>
-			</AntDesign.Col>
-		</Row>
-		<div class="modal-crear-equipo-footer">
-			<Button Type="@ButtonType.Primary" HtmlType="submit">
-				Agregar Equipo
-			</Button>
-		</div>
-	</div>
-</Form>
+            <Row Class="modal-crear-equipo-row" Gutter="16">
+                <AntDesign.Col Span="12">
+                    <FormItem Label="📋 Número de Serie" Required Class="modal-crear-equipo-form-item">
+                        <Input @bind-Value="@equipoAutonomo.NroSerie"
+                               Placeholder="Ingrese el número de serie"
+                               Size="InputSize.Large" />
+                    </FormItem>
+                </AntDesign.Col>
+
+                <AntDesign.Col Span="12">
+                    <FormItem Label="🔧 Número de Tubo" Class="modal-crear-equipo-form-item">
+                        <Input @bind-Value="@equipoAutonomo.NroTubo"
+                               Placeholder="Ingrese el número de tubo"
+                               Size="InputSize.Large" />
+                    </FormItem>
+                </AntDesign.Col>
+            </Row>
+
+            <Row Class="modal-crear-equipo-row" Gutter="16">
+                <AntDesign.Col Span="12">
+                    <FormItem Label="🏭 Marca" Class="modal-crear-equipo-form-item">
+                        <Input @bind-Value="@equipoAutonomo.Marca"
+                               Placeholder="Ingrese la marca"
+                               Size="InputSize.Large" />
+                    </FormItem>
+                </AntDesign.Col>
+
+                <AntDesign.Col Span="12">
+                    <FormItem Label="📱 Modelo" Class="modal-crear-equipo-form-item">
+                        <Input @bind-Value="@equipoAutonomo.Modelo"
+                               Placeholder="Ingrese el modelo"
+                               Size="InputSize.Large" />
+                    </FormItem>
+                </AntDesign.Col>
+            </Row>
+
+            <Row Class="modal-crear-equipo-row" Gutter="16">
+                <AntDesign.Col Span="12">
+                    <FormItem Label="🧱 Tipo de Material" Class="modal-crear-equipo-form-item">
+                        <Input @bind-Value="@equipoAutonomo.TipoMaterial"
+                               Placeholder="Ingrese el tipo de material"
+                               Size="InputSize.Large" />
+                    </FormItem>
+                </AntDesign.Col>
+            </Row>
+
+            <Row Class="modal-crear-equipo-row" Gutter="16">
+                <AntDesign.Col Span="24" Class="modal-crear-equipo-form-full-width" Style="text-align: right; justify-content: center; height: 20px;">
+                    <Button Type="@ButtonType.Primary" HtmlType="submit">
+                        Agregar Equipo
+                    </Button>
+                </AntDesign.Col>
+            </Row>
+        </Form>
 
 @code {
 	[Parameter] public EventCallback OnFinishCallback { get; set; }
