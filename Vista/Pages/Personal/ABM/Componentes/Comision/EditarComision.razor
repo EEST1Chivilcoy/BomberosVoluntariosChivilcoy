@@ -18,7 +18,7 @@
 @*Servicios Utilizados*@
 @using Vista.Services
 @inject IMessageService message
-@inject IBomberoService BomberoService
+@inject IComisionDirectivaService ComisionDirectivaService
 
 <style>
 	/* Estilos generales */
@@ -151,8 +151,8 @@
 <div class="container">
 	<div class="page-title">
 		<div>
-			<Icon Type="fire" Theme="IconThemeType.Fill" Class="page-title-icon" />
-			<span>Editar Bombero</span>
+			<Icon Type="reconciliation" Theme="IconThemeType.Fill" Class="page-title-icon" />
+			<span>Registro de Nuevo Miembro de Comisión Directiva</span>
 		</div>
 	</div>
 
@@ -198,8 +198,7 @@
 						<AntDesign.Row Gutter="16">
 							<AntDesign.Col Span="24">
 								<FormItem Label="UPN">
-									<AntDesign.Input @bind-Value="@personalView.UPN" Disabled>
-									</AntDesign.Input>
+									<Input @bind-Value="@personalView.UPN" Disabled />
 								</FormItem>
 							</AntDesign.Col>
 						</AntDesign.Row>
@@ -252,23 +251,13 @@
 				<div class="card-title">Información Profesional</div>
 				<AntDesign.Row Gutter="16">
 					<AntDesign.Col Span="6">
-						<FormItem Label="Número Legajo">
-							<Input @bind-Value="@personalView.NumeroLegajo" Placeholder="Ingrese número de legajo" />
-						</FormItem>
-					</AntDesign.Col>
-					<AntDesign.Col Span="6">
-						<FormItem Label="Dotación">
-							<EnumSelect TEnum="TipoDotaciones ?" @bind-Value="@personalView.Dotacion" />
-						</FormItem>
-					</AntDesign.Col>
-					<AntDesign.Col Span="6">
 						<FormItem Label="Grado">
-							<EnumSelect TEnum="EscalafonJerarquico ?" @bind-Value="@personalView.Grado" AllowClear />
+							<EnumSelect TEnum="GradoComisionDirectiva" @bind-Value="@personalView.Grado" AllowClear />
 						</FormItem>
 					</AntDesign.Col>
 					<AntDesign.Col Span="6">
 						<FormItem Label="Estado">
-							<EnumSelect TEnum="EstadoBombero ?" @bind-Value="personalView.Estado" AllowClear />
+							<EnumSelect TEnum="EstadoComisionDirectiva" @bind-Value="@personalView.Estado" AllowClear />
 						</FormItem>
 					</AntDesign.Col>
 				</AntDesign.Row>
@@ -283,63 +272,8 @@
 										AllowClear />
 						</FormItem>
 					</AntDesign.Col>
-					<AntDesign.Col Span="8">
-						<FormItem Label="Número IOMA">
-							<Input @bind-Value="personalView.NumeroIoma" Placeholder="Ingrese número IOMA" />
-						</FormItem>
-					</AntDesign.Col>
 				</AntDesign.Row>
 
-				<AntDesign.Row Gutter="16">
-					<AntDesign.Col Span="12">
-						<FormItem Label="¿Es chofer?">
-							<Switch @bind-Checked="personalView.EsChofer"></Switch>
-							@if (personalView.EsChofer)
-							{
-								<div class="conditional-field">
-									<FormItem Label="Fecha vencimiento del carnet">
-										<DatePicker @bind-Value="@personalView.VencimientoRegistro"
-													Picker="@DatePickerType.Date"
-													Style="width: 100%;"
-													Placeholder="@("Seleccione fecha de vencimiento")"
-													AllowClear />
-									</FormItem>
-								</div>
-							}
-						</FormItem>
-					</AntDesign.Col>
-				</AntDesign.Row>
-			</div>
-
-			@*Información Adicional*@
-			<div class="card">
-				<div class="card-title">Información Adicional</div>
-				<AntDesign.Row Gutter="16">
-					<AntDesign.Col Span="6">
-						<FormItem Label="Altura (cm)">
-							<AntDesign.InputNumber @bind-Value="@personalView.Altura" Style="width: 100%;" Placeholder="Ingrese altura" />
-						</FormItem>
-					</AntDesign.Col>
-					<AntDesign.Col Span="6">
-						<FormItem Label="Peso (kg)">
-							<AntDesign.InputNumber @bind-Value="@personalView.Peso" Style="width: 100%;" Placeholder="Ingrese peso" />
-						</FormItem>
-					</AntDesign.Col>
-					<AntDesign.Col Span="6">
-						<FormItem Label="Nivel de estudio">
-							<Input @bind-Value="@personalView.NivelEstudios" Placeholder="Ingrese nivel de estudios" />
-						</FormItem>
-					</AntDesign.Col>
-					<AntDesign.Col Span="6">
-						<FormItem Label="Profesión">
-							<Input @bind-Value="@personalView.Profesion" Placeholder="Ingrese profesión" />
-						</FormItem>
-					</AntDesign.Col>
-				</AntDesign.Row>
-
-				<FormItem Label="Observaciones">
-					<TextArea @bind-Value="@personalView.Observaciones" Placeholder="Ingrese observaciones" Rows="4" />
-				</FormItem>
 			</div>
 
 			@*Información de Contacto*@
@@ -375,7 +309,7 @@
 					Cancelar
 				</Button>
 				<Button Type="@ButtonType.Primary" HtmlType="submit" Class="primary-button">
-					Editar Bombero
+					Editar Comisión Directiva
 				</Button>
 			</div>
 		</Form>
@@ -395,34 +329,40 @@
 </div>
 
 @code {
-	[Parameter] public required int BomberoId { get; set; }
+	[Parameter] public required int ComisionDirectivaId { get; set; }
 	[Parameter] public required EventCallback OnCancel { get; set; }
 
-	private BomberoViweModel? personalView = new();
+	private ComisionDirectivaViewModel? personalView = new();
 	private bool isLoading = true;
 
-	protected override async Task OnParametersSetAsync()	
+	public async Task Cancelar()
+	{
+		await OnCancel.InvokeAsync();
+	}
+
+	protected override async Task OnParametersSetAsync()
 	{
 		isLoading = true;
 
-		if (BomberoId <= 0)
+		if (ComisionDirectivaId <= 0)
 		{
-			await message.ErrorAsync("BomberoId no es válido.");
-			await OnCancel.InvokeAsync();
+			await message.ErrorAsync("El ID del comisionista no es válido.");
+			await Cancelar();
 			return;
 		}
 
 		try
 		{
-			Bombero? bombero = await BomberoService.ObtenerBomberoPorIdAsync(BomberoId);
+			ComisionDirectiva? comision = await ComisionDirectivaService.ObtenerMiembroComisionDirectivaPorIdAsync(ComisionDirectivaId);
 
-			if (bombero == null)
+			if (comision == null)
 			{
-				await message.ErrorAsync("No se encontró el bombero solicitado.");
-				await OnCancel.InvokeAsync();
+				await message.ErrorAsync("No se encontró el comisionista solicitado.");
+				await Cancelar();
+				return;
 			}
 
-			if (bombero != null) personalView = BomberoMapper.ToBomberoViewModel(bombero);
+			personalView = comision.ToComisionDirectivaViewModel();
 		}
 		catch (Exception ex)
 		{
@@ -434,44 +374,33 @@
 		}
 	}
 
-	public async Task Cancelar()
-	{
-		await OnCancel.InvokeAsync();
-	}
-
 	private async Task OnFinish(EditContext editContext)
 	{
 		isLoading = true;
 
 		try
 		{
-			// Preparar el objeto Bombero
-			Bombero bombero = new Bombero()
+			// Preparar el objeto ComisionDirectiva para enviarlo al servicio
+			ComisionDirectiva comisionDirectiva = new ComisionDirectiva()
 			{
-				EntraId = personalView.EntraID,
-				UPN = personalView.UPN,
-				FechaNacimiento = personalView.FechaNacimiento,
-				Sexo = personalView.Sexo.Value,
+				// --- Información Personal ---
 				Nombre = personalView.Nombre,
 				Apellido = personalView.Apellido,
+				EntraId = personalView.EntraID,
+				UPN = personalView.UPN,
 				Documento = personalView.Documento.Value,
-				NumeroLegajo = personalView.NumeroLegajo.Value,
-				NumeroIoma = personalView.NumeroIoma,
+				FechaNacimiento = personalView.FechaNacimiento,
 				LugarNacimiento = personalView.LugarNacimiento,
-				Grado = personalView.Grado.Value,
-				Dotacion = personalView.Dotacion.Value,
-				GrupoSanguineo = personalView.GrupoSanguineo,
-				Altura = personalView.Altura,
-				Peso = personalView.Peso,
-				Estado = personalView.Estado.Value,
-				Chofer = personalView.EsChofer,
-				VencimientoRegistro = personalView.VencimientoRegistro,
 				Direccion = personalView.Direccion,
-				Observaciones = personalView.Observaciones,
-				Profesion = personalView.Profesion,
-				NivelEstudios = personalView.NivelEstudios,
+				Sexo = personalView.Sexo.Value,
+				GrupoSanguineo = personalView.GrupoSanguineo,
+
+				// --- Información Profesional ---
+				Grado = personalView.Grado,
+				Estado = personalView.Estado,
 				FechaAceptacion = personalView.FechaAceptacion,
 
+				// --- Información de Contacto ---
 				Contacto = new Contacto
 				{
 					TelefonoCel = personalView.TelefonoCel,
@@ -481,10 +410,7 @@
 				}
 			};
 
-			// Creamos el bombero
-			await BomberoService.EditarBombero(bombero);
-			message.Success("Se agregó el bombero.");
-			await OnCancel.InvokeAsync();
+			// Editamos el ComisionDirectiva
 		}
 		catch (Exception ex)
 		{

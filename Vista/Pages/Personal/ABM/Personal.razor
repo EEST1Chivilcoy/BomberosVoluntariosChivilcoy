@@ -10,7 +10,8 @@
 @using Vista.Data.Models.Personas.Personal
 @using Vista.Data.Models.Personas.Personal.Componentes
 @using Vista.Pages.Personal.ABM.Componentes.Bomberos
-@using Vista.Pages.Personal.ABM.Componentes
+@using Vista.Pages.Personal.ABM.Componentes.Comision
+@using Vista.Pages.Personal.ABM.Componentes.Cobradores
 @using Vista.Data.Mappers
 
 @*Servicios utilizados*@
@@ -711,6 +712,14 @@
 	@if (TipoPersonal.ToLower() == "bomberos")
 	{
 		<EditarBombero BomberoId="@PersonalId" OnCancel="CloseModals" />
+	}
+	else if (TipoPersonal.ToLower() == "comisiondirectiva")
+	{
+		<EditarComision ComisionDirectivaId="@PersonalId" OnCancel="CloseModals" />
+	}
+	else if (TipoPersonal.ToLower() == "cobradores")
+	{
+		<EditarCobrador CobradorId="@PersonalId" OnCancel="CloseModals" />
 	}
 </Modal>
 
