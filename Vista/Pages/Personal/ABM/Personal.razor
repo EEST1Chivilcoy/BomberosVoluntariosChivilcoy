@@ -710,32 +710,38 @@
 }
 
 <Modal Footer="null" Visible="@EditarVisible" Centered="@true" DefaultMaximized="@true">
-	@if (TipoPersonal.ToLower() == "bomberos")
+	@if (PersonalId > 0)
 	{
-		<EditarBombero BomberoId="@PersonalId" OnCancel="CloseModals" />
-	}
-	else if (TipoPersonal.ToLower() == "comisiondirectiva")
-	{
-		<EditarComision ComisionDirectivaId="@PersonalId" OnCancel="CloseModals" />
-	}
-	else if (TipoPersonal.ToLower() == "cobradores")
-	{
-		<EditarCobrador CobradorId="@PersonalId" OnCancel="CloseModals" />
+		@if (TipoPersonal.ToLower() == "bomberos")
+		{
+			<EditarBombero @key="@($"edit-bombero-{PersonalId}")" BomberoId="@PersonalId" OnCancel="CloseModals" />
+		}
+		else if (TipoPersonal.ToLower() == "comisiondirectiva")
+		{
+			<EditarComision @key="@($"edit-comision-{PersonalId}")" ComisionDirectivaId="@PersonalId" OnCancel="CloseModals" />
+		}
+		else if (TipoPersonal.ToLower() == "cobradores")
+		{
+			<EditarCobrador @key="@($"edit-cobrador-{PersonalId}")" CobradorId="@PersonalId" OnCancel="CloseModals" />
+		}
 	}
 </Modal>
 
 <Modal Visible="@DetallesVisible" OnCancel="@CloseModals" Footer="@footer" Centered="@true" DefaultMaximized="@true">
-	@if (TipoPersonal.ToLower() == "comisiondirectiva")
+	@if (PersonalId > 0)
 	{
-		<DetallePersonal PersonalId="@PersonalId" Tipo="Data.Enums.Discriminadores.TipoPersonal.ComisionDirectiva" OnFinishCallback="CloseModals" />
-	}
-	else if (TipoPersonal.ToLower() == "bomberos")
-	{
-		<DetallePersonal PersonalId="@PersonalId" Tipo="Data.Enums.Discriminadores.TipoPersonal.Bombero" OnFinishCallback="CloseModals" />
-	}
-	else if (TipoPersonal.ToLower() == "cobradores")
-	{
-		<DetallePersonal PersonalId="@PersonalId" Tipo="Data.Enums.Discriminadores.TipoPersonal.Cobrador" OnFinishCallback="CloseModals" />
+		@if (TipoPersonal.ToLower() == "comisiondirectiva")
+		{
+			<DetallePersonal @key="@($"detalle-comision-{PersonalId}")" PersonalId="@PersonalId" Tipo="Data.Enums.Discriminadores.TipoPersonal.ComisionDirectiva" OnFinishCallback="CloseModals" />
+		}
+		else if (TipoPersonal.ToLower() == "bomberos")
+		{
+			<DetallePersonal @key="@($"detalle-bombero-{PersonalId}")" PersonalId="@PersonalId" Tipo="Data.Enums.Discriminadores.TipoPersonal.Bombero" OnFinishCallback="CloseModals" />
+		}
+		else if (TipoPersonal.ToLower() == "cobradores")
+		{
+			<DetallePersonal @key="@($"detalle-cobrador-{PersonalId}")" PersonalId="@PersonalId" Tipo="Data.Enums.Discriminadores.TipoPersonal.Cobrador" OnFinishCallback="CloseModals" />
+		}
 	}
 </Modal>
 
@@ -817,8 +823,19 @@
 
 	private async void CloseModals()
 	{
+		var wasVisible = DetallesVisible || EditarVisible;
+		
 		DetallesVisible = false;
 		EditarVisible = false;
+		
+		// Resetear el ID para forzar la destrucción del componente modal
+		if (wasVisible)
+		{
+			PersonalId = 0;
+			await InvokeAsync(StateHasChanged);
+			await Task.Delay(100); // Pequeño delay para asegurar que el componente se destruya
+		}
+		
 		await RefreshData();
 	}
 
@@ -892,8 +909,8 @@
 			searchC(searchString, EstadoC);
 		}
 
-		isLoading = false; // <-- AÑADIDO
-		await InvokeAsync(StateHasChanged);
+		isLoading = false;
+		StateHasChanged();
 	}
 
 	// Función para manejar el clic en una fila de la tabla de bomberos
