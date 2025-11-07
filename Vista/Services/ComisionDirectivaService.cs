@@ -6,12 +6,13 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using Vista.Data;
 using Vista.Data.Enums;
+using Vista.Data.Enums.Personal.ComisionDirectiva;
 using Vista.Data.Models.Grupos.Brigadas;
 using Vista.Data.Models.Imagenes;
 using Vista.Data.Models.Personas.Personal;
 using Vista.Data.Models.Personas.Personal.Componentes;
 using Vista.Data.ViewModels.Personal;
-using Vista.Data.Enums.Personal.ComisionDirectiva;
+using Vista.Helpers;
 
 namespace Vista.Services
 {
@@ -44,15 +45,7 @@ namespace Vista.Services
                 throw new ArgumentNullException(nameof(comisionDirectiva), "El Comisión Directiva no puede ser nulo.");
             }
 
-            var validationContext = new ValidationContext(comisionDirectiva, serviceProvider: null, items: null);
-            var validationResults = new List<ValidationResult>();
-            bool esValido = Validator.TryValidateObject(comisionDirectiva, validationContext, validationResults, validateAllProperties: true);
-
-            if (!esValido)
-            {
-                string errores = string.Join(Environment.NewLine, validationResults.Select(r => r.ErrorMessage));
-                throw new ValidationException($"El modelo Comisión Directiva no es válido: {Environment.NewLine}{errores}");
-            }
+            ValidationHelper.Validar(comisionDirectiva);
 
             // --- Paso B: Validaciones "Caras" (contra la BD) ---
             // (Se hacen antes de iniciar la transacción para no abrirla innecesariamente)

@@ -13,7 +13,7 @@ namespace Vista.Services
     {
         Task CrearBomberoAsync(Bombero bombero, Imagen? imagen = null);
         Task<bool> BorrarBombero(Bombero bombero);
-        Task<bool> EditarBombero(Bombero bombero);
+        Task EditarBombero(Bombero bombero);
         Task<Sancion> SancionarBombero(Sancion sancion);
         Task<bool> CambiarEstado(int id, EstadoBombero estado);
         Task<AscensoBombero> AscenderBombero(AscensoBombero ascenso);
@@ -147,7 +147,7 @@ namespace Vista.Services
             }
         }
 
-        public async Task<bool> EditarBombero(Bombero bombero)
+        public async Task EditarBombero(Bombero bombero)
         {
             // --- 1. Validaciones ---
 
@@ -184,6 +184,17 @@ namespace Vista.Services
                     if (legajoExistente)
                     {
                         throw new InvalidOperationException("Número de legajo ya existente para otro bombero.");
+                    }
+                }
+
+                // Validar que no exista otro bombero con el mismo documento (si se cambió)
+                if (bomberoExistente.Documento != bombero.Documento)
+                {
+                    bool documentoExistente = await _context.Bomberos
+                        .AnyAsync(b => b.Documento == bombero.Documento && b.PersonaId != bombero.PersonaId);
+                    if (documentoExistente)
+                    {
+                        throw new InvalidOperationException("Número de documento ya existente para otro bombero.");
                     }
                 }
 
@@ -239,8 +250,6 @@ namespace Vista.Services
                 // Guardar los cambios
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
-
-                return true;
             }
             catch (Exception ex)
             {
