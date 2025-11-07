@@ -408,7 +408,7 @@
 		if (BomberoId <= 0)
 		{
 			await message.ErrorAsync("BomberoId no es válido.");
-			await OnCancel.InvokeAsync();
+			await Cancelar();
 			return;
 		}
 
@@ -419,7 +419,7 @@
 			if (bombero == null)
 			{
 				await message.ErrorAsync("No se encontró el bombero solicitado.");
-				await OnCancel.InvokeAsync();
+				await Cancelar();
 				return;
 			}
 
@@ -485,7 +485,7 @@
 			// Creamos el bombero
 			await BomberoService.EditarBombero(bombero);
 			message.Success("Se edito el bombero.");
-			await OnCancel.InvokeAsync();
+			await Cancelar();
 		}
 		catch (Exception ex)
 		{
