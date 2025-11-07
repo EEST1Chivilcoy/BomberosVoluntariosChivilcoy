@@ -353,7 +353,7 @@
 
 		try
 		{
-			Cobrador? cobrador = await CobradorService.ObtenerCobradorPorIdAsync(CobradorId);
+			Cobrador? cobrador = await CobradorService.ObtenerCobradorPorIdAsync(id:CobradorId, conRelaciones:true);
 
 			if (cobrador == null)
 			{

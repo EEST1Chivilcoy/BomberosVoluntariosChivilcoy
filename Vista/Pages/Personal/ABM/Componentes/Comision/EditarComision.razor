@@ -353,7 +353,7 @@
 
 		try
 		{
-			ComisionDirectiva? comision = await ComisionDirectivaService.ObtenerMiembroComisionDirectivaPorIdAsync(ComisionDirectivaId);
+			ComisionDirectiva? comision = await ComisionDirectivaService.ObtenerMiembroComisionDirectivaPorIdAsync(id:ComisionDirectivaId, conRelaciones:true);
 
 			if (comision == null)
 			{

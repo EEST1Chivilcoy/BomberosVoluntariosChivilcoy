@@ -414,7 +414,7 @@
 
 		try
 		{
-			Bombero? bombero = await BomberoService.ObtenerBomberoPorIdAsync(BomberoId);
+			Bombero? bombero = await BomberoService.ObtenerBomberoPorIdAsync(id:BomberoId, conRelaciones:true);
 
 			if (bombero == null)
 			{
