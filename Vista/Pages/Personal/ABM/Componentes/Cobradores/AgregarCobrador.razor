@@ -185,14 +185,6 @@
 									<Avatar Icon="@IconType.Outline.User" Size="@("10rem")" />
 								}
 							</div>
-							@if (ImageUrlPreview == null)
-							{
-								<div class="upload-actions">
-									<Button Type="@ButtonType.Primary" Danger>
-										<Icon Type="close" /> No se ha cargado ninguna foto
-									</Button>
-								</div>
-							}
 						</div>
 					</AntDesign.Col>
 					<AntDesign.Col Span="18">
@@ -277,7 +269,7 @@
 				<AntDesign.Row Gutter="16">
 					<AntDesign.Col Span="6">
 						<FormItem Label="Estado">
-							<EnumSelect TEnum="EstadoCobrador" @bind-Value="@personalView.Estado" AllowClear />
+							<EnumSelect TEnum="EstadoCobrador?" @bind-Value="@personalView.Estado" AllowClear />
 						</FormItem>
 					</AntDesign.Col>
 					<AntDesign.Col Span="6">
@@ -495,7 +487,7 @@
 
 				// --- Información Profesional ---
 
-				Estado = personalView.Estado,
+				Estado = personalView.Estado.Value,
 				ZonasAsignadas = personalView.ZonasAsignadas,
 				FechaAceptacion = personalView.FechaAceptacion,
 

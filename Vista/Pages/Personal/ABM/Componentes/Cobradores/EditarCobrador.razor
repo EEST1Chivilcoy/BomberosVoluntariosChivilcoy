@@ -253,7 +253,7 @@
 				<AntDesign.Row Gutter="16">
 					<AntDesign.Col Span="6">
 						<FormItem Label="Estado">
-							<EnumSelect TEnum="EstadoCobrador" @bind-Value="@personalView.Estado" AllowClear />
+							<EnumSelect TEnum="EstadoCobrador?" @bind-Value="@personalView.Estado" AllowClear />
 						</FormItem>
 					</AntDesign.Col>
 					<AntDesign.Col Span="6">
@@ -399,7 +399,7 @@
 
 				// --- Información Profesional ---
 
-				Estado = personalView.Estado,
+				Estado = personalView.Estado.Value,
 				ZonasAsignadas = personalView.ZonasAsignadas,
 				FechaAceptacion = personalView.FechaAceptacion,
 

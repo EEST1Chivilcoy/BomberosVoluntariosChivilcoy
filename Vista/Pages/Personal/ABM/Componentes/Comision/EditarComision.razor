@@ -252,12 +252,12 @@
 				<AntDesign.Row Gutter="16">
 					<AntDesign.Col Span="6">
 						<FormItem Label="Grado">
-							<EnumSelect TEnum="GradoComisionDirectiva" @bind-Value="@personalView.Grado" AllowClear />
+							<EnumSelect TEnum="GradoComisionDirectiva?" @bind-Value="@personalView.Grado" AllowClear />
 						</FormItem>
 					</AntDesign.Col>
 					<AntDesign.Col Span="6">
 						<FormItem Label="Estado">
-							<EnumSelect TEnum="EstadoComisionDirectiva" @bind-Value="@personalView.Estado" AllowClear />
+							<EnumSelect TEnum="EstadoComisionDirectiva?" @bind-Value="@personalView.Estado" AllowClear />
 						</FormItem>
 					</AntDesign.Col>
 				</AntDesign.Row>
@@ -397,8 +397,8 @@
 				GrupoSanguineo = personalView.GrupoSanguineo,
 
 				// --- Información Profesional ---
-				Grado = personalView.Grado,
-				Estado = personalView.Estado,
+				Grado = personalView.Grado.Value,
+				Estado = personalView.Estado.Value,
 				FechaAceptacion = personalView.FechaAceptacion,
 
 				// --- Información de Contacto ---
