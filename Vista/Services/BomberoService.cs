@@ -221,30 +221,24 @@ namespace Vista.Services
                 bomberoExistente.FechaNacimiento = bombero.FechaNacimiento;
                 bomberoExistente.Sexo = bombero.Sexo;
 
-                // Manejar la actualización del contacto
-                if (bombero.Contacto != null)
+                // Información de contacto
+                if (bomberoExistente.Contacto == null)
                 {
-                    if (bomberoExistente.Contacto != null)
+                    bomberoExistente.Contacto = new Contacto
                     {
-                        // Actualizar contacto existente
-                        bomberoExistente.Contacto.TelefonoCel = bombero.Contacto.TelefonoCel;
-                        bomberoExistente.Contacto.TelefonoFijo = bombero.Contacto.TelefonoFijo;
-                        bomberoExistente.Contacto.TelefonoLaboral = bombero.Contacto.TelefonoLaboral;
-                        bomberoExistente.Contacto.Email = bombero.Contacto.Email;
-                    }
-                    else
-                    {
-                        // Crear nuevo contacto
-                        bomberoExistente.Contacto = new Contacto
-                        {
-                            PersonalId = bomberoExistente.PersonaId,
-                            TelefonoCel = bombero.Contacto.TelefonoCel,
-                            TelefonoFijo = bombero.Contacto.TelefonoFijo,
-                            TelefonoLaboral = bombero.Contacto.TelefonoLaboral,
-                            Email = bombero.Contacto.Email
-                        };
-                        _context.Contactos.Add(bomberoExistente.Contacto);
-                    }
+                        PersonalId = bomberoExistente.PersonaId,
+                        TelefonoCel = bombero.Contacto?.TelefonoCel,
+                        TelefonoLaboral = bombero.Contacto?.TelefonoLaboral,
+                        TelefonoFijo = bombero.Contacto?.TelefonoFijo,
+                        Email = bombero.Contacto?.Email
+                    };
+                }
+                else
+                {
+                    bomberoExistente.Contacto.TelefonoCel = bombero.Contacto?.TelefonoCel;
+                    bomberoExistente.Contacto.TelefonoLaboral = bombero.Contacto?.TelefonoLaboral;
+                    bomberoExistente.Contacto.TelefonoFijo = bombero.Contacto?.TelefonoFijo;
+                    bomberoExistente.Contacto.Email = bombero.Contacto?.Email;
                 }
 
                 // Guardar los cambios

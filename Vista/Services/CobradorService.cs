@@ -150,7 +150,42 @@ namespace Vista.Services
                 }
 
                 // Actualizamos los campos del cobrador existente
-                _context.Entry(cobradorExistente).CurrentValues.SetValues(cobrador);
+
+                // Información Personal
+
+                cobradorExistente.Documento = cobrador.Documento;
+                cobradorExistente.FechaNacimiento = cobrador.FechaNacimiento;
+                cobradorExistente.LugarNacimiento = cobrador.LugarNacimiento;
+                cobradorExistente.Direccion = cobrador.Direccion;
+                cobradorExistente.Sexo = cobrador.Sexo;
+                cobradorExistente.GrupoSanguineo = cobrador.GrupoSanguineo;
+
+                // Información Profesional
+
+                cobradorExistente.Estado = cobrador.Estado;
+                cobradorExistente.ZonasAsignadas = cobrador.ZonasAsignadas;
+                cobradorExistente.FechaAceptacion = cobrador.FechaAceptacion;
+
+                // Información de Contacto
+                if (cobradorExistente.Contacto == null)
+                {
+                    cobradorExistente.Contacto = new Contacto 
+                    {
+                        PersonalId = cobradorExistente.PersonaId,
+                        TelefonoCel = cobrador.Contacto?.TelefonoCel,
+                        TelefonoLaboral = cobrador.Contacto?.TelefonoLaboral,
+                        TelefonoFijo = cobrador.Contacto?.TelefonoFijo,
+                        Email = cobrador.Contacto?.Email
+                    };
+                }
+                else
+                {
+                    cobradorExistente.Contacto.TelefonoCel = cobrador.Contacto?.TelefonoCel;
+                    cobradorExistente.Contacto.TelefonoLaboral = cobrador.Contacto?.TelefonoLaboral;
+                    cobradorExistente.Contacto.TelefonoFijo = cobrador.Contacto?.TelefonoFijo;
+                    cobradorExistente.Contacto.Email = cobrador.Contacto?.Email;
+                }
+
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
             }
