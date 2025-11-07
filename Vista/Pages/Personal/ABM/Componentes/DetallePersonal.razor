@@ -183,7 +183,7 @@
 					<AntDesign.Col Span="6">
 						<div class="profile-photo-container">
 							<div class="photo-preview">
-								@if (personalView.UrlImagen != null)
+								@if (!string.IsNullOrWhiteSpace(personalView.UrlImagen))
 								{
 									<Avatar Src="@personalView.UrlImagen" Alt="Foto de perfil" Size="@("10rem")" />
 								}
@@ -441,9 +441,9 @@
 </div>
 
 @code {
-	[Parameter, Required, EditorRequired] public int PersonalId { get; set; }
-	[Parameter, Required, EditorRequired] public TipoPersonal Tipo { get; set; } // Puede ser "bombero" o "comisiondirectiva" o "cobrador"
-	[Parameter, Required, EditorRequired] public EventCallback OnFinishCallback { get; set; }
+	[Parameter] public required int PersonalId { get; set; }
+	[Parameter] public required TipoPersonal Tipo { get; set; } // Puede ser "bombero" o "comisiondirectiva" o "cobrador"
+	[Parameter] public required EventCallback OnFinishCallback { get; set; }
 
 	private PersonalViewModel? personalView = new(); // ViewModel base para el personal
 	private bool isLoading = true;
@@ -503,7 +503,7 @@
 			return;
 		}
 
-		await Task.Delay(300); // Pequeña demora para mejorar la experiencia de usuario
+		await Task.Delay(150);
 		isLoading = false;
 	}
 

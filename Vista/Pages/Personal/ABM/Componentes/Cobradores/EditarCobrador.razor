@@ -344,7 +344,7 @@
 	{
 		isLoading = true;
 
-		if(CobradorId <= 0)
+		if (CobradorId <= 0)
 		{
 			await message.ErrorAsync("El ID del cobrador no es válido.");
 			await Cancelar();
@@ -355,14 +355,15 @@
 		{
 			Cobrador? cobrador = await CobradorService.ObtenerCobradorPorIdAsync(CobradorId);
 
-			if(cobrador == null)
+			if (cobrador == null)
 			{
 				await message.ErrorAsync("No se encontró el cobrador solicitado.");
 				await Cancelar();
 				return;
 			}
 
-			personalView = CobradorMapper.ToCobradorViewModel(cobrador);
+			personalView = cobrador.ToCobradorViewModel();
+			await Task.Delay(150);
 		}
 		catch (Exception ex)
 		{

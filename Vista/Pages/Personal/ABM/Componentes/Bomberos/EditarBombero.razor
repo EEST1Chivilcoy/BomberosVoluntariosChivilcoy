@@ -401,7 +401,7 @@
 	private BomberoViweModel? personalView = new();
 	private bool isLoading = true;
 
-	protected override async Task OnParametersSetAsync()	
+	protected override async Task OnParametersSetAsync()
 	{
 		isLoading = true;
 
@@ -420,9 +420,10 @@
 			{
 				await message.ErrorAsync("No se encontró el bombero solicitado.");
 				await OnCancel.InvokeAsync();
+				return;
 			}
 
-			if (bombero != null) personalView = BomberoMapper.ToBomberoViewModel(bombero);
+			personalView = bombero.ToBomberoViewModel();
 		}
 		catch (Exception ex)
 		{
@@ -483,7 +484,7 @@
 
 			// Creamos el bombero
 			await BomberoService.EditarBombero(bombero);
-			message.Success("Se agregó el bombero.");
+			message.Success("Se edito el bombero.");
 			await OnCancel.InvokeAsync();
 		}
 		catch (Exception ex)
