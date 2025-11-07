@@ -259,6 +259,9 @@ namespace Vista.Services
                 // revertimos TODA la operación.
                 await transaction.RollbackAsync();
 
+                // Limpiar el contexto para evitar conflictos futuros
+                _context.ChangeTracker.Clear();
+
                 // Lanza una excepción genérica o la 'ex' original
                 // para que la capa superior sepa que algo falló.
                 if (ex is DbUpdateException)

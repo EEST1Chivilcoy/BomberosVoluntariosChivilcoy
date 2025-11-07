@@ -19,6 +19,7 @@ namespace Vista.Services
     public interface ICobradorService
     {
         Task CrearCobradorAsync(Cobrador cobrador, Imagen? imagen = null);
+        Task EditarCobradorAsync(Cobrador cobrador);
         Task<List<Cobrador>> ObtenerTodosLosCobradoresAsync(bool ConImagenes = false);
         Task<Cobrador> ObtenerCobradorPorIdAsync(int id, bool asnotracking = false, bool conRelaciones = true);
     }
@@ -98,6 +99,71 @@ namespace Vista.Services
                 // la lógica del service, o el segundo SaveChanges dentro del service),
                 // revertimos TODA la operación.
                 await transaction.RollbackAsync();
+
+                // Limpiar el contexto para evitar conflictos futuros
+                _context.ChangeTracker.Clear();
+
+                // Lanza una excepción genérica o la 'ex' original
+                // para que la capa superior sepa que algo falló.
+                if (ex is DbUpdateException)
+                {
+                    throw new Exception("Error al guardar en la base de datos. Verifique datos duplicados.", ex);
+                }
+
+                // Re-lanza la excepción (ej. la ValidationException del service)
+                throw;
+            }
+        }
+
+        public async Task EditarCobradorAsync(Cobrador cobrador)
+        {
+            // --- 1. Validaciones ---
+
+            // --- Paso A: Validaciones "Baratas" (en memoria) ---
+            if (cobrador == null)
+            {
+                throw new ArgumentNullException(nameof(cobrador), "El cobrador no puede ser nulo.");
+            }
+
+            ValidationHelper.Validar(cobrador);
+
+            // --- 2. Inicio de la Transacción ---
+            // Esta será la transacción "principal" que controlará todo.
+            using var transaction = await _context.Database.BeginTransactionAsync();
+
+            try
+            {
+                // Buscamos el cobrador existente con su contacto
+                var cobradorExistente = await _context.Cobradores
+                    .Include(c => c.Contacto)
+                    .FirstOrDefaultAsync(c => c.PersonaId == cobrador.PersonaId);
+
+                if (cobradorExistente == null)
+                {
+                    throw new KeyNotFoundException($"No se encontró un cobrador con el ID {cobrador.PersonaId}.");
+                }
+
+
+                if (await _context.Cobradores.AnyAsync(b => b.Documento == cobrador.Documento && b.PersonaId != cobrador.PersonaId))
+                {
+                    throw new InvalidOperationException("Número de documento ya existente.");
+                }
+
+                // Actualizamos los campos del cobrador existente
+                _context.Entry(cobradorExistente).CurrentValues.SetValues(cobrador);
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+            }
+            catch (Exception ex)
+            {
+                // --- Manejo de Error ---
+                // Si CUALQUIER operación falla (el primer SaveChanges,
+                // la lógica del service, o el segundo SaveChanges dentro del service),
+                // revertimos TODA la operación.
+                await transaction.RollbackAsync();
+
+                // Limpiar el contexto para evitar conflictos futuros
+                _context.ChangeTracker.Clear();
 
                 // Lanza una excepción genérica o la 'ex' original
                 // para que la capa superior sepa que algo falló.

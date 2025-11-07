@@ -449,6 +449,7 @@
 			// Preparar el objeto Bombero
 			Bombero bombero = new Bombero()
 			{
+				PersonaId = personalView.Id, 
 				EntraId = personalView.EntraID,
 				UPN = personalView.UPN,
 				FechaNacimiento = personalView.FechaNacimiento,
@@ -484,7 +485,7 @@
 
 			// Creamos el bombero
 			await BomberoService.EditarBombero(bombero);
-			message.Success("Se edito el bombero.");
+			message.Success("Bombero editado con éxito.");
 			await Cancelar();
 		}
 		catch (Exception ex)

@@ -385,7 +385,7 @@
 			Cobrador cobrador = new Cobrador()
 			{
 				// --- Información Personal ---
-
+				PersonaId = personalView.Id,
 				Nombre = personalView.Nombre,
 				Apellido = personalView.Apellido,
 				EntraId = personalView.EntraID,
@@ -414,6 +414,9 @@
 			};
 
 			// Editamos el cobrador
+			await CobradorService.EditarCobradorAsync(cobrador);
+			message.Success("Cobrador editado con éxito.");
+			await Cancelar();
 		}
 		catch (Exception ex)
 		{

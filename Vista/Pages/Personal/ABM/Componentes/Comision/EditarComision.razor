@@ -385,6 +385,7 @@
 			ComisionDirectiva comisionDirectiva = new ComisionDirectiva()
 			{
 				// --- Información Personal ---
+				PersonaId = personalView.Id,
 				Nombre = personalView.Nombre,
 				Apellido = personalView.Apellido,
 				EntraId = personalView.EntraID,
@@ -412,6 +413,9 @@
 			};
 
 			// Editamos el ComisionDirectiva
+			await ComisionDirectivaService.EditarComisionDirectivaAsync(comisionDirectiva);
+			message.Success("Comisionista editado correctamente.");
+			await Cancelar();
 		}
 		catch (Exception ex)
 		{
