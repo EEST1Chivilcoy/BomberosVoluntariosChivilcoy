@@ -25,17 +25,20 @@ namespace Vista.Data.Models.Socios
         /// <summary>
         /// Representa el tipo de socio. (Empresa o Persona)
         /// </summary>
-        public TipoSocio Tipo { get; set; }
+        [Required(ErrorMessage = "Debe especificar si el socio es una Empresa o una Persona.")]
+        public TipoSocio? Tipo { get; set; }
 
         /// <summary>
         /// Representa la fecha de ingreso del socio.
         /// </summary>
+        [Required(ErrorMessage = "La fecha de ingreso es obligatoria.")]
         public DateTime FechaIngreso { get; set; } = DateTime.Now;
 
         /// <summary>
         /// Representa el estado actual del socio. (Activo, Inactivo, Suspendido)
         /// </summary>
-        public TipoEstadoSocio EstadoSocio { get; set; } = TipoEstadoSocio.Activo;
+        [Required(ErrorMessage = "El estado del socio es obligatorio.")]
+        public TipoEstadoSocio? EstadoSocio { get; set; } = TipoEstadoSocio.Activo;
 
         /// <summary>
         /// Representa la relación del con el historial del socio. (1 a n) (Componente)
@@ -50,7 +53,8 @@ namespace Vista.Data.Models.Socios
         /// <summary>
         /// Representa la frecuencia de pago del socio. (Mensual, Trimestral, Semestral, Anual) (Por defecto es Mensual)
         /// </summary>
-        public FrecuenciaPago FrecuenciaDePago { get; set; } = FrecuenciaPago.Mensual;
+        [Required(ErrorMessage = "La frecuencia de pago es obligatoria.")]
+        public FrecuenciaPago? FrecuenciaDePago { get; set; } = FrecuenciaPago.Mensual;
 
         // --- Datos personales ---
 
@@ -59,13 +63,14 @@ namespace Vista.Data.Models.Socios
         /// Documento para personas y CUIT para empresas.
         /// Debe ser único.
         /// </summary>
-        [Required]
+        [Required(ErrorMessage = "El documento o CUIT del socio es obligatorio.")]
         public int DocumentoOCUIT { get; set; }
 
         /// <summary>
         /// Representa el nombre de la persona o empresa.
         /// </summary>
-        public string Nombre { get; set; } = string.Empty;
+        [Required(ErrorMessage = "El nombre del socio es obligatorio.")]
+        public string? Nombre { get; set; }
 
         /// <summary>
         /// Representa el apellido de la persona.
@@ -96,7 +101,8 @@ namespace Vista.Data.Models.Socios
         /// <summary>
         /// Representa la zona del socio.
         /// </summary>
-        public TipoZona Zona { get; set; }
+        [Required(ErrorMessage = "La zona del socio es obligatoria.")]
+        public Zona? Zona { get; set; }
 
         /// <summary>
         /// Representa la ocupación del socio.
