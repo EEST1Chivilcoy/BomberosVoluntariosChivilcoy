@@ -71,6 +71,5 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Pages\Firmas\Departamentos\" />
-    <Folder Include="Pages\Socios\Componentes\" />
   </ItemGroup>
 </Project>

@@ -431,7 +431,7 @@
 				</div>
 				<div class="title-container">
 					<h1 class="main-title">
-						<Icon Type="transaction" Class="title-icon" />
+						<Icon Type="user" Class="title-icon" />
 						<span>SOCIOS</span>
 					</h1>
 				</div>
@@ -489,7 +489,7 @@
 									</Button>
 								</Popconfirm>
 							}
-							else
+							else if (context.Estado == TipoEstadoSocio.Inactivo)
 							{
 								<Popconfirm Title="¿Está seguro de dar de alta?"
 											OkText="Sí" CancelText="No">

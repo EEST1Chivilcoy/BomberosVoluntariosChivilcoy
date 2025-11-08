@@ -166,6 +166,11 @@
         color: white !important;
     }
 
+    .socios-card {
+        background: #581c87 !important; /* Púrpura oscuro */
+        color: white !important;
+    }
+
     .unidades-card {
         background: #92400e !important; /* Naranja marrón */
         color: white !important;
@@ -442,6 +447,17 @@
                     <i class="fa-solid fa-money-bill-wave card-icon"></i>
                     <h2>COBRADORES</h2>
                     <p>Ver el personal de cobradores</p>
+                </Card>
+            </div>
+        </AntDesign.Col>
+
+        @* Socios Section *@
+        <AntDesign.Col Xs="24" Sm="12" Lg="8">
+            <div @onclick="@(() => { navigationManager.NavigateTo("/fire-force/socios"); })" style="cursor: pointer;">
+                <Card Class="dashboard-card socios-card">
+                    <i class="fa-solid fa-handshake card-icon"></i>
+                    <h2>SOCIOS</h2>
+                    <p>Gestión de socios</p>
                 </Card>
             </div>
         </AntDesign.Col>

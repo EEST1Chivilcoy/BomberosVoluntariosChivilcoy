@@ -1,0 +1,137 @@
+﻿@page "/fire-force/socios/agregar"
+
+@*Servicios Utilizados*@
+@using Vista.Services
+@inject NavigationManager navigationManager
+
+<style>
+	/* Estilos generales */
+	.container {
+		padding: 24px !important;
+		min-height: 100vh !important;
+	}
+
+	.page-title {
+		font-size: 24px !important;
+		font-weight: 600 !important;
+		color: #1f1f1f !important;
+		margin-bottom: 24px !important;
+		display: flex !important;
+		align-items: center !important;
+	}
+
+	.page-title-icon {
+		margin-right: 12px !important;
+		color: #c43a3a !important;
+	}
+
+	.card {
+		background-color: white !important;
+		border-radius: 8px !important;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+		padding: 24px !important;
+		margin-bottom: 24px !important;
+	}
+
+	.card-title {
+		font-size: 18px !important;
+		font-weight: 500 !important;
+		color: #434343 !important;
+		margin-bottom: 16px !important;
+		padding-bottom: 12px !important;
+		border-bottom: 1px solid #f0f0f0 !important;
+	}
+
+	/* Estilos de la foto */
+	.profile-photo-container {
+		display: flex !important;
+		flex-direction: column !important;
+		align-items: center !important;
+		padding: 16px !important;
+	}
+
+	.photo-preview {
+		width: 150px !important;
+		height: 150px !important;
+		border-radius: 50% !important;
+		overflow: hidden !important;
+		margin-bottom: 16px !important;
+		display: flex !important;
+		align-items: center !important;
+		justify-content: center !important;
+	}
+
+	.upload-actions {
+		display: flex !important;
+		gap: 8px !important;
+	}
+
+	/* Estilo para las secciones del formulario */
+	.form-section {
+		margin-bottom: 24px !important;
+	}
+
+	/* Estilo para los botones de acción */
+	.action-buttons {
+		display: flex !important;
+		justify-content: flex-end !important;
+		gap: 12px !important;
+		margin-top: 24px !important;
+	}
+
+	/* Estilo para los campos */
+	.ant-form-item {
+		margin-bottom: 16px !important;
+	}
+
+	.ant-form-item-label > label {
+		color: #595959 !important;
+		font-weight: 500 !important;
+	}
+
+	.ant-input,
+	.ant-select:not(.ant-select-customize-input) .ant-select-selector,
+	.ant-picker,
+	.ant-input-number {
+		border-radius: 4px !important;
+		border: 1px solid #d9d9d9 !important;
+	}
+
+		.ant-input:hover,
+		.ant-select:not(.ant-select-customize-input) .ant-select-selector:hover,
+		.ant-picker:hover,
+		.ant-input-number:hover {
+			border-color: #c43a3a !important;
+		}
+
+		.ant-input:focus,
+		.ant-select-focused:not(.ant-select-customize-input) .ant-select-selector,
+		.ant-picker-focused,
+		.ant-input-number-focused {
+			border-color: #c43a3a !important;
+			box-shadow: 0 0 0 2px rgba(196, 58, 58, 0.2) !important;
+		}
+
+	/* Ajuste visual para el switch */
+	.ant-switch-checked {
+		background-color: #c43a3a !important;
+	}
+
+	/* Estilo para campos requeridos */
+	.required-field::after {
+		content: '*' !important;
+		color: #c43a3a !important;
+		margin-left: 4px !important;
+	}
+
+	/* Estilo para el campo condicional de chofer */
+	.conditional-field {
+		margin-top: 12px !important;
+		padding-top: 12px !important;
+		border-top: 1px dashed #f0f0f0 !important;
+	}
+</style>
+
+@code {
+	private bool isLoading = true;
+}
