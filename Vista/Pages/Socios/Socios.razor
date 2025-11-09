@@ -452,7 +452,8 @@
 
 						<Button Type="ButtonType.Primary"
 								Class="add-button"
-								OnClick="@(() => navigationManager.NavigateTo("/fire-force/socios/agregar"))">
+								OnClick="@OpenCrearModal"
+								Loading="isLoading">
 							<Icon Type="user-add" /> Agregar Socio
 						</Button>
 
@@ -512,6 +513,57 @@
 	</Template>;
 }
 
+@*Modal Detalle Socio*@
+
+@*Modal Editar Socio*@
+
+@*Modal Crear Socio*@
+
+<Modal Title="Crear Socio"
+	   Footer="footer"
+	   Centered="@true"
+	   OnCancel="CloseModals"
+	   Visible="@isModalCrearVisible"
+	   Width="600">
+	<div style="padding: 24px;">
+		<h3 style="text-align: center; margin-bottom: 32px; color: #A63333; font-weight: 600;">
+			Seleccione el tipo de socio a crear
+		</h3>
+
+		<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+			<!-- Card Persona -->
+			<Card Hoverable="true"
+				  Style="cursor: pointer; border: 2px solid #e8e8e8; border-radius: 12px; transition: all 0.3s ease;">
+				<div style="text-align: center; padding: 24px;">
+					<Icon Type="user"
+						  Style="font-size: 64px; color: #4CAF50; margin-bottom: 16px;" />
+					<h4 style="margin: 0 0 8px 0; color: #333; font-weight: 600; font-size: 20px;">
+						Persona
+					</h4>
+					<p style="margin: 0; color: #666; font-size: 14px;">
+						Socio individual
+					</p>
+				</div>
+			</Card>
+
+			<!-- Card Empresa -->
+			<Card Hoverable="true"
+				  Style="cursor: pointer; border: 2px solid #e8e8e8; border-radius: 12px; transition: all 0.3s ease;">
+				<div style="text-align: center; padding: 24px;">
+					<Icon Type="bank"
+						  Style="font-size: 64px; color: #1890ff; margin-bottom: 16px;" />
+					<h4 style="margin: 0 0 8px 0; color: #333; font-weight: 600; font-size: 20px;">
+						Empresa
+					</h4>
+					<p style="margin: 0; color: #666; font-size: 14px;">
+						Socio corporativo
+					</p>
+				</div>
+			</Card>
+		</div>
+	</div>
+</Modal>
+
 @code {
 
 	// Referencia a la tabla
@@ -530,6 +582,7 @@
 	// Visibilidad de los modales
 	bool isModalEditarVisible = false;
 	bool isModalDetalleVisible = false;
+	bool isModalCrearVisible = false;
 
 	// Lista de Socios
 	private List<SocioTableViewModel> socios = new();
@@ -558,6 +611,7 @@
 	{
 		isModalEditarVisible = false;
 		isModalDetalleVisible = false;
+		isModalCrearVisible = false;
 	}
 
 	private void OpenDetalleModal(int socioId)
@@ -570,5 +624,10 @@
 	{
 		selectedSocioId = socioId;
 		isModalEditarVisible = true;
+	}
+
+	private void OpenCrearModal()
+	{
+		isModalCrearVisible = true;
 	}
 }
