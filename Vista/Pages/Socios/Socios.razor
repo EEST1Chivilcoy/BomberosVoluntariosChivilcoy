@@ -452,8 +452,7 @@
 
 						<Button Type="ButtonType.Primary"
 								Class="add-button"
-								OnClick="@OpenCrearModal"
-								Loading="isLoading">
+								OnClick="@OpenCrearModal">
 							<Icon Type="user-add" /> Agregar Socio
 						</Button>
 
@@ -515,7 +514,11 @@
 
 @*Modal Detalle Socio*@
 
+
+
 @*Modal Editar Socio*@
+
+
 
 @*Modal Crear Socio*@
 
@@ -532,40 +535,31 @@
 
 		<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
 			<!-- Card Persona -->
-			<Card Hoverable="true"
-				  Style="cursor: pointer; border: 2px solid #e8e8e8; border-radius: 12px; transition: all 0.3s ease;">
-				<div style="text-align: center; padding: 24px;">
-					<Icon Type="user"
-						  Style="font-size: 64px; color: #4CAF50; margin-bottom: 16px;" />
-					<h4 style="margin: 0 0 8px 0; color: #333; font-weight: 600; font-size: 20px;">
-						Persona
-					</h4>
-					<p style="margin: 0; color: #666; font-size: 14px;">
-						Socio individual
-					</p>
-				</div>
-			</Card>
+			<NavLink href="/fire-force/socios/crear/persona" style="text-decoration: none;">
+				<Card Hoverable="true" Style="cursor: pointer; border: 2px solid #e8e8e8; border-radius: 12px; transition: all 0.3s ease;">
+					<div style="text-align: center; padding: 24px;">
+						<Icon Type="user" Style="font-size: 64px; color: #4CAF50; margin-bottom: 16px;" />
+						<h4 style="margin: 0 0 8px 0; color: #333; font-weight: 600; font-size: 20px;">Persona</h4>
+						<p style="margin: 0; color: #666; font-size: 14px;">Socio individual</p>
+					</div>
+				</Card>
+			</NavLink>
 
 			<!-- Card Empresa -->
-			<Card Hoverable="true"
-				  Style="cursor: pointer; border: 2px solid #e8e8e8; border-radius: 12px; transition: all 0.3s ease;">
-				<div style="text-align: center; padding: 24px;">
-					<Icon Type="bank"
-						  Style="font-size: 64px; color: #1890ff; margin-bottom: 16px;" />
-					<h4 style="margin: 0 0 8px 0; color: #333; font-weight: 600; font-size: 20px;">
-						Empresa
-					</h4>
-					<p style="margin: 0; color: #666; font-size: 14px;">
-						Socio corporativo
-					</p>
-				</div>
-			</Card>
+			<NavLink href="/fire-force/socios/crear/empresa" style="text-decoration: none;">
+				<Card Hoverable="true" Style="cursor: pointer; border: 2px solid #e8e8e8; border-radius: 12px; transition: all 0.3s ease;">
+					<div style="text-align: center; padding: 24px;">
+						<Icon Type="bank" Style="font-size: 64px; color: #1890ff; margin-bottom: 16px;" />
+						<h4 style="margin: 0 0 8px 0; color: #333; font-weight: 600; font-size: 20px;">Empresa</h4>
+						<p style="margin: 0; color: #666; font-size: 14px;">Socio corporativo</p>
+					</div>
+				</Card>
+			</NavLink>
 		</div>
 	</div>
 </Modal>
 
 @code {
-
 	// Referencia a la tabla
 	ITable table;
 

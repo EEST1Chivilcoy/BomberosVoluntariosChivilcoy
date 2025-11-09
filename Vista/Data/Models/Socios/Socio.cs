@@ -64,7 +64,7 @@ namespace Vista.Data.Models.Socios
         /// Debe ser único.
         /// </summary>
         [Required(ErrorMessage = "El documento o CUIT del socio es obligatorio.")]
-        public int DocumentoOCUIT { get; set; }
+        public string DocumentoOCUIT { get; set; } = null!;
 
         /// <summary>
         /// Representa el nombre de la persona o empresa.

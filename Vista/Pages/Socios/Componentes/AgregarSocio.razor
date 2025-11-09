@@ -1,8 +1,13 @@
-﻿@page "/fire-force/socios/agregar"
+﻿@using Vista.Data.Enums.Socios
+@using Vista.Data.Enums.Discriminadores
+@using Vista.Data.Models.Socios
+
+@page "/fire-force/socios/crear/{TipoSocio}"
 
 @*Servicios Utilizados*@
 @using Vista.Services
 @inject NavigationManager navigationManager
+@inject IMessageService message
 
 <style>
 	/* Estilos generales */
@@ -132,6 +137,287 @@
 	}
 </style>
 
+<div class="container">
+	<div class="page-title">
+		<div>
+			<Icon Type="user" Theme="IconThemeType.Fill" Class="page-title-icon" />
+			<span>Registro de Nuevo Socio</span>
+		</div>
+	</div>
+
+	@if (socioView != null)
+	{
+		<Form Model="@socioView"
+			  Layout="FormLayout.Vertical"
+			  OnFinish="OnFinish"
+			  Loading="isLoading">
+
+			@*Información Personal (Común para todos)*@
+			<div class="card">
+				<div class="card-title">Información Personal</div>
+				<AntDesign.Row Gutter="24">
+					<AntDesign.Col Span="18">
+						<AntDesign.Row Gutter="16">
+							<AntDesign.Col Span="8">
+								<FormItem Label="Nombre">
+									<Input @bind-Value="@socioView.Nombre" />
+								</FormItem>
+							</AntDesign.Col>
+							@if (socioView is SocioPersonaViewModel sociopersonaView)
+							{
+								<AntDesign.Col Span="8">
+									<FormItem Label="Apellido">
+										<Input @bind-Value="@sociopersonaView.Apellido" />
+									</FormItem>
+								</AntDesign.Col>
+							}
+						</AntDesign.Row>
+
+
+						<AntDesign.Row Gutter="16">
+							<AntDesign.Col Span="8">
+								<FormItem Label="Nro Socio">
+									<Input @bind-Value="@socioView.NroSocio" Placeholder="Ingrese Nro Socio" />
+								</FormItem>
+							</AntDesign.Col>
+							<AntDesign.Col Span="8">
+								@if (socioView is SocioPersonaViewModel personalView)
+								{
+									<FormItem Label="DNI">
+										<Input @bind-Value="@personalView.Documento" Placeholder="Ingrese el DNI" />
+									</FormItem>
+								}
+								else if (socioView is SocioEmpresaViewModel empresaView)
+								{
+									<FormItem Label="CUIT">
+										<Input @bind-Value="@empresaView.CUIT" Placeholder="Ingrese el CUIT" />
+									</FormItem>
+								}
+							</AntDesign.Col>
+							<AntDesign.Col Span="8">
+								<FormItem Label="Fecha de Ingreso">
+									<DatePicker @bind-Value="@socioView.FechaIngreso"
+												Picker="@DatePickerType.Date"
+												Style="width: 100%;"
+												Placeholder="@("Seleccione fecha")"
+												AllowClear />
+								</FormItem>
+							</AntDesign.Col>
+						</AntDesign.Row>
+
+						<AntDesign.Row Gutter="16">
+							<AntDesign.Col Span="8">
+								<FormItem Label="Dirección">
+									<Input @bind-Value="@socioView.Direccion" Placeholder="Ingrese dirección" />
+								</FormItem>
+							</AntDesign.Col>
+							<AntDesign.Col Span="8">
+								<FormItem Label="Zona">
+									<EnumSelect TEnum="Zona ?" @bind-Value="@socioView.Zona" />
+								</FormItem>
+							</AntDesign.Col>
+							<AntDesign.Col Span="8">
+								<FormItem Label="Localidad">
+									<Input @bind-Value="@socioView.Localidad" Placeholder="Ingrese localidad" />
+								</FormItem>
+							</AntDesign.Col>
+						</AntDesign.Row>
+					</AntDesign.Col>
+				</AntDesign.Row>
+			</div>
+
+			@*Información Profesional*@
+			<div class="card">
+				<div class="card-title">Información Cuota</div>
+
+				<AntDesign.Row Gutter="16">
+					<AntDesign.Col Span="6">
+						<FormItem Label="Frecuencia de Pago">
+							<EnumSelect TEnum="FrecuenciaPago ?" @bind-Value="@socioView.FrecuenciaPago" AllowClear Placeholder="Ingrese la frecuencia de pago" />
+						</FormItem>
+					</AntDesign.Col>
+					<AntDesign.Col Span="6">
+						<FormItem Label="Monto">
+							<Input @bind-Value="@socioView.CuotaValor" Placeholder="Ingrese el monto de la cuota" />
+						</FormItem>
+					</AntDesign.Col>
+				</AntDesign.Row>
+			</div>
+
+			@*Información de Contacto*@
+			<div class="card">
+				<div class="card-title">Información de Contacto</div>
+				<AntDesign.Row Gutter="16">
+					<AntDesign.Col Span="6">
+						<FormItem Label="Teléfono">
+							<Input @bind-Value="@socioView.Telefono" Placeholder="Ingrese teléfono celular" />
+						</FormItem>
+					</AntDesign.Col>
+				</AntDesign.Row>
+			</div>
+
+			@*Botones de Acción*@
+			<div class="action-buttons">
+				<Button Type="@ButtonType.Default" OnClick="Cancelar">
+					Cancelar
+				</Button>
+				<Button Type="@ButtonType.Primary" HtmlType="submit" Class="primary-button">
+					Registrar Socio
+				</Button>
+			</div>
+		</Form>
+	}
+	else
+	{
+		<Result Status="ResultStatus.Error"
+				Title="Error"
+				SubTitle="No se ha inicializado correctamente el formulario.">
+			<Extra>
+				<Button Type="@ButtonType.Primary" OnClick="Cancelar">
+					Volver al listado
+				</Button>
+			</Extra>
+		</Result>
+	}
+</div>
+
 @code {
+	[Parameter] public required string TipoSocio { get; set; } = null!; // Parámetro para el tipo de socio (empresa o persona)
+
+	private SocioViewModel? socioView;
+
 	private bool isLoading = true;
+
+	public abstract class SocioViewModel
+	{
+		[Required(ErrorMessage = "El número de socio es obligatorio.")]
+		public int NroSocio { get; set; }
+
+		// -- Datos Generales --
+
+		[Required(ErrorMessage = "El nombre es obligatorio.")]
+		[StringLength(255, ErrorMessage = "El nombre no puede superar los 255 caracteres.")]
+		public string? Nombre { get; set; }
+
+		[Required(ErrorMessage = "La localidad es obligatoria.")]
+		[StringLength(255, ErrorMessage = "La localidad no puede superar los 255 caracteres.")]
+		public string? Localidad { get; set; }
+
+		[Required(ErrorMessage = "La dirección es obligatoria.")]
+		[StringLength(255, ErrorMessage = "La dirección no puede superar los 255 caracteres.")]
+		public string? Direccion { get; set; }
+
+		[Required(ErrorMessage = "La zona es obligatoria.")]
+		public Zona? Zona { get; set; }
+
+		[Required(ErrorMessage = "La fecha de ingreso es obligatoria.")]
+		public DateTime? FechaIngreso { get; set; } = DateTime.Now;
+
+		// -- Datos de Contacto --
+
+		[Required(ErrorMessage = "El teléfono es obligatorio.")]
+		[StringLength(255, ErrorMessage = "El teléfono no puede superar los 255 caracteres.")]
+		public string? Telefono { get; set; }
+
+		// -- Datos de la Cuota --
+
+		[Required(ErrorMessage = "El valor de la cuota es obligatoria.")]
+		public double? CuotaValor { get; set; }
+
+		[Required(ErrorMessage = "La frecuencia de pago es obligatoria.")]
+		public FrecuenciaPago? FrecuenciaPago { get; set; }
+	}
+
+	public class SocioPersonaViewModel : SocioViewModel
+	{
+		// -- Datos Personales --
+
+		[Required(ErrorMessage = "El número de documento es obligatorio.")]
+		[StringLength(8, MinimumLength = 7, ErrorMessage = "El documento debe tener entre 7 y 8 dígitos.")]
+		[RegularExpression(@"^\d{7,8}$", ErrorMessage = "El documento debe contener solo números.")]
+		public string? Documento { get; set; }
+
+
+		[Required(ErrorMessage = "El apellido es obligatorio.")]
+		[StringLength(255, ErrorMessage = "El apellido no puede superar los 255 caracteres.")]
+		public string? Apellido { get; set; }
+
+		[StringLength(255, ErrorMessage = "La ocupación no puede superar los 255 caracteres.")]
+		public string? Ocupacion { get; set; }
+	}
+
+
+	public class SocioEmpresaViewModel : SocioViewModel
+	{
+		// -- Datos de la Empresa --
+		[Required(ErrorMessage = "El CUIT es obligatorio.")]
+		[StringLength(11, MinimumLength = 11, ErrorMessage = "El CUIT debe tener exactamente 11 dígitos.")]
+		[RegularExpression(@"^(20|23|24|27|30|33|34)\d{8}\d$", ErrorMessage = "El CUIT no tiene un formato válido.")]
+		public string? CUIT { get; set; }
+	}
+
+	protected override async Task OnInitializedAsync()
+	{
+		isLoading = true;
+
+		try
+		{
+			TipoSocio = TipoSocio.ToLower();
+
+			if (TipoSocio == "persona")
+			{
+				socioView = new SocioPersonaViewModel();
+			}
+			else if (TipoSocio == "empresa")
+			{
+				socioView = new SocioEmpresaViewModel();
+			}
+			else
+			{
+				await message.ErrorAsync("Tipo de socio inválido. Por favor, verifique la URL.");
+				Cancelar();
+			}
+		}
+		catch (Exception ex)
+		{
+			await message.ErrorAsync($"Error: {ex.Message}");
+			Cancelar();
+		}
+		finally
+		{
+			isLoading = false;
+		}
+	}
+
+	private async Task OnFinish(EditContext editContext)
+	{
+		isLoading = true;
+
+		try
+		{
+
+			// Preparar el objeto Socio para enviarlo al servicio
+			Socio socio = new Socio()
+			{
+				
+			};
+
+			// Creamos el socio
+			message.Success("Se agregó el socio.");
+			Cancelar();
+		}
+		catch (Exception ex)
+		{
+			await message.ErrorAsync($"Error: {ex.Message}");
+		}
+		finally
+		{
+			isLoading = false;
+		}
+	}
+
+	private void Cancelar()
+	{
+		navigationManager.NavigateTo($"/fire-force/socios", true);
+	}
 }
