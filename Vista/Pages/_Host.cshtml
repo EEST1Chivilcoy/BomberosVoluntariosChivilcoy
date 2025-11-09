@@ -7,29 +7,18 @@
 @{
 	Layout = "_Layout";
 	var path = string.Empty;
-	var isSafari = false;
-
 	if (HttpContextAccessor.HttpContext != null)
 	{
 		path = HttpContextAccessor.HttpContext.Request.Path.Value ?? string.Empty;
-		var cookie = HttpContextAccessor.HttpContext.Request.Cookies["isSafari"];
-		isSafari = cookie == "true";
 	}
-
-	var renderMode = isSafari ? RenderMode.Server : RenderMode.ServerPrerendered;
 }
 
-<component type="typeof(App)" render-mode="@renderMode" />
-
+<component type="typeof(App)" render-mode="ServerPrerendered" />
 <head>
 	<meta name="robots" content="noindex, nofollow">
-	<script>
-		const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-		document.cookie = "isSafari=" + isSafari + "; path=/";
-	</script>
 	@if (!path.Contains("/PlanillasIntervencion/Imprimir/"))
 	{
-		<link href="_content/AntDesign/css/ant-design-blazor.css" rel="stylesheet" />
+		<link href="_content/AntDesign/css/ant-design-blazor.aliyun.css" rel="stylesheet" />
 		<script src="_content/AntDesign/js/ant-design-blazor.js"></script>
 		<script src="_content/AntDesign.Charts/g2plot.min.js"></script>
 		<script src="_content/AntDesign.Charts/ant-design-charts-blazor.js"></script>
