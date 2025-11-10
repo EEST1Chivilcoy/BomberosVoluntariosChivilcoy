@@ -152,20 +152,25 @@
 			  OnFinish="OnFinish"
 			  Loading="isLoading">
 
-			@*Información Personal (Común para todos)*@
+			@*Información General (Común para todos)*@
 			<div class="card">
-				<div class="card-title">Información Personal</div>
+				<div class="card-title">Información General</div>
 				<AntDesign.Row Gutter="24">
-					<AntDesign.Col Span="18">
+					<AntDesign.Col Span="24">
 						<AntDesign.Row Gutter="16">
-							<AntDesign.Col Span="8">
+							<AntDesign.Col Span="4">
+								<FormItem Label="Nro Socio">
+									<Input @bind-Value="@socioView.NroSocio" Placeholder="Ingrese Nro Socio" />
+								</FormItem>
+							</AntDesign.Col>
+							<AntDesign.Col Span="10">
 								<FormItem Label="Nombre">
 									<Input @bind-Value="@socioView.Nombre" />
 								</FormItem>
 							</AntDesign.Col>
 							@if (socioView is SocioPersonaViewModel sociopersonaView)
 							{
-								<AntDesign.Col Span="8">
+								<AntDesign.Col Span="10">
 									<FormItem Label="Apellido">
 										<Input @bind-Value="@sociopersonaView.Apellido" />
 									</FormItem>
@@ -175,11 +180,6 @@
 
 
 						<AntDesign.Row Gutter="16">
-							<AntDesign.Col Span="8">
-								<FormItem Label="Nro Socio">
-									<Input @bind-Value="@socioView.NroSocio" Placeholder="Ingrese Nro Socio" />
-								</FormItem>
-							</AntDesign.Col>
 							<AntDesign.Col Span="8">
 								@if (socioView is SocioPersonaViewModel personalView)
 								{
@@ -206,22 +206,32 @@
 						</AntDesign.Row>
 
 						<AntDesign.Row Gutter="16">
-							<AntDesign.Col Span="8">
+							<AntDesign.Col Span="12">
 								<FormItem Label="Dirección">
 									<Input @bind-Value="@socioView.Direccion" Placeholder="Ingrese dirección" />
 								</FormItem>
 							</AntDesign.Col>
-							<AntDesign.Col Span="8">
+							<AntDesign.Col Span="6">
 								<FormItem Label="Zona">
 									<EnumSelect TEnum="Zona ?" @bind-Value="@socioView.Zona" />
 								</FormItem>
 							</AntDesign.Col>
-							<AntDesign.Col Span="8">
+							<AntDesign.Col Span="6">
 								<FormItem Label="Localidad">
 									<Input @bind-Value="@socioView.Localidad" Placeholder="Ingrese localidad" />
 								</FormItem>
 							</AntDesign.Col>
 						</AntDesign.Row>
+
+						<AntDesign.Row Gutter="16">
+							<AntDesign.Col Span="24">
+								<FormItem Label="Ocupación">
+									<TextArea @bind-Value="@socioView.Ocupacion" Placeholder="Ingrese ocupación" Rows="2" MaxLength="255" />
+								</FormItem>
+							</AntDesign.Col>
+						</AntDesign.Row>
+
+
 					</AntDesign.Col>
 				</AntDesign.Row>
 			</div>
@@ -231,12 +241,12 @@
 				<div class="card-title">Información Cuota</div>
 
 				<AntDesign.Row Gutter="16">
-					<AntDesign.Col Span="6">
+					<AntDesign.Col Span="12">
 						<FormItem Label="Frecuencia de Pago">
 							<EnumSelect TEnum="FrecuenciaPago ?" @bind-Value="@socioView.FrecuenciaPago" AllowClear Placeholder="Ingrese la frecuencia de pago" />
 						</FormItem>
 					</AntDesign.Col>
-					<AntDesign.Col Span="6">
+					<AntDesign.Col Span="12">
 						<FormItem Label="Monto">
 							<Input @bind-Value="@socioView.CuotaValor" Placeholder="Ingrese el monto de la cuota" />
 						</FormItem>
@@ -248,9 +258,14 @@
 			<div class="card">
 				<div class="card-title">Información de Contacto</div>
 				<AntDesign.Row Gutter="16">
-					<AntDesign.Col Span="6">
+					<AntDesign.Col Span="12">
 						<FormItem Label="Teléfono">
 							<Input @bind-Value="@socioView.Telefono" Placeholder="Ingrese teléfono celular" />
+						</FormItem>
+					</AntDesign.Col>
+					<AntDesign.Col Span="12">
+						<FormItem Label="Email">
+							<Input @bind-Value="@socioView.Email" Placeholder="Ingrese correo electrónico" />
 						</FormItem>
 					</AntDesign.Col>
 				</AntDesign.Row>
@@ -291,7 +306,7 @@
 	public abstract class SocioViewModel
 	{
 		[Required(ErrorMessage = "El número de socio es obligatorio.")]
-		public int NroSocio { get; set; }
+		public int? NroSocio { get; set; }
 
 		// -- Datos Generales --
 
@@ -313,11 +328,16 @@
 		[Required(ErrorMessage = "La fecha de ingreso es obligatoria.")]
 		public DateTime? FechaIngreso { get; set; } = DateTime.Now;
 
+		[StringLength(255, ErrorMessage = "La ocupación no puede superar los 255 caracteres.")]
+		public string? Ocupacion { get; set; }
+
 		// -- Datos de Contacto --
 
 		[Required(ErrorMessage = "El teléfono es obligatorio.")]
 		[StringLength(255, ErrorMessage = "El teléfono no puede superar los 255 caracteres.")]
 		public string? Telefono { get; set; }
+
+		public string? Email { get; set; }
 
 		// -- Datos de la Cuota --
 
@@ -341,9 +361,6 @@
 		[Required(ErrorMessage = "El apellido es obligatorio.")]
 		[StringLength(255, ErrorMessage = "El apellido no puede superar los 255 caracteres.")]
 		public string? Apellido { get; set; }
-
-		[StringLength(255, ErrorMessage = "La ocupación no puede superar los 255 caracteres.")]
-		public string? Ocupacion { get; set; }
 	}
 
 
@@ -399,7 +416,7 @@
 			// Preparar el objeto Socio para enviarlo al servicio
 			Socio socio = new Socio()
 			{
-				
+
 			};
 
 			// Creamos el socio
