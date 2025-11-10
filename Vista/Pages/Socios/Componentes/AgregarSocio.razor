@@ -7,6 +7,7 @@
 @*Servicios Utilizados*@
 @using Vista.Services
 @inject NavigationManager navigationManager
+@inject ISocioService SocioService
 @inject IMessageService message
 
 <style>
@@ -423,10 +424,33 @@
 			// Preparar el objeto Socio para enviarlo al servicio
 			Socio socio = new Socio()
 			{
-
+				Id = socioView!.NroSocio!.Value,
+				Nombre = socioView.Nombre!,
+				Direccion = socioView.Direccion!,
+				Localidad = socioView.Localidad!,
+				Zona = socioView.Zona!.Value,
+				FechaIngreso = socioView.FechaIngreso!.Value,
+				Ocupacion = socioView.Ocupacion,
+				Telefono = socioView.Telefono!,
+				Email = socioView.Email,
+				MontoCuota = socioView.CuotaValor!.Value,
+				FrecuenciaDePago = socioView.FrecuenciaPago!.Value
 			};
 
+			if (socioView is SocioPersonaViewModel socioPersonaView)
+			{
+				socio.Tipo = Data.Enums.Discriminadores.TipoSocio.Persona;
+				socio.DocumentoOCUIT = socioPersonaView.Documento!;
+				socio.Apellido = socioPersonaView.Apellido!;
+			}
+			else if (socioView is SocioEmpresaViewModel socioEmpresaView)
+			{
+				socio.Tipo = Data.Enums.Discriminadores.TipoSocio.Empresa;
+				socio.DocumentoOCUIT = socioEmpresaView.CUIT!;
+			}
+
 			// Creamos el socio
+			await SocioService.CrearSocioAsync(socio);
 			message.Success("Se agregó el socio.");
 			Cancelar();
 		}

@@ -20,6 +20,7 @@
 @*Servicios utilizados*@
 @using Vista.Services
 @inject IMessageService message
+@inject ISocioService SocioService
 @inject NavigationManager navigationManager
 
 <style>
@@ -586,7 +587,7 @@
 	{
 		public int Id { get; set; }
 		public string? NombreYApellidoSiVa { get; set; }
-		public int DocumentoOCUIT { get; set; }
+		public string DocumentoOCUIT { get; set; }
 		public TipoSocio Tipo { get; set; }
 		public Zona Zona { get; set; }
 		public TipoEstadoSocio Estado { get; set; }
@@ -623,5 +624,44 @@
 	private void OpenCrearModal()
 	{
 		isModalCrearVisible = true;
+	}
+
+	protected override async Task OnInitializedAsync()
+	{
+		await LoadSocios();
+	}
+
+	private async Task LoadSocios()
+	{
+		isLoading = true;
+		try
+		{
+			var sociosData = await SocioService.ObtenerSociosAsync();
+
+			if (sociosData == null)
+			{
+				socios = new List<SocioTableViewModel>();
+				return;
+			}
+
+			socios = sociosData.Select(s => new SocioTableViewModel
+			{
+				Id = s.Id,
+				NombreYApellidoSiVa = s.Nombre + " " + s.Apellido,
+				DocumentoOCUIT = s.DocumentoOCUIT,
+				Tipo = s.Tipo!.Value,
+				Zona = s.Zona!.Value,
+				Estado = s.EstadoSocio!.Value
+			}).ToList();
+		}
+		catch (Exception ex)
+		{
+			message.Error($"Error al cargar los socios: {ex.Message}");
+		}
+		finally
+		{
+			isLoading = false;
+			StateHasChanged();
+		}
 	}
 }
