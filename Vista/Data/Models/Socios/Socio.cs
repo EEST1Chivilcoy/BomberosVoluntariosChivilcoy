@@ -81,11 +81,13 @@ namespace Vista.Data.Models.Socios
         /// <summary>
         /// Representa la localidad del socio.
         /// </summary>
+        [Required(ErrorMessage = "la localidad del socio es obligatoria.")]
         public string Localidad { get; set; } = string.Empty;
 
         /// <summary>
         /// Representa la dirección del socio.
         /// </summary>
+        [Required(ErrorMessage = "la dirección del socio es obligatoria.")]
         public string Direccion { get; set; } = string.Empty;
 
         /// <summary>
@@ -107,11 +109,21 @@ namespace Vista.Data.Models.Socios
         /// <summary>
         /// Representa la ocupación del socio.
         /// </summary>
+        [StringLength(255, ErrorMessage = "La ocupacion no puede superar los 255 caracteres.")]
         public string? Ocupacion { get; set; }
 
         /// <summary>
         /// Representa el número de teléfono del socio.
         /// </summary>
+        [StringLength(255, ErrorMessage = "El número de telefono no puede superar los 255 caracteres.")]
+        [Phone(ErrorMessage = "El número de telefono no tiene un formato válido.")]
         public string Telefono { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Representa el correo electrónico del socio.
+        /// </summary>
+        [StringLength(255, ErrorMessage = "El email no puede superar los 255 caracteres.")]
+        [EmailAddress(ErrorMessage = "El email no tiene un formato válido.")]
+        public string? Email { get; set; }
     }
 }

@@ -48,7 +48,6 @@ namespace Vista.Data
         public DbSet<Historial_Socio> HistorialesSocios { get; set; }
         public DbSet<HistorialCuota_Socio> HistorialCuotas { get; set; }
         public DbSet<HistorialEstado_Socio> HistorialEstados { get; set; }
-        public DbSet<HistorialPago_Socio> HistorialPagos { get; set; }
 
         // Dependencias (Departamentos)
 
@@ -499,13 +498,6 @@ namespace Vista.Data
             modelBuilder
                 .Entity<Socio>()
                 .Property(s => s.FrecuenciaDePago)
-                .HasConversion<int>();
-
-            // HistorialPago_Socio - Enum FormaDePago
-
-            modelBuilder
-                .Entity<HistorialPago_Socio>()
-                .Property(hp => hp.FormaDePago)
                 .HasConversion<int>();
 
             // HistorialEstado_Socio - Enum TipoEstadoSocio

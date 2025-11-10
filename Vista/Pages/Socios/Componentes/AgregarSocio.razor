@@ -140,7 +140,14 @@
 <div class="container">
 	<div class="page-title">
 		<div>
-			<Icon Type="user" Theme="IconThemeType.Fill" Class="page-title-icon" />
+			@if (TipoSocio.ToLower() == "persona")
+			{
+				<Icon Type="user-add" Class="page-title-icon" />
+			}
+			else if (TipoSocio.ToLower() == "empresa")
+			{
+				<Icon Type="shop" Class="page-title-icon" />
+			}
 			<span>Registro de Nuevo Socio</span>
 		</div>
 	</div>
