@@ -10,6 +10,7 @@
 @inject INominatimService GeorefService
 @inject IFuerzaIntervinienteService FuerzaIntervinienteService
 @inject IMessageService MessageService
+@implements IDisposable
 
 <style>
 
@@ -60,7 +61,7 @@
 </style>
 
 <div class="datos-generales">
-	<Form Model="Model" OnFieldChanged="@ValidateForm">
+	<Form Model="Model" OnFieldChanged="@ValidateForm" Loading="_formloading">
 
 		@* 🕒 Información Temporal *@
 		<div style="margin-bottom: 24px;">
@@ -97,16 +98,16 @@
 				<h4 style="color: #1890ff; margin: 0; font-weight: 600; font-size: 1.08rem;">📍 Ubicación</h4>
 			</div>
 
-			<Row Gutter="16">
-				<AntDesign.Col Span="8">
-					<FormItem Label="Calle o Ruta" Required>
-						@if (isApiAvailable)
-						{
+			@if (isApiAvailable)
+			{
+				<Row Gutter="24">
+					<AntDesign.Col Span="24">
+						<FormItem Label="Dirección" Required>
 							<Select TItem="Direccion"
-                                    TItemValue="Direccion"
+									TItemValue="Direccion"
 									DataSource="@direcciones"
 									@bind-Value="@DireccionSelecionada"
-									Placeholder="Seleccione una calle o ruta"
+									Placeholder="Ingrese una direccion o coordenadas"
 									LabelName="@nameof(Direccion.Descripcion)"
 									OnSearch="OnSearch"
 									SearchDebounceMilliseconds="350"
@@ -114,15 +115,18 @@
 									Loading="@_loading"
 									OnSelectedItemChanged="OnStreetSelected">
 							</Select>
-						}
-					</FormItem>
-				</AntDesign.Col>
-				<AntDesign.Col Span="8">
+						</FormItem>
+					</AntDesign.Col>
+				</Row>
+			}
+
+			<Row Gutter="16">
+				<AntDesign.Col Span="12">
 					<FormItem Label="Tipo Zona" Required>
 						<EnumSelect TEnum="TipoZona" @bind-Value="@Model.TipoZona" />
 					</FormItem>
 				</AntDesign.Col>
-				<AntDesign.Col Span="8">
+				<AntDesign.Col Span="12">
 					<FormItem Label="Región Cuartel" Required>
 						<EnumSelect TEnum="CuartelRegionChivilcoy" @bind-Value="@Model.CuartelRegion" DefaultActiveFirstOption="false" />
 					</FormItem>
@@ -254,6 +258,7 @@
 	private bool isApiAvailable;
 
 	private bool _loading = false; // Variable para controlar el estado de carga
+	private bool _formloading = true;
 
 	private bool esDepartamento;
 	private bool SeConvocoGuardia;
@@ -264,40 +269,53 @@
 	private List<SimpleFuerzaViewModel> FuerzaViewModels = new();
 	private List<Direccion> direcciones = new();
 
+	private CancellationTokenSource? _searchCancellationTokenSource;
+
 	protected override async Task OnInitializedAsync()
 	{
-		isApiAvailable = await GeorefService.CheckApiConnectionAsync();
+		_formloading = true;
 
-		if (Model != null)
+		try
 		{
-			if (Model.FechaSalida == DateTime.MinValue)
+			isApiAvailable = await GeorefService.CheckApiConnectionAsync();
+
+			if (Model != null)
 			{
-				Model.FechaSalida = DateTime.Today;
-			}
+				if (Model.FechaSalida == DateTime.MinValue)
+				{
+					Model.FechaSalida = DateTime.Today;
+				}
 
-			esDepartamento = !string.IsNullOrEmpty(Model.PisoNumero) ||
-							  !string.IsNullOrEmpty(Model.Depto);
+				esDepartamento = !string.IsNullOrEmpty(Model.PisoNumero) ||
+										!string.IsNullOrEmpty(Model.Depto);
 
-			// Activa el switch si ya se había convocado una guardia
-			SeConvocoGuardia = Model.GuardiaSelecionada != default(Guardia);
+				// Activa el switch si ya se había convocado una guardia
+				SeConvocoGuardia = Model.GuardiaSelecionada != default(Guardia);
 
-			// Activa el switch si ya hay fuerzas intervinientes al cargar en modo edición
-			IntervencionDeFuerzasIntervinientes = Model.FuerzasIntervinientesParticipantes?.Any() == true;
+				// Activa el switch si ya hay fuerzas intervinientes al cargar en modo edición
+				IntervencionDeFuerzasIntervinientes = Model.FuerzasIntervinientesParticipantes?.Any() == true;
 
-
-			try
-			{
 				var Fuerzas = await FuerzaIntervinienteService.ObtenerTodasLasFuerzasAsync();
 				FuerzaViewModels = await MapearFuerzasAsync(Fuerzas);
 			}
-			catch (Exception ex)
-			{
-				await MessageService.ErrorAsync($"Error al cargar fuerzas intervinientes: {ex.Message}");
-			}
+		}
+		catch (Exception ex)
+		{
+			await MessageService.ErrorAsync($"Error: {ex.Message}");
+		}
+		finally
+		{
+			_formloading = false;
+			StateHasChanged();
 		}
 	}
 
-	private async Task ValidateForm()
+	private void ValidateForm()
+	{
+		_ = ValidateFormAsync();
+	}
+
+	private async Task ValidateFormAsync()
 	{
 		var esValido = true;
 
@@ -321,32 +339,68 @@
 		}
 	}
 
-	private async void OnSearch(string value)
+	private void OnSearch(string value)
 	{
-		if (value.Length >= 3)
-		{
-			_loading = true;
-            StateHasChanged();
+		// Ejecutar la búsqueda en segundo plano sin bloquear la UI
+		_ = PerformSearchAsync(value);
+	}
 
-			try
-			{
-				direcciones = await GeorefService.GetSuggestionsAsync(value);
-			}
-			catch (Exception ex)
-			{
-				// Podés loguear el error si querés
-				Console.Error.WriteLine($"Error al buscar direcciones: {ex.Message}");
-				direcciones.Clear();
-			}
+	private async Task PerformSearchAsync(string value)
+	{
+		// Cancelar búsqueda anterior si existe
+		_searchCancellationTokenSource?.Cancel();
+		_searchCancellationTokenSource?.Dispose();
+		_searchCancellationTokenSource = new CancellationTokenSource();
+		var cancellationToken = _searchCancellationTokenSource.Token;
 
-			_loading = false;
-            await InvokeAsync(StateHasChanged); // vuelve a actualizar el componente
-		}
-		else
+		// Validar longitud mínima
+		if (string.IsNullOrWhiteSpace(value) || value.Length < 3)
 		{
 			direcciones.Clear();
 			_loading = false;
-            await InvokeAsync(StateHasChanged);
+			await InvokeAsync(StateHasChanged);
+			return;
+		}
+
+		// Si la API no está disponible, no intentar buscar
+		if (!isApiAvailable)
+		{
+			await MessageService.WarningAsync("La API de búsqueda de direcciones no está disponible.");
+			return;
+		}
+
+		_loading = true;
+		await InvokeAsync(StateHasChanged);
+
+		try
+		{
+			// Realizar la búsqueda
+			direcciones = await GeorefService.GetSuggestionsAsync(value);
+
+			// Si la tarea fue cancelada, no actualizar
+			if (cancellationToken.IsCancellationRequested)
+			{
+				return;
+			}
+		}
+		catch (OperationCanceledException)
+		{
+			// Búsqueda cancelada, no hacer nada
+			return;
+		}
+		catch (Exception ex)
+		{
+			// Solo mostrar el error si no fue cancelado
+			if (!cancellationToken.IsCancellationRequested)
+			{
+				Console.Error.WriteLine($"Error al buscar direcciones: {ex.Message}");
+				direcciones.Clear();
+			}
+		}
+		finally
+		{
+			_loading = false;
+			await InvokeAsync(StateHasChanged);
 		}
 	}
 
@@ -406,5 +460,11 @@
 
 		// Combinar la URL base con los parámetros
 		return baseUrl + urlParameters;
+	}
+
+	public void Dispose()
+	{
+		_searchCancellationTokenSource?.Cancel();
+		_searchCancellationTokenSource?.Dispose();
 	}
 }

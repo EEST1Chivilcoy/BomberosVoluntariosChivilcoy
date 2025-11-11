@@ -82,12 +82,6 @@ namespace Vista.Services
             if (string.IsNullOrWhiteSpace(input))
                 return new List<Direccion>();
 
-            if (!await CheckApiConnectionAsync())
-            {
-                await LogErrorToConsoleAsync("🌐 API connection failed. Suggestions won't be fetched.");
-                return new List<Direccion>();
-            }
-
             var query = Uri.EscapeDataString(input.Trim());
             var url = $"https://nominatim.openstreetmap.org/search?format=json&q={query}&addressdetails=1&limit=10&countrycodes=ar";
 
@@ -98,9 +92,14 @@ namespace Vista.Services
                     ? new List<Direccion>()
                     : NominatimMapper.Map(rawResults).Direcciones;
             }
+            catch (HttpRequestException httpEx)
+            {
+                await LogErrorToConsoleAsync($"❌ Error de conexión al buscar direcciones: {httpEx.Message}");
+                return new List<Direccion>();
+            }
             catch (Exception ex)
             {
-                await LogErrorToConsoleAsync($"❌ Error fetching suggestions: {ex.Message}");
+                await LogErrorToConsoleAsync($"❌ Error al buscar direcciones: {ex.Message}");
                 return new List<Direccion>();
             }
         }
