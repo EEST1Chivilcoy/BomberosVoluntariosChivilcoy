@@ -439,17 +439,17 @@
 				<div class="filters-section">
 					<div class="actions-row abm-filters">
 
-						@*<EnumSelect DefaultValue="EstadoCobrador.Activo"
-									ValueChanged="(EstadoCobrador estado) => searchC(searchString, estado)"
-									TEnum="EstadoCobrador"
+						<EnumSelect DefaultValue="TipoEstadoSocio.Activo"
+									ValueChanged="(TipoEstadoSocio estado) => OnEstadoChanged(estado)"
+									TEnum="TipoEstadoSocio"
 									Class="abm-select-estado" />
 
 						<div class="search-container">
-							<Search Placeholder="Buscar Cobrador"
+							<Search Placeholder="Buscar por nombre, documento, cuit o N° socio"
 									@bind-Value="@searchString"
-									OnSearch="()=>searchC(searchString, EstadoC)"
+									OnSearch="OnSearch"
 									BindOnInput />
-						</div>*@
+						</div>
 
 						<Button Type="ButtonType.Primary"
 								Class="add-button"
@@ -462,7 +462,7 @@
 			</div>
 			<Table @ref="table"
 				   TItem="SocioTableViewModel"
-				   DataSource="@socios"
+				   DataSource="@sociosFiltrados"
 				   OnRow="@OnRowClick"
 				   @bind-PageIndex="_pageIndex"
 				   @bind-PageSize="_pageSize"
@@ -579,8 +579,13 @@
 	bool isModalDetalleVisible = false;
 	bool isModalCrearVisible = false;
 
+	// Filtros
+	private string searchString = string.Empty;
+	private TipoEstadoSocio estadoSeleccionado = TipoEstadoSocio.Activo;
+
 	// Lista de Socios
 	private List<SocioTableViewModel> socios = new();
+	private List<SocioTableViewModel> sociosFiltrados = new();
 
 	// ViewModel de la Tabla
 	public class SocioTableViewModel
@@ -626,6 +631,39 @@
 		isModalCrearVisible = true;
 	}
 
+	private void OnEstadoChanged(TipoEstadoSocio estado)
+	{
+		estadoSeleccionado = estado;
+		AplicarFiltros();
+	}
+
+	private void OnSearch()
+	{
+		AplicarFiltros();
+	}
+
+	private void AplicarFiltros()
+	{
+		var query = socios.AsEnumerable();
+
+		// Filtrar por estado
+		query = query.Where(s => s.Estado == estadoSeleccionado);
+
+		// Filtrar por búsqueda
+		if (!string.IsNullOrWhiteSpace(searchString))
+		{
+			var searchTerm = searchString.Trim().ToLower();
+			query = query.Where(s =>
+				(s.NombreYApellidoSiVa != null && s.NombreYApellidoSiVa.ToLower().Contains(searchTerm)) ||
+				(s.DocumentoOCUIT != null && s.DocumentoOCUIT.ToLower().Contains(searchTerm)) ||
+				s.Id.ToString().Contains(searchTerm)
+			);
+		}
+
+		sociosFiltrados = query.ToList();
+		StateHasChanged();
+	}
+
 	protected override async Task OnInitializedAsync()
 	{
 		await LoadSocios();
@@ -641,6 +679,7 @@
 			if (sociosData == null)
 			{
 				socios = new List<SocioTableViewModel>();
+				sociosFiltrados = new List<SocioTableViewModel>();
 				return;
 			}
 
@@ -653,6 +692,9 @@
 				Zona = s.Zona!.Value,
 				Estado = s.EstadoSocio!.Value
 			}).ToList();
+
+			// Aplicar filtros iniciales
+			AplicarFiltros();
 		}
 		catch (Exception ex)
 		{
