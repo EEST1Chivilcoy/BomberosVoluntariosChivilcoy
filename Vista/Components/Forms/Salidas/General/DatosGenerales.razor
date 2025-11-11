@@ -13,394 +13,398 @@
 
 <style>
 
-    .map-container {
-        width: 300px;
-        height: 300px;
-        border: 1px solid #ccc;
-        border-radius: 6px;
-        overflow: hidden;
-        margin: 20px auto;
-    }
+	.map-container {
+		width: 300px;
+		height: 300px;
+		border: 1px solid #ccc;
+		border-radius: 6px;
+		overflow: hidden;
+		margin: 20px auto;
+	}
 
-    @@media screen and (max-width: 450px) {
-        .map-container {
-            width: 100%;
-            height: auto;
-        }
-    }
+	@@media screen and (max-width: 450px) {
+		.map-container {
+			width: 100%;
+			height: auto;
+		}
+	}
 
-    .datos-generales {
-        border: 2px solid #40a9ff;
-        background: #fff;
-        border-radius: 16px;
-        box-shadow: 0 4px 16px rgba(24,144,255,0.08);
-        padding: 2.5rem 2rem 2rem 2rem;
-        margin-bottom: 2rem;
-        transition: box-shadow 0.2s;
-    }
+	.datos-generales {
+		border: 2px solid #40a9ff;
+		background: #fff;
+		border-radius: 16px;
+		box-shadow: 0 4px 16px rgba(24,144,255,0.08);
+		padding: 2.5rem 2rem 2rem 2rem;
+		margin-bottom: 2rem;
+		transition: box-shadow 0.2s;
+	}
 
-        .datos-generales .section-title {
-            color: #1890ff;
-            display: flex;
-            align-items: center;
-            gap: 0.7rem;
-        }
+		.datos-generales .section-title {
+			color: #1890ff;
+			display: flex;
+			align-items: center;
+			gap: 0.7rem;
+		}
 
-    .hora-row {
-        display: flex;
-        gap: 24px;
-        align-items: flex-end;
-        margin-bottom: 16px;
-    }
+	.hora-row {
+		display: flex;
+		gap: 24px;
+		align-items: flex-end;
+		margin-bottom: 16px;
+	}
 
-        .hora-row .ant-form-item {
-            margin-bottom: 0;
-            min-width: 180px;
-        }
+		.hora-row .ant-form-item {
+			margin-bottom: 0;
+			min-width: 180px;
+		}
 </style>
 
 <div class="datos-generales">
-    <Form Model="Model" OnFieldChanged="@ValidateForm">
+	<Form Model="Model" OnFieldChanged="@ValidateForm">
 
-        @* 🕒 Información Temporal *@
-        <div style="margin-bottom: 24px;">
-            <div style="border-bottom: 2px solid #1890ff; padding-bottom: 8px; margin-bottom: 16px;">
-                <h4 style="color: #1890ff; margin: 0; font-weight: 600;">🕒 Información Temporal</h4>
-            </div>
-            @if (Model.TimeLlegada < Model.TimeSalida)
-            {
-                <FormItem Label="Fechas" Required>
-                    <RangePicker TValue="DateTime[]" Disabled="new bool[] { false, true }"
-                                 @bind-Value="@FechaRange" />
-                </FormItem>
-            }
-            else
-            {
-                <FormItem Label="Fecha" Required>
-                    <DatePicker TValue="DateTime" Picker="@DatePickerType.Date" @bind-Value="@Model.FechaSalida" />
-                </FormItem>
-            }
+		@* 🕒 Información Temporal *@
+		<div style="margin-bottom: 24px;">
+			<div style="border-bottom: 2px solid #1890ff; padding-bottom: 8px; margin-bottom: 16px;">
+				<h4 style="color: #1890ff; margin: 0; font-weight: 600;">🕒 Información Temporal</h4>
+			</div>
+			@if (Model.TimeLlegada < Model.TimeSalida)
+			{
+				<FormItem Label="Fechas" Required>
+					<RangePicker TValue="DateTime[]" Disabled="new bool[] { false, true }"
+								 @bind-Value="@FechaRange" />
+				</FormItem>
+			}
+			else
+			{
+				<FormItem Label="Fecha" Required>
+					<DatePicker TValue="DateTime" Picker="@DatePickerType.Date" @bind-Value="@Model.FechaSalida" />
+				</FormItem>
+			}
 
-            <div class="hora-row">
-                <FormItem Label="Hora Salida" Required>
-                    <TimePicker @bind-Value="@Model.TimeSalida" Format="HH:mm" />
-                </FormItem>
-                <FormItem Label="Hora Llegada" Required>
-                    <TimePicker @bind-Value="@Model.TimeLlegada" Format="HH:mm" />
-                </FormItem>
-            </div>
-        </div>
+			<div class="hora-row">
+				<FormItem Label="Hora Salida" Required>
+					<TimePicker @bind-Value="@Model.TimeSalida" Format="HH:mm" />
+				</FormItem>
+				<FormItem Label="Hora Llegada" Required>
+					<TimePicker @bind-Value="@Model.TimeLlegada" Format="HH:mm" />
+				</FormItem>
+			</div>
+		</div>
 
-        @* 📍 Ubicación *@
-        <div style="margin-bottom: 14px;">
-            <div style="border-bottom: 2px solid #1890ff; padding-bottom: 4px; margin-bottom: 8px;">
-                <h4 style="color: #1890ff; margin: 0; font-weight: 600; font-size: 1.08rem;">📍 Ubicación</h4>
-            </div>
+		@* 📍 Ubicación *@
+		<div style="margin-bottom: 14px;">
+			<div style="border-bottom: 2px solid #1890ff; padding-bottom: 4px; margin-bottom: 8px;">
+				<h4 style="color: #1890ff; margin: 0; font-weight: 600; font-size: 1.08rem;">📍 Ubicación</h4>
+			</div>
 
-            <Row Gutter="16">
-                <AntDesign.Col Span="8">
-                    <FormItem Label="Calle o Ruta" Required>
-                        @if (isApiAvailable)
-                        {
-                            <Select TItem="Direccion"
+			<Row Gutter="16">
+				<AntDesign.Col Span="8">
+					<FormItem Label="Calle o Ruta" Required>
+						@if (isApiAvailable)
+						{
+							<Select TItem="Direccion"
                                     TItemValue="Direccion"
-                                    DataSource="@direcciones"
-                                    @bind-Value="@Model.Direccion"
-                                    Placeholder="Seleccione una calle o ruta"
-                                    LabelName="@nameof(Direccion.NombreYAltura)"
-                                    OnSearch="OnSearch"
-                                    SearchDebounceMilliseconds="350"
-                                    EnableSearch
-                                    Loading="@_loading"
-                                    OnSelectedItemChanged="OnStreetSelected">
-                            </Select>
-                        }
-                        else
-                        {
-                            <Input @bind-Value="@Model.CalleORuta" Placeholder="Ingrese una calle o ruta" />
-                        }
-                    </FormItem>
-                </AntDesign.Col>
-                <AntDesign.Col Span="8">
-                    <FormItem Label="Tipo Zona" Required>
-                        <EnumSelect TEnum="TipoZona" @bind-Value="@Model.TipoZona" />
-                    </FormItem>
-                </AntDesign.Col>
-                <AntDesign.Col Span="8">
-                    <FormItem Label="Región Cuartel" Required>
-                        <EnumSelect TEnum="CuartelRegionChivilcoy" @bind-Value="@Model.CuartelRegion" DefaultActiveFirstOption="false" />
-                    </FormItem>
-                </AntDesign.Col>
-            </Row>
+									DataSource="@direcciones"
+									@bind-Value="@DireccionSelecionada"
+									Placeholder="Seleccione una calle o ruta"
+									LabelName="@nameof(Direccion.Descripcion)"
+									OnSearch="OnSearch"
+									SearchDebounceMilliseconds="350"
+									EnableSearch
+									Loading="@_loading"
+									OnSelectedItemChanged="OnStreetSelected">
+							</Select>
+						}
+					</FormItem>
+				</AntDesign.Col>
+				<AntDesign.Col Span="8">
+					<FormItem Label="Tipo Zona" Required>
+						<EnumSelect TEnum="TipoZona" @bind-Value="@Model.TipoZona" />
+					</FormItem>
+				</AntDesign.Col>
+				<AntDesign.Col Span="8">
+					<FormItem Label="Región Cuartel" Required>
+						<EnumSelect TEnum="CuartelRegionChivilcoy" @bind-Value="@Model.CuartelRegion" DefaultActiveFirstOption="false" />
+					</FormItem>
+				</AntDesign.Col>
+			</Row>
 
-            <Row Gutter="16">
-                <AntDesign.Col Span="12">
-                    <FormItem Label="Altura / Km" Required>
-                        <Input @bind-Value="@Model.AlturaOKm" />
-                    </FormItem>
-                </AntDesign.Col>
-            </Row>
+			@if (Model.Latitud.HasValue && Model.Longitud.HasValue)
+			{
+				<div class="map-container">
+					<iframe style="border:0; width: 100%; aspect-ratio: 1 / 1;"
+							src="@GetOpenStreetMapUrl(Model.Latitud.Value, Model.Longitud.Value)"
+							frameborder="0"
+							allowfullscreen>
+					</iframe>
+				</div>
 
-            @if (Model.Latitud.HasValue && Model.Longitud.HasValue)
-            {
-                <div class="map-container">
-                    <iframe style="border:0; width: 100%; aspect-ratio: 1 / 1;"
-                            src="@GetOpenStreetMapUrl(Model.Latitud.Value, Model.Longitud.Value)"
-                            frameborder="0"
-                            allowfullscreen>
-                    </iframe>
-                </div>
-            }
-        </div>
+				<Row Gutter="16">
+					<AntDesign.Col Span="12">
+						<FormItem Label="Latitud">
+							<Input @bind-Value="@Model.Latitud" ReadOnly />
+						</FormItem>
+					</AntDesign.Col>
 
-        @* 🏢 Detalles del Lugar *@
-        @if (MostrarOpcionDepartamento)
-        {
-            <div style="margin-bottom: 24px;">
-                <div style="border-bottom: 2px solid #1890ff; padding-bottom: 8px; margin-bottom: 16px;">
-                    <h4 style="color: #1890ff; margin: 0; font-weight: 600;">🏢 Detalles del Lugar</h4>
-                </div>
-                <FormItem Label="¿Es Departamento?">
-                    <Switch @bind-Checked="@esDepartamento" />
-                </FormItem>
+					<AntDesign.Col Span="12">
+						<FormItem Label="Longitud">
+							<Input @bind-Value="@Model.Longitud" ReadOnly />
+						</FormItem>
+					</AntDesign.Col>
+				</Row>
+			}
+		</div>
 
-                @if (esDepartamento)
-                {
-                    <Row Gutter="16">
-                        <AntDesign.Col Span="12">
-                            <FormItem Label="Piso">
-                                <Input @bind-Value="@Model.PisoNumero" Placeholder="Número de piso" />
-                            </FormItem>
-                        </AntDesign.Col>
-                        <AntDesign.Col Span="12">
-                            <FormItem Label="Departamento">
-                                <Input @bind-Value="@Model.Depto" Placeholder="Nro. de depto." />
-                            </FormItem>
-                        </AntDesign.Col>
-                    </Row>
-                }
-            </div>
-        }
+		@* 🏢 Detalles del Lugar *@
+		@if (MostrarOpcionDepartamento)
+		{
+			<div style="margin-bottom: 24px;">
+				<div style="border-bottom: 2px solid #1890ff; padding-bottom: 8px; margin-bottom: 16px;">
+					<h4 style="color: #1890ff; margin: 0; font-weight: 600;">🏢 Detalles del Lugar</h4>
+				</div>
+				<FormItem Label="¿Es Departamento?">
+					<Switch @bind-Checked="@esDepartamento" />
+				</FormItem>
 
-        @* 🚒 Información Operativa *@
-        <div style="margin-bottom: 24px;">
-            <div style="border-bottom: 2px solid #1890ff; padding-bottom: 8px; margin-bottom: 16px;">
-                <h4 style="color: #1890ff; margin: 0; font-weight: 600;">🚒 Información Operativa</h4>
-            </div>
+				@if (esDepartamento)
+				{
+					<Row Gutter="16">
+						<AntDesign.Col Span="12">
+							<FormItem Label="Piso">
+								<Input @bind-Value="@Model.PisoNumero" Placeholder="Número de piso" />
+							</FormItem>
+						</AntDesign.Col>
+						<AntDesign.Col Span="12">
+							<FormItem Label="Departamento">
+								<Input @bind-Value="@Model.Depto" Placeholder="Nro. de depto." />
+							</FormItem>
+						</AntDesign.Col>
+					</Row>
+				}
+			</div>
+		}
 
-            <FormItem Label="¿Se convoca Guardia?">
-                <Switch @bind-Checked="@SeConvocoGuardia" />
-            </FormItem>
+		@* 🚒 Información Operativa *@
+		<div style="margin-bottom: 24px;">
+			<div style="border-bottom: 2px solid #1890ff; padding-bottom: 8px; margin-bottom: 16px;">
+				<h4 style="color: #1890ff; margin: 0; font-weight: 600;">🚒 Información Operativa</h4>
+			</div>
 
-            @if (SeConvocoGuardia)
-            {
-                <FormItem Label="Guardia">
-                    <EnumSelect TEnum="Guardia" @bind-Value="@Model.GuardiaSelecionada" />
-                </FormItem>
-            }
+			<FormItem Label="¿Se convoca Guardia?">
+				<Switch @bind-Checked="@SeConvocoGuardia" />
+			</FormItem>
 
-            @if (MostrarSwitchFuerzasIntervinientes)
-            {
-                <FormItem Label="¿Hubo Fuerzas Intervinientes?">
-                    <Switch @bind-Checked="@IntervencionDeFuerzasIntervinientes" />
-                </FormItem>
-            }
+			@if (SeConvocoGuardia)
+			{
+				<FormItem Label="Guardia">
+					<EnumSelect TEnum="Guardia" @bind-Value="@Model.GuardiaSelecionada" />
+				</FormItem>
+			}
 
-            @if (IntervencionDeFuerzasIntervinientes || !MostrarSwitchFuerzasIntervinientes)
-            {
-                <AntDesign.FormItem Label="Fuerzas Intervinientes">
-                    <Select Mode="SelectMode.Multiple"
-                            @bind-Values="@Model.FuerzasIntervinientesParticipantes"
-                            TItem="SimpleFuerzaViewModel"
-                            TItemValue="SimpleFuerzaViewModel"
-                            DataSource="@FuerzaViewModels"
-                            LabelName="@nameof(SimpleFuerzaViewModel.Nombre)"
-                            Placeholder="Seleccione las fuerzas intervinientes"
-                            DefaultActiveFirstOption="false"
-                            EnableSearch
-                            AllowClear />
-                </AntDesign.FormItem>
-            }
-        </div>
+			@if (MostrarSwitchFuerzasIntervinientes)
+			{
+				<FormItem Label="¿Hubo Fuerzas Intervinientes?">
+					<Switch @bind-Checked="@IntervencionDeFuerzasIntervinientes" />
+				</FormItem>
+			}
 
-        @* Detalles o Daños Generales *@
-        <div style="margin-bottom: 24px;">
-            <div style="border-bottom: 2px solid #1890ff; padding-bottom: 8px; margin-bottom: 16px;">
-                <h4 style="color: #1890ff; margin: 0; font-weight: 600;">Detalles o Daños Generales</h4>
-            </div>
-            <FormItem Required>
-                <TextArea Placeholder="Describa la situación o evento..."
-                          @bind-Value="@Model.Descripcion"
-                          Rows="4" />
-            </FormItem>
-        </div>
+			@if (IntervencionDeFuerzasIntervinientes || !MostrarSwitchFuerzasIntervinientes)
+			{
+				<AntDesign.FormItem Label="Fuerzas Intervinientes">
+					<Select Mode="SelectMode.Multiple"
+							@bind-Values="@Model.FuerzasIntervinientesParticipantes"
+							TItem="SimpleFuerzaViewModel"
+							TItemValue="SimpleFuerzaViewModel"
+							DataSource="@FuerzaViewModels"
+							LabelName="@nameof(SimpleFuerzaViewModel.Nombre)"
+							Placeholder="Seleccione las fuerzas intervinientes"
+							DefaultActiveFirstOption="false"
+							EnableSearch
+							AllowClear />
+				</AntDesign.FormItem>
+			}
+		</div>
 
-    </Form>
+		@* Detalles o Daños Generales *@
+		<div style="margin-bottom: 24px;">
+			<div style="border-bottom: 2px solid #1890ff; padding-bottom: 8px; margin-bottom: 16px;">
+				<h4 style="color: #1890ff; margin: 0; font-weight: 600;">Detalles o Daños Generales</h4>
+			</div>
+			<FormItem Required>
+				<TextArea Placeholder="Describa la situación o evento..."
+						  @bind-Value="@Model.Descripcion"
+						  Rows="4" />
+			</FormItem>
+		</div>
+
+	</Form>
 </div>
 
 @code {
-    [Parameter, EditorRequired] public required SalidasViewModels Model { get; set; } // Modelo de datos para el formulario
-    [Parameter] public bool IsFormDisabled { get; set; }
-    [Parameter] public bool MostrarOpcionDepartamento { get; set; } = true; // Indica si se muestra la opción de departamento (En algunos casos es imposible que sea un deparatamento)
+	[Parameter, EditorRequired] public required SalidasViewModels Model { get; set; } // Modelo de datos para el formulario
+	[Parameter] public bool IsFormDisabled { get; set; }
+	[Parameter] public bool MostrarOpcionDepartamento { get; set; } = true; // Indica si se muestra la opción de departamento (En algunos casos es imposible que sea un deparatamento)
 
-    [Parameter] public bool MostrarSwitchFuerzasIntervinientes { get; set; } = true; // Indica si se muestra el switch de la opción de fuerzas intervinientes (En algunos casos es obligatorio por lo que no se muestra el switch)
+	[Parameter] public bool MostrarSwitchFuerzasIntervinientes { get; set; } = true; // Indica si se muestra el switch de la opción de fuerzas intervinientes (En algunos casos es obligatorio por lo que no se muestra el switch)
 
-    [Parameter] public bool MostrarSwitchDamnficados { get; set; } = true; // Indica si se muestra el switch de la opción de damnificados (En algunos casos es obligatorio por lo que no se muestra el switch)
+	[Parameter] public bool MostrarSwitchDamnficados { get; set; } = true; // Indica si se muestra el switch de la opción de damnificados (En algunos casos es obligatorio por lo que no se muestra el switch)
 
-    [Parameter] public EventCallback<bool> OnCompleted { get; set; } // Evento para notificar que se ha completado el formulario
+	[Parameter] public EventCallback<bool> OnCompleted { get; set; } // Evento para notificar que se ha completado el formulario
 
-    private bool isApiAvailable;
+	private bool isApiAvailable;
 
-    private bool _loading = false; // Variable para controlar el estado de carga
+	private bool _loading = false; // Variable para controlar el estado de carga
 
-    private bool esDepartamento;
-    private bool SeConvocoGuardia;
-    private bool IntervencionDeFuerzasIntervinientes;
+	private bool esDepartamento;
+	private bool SeConvocoGuardia;
+	private bool IntervencionDeFuerzasIntervinientes;
 
-    private List<SimpleFuerzaViewModel> FuerzaViewModels = new();
-    private List<Direccion> direcciones = new();
+	private Direccion DireccionSelecionada = new();
 
-    protected override async Task OnInitializedAsync()
-    {
-        isApiAvailable = await GeorefService.CheckApiConnectionAsync();
+	private List<SimpleFuerzaViewModel> FuerzaViewModels = new();
+	private List<Direccion> direcciones = new();
 
-        if (Model != null)
-        {
-            if (Model.FechaSalida == DateTime.MinValue)
-            {
-                Model.FechaSalida = DateTime.Today;
-            }
+	protected override async Task OnInitializedAsync()
+	{
+		isApiAvailable = await GeorefService.CheckApiConnectionAsync();
 
-            esDepartamento = !string.IsNullOrEmpty(Model.PisoNumero) ||
-                              !string.IsNullOrEmpty(Model.Depto);
+		if (Model != null)
+		{
+			if (Model.FechaSalida == DateTime.MinValue)
+			{
+				Model.FechaSalida = DateTime.Today;
+			}
 
-            // Activa el switch si ya se había convocado una guardia
-            SeConvocoGuardia = Model.GuardiaSelecionada != default(Guardia);
+			esDepartamento = !string.IsNullOrEmpty(Model.PisoNumero) ||
+							  !string.IsNullOrEmpty(Model.Depto);
 
-            // Activa el switch si ya hay fuerzas intervinientes al cargar en modo edición
-            IntervencionDeFuerzasIntervinientes = Model.FuerzasIntervinientesParticipantes?.Any() == true;
+			// Activa el switch si ya se había convocado una guardia
+			SeConvocoGuardia = Model.GuardiaSelecionada != default(Guardia);
+
+			// Activa el switch si ya hay fuerzas intervinientes al cargar en modo edición
+			IntervencionDeFuerzasIntervinientes = Model.FuerzasIntervinientesParticipantes?.Any() == true;
 
 
-            try
-            {
-                var Fuerzas = await FuerzaIntervinienteService.ObtenerTodasLasFuerzasAsync();
-                FuerzaViewModels = await MapearFuerzasAsync(Fuerzas);
-            }
-            catch (Exception ex)
-            {
-                await MessageService.ErrorAsync($"Error al cargar fuerzas intervinientes: {ex.Message}");
-            }
-        }
-    }
+			try
+			{
+				var Fuerzas = await FuerzaIntervinienteService.ObtenerTodasLasFuerzasAsync();
+				FuerzaViewModels = await MapearFuerzasAsync(Fuerzas);
+			}
+			catch (Exception ex)
+			{
+				await MessageService.ErrorAsync($"Error al cargar fuerzas intervinientes: {ex.Message}");
+			}
+		}
+	}
 
-    private async Task ValidateForm()
-    {
-        var esValido = true;
+	private async Task ValidateForm()
+	{
+		var esValido = true;
 
-        if (Model.FechaSalida == default ||
-            string.IsNullOrWhiteSpace(Model.Descripcion))
-        {
-            esValido = false;
-        }
+		if (Model.FechaSalida == default ||
+			string.IsNullOrWhiteSpace(Model.Descripcion))
+		{
+			esValido = false;
+		}
 
-        await OnCompleted.InvokeAsync(esValido);
-    }
+		await OnCompleted.InvokeAsync(esValido);
+	}
 
-    private void OnStreetSelected(Direccion selectedStreet)
-    {
-        if (selectedStreet != null)
-        {
-            Model.CalleORuta = $"{selectedStreet.Calle.Nombre} {selectedStreet.Altura.Valor}";
-            Model.Latitud = selectedStreet.Ubicacion.Lat;
-            Model.Longitud = selectedStreet.Ubicacion.Lon;
+	private void OnStreetSelected(Direccion selectedStreet)
+	{
+		if (selectedStreet != null)
+		{
+			Model.Direccion = selectedStreet.Descripcion;
+			Model.Latitud = selectedStreet.Lat;
+			Model.Longitud = selectedStreet.Lon;
+			StateHasChanged();
+		}
+	}
+
+	private async void OnSearch(string value)
+	{
+		if (value.Length >= 3)
+		{
+			_loading = true;
             StateHasChanged();
-        }
-    }
 
-    private async void OnSearch(string value)
-    {
-        if (value.Length >= 3)
-        {
-            _loading = true;
-            StateHasChanged(); // actualiza el componente para que se muestre el spinner
+			try
+			{
+				direcciones = await GeorefService.GetSuggestionsAsync(value);
+			}
+			catch (Exception ex)
+			{
+				// Podés loguear el error si querés
+				Console.Error.WriteLine($"Error al buscar direcciones: {ex.Message}");
+				direcciones.Clear();
+			}
 
-            try
-            {
-                direcciones = await GeorefService.GetStreetSuggestionsAsync(value);
-            }
-            catch (Exception ex)
-            {
-                // Podés loguear el error si querés
-                Console.Error.WriteLine($"Error al buscar direcciones: {ex.Message}");
-                direcciones.Clear();
-            }
-
-            _loading = false;
+			_loading = false;
             await InvokeAsync(StateHasChanged); // vuelve a actualizar el componente
-        }
-        else
-        {
-            direcciones.Clear();
-            _loading = false;
+		}
+		else
+		{
+			direcciones.Clear();
+			_loading = false;
             await InvokeAsync(StateHasChanged);
-        }
-    }
+		}
+	}
 
 
-    private DateTime[] FechaRange
-    {
-        get => new DateTime[] { Model.FechaSalida, Model.FechaLlegada };
-        set
-        {
-            if (value.Length == 1)
-            {
-                Model.FechaSalida = value[0];
-            }
-        }
-    }
+	private DateTime[] FechaRange
+	{
+		get => new DateTime[] { Model.FechaSalida, Model.FechaLlegada };
+		set
+		{
+			if (value.Length == 1)
+			{
+				Model.FechaSalida = value[0];
+			}
+		}
+	}
 
-    public async Task<List<SimpleFuerzaViewModel>> MapearFuerzasAsync(List<FuerzaInterviniente> fuerzas)
-    {
-        return await Task.Run(() => fuerzas.Select(f => new SimpleFuerzaViewModel
-        {
-            Id = f.Id,
-            Nombre = f.NombreFuerza ?? string.Empty
-        }).ToList());
-    }
+	public async Task<List<SimpleFuerzaViewModel>> MapearFuerzasAsync(List<FuerzaInterviniente> fuerzas)
+	{
+		return await Task.Run(() => fuerzas.Select(f => new SimpleFuerzaViewModel
+		{
+			Id = f.Id,
+			Nombre = f.NombreFuerza ?? string.Empty
+		}).ToList());
+	}
 
-    private string GetOpenStreetMapUrl(double latitud, double longitud)
-    {
-        // URL base para el embed de OpenStreetMap
-        string baseUrl = "https://www.openstreetmap.org/export/embed.html";
+	private string GetOpenStreetMapUrl(double latitud, double longitud)
+	{
+		// URL base para el embed de OpenStreetMap
+		string baseUrl = "https://www.openstreetmap.org/export/embed.html";
 
-        // Redondear a 5 decimales para las coordenadas
-        string latString = Math.Round(latitud, 5).ToString(System.Globalization.CultureInfo.InvariantCulture);
-        string lonString = Math.Round(longitud, 5).ToString(System.Globalization.CultureInfo.InvariantCulture);
+		// Redondear a 5 decimales para las coordenadas
+		string latString = Math.Round(latitud, 5).ToString(System.Globalization.CultureInfo.InvariantCulture);
+		string lonString = Math.Round(longitud, 5).ToString(System.Globalization.CultureInfo.InvariantCulture);
 
-        // Generar los valores para el parámetro bbox (rango de coordenadas alrededor del punto)
-        double latMin = latitud - 0.005;  // Ajuste más pequeño para un mejor zoom
-        double latMax = latitud + 0.005;
-        double lonMin = longitud - 0.005;
-        double lonMax = longitud + 0.005;
+		// Generar los valores para el parámetro bbox (rango de coordenadas alrededor del punto)
+		double latMin = latitud - 0.005;  // Ajuste más pequeño para un mejor zoom
+		double latMax = latitud + 0.005;
+		double lonMin = longitud - 0.005;
+		double lonMax = longitud + 0.005;
 
-        // Formatear las coordenadas para asegurar que se usen puntos como separadores decimales
-        string latMinString = latMin.ToString(System.Globalization.CultureInfo.InvariantCulture);
-        string latMaxString = latMax.ToString(System.Globalization.CultureInfo.InvariantCulture);
-        string lonMinString = lonMin.ToString(System.Globalization.CultureInfo.InvariantCulture);
-        string lonMaxString = lonMax.ToString(System.Globalization.CultureInfo.InvariantCulture);
+		// Formatear las coordenadas para asegurar que se usen puntos como separadores decimales
+		string latMinString = latMin.ToString(System.Globalization.CultureInfo.InvariantCulture);
+		string latMaxString = latMax.ToString(System.Globalization.CultureInfo.InvariantCulture);
+		string lonMinString = lonMin.ToString(System.Globalization.CultureInfo.InvariantCulture);
+		string lonMaxString = lonMax.ToString(System.Globalization.CultureInfo.InvariantCulture);
 
-        // Parámetros para el mapa
-        string bbox = $"{lonMinString},{latMinString},{lonMaxString},{latMaxString}";
-        string marker = $"{latString},{lonString}";
+		// Parámetros para el mapa
+		string bbox = $"{lonMinString},{latMinString},{lonMaxString},{latMaxString}";
+		string marker = $"{latString},{lonString}";
 
-        // Codificar las coordenadas para las comas
-        string encodedBbox = HttpUtility.UrlEncode(bbox);  // Codifica las comas
-        string encodedMarker = HttpUtility.UrlEncode(marker);  // Codifica las comas
+		// Codificar las coordenadas para las comas
+		string encodedBbox = HttpUtility.UrlEncode(bbox);  // Codifica las comas
+		string encodedMarker = HttpUtility.UrlEncode(marker);  // Codifica las comas
 
-        // Generar la URL completa con los parámetros codificados
-        string urlParameters = $"?bbox={encodedBbox}&layer=mapnik&marker={encodedMarker}";
+		// Generar la URL completa con los parámetros codificados
+		string urlParameters = $"?bbox={encodedBbox}&layer=mapnik&marker={encodedMarker}";
 
-        // Combinar la URL base con los parámetros
-        return baseUrl + urlParameters;
-    }
+		// Combinar la URL base con los parámetros
+		return baseUrl + urlParameters;
+	}
 }

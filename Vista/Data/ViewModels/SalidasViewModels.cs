@@ -91,9 +91,6 @@ namespace Vista.Data.ViewModels
             }
         }
 
-        // Pendiente de revisar por cambios en la funcionalidad.
-        public Direccion Direccion { get; set; }
-
         /// <summary>
         /// Guardia que está a cargo de la salida.
         /// Esta propiedad representa la guardia seleccionada para la salida. (Si se convocó a una guardia específica).
@@ -111,16 +108,24 @@ namespace Vista.Data.ViewModels
         [Required, StringLength(255)]
         public string Descripcion { get; set; } = null!;
 
-        /// <summary>
-        /// Nombre de la calle o ruta donde ocurrió el incidente.
-        /// </summary>
-        [StringLength(255)]
-        public string? CalleORuta { get; set; }
+        // --- Ubicación ---
 
         /// <summary>
-        /// Altura o kilómetro donde ocurrió el incidente.
+        /// Dirección donde ocurrió el incidente o lugar de la salida. (Calle y número).
         /// </summary>
-        public int? AlturaOKm { get; set; }
+        public string? Direccion { get; set; }
+
+        /// <summary>
+        /// Latitud de la ubicación del incidente o lugar de la salida.
+        /// </summary>
+        [Required]
+        public double? Latitud { get; set; }
+
+        /// <summary>
+        /// Longitud de la ubicación del incidente o lugar de la salida.
+        /// </summary>
+        [Required]
+        public double? Longitud { get; set; }
 
         // Datos por si es en un edificio. (Opcional) (Apartamento, Piso, etc.)
 
@@ -146,18 +151,6 @@ namespace Vista.Data.ViewModels
         /// Cuartel o región donde ocurrió el incidente.
         /// </summary>
         public CuartelRegionChivilcoy CuartelRegion { get; set; }
-
-        // Ubicación <-- Esto para hacer estadística (No es obligatorio por que faltan calles) (La API Nominatim devuelve la ubicación)
-
-        /// <summary>
-        /// Latitud de la ubicación del incidente o lugar de la salida.
-        /// </summary>
-        public double? Latitud { get; set; }
-
-        /// <summary>
-        /// Longitud de la ubicación del incidente o lugar de la salida.
-        /// </summary>
-        public double? Longitud { get; set; }
 
         // Sección de Datos del Solicitante y Receptor. (Datos telefónicos)
 

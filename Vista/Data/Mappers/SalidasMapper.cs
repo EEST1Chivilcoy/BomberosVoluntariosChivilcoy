@@ -306,7 +306,7 @@ namespace Vista.Data.Mappers
             destination.HoraSalida = source.HoraSalida;
             destination.HoraLlegada = source.HoraLLegada;
             destination.Descripcion = source.Descripcion;
-            destination.Direccion = source.CalleORuta;
+            destination.Direccion = source.Direccion;
             destination.PisoNumero = source.PisoNumero;
             destination.Depto = source.Depto;
             destination.TipoZona = source.TipoZona;
@@ -601,7 +601,7 @@ namespace Vista.Data.Mappers
             viewModel.TimeSalida = TimeOnly.FromDateTime(model.HoraSalida);
             viewModel.TimeLlegada = TimeOnly.FromDateTime(model.HoraLlegada);
             viewModel.Descripcion = model.Descripcion;
-            viewModel.CalleORuta = model.Direccion;
+            viewModel.Direccion = model.Direccion;
             viewModel.PisoNumero = model.PisoNumero;
             viewModel.Depto = model.Depto;
             viewModel.TipoZona = model.TipoZona;
