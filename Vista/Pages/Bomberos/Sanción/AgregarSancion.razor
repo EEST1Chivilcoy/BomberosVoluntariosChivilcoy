@@ -144,7 +144,6 @@
         </AntDesign.Col>
     </Row>
 
-
     <Row Class="modal-crear-sancion-row" Gutter="24">
         <AntDesign.Col Span="12">
             <FormItem Label="Tipo Sancion" Required Class="modal-crear-sancion-form-item">
@@ -161,7 +160,7 @@
     <Row Class="modal-crear-sancion-row" Gutter="38">
         <AntDesign.Col Span="24">
             <FormItem Label="Observacion" Class="modal-crear-sancion-form-item">
-                <TextArea @bind-Value="SancionVM.observaciones" Size="InputSize.Large" Rows="4" />
+                <TextArea @bind-Value="SancionVM.Observaciones" Size="InputSize.Large" Rows="4" />
             </FormItem>
         </AntDesign.Col>
     </Row>
@@ -188,11 +187,13 @@
 		public DateOnly FechaHasta { get; set; } = DateOnly.FromDateTime(DateTime.Now);
 		public Bombero PersonalSancionado { get; set; }
 		public int NumeroLegajoSancionado { get; set; }
+        [Required]
 		public TipoSancion TipoSancion { get; set; }
+        [Required]
 		public AreaSancion SancionArea { get; set; }
 		public Bombero EncargadoArea { get; set; }
 		public int NumeroLegajoEncargado { get; set; }
-		public string observaciones { get; set; }
+		public string Observaciones { get; set; }
 	}
 
 	// OnFinish
@@ -209,7 +210,7 @@
 					PersonalSancionado = BomberoSancionado,
 					TipoSancion = SancionVM.TipoSancion,
 					SacionArea = SancionVM.SancionArea,
-					DescripcionSancion = SancionVM.observaciones
+					DescripcionSancion = SancionVM.Observaciones
 				};
 
 			await BomberoService.SancionarBombero(nuevaSancion);
