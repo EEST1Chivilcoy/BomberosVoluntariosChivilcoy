@@ -4,6 +4,7 @@ using Vista.Data.Enums;
 using Vista.Data.Enums.Discriminadores;
 using Vista.Data.Enums.Socios;
 using Vista.Data.Models.Socios.Componentes;
+using Vista.Data.Models.Socios.Componentes.Pagos;
 
 namespace Vista.Data.Models.Socios
 {
@@ -125,5 +126,11 @@ namespace Vista.Data.Models.Socios
         [StringLength(255, ErrorMessage = "El email no puede superar los 255 caracteres.")]
         [EmailAddress(ErrorMessage = "El email no tiene un formato válido.")]
         public string? Email { get; set; }
+
+        /// <summary>
+        /// Pagos realizados por este socio.
+        /// Incluye pagos en efectivo y pagos electrónicos.
+        /// </summary>
+        public List<PagoSocio> Pagos { get; set; } = new();
     }
 }

@@ -4,6 +4,9 @@ using Vista.Data.Models.Personas.Personal;
 
 namespace Vista.Data.Models.Imagenes
 {
+    /// <summary>
+    /// Representa la imagen de perfil asociada a un miembro del personal.
+    /// </summary>
     public class Imagen_Personal : Imagen
     {
         /// <summary>

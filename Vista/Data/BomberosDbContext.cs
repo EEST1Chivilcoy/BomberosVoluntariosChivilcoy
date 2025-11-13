@@ -20,6 +20,8 @@ using Vista.Data.Models.Objetos;
 using Vista.Data.Models.Objetos.Componentes;
 using Vista.Data.Models.Socios;
 using Vista.Data.Models.Socios.Componentes;
+using Vista.Data.Models.Socios.Componentes.Pagos;
+using Vista.Data.Enums.Socios;
 
 namespace Vista.Data
 {
@@ -310,6 +312,10 @@ namespace Vista.Data
                 .Property(s => s.TipoEmergencia)
                 .HasConversion<int>();
 
+            modelBuilder.Entity<PagoSocio>()
+                .Property(p => p.Tipo)
+                .HasConversion<int>();
+
             //Discriminacion (Pasada a ENUM)
 
             modelBuilder.Entity<Persona>()
@@ -326,7 +332,9 @@ namespace Vista.Data
             modelBuilder.Entity<Imagen>()
                 .HasDiscriminator(i => i.Tipo)
                 .HasValue<Imagen_Personal>(TipoImagen.ImagenPersonal)
-                .HasValue<Imagen_VehiculoSalida>(TipoImagen.ImagenVehiculoSalida);
+                .HasValue<Imagen_VehiculoSalida>(TipoImagen.ImagenVehiculoSalida)
+                .HasValue<CertificadoMedico>(TipoImagen.ImagenCertificadoMedico)
+                .HasValue<Comprobante>(TipoImagen.ImagenComprobanteBancario);
 
             modelBuilder.Entity<Salida>()
                 .HasDiscriminator(s => s.TipoEmergencia)
@@ -360,6 +368,11 @@ namespace Vista.Data
                 .HasValue<Movil>(TipoVehiculo.Movil)
                 .HasValue<VehiculoAfectado>(TipoVehiculo.VehiculoAfectado)
                 .HasValue<Embarcacion>(TipoVehiculo.Embarcacion);
+
+            modelBuilder.Entity<PagoSocio>()
+                .HasDiscriminator(p => p.Tipo)
+                .HasValue<PagoTransferencia>(FormaDePago.Transferencia)
+                .HasValue<PagoEfectivo>(FormaDePago.Efectivo);
 
             // Configuracion de Realaciones al Borrarse
 
@@ -404,6 +417,12 @@ namespace Vista.Data
                 .HasForeignKey(bs => bs.SalidaId);
 
             // Enum Conversiones a INT (Enteros)
+
+            // PagoTransferencia - Enum BancosConocidos
+            modelBuilder
+                .Entity<PagoTransferencia>()
+                .Property(pt => pt.BancoOrigen)
+                .HasConversion<int>();
 
             // Bombero - Enum EscalafonJerarquico (Grado)
 
