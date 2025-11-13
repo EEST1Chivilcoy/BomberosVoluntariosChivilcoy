@@ -16,8 +16,6 @@ using Vista.Data.Models.Personas;
 using Vista.Data.Models.Personas.Personal;
 using Vista.Data.Models.Personas.Personal.Componentes;
 using Vista.Data.Models.Vehiculos.Flota;
-using Vista.Data.Models.Vehiculos.Flota.Componentes;
-using Vista.Data.Models.Otros;
 using Vista.Data.Models.Objetos;
 using Vista.Data.Models.Objetos.Componentes;
 using Vista.Data.Models.Socios;
@@ -100,7 +98,6 @@ namespace Vista.Data
         public DbSet<Firma> Firmas { get; set; }
         public DbSet<Movil_Salida> MovilesSalida { get; set; }
         public DbSet<BomberoSalida> BomberosSalida { get; set; }
-        public DbSet<Limpieza> Limpiezas { get; set; }
         public DbSet<Material> Materiales { get; set; }
 
         public DbSet<MovimientoMaterial> Movimientos { get; set; }
@@ -109,8 +106,6 @@ namespace Vista.Data
         public DbSet<AscensoBombero> AscensoBomberos { get; set; }
         public DbSet<Licencia> Licencias { get; set; }
         public DbSet<Sancion> Sanciones { get; set; }
-        public DbSet<Novedad> Novedades { get; set; }
-        public DbSet<NovedadVehiculo> NovedadesVehiculos { get; set; }
 
         // Fuerzas
 
@@ -379,34 +374,6 @@ namespace Vista.Data
                 .HasOne(i => i.Vehiculo)
                 .WithOne(v => v.Imagen)
                 .HasForeignKey<VehiculoSalida>(v => v.ImagenId)
-                .OnDelete(DeleteBehavior.SetNull)
-                .IsRequired(false);
-
-            modelBuilder.Entity<VehiculoSalida>()
-                .HasMany(mo => mo.Incidentes)
-                .WithOne(li => li.Vehiculo)
-                .HasForeignKey(li => li.VehiculoId)
-                .OnDelete(DeleteBehavior.SetNull)
-                .IsRequired(false);
-
-            modelBuilder.Entity<NovedadBase>()
-                .HasOne(n => n.Personal)
-                .WithMany(b => b.Novedades)
-                .HasForeignKey(n => n.PersonalId)
-                .OnDelete(DeleteBehavior.SetNull)
-                .IsRequired(false);
-
-            modelBuilder.Entity<NovedadVehiculo>()
-                .HasOne(n => n.Vehiculo)
-                .WithMany(b => b.Novedades)
-                .HasForeignKey(n => n.VehiculoId)
-                .OnDelete(DeleteBehavior.SetNull)
-                .IsRequired(false);
-
-            modelBuilder.Entity<Bombero>()
-                .HasMany(bo => bo.Incidentes)
-                .WithOne(li => li.Encargado)
-                .HasForeignKey(li => li.PersonaId)
                 .OnDelete(DeleteBehavior.SetNull)
                 .IsRequired(false);
 
@@ -762,18 +729,6 @@ namespace Vista.Data
             modelBuilder
                 .Entity<BomberoSalida>()
                 .Property(b => b.Grado)
-                .HasConversion<string>()
-                .HasMaxLength(255);
-
-            modelBuilder
-                .Entity<Limpieza>()
-                .Property(t => t.Incidente)
-                .HasConversion<string>()
-                .HasMaxLength(255);
-
-            modelBuilder
-                .Entity<Incidente>()
-                .Property(t => t.Tipo)
                 .HasConversion<string>()
                 .HasMaxLength(255);
 

@@ -5,8 +5,6 @@ using Vista.Data.Models.Imagenes;
 using Vista.Data.Models.Vehiculos;
 using Vista.Data.Models.Personas.Personal;
 using Vista.Data.Models.Personas.Personal.Componentes;
-using Vista.Data.Models.Vehiculos.Flota.Componentes;
-using Vista.Data.Models.Otros;
 
 namespace Vista.Data.Models.Vehiculos.Flota
 {
@@ -44,10 +42,6 @@ namespace Vista.Data.Models.Vehiculos.Flota
         /// </summary>
         public List<Firma> Firmas { get; set; } = new();
 
-        /// <summary>
-        /// Incidentes asociados al vehículo.
-        /// </summary>
-        public List<Incidente> Incidentes { get; set; } = new();
 
         /// <summary>
         /// Foranea para la imagen del vehículo.
@@ -59,10 +53,6 @@ namespace Vista.Data.Models.Vehiculos.Flota
         /// </summary>
         public Imagen_VehiculoSalida? Imagen { get; set; }
 
-        /// <summary>
-        /// Lista de novedades asociadas al vehículo.
-        /// </summary>
-        public List<NovedadVehiculo>? Novedades { get; set; }
 
         /// <summary>
         /// Tipo de combustible (por ejemplo, Diesel). Con un maximo de 255 caracteres.
