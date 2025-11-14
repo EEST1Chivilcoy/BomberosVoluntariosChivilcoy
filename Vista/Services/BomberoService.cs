@@ -41,7 +41,6 @@ namespace Vista.Services
             {
                 query = query
                     .Include(b => b.Imagen)
-                    .Include(b => b.Firmas)
                     .Include(b => b.Brigadas)
                     .Include(b => b.VehiculosEncargado)
                     .Include(b => b.Dependencias)
@@ -365,7 +364,6 @@ namespace Vista.Services
             if (ConTodasLasDemasRelaciones)
             {
                 query = query
-                    .Include(b => b.Firmas)
                     .Include(b => b.Brigadas)
                     .Include(b => b.VehiculosEncargado)
                     .Include(b => b.Dependencias)

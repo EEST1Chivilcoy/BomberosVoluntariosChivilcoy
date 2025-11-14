@@ -20,6 +20,6 @@ namespace Vista.Data.Models.Socios.Componentes.Pagos
         /// <summary>
         /// Representa la imagen del comprobante de la transferencia.
         /// </summary>
-        public Comprobante Comprobante { get; set; } = null!;
+        // public Comprobante Comprobante { get; set; } = null!;
     }
 }

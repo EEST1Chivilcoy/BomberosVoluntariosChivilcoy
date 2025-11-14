@@ -89,11 +89,6 @@ namespace Vista.Data.Models.Personas.Personal
         public DateTime? VencimientoRegistro { get; set; }
 
         /// <summary>
-        /// Firmas registradas del bombero.
-        /// </summary>
-        public List<Firma>? Firmas { get; set; }
-
-        /// <summary>
         /// Relación muchos a muchos entre bomberos y brigadas.
         /// </summary>
         public List<Bombero_Brigada> Brigadas { get; set; } = new List<Bombero_Brigada>();

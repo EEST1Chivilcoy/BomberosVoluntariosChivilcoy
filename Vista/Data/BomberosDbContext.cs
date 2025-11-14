@@ -22,6 +22,7 @@ using Vista.Data.Models.Socios;
 using Vista.Data.Models.Socios.Componentes;
 using Vista.Data.Models.Socios.Componentes.Pagos;
 using Vista.Data.Enums.Socios;
+using Vista.Data.Models.Otros.Partes;
 
 namespace Vista.Data
 {
@@ -97,7 +98,6 @@ namespace Vista.Data
         public DbSet<ServicioEspecialSuministroAgua> ServicioEspecialSuministroAgua { get; set; }
         public DbSet<ServicioEspecialFalsaAlarma> ServicioEspecialFalsaAlarma { get; set; }
         public DbSet<ServicioEspecialColaboraciónFuerzasSeguridad> ServicioEspecialColaboraciónFuerzasSeguridad { get; set; }
-        public DbSet<Firma> Firmas { get; set; }
         public DbSet<Movil_Salida> MovilesSalida { get; set; }
         public DbSet<BomberoSalida> BomberosSalida { get; set; }
         public DbSet<Material> Materiales { get; set; }
@@ -128,6 +128,9 @@ namespace Vista.Data
 
         // Otra Propiedad experimental para el servicio de VehiculoSalida
         public DbSet<VehiculoSalida> VehiculoSalidas { get; set; }
+
+        // Partes de Vehiculo
+        public DbSet<ParteVehiculo> PartesVehiculo { get; set; }
 
         public BomberosDbContext(DbContextOptions<BomberosDbContext> options)
             : base(options)
@@ -312,9 +315,9 @@ namespace Vista.Data
                 .Property(s => s.TipoEmergencia)
                 .HasConversion<int>();
 
-            modelBuilder.Entity<PagoSocio>()
-                .Property(p => p.Tipo)
-                .HasConversion<int>();
+            // modelBuilder.Entity<PagoSocio>()
+               // .Property(p => p.Tipo)
+               // .HasConversion<int>();
 
             //Discriminacion (Pasada a ENUM)
 
@@ -333,8 +336,8 @@ namespace Vista.Data
                 .HasDiscriminator(i => i.Tipo)
                 .HasValue<Imagen_Personal>(TipoImagen.ImagenPersonal)
                 .HasValue<Imagen_VehiculoSalida>(TipoImagen.ImagenVehiculoSalida)
-                .HasValue<CertificadoMedico>(TipoImagen.ImagenCertificadoMedico)
-                .HasValue<Comprobante>(TipoImagen.ImagenComprobanteBancario);
+                .HasValue<CertificadoMedico>(TipoImagen.ImagenCertificadoMedico);
+                //.HasValue<Comprobante>(TipoImagen.ImagenComprobanteBancario)
 
             modelBuilder.Entity<Salida>()
                 .HasDiscriminator(s => s.TipoEmergencia)
@@ -369,10 +372,10 @@ namespace Vista.Data
                 .HasValue<VehiculoAfectado>(TipoVehiculo.VehiculoAfectado)
                 .HasValue<Embarcacion>(TipoVehiculo.Embarcacion);
 
-            modelBuilder.Entity<PagoSocio>()
+            /* modelBuilder.Entity<PagoSocio>()
                 .HasDiscriminator(p => p.Tipo)
                 .HasValue<PagoTransferencia>(FormaDePago.Transferencia)
-                .HasValue<PagoEfectivo>(FormaDePago.Efectivo);
+                .HasValue<PagoEfectivo>(FormaDePago.Efectivo); */
 
             // Configuracion de Realaciones al Borrarse
 
@@ -418,11 +421,17 @@ namespace Vista.Data
 
             // Enum Conversiones a INT (Enteros)
 
+            // ParteVehiculo - Enum TipoParteVehiculo
+            modelBuilder.Entity<ParteVehiculo>()
+                .Property(pv => pv.Tipo)
+                .HasConversion<int>();
+
             // PagoTransferencia - Enum BancosConocidos
-            modelBuilder
+
+            /*modelBuilder
                 .Entity<PagoTransferencia>()
                 .Property(pt => pt.BancoOrigen)
-                .HasConversion<int>();
+                .HasConversion<int>(); */
 
             // Bombero - Enum EscalafonJerarquico (Grado)
 

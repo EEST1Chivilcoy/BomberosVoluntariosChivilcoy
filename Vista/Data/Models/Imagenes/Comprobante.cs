@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿/*using System.ComponentModel.DataAnnotations;
 using Vista.Data.Models.Socios.Componentes.Pagos;
 
 namespace Vista.Data.Models.Imagenes
@@ -19,4 +19,4 @@ namespace Vista.Data.Models.Imagenes
         [Required(ErrorMessage = "El campo 'PagoTransferenciaId' es obligatorio. Debe especificar el identificador único de la transferencia asociada a la imagen.")]
         public int PagoTransferenciaId { get; set; }
     }
-}
+}*/

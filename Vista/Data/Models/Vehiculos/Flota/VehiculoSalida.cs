@@ -38,12 +38,6 @@ namespace Vista.Data.Models.Vehiculos.Flota
         public TipoEstadoMovil Estado { get; set; }
 
         /// <summary>
-        /// Firmas asociadas al vehículo.
-        /// </summary>
-        public List<Firma> Firmas { get; set; } = new();
-
-
-        /// <summary>
         /// Foranea para la imagen del vehículo.
         /// </summary>
         public int? ImagenId { get; set; }

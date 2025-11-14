@@ -122,6 +122,7 @@ builder.Services.AddScoped<IVehiculoSalidaService, VehiculoSalidaService>();
 builder.Services.AddScoped<IFuerzaIntervinienteService, FuerzaIntervinienteService>();
 builder.Services.AddScoped<ISocioService, SocioService>();
 builder.Services.AddScoped<IEntraIDService, EntraIDService>();
+builder.Services.AddScoped<IParteVehiculoService, ParteVehiculoService>();
 builder.Services.AddScoped<IImagenService, ImagenService>();
 
 // Servicios HttpClient
