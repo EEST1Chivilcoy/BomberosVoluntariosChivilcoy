@@ -21,480 +21,481 @@
 @inject IBomberoService BomberoService
 
 <style>
-	/* Estilos generales */
-	.container {
-		padding: 24px !important;
-		min-height: 100vh !important;
-	}
+    /* Estilos generales */
+    .container {
+        padding: 24px !important;
+        min-height: 100vh !important;
+    }
 
-	.page-title {
-		font-size: 24px !important;
-		font-weight: 600 !important;
-		color: #1f1f1f !important;
-		margin-bottom: 24px !important;
-		display: flex !important;
-		align-items: center !important;
-	}
+    .page-title {
+        font-size: 24px !important;
+        font-weight: 600 !important;
+        color: #1f1f1f !important;
+        margin-bottom: 24px !important;
+        display: flex !important;
+        align-items: center !important;
+    }
 
-	.page-title-icon {
-		margin-right: 12px !important;
-		color: #c43a3a !important;
-	}
+    .page-title-icon {
+        margin-right: 12px !important;
+        color: #c43a3a !important;
+    }
 
-	.card {
-		background-color: white !important;
-		border-radius: 8px !important;
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
-		padding: 24px !important;
-		margin-bottom: 24px !important;
-	}
+    .card {
+        background-color: white !important;
+        border-radius: 8px !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+        padding: 24px !important;
+        margin-bottom: 24px !important;
+    }
 
-	.card-title {
-		font-size: 18px !important;
-		font-weight: 500 !important;
-		color: #434343 !important;
-		margin-bottom: 16px !important;
-		padding-bottom: 12px !important;
-		border-bottom: 1px solid #f0f0f0 !important;
-	}
+    .card-title {
+        font-size: 18px !important;
+        font-weight: 500 !important;
+        color: #434343 !important;
+        margin-bottom: 16px !important;
+        padding-bottom: 12px !important;
+        border-bottom: 1px solid #f0f0f0 !important;
+    }
 
-	/* Estilos de la foto */
-	.profile-photo-container {
-		display: flex !important;
-		flex-direction: column !important;
-		align-items: center !important;
-		padding: 16px !important;
-	}
+    /* Estilos de la foto */
+    .profile-photo-container {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        padding: 16px !important;
+    }
 
-	.photo-preview {
-		width: 150px !important;
-		height: 150px !important;
-		border-radius: 50% !important;
-		overflow: hidden !important;
-		margin-bottom: 16px !important;
-		display: flex !important;
-		align-items: center !important;
-		justify-content: center !important;
-	}
+    .photo-preview {
+        width: 150px !important;
+        height: 150px !important;
+        border-radius: 50% !important;
+        overflow: hidden !important;
+        margin-bottom: 16px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
 
-	.upload-actions {
-		display: flex !important;
-		gap: 8px !important;
-	}
+    .upload-actions {
+        display: flex !important;
+        gap: 8px !important;
+    }
 
-	/* Estilo para las secciones del formulario */
-	.form-section {
-		margin-bottom: 24px !important;
-	}
+    /* Estilo para las secciones del formulario */
+    .form-section {
+        margin-bottom: 24px !important;
+    }
 
-	/* Estilo para los botones de acción */
-	.action-buttons {
-		display: flex !important;
-		justify-content: flex-end !important;
-		gap: 12px !important;
-		margin-top: 24px !important;
-	}
+    /* Estilo para los botones de acción */
+    .action-buttons {
+        display: flex !important;
+        justify-content: flex-end !important;
+        gap: 12px !important;
+        margin-top: 24px !important;
+    }
 
-	/* Estilo para los campos */
-	.ant-form-item {
-		margin-bottom: 16px !important;
-	}
+    /* Estilo para los campos */
+    .ant-form-item {
+        margin-bottom: 16px !important;
+    }
 
-	.ant-form-item-label > label {
-		color: #595959 !important;
-		font-weight: 500 !important;
-	}
+    .ant-form-item-label > label {
+        color: #595959 !important;
+        font-weight: 500 !important;
+    }
 
-	.ant-input,
-	.ant-select:not(.ant-select-customize-input) .ant-select-selector,
-	.ant-picker,
-	.ant-input-number {
-		border-radius: 4px !important;
-		border: 1px solid #d9d9d9 !important;
-	}
+    .ant-input,
+    .ant-select:not(.ant-select-customize-input) .ant-select-selector,
+    .ant-picker,
+    .ant-input-number {
+        border-radius: 4px !important;
+        border: 1px solid #d9d9d9 !important;
+    }
 
-		.ant-input:hover,
-		.ant-select:not(.ant-select-customize-input) .ant-select-selector:hover,
-		.ant-picker:hover,
-		.ant-input-number:hover {
-			border-color: #c43a3a !important;
-		}
+        .ant-input:hover,
+        .ant-select:not(.ant-select-customize-input) .ant-select-selector:hover,
+        .ant-picker:hover,
+        .ant-input-number:hover {
+            border-color: #c43a3a !important;
+        }
 
-		.ant-input:focus,
-		.ant-select-focused:not(.ant-select-customize-input) .ant-select-selector,
-		.ant-picker-focused,
-		.ant-input-number-focused {
-			border-color: #c43a3a !important;
-			box-shadow: 0 0 0 2px rgba(196, 58, 58, 0.2) !important;
-		}
+        .ant-input:focus,
+        .ant-select-focused:not(.ant-select-customize-input) .ant-select-selector,
+        .ant-picker-focused,
+        .ant-input-number-focused {
+            border-color: #c43a3a !important;
+            box-shadow: 0 0 0 2px rgba(196, 58, 58, 0.2) !important;
+        }
 
-	/* Ajuste visual para el switch */
-	.ant-switch-checked {
-		background-color: #c43a3a !important;
-	}
+    /* Ajuste visual para el switch */
+    .ant-switch-checked {
+        background-color: #c43a3a !important;
+    }
 
-	/* Estilo para campos requeridos */
-	.required-field::after {
-		content: '*' !important;
-		color: #c43a3a !important;
-		margin-left: 4px !important;
-	}
+    /* Estilo para campos requeridos */
+    .required-field::after {
+        content: '*' !important;
+        color: #c43a3a !important;
+        margin-left: 4px !important;
+    }
 
-	/* Estilo para el campo condicional de chofer */
-	.conditional-field {
-		margin-top: 12px !important;
-		padding-top: 12px !important;
-		border-top: 1px dashed #f0f0f0 !important;
-	}
+    /* Estilo para el campo condicional de chofer */
+    .conditional-field {
+        margin-top: 12px !important;
+        padding-top: 12px !important;
+        border-top: 1px dashed #f0f0f0 !important;
+    }
 </style>
 
 <div class="container">
-	<div class="page-title">
-		<div>
-			<Icon Type="fire" Theme="IconThemeType.Fill" Class="page-title-icon" />
-			<span>Editar Bombero</span>
-		</div>
-	</div>
+    <div class="page-title">
+        <div>
+            <Icon Type="fire" Theme="IconThemeType.Fill" Class="page-title-icon" />
+            <span>Editar Bombero</span>
+        </div>
+    </div>
 
-	@if (personalView != null)
-	{
-		<Form Model="@personalView"
-			  Layout="FormLayout.Vertical"
-			  OnFinish="OnFinish"
-			  Loading="isLoading">
+    @if (personalView != null)
+    {
+        <Form Model="@personalView"
+              Layout="FormLayout.Vertical"
+              OnFinish="OnFinish"
+              ValidateOnChange="@true"
+              Loading="isLoading">
 
-			@*Información Personal (Común para todos)*@
-			<div class="card">
-				<div class="card-title">Información Personal</div>
-				<AntDesign.Row Gutter="24">
-					<AntDesign.Col Span="6">
-						<div class="profile-photo-container">
-							<div class="photo-preview">
-								@if (!string.IsNullOrWhiteSpace(personalView.UrlImagen))
-								{
-									<Avatar Src="@personalView.UrlImagen" Alt="Foto de perfil" Size="@("10rem")" />
-								}
-								else
-								{
-									<Avatar Icon="@IconType.Outline.User" Size="@("10rem")" />
-								}
-							</div>
-						</div>
-					</AntDesign.Col>
-					<AntDesign.Col Span="18">
-						<AntDesign.Row Gutter="16">
-							<AntDesign.Col Span="8">
-								<FormItem Label="Nombre">
-									<Input @bind-Value="@personalView.Nombre" Disabled />
-								</FormItem>
-							</AntDesign.Col>
-							<AntDesign.Col Span="8">
-								<FormItem Label="Apellido">
-									<Input @bind-Value="@personalView.Apellido" Disabled />
-								</FormItem>
-							</AntDesign.Col>
-						</AntDesign.Row>
+            @*Información Personal (Común para todos)*@
+            <div class="card">
+                <div class="card-title">Información Personal</div>
+                <AntDesign.Row Gutter="24">
+                    <AntDesign.Col Span="6">
+                        <div class="profile-photo-container">
+                            <div class="photo-preview">
+                                @if (!string.IsNullOrWhiteSpace(personalView.UrlImagen))
+                                {
+                                    <Avatar Src="@personalView.UrlImagen" Alt="Foto de perfil" Size="@("10rem")" />
+                                }
+                                else
+                                {
+                                    <Avatar Icon="@IconType.Outline.User" Size="@("10rem")" />
+                                }
+                            </div>
+                        </div>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="18">
+                        <AntDesign.Row Gutter="16">
+                            <AntDesign.Col Span="8">
+                                <FormItem Label="Nombre">
+                                    <Input @bind-Value="@personalView.Nombre" Disabled />
+                                </FormItem>
+                            </AntDesign.Col>
+                            <AntDesign.Col Span="8">
+                                <FormItem Label="Apellido">
+                                    <Input @bind-Value="@personalView.Apellido" Disabled />
+                                </FormItem>
+                            </AntDesign.Col>
+                        </AntDesign.Row>
 
-						<AntDesign.Row Gutter="16">
-							<AntDesign.Col Span="24">
-								<FormItem Label="UPN">
-									<AntDesign.Input @bind-Value="@personalView.UPN" Disabled>
-									</AntDesign.Input>
-								</FormItem>
-							</AntDesign.Col>
-						</AntDesign.Row>
+                        <AntDesign.Row Gutter="16">
+                            <AntDesign.Col Span="24">
+                                <FormItem Label="UPN">
+                                    <AntDesign.Input @bind-Value="@personalView.UPN" Disabled>
+                                    </AntDesign.Input>
+                                </FormItem>
+                            </AntDesign.Col>
+                        </AntDesign.Row>
 
-						<AntDesign.Row Gutter="16">
-							<AntDesign.Col Span="8">
-								<FormItem Label="DNI">
-									<Input @bind-Value="@personalView.Documento" Placeholder="Ingrese el DNI" />
-								</FormItem>
-							</AntDesign.Col>
-							<AntDesign.Col Span="8">
-								<FormItem Label="Fecha de Nacimiento">
-									<DatePicker @bind-Value="@personalView.FechaNacimiento"
-												Picker="@DatePickerType.Date"
-												Style="width: 100%;"
-												Placeholder="@("Seleccione fecha")"
-												AllowClear />
-								</FormItem>
-							</AntDesign.Col>
-							<AntDesign.Col Span="8">
-								<FormItem Label="Lugar de nacimiento">
-									<Input @bind-Value="@personalView.LugarNacimiento" Placeholder="Ingrese lugar de nacimiento" />
-								</FormItem>
-							</AntDesign.Col>
-						</AntDesign.Row>
+                        <AntDesign.Row Gutter="16">
+                            <AntDesign.Col Span="8">
+                                <FormItem Label="DNI">
+                                    <Input @bind-Value="@personalView.Documento" Placeholder="Ingrese el DNI" />
+                                </FormItem>
+                            </AntDesign.Col>
+                            <AntDesign.Col Span="8">
+                                <FormItem Label="Fecha de Nacimiento">
+                                    <DatePicker @bind-Value="@personalView.FechaNacimiento"
+                                                Picker="@DatePickerType.Date"
+                                                Style="width: 100%;"
+                                                Placeholder="@("Seleccione fecha")"
+                                                AllowClear />
+                                </FormItem>
+                            </AntDesign.Col>
+                            <AntDesign.Col Span="8">
+                                <FormItem Label="Lugar de nacimiento">
+                                    <Input @bind-Value="@personalView.LugarNacimiento" Placeholder="Ingrese lugar de nacimiento" />
+                                </FormItem>
+                            </AntDesign.Col>
+                        </AntDesign.Row>
 
-						<AntDesign.Row Gutter="16">
-							<AntDesign.Col Span="12">
-								<FormItem Label="Dirección">
-									<Input @bind-Value="@personalView.Direccion" Placeholder="Ingrese dirección" />
-								</FormItem>
-							</AntDesign.Col>
-							<AntDesign.Col Span="6">
-								<FormItem Label="Sexo">
-									<EnumSelect TEnum="TipoSexo ?" @bind-Value="@personalView.Sexo" />
-								</FormItem>
-							</AntDesign.Col>
-							<AntDesign.Col Span="6">
-								<FormItem Label="Grupo Sanguíneo">
-									<EnumSelect TEnum="TipoGrupoSanguineo ?" @bind-Value="@personalView.GrupoSanguineo" AllowClear />
-								</FormItem>
-							</AntDesign.Col>
-						</AntDesign.Row>
-					</AntDesign.Col>
-				</AntDesign.Row>
-			</div>
+                        <AntDesign.Row Gutter="16">
+                            <AntDesign.Col Span="12">
+                                <FormItem Label="Dirección">
+                                    <Input @bind-Value="@personalView.Direccion" Placeholder="Ingrese dirección" />
+                                </FormItem>
+                            </AntDesign.Col>
+                            <AntDesign.Col Span="6">
+                                <FormItem Label="Sexo">
+                                    <EnumSelect TEnum="TipoSexo ?" @bind-Value="@personalView.Sexo" />
+                                </FormItem>
+                            </AntDesign.Col>
+                            <AntDesign.Col Span="6">
+                                <FormItem Label="Grupo Sanguíneo">
+                                    <EnumSelect TEnum="TipoGrupoSanguineo ?" @bind-Value="@personalView.GrupoSanguineo" AllowClear />
+                                </FormItem>
+                            </AntDesign.Col>
+                        </AntDesign.Row>
+                    </AntDesign.Col>
+                </AntDesign.Row>
+            </div>
 
-			@*Información Profesional*@
-			<div class="card">
-				<div class="card-title">Información Profesional</div>
-				<AntDesign.Row Gutter="16">
-					<AntDesign.Col Span="6">
-						<FormItem Label="Número Legajo">
-							<Input @bind-Value="@personalView.NumeroLegajo" Placeholder="Ingrese número de legajo" />
-						</FormItem>
-					</AntDesign.Col>
-					<AntDesign.Col Span="6">
-						<FormItem Label="Dotación">
-							<EnumSelect TEnum="TipoDotaciones ?" @bind-Value="@personalView.Dotacion" />
-						</FormItem>
-					</AntDesign.Col>
-					<AntDesign.Col Span="6">
-						<FormItem Label="Grado">
-							<EnumSelect TEnum="EscalafonJerarquico ?" @bind-Value="@personalView.Grado" AllowClear />
-						</FormItem>
-					</AntDesign.Col>
-					<AntDesign.Col Span="6">
-						<FormItem Label="Estado">
-							<EnumSelect TEnum="EstadoBombero ?" @bind-Value="personalView.Estado" AllowClear />
-						</FormItem>
-					</AntDesign.Col>
-				</AntDesign.Row>
+            @*Información Profesional*@
+            <div class="card">
+                <div class="card-title">Información Profesional</div>
+                <AntDesign.Row Gutter="16">
+                    <AntDesign.Col Span="6">
+                        <FormItem Label="Número Legajo">
+                            <Input @bind-Value="@personalView.NumeroLegajo" Placeholder="Ingrese número de legajo" />
+                        </FormItem>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="6">
+                        <FormItem Label="Dotación">
+                            <EnumSelect TEnum="TipoDotaciones ?" @bind-Value="@personalView.Dotacion" />
+                        </FormItem>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="6">
+                        <FormItem Label="Grado">
+                            <EnumSelect TEnum="EscalafonJerarquico ?" @bind-Value="@personalView.Grado" AllowClear />
+                        </FormItem>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="6">
+                        <FormItem Label="Estado">
+                            <EnumSelect TEnum="EstadoBombero ?" @bind-Value="personalView.Estado" AllowClear />
+                        </FormItem>
+                    </AntDesign.Col>
+                </AntDesign.Row>
 
-				<AntDesign.Row Gutter="16">
-					<AntDesign.Col Span="8">
-						<FormItem Label="Fecha de Aceptación">
-							<DatePicker @bind-Value="@personalView.FechaAceptacion"
-										Picker="@DatePickerType.Date"
-										Style="width: 100%;"
-										Placeholder="@("Seleccione fecha")"
-										AllowClear />
-						</FormItem>
-					</AntDesign.Col>
-					<AntDesign.Col Span="8">
-						<FormItem Label="Número IOMA">
-							<Input @bind-Value="personalView.NumeroIoma" Placeholder="Ingrese número IOMA" />
-						</FormItem>
-					</AntDesign.Col>
-				</AntDesign.Row>
+                <AntDesign.Row Gutter="16">
+                    <AntDesign.Col Span="8">
+                        <FormItem Label="Fecha de Aceptación">
+                            <DatePicker @bind-Value="@personalView.FechaAceptacion"
+                                        Picker="@DatePickerType.Date"
+                                        Style="width: 100%;"
+                                        Placeholder="@("Seleccione fecha")"
+                                        AllowClear />
+                        </FormItem>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="8">
+                        <FormItem Label="Número IOMA">
+                            <Input @bind-Value="personalView.NumeroIoma" Placeholder="Ingrese número IOMA" />
+                        </FormItem>
+                    </AntDesign.Col>
+                </AntDesign.Row>
 
-				<AntDesign.Row Gutter="16">
-					<AntDesign.Col Span="12">
-						<FormItem Label="¿Es chofer?">
-							<Switch @bind-Checked="personalView.EsChofer"></Switch>
-							@if (personalView.EsChofer)
-							{
-								<div class="conditional-field">
-									<FormItem Label="Fecha vencimiento del carnet">
-										<DatePicker @bind-Value="@personalView.VencimientoRegistro"
-													Picker="@DatePickerType.Date"
-													Style="width: 100%;"
-													Placeholder="@("Seleccione fecha de vencimiento")"
-													AllowClear />
-									</FormItem>
-								</div>
-							}
-						</FormItem>
-					</AntDesign.Col>
-				</AntDesign.Row>
-			</div>
+                <AntDesign.Row Gutter="16">
+                    <AntDesign.Col Span="12">
+                        <FormItem Label="¿Es chofer?">
+                            <Switch @bind-Checked="personalView.EsChofer"></Switch>
+                            @if (personalView.EsChofer)
+                            {
+                                <div class="conditional-field">
+                                    <FormItem Label="Fecha vencimiento del carnet">
+                                        <DatePicker @bind-Value="@personalView.VencimientoRegistro"
+                                                    Picker="@DatePickerType.Date"
+                                                    Style="width: 100%;"
+                                                    Placeholder="@("Seleccione fecha de vencimiento")"
+                                                    AllowClear />
+                                    </FormItem>
+                                </div>
+                            }
+                        </FormItem>
+                    </AntDesign.Col>
+                </AntDesign.Row>
+            </div>
 
-			@*Información Adicional*@
-			<div class="card">
-				<div class="card-title">Información Adicional</div>
-				<AntDesign.Row Gutter="16">
-					<AntDesign.Col Span="6">
-						<FormItem Label="Altura (cm)">
-							<AntDesign.InputNumber @bind-Value="@personalView.Altura" Style="width: 100%;" Placeholder="Ingrese altura" />
-						</FormItem>
-					</AntDesign.Col>
-					<AntDesign.Col Span="6">
-						<FormItem Label="Peso (kg)">
-							<AntDesign.InputNumber @bind-Value="@personalView.Peso" Style="width: 100%;" Placeholder="Ingrese peso" />
-						</FormItem>
-					</AntDesign.Col>
-					<AntDesign.Col Span="6">
-						<FormItem Label="Nivel de estudio">
-							<Input @bind-Value="@personalView.NivelEstudios" Placeholder="Ingrese nivel de estudios" />
-						</FormItem>
-					</AntDesign.Col>
-					<AntDesign.Col Span="6">
-						<FormItem Label="Profesión">
-							<Input @bind-Value="@personalView.Profesion" Placeholder="Ingrese profesión" />
-						</FormItem>
-					</AntDesign.Col>
-				</AntDesign.Row>
+            @*Información Adicional*@
+            <div class="card">
+                <div class="card-title">Información Adicional</div>
+                <AntDesign.Row Gutter="16">
+                    <AntDesign.Col Span="6">
+                        <FormItem Label="Altura (cm)">
+                            <AntDesign.InputNumber @bind-Value="@personalView.Altura" Style="width: 100%;" Placeholder="Ingrese altura" />
+                        </FormItem>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="6">
+                        <FormItem Label="Peso (kg)">
+                            <AntDesign.InputNumber @bind-Value="@personalView.Peso" Style="width: 100%;" Placeholder="Ingrese peso" />
+                        </FormItem>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="6">
+                        <FormItem Label="Nivel de estudio">
+                            <Input @bind-Value="@personalView.NivelEstudios" Placeholder="Ingrese nivel de estudios" />
+                        </FormItem>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="6">
+                        <FormItem Label="Profesión">
+                            <Input @bind-Value="@personalView.Profesion" Placeholder="Ingrese profesión" />
+                        </FormItem>
+                    </AntDesign.Col>
+                </AntDesign.Row>
 
-				<FormItem Label="Observaciones">
-					<TextArea @bind-Value="@personalView.Observaciones" Placeholder="Ingrese observaciones" Rows="4" />
-				</FormItem>
-			</div>
+                <FormItem Label="Observaciones">
+                    <TextArea @bind-Value="@personalView.Observaciones" Placeholder="Ingrese observaciones" Rows="4" />
+                </FormItem>
+            </div>
 
-			@*Información de Contacto*@
-			<div class="card">
-				<div class="card-title">Información de Contacto</div>
-				<AntDesign.Row Gutter="16">
-					<AntDesign.Col Span="6">
-						<FormItem Label="Teléfono Celular">
-							<Input @bind-Value="@personalView.TelefonoCel" Placeholder="Ingrese teléfono celular" />
-						</FormItem>
-					</AntDesign.Col>
-					<AntDesign.Col Span="6">
-						<FormItem Label="Teléfono Fijo">
-							<Input @bind-Value="@personalView.TelefonoFijo" Placeholder="Ingrese teléfono fijo" />
-						</FormItem>
-					</AntDesign.Col>
-					<AntDesign.Col Span="6">
-						<FormItem Label="Teléfono Laboral">
-							<Input @bind-Value="@personalView.TelefonoLaboral" Placeholder="Ingrese teléfono laboral" />
-						</FormItem>
-					</AntDesign.Col>
-					<AntDesign.Col Span="6">
-						<FormItem Label="Email">
-							<Input @bind-Value="@personalView.Email" Placeholder="Ingrese email" />
-						</FormItem>
-					</AntDesign.Col>
-				</AntDesign.Row>
-			</div>
+            @*Información de Contacto*@
+            <div class="card">
+                <div class="card-title">Información de Contacto</div>
+                <AntDesign.Row Gutter="16">
+                    <AntDesign.Col Span="6">
+                        <FormItem Label="Teléfono Celular">
+                            <Input @bind-Value="@personalView.TelefonoCel" Placeholder="Ingrese teléfono celular" />
+                        </FormItem>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="6">
+                        <FormItem Label="Teléfono Fijo">
+                            <Input @bind-Value="@personalView.TelefonoFijo" Placeholder="Ingrese teléfono fijo" />
+                        </FormItem>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="6">
+                        <FormItem Label="Teléfono Laboral">
+                            <Input @bind-Value="@personalView.TelefonoLaboral" Placeholder="Ingrese teléfono laboral" />
+                        </FormItem>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="6">
+                        <FormItem Label="Email">
+                            <Input @bind-Value="@personalView.Email" Placeholder="Ingrese email" />
+                        </FormItem>
+                    </AntDesign.Col>
+                </AntDesign.Row>
+            </div>
 
-			@*Botones de Acción*@
-			<div class="action-buttons">
-				<Button Type="@ButtonType.Default" OnClick="Cancelar">
-					Cancelar
-				</Button>
-				<Button Type="@ButtonType.Primary" HtmlType="submit" Class="primary-button">
-					Editar Bombero
-				</Button>
-			</div>
-		</Form>
-	}
-	else
-	{
-		<Result Status="ResultStatus.Error"
-				Title="Error"
-				SubTitle="No se ha inicializado correctamente el formulario.">
-			<Extra>
-				<Button Type="@ButtonType.Primary" OnClick="Cancelar">
-					Volver al listado
-				</Button>
-			</Extra>
-		</Result>
-	}
+            @*Botones de Acción*@
+            <div class="action-buttons">
+                <Button Type="@ButtonType.Default" OnClick="Cancelar">
+                    Cancelar
+                </Button>
+                <Button Type="@ButtonType.Primary" HtmlType="submit" Class="primary-button">
+                    Editar Bombero
+                </Button>
+            </div>
+        </Form>
+    }
+    else
+    {
+        <Result Status="ResultStatus.Error"
+                Title="Error"
+                SubTitle="No se ha inicializado correctamente el formulario.">
+            <Extra>
+                <Button Type="@ButtonType.Primary" OnClick="Cancelar">
+                    Volver al listado
+                </Button>
+            </Extra>
+        </Result>
+    }
 </div>
 
 @code {
-	[Parameter] public required int BomberoId { get; set; }
-	[Parameter] public required EventCallback OnCancel { get; set; }
+    [Parameter] public required int BomberoId { get; set; }
+    [Parameter] public required EventCallback OnCancel { get; set; }
 
-	private BomberoViweModel? personalView = new();
-	private bool isLoading = true;
+    private BomberoViweModel? personalView = new();
+    private bool isLoading = true;
 
-	protected override async Task OnParametersSetAsync()
-	{
-		isLoading = true;
+    protected override async Task OnParametersSetAsync()
+    {
+        isLoading = true;
 
-		if (BomberoId <= 0)
-		{
-			await message.ErrorAsync("BomberoId no es válido.");
-			await Cancelar();
-			return;
-		}
+        if (BomberoId <= 0)
+        {
+            await message.ErrorAsync("BomberoId no es válido.");
+            await Cancelar();
+            return;
+        }
 
-		try
-		{
-			Bombero? bombero = await BomberoService.ObtenerBomberoPorIdAsync(id:BomberoId, conRelaciones:true);
+        try
+        {
+            Bombero? bombero = await BomberoService.ObtenerBomberoPorIdAsync(id: BomberoId, conRelaciones: true);
 
-			if (bombero == null)
-			{
-				await message.ErrorAsync("No se encontró el bombero solicitado.");
-				await Cancelar();
-				return;
-			}
+            if (bombero == null)
+            {
+                await message.ErrorAsync("No se encontró el bombero solicitado.");
+                await Cancelar();
+                return;
+            }
 
-			personalView = bombero.ToBomberoViewModel();
-		}
-		catch (Exception ex)
-		{
-			await message.ErrorAsync($"Error: {ex.Message}");
-		}
-		finally
-		{
-			isLoading = false;
-		}
-	}
+            personalView = bombero.ToBomberoViewModel();
+        }
+        catch (Exception ex)
+        {
+            await message.ErrorAsync($"Error: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
 
-	public async Task Cancelar()
-	{
-		await OnCancel.InvokeAsync();
-	}
+    public async Task Cancelar()
+    {
+        await OnCancel.InvokeAsync();
+    }
 
-	private async Task OnFinish(EditContext editContext)
-	{
-		isLoading = true;
+    private async Task OnFinish(EditContext editContext)
+    {
+        isLoading = true;
 
-		try
-		{
-			// Preparar el objeto Bombero
-			Bombero bombero = new Bombero()
-			{
-				PersonaId = personalView.Id, 
-				EntraId = personalView.EntraID,
-				UPN = personalView.UPN,
-				FechaNacimiento = personalView.FechaNacimiento,
-				Sexo = personalView.Sexo.Value,
-				Nombre = personalView.Nombre,
-				Apellido = personalView.Apellido,
-				Documento = personalView.Documento.Value,
-				NumeroLegajo = personalView.NumeroLegajo.Value,
-				NumeroIoma = personalView.NumeroIoma,
-				LugarNacimiento = personalView.LugarNacimiento,
-				Grado = personalView.Grado.Value,
-				Dotacion = personalView.Dotacion.Value,
-				GrupoSanguineo = personalView.GrupoSanguineo,
-				Altura = personalView.Altura,
-				Peso = personalView.Peso,
-				Estado = personalView.Estado.Value,
-				Chofer = personalView.EsChofer,
-				VencimientoRegistro = personalView.VencimientoRegistro,
-				Direccion = personalView.Direccion,
-				Observaciones = personalView.Observaciones,
-				Profesion = personalView.Profesion,
-				NivelEstudios = personalView.NivelEstudios,
-				FechaAceptacion = personalView.FechaAceptacion,
+        try
+        {
+            // Preparar el objeto Bombero
+            Bombero bombero = new Bombero()
+            {
+                PersonaId = personalView.Id,
+                EntraId = personalView.EntraID,
+                UPN = personalView.UPN,
+                FechaNacimiento = personalView.FechaNacimiento,
+                Sexo = personalView.Sexo.Value,
+                Nombre = personalView.Nombre,
+                Apellido = personalView.Apellido,
+                Documento = personalView.Documento.Value,
+                NumeroLegajo = personalView.NumeroLegajo.Value,
+                NumeroIoma = personalView.NumeroIoma,
+                LugarNacimiento = personalView.LugarNacimiento,
+                Grado = personalView.Grado.Value,
+                Dotacion = personalView.Dotacion.Value,
+                GrupoSanguineo = personalView.GrupoSanguineo,
+                Altura = personalView.Altura,
+                Peso = personalView.Peso,
+                Estado = personalView.Estado.Value,
+                Chofer = personalView.EsChofer,
+                VencimientoRegistro = personalView.VencimientoRegistro,
+                Direccion = personalView.Direccion,
+                Observaciones = personalView.Observaciones,
+                Profesion = personalView.Profesion,
+                NivelEstudios = personalView.NivelEstudios,
+                FechaAceptacion = personalView.FechaAceptacion,
 
-				Contacto = new Contacto
-				{
-					TelefonoCel = personalView.TelefonoCel,
-					TelefonoFijo = personalView.TelefonoFijo,
-					TelefonoLaboral = personalView.TelefonoLaboral,
-					Email = personalView.Email
-				}
-			};
+                Contacto = new Contacto
+                {
+                    TelefonoCel = personalView.TelefonoCel,
+                    TelefonoFijo = personalView.TelefonoFijo,
+                    TelefonoLaboral = personalView.TelefonoLaboral,
+                    Email = personalView.Email
+                }
+            };
 
-			// Creamos el bombero
-			await BomberoService.EditarBombero(bombero);
-			message.Success("Bombero editado con éxito.");
-			await Cancelar();
-		}
-		catch (Exception ex)
-		{
-			message.Error($"Error: {ex.Message}");
-		}
-		finally
-		{
-			isLoading = false;
-		}
-	}
+            // Creamos el bombero
+            await BomberoService.EditarBombero(bombero);
+            message.Success("Bombero editado con éxito.");
+            await Cancelar();
+        }
+        catch (Exception ex)
+        {
+            message.Error($"Error: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
 }
