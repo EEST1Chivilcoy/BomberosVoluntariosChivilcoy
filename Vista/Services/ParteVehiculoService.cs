@@ -32,14 +32,18 @@ namespace Vista.Services
 
             ValidationHelper.Validar(parteVehiculo);
 
-            // --- Paso B: Validaciones "Caras" (contra la BD) ---
-            // (Se hacen antes de iniciar la transacción para no abrirla innecesariamente)
+            // --- Validar duplicados ---
+            var nombreNormalizado = parteVehiculo.Nombre?.Trim().ToLower();
 
-            // Validar que no exista ya un ParteVehiculo con el mismo nombre y tipo
-            if (_context.PartesVehiculo.Any(pv => pv.Nombre == parteVehiculo.Nombre && pv.Tipo == parteVehiculo.Tipo))
+            if (await _context.PartesVehiculo
+                .AnyAsync(pv =>
+                    pv.Nombre.ToLower().Trim() == nombreNormalizado &&
+                    pv.Tipo == parteVehiculo.Tipo))
             {
-                throw new InvalidOperationException($"Ya existe un ParteVehiculo con el nombre '{parteVehiculo.Nombre}' y tipo '{parteVehiculo.Tipo}'.");
+                throw new InvalidOperationException(
+                    $"Ya existe un ParteVehiculo con el nombre '{parteVehiculo.Nombre}' y tipo '{parteVehiculo.Tipo}'.");
             }
+
 
             // --- 2. Inicio de la Transacción ---
             // Esta será la transacción "principal" que controlará todo.
@@ -74,7 +78,7 @@ namespace Vista.Services
                     throw new Exception("Error al guardar en la base de datos. Verifique datos duplicados.", ex);
                 }
 
-                // Re-lanza la excepción (ej. la ValidationException del service)
+                // Re-lanza la excepción
                 throw;
             }
         }

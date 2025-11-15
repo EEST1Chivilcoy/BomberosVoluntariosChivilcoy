@@ -6,74 +6,43 @@
 @inject IMessageService message
 @inject IParteVehiculoService ParteVehiculoService
 
-<style>
-    /* Estilo para los campos */
-    .ant-form-item {
-        margin-bottom: 16px !important;
-    }
-
-    .ant-form-item-label > label {
-        color: #595959 !important;
-        font-weight: 500 !important;
-    }
-
-    .ant-input,
-    .ant-select:not(.ant-select-customize-input) .ant-select-selector,
-    .ant-picker,
-    .ant-input-number {
-        border-radius: 4px !important;
-        border: 1px solid #d9d9d9 !important;
-    }
-
-        .ant-input:hover,
-        .ant-select:not(.ant-select-customize-input) .ant-select-selector:hover,
-        .ant-picker:hover,
-        .ant-input-number:hover {
-            border-color: #c43a3a !important;
-        }
-
-        .ant-input:focus,
-        .ant-select-focused:not(.ant-select-customize-input) .ant-select-selector,
-        .ant-picker-focused,
-        .ant-input-number-focused {
-            border-color: #c43a3a !important;
-            box-shadow: 0 0 0 2px rgba(196, 58, 58, 0.2) !important;
-        }
-
-    /* Ajuste visual para el switch */
-    .ant-switch-checked {
-        background-color: #c43a3a !important;
-    }
-
-    /* Estilo para campos requeridos */
-    .required-field::after {
-        content: '*' !important;
-        color: #c43a3a !important;
-        margin-left: 4px !important;
-    }
-
-    /* Estilo para el campo condicional de chofer */
-    .conditional-field {
-        margin-top: 12px !important;
-        padding-top: 12px !important;
-        border-top: 1px dashed #f0f0f0 !important;
-    }
-</style>
-
 <Form Model="@agregarParteVehiculoViewModel"
-      Loading="_isLoading">
-    <FormItem Label="Nombre"
-              Class="required-field">
-        <Input @bind-Value="@agregarParteVehiculoViewModel.Nombre"
-               Placeholder="Ingrese el nombre de la parte del vehículo" AllowClear />
-    </FormItem>
-    <FormItem Label="Tipo de Parte"
-              Class="required-field">
-        <EnumSelect TEnum="TipoParteVehiculo ?" @bind-Value="@agregarParteVehiculoViewModel.TipoParte" AllowClear />
-    </FormItem>
+      Loading="_isLoading"
+      Layout="FormLayout.Vertical"
+      Class="modal-crear-fuerza-form"
+      OnFinish="OnFinish">
+    <Row Class="modal-crear-fuerza-row" Gutter="16">
+        <FormItem Label="Nombre"
+                  Class="modal-crear-fuerza-form-item">
+            <AntDesign.Col Span="24">
+                <Input @bind-Value="@agregarParteVehiculoViewModel.Nombre"
+                       AllowClear Size="InputSize.Large" />
+            </AntDesign.Col>
+        </FormItem>
+    </Row>
+    <Row Class="modal-crear-fuerza-row" Gutter="16">
+        <AntDesign.Col Span="24">
+            <FormItem Label="Tipo de Parte"
+                      Class="modal-crear-fuerza-form-item">
+                <EnumSelect TEnum="TipoParteVehiculo ?" @bind-Value="@agregarParteVehiculoViewModel.TipoParte" AllowClear Size="InputSize.Large" />
+            </FormItem>
+        </AntDesign.Col>
+    </Row>
+
+    <div class="modal-crear-fuerza-footer">
+        <FormItem>
+            <Button Type="ButtonType.Primary"
+                    HtmlType="submit">
+                Agregar Parte del Vehículo
+            </Button>
+            <Button Style="margin-left: 8px;"
+                    OnClick="CancelarAsync"
+                    Danger>
+                Cancelar
+            </Button>
+        </FormItem>
+    </div>
 </Form>
-
-
 
 @code {
     [Parameter] public required EventCallback OnCancel { get; set; }
@@ -107,6 +76,11 @@
                 Nombre = agregarParteVehiculoViewModel.Nombre!,
                 Tipo = agregarParteVehiculoViewModel.TipoParte!.Value
             };
+
+            // Llamamos al servicio para agregar la nueva parte del vehículo
+            await ParteVehiculoService.AgregarParteVehiculoAsync(nuevaParteVehiculo);
+            message.Success("Parte del vehículo agregada exitosamente.");
+            await CancelarAsync();
         }
         catch (Exception ex)
         {

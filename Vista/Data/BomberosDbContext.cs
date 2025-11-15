@@ -293,6 +293,11 @@ namespace Vista.Data
                 .HasIndex(b => b.NumeroLegajo)
                 .IsUnique();
 
+            // ParteVehiculo
+            modelBuilder.Entity<ParteVehiculo>()
+                .HasIndex(pv => new { pv.Nombre, pv.Tipo })
+                .IsUnique();
+
             // Enum Discriminadores
 
             modelBuilder.Entity<Persona>()
@@ -316,8 +321,8 @@ namespace Vista.Data
                 .HasConversion<int>();
 
             // modelBuilder.Entity<PagoSocio>()
-               // .Property(p => p.Tipo)
-               // .HasConversion<int>();
+            // .Property(p => p.Tipo)
+            // .HasConversion<int>();
 
             //Discriminacion (Pasada a ENUM)
 
@@ -337,7 +342,7 @@ namespace Vista.Data
                 .HasValue<Imagen_Personal>(TipoImagen.ImagenPersonal)
                 .HasValue<Imagen_VehiculoSalida>(TipoImagen.ImagenVehiculoSalida)
                 .HasValue<CertificadoMedico>(TipoImagen.ImagenCertificadoMedico);
-                //.HasValue<Comprobante>(TipoImagen.ImagenComprobanteBancario)
+            //.HasValue<Comprobante>(TipoImagen.ImagenComprobanteBancario)
 
             modelBuilder.Entity<Salida>()
                 .HasDiscriminator(s => s.TipoEmergencia)

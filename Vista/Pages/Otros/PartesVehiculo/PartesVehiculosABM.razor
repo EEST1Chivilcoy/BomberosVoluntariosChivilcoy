@@ -467,10 +467,11 @@
     }
 
     // Close Modals
-    public void CloseModals()
+    public async Task CloseModals()
     {
         _modalAñadirVisible = false;
         _modalEditarVisible = false;
+        await CargarPartesVehiculoAsync();
     }
 
     protected override async Task OnInitializedAsync()
