@@ -406,7 +406,7 @@
                         <ActionColumn Title="⚙️ Acciones" Align=ColumnAlign.Center Width="180px">
                             <Space>
                                 <SpaceItem>
-                                    <Button Type="@ButtonType.Primary" Ghost>
+                                    <Button Type="@ButtonType.Primary" Ghost OnClick="() => ShowEditar(partes.Id)">
                                         <Icon Type="edit" />
                                     </Button>
                                 </SpaceItem>
@@ -441,6 +441,7 @@
        DestroyOnClose
        WrapClassName="modal-crear-fuerza">
     <div class="modal-crear-fuerza-content">
+        <EditarParteVehiculo OnCancel="CloseModals" ParteVehiculoId="ParteSel" />
     </div>
 </Modal>
 
@@ -457,6 +458,9 @@
     // Modals
     private bool _modalAñadirVisible = false;
     private bool _modalEditarVisible = false;
+
+    // Selected Parte Vehiculo Id para Editar
+    private int ParteSel;
 
     // ViewModel
     public class ParteVehiculoViewModel
@@ -502,5 +506,11 @@
         {
             _isLoading = false;
         }
+    }
+
+    private void ShowEditar(int id)
+    {
+        ParteSel = id;
+        _modalEditarVisible = true;
     }
 }

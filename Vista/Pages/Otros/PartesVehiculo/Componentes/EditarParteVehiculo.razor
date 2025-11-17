@@ -23,7 +23,7 @@
     </Row>
     <Row Class="modal-crear-fuerza-row" Gutter="16">
         <AntDesign.Col Span="24">
-            <FormItem Label="Categoría"
+            <FormItem Label="Tipo de Parte"
                       Class="modal-crear-fuerza-form-item">
                 <EnumSelect TEnum="CategoriaParteVehiculo ?" @bind-Value="@agregarParteVehiculoViewModel.Categoria" AllowClear Size="InputSize.Large" />
             </FormItem>
@@ -38,20 +38,21 @@
                 Cancelar
             </Button>
             <Button Type="ButtonType.Primary" HtmlType="submit" Disabled="!_form.IsModified">
-                Agregar Parte del Vehículo
+                Editar Parte del Vehículo
             </Button>
         </FormItem>
     </div>
 </Form>
 
 @code {
+    [Parameter] public required int ParteVehiculoId { get; set; }
     [Parameter] public required EventCallback OnCancel { get; set; }
 
-    private AgregarParteVehiculoViewModel agregarParteVehiculoViewModel = new();
-    private Form<AgregarParteVehiculoViewModel> _form = new();
-    private bool _isLoading = false;
+    private EditarParteVehiculoViewModel agregarParteVehiculoViewModel = new();
+    private Form<EditarParteVehiculoViewModel> _form = new();
+    private bool _isLoading = true;
 
-    public class AgregarParteVehiculoViewModel
+    public class EditarParteVehiculoViewModel
     {
         [Required(ErrorMessage = "El nombre de la parte es obligatorio.")]
         [StringLength(100, ErrorMessage = "El nombre no puede exceder los 100 caracteres.")]
@@ -69,6 +70,11 @@
         }
     }
 
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarParteVehiculoAsync();
+    }
+
     private async Task OnFinish(EditContext editContext)
     {
         _isLoading = true;
@@ -78,18 +84,47 @@
             // Preparamos el modelo para enviar al servicio
             var nuevaParteVehiculo = new ParteVehiculo
             {
+                Id = ParteVehiculoId,
                 Nombre = agregarParteVehiculoViewModel.Nombre!,
                 Tipo = agregarParteVehiculoViewModel.Categoria!.Value
             };
 
-            // Llamamos al servicio para agregar la nueva parte del vehículo
-            await ParteVehiculoService.AgregarParteVehiculoAsync(nuevaParteVehiculo);
-            message.Success("Parte del vehículo agregada exitosamente.");
+            // Llamamos al servicio para editar la parte del vehículo
+            message.Success("Parte del vehículo editada exitosamente.");
             await CancelarAsync();
         }
         catch (Exception ex)
         {
             message.Error($"Error: {ex.Message}");
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+
+    private async Task CargarParteVehiculoAsync()
+    {
+        _isLoading = true;
+        try
+        {
+            var parteVehiculo = await ParteVehiculoService.ObtenerParteVehiculoPorIdAsync(ParteVehiculoId, asNoTrack: false);
+
+            if (parteVehiculo != null)
+            {
+                agregarParteVehiculoViewModel.Nombre = parteVehiculo.Nombre;
+                agregarParteVehiculoViewModel.Categoria = parteVehiculo.Tipo;
+            }
+            else
+            {
+                message.Error("No se encontró la parte del vehículo.");
+                await CancelarAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            message.Error($"Error al cargar la parte del vehículo: {ex.Message}");
+            await CancelarAsync();
         }
         finally
         {

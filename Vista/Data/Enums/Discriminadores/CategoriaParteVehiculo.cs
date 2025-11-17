@@ -3,9 +3,9 @@
 namespace Vista.Data.Enums.Discriminadores
 {
     /// <summary>
-    /// Representa los tipos de partes de vehículos.
+    /// Categoría de parte de vehículo.
     /// </summary>
-    public enum TipoParteVehiculo
+    public enum CategoriaParteVehiculo
     {
         /// <summary>
         /// Parte correspondiente a una embarcación.

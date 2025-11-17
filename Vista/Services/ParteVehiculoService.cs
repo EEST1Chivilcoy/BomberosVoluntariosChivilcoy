@@ -9,6 +9,7 @@ namespace Vista.Services
     {
         Task AgregarParteVehiculoAsync(ParteVehiculo parteVehiculo);
         Task<List<ParteVehiculo>> ObtenerTodasLasPartesVehiculoAsync();
+        Task<ParteVehiculo?> ObtenerParteVehiculoPorIdAsync(int id, bool asNoTrack = true);
     }
     public class ParteVehiculoService : IParteVehiculoService
     {
@@ -89,6 +90,18 @@ namespace Vista.Services
                 .OrderBy(pv => pv.Nombre) // Ordena por nombre
                 .AsNoTracking() // Evita el seguimiento de EF Core
                 .ToListAsync();
+        }
+
+        public async Task<ParteVehiculo?> ObtenerParteVehiculoPorIdAsync(int id, bool asNoTrack = true)
+        {
+            IQueryable<ParteVehiculo> query = _context.PartesVehiculo;
+
+            if (asNoTrack)
+            {
+                query = query.AsNoTracking(); // Evita el seguimiento de EF Core
+            }
+
+            return await query.FirstOrDefaultAsync(pv => pv.Id == id);
         }
     }
 }

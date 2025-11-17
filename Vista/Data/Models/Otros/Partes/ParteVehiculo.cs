@@ -18,7 +18,7 @@ namespace Vista.Data.Models.Otros.Partes
         /// Representa el tipo de parte de vehículo. (Embarcación o Movil)
         /// </summary>
         [Required]
-        public TipoParteVehiculo Tipo { get; set; }
+        public CategoriaParteVehiculo Tipo { get; set; }
 
         /// <summary>
         /// Nombre de la parte del vehículo.

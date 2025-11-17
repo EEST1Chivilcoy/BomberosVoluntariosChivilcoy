@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Vista.Data.Mappers;
 using Vista.DTOs.Nominatim;
 using Vista.DTOs.Nominatim.Raw;
-using Vista.Data.Mappers;
 
 namespace Vista.Services
 {
