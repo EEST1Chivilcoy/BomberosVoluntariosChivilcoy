@@ -70,7 +70,6 @@
 		</EmbeddedResource>
 	</ItemGroup>
 	<ItemGroup>
-		<Folder Include="Data\Models\Otros\Firmas\" />
 		<Folder Include="Data\Models\Vehiculos\Flota\Componentes\" />
 		<Folder Include="Pages\Firmas\Departamentos\" />
 	</ItemGroup>
