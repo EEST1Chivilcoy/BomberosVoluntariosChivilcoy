@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Vista.Data.Mappers;
 using Vista.DTOs.Nominatim;
 using Vista.DTOs.Nominatim.Raw;
-using Vista.Data.Mappers;
 
 namespace Vista.Services
 {
@@ -25,13 +24,19 @@ namespace Vista.Services
         Task<bool> CheckApiConnectionAsync();
 
         /// <summary>
-        /// Obtiene sugerencias de direcciones a partir del nombre de una calle.
+        /// Obtiene sugerencias de direcciones a partir de una entrada libre, que puede ser un nombre de calle, una dirección parcial o coordenadas geográficas.
         /// </summary>
-        /// <param name="calle">Nombre o parte del nombre de la calle a buscar.</param>
+        /// <param name="input">
+        /// Texto de búsqueda libre. Puede ser:
+        /// <list type="bullet">
+        /// <item><description>Una dirección escrita (ej. "Av. Ceballos 100, Chivilcoy")</description></item>
+        /// <item><description>Coordenadas geográficas (ej. "-34.865753, -60.048978")</description></item>
+        /// </list>
+        /// </param>
         /// <returns>
-        /// Una lista de objetos <see cref="Direccion"/> con las coincidencias encontradas. Si no hay conexión o falla la búsqueda, se devuelve una lista vacía.
+        /// Una lista de objetos <see cref="Direccion"/> con las coincidencias encontradas. Si no hay conexión o ocurre un error durante la búsqueda, se devuelve una lista vacía.
         /// </returns>
-        Task<List<Direccion>> GetStreetSuggestionsAsync(string calle);
+        Task<List<Direccion>> GetSuggestionsAsync(string input);
     }
 
     public class NominatimService : INominatimService
@@ -71,33 +76,29 @@ namespace Vista.Services
             }
         }
 
-        public async Task<List<Direccion>> GetStreetSuggestionsAsync(string calle)
+        public async Task<List<Direccion>> GetSuggestionsAsync(string input)
         {
-            if (string.IsNullOrWhiteSpace(calle))
+            if (string.IsNullOrWhiteSpace(input))
                 return new List<Direccion>();
 
-            var isConnected = await CheckApiConnectionAsync();
-
-            if (!isConnected)
-            {
-                await LogErrorToConsoleAsync("API connection failed. Street suggestions will not be fetched.");
-                return new List<Direccion>();
-            }
-
-            var calleEscaped = Uri.EscapeDataString(calle.Trim());
-            var url = $"https://nominatim.openstreetmap.org/search?street={calleEscaped}&city=Chivilcoy&state=Buenos%20Aires&country=Argentina&format=json&addressdetails=1";
+            var query = Uri.EscapeDataString(input.Trim());
+            var url = $"https://nominatim.openstreetmap.org/search?format=json&q={query}&addressdetails=1&limit=10&countrycodes=ar";
 
             try
             {
                 var rawResults = await _httpClient.GetFromJsonAsync<List<NominatimRaw>>(url);
-
                 return rawResults is null
                     ? new List<Direccion>()
                     : NominatimMapper.Map(rawResults).Direcciones;
             }
+            catch (HttpRequestException httpEx)
+            {
+                await LogErrorToConsoleAsync($"❌ Error de conexión al buscar direcciones: {httpEx.Message}");
+                return new List<Direccion>();
+            }
             catch (Exception ex)
             {
-                await LogErrorToConsoleAsync($"Error fetching street suggestions: {ex.Message}");
+                await LogErrorToConsoleAsync($"❌ Error al buscar direcciones: {ex.Message}");
                 return new List<Direccion>();
             }
         }

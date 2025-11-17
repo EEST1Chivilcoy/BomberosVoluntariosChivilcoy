@@ -4,8 +4,9 @@ namespace Vista.Data.ViewModels.Rescates
 {
     public class RescateViewModels: SalidasViewModels
     {
-        //Localización, Datos del solicitante, personas damnificadas y datos del seguro
-        [Required, StringLength(255)]
-        public string Otro { get; set; }
+        /// <summary>
+        /// Indica si el rescate se realizó en otro lugar no especificado.
+        /// </summary>
+        public bool OtroLugar { get; set; } = false;
     }
 }

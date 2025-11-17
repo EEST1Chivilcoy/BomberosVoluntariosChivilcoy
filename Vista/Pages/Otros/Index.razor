@@ -3,36 +3,61 @@
 @inject NavigationManager navigationManager
 @page "/fire-force/"
 
-
 <style>
-    /* Dashboard Container */
-    .dashboard-container {
-        padding: 24px;
-        background-color: #f0f2f5;
-        min-height: 100vh;
+    /* ========================================
+                   VARIABLES Y CONFIGURACIÓN BASE
+                   ======================================== */
+    :root {
+        --primary-color: #1890ff;
+        --text-primary: #262626;
+        --text-secondary: #595959;
+        --bg-light: #fafafa;
+        --bg-white: #ffffff;
+        --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+        --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+        --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.16);
+        --radius-sm: 8px;
+        --radius-md: 12px;
+        --radius-lg: 16px;
+        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    /* Banner Section */
+    /* ========================================
+                   CONTENEDOR PRINCIPAL
+                   Dashboard container con fondo limpio
+                   ======================================== */
+    .dashboard-container {
+        padding: 24px;
+        background-color: var(--bg-light);
+        min-height: 100vh;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    /* ========================================
+                   SECCIÓN DE BANNER / HERO
+                   Banner principal con overlay accesible
+                   ======================================== */
     .banner-section {
-        margin-bottom: 24px;
+        margin-bottom: 32px;
     }
 
     .banner-card {
         position: relative;
         overflow: hidden;
-        border-radius: 16px !important;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
-        height: 300px;
+        border-radius: var(--radius-lg) !important;
+        box-shadow: var(--shadow-lg) !important;
+        height: 280px;
+        border: none !important;
     }
 
     .banner-image {
-        position: absolute; /* Posiciona la imagen para que ocupe todo el espacio */
+        position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
         object-fit: cover;
-        z-index: 1; /* La imagen permanece detrás del overlay */
+        z-index: 1;
     }
 
     .banner-overlay {
@@ -41,437 +66,790 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7));
+        background: linear-gradient(135deg, rgba(249, 168, 37, 0.85) 0%, rgba(255, 193, 7, 0.75) 50%, rgba(0, 0, 0, 0.70) 100%);
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 24px;
-        z-index: 2; /* El overlay se coloca encima de la imagen */
+        padding: 32px;
+        z-index: 2;
     }
 
-        .banner-overlay h1 {
-            color: white;
-            font-size: 2.5rem;
-            text-align: center;
-            font-weight: 700;
-            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
-            letter-spacing: -1px;
-        }
+    .banner-content {
+        text-align: center;
+        max-width: 900px;
+    }
+
+    .banner-title {
+        color: #ffffff !important;
+        font-size: 2.75rem !important;
+        font-weight: 700 !important;
+        margin-bottom: 12px !important;
+        text-shadow: 2px 2px 12px rgba(0, 0, 0, 0.4);
+        letter-spacing: -0.5px;
+        line-height: 1.2;
+    }
 
     .banner-subtitle {
-        color: white;
-        font-size: 2.0rem;
-        text-align: center;
-        font-weight: 700;
-        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
-        letter-spacing: -1px;
+        color: #ffffff !important;
+        font-size: 1.5rem !important;
+        font-weight: 500 !important;
+        margin-bottom: 0 !important;
+        text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.3);
+        opacity: 0.95;
     }
 
-    /* Dashboard Grid */
+    /* ========================================
+                   TÍTULO DE SECCIÓN
+                   Mejora la organización visual
+                   ======================================== */
+    .section-title {
+        font-size: 1.75rem !important;
+        font-weight: 600 !important;
+        color: var(--text-primary) !important;
+        margin-bottom: 24px !important;
+        padding-bottom: 12px;
+        border-bottom: 3px solid var(--primary-color);
+        display: inline-block;
+    }
+
+    /* ========================================
+                   GRID DE DASHBOARD
+                   Layout responsivo para las tarjetas
+                   ======================================== */
     .dashboard-grid {
-        margin-top: 24px;
+        margin-top: 0;
     }
 
-    /* Cards */
+    /* ========================================
+                   TARJETAS DE NAVEGACIÓN
+                   Cards modernos con mejor accesibilidad
+                   ======================================== */
     .dashboard-card {
-        height: 230px;
-        border-radius: 16px !important;
-        transition: all 0.4s ease;
+        height: 100%;
+        min-height: 200px;
+        border-radius: var(--radius-md) !important;
+        transition: var(--transition) !important;
         cursor: pointer;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         text-align: center;
-        padding: -25px !important;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.08) !important;
+        padding: 32px 24px !important;
+        box-shadow: var(--shadow-sm) !important;
+        border: 2px solid transparent !important;
         position: relative;
         overflow: hidden;
+        background: var(--bg-white) !important;
     }
 
+        /* Efecto de hover mejorado */
+        .dashboard-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg) !important;
+            border-color: var(--primary-color) !important;
+        }
+
+        /* Efecto de foco para accesibilidad con teclado */
+        .dashboard-card:focus-within {
+            outline: 3px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+
+        /* Banda de color superior para identificación visual */
         .dashboard-card::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
-            opacity: 0;
-            transition: opacity 0.3s ease;
+            height: 6px;
+            background: linear-gradient(90deg, var(--card-color, #1890ff), var(--card-color-dark, #096dd9));
+            transition: height 0.3s ease;
         }
 
-        .dashboard-card:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+        .dashboard-card:hover::before {
+            height: 8px;
         }
 
-            .dashboard-card:hover::before {
-                opacity: 1;
-            }
-
+    /* ========================================
+                   ICONOS DE TARJETAS
+                   Iconos grandes y claros
+                   ======================================== */
     .card-icon {
-        font-size: 36px;
+        font-size: 48px !important;
         margin-bottom: 16px;
-        opacity: 0.9;
+        color: var(--card-color, #1890ff);
         transition: transform 0.3s ease;
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
     }
 
     .dashboard-card:hover .card-icon {
-        transform: scale(1.1);
+        transform: scale(1.15);
     }
 
-    .dashboard-card h2 {
-        margin: 12px 0;
-        font-size: 1.5rem;
-        font-weight: 600;
-        letter-spacing: -0.5px;
-        color: white !important;
+    /* ========================================
+                   TÍTULOS Y DESCRIPCIONES DE TARJETAS
+                   Tipografía clara y legible
+                   ======================================== */
+    .card-title {
+        margin: 12px 0 8px 0 !important;
+        font-size: 1.35rem !important;
+        font-weight: 600 !important;
+        letter-spacing: -0.3px;
+        color: var(--text-primary) !important;
+        line-height: 1.3;
     }
 
-    .dashboard-card p {
-        margin: 0;
-        font-size: 0.9rem;
-        color: white !important;
+    .card-description {
+        margin: 0 !important;
+        font-size: 1rem !important;
+        color: var(--text-secondary) !important;
+        line-height: 1.5;
     }
 
-    /* Specific Cards Color Schemes */
-    .brigadas-card {
-        background: #2c3e50 !important; /* Azul profundo serio */
-        color: white !important;
+    /* ========================================
+                   TARJETAS CON MÚLTIPLES ACCIONES
+                   Para secciones con varios botones
+                   ======================================== */
+    .multi-action-card {
+        padding: 28px 24px !important;
     }
 
-    .legajo-card {
-        background: #1e3a8a !important; /* Azul oscuro serio */
-        color: white !important;
-    }
-
-    .licencias-card {
-        background: #14532d !important; /* Verde oscuro */
-        color: white !important;
-    }
-
-    .salidas-card {
-        background: #7f1d1d !important; /* Rojo oscuro serio */
-        color: white !important;
-    }
-
-    .personal-card {
-        background: #4b5563 !important; /* Gris oscuro */
-        color: white !important;
-    }
-
-    .cobradores-card {
-        background: #065f46 !important; /* Verde esmeralda oscuro */
-        color: white !important;
-    }
-
-    .unidades-card {
-        background: #92400e !important; /* Naranja marrón */
-        color: white !important;
-    }
-
-    .firmas-card {
-        background: #0f766e !important; /* Verde azulado oscuro */
-        color: white !important;
-    }
-
-    .reportes-card {
-        background: #1e293b !important; /* Azul grisáceo oscuro */
-        color: white !important;
-    }
-
-    .departamentos-card {
-        background: #3730a3 !important; /* Azul violeta oscuro */
-        color: white !important;
-    }
-
-    .etica-card {
-        background: #6b7280 !important; /* Gris oscuro */
-        color: white !important;
-    }
-
-    .fuerzas-intervinientes-card {
-        background: #5d4037 !important; /* Marrón oscuro serio */
-        color: white !important;
-    }
-
-    .department-buttons, .ethics-buttons, .report-buttons {
+    .action-buttons-container {
         display: flex;
+        flex-wrap: wrap;
         justify-content: center;
         align-items: center;
-        gap: 15px;
+        gap: 12px;
         width: 100%;
+        margin-top: 12px;
     }
 
-        .department-buttons .ant-btn,
-        .ethics-buttons .ant-btn,
-        .report-buttons .ant-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
-            background-color: rgba(255,255,255,0.2);
-            color: white;
-            border: none;
-            transition: all 0.3s ease;
+    .action-button {
+        display: flex !important;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-width: 90px;
+        height: auto;
+        padding: 16px 12px !important;
+        border-radius: var(--radius-sm) !important;
+        background-color: var(--bg-light) !important;
+        color: var(--card-color, #1890ff) !important;
+        border: 2px solid var(--card-color, #1890ff) !important;
+        transition: var(--transition) !important;
+        font-size: 0.9rem !important;
+        font-weight: 500 !important;
+    }
+
+        .action-button:hover {
+            background-color: var(--card-color, #1890ff) !important;
+            color: #ffffff !important;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md) !important;
         }
 
-            .department-buttons .ant-btn:hover,
-            .ethics-buttons .ant-btn:hover,
-            .report-buttons .ant-btn:hover {
-                background-color: rgba(255,255,255,0.3);
-                transform: scale(1.1);
-            }
+        .action-button:focus {
+            outline: 3px solid var(--card-color, #1890ff);
+            outline-offset: 2px;
+        }
 
-            .department-buttons .ant-btn i,
-            .ethics-buttons .ant-btn i,
-            .report-buttons .ant-btn i {
-                font-size: 20px;
-            }
+        .action-button i {
+            font-size: 24px;
+            margin-bottom: 6px;
+        }
 
-    /* Responsive Adjustments */
-    @@media (max-width: 768px) {
-        .banner-overlay h1 {
-            font-size: 1.8rem;
+    /* ========================================
+                   ESQUEMAS DE COLOR POR CATEGORÍA
+                   Colores accesibles con buen contraste
+                   ======================================== */
+
+    /* Legajo - Azul profesional */
+    .legajo-card {
+        --card-color: #1890ff;
+        --card-color-dark: #096dd9;
+    }
+
+    /* Salidas - Rojo urgencia */
+    .salidas-card {
+        --card-color: #f5222d;
+        --card-color-dark: #cf1322;
+    }
+
+    /* Personal/Bomberos - Verde institucional */
+    .personal-card {
+        --card-color: #52c41a;
+        --card-color-dark: #389e0d;
+    }
+
+    /* Comisión Directiva - Púrpura liderazgo */
+    .comision-card {
+        --card-color: #722ed1;
+        --card-color-dark: #531dab;
+    }
+
+    /* Licencias - Naranja administrativo */
+    .licencias-card {
+        --card-color: #fa8c16;
+        --card-color-dark: #d46b08;
+    }
+
+    /* Unidades - Azul oscuro vehículos */
+    .unidades-card {
+        --card-color: #1d39c4;
+        --card-color-dark: #10239e;
+    }
+
+    /* Firmas - Cyan documentos */
+    .firmas-card {
+        --card-color: #13c2c2;
+        --card-color-dark: #08979c;
+    }
+
+    /* Ética - Magenta valores */
+    .etica-card {
+        --card-color: #eb2f96;
+        --card-color-dark: #c41d7f;
+    }
+
+    /* Reportes - Gris profesional */
+    .reportes-card {
+        --card-color: #595959;
+        --card-color-dark: #434343;
+    }
+
+    /* Utilidades - Verde azulado herramientas */
+    .utilidades-card {
+        --card-color: #0050b3;
+        --card-color-dark: #003a8c;
+    }
+
+    /* Cobradores - Verde dinero */
+    .cobradores-card {
+        --card-color: #389e0d;
+        --card-color-dark: #237804;
+    }
+
+    /* Socios - Dorado membresía */
+    .socios-card {
+        --card-color: #fa8c16;
+        --card-color-dark: #d46b08;
+    }
+
+    /* ========================================
+                   ACCESIBILIDAD
+                   Skip link para navegación por teclado
+                   ======================================== */
+    .skip-link {
+        position: absolute;
+        top: -40px;
+        left: 0;
+        background: var(--primary-color);
+        color: white;
+        padding: 8px 16px;
+        text-decoration: none;
+        border-radius: 0 0 4px 0;
+        z-index: 100;
+    }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
+    /* ========================================
+                   ESTADOS DE CARGA Y FEEDBACK
+                   ======================================== */
+    .loading-state {
+        opacity: 0.6;
+        pointer-events: none;
+    }
+
+    /* ========================================
+                   RESPONSIVE DESIGN
+                   Adaptación para móviles y tablets
+                   ======================================== */
+    @@media (max-width: 992px) {
+        .dashboard-container {
+            padding: 16px;
+        }
+
+        .banner-card {
+            height: 240px;
+        }
+
+        .banner-title {
+            font-size: 2rem !important;
         }
 
         .banner-subtitle {
-            font-size: 1.2rem;
-            font: bolder;
+            font-size: 1.2rem !important;
         }
 
-        .dashboard-card {
+        .section-title {
+            font-size: 1.5rem !important;
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .banner-card {
             height: 200px;
         }
 
-        .card-icon {
-            font-size: 28px;
+        .banner-title {
+            font-size: 1.6rem !important;
         }
 
-        .dashboard-card h2 {
-            font-size: 1.2rem;
+        .banner-subtitle {
+            font-size: 1rem !important;
+        }
+
+        .dashboard-card {
+            min-height: 180px;
+            padding: 24px 16px !important;
+        }
+
+        .card-icon {
+            font-size: 40px !important;
+        }
+
+        .card-title {
+            font-size: 1.2rem !important;
+        }
+
+        .card-description {
+            font-size: 0.9rem !important;
+        }
+
+        .action-button {
+            min-width: 80px;
+            padding: 12px 8px !important;
+            font-size: 0.85rem !important;
+        }
+
+            .action-button i {
+                font-size: 20px;
+            }
+
+        .action-buttons-container {
+            gap: 8px;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .dashboard-container {
+            padding: 12px;
+        }
+
+        .banner-card {
+            height: 180px;
+            border-radius: var(--radius-sm) !important;
+        }
+
+        .banner-title {
+            font-size: 1.4rem !important;
+        }
+
+        .banner-subtitle {
+            font-size: 0.9rem !important;
+        }
+
+        .section-title {
+            font-size: 1.3rem !important;
+        }
+
+        .dashboard-card {
+            min-height: 160px;
+        }
+    }
+
+    /* ========================================
+                   MEJORAS DE IMPRESIÓN
+                   ======================================== */
+    @@media print {
+        .dashboard-container {
+            background: white;
+        }
+
+        .dashboard-card:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        .banner-section {
+            page-break-after: avoid;
         }
     }
 </style>
 
-<div class="dashboard-container">
-    @*Banner Section*@
-    <Row Class="banner-section">
-        <AntDesign.Col Span="24">
-            <Card Bordered="false" Class="banner-card">
-                <img src="Imagenes/banner_index.png" class="banner-image" alt="Banner Bomberos" />
-                <div class="banner-overlay">
-                    <div>
-                        <h1>SISTEMA DE GESTIÓN DE BOMBEROS</h1>
-                        <div class="banner-subtitle">Bomberos Voluntarios de Chivilcoy</div>
+<!-- Skip link para accesibilidad con teclado -->
+<a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+
+<div class="dashboard-container" role="main" id="main-content">
+
+    <!-- ========================================
+         SECCIÓN BANNER / HERO
+         Banner principal con información institucional
+         ======================================== -->
+    <section aria-labelledby="banner-title" class="banner-section">
+        <Row>
+            <AntDesign.Col Span="24">
+                <Card Bordered="false" Class="banner-card">
+                    <img src="Imagenes/banner_index.png" class="banner-image" alt="Banner de Bomberos Voluntarios de Chivilcoy" />
+                    <div class="banner-overlay">
+                        <div class="banner-content">
+                            <Title id="banner-title" Level="1" Class="banner-title">
+                                SISTEMA DE GESTIÓN DE BOMBEROS
+                            </Title>
+                            <Title Level="2" Class="banner-subtitle">
+                                Bomberos Voluntarios de Chivilcoy
+                            </Title>
+                        </div>
                     </div>
+                </Card>
+            </AntDesign.Col>
+        </Row>
+    </section>
+
+    <!-- ========================================
+         SECCIÓN PRINCIPAL DE NAVEGACIÓN
+         Grid responsivo con todas las funcionalidades
+         ======================================== -->
+    <section aria-label="Menú principal de navegación">
+        <Row Gutter="24" Class="dashboard-grid">
+
+            <!-- LEGAJO: Información personal del usuario -->
+            <AntDesign.Col Xs="24" Sm="12" Lg="8">
+                <div @onclick="NavigateToLegajo"
+                     @onkeypress="@((e) => HandleKeyPress(e, NavigateToLegajo))"
+                     role="button"
+                     tabindex="0"
+                     aria-label="Ir a Legajo Personal"
+                     style="cursor: pointer; height: 100%;">
+                    <Card Class="dashboard-card legajo-card" Hoverable>
+                        <i class="fa-solid fa-user card-icon" aria-hidden="true"></i>
+                        <Title Level="3" Class="card-title">LEGAJO</Title>
+                        <Paragraph Class="card-description">
+                            Consulte su información personal y trayectoria
+                        </Paragraph>
+                    </Card>
                 </div>
-            </Card>
-        </AntDesign.Col>
-    </Row>
+            </AntDesign.Col>
 
-    @*Main Grid Section*@
-    <Row Gutter="24" Class="dashboard-grid">
-
-        @*Legajo Section*@
-        <AntDesign.Col Xs="24" Sm="12" Lg="8">
-            <div @onclick="@(() => { navigationManager.NavigateTo("/fire-force/Bomberos/Legajo"); })" style="cursor: pointer;">
-                <Card Class="dashboard-card legajo-card">
-                    <i class="fa-solid fa-user card-icon"></i>
-                    <h2>LEGAJO</h2>
-                    <p>Visite su legajo personal</p>
-                </Card>
-            </div>
-        </AntDesign.Col>
-
-        @*Salidas Section*@
-        <AntDesign.Col Xs="24" Sm="12" Lg="8">
-            <div @onclick="@(() => { navigationManager.NavigateTo("/fire-force/Salidas"); })" style="cursor: pointer;">
-                <Card Class="dashboard-card salidas-card">
-                    <Icon class="card-icon" Type="alert" Theme="IconThemeType.Fill" />
-                    <h2>SALIDAS</h2>
-                    <p>Gestión de salidas</p>
-                </Card>
-            </div>
-        </AntDesign.Col>
-
-        @* Personal/Bomberos Section *@
-        <AntDesign.Col Xs="24" Sm="12" Lg="8">
-            <div @onclick="@(() => { navigationManager.NavigateTo("/fire-force/personal/bomberos"); })" style="cursor: pointer;">
-                <Card Class="dashboard-card personal-card">
-                    <i class="fa-solid fa-people-group card-icon"></i>
-                    <h2>BOMBEROS</h2>
-                    <p>Ver el personal de bomberos</p>
-                </Card>
-            </div>
-        </AntDesign.Col>
-
-        @* Comisión Directiva Section *@
-        <AntDesign.Col Xs="24" Sm="12" Lg="8">
-            <div @onclick="@(() => { navigationManager.NavigateTo("/fire-force/personal/comisiondirectiva"); })" style="cursor: pointer;">
-                <Card Class="dashboard-card personal-card">
-                    <i class="fa-solid fa-user-tie card-icon"></i>
-                    <h2>COMISIÓN DIRECTIVA</h2>
-                    <p>Ver la comisión directiva</p>
-                </Card>
-            </div>
-        </AntDesign.Col>
-
-        @*Licencias Section*@
-        <AntDesign.Col Xs="24" Sm="12" Lg="8">
-            <div @onclick="@(() => { navigationManager.NavigateTo("/fire-force/Licencias"); })" style="cursor: pointer;">
-                <Card Class="dashboard-card licencias-card">
-                    <i class="fa-solid fa-file-signature card-icon"></i>
-                    <h2>LICENCIAS</h2>
-                    <p>Gestión de licencias</p>
-                </Card>
-            </div>
-        </AntDesign.Col>
-
-        @* Unidades Section *@
-        <AntDesign.Col Xs="24" Sm="12" Lg="8">
-            <div @onclick="@(() => { navigationManager.NavigateTo("/fire-force/unidades"); })" style="cursor: pointer;">
-                <Card Class="dashboard-card unidades-card">
-                    <i class="fa-solid fa-truck card-icon"></i>
-                    <h2>UNIDADES</h2>
-                    <p>Ver las unidades</p>
-                </Card>
-            </div>
-        </AntDesign.Col>
-
-        @* Firmas Section *@
-        <AntDesign.Col Xs="24" Sm="12" Lg="8">
-            <div @onclick="@(() => { navigationManager.NavigateTo("/fire-force/incidentes-vehiculos"); })" style="cursor: pointer;">
-                <Card Class="dashboard-card firmas-card">
-                    <i class="fa-solid fa-scroll card-icon"></i>
-                    <h2>FIRMAS</h2>
-                    <p>Ver firmas</p>
-                </Card>
-            </div>
-        </AntDesign.Col>
-
-        @* Ética Section *@
-        <AntDesign.Col Xs="24" Sm="12" Lg="8">
-            <Card Class="dashboard-card etica-card">
-                <h2>ÉTICA</h2>
-                <div class="ethics-buttons">
-                    <span title="Sancionados">
-                        <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/fire-force/bomberos/sancionados"); })">
-                            <i class="fa-solid fa-user-xmark"></i>
-                        </Button>
-                    </span>
-                    <span title="Ascensos">
-                        <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/fire-force/bomberos/ascenso"); })">
-                            <i class="fa-solid fa-user-plus"></i>
-                        </Button>
-                    </span>
+            <!-- SALIDAS: Gestión de emergencias y servicios -->
+            <AntDesign.Col Xs="24" Sm="12" Lg="8">
+                <div @onclick="NavigateToSalidas"
+                     @onkeypress="@((e) => HandleKeyPress(e, NavigateToSalidas))"
+                     role="button"
+                     tabindex="0"
+                     aria-label="Ir a Salidas y Emergencias"
+                     style="cursor: pointer; height: 100%;">
+                    <Card Class="dashboard-card salidas-card" Hoverable>
+                        <i class="fa fa-house-fire card-icon" aria-hidden="true"></i>
+                        <Title Level="3" Class="card-title">SALIDAS</Title>
+                        <Paragraph Class="card-description">
+                            Registre y consulte emergencias atendidas
+                        </Paragraph>
+                    </Card>
                 </div>
-            </Card>
-        </AntDesign.Col>
+            </AntDesign.Col>
 
-        @* Reportes Section *@
-        <AntDesign.Col Xs="24" Sm="12" Lg="8">
-            <Card Class="dashboard-card reportes-card">
-                <h2>REPORTES</h2>
-                <div class="report-buttons">
-                    <span title="Historial Bomberos">
-                        <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/fire-force/Reportes/HistorialBomberos"); })">
-                            <i class="fa-solid fa-user-clock"></i>
-                        </Button>
-                    </span>
-                    <span title="Choferes">
-                        <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/fire-force/Reportes/Reportes_Choferes"); })">
-                            <i class="fa-solid fa-id-card"></i>
-                        </Button>
-                    </span>
-                    <span title="Historial Móviles">
-                        <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/fire-force/Reportes/HistorialMoviles"); })">
-                            <i class="fa-solid fa-truck"></i>
-                        </Button>
-                    </span>
+            <!-- BOMBEROS: Listado del personal activo -->
+            <AntDesign.Col Xs="24" Sm="12" Lg="8">
+                <div @onclick="NavigateToBomberos"
+                     @onkeypress="@((e) => HandleKeyPress(e, NavigateToBomberos))"
+                     role="button"
+                     tabindex="0"
+                     aria-label="Ver Personal de Bomberos"
+                     style="cursor: pointer; height: 100%;">
+                    <Card Class="dashboard-card personal-card" Hoverable>
+                        <i class="fa-solid fa-people-group card-icon" aria-hidden="true"></i>
+                        <Title Level="3" Class="card-title">BOMBEROS</Title>
+                        <Paragraph Class="card-description">
+                            Directorio completo del cuerpo de bomberos
+                        </Paragraph>
+                    </Card>
                 </div>
-            </Card>
-        </AntDesign.Col>
+            </AntDesign.Col>
 
-        @* Dependencias Section *@
-        <AntDesign.Col Xs="24" Sm="12" Lg="8">
-            <Card Class="dashboard-card departamentos-card">
-                <H2>UTILIDADES</H2>
-                <div class="department-buttons">
-                    <span title="Comunicación">
-                        <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/fire-force/Dependencias/Comunicacion"); })">
-                            <i class="fa-solid fa-walkie-talkie"></i>
-                        </Button>
-                    </span>
-                    <span title="Depósito">
-                        <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/fire-force/Dependencias/Deposito"); })">
-                            <i class="fa-solid fa-warehouse"></i>
-                        </Button>
-                    </span>
-                    <span title="Dependencias">
-                        <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/fire-force/Dependencias"); })">
-                            <i class="fa-solid fa-building"></i>
-                        </Button>
-                    </span>
-                    <span title="Fuerzas Intervinientes">
-                        <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/fire-force/FuerzasIntervinientes"); })">
-                            <i class="fa-solid fa-shield-halved"></i>
-                        </Button>
-                    </span>
-                    <span title="Brigadas">
-                        <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/fire-force/Brigadas"); })">
-                            <i class="fa-solid fa-users-gear"></i>
-                        </Button>
-                    </span>
-                    <span title="Equipos Autonomos">
-                        <Button Type="ButtonType.Link" @onclick="@(() => { navigationManager.NavigateTo("/fire-force/Dependencias/EquiposAutonomos"); })">
-                            <i class="fa-solid fa-person-booth"></i>
-                        </Button>
-                    </span>
+            <!-- COMISIÓN DIRECTIVA: Autoridades institucionales -->
+            <AntDesign.Col Xs="24" Sm="12" Lg="8">
+                <div @onclick="NavigateToComision"
+                     @onkeypress="@((e) => HandleKeyPress(e, NavigateToComision))"
+                     role="button"
+                     tabindex="0"
+                     aria-label="Ver Comisión Directiva"
+                     style="cursor: pointer; height: 100%;">
+                    <Card Class="dashboard-card comision-card" Hoverable>
+                        <i class="fa-solid fa-user-tie card-icon" aria-hidden="true"></i>
+                        <Title Level="3" Class="card-title">COMISIÓN DIRECTIVA</Title>
+                        <Paragraph Class="card-description">
+                            Autoridades y estructura organizativa
+                        </Paragraph>
+                    </Card>
                 </div>
-            </Card>
-        </AntDesign.Col>
+            </AntDesign.Col>
 
-        @* Cobradores Section *@
-        <AntDesign.Col Xs="24" Sm="12" Lg="8">
-            <div @onclick="@(() => { navigationManager.NavigateTo("/fire-force/personal/cobradores"); })" style="cursor: pointer;">
-                <Card Class="dashboard-card cobradores-card">
-                    <i class="fa-solid fa-money-bill-wave card-icon"></i>
-                    <h2>COBRADORES</h2>
-                    <p>Ver el personal de cobradores</p>
+            <!-- LICENCIAS: Gestión de ausencias -->
+            <AntDesign.Col Xs="24" Sm="12" Lg="8">
+                <div @onclick="NavigateToLicencias"
+                     @onkeypress="@((e) => HandleKeyPress(e, NavigateToLicencias))"
+                     role="button"
+                     tabindex="0"
+                     aria-label="Ir a Licencias"
+                     style="cursor: pointer; height: 100%;">
+                    <Card Class="dashboard-card licencias-card" Hoverable>
+                        <i class="fa-solid fa-file-signature card-icon" aria-hidden="true"></i>
+                        <Title Level="3" Class="card-title">LICENCIAS</Title>
+                        <Paragraph Class="card-description">
+                            Solicite y gestione licencias del personal
+                        </Paragraph>
+                    </Card>
+                </div>
+            </AntDesign.Col>
+
+            <!-- UNIDADES: Vehículos y equipamiento -->
+            <AntDesign.Col Xs="24" Sm="12" Lg="8">
+                <div @onclick="NavigateToUnidades"
+                     @onkeypress="@((e) => HandleKeyPress(e, NavigateToUnidades))"
+                     role="button"
+                     tabindex="0"
+                     aria-label="Ver Unidades y Vehículos"
+                     style="cursor: pointer; height: 100%;">
+                    <Card Class="dashboard-card unidades-card" Hoverable>
+                        <i class="fa-solid fa-truck card-icon" aria-hidden="true"></i>
+                        <Title Level="3" Class="card-title">UNIDADES</Title>
+                        <Paragraph Class="card-description">
+                            Flota de vehículos y estado operativo
+                        </Paragraph>
+                    </Card>
+                </div>
+            </AntDesign.Col>
+
+            <!-- FIRMAS: Documentación oficial -->
+            <AntDesign.Col Xs="24" Sm="12" Lg="8">
+                <div @onclick="NavigateToFirmas"
+                     @onkeypress="@((e) => HandleKeyPress(e, NavigateToFirmas))"
+                     role="button"
+                     tabindex="0"
+                     aria-label="Ver Firmas y Documentos"
+                     style="cursor: pointer; height: 100%;">
+                    <Card Class="dashboard-card firmas-card" Hoverable>
+                        <i class="fa-solid fa-scroll card-icon" aria-hidden="true"></i>
+                        <Title Level="3" Class="card-title">FIRMAS</Title>
+                        <Paragraph Class="card-description">
+                            Incidentes y documentación vehicular
+                        </Paragraph>
+                    </Card>
+                </div>
+            </AntDesign.Col>
+
+            <!-- ÉTICA: Disciplina y reconocimientos -->
+            <AntDesign.Col Xs="24" Sm="12" Lg="8">
+                <Card Class="dashboard-card etica-card multi-action-card" Hoverable>
+                    <i class="fa-solid fa-balance-scale card-icon" aria-hidden="true"></i>
+                    <Title Level="3" Class="card-title">ÉTICA</Title>
+                    <Paragraph Class="card-description">
+                        Tribunal de ética y disciplina
+                    </Paragraph>
+                    <div class="action-buttons-container" role="group" aria-label="Opciones de Ética">
+                        <Button Type="ButtonType.Default"
+                                Class="action-button"
+                                OnClick="NavigateToSancionados"
+                                AriaLabel="Ver Sancionados">
+                            <i class="fa-solid fa-user-xmark" aria-hidden="true"></i>
+                            <span>Sancionados</span>
+                        </Button>
+                        <Button Type="ButtonType.Default"
+                                Class="action-button"
+                                OnClick="NavigateToAscensos"
+                                AriaLabel="Ver Ascensos">
+                            <i class="fa-solid fa-user-plus" aria-hidden="true"></i>
+                            <span>Ascensos</span>
+                        </Button>
+                    </div>
                 </Card>
-            </div>
-        </AntDesign.Col>
-    </Row>
+            </AntDesign.Col>
+
+            <!-- REPORTES: Informes y estadísticas -->
+            <AntDesign.Col Xs="24" Sm="12" Lg="8">
+                <Card Class="dashboard-card reportes-card multi-action-card" Hoverable>
+                    <i class="fa-solid fa-chart-line card-icon" aria-hidden="true"></i>
+                    <Title Level="3" Class="card-title">REPORTES</Title>
+                    <Paragraph Class="card-description">
+                        Informes y estadísticas del cuartel
+                    </Paragraph>
+                    <div class="action-buttons-container" role="group" aria-label="Tipos de Reportes">
+                        <Button Type="ButtonType.Default"
+                                Class="action-button"
+                                OnClick="NavigateToHistorialBomberos"
+                                AriaLabel="Ver Historial de Bomberos">
+                            <i class="fa-solid fa-user-clock" aria-hidden="true"></i>
+                            <span>Bomberos</span>
+                        </Button>
+                        <Button Type="ButtonType.Default"
+                                Class="action-button"
+                                OnClick="NavigateToChoferes"
+                                AriaLabel="Ver Reporte de Choferes">
+                            <i class="fa-solid fa-id-card" aria-hidden="true"></i>
+                            <span>Choferes</span>
+                        </Button>
+                        <Button Type="ButtonType.Default"
+                                Class="action-button"
+                                OnClick="NavigateToHistorialMoviles"
+                                AriaLabel="Ver Historial de Móviles">
+                            <i class="fa-solid fa-truck" aria-hidden="true"></i>
+                            <span>Móviles</span>
+                        </Button>
+                    </div>
+                </Card>
+            </AntDesign.Col>
+
+            <!-- UTILIDADES: Herramientas y recursos -->
+            <AntDesign.Col Xs="24" Sm="12" Lg="8">
+                <Card Class="dashboard-card utilidades-card multi-action-card" Hoverable>
+                    <i class="fa-solid fa-toolbox card-icon" aria-hidden="true"></i>
+                    <Title Level="3" Class="card-title">UTILIDADES</Title>
+                    <Paragraph Class="card-description">
+                        Herramientas y recursos operativos
+                    </Paragraph>
+                    <div class="action-buttons-container" role="group" aria-label="Herramientas Disponibles">
+                        <Button Type="ButtonType.Default"
+                                Class="action-button"
+                                OnClick="NavigateToComunicacion"
+                                AriaLabel="Ir a Comunicación">
+                            <i class="fa-solid fa-walkie-talkie" aria-hidden="true"></i>
+                            <span>Comunicación</span>
+                        </Button>
+                        <Button Type="ButtonType.Default"
+                                Class="action-button"
+                                OnClick="NavigateToDeposito"
+                                AriaLabel="Ir a Depósito">
+                            <i class="fa-solid fa-warehouse" aria-hidden="true"></i>
+                            <span>Depósito</span>
+                        </Button>
+                        <Button Type="ButtonType.Default"
+                                Class="action-button"
+                                OnClick="NavigateToDependencias"
+                                AriaLabel="Ir a Dependencias">
+                            <i class="fa-solid fa-building" aria-hidden="true"></i>
+                            <span>Dependencias</span>
+                        </Button>
+                        <Button Type="ButtonType.Default"
+                                Class="action-button"
+                                OnClick="NavigateToFuerzas"
+                                AriaLabel="Ir a Fuerzas Intervinientes">
+                            <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+                            <span>Fuerzas</span>
+                        </Button>
+                        <Button Type="ButtonType.Default"
+                                Class="action-button"
+                                OnClick="NavigateToBrigadas"
+                                AriaLabel="Ir a Brigadas">
+                            <i class="fa-solid fa-users-gear" aria-hidden="true"></i>
+                            <span>Brigadas</span>
+                        </Button>
+                        <Button Type="ButtonType.Default"
+                                Class="action-button"
+                                OnClick="NavigateToEquipos"
+                                AriaLabel="Ir a Equipos Autónomos">
+                            <i class="fa-solid fa-lungs" aria-hidden="true"></i>
+                            <span>Equipos</span>
+                        </Button>
+                        <Button Type="ButtonType.Default"
+                                Class="action-button"
+                                OnClick="NavigateToPartesVehiculos"
+                                AriaLabel="Ir a Partes de Vehículos">
+                            <i class="fa-solid fa-car-side" aria-hidden="true"></i>
+                            <span>Partes</span>
+                        </Button>
+                    </div>
+                </Card>
+            </AntDesign.Col>
+
+            <!-- COBRADORES: Personal de recaudación -->
+            <AntDesign.Col Xs="24" Sm="12" Lg="8">
+                <div @onclick="NavigateToCobradores"
+                     @onkeypress="@((e) => HandleKeyPress(e, NavigateToCobradores))"
+                     role="button"
+                     tabindex="0"
+                     aria-label="Ver Personal de Cobradores"
+                     style="cursor: pointer; height: 100%;">
+                    <Card Class="dashboard-card cobradores-card" Hoverable>
+                        <i class="fa-solid fa-money-bill-wave card-icon" aria-hidden="true"></i>
+                        <Title Level="3" Class="card-title">COBRADORES</Title>
+                        <Paragraph Class="card-description">
+                            Personal de recaudación y finanzas
+                        </Paragraph>
+                    </Card>
+                </div>
+            </AntDesign.Col>
+
+            <!-- SOCIOS: Membresía y asociados -->
+            <AntDesign.Col Xs="24" Sm="12" Lg="8">
+                <div @onclick="NavigateToSocios"
+                     @onkeypress="@((e) => HandleKeyPress(e, NavigateToSocios))"
+                     role="button"
+                     tabindex="0"
+                     aria-label="Ir a Gestión de Socios"
+                     style="cursor: pointer; height: 100%;">
+                    <Card Class="dashboard-card socios-card" Hoverable>
+                        <i class="fa-solid fa-handshake card-icon" aria-hidden="true"></i>
+                        <Title Level="3" Class="card-title">SOCIOS</Title>
+                        <Paragraph Class="card-description">
+                            Administre la base de socios activos
+                        </Paragraph>
+                    </Card>
+                </div>
+            </AntDesign.Col>
+
+        </Row>
+    </section>
 </div>
 
 @code {
-    private bool isOpen;
-    private bool showIncendios;
-    private bool showServicios;
-    private bool showRescates;
+    // ========================================
+    // MÉTODOS DE NAVEGACIÓN
+    // Centraliza la lógica de navegación
+    // ========================================
 
-    private void ToggleDropdown() => isOpen = !isOpen;
+    private void NavigateToLegajo() => navigationManager.NavigateTo("/fire-force/Bomberos/Legajo");
+    private void NavigateToSalidas() => navigationManager.NavigateTo("/fire-force/Salidas");
+    private void NavigateToBomberos() => navigationManager.NavigateTo("/fire-force/personal/bomberos");
+    private void NavigateToComision() => navigationManager.NavigateTo("/fire-force/personal/comisiondirectiva");
+    private void NavigateToLicencias() => navigationManager.NavigateTo("/fire-force/Licencias");
+    private void NavigateToUnidades() => navigationManager.NavigateTo("/fire-force/unidades");
+    private void NavigateToFirmas() => navigationManager.NavigateTo("/fire-force/incidentes-vehiculos");
+    private void NavigateToCobradores() => navigationManager.NavigateTo("/fire-force/personal/cobradores");
+    private void NavigateToSocios() => navigationManager.NavigateTo("/fire-force/socios");
 
-    private void toggleMenu(string menu)
+    // Ética
+    private void NavigateToSancionados() => navigationManager.NavigateTo("/fire-force/bomberos/sancionados");
+    private void NavigateToAscensos() => navigationManager.NavigateTo("/fire-force/bomberos/ascenso");
+
+    // Reportes
+    private void NavigateToHistorialBomberos() => navigationManager.NavigateTo("/fire-force/Reportes/HistorialBomberos");
+    private void NavigateToChoferes() => navigationManager.NavigateTo("/fire-force/Reportes/Reportes_Choferes");
+    private void NavigateToHistorialMoviles() => navigationManager.NavigateTo("/fire-force/Reportes/HistorialMoviles");
+
+    // Utilidades
+    private void NavigateToComunicacion() => navigationManager.NavigateTo("/fire-force/Dependencias/Comunicacion");
+    private void NavigateToDeposito() => navigationManager.NavigateTo("/fire-force/Dependencias/Deposito");
+    private void NavigateToDependencias() => navigationManager.NavigateTo("/fire-force/Dependencias");
+    private void NavigateToFuerzas() => navigationManager.NavigateTo("/fire-force/FuerzasIntervinientes");
+    private void NavigateToBrigadas() => navigationManager.NavigateTo("/fire-force/Brigadas");
+    private void NavigateToEquipos() => navigationManager.NavigateTo("/fire-force/Dependencias/EquiposAutonomos");
+    private void NavigateToPartesVehiculos() => navigationManager.NavigateTo("/fire-force/partes-vehiculos");
+
+    // ========================================
+    // ACCESIBILIDAD: Soporte para teclado
+    // Permite navegar con Enter o Espacio
+    // ========================================
+    private void HandleKeyPress(KeyboardEventArgs e, Action navigationAction)
     {
-        switch (menu)
+        if (e.Key == "Enter" || e.Key == " ")
         {
-            case "incendios":
-                showIncendios = !showIncendios;
-                showServicios = showRescates = false;
-                break;
-            case "servicios":
-                showServicios = !showServicios;
-                showIncendios = showRescates = false;
-                break;
-            case "rescates":
-                showRescates = !showRescates;
-                showIncendios = showServicios = false;
-                break;
+            navigationAction?.Invoke();
         }
     }
 }

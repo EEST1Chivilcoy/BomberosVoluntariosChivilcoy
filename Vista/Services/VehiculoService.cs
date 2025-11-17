@@ -7,7 +7,6 @@ using System.ComponentModel.DataAnnotations;
 using Vista.Data;
 using Vista.Data.Enums;
 using Vista.Data.Models.Imagenes;
-using Vista.Data.Models.Otros;
 using Vista.Data.Models.Personas.Personal;
 using Vista.Data.Models.Vehiculos.Flota;
 
@@ -17,8 +16,6 @@ namespace Vista.Services
     {
         Task<VehiculoSalida> AgregarVehiculo(VehiculoSalida vehiculo);
         Task<VehiculoSalida> EditarVehiculo(VehiculoSalida vehiculo);
-        Task<Incidente> AgregarIncidente(Incidente incidente);
-        Task<Incidente> BorrarIncidente(Incidente incidente);
         Task<Movil> ObtenerMovilPorNumero(string NumeroMovil);
     }
 
@@ -130,48 +127,6 @@ namespace Vista.Services
             vehiculo.Estado = estado;
             await _context.SaveChangesAsync();
             return vehiculo;
-        }
-        public async Task<Incidente> AgregarIncidente(Incidente incidente)
-        {
-            //PENDIENTE: Solucionar carga de datos en las List de las relaciones
-            if (incidente.Encargado != null)
-            {
-                Bombero? Responsable = await _context.Bomberos.SingleOrDefaultAsync(b => b.PersonaId == incidente.Encargado.PersonaId);
-                incidente.Encargado = Responsable;
-                Responsable.Incidentes.Add(incidente);
-            }
-            if (incidente.Vehiculo != null)
-            {
-                VehiculoSalida? vehiculo = await _context.Set<VehiculoSalida>().SingleOrDefaultAsync(m => m.VehiculoId == incidente.Vehiculo.VehiculoId);
-                incidente.Vehiculo = vehiculo;
-                vehiculo.Incidentes.Add(incidente);
-            }
-            _context.Set<Incidente>().Add(incidente);
-            await _context.SaveChangesAsync();
-            return incidente;
-        }
-        public async Task<Incidente> BorrarIncidente(Incidente incidente)
-        {
-            try
-            {
-                if (incidente != null)
-                {
-                    Incidente IncidenteBorrar = await _context.Set<Incidente>().Where(inci => inci.IncidenteId == incidente.IncidenteId).SingleOrDefaultAsync();
-                    _context.Set<Incidente>().Remove(IncidenteBorrar);
-                    await _context.SaveChangesAsync();
-                }
-            }
-            catch (DbUpdateException ex)
-            {
-                Console.WriteLine($"ERROR: Error al eliminar el incidente. {ex.Message}");
-                return incidente;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"ERROR: Ocurrió un error inesperado. {ex.Message}");
-                return incidente;
-            }
-            return incidente;
         }
 
         public async Task<Movil> ObtenerMovilPorNumero(string NumeroMovil)

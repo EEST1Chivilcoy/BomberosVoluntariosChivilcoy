@@ -15,27 +15,9 @@ namespace Vista.Data.Enums.Socios
         Efectivo = 1,
 
         /// <summary>
-        /// Representa el pago mediante tarjeta de crédito.
-        /// </summary>
-        [Display(Name = "Tarjeta de Crédito")]
-        TarjetaDeCredito = 2,
-
-        /// <summary>
-        /// Representa el pago mediante tarjeta de débito.
-        /// </summary>
-        [Display(Name = "Tarjeta de Débito")]
-        TarjetaDeDebito = 3,
-
-        /// <summary>
         /// Representa el pago mediante transferencia bancaria.
         /// </summary>
-        [Display(Name = "Transferencia Bancaria")]
-        TransferenciaBancaria = 4,
-
-        /// <summary>
-        /// Representa el pago mediante cheque.
-        /// </summary>
-        [Display(Name = "Cheque")]
-        Cheque = 5
+        [Display(Name = "Transferencia")]
+        Transferencia = 2
     }
 }

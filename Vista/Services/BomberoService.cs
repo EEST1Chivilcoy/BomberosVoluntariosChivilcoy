@@ -13,7 +13,7 @@ namespace Vista.Services
     {
         Task CrearBomberoAsync(Bombero bombero, Imagen? imagen = null);
         Task<bool> BorrarBombero(Bombero bombero);
-        Task<bool> EditarBombero(Bombero bombero);
+        Task EditarBombero(Bombero bombero);
         Task<Sancion> SancionarBombero(Sancion sancion);
         Task<bool> CambiarEstado(int id, EstadoBombero estado);
         Task<AscensoBombero> AscenderBombero(AscensoBombero ascenso);
@@ -41,7 +41,6 @@ namespace Vista.Services
             {
                 query = query
                     .Include(b => b.Imagen)
-                    .Include(b => b.Firmas)
                     .Include(b => b.Brigadas)
                     .Include(b => b.VehiculosEncargado)
                     .Include(b => b.Dependencias)
@@ -147,7 +146,7 @@ namespace Vista.Services
             }
         }
 
-        public async Task<bool> EditarBombero(Bombero bombero)
+        public async Task EditarBombero(Bombero bombero)
         {
             // --- 1. Validaciones ---
 
@@ -187,6 +186,17 @@ namespace Vista.Services
                     }
                 }
 
+                // Validar que no exista otro bombero con el mismo documento (si se cambió)
+                if (bomberoExistente.Documento != bombero.Documento)
+                {
+                    bool documentoExistente = await _context.Bomberos
+                        .AnyAsync(b => b.Documento == bombero.Documento && b.PersonaId != bombero.PersonaId);
+                    if (documentoExistente)
+                    {
+                        throw new InvalidOperationException("Número de documento ya existente para otro bombero.");
+                    }
+                }
+
                 // Actualizar las propiedades del bombero existente
                 bomberoExistente.Nombre = bombero.Nombre;
                 bomberoExistente.Apellido = bombero.Apellido;
@@ -210,37 +220,29 @@ namespace Vista.Services
                 bomberoExistente.FechaNacimiento = bombero.FechaNacimiento;
                 bomberoExistente.Sexo = bombero.Sexo;
 
-                // Manejar la actualización del contacto
-                if (bombero.Contacto != null)
+                // Información de contacto
+                if (bomberoExistente.Contacto == null)
                 {
-                    if (bomberoExistente.Contacto != null)
+                    bomberoExistente.Contacto = new Contacto
                     {
-                        // Actualizar contacto existente
-                        bomberoExistente.Contacto.TelefonoCel = bombero.Contacto.TelefonoCel;
-                        bomberoExistente.Contacto.TelefonoFijo = bombero.Contacto.TelefonoFijo;
-                        bomberoExistente.Contacto.TelefonoLaboral = bombero.Contacto.TelefonoLaboral;
-                        bomberoExistente.Contacto.Email = bombero.Contacto.Email;
-                    }
-                    else
-                    {
-                        // Crear nuevo contacto
-                        bomberoExistente.Contacto = new Contacto
-                        {
-                            PersonalId = bomberoExistente.PersonaId,
-                            TelefonoCel = bombero.Contacto.TelefonoCel,
-                            TelefonoFijo = bombero.Contacto.TelefonoFijo,
-                            TelefonoLaboral = bombero.Contacto.TelefonoLaboral,
-                            Email = bombero.Contacto.Email
-                        };
-                        _context.Contactos.Add(bomberoExistente.Contacto);
-                    }
+                        PersonalId = bomberoExistente.PersonaId,
+                        TelefonoCel = bombero.Contacto?.TelefonoCel,
+                        TelefonoLaboral = bombero.Contacto?.TelefonoLaboral,
+                        TelefonoFijo = bombero.Contacto?.TelefonoFijo,
+                        Email = bombero.Contacto?.Email
+                    };
+                }
+                else
+                {
+                    bomberoExistente.Contacto.TelefonoCel = bombero.Contacto?.TelefonoCel;
+                    bomberoExistente.Contacto.TelefonoLaboral = bombero.Contacto?.TelefonoLaboral;
+                    bomberoExistente.Contacto.TelefonoFijo = bombero.Contacto?.TelefonoFijo;
+                    bomberoExistente.Contacto.Email = bombero.Contacto?.Email;
                 }
 
                 // Guardar los cambios
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
-
-                return true;
             }
             catch (Exception ex)
             {
@@ -249,6 +251,9 @@ namespace Vista.Services
                 // la lógica del service, o el segundo SaveChanges dentro del service),
                 // revertimos TODA la operación.
                 await transaction.RollbackAsync();
+
+                // Limpiar el contexto para evitar conflictos futuros
+                _context.ChangeTracker.Clear();
 
                 // Lanza una excepción genérica o la 'ex' original
                 // para que la capa superior sepa que algo falló.
@@ -359,18 +364,14 @@ namespace Vista.Services
             if (ConTodasLasDemasRelaciones)
             {
                 query = query
-                    .Include(b => b.Firmas)
                     .Include(b => b.Brigadas)
                     .Include(b => b.VehiculosEncargado)
                     .Include(b => b.Dependencias)
-                    .Include(b => b.Incidentes)
                     .Include(b => b.Salidas)
                     .Include(b => b.Handie)
                     .Include(b => b.Ascensos)
                     .Include(b => b.DestinoMaterial)
                     .Include(b => b.SancionesRecibidas)
-                    .Include(b => b.Limpieza)
-                    .Include(b => b.Novedades)
                     .Include(b => b.Licencias);
             }
 

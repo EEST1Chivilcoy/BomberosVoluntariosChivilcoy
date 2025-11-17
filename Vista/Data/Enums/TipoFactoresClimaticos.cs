@@ -6,6 +6,7 @@
         Granizo,
         Tormentas,
         Inundaciones,
-        Otro
+        VientosFuertes,
+        Temporales,
     }
 }

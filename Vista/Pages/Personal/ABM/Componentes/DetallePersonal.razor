@@ -23,6 +23,8 @@
 @inject IComisionDirectivaService ComisionDirectivaService
 @inject ICobradorService CobradorService
 
+@implements IDisposable
+
 <style>
 	/* Estilos generales */
 	.container {
@@ -183,7 +185,7 @@
 					<AntDesign.Col Span="6">
 						<div class="profile-photo-container">
 							<div class="photo-preview">
-								@if (personalView.UrlImagen != null)
+								@if (!string.IsNullOrWhiteSpace(personalView.UrlImagen))
 								{
 									<Avatar Src="@personalView.UrlImagen" Alt="Foto de perfil" Size="@("10rem")" />
 								}
@@ -441,16 +443,43 @@
 </div>
 
 @code {
-	[Parameter, Required, EditorRequired] public int PersonalId { get; set; }
-	[Parameter, Required, EditorRequired] public TipoPersonal Tipo { get; set; } // Puede ser "bombero" o "comisiondirectiva" o "cobrador"
-	[Parameter, Required, EditorRequired] public EventCallback OnFinishCallback { get; set; }
+	[Parameter] public required int PersonalId { get; set; }
+	[Parameter] public required TipoPersonal Tipo { get; set; } // Puede ser "bombero" o "comisiondirectiva" o "cobrador"
+	[Parameter] public required EventCallback OnFinishCallback { get; set; }
 
 	private PersonalViewModel? personalView = new(); // ViewModel base para el personal
 	private bool isLoading = true;
+	private bool isInitialized = false;
+	private CancellationTokenSource? cts;
+
+	protected override async Task OnInitializedAsync()
+	{
+		// Solo cargar datos una vez cuando el componente se inicializa
+		if (!isInitialized)
+		{
+			await LoadDataAsync();
+		}
+	}
 
 	protected override async Task OnParametersSetAsync()
 	{
+		// Si los parámetros clave cambian, recargar datos
+		// Pero evitar recargas innecesarias
+		if (isInitialized && personalView?.Id != PersonalId)
+		{
+			await LoadDataAsync();
+		}
+	}
+
+	private async Task LoadDataAsync()
+	{
+		// Cancelar cualquier operación pendiente
+		cts?.Cancel();
+		cts?.Dispose();
+		cts = new CancellationTokenSource();
+
 		isLoading = true;
+		personalView = null;
 
 		try
 		{
@@ -496,21 +525,35 @@
 					await HandleErrorAndFinishAsync("Tipo de personal no válido. Debe ser 'Bombero', 'Comisión Directiva' o 'Cobrador'.");
 					return;
 			}
+
+			isInitialized = true;
+			await Task.Delay(150);
+		}
+		catch (OperationCanceledException)
+		{
+			// Operación cancelada, no hacer nada
 		}
 		catch (Exception ex)
 		{
 			await HandleErrorAndFinishAsync($"Error al obtener el {Tipo.ToString().ToLower()}: {ex.Message}");
 			return;
 		}
-
-		await Task.Delay(300); // Pequeña demora para mejorar la experiencia de usuario
-		isLoading = false;
+		finally
+		{
+			isLoading = false;
+			await InvokeAsync(StateHasChanged);
+		}
 	}
-
 
 	private async Task HandleErrorAndFinishAsync(string mensaje)
 	{
 		await message.ErrorAsync(mensaje);
 		await OnFinishCallback.InvokeAsync();
+	}
+
+	public void Dispose()
+	{
+		cts?.Cancel();
+		cts?.Dispose();
 	}
 }

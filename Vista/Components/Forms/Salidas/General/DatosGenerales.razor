@@ -10,6 +10,7 @@
 @inject INominatimService GeorefService
 @inject IFuerzaIntervinienteService FuerzaIntervinienteService
 @inject IMessageService MessageService
+@implements IDisposable
 
 <style>
 
@@ -60,7 +61,7 @@
 </style>
 
 <div class="datos-generales">
-    <Form Model="Model" OnFieldChanged="@ValidateForm">
+    <Form Model="Model" OnFieldChanged="@ValidateForm" Loading="_formloading">
 
         @* 🕒 Información Temporal *@
         <div style="margin-bottom: 24px;">
@@ -97,46 +98,37 @@
                 <h4 style="color: #1890ff; margin: 0; font-weight: 600; font-size: 1.08rem;">📍 Ubicación</h4>
             </div>
 
-            <Row Gutter="16">
-                <AntDesign.Col Span="8">
-                    <FormItem Label="Calle o Ruta" Required>
-                        @if (isApiAvailable)
-                        {
+            @if (isApiAvailable)
+            {
+                <Row Gutter="24">
+                    <AntDesign.Col Span="24">
+                        <FormItem Label="Dirección" Required>
                             <Select TItem="Direccion"
                                     TItemValue="Direccion"
                                     DataSource="@direcciones"
-                                    @bind-Value="@Model.Direccion"
-                                    Placeholder="Seleccione una calle o ruta"
-                                    LabelName="@nameof(Direccion.NombreYAltura)"
+                                    @bind-Value="@DireccionSelecionada"
+                                    Placeholder="Ingrese una direccion o coordenadas"
+                                    LabelName="@nameof(Direccion.Descripcion)"
                                     OnSearch="OnSearch"
                                     SearchDebounceMilliseconds="350"
                                     EnableSearch
                                     Loading="@_loading"
                                     OnSelectedItemChanged="OnStreetSelected">
                             </Select>
-                        }
-                        else
-                        {
-                            <Input @bind-Value="@Model.CalleORuta" Placeholder="Ingrese una calle o ruta" />
-                        }
-                    </FormItem>
-                </AntDesign.Col>
-                <AntDesign.Col Span="8">
-                    <FormItem Label="Tipo Zona" Required>
-                        <EnumSelect TEnum="TipoZona" @bind-Value="@Model.TipoZona" />
-                    </FormItem>
-                </AntDesign.Col>
-                <AntDesign.Col Span="8">
-                    <FormItem Label="Región Cuartel" Required>
-                        <EnumSelect TEnum="CuartelRegionChivilcoy" @bind-Value="@Model.CuartelRegion" DefaultActiveFirstOption="false" />
-                    </FormItem>
-                </AntDesign.Col>
-            </Row>
+                        </FormItem>
+                    </AntDesign.Col>
+                </Row>
+            }
 
             <Row Gutter="16">
                 <AntDesign.Col Span="12">
-                    <FormItem Label="Altura / Km" Required>
-                        <Input @bind-Value="@Model.AlturaOKm" />
+                    <FormItem Label="Tipo Zona" Required>
+                        <EnumSelect TEnum="TipoZona ?" @bind-Value="@Model.TipoZona" />
+                    </FormItem>
+                </AntDesign.Col>
+                <AntDesign.Col Span="12">
+                    <FormItem Label="Región Cuartel" Required>
+                        <EnumSelect TEnum="CuartelRegionChivilcoy ?" @bind-Value="@Model.CuartelRegion" DefaultActiveFirstOption="false" />
                     </FormItem>
                 </AntDesign.Col>
             </Row>
@@ -145,7 +137,7 @@
             {
                 <div class="map-container">
                     <iframe style="border:0; width: 100%; aspect-ratio: 1 / 1;"
-                            src="@GetOpenStreetMapUrl(Model.Latitud.Value, Model.Longitud.Value)"
+                            src="@GetGoogleMapsSatelliteUrl(Model.Latitud.Value, Model.Longitud.Value)"
                             frameborder="0"
                             allowfullscreen>
                     </iframe>
@@ -195,31 +187,8 @@
             @if (SeConvocoGuardia)
             {
                 <FormItem Label="Guardia">
-                    <EnumSelect TEnum="Guardia" @bind-Value="@Model.GuardiaSelecionada" />
+                    <EnumSelect TEnum="Guardia ?" @bind-Value="@Model.GuardiaSelecionada" />
                 </FormItem>
-            }
-
-            @if (MostrarSwitchFuerzasIntervinientes)
-            {
-                <FormItem Label="¿Hubo Fuerzas Intervinientes?">
-                    <Switch @bind-Checked="@IntervencionDeFuerzasIntervinientes" />
-                </FormItem>
-            }
-
-            @if (IntervencionDeFuerzasIntervinientes || !MostrarSwitchFuerzasIntervinientes)
-            {
-                <AntDesign.FormItem Label="Fuerzas Intervinientes">
-                    <Select Mode="SelectMode.Multiple"
-                            @bind-Values="@Model.FuerzasIntervinientesParticipantes"
-                            TItem="SimpleFuerzaViewModel"
-                            TItemValue="SimpleFuerzaViewModel"
-                            DataSource="@FuerzaViewModels"
-                            LabelName="@nameof(SimpleFuerzaViewModel.Nombre)"
-                            Placeholder="Seleccione las fuerzas intervinientes"
-                            DefaultActiveFirstOption="false"
-                            EnableSearch
-                            AllowClear />
-                </AntDesign.FormItem>
             }
         </div>
 
@@ -242,58 +211,62 @@
     [Parameter, EditorRequired] public required SalidasViewModels Model { get; set; } // Modelo de datos para el formulario
     [Parameter] public bool IsFormDisabled { get; set; }
     [Parameter] public bool MostrarOpcionDepartamento { get; set; } = true; // Indica si se muestra la opción de departamento (En algunos casos es imposible que sea un deparatamento)
-
-    [Parameter] public bool MostrarSwitchFuerzasIntervinientes { get; set; } = true; // Indica si se muestra el switch de la opción de fuerzas intervinientes (En algunos casos es obligatorio por lo que no se muestra el switch)
-
-    [Parameter] public bool MostrarSwitchDamnficados { get; set; } = true; // Indica si se muestra el switch de la opción de damnificados (En algunos casos es obligatorio por lo que no se muestra el switch)
-
     [Parameter] public EventCallback<bool> OnCompleted { get; set; } // Evento para notificar que se ha completado el formulario
 
     private bool isApiAvailable;
 
     private bool _loading = false; // Variable para controlar el estado de carga
+    private bool _formloading = true;
 
     private bool esDepartamento;
     private bool SeConvocoGuardia;
     private bool IntervencionDeFuerzasIntervinientes;
 
-    private List<SimpleFuerzaViewModel> FuerzaViewModels = new();
+    private Direccion DireccionSelecionada = new();
+
     private List<Direccion> direcciones = new();
+
+    private CancellationTokenSource? _searchCancellationTokenSource;
 
     protected override async Task OnInitializedAsync()
     {
-        isApiAvailable = await GeorefService.CheckApiConnectionAsync();
+        _formloading = true;
 
-        if (Model != null)
+        try
         {
-            if (Model.FechaSalida == DateTime.MinValue)
+            isApiAvailable = await GeorefService.CheckApiConnectionAsync();
+
+            if (Model != null)
             {
-                Model.FechaSalida = DateTime.Today;
+                if (Model.FechaSalida == DateTime.MinValue)
+                {
+                    Model.FechaSalida = DateTime.Today;
+                }
+
+                esDepartamento = !string.IsNullOrEmpty(Model.PisoNumero) ||
+                                        !string.IsNullOrEmpty(Model.Depto);
+
+                // Activa el switch si ya se había convocado una guardia
+                SeConvocoGuardia = Model.GuardiaSelecionada != default(Guardia);
             }
-
-            esDepartamento = !string.IsNullOrEmpty(Model.PisoNumero) ||
-                              !string.IsNullOrEmpty(Model.Depto);
-
-            // Activa el switch si ya se había convocado una guardia
-            SeConvocoGuardia = Model.GuardiaSelecionada != default(Guardia);
-
-            // Activa el switch si ya hay fuerzas intervinientes al cargar en modo edición
-            IntervencionDeFuerzasIntervinientes = Model.FuerzasIntervinientesParticipantes?.Any() == true;
-
-
-            try
-            {
-                var Fuerzas = await FuerzaIntervinienteService.ObtenerTodasLasFuerzasAsync();
-                FuerzaViewModels = await MapearFuerzasAsync(Fuerzas);
-            }
-            catch (Exception ex)
-            {
-                await MessageService.ErrorAsync($"Error al cargar fuerzas intervinientes: {ex.Message}");
-            }
+        }
+        catch (Exception ex)
+        {
+            await MessageService.ErrorAsync($"Error: {ex.Message}");
+        }
+        finally
+        {
+            _formloading = false;
+            StateHasChanged();
         }
     }
 
-    private async Task ValidateForm()
+    private void ValidateForm()
+    {
+        _ = ValidateFormAsync();
+    }
+
+    private async Task ValidateFormAsync()
     {
         var esValido = true;
 
@@ -310,37 +283,73 @@
     {
         if (selectedStreet != null)
         {
-            Model.CalleORuta = $"{selectedStreet.Calle.Nombre} {selectedStreet.Altura.Valor}";
-            Model.Latitud = selectedStreet.Ubicacion.Lat;
-            Model.Longitud = selectedStreet.Ubicacion.Lon;
+            Model.Direccion = selectedStreet.Descripcion;
+            Model.Latitud = selectedStreet.Lat;
+            Model.Longitud = selectedStreet.Lon;
             StateHasChanged();
         }
     }
 
-    private async void OnSearch(string value)
+    private void OnSearch(string value)
     {
-        if (value.Length >= 3)
-        {
-            _loading = true;
-            StateHasChanged(); // actualiza el componente para que se muestre el spinner
+        // Ejecutar la búsqueda en segundo plano sin bloquear la UI
+        _ = PerformSearchAsync(value);
+    }
 
-            try
+    private async Task PerformSearchAsync(string value)
+    {
+        // Cancelar búsqueda anterior si existe
+        _searchCancellationTokenSource?.Cancel();
+        _searchCancellationTokenSource?.Dispose();
+        _searchCancellationTokenSource = new CancellationTokenSource();
+        var cancellationToken = _searchCancellationTokenSource.Token;
+
+        // Validar longitud mínima
+        if (string.IsNullOrWhiteSpace(value) || value.Length < 3)
+        {
+            direcciones.Clear();
+            _loading = false;
+            await InvokeAsync(StateHasChanged);
+            return;
+        }
+
+        // Si la API no está disponible, no intentar buscar
+        if (!isApiAvailable)
+        {
+            await MessageService.WarningAsync("La API de búsqueda de direcciones no está disponible.");
+            return;
+        }
+
+        _loading = true;
+        await InvokeAsync(StateHasChanged);
+
+        try
+        {
+            // Realizar la búsqueda
+            direcciones = await GeorefService.GetSuggestionsAsync(value);
+
+            // Si la tarea fue cancelada, no actualizar
+            if (cancellationToken.IsCancellationRequested)
             {
-                direcciones = await GeorefService.GetStreetSuggestionsAsync(value);
+                return;
             }
-            catch (Exception ex)
+        }
+        catch (OperationCanceledException)
+        {
+            // Búsqueda cancelada, no hacer nada
+            return;
+        }
+        catch (Exception ex)
+        {
+            // Solo mostrar el error si no fue cancelado
+            if (!cancellationToken.IsCancellationRequested)
             {
-                // Podés loguear el error si querés
                 Console.Error.WriteLine($"Error al buscar direcciones: {ex.Message}");
                 direcciones.Clear();
             }
-
-            _loading = false;
-            await InvokeAsync(StateHasChanged); // vuelve a actualizar el componente
         }
-        else
+        finally
         {
-            direcciones.Clear();
             _loading = false;
             await InvokeAsync(StateHasChanged);
         }
@@ -368,39 +377,25 @@
         }).ToList());
     }
 
-    private string GetOpenStreetMapUrl(double latitud, double longitud)
+    private string GetGoogleMapsSatelliteUrl(double latitud, double longitud)
     {
-        // URL base para el embed de OpenStreetMap
-        string baseUrl = "https://www.openstreetmap.org/export/embed.html";
-
-        // Redondear a 5 decimales para las coordenadas
+        // Redondear coordenadas
         string latString = Math.Round(latitud, 5).ToString(System.Globalization.CultureInfo.InvariantCulture);
         string lonString = Math.Round(longitud, 5).ToString(System.Globalization.CultureInfo.InvariantCulture);
 
-        // Generar los valores para el parámetro bbox (rango de coordenadas alrededor del punto)
-        double latMin = latitud - 0.005;  // Ajuste más pequeño para un mejor zoom
-        double latMax = latitud + 0.005;
-        double lonMin = longitud - 0.005;
-        double lonMax = longitud + 0.005;
+        // URL base de Google Maps sin API Key
+        // Parámetros:
+        // q = coordenadas
+        // t = tipo de mapa (k = satélite)
+        // z = zoom (ej. 14)
+        string url = $"https://www.google.com/maps?q={latString},{lonString}&t=k&z=14&output=embed";
 
-        // Formatear las coordenadas para asegurar que se usen puntos como separadores decimales
-        string latMinString = latMin.ToString(System.Globalization.CultureInfo.InvariantCulture);
-        string latMaxString = latMax.ToString(System.Globalization.CultureInfo.InvariantCulture);
-        string lonMinString = lonMin.ToString(System.Globalization.CultureInfo.InvariantCulture);
-        string lonMaxString = lonMax.ToString(System.Globalization.CultureInfo.InvariantCulture);
+        return url;
+    }
 
-        // Parámetros para el mapa
-        string bbox = $"{lonMinString},{latMinString},{lonMaxString},{latMaxString}";
-        string marker = $"{latString},{lonString}";
-
-        // Codificar las coordenadas para las comas
-        string encodedBbox = HttpUtility.UrlEncode(bbox);  // Codifica las comas
-        string encodedMarker = HttpUtility.UrlEncode(marker);  // Codifica las comas
-
-        // Generar la URL completa con los parámetros codificados
-        string urlParameters = $"?bbox={encodedBbox}&layer=mapnik&marker={encodedMarker}";
-
-        // Combinar la URL base con los parámetros
-        return baseUrl + urlParameters;
+    public void Dispose()
+    {
+        _searchCancellationTokenSource?.Cancel();
+        _searchCancellationTokenSource?.Dispose();
     }
 }

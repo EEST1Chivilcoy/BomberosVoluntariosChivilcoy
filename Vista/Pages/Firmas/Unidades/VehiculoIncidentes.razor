@@ -8,7 +8,6 @@
 @using Vista.Data.Models.Personas.Personal
 @using Vista.Data.Models.Personas.Personal.Componentes
 @using Vista.Data.Models.Vehiculos.Flota
-@using Vista.Data.Models.Otros
 
 <style>
 
@@ -181,6 +180,7 @@ else if (!existe)
     // Funciones relacionadas con datos
     public async void BorrarIncidente()
     {
+        @*
         if (selectedIncidente != null)
         {
             Incidente incidente = await Context.Set<Incidente>().SingleOrDefaultAsync(e => e.IncidenteId == selectedIncidente.IncidenteId);
@@ -190,6 +190,7 @@ else if (!existe)
             selectedIncidente = null;
             message.Success("Incidente borrado");
         }
+*@
     }
     DateTime FechaDesde = new DateTime();
     DateTime FechaHasta = DateTime.Now;
@@ -197,7 +198,7 @@ else if (!existe)
     {
         vehiculo = await Context.Set<VehiculoSalida>().SingleOrDefaultAsync(e => e.VehiculoId == VehiculoId);
         if (vehiculo != null)
-        {
+        {/*
             incidentes = new();
             foreach (Incidente inci in Context.Set<Incidente>().Where(inci=>inci.Fecha >= FechaDesde && inci.Fecha <= FechaHasta).ToArray())
             {
@@ -218,6 +219,7 @@ else if (!existe)
                 }
             }
             existe = true;
+            */
         }
         else if (vehiculo is null)
         {

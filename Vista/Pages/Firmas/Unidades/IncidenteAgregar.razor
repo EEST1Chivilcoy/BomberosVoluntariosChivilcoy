@@ -1,7 +1,6 @@
 ﻿@using Vista.Data.Models.Personas.Personal
 @using Vista.Data.Models.Personas.Personal.Componentes
 @using Vista.Data.Models.Vehiculos.Flota
-@using Vista.Data.Models.Otros
 @using Vista.Services
 @inject IVehiculoService VehiculoService
 @implements IDisposable
@@ -105,15 +104,6 @@ else
         try
         {
             Bombero? Encargado = await Context.Bomberos.SingleOrDefaultAsync(b => b.PersonaId == IncidenteView.ResponsableId);
-            Incidente incidente = new()
-            {
-                Vehiculo = vehiculo,
-                Fecha = DateTime.Now,
-                Observacion = IncidenteView.Observacion,
-                Tipo = IncidenteView.Tipo,
-                Encargado = Encargado,
-            };
-            await VehiculoService.AgregarIncidente(incidente);
             message.Success("Se grabo el incidente correctamente");
             await Init();
             await OnClose.InvokeAsync();

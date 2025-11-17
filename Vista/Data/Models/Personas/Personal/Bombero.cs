@@ -10,8 +10,6 @@ using Vista.Data.Models.Imagenes;
 using Vista.Data.Models.Grupos.Dependencias.Comunicaciones;
 using Vista.Data.Models.Personas.Personal.Componentes;
 using Vista.Data.Models.Vehiculos.Flota;
-using Vista.Data.Models.Vehiculos.Flota.Componentes;
-using Vista.Data.Models.Otros;
 using Vista.Data.Models.Objetos.Componentes;
 
 namespace Vista.Data.Models.Personas.Personal
@@ -91,11 +89,6 @@ namespace Vista.Data.Models.Personas.Personal
         public DateTime? VencimientoRegistro { get; set; }
 
         /// <summary>
-        /// Firmas registradas del bombero.
-        /// </summary>
-        public List<Firma>? Firmas { get; set; }
-
-        /// <summary>
         /// Relación muchos a muchos entre bomberos y brigadas.
         /// </summary>
         public List<Bombero_Brigada> Brigadas { get; set; } = new List<Bombero_Brigada>();
@@ -109,11 +102,6 @@ namespace Vista.Data.Models.Personas.Personal
         /// Relación muchos a muchos entre bomberos y dependencias.
         /// </summary>
         public List<Bombero_Dependencia> Dependencias { get; set; } = new();
-
-        /// <summary>
-        /// Incidentes en los que ha participado el bombero.
-        /// </summary>
-        public List<Incidente> Incidentes { get; set; } = new();
 
         /// <summary>
         /// Salidas de emergencia en las que ha participado el bombero.
@@ -145,16 +133,6 @@ namespace Vista.Data.Models.Personas.Personal
         /// </summary>
         [InverseProperty("PersonalSancionado")]
         public List<Sancion> SancionesRecibidas { get; set; } = new();
-
-        /// <summary>
-        /// Registros de limpieza en los que ha participado el bombero.
-        /// </summary>
-        public List<Limpieza> Limpieza { get; set; } = new();
-
-        /// <summary>
-        /// Novedades registradas por el bombero.
-        /// </summary>
-        public List<NovedadBase>? Novedades { get; set; } = new();
 
         /// <summary>
         /// Lista de licencias asociadas a el bombero. Inicializada como una lista vacía por defecto.

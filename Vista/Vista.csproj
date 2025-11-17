@@ -1,75 +1,76 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>f08ce748-0a84-44c1-8c1e-cca58d1deceb</UserSecretsId>
-  </PropertyGroup>
-  <ItemGroup>
-    <Compile Remove="Areas\**" />
-    <Compile Remove="Data\ViewModels\APIResponse\**" />
-    <Compile Remove="Data\ViewModel\**" />
-    <Compile Remove="wwwroot\Moviles\**" />
-    <Content Remove="Areas\**" />
-    <Content Remove="Data\ViewModels\APIResponse\**" />
-    <Content Remove="Data\ViewModel\**" />
-    <Content Remove="wwwroot\Moviles\**" />
-    <EmbeddedResource Remove="Areas\**" />
-    <EmbeddedResource Remove="Data\ViewModels\APIResponse\**" />
-    <EmbeddedResource Remove="Data\ViewModel\**" />
-    <EmbeddedResource Remove="wwwroot\Moviles\**" />
-    <None Remove="Areas\**" />
-    <None Remove="Data\ViewModels\APIResponse\**" />
-    <None Remove="Data\ViewModel\**" />
-    <None Remove="wwwroot\Moviles\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="Data\Models\Salidas\Componentes\VehículoInterviniente.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="AntDesign" Version="1.5.0-alpha" />
-    <PackageReference Include="AntDesign.Charts" Version="0.8.0" />
-    <PackageReference Include="ClosedXML" Version="0.105.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.20" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.20" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.10" />
-    <PackageReference Include="Microsoft.Identity.Web" Version="4.0.1" />
-    <PackageReference Include="Microsoft.Identity.Web.MicrosoftGraph" Version="4.0.1" />
-    <PackageReference Include="Microsoft.Identity.Web.UI" Version="4.0.1" />
-    <PackageReference Include="PDFsharp" Version="6.2.2" />    
-    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Components" Version="8.0.20" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.Forms" Version="8.0.20" />
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.20" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.20" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.20" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.10" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.10">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
-    <PackageReference Include="System.Text.Json" Version="9.0.10" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Update="Properties\Resources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Update="wwwroot\Imagenes\logoPlanilla.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Update="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Pages\Firmas\Departamentos\" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UserSecretsId>f08ce748-0a84-44c1-8c1e-cca58d1deceb</UserSecretsId>
+	</PropertyGroup>
+	<ItemGroup>
+		<Compile Remove="Areas\**" />
+		<Compile Remove="Data\ViewModels\APIResponse\**" />
+		<Compile Remove="Data\ViewModel\**" />
+		<Compile Remove="wwwroot\Moviles\**" />
+		<Content Remove="Areas\**" />
+		<Content Remove="Data\ViewModels\APIResponse\**" />
+		<Content Remove="Data\ViewModel\**" />
+		<Content Remove="wwwroot\Moviles\**" />
+		<EmbeddedResource Remove="Areas\**" />
+		<EmbeddedResource Remove="Data\ViewModels\APIResponse\**" />
+		<EmbeddedResource Remove="Data\ViewModel\**" />
+		<EmbeddedResource Remove="wwwroot\Moviles\**" />
+		<None Remove="Areas\**" />
+		<None Remove="Data\ViewModels\APIResponse\**" />
+		<None Remove="Data\ViewModel\**" />
+		<None Remove="wwwroot\Moviles\**" />
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Data\Models\Salidas\Componentes\VehículoInterviniente.cs" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="AntDesign" Version="1.5.0" />
+		<PackageReference Include="AntDesign.Charts" Version="0.8.0" />
+		<PackageReference Include="ClosedXML" Version="0.105.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.22" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.22" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.10" />
+		<PackageReference Include="Microsoft.Identity.Web" Version="4.0.1" />
+		<PackageReference Include="Microsoft.Identity.Web.MicrosoftGraph" Version="4.0.1" />
+		<PackageReference Include="Microsoft.Identity.Web.UI" Version="4.0.1" />
+		<PackageReference Include="PDFsharp" Version="6.2.2" />
+		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Components" Version="8.0.22" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Forms" Version="8.0.22" />
+		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.22" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.22" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.22" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.10" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.10">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
+		<PackageReference Include="System.Text.Json" Version="9.0.10" />
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Update="Properties\Resources.Designer.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Resources.resx</DependentUpon>
+		</Compile>
+	</ItemGroup>
+	<ItemGroup>
+		<Content Update="wwwroot\Imagenes\logoPlanilla.png">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Update="Properties\Resources.resx">
+			<Generator>ResXFileCodeGenerator</Generator>
+			<LastGenOutput>Resources.Designer.cs</LastGenOutput>
+		</EmbeddedResource>
+	</ItemGroup>
+	<ItemGroup>
+		<Folder Include="Data\Models\Vehiculos\Flota\Componentes\" />
+		<Folder Include="Pages\Firmas\Departamentos\" />
+	</ItemGroup>
 </Project>

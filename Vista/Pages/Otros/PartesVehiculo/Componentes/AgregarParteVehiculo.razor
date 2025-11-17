@@ -1,0 +1,99 @@
+﻿@using Vista.Data.Enums.Discriminadores;
+@using Vista.Data.Models.Otros.Partes;
+
+@*Servicios Utilizados*@
+@using Vista.Services
+@inject IMessageService message
+@inject IParteVehiculoService ParteVehiculoService
+
+<Form @ref="@_form"
+      Model="@agregarParteVehiculoViewModel"
+      Loading="_isLoading"
+      Layout="FormLayout.Vertical"
+      Class="modal-crear-fuerza-form"
+      OnFinish="OnFinish">
+    <Row Class="modal-crear-fuerza-row" Gutter="16">
+        <FormItem Label="Nombre"
+                  Class="modal-crear-fuerza-form-item">
+            <AntDesign.Col Span="24">
+                <Input @bind-Value="@agregarParteVehiculoViewModel.Nombre"
+                       AllowClear Size="InputSize.Large" />
+            </AntDesign.Col>
+        </FormItem>
+    </Row>
+    <Row Class="modal-crear-fuerza-row" Gutter="16">
+        <AntDesign.Col Span="24">
+            <FormItem Label="Categoría"
+                      Class="modal-crear-fuerza-form-item">
+                <EnumSelect TEnum="CategoriaParteVehiculo ?" @bind-Value="@agregarParteVehiculoViewModel.Categoria" AllowClear Size="InputSize.Large" />
+            </FormItem>
+        </AntDesign.Col>
+    </Row>
+
+    <div class="modal-crear-fuerza-footer">
+        <FormItem>
+            <Button Style="margin-right: 8px;"
+                    OnClick="CancelarAsync"
+                    Danger>
+                Cancelar
+            </Button>
+            <Button Type="ButtonType.Primary" HtmlType="submit" Disabled="!_form.IsModified">
+                Agregar Parte del Vehículo
+            </Button>
+        </FormItem>
+    </div>
+</Form>
+
+@code {
+    [Parameter] public required EventCallback OnCancel { get; set; }
+
+    private AgregarParteVehiculoViewModel agregarParteVehiculoViewModel = new();
+    private Form<AgregarParteVehiculoViewModel> _form = new();
+    private bool _isLoading = false;
+
+    public class AgregarParteVehiculoViewModel
+    {
+        [Required(ErrorMessage = "El nombre de la parte es obligatorio.")]
+        [StringLength(100, ErrorMessage = "El nombre no puede exceder los 100 caracteres.")]
+        public string? Nombre { get; set; }
+
+        [Required(ErrorMessage = "Debe seleccionar la categoría de la parte del vehículo.")]
+        public CategoriaParteVehiculo? Categoria { get; set; }
+    }
+
+    public async Task CancelarAsync()
+    {
+        if (OnCancel.HasDelegate)
+        {
+            await OnCancel.InvokeAsync(null);
+        }
+    }
+
+    private async Task OnFinish(EditContext editContext)
+    {
+        _isLoading = true;
+
+        try
+        {
+            // Preparamos el modelo para enviar al servicio
+            var nuevaParteVehiculo = new ParteVehiculo
+            {
+                Nombre = agregarParteVehiculoViewModel.Nombre!,
+                Tipo = agregarParteVehiculoViewModel.Categoria!.Value
+            };
+
+            // Llamamos al servicio para agregar la nueva parte del vehículo
+            await ParteVehiculoService.AgregarParteVehiculoAsync(nuevaParteVehiculo);
+            message.Success("Parte del vehículo agregada exitosamente.");
+            await CancelarAsync();
+        }
+        catch (Exception ex)
+        {
+            message.Error($"Error: {ex.Message}");
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+}

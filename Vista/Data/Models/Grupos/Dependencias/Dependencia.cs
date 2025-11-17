@@ -29,10 +29,5 @@ namespace Vista.Data.Models.Grupos.Dependencias
         /// Lista de bomberos que pertenecen a la dependencia.
         /// </summary>
         public List<Bombero_Dependencia> Bomberos { get; set; } = new();
-
-        /// <summary>
-        /// Lista de Incidentes relacionados con la dependencia.
-        /// </summary>
-        public List<IncidenteDependencia> Incidentes { get; set; } = new();
     }
 }

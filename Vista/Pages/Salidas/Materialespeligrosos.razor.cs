@@ -123,7 +123,7 @@ namespace Vista.Pages.Salidas
             }
 
             MaterialPeligrosoViewModel.TipoEmergencia = (TipoDeEmergencia)TipoMaterialPeligroso;
-            MaterialPeligrosoViewModel.Tipo = (TipoMaterialPeligroso)TipoMaterialPeligroso;
+            MaterialPeligrosoViewModel.Tipo = (CategoriaMaterialPeligroso)TipoMaterialPeligroso;
             MaterialPeligrosoViewModel.AnioNumeroParte = AnioSalida.HasValue && AnioSalida.Value > 0 ? AnioSalida.Value : DateTime.Now.Year;
             MaterialPeligrosoViewModel.NumeroParte = NumeroSalida.HasValue && NumeroSalida.Value > 0 ? NumeroSalida.Value : await SalidaService.ObtenerUltimoNumeroParteDelAnioAsync(MaterialPeligrosoViewModel.AnioNumeroParte) + 1;
             

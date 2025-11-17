@@ -1,0 +1,515 @@
+﻿@using Vista.Pages.Otros.PartesVehiculo.Componentes
+
+@page "/fire-force/partes-vehiculos"
+
+@*Servicios Utilizados*@
+@using Vista.Services
+@inject IMessageService MessageService
+@inject IParteVehiculoService ParteVehiculoService
+
+<style>
+    .fuerzas-abm {
+        --fuerzas-primary-color: #A63333;
+        --fuerzas-primary-dark: #732D2D;
+        --fuerzas-success-color: #4CAF50;
+        --fuerzas-success-dark: #438E46;
+        --fuerzas-accent-color: #FFD54F;
+    }
+
+        .fuerzas-abm .fuerzas-container {
+            padding: 12px !important;
+            min-height: 100vh !important;
+        }
+
+        .fuerzas-abm .main-card {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(10px) !important;
+            border-radius: 16px !important;
+            box-shadow: 0 8px 32px rgba(166, 51, 51, 0.1), 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            overflow: hidden !important;
+        }
+
+        .fuerzas-abm .header-section {
+            background: linear-gradient(135deg, var(--fuerzas-primary-color) 0%, var(--fuerzas-primary-dark) 100%) !important;
+            color: white !important;
+            padding: 28px !important;
+            position: relative !important;
+            overflow: hidden !important;
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            flex-wrap: wrap;
+        }
+
+            .fuerzas-abm .header-section .lava-bubbles {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                z-index: 1;
+                overflow: hidden;
+            }
+
+            .fuerzas-abm .header-section .lava-bubble {
+                position: absolute;
+                border-radius: 50%;
+                opacity: 0.45;
+                background: radial-gradient(circle at 60% 40%, #FFD54F 0%, #F9A825 80%, transparent 100%);
+                animation: lava-bubble-move 8s linear infinite;
+                filter: blur(1.5px);
+                mix-blend-mode: lighten;
+            }
+
+                .fuerzas-abm .header-section .lava-bubble.b1 {
+                    left: 10%;
+                    width: 60px;
+                    height: 60px;
+                    bottom: -70px;
+                    animation-delay: 0s;
+                    animation-duration: 7.5s;
+                }
+
+                .fuerzas-abm .header-section .lava-bubble.b2 {
+                    left: 35%;
+                    width: 90px;
+                    height: 90px;
+                    bottom: -100px;
+                    animation-delay: 2s;
+                    animation-duration: 9s;
+                    background: radial-gradient(circle at 60% 40%, #FFEB3B 0%, #FFD54F 80%, transparent 100%);
+                }
+
+                .fuerzas-abm .header-section .lava-bubble.b3 {
+                    left: 65%;
+                    width: 50px;
+                    height: 50px;
+                    bottom: -60px;
+                    animation-delay: 1.5s;
+                    animation-duration: 6.5s;
+                    background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #FFD54F 80%, transparent 100%);
+                }
+
+                .fuerzas-abm .header-section .lava-bubble.b4 {
+                    left: 80%;
+                    width: 70px;
+                    height: 70px;
+                    bottom: -80px;
+                    animation-delay: 3.2s;
+                    animation-duration: 8.5s;
+                    background: radial-gradient(circle at 60% 40%, #F9A825 0%, #FFD54F 80%, transparent 100%);
+                }
+
+                .fuerzas-abm .header-section .lava-bubble.b5 {
+                    left: 55%;
+                    width: 40px;
+                    height: 40px;
+                    bottom: -50px;
+                    animation-delay: 5s;
+                    animation-duration: 7.2s;
+                    background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #F9A825 80%, transparent 100%);
+                }
+
+    @@keyframes lava-bubble-move {
+        0% {
+            transform: translateY(0) scale(1) rotate(0deg);
+            opacity: 0.45;
+        }
+
+        60% {
+            opacity: 0.7;
+            filter: blur(2.5px);
+        }
+
+        80% {
+            transform: translateY(-220px) scale(1.15) rotate(10deg);
+            opacity: 0.6;
+        }
+
+        100% {
+            transform: translateY(-320px) scale(0.95) rotate(-8deg);
+            opacity: 0;
+        }
+    }
+
+    .fuerzas-abm .main-title {
+        font-family: 'Poppins', 'Fjalla One', sans-serif !important;
+        font-size: 2.2rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 1px !important;
+        margin: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 12px !important;
+        animation: text-glow 2.5s ease-in-out infinite alternate !important;
+        position: relative !important;
+        z-index: 2 !important;
+    }
+
+    .fuerzas-abm .title-icon {
+        color: var(--fuerzas-accent-color) !important;
+        font-size: 2rem !important;
+        filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25)) !important;
+    }
+
+    @@keyframes text-glow {
+        0%, 100% {
+            text-shadow: 0 0 5px #F9A825, 0 0 10px #FFD54F;
+        }
+
+        50% {
+            text-shadow: 0 0 12px #F9A825, 0 0 22px #FFD54F;
+        }
+    }
+
+    .fuerzas-abm .title-container {
+        position: relative !important;
+        z-index: 2 !important;
+    }
+
+    .fuerzas-abm .actions-row {
+        display: flex !important;
+        gap: 10px !important;
+        align-items: center !important;
+        z-index: 2 !important;
+    }
+
+    .fuerzas-abm .table-container {
+        padding: 0 !important;
+        overflow: hidden !important;
+    }
+
+    .fuerzas-abm .modern-button {
+        height: 40px !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        position: relative !important;
+        overflow: hidden !important;
+    }
+
+    .fuerzas-abm .add-button {
+        background: linear-gradient(135deg, var(--fuerzas-success-color) 0%, var(--fuerzas-success-dark) 100%) !important;
+        border: none !important;
+        color: white !important;
+        box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3) !important;
+        padding: 0 20px !important;
+        font-weight: 600 !important;
+        border-radius: 8px !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+
+        .fuerzas-abm .add-button:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4) !important;
+        }
+
+    .fuerzas-abm .ant-table-thead .ant-table-cell {
+        background-color: #A63333 !important;
+        color: #fff !important;
+        font-weight: bold !important;
+        padding: 16px !important;
+        border: none !important;
+    }
+
+    .fuerzas-abm .ant-table-cell {
+        padding: 16px !important;
+    }
+
+    .fuerzas-abm .fade-in {
+        animation: abm-fadeIn 0.5s ease-in-out !important;
+    }
+
+    @@keyframes abm-fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* ====== MODAL DISEÑO FUERZAS INTERVINIENTES ====== */
+    .modal-crear-fuerza .ant-modal-content {
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        border: 2px solid #732D2D;
+        margin-top: -50px;
+        margin-bottom: 0px;
+    }
+
+    .modal-crear-fuerza .ant-modal-title {
+        color: white !important;
+    }
+
+    .modal-crear-fuerza .ant-modal-header {
+        background-color: #A63333;
+        padding: 16px 24px;
+    }
+
+    .modal-crear-fuerza-content {
+        padding: 24px;
+    }
+
+    .modal-crear-fuerza-form-item {
+        margin-bottom: 20px;
+        position: relative;
+        padding-left: 10px;
+    }
+
+        .modal-crear-fuerza-form-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            border-radius: 5px;
+        }
+
+        .modal-crear-fuerza-form-item .ant-form-item-label > label {
+            font-weight: 600;
+            color: #434343;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+            .modal-crear-fuerza-form-item .ant-form-item-label > label:hover {
+                color: #FFD700;
+            }
+
+    .modal-crear-fuerza .ant-input:focus,
+    .modal-crear-fuerza .ant-input:hover {
+        border-color: #FFD700 !important;
+        box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
+    }
+
+    .modal-crear-fuerza .ant-picker,
+    .modal-crear-fuerza .ant-input,
+    .modal-crear-fuerza .ant-select-selector,
+    .modal-crear-fuerza .ant-input-number,
+    .modal-crear-fuerza .ant-textarea {
+        border-radius: 8px !important;
+        border: 1px solid #d9d9d9 !important;
+        background: #fff !important;
+        color: #434343 !important;
+        transition: all 0.3s ease !important;
+    }
+
+    .modal-crear-fuerza .modal-crear-fuerza-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 18px;
+        margin-bottom: 0px;
+    }
+
+    .modal-crear-fuerza .ant-btn-primary {
+        background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
+        border: none !important;
+        color: #fff !important;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
+        margin-top: 0;
+        margin-bottom: 0;
+        padding: 0 20px !important;
+    }
+
+        .modal-crear-fuerza .ant-btn-primary:hover {
+            background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
+            color: #fff !important;
+        }
+
+    @@media (max-width: 1199px) {
+        .fuerzas-abm .fuerzas-container {
+            padding: 8px !important;
+        }
+
+        .fuerzas-abm .header-section {
+            padding: 20px !important;
+            flex-direction: column;
+            align-items: flex-start !important;
+        }
+
+        .fuerzas-abm .actions-row {
+            margin-top: 15px;
+            justify-content: flex-start !important;
+            width: 100%;
+        }
+
+        .fuerzas-abm .main-title {
+            font-size: 2rem !important;
+            flex-direction: column !important;
+            text-align: center !important;
+            gap: 8px !important;
+        }
+    }
+</style>
+
+<div class="fuerzas-abm">
+    <div class="fuerzas-container fade-in">
+        <Card Class="main-card">
+            <div class="header-section">
+                <div class="lava-bubbles">
+                    <div class="lava-bubble b1"></div>
+                    <div class="lava-bubble b2"></div>
+                    <div class="lava-bubble b3"></div>
+                    <div class="lava-bubble b4"></div>
+                    <div class="lava-bubble b5"></div>
+                </div>
+                <div class="title-container">
+                    <h1 class="main-title">
+                        <Icon Type="car" Class="title-icon" />
+                        PARTES VEHICULARES
+                    </h1>
+                </div>
+                <div class="actions-row">
+                    <Button Class="modern-button add-button"
+                            OnClick="@(() => _modalAñadirVisible = true)"
+                            Icon="plus"
+                            Loading="_isLoading"
+                            Size="ButtonSize.Large">
+                        Nueva Parte
+                    </Button>
+                </div>
+            </div>
+            <div class="table-container">
+                <Table DataSource="@parteVehiculoViewModels"
+                       @bind-PageIndex="_pageIndex"
+                       @bind-PageSize="_pageSize"
+                       Loading="_isLoading"
+                       Responsive>
+                    <ColumnDefinitions Context="partes">
+                        <PropertyColumn Title="🏷️ Nombre"
+                                        Property="p => p.Nombre"
+                                        Align="ColumnAlign.Center"
+                                        Sortable
+                                        Width="220px"
+                                        Fixed="ColumnFixPlacement.Left" />
+                        <PropertyColumn Title="🚗 Tipo de Parte"
+                                        Property="p => p.Tipo"
+                                        Align="ColumnAlign.Center"
+                                        Sortable
+                                        Width="220px" />
+                        <ActionColumn Title="⚙️ Acciones" Align=ColumnAlign.Center Width="180px">
+                            <Space>
+                                <SpaceItem>
+                                    <Button Type="@ButtonType.Primary" Ghost OnClick="() => ShowEditar(partes.Id)">
+                                        <Icon Type="edit" />
+                                    </Button>
+                                </SpaceItem>
+                            </Space>
+                        </ActionColumn>
+                    </ColumnDefinitions>
+                </Table>
+            </div>
+        </Card>
+    </div>
+</div>
+
+@*Modal para Añadir Parte con diseño de Licencias*@
+<Modal @bind-Visible="_modalAñadirVisible"
+       Title="Añadir Parte Vehiculo"
+       Width="@("100%")"
+       Style="max-width: 800px;"
+       Footer="null"
+       DestroyOnClose
+       WrapClassName="modal-crear-fuerza">
+    <div class="modal-crear-fuerza-content">
+        <AgregarParteVehiculo OnCancel="CloseModals" />
+    </div>
+</Modal>
+
+@*Modal para Editar Parte con diseño de Licencias*@
+<Modal @bind-Visible="_modalEditarVisible"
+       Title="Editar Parte Vehiculo"
+       Width="@("100%")"
+       Style="max-width: 800px;"
+       Footer="null"
+       DestroyOnClose
+       WrapClassName="modal-crear-fuerza">
+    <div class="modal-crear-fuerza-content">
+        <EditarParteVehiculo OnCancel="CloseModals" ParteVehiculoId="ParteSel" />
+    </div>
+</Modal>
+
+@code {
+    private List<ParteVehiculoViewModel> parteVehiculoViewModels = new();
+
+    // Variables de Tamaño de la Tabla
+    int _pageIndex = 1;
+    int _pageSize = 15;
+
+    // Loading de la Tabla
+    bool _isLoading = true;
+
+    // Modals
+    private bool _modalAñadirVisible = false;
+    private bool _modalEditarVisible = false;
+
+    // Selected Parte Vehiculo Id para Editar
+    private int ParteSel;
+
+    // ViewModel
+    public class ParteVehiculoViewModel
+    {
+        public int Id { get; set; }
+        public string Nombre { get; set; } = string.Empty;
+        public string Tipo { get; set; } = string.Empty;
+    }
+
+    // Close Modals
+    public async Task CloseModals()
+    {
+        _modalAñadirVisible = false;
+        _modalEditarVisible = false;
+        await CargarPartesVehiculoAsync();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarPartesVehiculoAsync();
+    }
+
+    private async Task CargarPartesVehiculoAsync()
+    {
+        _isLoading = true;
+
+        try
+        {
+            var partes = await ParteVehiculoService.ObtenerTodasLasPartesVehiculoAsync();
+
+            parteVehiculoViewModels = partes.Select(p => new ParteVehiculoViewModel
+            {
+                Id = p.Id,
+                Nombre = p.Nombre,
+                Tipo = p.Tipo.GetDisplayName()
+            }).ToList();
+        }
+        catch (Exception ex)
+        {
+            await MessageService.ErrorAsync($"Error: No se pudieron cargar las partes del vehículo: {ex.Message}");
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+
+    private void ShowEditar(int id)
+    {
+        ParteSel = id;
+        _modalEditarVisible = true;
+    }
+}

@@ -4,6 +4,9 @@ using Vista.Data.Enums.Discriminadores;
 
 namespace Vista.Data.Models.Imagenes
 {
+    /// <summary>
+    /// Representa una imagen en el sistema.
+    /// </summary>
     public abstract class Imagen
     {
         /// <summary>

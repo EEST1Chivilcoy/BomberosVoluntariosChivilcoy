@@ -36,7 +36,7 @@ namespace Vista.Data.Mappers
                 IncendioComercioViewModels icvm => MapToIncendioComercio(icvm),
                 IncendioEstablecimientoEducativoViewModels ieevm => MapToIncendioEstablecimientoEducativo(ieevm),
                 IncendioEstablecimientoPublicoViewModels iepvm => MapToIncendioEstablecimientoPublico(iepvm),
-                IncendioForestaViewModels ifvm => MapToIncendioForestal(ifvm),
+                IncendioForestalViewModels ifvm => MapToIncendioForestal(ifvm),
                 IncendioHospitalesYClinicasViewModels ihcvm => MapToIncendioHospitalesYClinicas(ihcvm),
                 IncendioIndustriaViewModels iivm => MapToIncendioIndustria(iivm),
                 IncendioViviendaViewModels ivvm => MapToIncendioVivienda(ivvm),
@@ -195,7 +195,7 @@ namespace Vista.Data.Mappers
 
         private static void MapIncendioCommonProperties(IncendioViewModels source, Incendio destination)
         {
-            destination.DeteccionAutomatica = source.DeteccionAutomaticaId;
+            destination.DeteccionAutomatica = source.DeteccionAutomatica;
             destination.Extintor = source.Extintor;
             destination.Hidrante = source.Hidrante;
             destination.TipoEvacuacion = source.TipoEvacuacion;
@@ -240,7 +240,7 @@ namespace Vista.Data.Mappers
             return incendio;
         }
 
-        private static IncendioForestal MapToIncendioForestal(IncendioForestaViewModels viewModel)
+        private static IncendioForestal MapToIncendioForestal(IncendioForestalViewModels viewModel)
         {
             var incendio = new IncendioForestal();
             MapBaseProperties(viewModel, incendio);
@@ -280,7 +280,7 @@ namespace Vista.Data.Mappers
             var rescate = new RescatePersona();
             MapBaseProperties(viewModel, rescate);
             rescate.LugarRescatePersona = viewModel.TipoRescatePersona;
-            rescate.OtroLugarRescate = viewModel.Otro;
+            rescate.OtroLugarRescate = viewModel.OtroLugar;
             return rescate;
         }
 
@@ -289,7 +289,7 @@ namespace Vista.Data.Mappers
             var rescate = new RescateAnimal();
             MapBaseProperties(viewModel, rescate);
             rescate.LugarRescateAnimal = viewModel.TipoRescateAnimal;
-            rescate.OtroLugarRescate = viewModel.Otro;
+            rescate.OtroLugarRescate = viewModel.OtroLugar;
             return rescate;
         }
 
@@ -306,7 +306,7 @@ namespace Vista.Data.Mappers
             destination.HoraSalida = source.HoraSalida;
             destination.HoraLlegada = source.HoraLLegada;
             destination.Descripcion = source.Descripcion;
-            destination.Direccion = source.CalleORuta;
+            destination.Direccion = source.Direccion;
             destination.PisoNumero = source.PisoNumero;
             destination.Depto = source.Depto;
             destination.TipoZona = source.TipoZona;
@@ -394,7 +394,7 @@ namespace Vista.Data.Mappers
                 IncendioComercio _ => new IncendioComercioViewModels(),
                 IncendioEstablecimientoEducativo _ => new IncendioEstablecimientoEducativoViewModels(),
                 IncendioEstablecimientoPublico _ => new IncendioEstablecimientoPublicoViewModels(),
-                IncendioForestal _ => new IncendioForestaViewModels(),
+                IncendioForestal _ => new IncendioForestalViewModels(),
                 IncendioHospitalesYClinicas _ => new IncendioHospitalesYClinicasViewModels(),
                 IncendioIndustria _ => new IncendioIndustriaViewModels(),
                 IncendioVivienda _ => new IncendioViviendaViewModels(),
@@ -425,12 +425,12 @@ namespace Vista.Data.Mappers
                 case RescatePersona RescaPerso:
                     var rpvm = (RescatePersonaViewModels)viewModel;
                     rpvm.TipoRescatePersona = RescaPerso.LugarRescatePersona;
-                    rpvm.Otro = RescaPerso.OtroLugarRescate;
+                    rpvm.OtroLugar = RescaPerso.OtroLugarRescate;
                     break;
                 case RescateAnimal RescaAnima:
                     var ravm = (RescateAnimaViewModels)viewModel;
                     ravm.TipoRescateAnimal = RescaAnima.LugarRescateAnimal;
-                    ravm.Otro = RescaAnima.OtroLugarRescate;
+                    ravm.OtroLugar = RescaAnima.OtroLugarRescate;
                     break;
                 case IncendioComercio IncenComer:
                     var icvm = (IncendioComercioViewModels)viewModel;
@@ -448,7 +448,7 @@ namespace Vista.Data.Mappers
                     iepvm.TipoLugar = IncenEstaPubli.TipoLugar;
                     break;
                 case IncendioForestal IncenFore:
-                    var ifovm = (IncendioForestaViewModels)viewModel;
+                    var ifovm = (IncendioForestalViewModels)viewModel;
                     MapIncendioCommonViewModelProperties(IncenFore, ifovm);
                     ifovm.TipoLugar = IncenFore.TipoLugar;
                     break;
@@ -572,7 +572,7 @@ namespace Vista.Data.Mappers
         // Helper para mapear propiedades comunes de Incendio a IncendioViewModels
         private static void MapIncendioCommonViewModelProperties(Incendio source, IncendioViewModels destination)
         {
-            destination.DeteccionAutomaticaId = source.DeteccionAutomatica;
+            destination.DeteccionAutomatica = source.DeteccionAutomatica;
             destination.Extintor = source.Extintor;
             destination.Hidrante = source.Hidrante;
             destination.TipoEvacuacion = source.TipoEvacuacion;
@@ -601,7 +601,7 @@ namespace Vista.Data.Mappers
             viewModel.TimeSalida = TimeOnly.FromDateTime(model.HoraSalida);
             viewModel.TimeLlegada = TimeOnly.FromDateTime(model.HoraLlegada);
             viewModel.Descripcion = model.Descripcion;
-            viewModel.CalleORuta = model.Direccion;
+            viewModel.Direccion = model.Direccion;
             viewModel.PisoNumero = model.PisoNumero;
             viewModel.Depto = model.Depto;
             viewModel.TipoZona = model.TipoZona;

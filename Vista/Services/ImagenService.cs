@@ -5,13 +5,14 @@ using Vista.Data;
 using Vista.Data.Models.Imagenes;
 using Vista.Data.Models.Personas.Personal;
 using Vista.DTOs;
+using Vista.Helpers;
 
 namespace Vista.Services
 {
     public interface IImagenService
     {
         Task<ImagenResultado?> ObtenerImagenAsync(int id);
-        Task<bool> GuardarImagenAsync(Imagen imagen);
+        Task GuardarImagenAsync(Imagen imagen);
         Task EditarImagenAsync(Imagen imagen);
         Task EliminarImagenAsync(int? id);
     }
@@ -40,19 +41,10 @@ namespace Vista.Services
 
         // Dentro de ImagenService:
         // NOTA: Se ha quitado la lógica de BeginTransaction y Commit/Rollback.
-        public async Task<bool> GuardarImagenAsync(Imagen imagen)
+        public async Task GuardarImagenAsync(Imagen imagen)
         {
             // --- 1. Validación del Modelo (DataAnnotations) ---
-            var validationContext = new ValidationContext(imagen, serviceProvider: null, items: null);
-            var validationResults = new List<ValidationResult>();
-            bool esValido = Validator.TryValidateObject(imagen, validationContext, validationResults, validateAllProperties: true);
-
-            if (!esValido)
-            {
-                string errores = string.Join(Environment.NewLine, validationResults.Select(r => r.ErrorMessage));
-                // Lanza la excepción. Será capturada por el 'catch' del método que lo llamó.
-                throw new ValidationException($"El modelo Imagen no es válido: {Environment.NewLine}{errores}");
-            }
+            ValidationHelper.Validar(imagen);
 
             // --- 2. Manejar las relaciones ---
             switch (imagen)
@@ -61,22 +53,12 @@ namespace Vista.Services
                     if (imagen_VehiculoSalida.VehiculoId == 0)
                         throw new ArgumentException("El ID del vehículo no puede ser cero.");
 
-                    var vehiculo = await _context.VehiculoSalidas.FindAsync(imagen_VehiculoSalida.VehiculoId);
-                    if (vehiculo == null)
-                        throw new InvalidOperationException($"No se encontró el vehículo con ID {imagen_VehiculoSalida.VehiculoId}.");
-
-                    imagen_VehiculoSalida.Vehiculo = vehiculo;
                     break;
 
                 case Imagen_Personal imagen_Personal:
                     if (imagen_Personal.PersonalId == 0)
                         throw new ArgumentException("El ID del personal no puede ser cero.");
 
-                    var personal = await _context.Bomberos.FindAsync(imagen_Personal.PersonalId);
-                    if (personal == null)
-                        throw new InvalidOperationException($"No se encontró el personal con ID {imagen_Personal.PersonalId}.");
-
-                    imagen_Personal.Personal = personal;
                     break;
 
                 default:
@@ -88,7 +70,6 @@ namespace Vista.Services
             _context.Imagen.Add(imagen);
 
             await _context.SaveChangesAsync();
-            return true;
         }
 
         public async Task EditarImagenAsync(Imagen imagen)

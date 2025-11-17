@@ -1,23 +1,17 @@
-﻿using AntDesign;
-using DocumentFormat.OpenXml.InkML;
-using Microsoft.AspNetCore.Components;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
 using Vista.Data;
-using Vista.Data.Enums;
-using Vista.Data.Models.Grupos.Brigadas;
+using Vista.Data.Enums.Personal.ComisionDirectiva;
 using Vista.Data.Models.Imagenes;
 using Vista.Data.Models.Personas.Personal;
 using Vista.Data.Models.Personas.Personal.Componentes;
-using Vista.Data.ViewModels.Personal;
-using Vista.Data.Enums.Personal.ComisionDirectiva;
+using Vista.Helpers;
 
 namespace Vista.Services
 {
     public interface IComisionDirectivaService
     {
         Task CrearComisionDirectivaAsync(ComisionDirectiva comisionDirectiva, Imagen? imagen = null);
+        Task EditarComisionDirectivaAsync(ComisionDirectiva comisionDirectiva);
         Task<List<ComisionDirectiva>> ObtenerTodosLosMiembrosDeComisionDirectivaAsync(bool ConImagenes = false);
         Task<ComisionDirectiva> ObtenerMiembroComisionDirectivaPorIdAsync(int id, bool asnotracking = false, bool conRelaciones = false);
         Task<bool> CambiarEstado(int id, EstadoComisionDirectiva estado);
@@ -44,15 +38,7 @@ namespace Vista.Services
                 throw new ArgumentNullException(nameof(comisionDirectiva), "El Comisión Directiva no puede ser nulo.");
             }
 
-            var validationContext = new ValidationContext(comisionDirectiva, serviceProvider: null, items: null);
-            var validationResults = new List<ValidationResult>();
-            bool esValido = Validator.TryValidateObject(comisionDirectiva, validationContext, validationResults, validateAllProperties: true);
-
-            if (!esValido)
-            {
-                string errores = string.Join(Environment.NewLine, validationResults.Select(r => r.ErrorMessage));
-                throw new ValidationException($"El modelo Comisión Directiva no es válido: {Environment.NewLine}{errores}");
-            }
+            ValidationHelper.Validar(comisionDirectiva);
 
             // --- Paso B: Validaciones "Caras" (contra la BD) ---
             // (Se hacen antes de iniciar la transacción para no abrirla innecesariamente)
@@ -106,6 +92,104 @@ namespace Vista.Services
                 // la lógica del service, o el segundo SaveChanges dentro del service),
                 // revertimos TODA la operación.
                 await transaction.RollbackAsync();
+
+                // Lanza una excepción genérica o la 'ex' original
+                // para que la capa superior sepa que algo falló.
+                if (ex is DbUpdateException)
+                {
+                    throw new Exception("Error al guardar en la base de datos. Verifique datos duplicados.", ex);
+                }
+
+                // Re-lanza la excepción (ej. la ValidationException del service)
+                throw;
+            }
+        }
+
+        public async Task EditarComisionDirectivaAsync(ComisionDirectiva comisionDirectiva)
+        {
+            // --- 1. Validaciones ---
+
+            // --- Paso A: Validaciones "Baratas" (en memoria) ---
+            if (comisionDirectiva == null)
+            {
+                throw new ArgumentNullException(nameof(comisionDirectiva), "El Comisión Directiva no puede ser nulo.");
+            }
+
+            ValidationHelper.Validar(comisionDirectiva);
+
+            // --- 2. Inicio de la Transacción ---
+            // Esta será la transacción "principal" que controlará todo.
+            using var transaction = await _context.Database.BeginTransactionAsync();
+
+
+            try
+            {
+                // Buscamos el Comisión Directiva existente con su contacto
+                var existente = await _context.ComisionDirectivas
+                    .Include(c => c.Contacto)
+                    .FirstOrDefaultAsync(c => c.PersonaId == comisionDirectiva.PersonaId);
+
+                if (existente == null)
+                {
+                    throw new KeyNotFoundException($"No se encontró un miembro de comisión directiva con el ID {comisionDirectiva.PersonaId}.");
+                }
+
+                // Validar que no exista otro Comisión Directiva con el mismo documento
+                if (await _context.ComisionDirectivas.AnyAsync(b => b.Documento == comisionDirectiva.Documento && b.PersonaId != comisionDirectiva.PersonaId))
+                {
+                    throw new InvalidOperationException("Número de documento ya existente.");
+                }
+
+                // Actualizar los campos del Comisión Directiva existente
+
+                // Información Personal
+
+                existente.Documento = comisionDirectiva.Documento;
+                existente.FechaNacimiento = comisionDirectiva.FechaNacimiento;
+                existente.LugarNacimiento = comisionDirectiva.LugarNacimiento;
+                existente.Direccion = comisionDirectiva.Direccion;
+                existente.Sexo = comisionDirectiva.Sexo;
+                existente.GrupoSanguineo = comisionDirectiva.GrupoSanguineo;
+
+                // Información Profesional
+
+                existente.Grado = comisionDirectiva.Grado;
+                existente.Estado = comisionDirectiva.Estado;
+                existente.FechaAceptacion = comisionDirectiva.FechaAceptacion;
+
+                // Información de Contacto
+                if (existente.Contacto == null)
+                {
+                    existente.Contacto = new Contacto
+                    {
+                        PersonalId = existente.PersonaId,
+                        TelefonoCel = comisionDirectiva.Contacto?.TelefonoCel,
+                        TelefonoLaboral = comisionDirectiva.Contacto?.TelefonoLaboral,
+                        TelefonoFijo = comisionDirectiva.Contacto?.TelefonoFijo,
+                        Email = comisionDirectiva.Contacto?.Email
+                    };
+                }
+                else
+                {
+                    existente.Contacto.TelefonoCel = comisionDirectiva.Contacto?.TelefonoCel;
+                    existente.Contacto.TelefonoLaboral = comisionDirectiva.Contacto?.TelefonoLaboral;
+                    existente.Contacto.TelefonoFijo = comisionDirectiva.Contacto?.TelefonoFijo;
+                    existente.Contacto.Email = comisionDirectiva.Contacto?.Email;
+                }
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+            }
+            catch (Exception ex)
+            {
+                // --- Manejo de Error ---
+                // Si CUALQUIER operación falla (el primer SaveChanges,
+                // la lógica del service, o el segundo SaveChanges dentro del service),
+                // revertimos TODA la operación.
+                await transaction.RollbackAsync();
+
+                // Limpiar el contexto para evitar conflictos futuros
+                _context.ChangeTracker.Clear();
 
                 // Lanza una excepción genérica o la 'ex' original
                 // para que la capa superior sepa que algo falló.

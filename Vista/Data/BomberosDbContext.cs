@@ -16,12 +16,13 @@ using Vista.Data.Models.Personas;
 using Vista.Data.Models.Personas.Personal;
 using Vista.Data.Models.Personas.Personal.Componentes;
 using Vista.Data.Models.Vehiculos.Flota;
-using Vista.Data.Models.Vehiculos.Flota.Componentes;
-using Vista.Data.Models.Otros;
 using Vista.Data.Models.Objetos;
 using Vista.Data.Models.Objetos.Componentes;
 using Vista.Data.Models.Socios;
 using Vista.Data.Models.Socios.Componentes;
+using Vista.Data.Models.Socios.Componentes.Pagos;
+using Vista.Data.Enums.Socios;
+using Vista.Data.Models.Otros.Partes;
 
 namespace Vista.Data
 {
@@ -48,7 +49,6 @@ namespace Vista.Data
         public DbSet<Historial_Socio> HistorialesSocios { get; set; }
         public DbSet<HistorialCuota_Socio> HistorialCuotas { get; set; }
         public DbSet<HistorialEstado_Socio> HistorialEstados { get; set; }
-        public DbSet<HistorialPago_Socio> HistorialPagos { get; set; }
 
         // Dependencias (Departamentos)
 
@@ -98,10 +98,8 @@ namespace Vista.Data
         public DbSet<ServicioEspecialSuministroAgua> ServicioEspecialSuministroAgua { get; set; }
         public DbSet<ServicioEspecialFalsaAlarma> ServicioEspecialFalsaAlarma { get; set; }
         public DbSet<ServicioEspecialColaboraciónFuerzasSeguridad> ServicioEspecialColaboraciónFuerzasSeguridad { get; set; }
-        public DbSet<Firma> Firmas { get; set; }
         public DbSet<Movil_Salida> MovilesSalida { get; set; }
         public DbSet<BomberoSalida> BomberosSalida { get; set; }
-        public DbSet<Limpieza> Limpiezas { get; set; }
         public DbSet<Material> Materiales { get; set; }
 
         public DbSet<MovimientoMaterial> Movimientos { get; set; }
@@ -110,8 +108,6 @@ namespace Vista.Data
         public DbSet<AscensoBombero> AscensoBomberos { get; set; }
         public DbSet<Licencia> Licencias { get; set; }
         public DbSet<Sancion> Sanciones { get; set; }
-        public DbSet<Novedad> Novedades { get; set; }
-        public DbSet<NovedadVehiculo> NovedadesVehiculos { get; set; }
 
         // Fuerzas
 
@@ -132,6 +128,9 @@ namespace Vista.Data
 
         // Otra Propiedad experimental para el servicio de VehiculoSalida
         public DbSet<VehiculoSalida> VehiculoSalidas { get; set; }
+
+        // Partes de Vehiculo
+        public DbSet<ParteVehiculo> PartesVehiculo { get; set; }
 
         public BomberosDbContext(DbContextOptions<BomberosDbContext> options)
             : base(options)
@@ -294,6 +293,11 @@ namespace Vista.Data
                 .HasIndex(b => b.NumeroLegajo)
                 .IsUnique();
 
+            // ParteVehiculo
+            modelBuilder.Entity<ParteVehiculo>()
+                .HasIndex(pv => new { pv.Nombre, pv.Tipo })
+                .IsUnique();
+
             // Enum Discriminadores
 
             modelBuilder.Entity<Persona>()
@@ -316,6 +320,10 @@ namespace Vista.Data
                 .Property(s => s.TipoEmergencia)
                 .HasConversion<int>();
 
+            // modelBuilder.Entity<PagoSocio>()
+            // .Property(p => p.Tipo)
+            // .HasConversion<int>();
+
             //Discriminacion (Pasada a ENUM)
 
             modelBuilder.Entity<Persona>()
@@ -332,7 +340,9 @@ namespace Vista.Data
             modelBuilder.Entity<Imagen>()
                 .HasDiscriminator(i => i.Tipo)
                 .HasValue<Imagen_Personal>(TipoImagen.ImagenPersonal)
-                .HasValue<Imagen_VehiculoSalida>(TipoImagen.ImagenVehiculoSalida);
+                .HasValue<Imagen_VehiculoSalida>(TipoImagen.ImagenVehiculoSalida)
+                .HasValue<CertificadoMedico>(TipoImagen.ImagenCertificadoMedico);
+            //.HasValue<Comprobante>(TipoImagen.ImagenComprobanteBancario)
 
             modelBuilder.Entity<Salida>()
                 .HasDiscriminator(s => s.TipoEmergencia)
@@ -367,6 +377,11 @@ namespace Vista.Data
                 .HasValue<VehiculoAfectado>(TipoVehiculo.VehiculoAfectado)
                 .HasValue<Embarcacion>(TipoVehiculo.Embarcacion);
 
+            /* modelBuilder.Entity<PagoSocio>()
+                .HasDiscriminator(p => p.Tipo)
+                .HasValue<PagoTransferencia>(FormaDePago.Transferencia)
+                .HasValue<PagoEfectivo>(FormaDePago.Efectivo); */
+
             // Configuracion de Realaciones al Borrarse
 
             modelBuilder.Entity<Comunicacion>()
@@ -380,34 +395,6 @@ namespace Vista.Data
                 .HasOne(i => i.Vehiculo)
                 .WithOne(v => v.Imagen)
                 .HasForeignKey<VehiculoSalida>(v => v.ImagenId)
-                .OnDelete(DeleteBehavior.SetNull)
-                .IsRequired(false);
-
-            modelBuilder.Entity<VehiculoSalida>()
-                .HasMany(mo => mo.Incidentes)
-                .WithOne(li => li.Vehiculo)
-                .HasForeignKey(li => li.VehiculoId)
-                .OnDelete(DeleteBehavior.SetNull)
-                .IsRequired(false);
-
-            modelBuilder.Entity<NovedadBase>()
-                .HasOne(n => n.Personal)
-                .WithMany(b => b.Novedades)
-                .HasForeignKey(n => n.PersonalId)
-                .OnDelete(DeleteBehavior.SetNull)
-                .IsRequired(false);
-
-            modelBuilder.Entity<NovedadVehiculo>()
-                .HasOne(n => n.Vehiculo)
-                .WithMany(b => b.Novedades)
-                .HasForeignKey(n => n.VehiculoId)
-                .OnDelete(DeleteBehavior.SetNull)
-                .IsRequired(false);
-
-            modelBuilder.Entity<Bombero>()
-                .HasMany(bo => bo.Incidentes)
-                .WithOne(li => li.Encargado)
-                .HasForeignKey(li => li.PersonaId)
                 .OnDelete(DeleteBehavior.SetNull)
                 .IsRequired(false);
 
@@ -438,6 +425,18 @@ namespace Vista.Data
                 .HasForeignKey(bs => bs.SalidaId);
 
             // Enum Conversiones a INT (Enteros)
+
+            // ParteVehiculo - Enum TipoParteVehiculo
+            modelBuilder.Entity<ParteVehiculo>()
+                .Property(pv => pv.Tipo)
+                .HasConversion<int>();
+
+            // PagoTransferencia - Enum BancosConocidos
+
+            /*modelBuilder
+                .Entity<PagoTransferencia>()
+                .Property(pt => pt.BancoOrigen)
+                .HasConversion<int>(); */
 
             // Bombero - Enum EscalafonJerarquico (Grado)
 
@@ -499,13 +498,6 @@ namespace Vista.Data
             modelBuilder
                 .Entity<Socio>()
                 .Property(s => s.FrecuenciaDePago)
-                .HasConversion<int>();
-
-            // HistorialPago_Socio - Enum FormaDePago
-
-            modelBuilder
-                .Entity<HistorialPago_Socio>()
-                .Property(hp => hp.FormaDePago)
                 .HasConversion<int>();
 
             // HistorialEstado_Socio - Enum TipoEstadoSocio
@@ -770,18 +762,6 @@ namespace Vista.Data
             modelBuilder
                 .Entity<BomberoSalida>()
                 .Property(b => b.Grado)
-                .HasConversion<string>()
-                .HasMaxLength(255);
-
-            modelBuilder
-                .Entity<Limpieza>()
-                .Property(t => t.Incidente)
-                .HasConversion<string>()
-                .HasMaxLength(255);
-
-            modelBuilder
-                .Entity<Incidente>()
-                .Property(t => t.Tipo)
                 .HasConversion<string>()
                 .HasMaxLength(255);
 

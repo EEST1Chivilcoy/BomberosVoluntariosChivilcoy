@@ -4,6 +4,7 @@ using Vista.Data.Enums;
 using Vista.Data.Enums.Discriminadores;
 using Vista.Data.Enums.Socios;
 using Vista.Data.Models.Socios.Componentes;
+using Vista.Data.Models.Socios.Componentes.Pagos;
 
 namespace Vista.Data.Models.Socios
 {
@@ -25,17 +26,20 @@ namespace Vista.Data.Models.Socios
         /// <summary>
         /// Representa el tipo de socio. (Empresa o Persona)
         /// </summary>
-        public TipoSocio Tipo { get; set; }
+        [Required(ErrorMessage = "Debe especificar si el socio es una Empresa o una Persona.")]
+        public TipoSocio? Tipo { get; set; }
 
         /// <summary>
         /// Representa la fecha de ingreso del socio.
         /// </summary>
+        [Required(ErrorMessage = "La fecha de ingreso es obligatoria.")]
         public DateTime FechaIngreso { get; set; } = DateTime.Now;
 
         /// <summary>
         /// Representa el estado actual del socio. (Activo, Inactivo, Suspendido)
         /// </summary>
-        public TipoEstadoSocio EstadoSocio { get; set; } = TipoEstadoSocio.Activo;
+        [Required(ErrorMessage = "El estado del socio es obligatorio.")]
+        public TipoEstadoSocio? EstadoSocio { get; set; } = TipoEstadoSocio.Activo;
 
         /// <summary>
         /// Representa la relación del con el historial del socio. (1 a n) (Componente)
@@ -50,7 +54,8 @@ namespace Vista.Data.Models.Socios
         /// <summary>
         /// Representa la frecuencia de pago del socio. (Mensual, Trimestral, Semestral, Anual) (Por defecto es Mensual)
         /// </summary>
-        public FrecuenciaPago FrecuenciaDePago { get; set; } = FrecuenciaPago.Mensual;
+        [Required(ErrorMessage = "La frecuencia de pago es obligatoria.")]
+        public FrecuenciaPago? FrecuenciaDePago { get; set; } = FrecuenciaPago.Mensual;
 
         // --- Datos personales ---
 
@@ -59,13 +64,14 @@ namespace Vista.Data.Models.Socios
         /// Documento para personas y CUIT para empresas.
         /// Debe ser único.
         /// </summary>
-        [Required]
-        public int DocumentoOCUIT { get; set; }
+        [Required(ErrorMessage = "El documento o CUIT del socio es obligatorio.")]
+        public string DocumentoOCUIT { get; set; } = null!;
 
         /// <summary>
         /// Representa el nombre de la persona o empresa.
         /// </summary>
-        public string Nombre { get; set; } = string.Empty;
+        [Required(ErrorMessage = "El nombre del socio es obligatorio.")]
+        public string? Nombre { get; set; }
 
         /// <summary>
         /// Representa el apellido de la persona.
@@ -76,11 +82,13 @@ namespace Vista.Data.Models.Socios
         /// <summary>
         /// Representa la localidad del socio.
         /// </summary>
+        [Required(ErrorMessage = "la localidad del socio es obligatoria.")]
         public string Localidad { get; set; } = string.Empty;
 
         /// <summary>
         /// Representa la dirección del socio.
         /// </summary>
+        [Required(ErrorMessage = "la dirección del socio es obligatoria.")]
         public string Direccion { get; set; } = string.Empty;
 
         /// <summary>
@@ -96,16 +104,33 @@ namespace Vista.Data.Models.Socios
         /// <summary>
         /// Representa la zona del socio.
         /// </summary>
-        public TipoZona Zona { get; set; }
+        [Required(ErrorMessage = "La zona del socio es obligatoria.")]
+        public Zona? Zona { get; set; }
 
         /// <summary>
         /// Representa la ocupación del socio.
         /// </summary>
+        [StringLength(255, ErrorMessage = "La ocupacion no puede superar los 255 caracteres.")]
         public string? Ocupacion { get; set; }
 
         /// <summary>
         /// Representa el número de teléfono del socio.
         /// </summary>
+        [StringLength(255, ErrorMessage = "El número de telefono no puede superar los 255 caracteres.")]
+        [Phone(ErrorMessage = "El número de telefono no tiene un formato válido.")]
         public string Telefono { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Representa el correo electrónico del socio.
+        /// </summary>
+        [StringLength(255, ErrorMessage = "El email no puede superar los 255 caracteres.")]
+        [EmailAddress(ErrorMessage = "El email no tiene un formato válido.")]
+        public string? Email { get; set; }
+
+        /// <summary>
+        /// Pagos realizados por este socio.
+        /// Incluye pagos en efectivo y pagos electrónicos.
+        /// </summary>
+        // public List<PagoSocio> Pagos { get; set; } = new();
     }
 }

@@ -1,4 +1,5 @@
-﻿using Vista.Data.Enums.Personal.Cobrador;
+﻿using System.ComponentModel.DataAnnotations;
+using Vista.Data.Enums.Personal.Cobrador;
 using Vista.Data.Enums.Socios;
 using Vista.Shared;
 
@@ -12,11 +13,13 @@ namespace Vista.Data.ViewModels.Personal
         /// <summary>
         /// Estado del cobrador.
         /// </summary>
-        public EstadoCobrador Estado { get; set; } = EstadoCobrador.Activo;
+        [Required(ErrorMessage = "El estado del cobrador es obligatorio. Seleccioná una opción válida.")]
+        public EstadoCobrador? Estado { get; set; } = EstadoCobrador.Activo;
 
         /// <summary>
         /// Regiónes asignadas al cobrador.
         /// </summary>
+        [Required(ErrorMessage = "Debés asignar al menos una zona al cobrador.")]
         public Zona ZonasAsignadas { get; set; } = Zona.Ninguna;
 
         public string ZonasAsignadasAsString

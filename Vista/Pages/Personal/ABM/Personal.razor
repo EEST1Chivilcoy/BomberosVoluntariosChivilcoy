@@ -10,6 +10,8 @@
 @using Vista.Data.Models.Personas.Personal
 @using Vista.Data.Models.Personas.Personal.Componentes
 @using Vista.Pages.Personal.ABM.Componentes.Bomberos
+@using Vista.Pages.Personal.ABM.Componentes.Comision
+@using Vista.Pages.Personal.ABM.Componentes.Cobradores
 @using Vista.Pages.Personal.ABM.Componentes
 @using Vista.Data.Mappers
 
@@ -24,972 +26,996 @@
 @inject ICobradorService CobradorService
 
 <style>
-	/* Variables CSS para colores principales - Prefijo para evitar conflictos */
-	.personal-abm {
-		--abm-primary-color: #A63333;
-		--abm-primary-dark: #732D2D;
-		--abm-success-color: #4CAF50;
-		--abm-success-dark: #438E46;
-		--abm-warning-color: #F57F17;
-		--abm-warning-light: #FFF8E1;
-		--abm-error-color: #C62828;
-		--abm-error-light: #FFEBEE;
-		--abm-approved-color: #2E7D32;
-		--abm-approved-light: #E6F7E9;
-		--abm-gold-color: #FFD700;
-	}
+    /* Variables CSS para colores principales - Prefijo para evitar conflictos */
+    .personal-abm {
+        --abm-primary-color: #A63333;
+        --abm-primary-dark: #732D2D;
+        --abm-success-color: #4CAF50;
+        --abm-success-dark: #438E46;
+        --abm-warning-color: #F57F17;
+        --abm-warning-light: #FFF8E1;
+        --abm-error-color: #C62828;
+        --abm-error-light: #FFEBEE;
+        --abm-approved-color: #2E7D32;
+        --abm-approved-light: #E6F7E9;
+        --abm-gold-color: #FFD700;
+    }
 
-		.personal-abm .abm-container {
-			padding: 12px !important;
-			min-height: 100vh !important;
-			background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;
-		}
+        .personal-abm .abm-container {
+            padding: 12px !important;
+            min-height: 100vh !important;
+        }
 
-		.personal-abm .abm-main-card {
-			background: rgba(255, 255, 255, 0.95) !important;
-			backdrop-filter: blur(10px) !important;
-			border-radius: 16px !important;
-			box-shadow: 0 8px 32px rgba(166, 51, 51, 0.1), 0 4px 16px rgba(0, 0, 0, 0.05) !important;
-			border: 1px solid rgba(255, 255, 255, 0.2) !important;
-			overflow: hidden !important;
-		}
+        .personal-abm .abm-main-card {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(10px) !important;
+            border-radius: 16px !important;
+            box-shadow: 0 8px 32px rgba(166, 51, 51, 0.1), 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            overflow: hidden !important;
+        }
 
-		.personal-abm .abm-header-section {
-			background: linear-gradient(135deg, #A63333 0%, #732D2D 100%) !important;
-			color: white !important;
-			padding: 28px !important;
-			position: relative !important;
-			overflow: hidden !important;
-			margin-bottom: 0 !important;
-		}
+        .personal-abm .abm-header-section {
+            background: linear-gradient(135deg, #A63333 0%, #732D2D 100%) !important;
+            color: white !important;
+            padding: 28px !important;
+            position: relative !important;
+            overflow: hidden !important;
+            margin-bottom: 0 !important;
+        }
 
-			.personal-abm .abm-header-section::before {
-				content: '';
-				display: none;
-			}
+            .personal-abm .abm-header-section::before {
+                content: '';
+                display: none;
+            }
 
-			.personal-abm .abm-header-section .lava-bubbles {
-				position: absolute;
-				top: 0;
-				left: 0;
-				width: 100%;
-				height: 100%;
-				pointer-events: none;
-				z-index: 1;
-				overflow: hidden;
-			}
+            .personal-abm .abm-header-section .lava-bubbles {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                z-index: 1;
+                overflow: hidden;
+            }
 
-			.personal-abm .abm-header-section .lava-bubble {
-				position: absolute;
-				border-radius: 50%;
-				opacity: 0.45;
-				background: radial-gradient(circle at 60% 40%, #FFD54F 0%, #F9A825 80%, transparent 100%);
-				animation: lava-bubble-move 8s linear infinite;
-				filter: blur(1.5px);
-				mix-blend-mode: lighten;
-			}
+            .personal-abm .abm-header-section .lava-bubble {
+                position: absolute;
+                border-radius: 50%;
+                opacity: 0.45;
+                background: radial-gradient(circle at 60% 40%, #FFD54F 0%, #F9A825 80%, transparent 100%);
+                animation: lava-bubble-move 8s linear infinite;
+                filter: blur(1.5px);
+                mix-blend-mode: lighten;
+            }
 
-				.personal-abm .abm-header-section .lava-bubble.b1 {
-					left: 10%;
-					width: 60px;
-					height: 60px;
-					bottom: -70px;
-					animation-delay: 0s;
-					animation-duration: 7.5s;
-				}
+                .personal-abm .abm-header-section .lava-bubble.b1 {
+                    left: 10%;
+                    width: 60px;
+                    height: 60px;
+                    bottom: -70px;
+                    animation-delay: 0s;
+                    animation-duration: 7.5s;
+                }
 
-				.personal-abm .abm-header-section .lava-bubble.b2 {
-					left: 35%;
-					width: 90px;
-					height: 90px;
-					bottom: -100px;
-					animation-delay: 2s;
-					animation-duration: 9s;
-					background: radial-gradient(circle at 60% 40%, #FFEB3B 0%, #FFD54F 80%, transparent 100%);
-				}
+                .personal-abm .abm-header-section .lava-bubble.b2 {
+                    left: 35%;
+                    width: 90px;
+                    height: 90px;
+                    bottom: -100px;
+                    animation-delay: 2s;
+                    animation-duration: 9s;
+                    background: radial-gradient(circle at 60% 40%, #FFEB3B 0%, #FFD54F 80%, transparent 100%);
+                }
 
-				.personal-abm .abm-header-section .lava-bubble.b3 {
-					left: 65%;
-					width: 50px;
-					height: 50px;
-					bottom: -60px;
-					animation-delay: 1.5s;
-					animation-duration: 6.5s;
-					background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #FFD54F 80%, transparent 100%);
-				}
+                .personal-abm .abm-header-section .lava-bubble.b3 {
+                    left: 65%;
+                    width: 50px;
+                    height: 50px;
+                    bottom: -60px;
+                    animation-delay: 1.5s;
+                    animation-duration: 6.5s;
+                    background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #FFD54F 80%, transparent 100%);
+                }
 
-				.personal-abm .abm-header-section .lava-bubble.b4 {
-					left: 80%;
-					width: 70px;
-					height: 70px;
-					bottom: -80px;
-					animation-delay: 3.2s;
-					animation-duration: 8.5s;
-					background: radial-gradient(circle at 60% 40%, #F9A825 0%, #FFD54F 80%, transparent 100%);
-				}
+                .personal-abm .abm-header-section .lava-bubble.b4 {
+                    left: 80%;
+                    width: 70px;
+                    height: 70px;
+                    bottom: -80px;
+                    animation-delay: 3.2s;
+                    animation-duration: 8.5s;
+                    background: radial-gradient(circle at 60% 40%, #F9A825 0%, #FFD54F 80%, transparent 100%);
+                }
 
-				.personal-abm .abm-header-section .lava-bubble.b5 {
-					left: 55%;
-					width: 40px;
-					height: 40px;
-					bottom: -50px;
-					animation-delay: 5s;
-					animation-duration: 7.2s;
-					background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #F9A825 80%, transparent 100%);
-				}
+                .personal-abm .abm-header-section .lava-bubble.b5 {
+                    left: 55%;
+                    width: 40px;
+                    height: 40px;
+                    bottom: -50px;
+                    animation-delay: 5s;
+                    animation-duration: 7.2s;
+                    background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #F9A825 80%, transparent 100%);
+                }
 
-	@@keyframes lava-bubble-move {
-		0% {
-			transform: translateY(0) scale(1) rotate(0deg);
-			opacity: 0.45;
-		}
+    @@keyframes lava-bubble-move {
+        0% {
+            transform: translateY(0) scale(1) rotate(0deg);
+            opacity: 0.45;
+        }
 
-		60% {
-			opacity: 0.7;
-			filter: blur(2.5px);
-		}
+        60% {
+            opacity: 0.7;
+            filter: blur(2.5px);
+        }
 
-		80% {
-			transform: translateY(-220px) scale(1.15) rotate(10deg);
-			opacity: 0.6;
-		}
+        80% {
+            transform: translateY(-220px) scale(1.15) rotate(10deg);
+            opacity: 0.6;
+        }
 
-		100% {
-			transform: translateY(-320px) scale(0.95) rotate(-8deg);
-			opacity: 0;
-		}
-	}
+        100% {
+            transform: translateY(-320px) scale(0.95) rotate(-8deg);
+            opacity: 0;
+        }
+    }
 
-	.personal-abm .abm-header-section .main-title {
-		font-family: 'Poppins', 'Fjalla One', sans-serif !important;
-		font-size: 2.2rem !important;
-		font-weight: 700 !important;
-		letter-spacing: 1px !important;
-		margin: 0 !important;
-		display: flex !important;
-		align-items: center !important;
-		gap: 12px !important;
-		animation: text-glow 2.5s ease-in-out infinite alternate !important;
-		position: relative !important;
-		z-index: 2 !important;
-	}
+    .personal-abm .abm-header-section .main-title {
+        font-family: 'Poppins', 'Fjalla One', sans-serif !important;
+        font-size: 2.2rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 1px !important;
+        margin: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 12px !important;
+        animation: text-glow 2.5s ease-in-out infinite alternate !important;
+        position: relative !important;
+        z-index: 2 !important;
+    }
 
-	.personal-abm .abm-header-section .title-icon {
-		color: #FFD54F !important;
-		font-size: 2rem !important;
-		filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25)) !important;
-	}
+    .personal-abm .abm-header-section .title-icon {
+        color: #FFD54F !important;
+        font-size: 2rem !important;
+        filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25)) !important;
+    }
 
-	@@keyframes text-glow {
-		0%, 100% {
-			text-shadow: 0 0 5px #F9A825, 0 0 10px #FFD54F;
-		}
+    @@keyframes text-glow {
+        0%, 100% {
+            text-shadow: 0 0 5px #F9A825, 0 0 10px #FFD54F;
+        }
 
-		50% {
-			text-shadow: 0 0 12px #F9A825, 0 0 22px #FFD54F;
-		}
-	}
+        50% {
+            text-shadow: 0 0 12px #F9A825, 0 0 22px #FFD54F;
+        }
+    }
 
-	.personal-abm .abm-header-section .title-container {
-		position: relative !important;
-		z-index: 2 !important;
-		margin-bottom: 20px !important;
-	}
+    .personal-abm .abm-header-section .title-container {
+        position: relative !important;
+        z-index: 2 !important;
+        margin-bottom: 20px !important;
+    }
 
-	/* Filtros responsivos - Matching licenses layout */
-	.personal-abm .filters-section {
-		position: relative !important;
-		z-index: 2 !important;
-		display: grid !important;
-		grid-template-columns: 1fr !important;
-		gap: 16px !important;
-	}
+    /* Filtros responsivos - Matching licenses layout */
+    .personal-abm .filters-section {
+        position: relative !important;
+        z-index: 2 !important;
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+    }
 
-	.personal-abm .actions-row {
-		display: grid !important;
-		grid-template-columns: 1fr 1fr auto !important;
-		gap: 16px !important;
-		align-items: center !important;
-	}
+    .personal-abm .actions-row {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr auto !important;
+        gap: 16px !important;
+        align-items: center !important;
+    }
 
-	.personal-abm .search-container {
-		min-width: 0 !important;
-	}
+    .personal-abm .search-container {
+        min-width: 0 !important;
+    }
 
-	.personal-abm .abm-filters {
-		display: grid !important;
-		grid-template-columns: 2fr 2fr auto !important;
-		align-items: center !important;
-		gap: 16px !important;
-		margin-bottom: 16px !important;
-	}
+    .personal-abm .abm-filters {
+        display: grid !important;
+        grid-template-columns: 2fr 2fr auto !important;
+        align-items: center !important;
+        gap: 16px !important;
+        margin-bottom: 16px !important;
+    }
 
-		.personal-abm .abm-filters .ant-select,
-		.personal-abm .abm-filters .ant-input {
-			font-size: 16px !important;
-			width: 100% !important;
-			height: 40px !important;
-		}
+        .personal-abm .abm-filters .ant-select,
+        .personal-abm .abm-filters .ant-input {
+            font-size: 16px !important;
+            width: 100% !important;
+            height: 40px !important;
+        }
 
-	.personal-abm .abm-select-estado .ant-select-selector {
-		width: 100% !important;
-		height: 40px !important;
-		display: flex !important;
-		align-items: center !important;
-		justify-content: center !important;
-	}
+    .personal-abm .abm-select-estado .ant-select-selector {
+        width: 100% !important;
+        height: 40px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
 
-	.personal-abm .abm-filters .ant-input-search {
-		display: flex !important;
-	}
+    .personal-abm .abm-filters .ant-input-search {
+        display: flex !important;
+    }
 
-	.personal-abm .abm-filters button {
-		height: 40px !important;
-		font-size: 16px !important;
-		display: flex !important;
-		align-items: center !important;
-		justify-content: center !important;
-		gap: 6px !important;
-	}
+    .personal-abm .abm-filters button {
+        height: 40px !important;
+        font-size: 16px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 6px !important;
+    }
 
-	.personal-abm .ant-table {
-		overflow: hidden !important;
-		font-size: 16px !important;
-		background-color: #ffffff !important;
-	}
+    .personal-abm .ant-table {
+        overflow: hidden !important;
+        font-size: 16px !important;
+        background-color: #ffffff !important;
+    }
 
-	.personal-abm .ant-table-thead .ant-table-cell {
-		background-color: #A63333 !important;
-		color: #fff !important;
-		font-weight: bold !important;
-		padding: 16px !important;
-		border: none !important;
-	}
+    .personal-abm .ant-table-thead .ant-table-cell {
+        background-color: #A63333 !important;
+        color: #fff !important;
+        font-weight: bold !important;
+        padding: 16px !important;
+        border: none !important;
+    }
 
-	.personal-abm .ant-table-cell {
-		padding: 18px !important;
-		border-bottom: 1px solid #f0f0f0 !important;
-	}
+    .personal-abm .ant-table-cell {
+        padding: 18px !important;
+        border-bottom: 1px solid #f0f0f0 !important;
+    }
 
-	.personal-abm .abm-action-buttons {
-		display: flex !important;
-		justify-content: center !important;
-		flex-wrap: wrap !important;
-		gap: 8px !important;
-	}
+    .personal-abm .abm-action-buttons {
+        display: flex !important;
+        justify-content: center !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+    }
 
-		.personal-abm .abm-action-buttons .ant-btn {
-			min-width: 110px !important;
-			height: 38px !important;
-			font-size: 15px !important;
-			display: inline-flex !important;
-			align-items: center !important;
-			justify-content: center !important;
-			gap: 6px !important;
-			line-height: 1.2 !important;
-			padding: 0 12px !important;
-		}
+        .personal-abm .abm-action-buttons .ant-btn {
+            min-width: 110px !important;
+            height: 38px !important;
+            font-size: 15px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 6px !important;
+            line-height: 1.2 !important;
+            padding: 0 12px !important;
+        }
 
-	.personal-abm .ant-btn-dangerous {
-		color: #a63333 !important;
-		border-color: #a63333 !important;
-	}
+    .personal-abm .ant-btn-dangerous {
+        color: #a63333 !important;
+        border-color: #a63333 !important;
+    }
 
-		.personal-abm .ant-btn-dangerous:hover {
-			background-color: #a63333 !important;
-			color: white !important;
-		}
+        .personal-abm .ant-btn-dangerous:hover {
+            background-color: #a63333 !important;
+            color: white !important;
+        }
 
-	.personal-abm .ant-pagination {
-		justify-content: center !important;
-		margin-top: 24px !important;
-	}
+    .personal-abm .ant-pagination {
+        justify-content: center !important;
+        margin-top: 24px !important;
+    }
 
-	.personal-abm .ant-pagination-item {
-		display: flex !important;
-		align-items: center !important;
-		justify-content: center !important;
-	}
+    .personal-abm .ant-pagination-item {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
 
-	.personal-abm .ant-pagination-prev,
-	.personal-abm .ant-pagination-next {
-		display: flex !important;
-		align-items: center !important;
-		justify-content: center !important;
-	}
+    .personal-abm .ant-pagination-prev,
+    .personal-abm .ant-pagination-next {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
 
-	.personal-abm .add-button {
-		background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
-		border: none !important;
-		color: white !important;
-		box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3) !important;
-		padding: 0 20px !important;
-		font-weight: 600 !important;
-		border-radius: 8px !important;
-		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-	}
+    .personal-abm .add-button {
+        background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
+        border: none !important;
+        color: white !important;
+        box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3) !important;
+        padding: 0 20px !important;
+        font-weight: 600 !important;
+        border-radius: 8px !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
 
-		.personal-abm .add-button:hover {
-			transform: translateY(-2px) !important;
-			box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4) !important;
-		}
+        .personal-abm .add-button:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4) !important;
+        }
 
-	.personal-abm .abm-select-estado {
-		width: 100% !important;
-		min-width: 0 !important;
-		box-sizing: border-box !important;
-		height: 40px !important;
-		font-size: 14px !important;
-		display: block !important;
-	}
+    .personal-abm .abm-select-estado {
+        width: 100% !important;
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+        height: 40px !important;
+        font-size: 14px !important;
+        display: block !important;
+    }
 
-	.personal-abm .flex-container .fade-in {
-		animation: abm-fadeIn 0.5s ease-in-out !important;
-	}
+    .personal-abm .flex-container .fade-in {
+        animation: abm-fadeIn 0.5s ease-in-out !important;
+    }
 
-	@@keyframes abm-fadeIn {
-		from {
-			opacity: 0;
-			transform: translateY(20px);
-		}
+    @@keyframes abm-fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
 
-		to {
-			opacity: 1;
-			transform: translateY(0);
-		}
-	}
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
 
-	/* Responsive adjustments - Matching licenses */
-	@@media (max-width: 1199px) {
-		.personal-abm .abm-container {
-			padding: 8px !important;
-		}
+    /* Responsive adjustments - Matching licenses */
+    @@media (max-width: 1199px) {
+        .personal-abm .abm-container {
+            padding: 8px !important;
+        }
 
-		.personal-abm .abm-header-section {
-			padding: 20px !important;
-		}
+        .personal-abm .abm-header-section {
+            padding: 20px !important;
+        }
 
-		.personal-abm .main-title {
-			font-size: 2rem !important;
-			flex-direction: column !important;
-			text-align: center !important;
-			gap: 8px !important;
-		}
+        .personal-abm .main-title {
+            font-size: 2rem !important;
+            flex-direction: column !important;
+            text-align: center !important;
+            gap: 8px !important;
+        }
 
-		.personal-abm .abm-filters {
-			grid-template-columns: 1fr !important;
-		}
+        .personal-abm .abm-filters {
+            grid-template-columns: 1fr !important;
+        }
 
-		.personal-abm .actions-row {
-			grid-template-columns: 1fr !important;
-			gap: 12px !important;
-		}
-	}
+        .personal-abm .actions-row {
+            grid-template-columns: 1fr !important;
+            gap: 12px !important;
+        }
+    }
 
-	@@media (max-width: 768px) {
-		.personal-abm .abm-container {
-			padding: 4px !important;
-		}
+    @@media (max-width: 768px) {
+        .personal-abm .abm-container {
+            padding: 4px !important;
+        }
 
-		.personal-abm .abm-header-section {
-			padding: 16px !important;
-		}
+        .personal-abm .abm-header-section {
+            padding: 16px !important;
+        }
 
-		.personal-abm .main-title {
-			font-size: 1.8rem !important;
-			letter-spacing: 2px !important;
-		}
+        .personal-abm .main-title {
+            font-size: 1.8rem !important;
+            letter-spacing: 2px !important;
+        }
 
-		.personal-abm .abm-action-buttons {
-			flex-direction: column !important;
-			align-items: stretch !important;
-		}
+        .personal-abm .abm-action-buttons {
+            flex-direction: column !important;
+            align-items: stretch !important;
+        }
 
-			.personal-abm .abm-action-buttons .ant-btn {
-				width: 100% !important;
-			}
-	}
+            .personal-abm .abm-action-buttons .ant-btn {
+                width: 100% !important;
+            }
+    }
 
-	@@media (max-width: 575px) {
-		.personal-abm .main-title {
-			font-size: 1.5rem !important;
-		}
-	}
+    @@media (max-width: 575px) {
+        .personal-abm .main-title {
+            font-size: 1.5rem !important;
+        }
+    }
 </style>
 
 <div class="personal-abm">
-	<div class="abm-container">
-		<Card Class="abm-main-card fade-in">
-			<div class="abm-header-section">
-				<div class="lava-bubbles">
-					<div class="lava-bubble b1"></div>
-					<div class="lava-bubble b2"></div>
-					<div class="lava-bubble b3"></div>
-					<div class="lava-bubble b4"></div>
-					<div class="lava-bubble b5"></div>
-				</div>
-				<div class="title-container">
-					<h1 class="main-title">
-						@if (TipoPersonal.ToLower() == "comisiondirectiva")
-						{
-							<Icon Type="team" Class="title-icon" />
-							<span>COMISIÓN DIRECTIVA</span>
-						}
-						else if (TipoPersonal.ToLower() == "bomberos")
-						{
-							<Icon Type="fire" Class="title-icon" />
-							<span>BOMBEROS</span>
-						}
-						else if (TipoPersonal.ToLower() == "cobradores")
-						{
-							<Icon Type="transaction" Class="title-icon" />
-							<span>COBRADORES</span>
-						}
-					</h1>
-				</div>
-				<div class="filters-section">
-					<div class="actions-row abm-filters">
-						@if (TipoPersonal.ToLower() == "bomberos")
-						{
-							<EnumSelect DefaultValue="EstadoBombero.CuerpoActivo"
-										ValueChanged="(EstadoBombero estado) => searchB(searchString, estado)"
-										TEnum="EstadoBombero"
-										Class="abm-select-estado" />
-							<div class="search-container">
-								<Search Placeholder="Buscar Bombero"
-										@bind-Value="@searchString"
-										OnSearch="()=>searchB(searchString, EstadoB)"
-										BindOnInput />
-							</div>
-							<Button Type="ButtonType.Primary"
-									Class="add-button"
-									OnClick="@(() => navigationManager.NavigateTo("/fire-force/personal/bombero/agregar"))">
-								<Icon Type="plus" /> Agregar Bombero
-							</Button>
-						}
-						else if (TipoPersonal.ToLower() == "comisiondirectiva")
-						{
-							<EnumSelect DefaultValue="EstadoComisionDirectiva.Activo"
-										ValueChanged="(EstadoComisionDirectiva estado) => searchCD(searchString, estado)"
-										TEnum="EstadoComisionDirectiva"
-										Class="abm-select-estado" />
-							<div class="search-container">
-								<Search Placeholder="Buscar Miembro"
-										@bind-Value="@searchString"
-										OnSearch="()=>searchCD(searchString, EstadoCD)"
-										BindOnInput />
-							</div>
-							<Button Type="ButtonType.Primary"
-									Class="add-button"
-									OnClick="@(() => navigationManager.NavigateTo("/fire-force/personal/comisiondirectiva/agregar"))">
-								<Icon Type="plus" /> Agregar Comisión Directiva
-							</Button>
-						}
-						else if (TipoPersonal.ToLower() == "cobradores")
-						{
-							<EnumSelect DefaultValue="EstadoCobrador.Activo"
-										ValueChanged="(EstadoCobrador estado) => searchC(searchString, estado)"
-										TEnum="EstadoCobrador"
-										Class="abm-select-estado" />
+    <div class="abm-container">
+        <Card Class="abm-main-card fade-in">
+            <div class="abm-header-section">
+                <div class="lava-bubbles">
+                    <div class="lava-bubble b1"></div>
+                    <div class="lava-bubble b2"></div>
+                    <div class="lava-bubble b3"></div>
+                    <div class="lava-bubble b4"></div>
+                    <div class="lava-bubble b5"></div>
+                </div>
+                <div class="title-container">
+                    <h1 class="main-title">
+                        @if (TipoPersonal.ToLower() == "comisiondirectiva")
+                        {
+                            <Icon Type="team" Class="title-icon" />
+                            <span>COMISIÓN DIRECTIVA</span>
+                        }
+                        else if (TipoPersonal.ToLower() == "bomberos")
+                        {
+                            <Icon Type="fire" Class="title-icon" />
+                            <span>BOMBEROS</span>
+                        }
+                        else if (TipoPersonal.ToLower() == "cobradores")
+                        {
+                            <Icon Type="transaction" Class="title-icon" />
+                            <span>COBRADORES</span>
+                        }
+                    </h1>
+                </div>
+                <div class="filters-section">
+                    <div class="actions-row abm-filters">
+                        @if (TipoPersonal.ToLower() == "bomberos")
+                        {
+                            <EnumSelect DefaultValue="EstadoBombero.CuerpoActivo"
+                                        ValueChanged="(EstadoBombero estado) => searchB(searchString, estado)"
+                                        TEnum="EstadoBombero"
+                                        Class="abm-select-estado" />
+                            <div class="search-container">
+                                <Search Placeholder="Buscar Bombero"
+                                        @bind-Value="@searchString"
+                                        OnSearch="()=>searchB(searchString, EstadoB)"
+                                        BindOnInput />
+                            </div>
+                            <Button Type="ButtonType.Primary"
+                                    Class="add-button"
+                                    OnClick="@(() => navigationManager.NavigateTo("/fire-force/personal/bombero/agregar"))">
+                                <Icon Type="plus" /> Agregar Bombero
+                            </Button>
+                        }
+                        else if (TipoPersonal.ToLower() == "comisiondirectiva")
+                        {
+                            <EnumSelect DefaultValue="EstadoComisionDirectiva.Activo"
+                                        ValueChanged="(EstadoComisionDirectiva estado) => searchCD(searchString, estado)"
+                                        TEnum="EstadoComisionDirectiva"
+                                        Class="abm-select-estado" />
+                            <div class="search-container">
+                                <Search Placeholder="Buscar Miembro"
+                                        @bind-Value="@searchString"
+                                        OnSearch="()=>searchCD(searchString, EstadoCD)"
+                                        BindOnInput />
+                            </div>
+                            <Button Type="ButtonType.Primary"
+                                    Class="add-button"
+                                    OnClick="@(() => navigationManager.NavigateTo("/fire-force/personal/comisiondirectiva/agregar"))">
+                                <Icon Type="plus" /> Agregar Comisión Directiva
+                            </Button>
+                        }
+                        else if (TipoPersonal.ToLower() == "cobradores")
+                        {
+                            <EnumSelect DefaultValue="EstadoCobrador.Activo"
+                                        ValueChanged="(EstadoCobrador estado) => searchC(searchString, estado)"
+                                        TEnum="EstadoCobrador"
+                                        Class="abm-select-estado" />
 
-							<div class="search-container">
-								<Search Placeholder="Buscar Cobrador"
-										@bind-Value="@searchString"
-										OnSearch="()=>searchC(searchString, EstadoC)"
-										BindOnInput />
-							</div>
-							<Button Type="ButtonType.Primary"
-									Class="add-button"
-									OnClick="@(() => navigationManager.NavigateTo("/fire-force/personal/cobrador/agregar"))">
-								<Icon Type="plus" /> Agregar Cobrador
-							</Button>
-						}
-					</div>
-				</div>
-			</div>
-			@if (TipoPersonal.ToLower() == "bomberos")
-			{
-				<Table @ref="table"
-					   TItem="BomberoViweModel"
-					   DataSource="@bomberos"
-					   OnRow="@OnRowClick"
-					   @bind-PageIndex="_pageIndex"
-					   @bind-PageSize="_pageSize"
-					   Loading="isLoading"
-					   Responsive>
-					<ColumnDefinitions>
-						<Column TData="Bombero" Title="Foto" Width="100">
-							@if (context.UrlImagen != null)
-							{
-								<Avatar Size="AvatarSize.Large" Src="@(context.UrlImagen)" />
-							}
-							else
-							{
-								<Avatar Size="AvatarSize.Large" Icon="user" />
-							}
-						</Column>
-						<PropertyColumn Property="c => c.ApellidoYNombre" Title="👤 Apellido y Nombre" Sortable>
-						</PropertyColumn>
-						<PropertyColumn Title="🆔 Legajo" Property="c => c.NumeroLegajo" Sortable>
-						</PropertyColumn>
-						<PropertyColumn Title="🎖️ Jerarquía"
-										Property="@(c => c.Grado)"
-										SorterCompare="@((x, y) => ((EscalafonJerarquico)x).CompareTo((EscalafonJerarquico)y))"
-										Sortable
-										DefaultSortOrder="SortDirection.Ascending">
-							<Template>
-								@context.Grado.GetDisplayName()
-							</Template>
-						</PropertyColumn>
-						<PropertyColumn Title="📊 Estado" Property="@(c => c.Estado.GetDisplayName())" Sortable>
+                            <div class="search-container">
+                                <Search Placeholder="Buscar Cobrador"
+                                        @bind-Value="@searchString"
+                                        OnSearch="()=>searchC(searchString, EstadoC)"
+                                        BindOnInput />
+                            </div>
+                            <Button Type="ButtonType.Primary"
+                                    Class="add-button"
+                                    OnClick="@(() => navigationManager.NavigateTo("/fire-force/personal/cobrador/agregar"))">
+                                <Icon Type="plus" /> Agregar Cobrador
+                            </Button>
+                        }
+                    </div>
+                </div>
+            </div>
+            @if (TipoPersonal.ToLower() == "bomberos")
+            {
+                <Table @ref="table"
+                       TItem="BomberoViweModel"
+                       DataSource="@bomberos"
+                       OnRow="@OnRowClick"
+                       @bind-PageIndex="_pageIndex"
+                       @bind-PageSize="_pageSize"
+                       Loading="isLoading"
+                       Responsive>
+                    <ColumnDefinitions>
+                        <Column TData="Bombero" Title="Foto" Width="100">
+                            @if (context.UrlImagen != null)
+                            {
+                                <Avatar Size="AvatarSize.Large" Src="@(context.UrlImagen)" />
+                            }
+                            else
+                            {
+                                <Avatar Size="AvatarSize.Large" Icon="user" />
+                            }
+                        </Column>
+                        <PropertyColumn Property="c => c.ApellidoYNombre" Title="👤 Apellido y Nombre" Sortable>
+                        </PropertyColumn>
+                        <PropertyColumn Title="🆔 Legajo" Property="c => c.NumeroLegajo" Sortable>
+                        </PropertyColumn>
+                        <PropertyColumn Title="🎖️ Jerarquía"
+                                        Property="@(c => c.Grado)"
+                                        SorterCompare="@((x, y) => ((EscalafonJerarquico)x).CompareTo((EscalafonJerarquico)y))"
+                                        Sortable
+                                        DefaultSortOrder="SortDirection.Ascending">
+                            <Template>
+                                @context.Grado.GetDisplayName()
+                            </Template>
+                        </PropertyColumn>
+                        <PropertyColumn Title="📊 Estado" Property="@(c => c.Estado.GetDisplayName())" Sortable>
 
-						</PropertyColumn>
-						<ActionColumn Title="⚙️ Acciones" Align=ColumnAlign.Center>
-							<div class="abm-action-buttons" @onclick:stopPropagation>
-								<Button Type="default" OnClick="() => EditarPersonal(context.Id)">
-									<Icon Type="edit" /> Editar
-								</Button>
-								@if (context.Estado != EstadoBombero.Baja)
-								{
-									<Popconfirm Title="¿Está seguro de dar de baja?"
-												OnConfirm="()=>CambiarEstadoBombero(context.Id, EstadoBombero.Baja)"
-												OkText="Sí" CancelText="No">
-										<Button Danger>
-											<Icon Type="down" /> Baja
-										</Button>
-									</Popconfirm>
-								}
-								else
-								{
-									<Popconfirm Title="¿Está seguro de dar de alta?"
-												OnConfirm="()=>CambiarEstadoBombero(context.Id, EstadoBombero.CuerpoActivo)"
-												OkText="Sí" CancelText="No">
-										<Button Color="Color.Green2">
-											<Icon Type="up" /> Alta
-										</Button>
-									</Popconfirm>
-								}
-							</div>
-						</ActionColumn>
-					</ColumnDefinitions>
-				</Table>
-			}
-			else if (TipoPersonal.ToLower() == "comisiondirectiva")
-			{
-				<Table @ref="table"
-					   TItem="ComisionDirectivaViewModel"
-					   DataSource="@comisionDirectiva"
-					   OnRow="@OnRowClick"
-					   @bind-PageIndex="_pageIndex"
-					   @bind-PageSize="_pageSize"
-					   Loading="isLoading"
-					   Responsive>
-					<ColumnDefinitions>
-						<Column TData="ComisionDirectiva" Title="Foto" Width="100">
-							@if (context.UrlImagen != null)
-							{
-								<Avatar Size="AvatarSize.Large" Src="@(context.UrlImagen)" />
-							}
-							else
-							{
-								<Avatar Size="AvatarSize.Large" Icon="user" />
-							}
-						</Column>
-						<PropertyColumn Property="c => c.ApellidoYNombre" Title="👤 Apellido y Nombre" Sortable>
-						</PropertyColumn>
-						<PropertyColumn Title="🆔 Documento" Property="c => c.Documento" Sortable>
-						</PropertyColumn>
-						<PropertyColumn Title="🎖️ Jerarquía"
-										Property="@(c => c.Grado)"
-										SorterCompare="@((x, y) => ((GradoComisionDirectiva)x).CompareTo((GradoComisionDirectiva)y))"
-										Sortable
-										DefaultSortOrder="SortDirection.Ascending">
-							<Template>
-								@context.Grado.GetDisplayName()
-							</Template>
-						</PropertyColumn>
-						<PropertyColumn Title="📊 Estado" Property="@(c => c.Estado.GetDisplayName())" Sortable>
+                        </PropertyColumn>
+                        <ActionColumn Title="⚙️ Acciones" Align=ColumnAlign.Center>
+                            <div class="abm-action-buttons" @onclick:stopPropagation>
+                                <Button Type="default" OnClick="() => EditarPersonal(context.Id)">
+                                    <Icon Type="edit" /> Editar
+                                </Button>
+                                @if (context.Estado != EstadoBombero.Baja)
+                                {
+                                    <Popconfirm Title="¿Está seguro de dar de baja?"
+                                                OnConfirm="()=>CambiarEstadoBombero(context.Id, EstadoBombero.Baja)"
+                                                OkText="Sí" CancelText="No">
+                                        <Button Danger>
+                                            <Icon Type="down" /> Baja
+                                        </Button>
+                                    </Popconfirm>
+                                }
+                                else
+                                {
+                                    <Popconfirm Title="¿Está seguro de dar de alta?"
+                                                OnConfirm="()=>CambiarEstadoBombero(context.Id, EstadoBombero.CuerpoActivo)"
+                                                OkText="Sí" CancelText="No">
+                                        <Button Color="Color.Green2">
+                                            <Icon Type="up" /> Alta
+                                        </Button>
+                                    </Popconfirm>
+                                }
+                            </div>
+                        </ActionColumn>
+                    </ColumnDefinitions>
+                </Table>
+            }
+            else if (TipoPersonal.ToLower() == "comisiondirectiva")
+            {
+                <Table @ref="table"
+                       TItem="ComisionDirectivaViewModel"
+                       DataSource="@comisionDirectiva"
+                       OnRow="@OnRowClick"
+                       @bind-PageIndex="_pageIndex"
+                       @bind-PageSize="_pageSize"
+                       Loading="isLoading"
+                       Responsive>
+                    <ColumnDefinitions>
+                        <Column TData="ComisionDirectiva" Title="Foto" Width="100">
+                            @if (context.UrlImagen != null)
+                            {
+                                <Avatar Size="AvatarSize.Large" Src="@(context.UrlImagen)" />
+                            }
+                            else
+                            {
+                                <Avatar Size="AvatarSize.Large" Icon="user" />
+                            }
+                        </Column>
+                        <PropertyColumn Property="c => c.ApellidoYNombre" Title="👤 Apellido y Nombre" Sortable>
+                        </PropertyColumn>
+                        <PropertyColumn Title="🆔 Documento" Property="c => c.Documento" Sortable>
+                        </PropertyColumn>
+                        <PropertyColumn Title="🎖️ Jerarquía"
+                                        Property="@(c => c.Grado)"
+                                        SorterCompare="@((x, y) => ((GradoComisionDirectiva)x).CompareTo((GradoComisionDirectiva)y))"
+                                        Sortable
+                                        DefaultSortOrder="SortDirection.Ascending">
+                            <Template>
+                                @context.Grado.GetDisplayName()
+                            </Template>
+                        </PropertyColumn>
+                        <PropertyColumn Title="📊 Estado" Property="@(c => c.Estado.GetDisplayName())" Sortable>
 
-						</PropertyColumn>
-						<ActionColumn Title="⚙️ Acciones" Align=ColumnAlign.Center>
-							<div class="abm-action-buttons" @onclick:stopPropagation>
-								<Button Type="default" OnClick="() => EditarPersonal(context.Id)">
-									<Icon Type="edit" /> Editar
-								</Button>
-								@if (context.Estado != EstadoComisionDirectiva.Baja)
-								{
-									<Popconfirm Title="¿Está seguro de dar de baja?"
-												OnConfirm="()=>CambiarEstadoComisionDirectiva(context.Id, EstadoComisionDirectiva.Baja)"
-												OkText="Sí" CancelText="No">
-										<Button Danger>
-											<Icon Type="down" /> Baja
-										</Button>
-									</Popconfirm>
-								}
-								else
-								{
-									<Popconfirm Title="¿Está seguro de dar de alta?"
-												OnConfirm="()=>CambiarEstadoComisionDirectiva(context.Id, EstadoComisionDirectiva.Activo)"
-												OkText="Sí" CancelText="No">
-										<Button Color="Color.Green2">
-											<Icon Type="up" /> Alta
-										</Button>
-									</Popconfirm>
-								}
-							</div>
-						</ActionColumn>
-					</ColumnDefinitions>
-				</Table>
-			}
-			else if (TipoPersonal.ToLower() == "cobradores")
-			{
-				<Table @ref="table"
-					   TItem="CobradorViewModel"
-					   DataSource="@cobradores"
-					   OnRow="@OnRowClick"
-					   @bind-PageIndex="_pageIndex"
-					   @bind-PageSize="_pageSize"
-					   Loading="isLoading"
-					   Responsive>
-					<ColumnDefinitions>
-						<Column TData="CobradorViewModel" Title="Foto" Width="100">
-							@if (context.UrlImagen != null)
-							{
-								<Avatar Size="AvatarSize.Large" Src="@(context.UrlImagen)" />
-							}
-							else
-							{
-								<Avatar Size="AvatarSize.Large" Icon="user" />
-							}
-						</Column>
-						<PropertyColumn Property="c => c.ApellidoYNombre" Title="👤 Apellido y Nombre" Sortable />
-						<PropertyColumn Title="🆔 Documento" Property="c => c.Documento" Sortable />
-						<PropertyColumn Title="🏘️ Zonas Asignadas" Property="c => c.ZonasAsignadasAsString" Sortable />
-						<PropertyColumn Title="📊 Estado" Property="@(c => c.Estado.GetDisplayName())" Sortable />
+                        </PropertyColumn>
+                        <ActionColumn Title="⚙️ Acciones" Align=ColumnAlign.Center>
+                            <div class="abm-action-buttons" @onclick:stopPropagation>
+                                <Button Type="default" OnClick="() => EditarPersonal(context.Id)">
+                                    <Icon Type="edit" /> Editar
+                                </Button>
+                                @if (context.Estado != EstadoComisionDirectiva.Baja)
+                                {
+                                    <Popconfirm Title="¿Está seguro de dar de baja?"
+                                                OnConfirm="()=>CambiarEstadoComisionDirectiva(context.Id, EstadoComisionDirectiva.Baja)"
+                                                OkText="Sí" CancelText="No">
+                                        <Button Danger>
+                                            <Icon Type="down" /> Baja
+                                        </Button>
+                                    </Popconfirm>
+                                }
+                                else
+                                {
+                                    <Popconfirm Title="¿Está seguro de dar de alta?"
+                                                OnConfirm="()=>CambiarEstadoComisionDirectiva(context.Id, EstadoComisionDirectiva.Activo)"
+                                                OkText="Sí" CancelText="No">
+                                        <Button Color="Color.Green2">
+                                            <Icon Type="up" /> Alta
+                                        </Button>
+                                    </Popconfirm>
+                                }
+                            </div>
+                        </ActionColumn>
+                    </ColumnDefinitions>
+                </Table>
+            }
+            else if (TipoPersonal.ToLower() == "cobradores")
+            {
+                <Table @ref="table"
+                       TItem="CobradorViewModel"
+                       DataSource="@cobradores"
+                       OnRow="@OnRowClick"
+                       @bind-PageIndex="_pageIndex"
+                       @bind-PageSize="_pageSize"
+                       Loading="isLoading"
+                       Responsive>
+                    <ColumnDefinitions>
+                        <Column TData="CobradorViewModel" Title="Foto" Width="100">
+                            @if (context.UrlImagen != null)
+                            {
+                                <Avatar Size="AvatarSize.Large" Src="@(context.UrlImagen)" />
+                            }
+                            else
+                            {
+                                <Avatar Size="AvatarSize.Large" Icon="user" />
+                            }
+                        </Column>
+                        <PropertyColumn Property="c => c.ApellidoYNombre" Title="👤 Apellido y Nombre" Sortable />
+                        <PropertyColumn Title="🆔 Documento" Property="c => c.Documento" Sortable />
+                        <PropertyColumn Title="🏘️ Zonas Asignadas" Property="c => c.ZonasAsignadasAsString" Sortable />
+                        <PropertyColumn Title="📊 Estado" Property="@(c => c.Estado.GetDisplayName())" Sortable />
 
-						<ActionColumn Title="⚙️ Acciones" Align=ColumnAlign.Center>
-							<div class="abm-action-buttons" @onclick:stopPropagation>
-								<Button Type="default" OnClick="() => EditarPersonal(context.Id)">
-									<Icon Type="edit" /> Editar
-								</Button>
-								@if (context.Estado == EstadoCobrador.Activo)
-								{
-									<Popconfirm Title="¿Está seguro de dar de baja?"
-												OnConfirm="()=>CambiarEstadoComisionDirectiva(context.Id, EstadoComisionDirectiva.Baja)"
-												OkText="Sí" CancelText="No">
-										<Button Danger>
-											<Icon Type="down" /> Baja
-										</Button>
-									</Popconfirm>
-								}
-								else
-								{
-									<Popconfirm Title="¿Está seguro de dar de alta?"
-												OnConfirm="()=>CambiarEstadoComisionDirectiva(context.Id, EstadoComisionDirectiva.Activo)"
-												OkText="Sí" CancelText="No">
-										<Button Color="Color.Green2">
-											<Icon Type="up" /> Alta
-										</Button>
-									</Popconfirm>
-								}
-							</div>
-						</ActionColumn>
-					</ColumnDefinitions>
-				</Table>
-			}
-		</Card>
-	</div>
+                        <ActionColumn Title="⚙️ Acciones" Align=ColumnAlign.Center>
+                            <div class="abm-action-buttons" @onclick:stopPropagation>
+                                <Button Type="default" OnClick="() => EditarPersonal(context.Id)">
+                                    <Icon Type="edit" /> Editar
+                                </Button>
+                                @if (context.Estado == EstadoCobrador.Activo)
+                                {
+                                    <Popconfirm Title="¿Está seguro de dar de baja?"
+                                                OnConfirm="()=>CambiarEstadoComisionDirectiva(context.Id, EstadoComisionDirectiva.Baja)"
+                                                OkText="Sí" CancelText="No">
+                                        <Button Danger>
+                                            <Icon Type="down" /> Baja
+                                        </Button>
+                                    </Popconfirm>
+                                }
+                                else
+                                {
+                                    <Popconfirm Title="¿Está seguro de dar de alta?"
+                                                OnConfirm="()=>CambiarEstadoComisionDirectiva(context.Id, EstadoComisionDirectiva.Activo)"
+                                                OkText="Sí" CancelText="No">
+                                        <Button Color="Color.Green2">
+                                            <Icon Type="up" /> Alta
+                                        </Button>
+                                    </Popconfirm>
+                                }
+                            </div>
+                        </ActionColumn>
+                    </ColumnDefinitions>
+                </Table>
+            }
+        </Card>
+    </div>
 </div>
 
 @{
-	RenderFragment footer = @<Template>
-		<Button OnClick="@CloseModals" @key="@("back")">Cerrar</Button>
-	</Template>;
+    RenderFragment footer = @<Template>
+        <Button OnClick="@CloseModals" @key="@("back")">Cerrar</Button>
+    </Template>;
 }
 
 <Modal Footer="null" Visible="@EditarVisible" Centered="@true" DefaultMaximized="@true">
-	@if (TipoPersonal.ToLower() == "bomberos")
-	{
-		<EditarBombero BomberoId="@PersonalId" OnCancel="CloseModals" />
-	}
+    @if (PersonalId > 0)
+    {
+        @if (TipoPersonal.ToLower() == "bomberos")
+        {
+            <EditarBombero @key="@($"edit-bombero-{PersonalId}")" BomberoId="@PersonalId" OnCancel="CloseModals" />
+        }
+        else if (TipoPersonal.ToLower() == "comisiondirectiva")
+        {
+            <EditarComision @key="@($"edit-comision-{PersonalId}")" ComisionDirectivaId="@PersonalId" OnCancel="CloseModals" />
+        }
+        else if (TipoPersonal.ToLower() == "cobradores")
+        {
+            <EditarCobrador @key="@($"edit-cobrador-{PersonalId}")" CobradorId="@PersonalId" OnCancel="CloseModals" />
+        }
+    }
 </Modal>
 
 <Modal Visible="@DetallesVisible" OnCancel="@CloseModals" Footer="@footer" Centered="@true" DefaultMaximized="@true">
-	@if (TipoPersonal.ToLower() == "comisiondirectiva")
-	{
-		<DetallePersonal PersonalId="@PersonalId" Tipo="Data.Enums.Discriminadores.TipoPersonal.ComisionDirectiva" OnFinishCallback="CloseModals" />
-	}
-	else if (TipoPersonal.ToLower() == "bomberos")
-	{
-		<DetallePersonal PersonalId="@PersonalId" Tipo="Data.Enums.Discriminadores.TipoPersonal.Bombero" OnFinishCallback="CloseModals" />
-	}
-	else if (TipoPersonal.ToLower() == "cobradores")
-	{
-		<DetallePersonal PersonalId="@PersonalId" Tipo="Data.Enums.Discriminadores.TipoPersonal.Cobrador" OnFinishCallback="CloseModals" />
-	}
+    @if (PersonalId > 0)
+    {
+        @if (TipoPersonal.ToLower() == "comisiondirectiva")
+        {
+            <DetallePersonal @key="@($"detalle-comision-{PersonalId}")" PersonalId="@PersonalId" Tipo="Data.Enums.Discriminadores.TipoPersonal.ComisionDirectiva" OnFinishCallback="CloseModals" />
+        }
+        else if (TipoPersonal.ToLower() == "bomberos")
+        {
+            <DetallePersonal @key="@($"detalle-bombero-{PersonalId}")" PersonalId="@PersonalId" Tipo="Data.Enums.Discriminadores.TipoPersonal.Bombero" OnFinishCallback="CloseModals" />
+        }
+        else if (TipoPersonal.ToLower() == "cobradores")
+        {
+            <DetallePersonal @key="@($"detalle-cobrador-{PersonalId}")" PersonalId="@PersonalId" Tipo="Data.Enums.Discriminadores.TipoPersonal.Cobrador" OnFinishCallback="CloseModals" />
+        }
+    }
 </Modal>
 
 @code {
-	[Parameter] public string TipoPersonal { get; set; } = null!; // Parámetro para el tipo de personal (comisión directiva o bombero)
+    [Parameter] public string TipoPersonal { get; set; } = null!; // Parámetro para el tipo de personal (comisión directiva o bombero)
 
-	string? searchString;
+    string? searchString;
 
-	// Referencia a la tabla
-	ITable table;
+    // Referencia a la tabla
+    ITable table;
 
-	// Cobradores
+    // Cobradores
 
-	// Listas
-	List<CobradorViewModel>? cobradores = null;
-	List<CobradorViewModel>? SinFiltrarC = null;
+    // Listas
+    List<CobradorViewModel>? cobradores = null;
+    List<CobradorViewModel>? SinFiltrarC = null;
 
-	// Estado seleccionado
-	public EstadoCobrador EstadoC = EstadoCobrador.Activo;
+    // Estado seleccionado
+    public EstadoCobrador EstadoC = EstadoCobrador.Activo;
 
-	// Comisión Directiva
+    // Comisión Directiva
 
-	// Listas
-	List<ComisionDirectivaViewModel>? comisionDirectiva = null;
-	List<ComisionDirectivaViewModel>? SinFiltrarCD = null;
+    // Listas
+    List<ComisionDirectivaViewModel>? comisionDirectiva = null;
+    List<ComisionDirectivaViewModel>? SinFiltrarCD = null;
 
-	// Estado seleccionado
-	public EstadoComisionDirectiva EstadoCD = EstadoComisionDirectiva.Activo;
+    // Estado seleccionado
+    public EstadoComisionDirectiva EstadoCD = EstadoComisionDirectiva.Activo;
 
-	// Filtros de la Tabla de Comisión Directiva
-	private TableFilter<GradoComisionDirectiva>[] GradoComisionDirectivaFilter;
+    // Filtros de la Tabla de Comisión Directiva
+    private TableFilter<GradoComisionDirectiva>[] GradoComisionDirectivaFilter;
 
-	// Bomberos
+    // Bomberos
 
-	// Listas
-	List<BomberoViweModel>? bomberos = null;
-	List<BomberoViweModel>? SinFiltrarB = null;
+    // Listas
+    List<BomberoViweModel>? bomberos = null;
+    List<BomberoViweModel>? SinFiltrarB = null;
 
-	// Estado seleccionado
-	public EstadoBombero EstadoB = EstadoBombero.CuerpoActivo;
+    // Estado seleccionado
+    public EstadoBombero EstadoB = EstadoBombero.CuerpoActivo;
 
-	// Tamaño de la tabla
-	int _pageIndex = 1;
-	int _pageSize = 6;
+    // Tamaño de la tabla
+    int _pageIndex = 1;
+    int _pageSize = 6;
 
-	// ID del personal seleccionado para editar o ver detalles
-	private int PersonalId { get; set; }
+    // ID del personal seleccionado para editar o ver detalles
+    private int PersonalId { get; set; }
 
-	// Variables para controlar la visibilidad de los modales
-	private bool EditarVisible { get; set; }
-	private bool DetallesVisible { get; set; }
+    // Variables para controlar la visibilidad de los modales
+    private bool EditarVisible { get; set; }
+    private bool DetallesVisible { get; set; }
 
-	// Variable de Carga
-	private bool isLoading { get; set; } = true; // <-- AÑADIDO
+    // Variable de Carga
+    private bool isLoading { get; set; } = true; // <-- AÑADIDO
 
-	private async Task CambiarEstadoBombero(int BomberoId, EstadoBombero estado)
-	{
-		await BomberoService.CambiarEstado(BomberoId, estado);
-		await RefreshData();
-	}
+    private async Task CambiarEstadoBombero(int BomberoId, EstadoBombero estado)
+    {
+        await BomberoService.CambiarEstado(BomberoId, estado);
+        await RefreshData();
+    }
 
-	private async Task CambiarEstadoComisionDirectiva(int ComisionDirectivaId, EstadoComisionDirectiva estado)
-	{
-		await ComisionDirectivaService.CambiarEstado(ComisionDirectivaId, estado);
-		await RefreshData();
-	}
+    private async Task CambiarEstadoComisionDirectiva(int ComisionDirectivaId, EstadoComisionDirectiva estado)
+    {
+        await ComisionDirectivaService.CambiarEstado(ComisionDirectivaId, estado);
+        await RefreshData();
+    }
 
-	private void EditarPersonal(int ID)
-	{
-		PersonalId = ID;
-		EditarVisible = true;
-	}
+    private void EditarPersonal(int ID)
+    {
+        PersonalId = ID;
+        EditarVisible = true;
+    }
 
-	private void DetallePersonal(int ID)
-	{
-		PersonalId = ID;
-		DetallesVisible = true;
-	}
+    private void DetallePersonal(int ID)
+    {
+        PersonalId = ID;
+        DetallesVisible = true;
+    }
 
-	private async void CloseModals()
-	{
-		DetallesVisible = false;
-		EditarVisible = false;
-		await RefreshData();
-	}
+    private async void CloseModals()
+    {
+        var wasVisible = DetallesVisible || EditarVisible;
 
-	// Init, OnChange y Carga de datos
-	protected override async Task OnInitializedAsync()
-	{
-		isLoading = true; // <-- AÑADIDO
+        DetallesVisible = false;
+        EditarVisible = false;
 
-		if (TipoPersonal.ToLower() == "bomberos")
-		{
-			var bomberos = await BomberoService.ObtenerTodosLosBomberosAsync(ConImagenes: true);
-			SinFiltrarB = bomberos.ToBomberoViewModelList();
+        // Resetear el ID para forzar la destrucción del componente modal
+        if (wasVisible)
+        {
+            PersonalId = 0;
+            await InvokeAsync(StateHasChanged);
+            await Task.Delay(100); // Pequeño delay para asegurar que el componente se destruya
+        }
 
-			searchB(searchString, EstadoB);
-		}
-		else if (TipoPersonal.ToLower() == "comisiondirectiva")
-		{
-			var comisionDirectiva = await ComisionDirectivaService.ObtenerTodosLosMiembrosDeComisionDirectivaAsync(ConImagenes: true);
-			SinFiltrarCD = comisionDirectiva.ToComisionDirectivaViewModelList();
+        await RefreshData();
+    }
 
-			searchCD(searchString, EstadoCD);
+    // Init, OnChange y Carga de datos
+    protected override async Task OnInitializedAsync()
+    {
+        isLoading = true; // <-- AÑADIDO
 
-			GradoComisionDirectivaFilter = new TableFilter<GradoComisionDirectiva>[Enum.GetValues(typeof(GradoComisionDirectiva)).Length];
+        if (TipoPersonal.ToLower() == "bomberos")
+        {
+            var bomberos = await BomberoService.ObtenerTodosLosBomberosAsync(ConImagenes: true);
+            SinFiltrarB = bomberos.ToBomberoViewModelList();
 
-			int i = 0;
-			foreach (GradoComisionDirectiva value in Enum.GetValues(typeof(GradoComisionDirectiva)))
-			{
-				GradoComisionDirectivaFilter[i] = new() { Text = Enum.GetName(typeof(GradoComisionDirectiva), value), Value = value };
-				i++;
-			}
-		}
-		else if (TipoPersonal.ToLower() == "cobradores")
-		{
-			var cobradores = await CobradorService.ObtenerTodosLosCobradoresAsync(ConImagenes: true);
-			SinFiltrarC = cobradores.ToCobradorViewModelList();
+            searchB(searchString, EstadoB);
+        }
+        else if (TipoPersonal.ToLower() == "comisiondirectiva")
+        {
+            var comisionDirectiva = await ComisionDirectivaService.ObtenerTodosLosMiembrosDeComisionDirectivaAsync(ConImagenes: true);
+            SinFiltrarCD = comisionDirectiva.ToComisionDirectivaViewModelList();
 
-			searchC(searchString, EstadoC);
-		}
-		else
-		{
-			navigationManager.NavigateTo("/fire-force/personal/bomberos", true);
-		}
+            searchCD(searchString, EstadoCD);
 
-		isLoading = false; // <-- AÑADIDO
-		StateHasChanged();
-	}
+            GradoComisionDirectivaFilter = new TableFilter<GradoComisionDirectiva>[Enum.GetValues(typeof(GradoComisionDirectiva)).Length];
 
-	private async Task RefreshData()
-	{
-		isLoading = true; // <-- AÑADIDO
+            int i = 0;
+            foreach (GradoComisionDirectiva value in Enum.GetValues(typeof(GradoComisionDirectiva)))
+            {
+                GradoComisionDirectivaFilter[i] = new() { Text = Enum.GetName(typeof(GradoComisionDirectiva), value), Value = value };
+                i++;
+            }
+        }
+        else if (TipoPersonal.ToLower() == "cobradores")
+        {
+            var cobradores = await CobradorService.ObtenerTodosLosCobradoresAsync(ConImagenes: true);
+            SinFiltrarC = cobradores.ToCobradorViewModelList();
 
-		if (TipoPersonal.ToLower() == "bomberos")
-		{
-			var bomberos = await BomberoService.ObtenerTodosLosBomberosAsync(ConImagenes: true);
-			SinFiltrarB = bomberos.ToBomberoViewModelList();
+            searchC(searchString, EstadoC);
+        }
+        else
+        {
+            navigationManager.NavigateTo("/fire-force/personal/bomberos", true);
+        }
 
-			searchB(searchString, EstadoB);
-		}
-		else if (TipoPersonal.ToLower() == "comisiondirectiva")
-		{
-			var comisionDirectiva = await ComisionDirectivaService.ObtenerTodosLosMiembrosDeComisionDirectivaAsync(ConImagenes: true);
-			SinFiltrarCD = comisionDirectiva.ToComisionDirectivaViewModelList();
+        isLoading = false; // <-- AÑADIDO
+        StateHasChanged();
+    }
 
-			searchCD(searchString, EstadoCD);
-		}
-		else if (TipoPersonal.ToLower() == "cobradores")
-		{
-			var cobradores = await CobradorService.ObtenerTodosLosCobradoresAsync(ConImagenes: true);
-			SinFiltrarC = cobradores.ToCobradorViewModelList();
+    private async Task RefreshData()
+    {
+        isLoading = true; // <-- AÑADIDO
 
-			searchC(searchString, EstadoC);
-		}
+        if (TipoPersonal.ToLower() == "bomberos")
+        {
+            var bomberos = await BomberoService.ObtenerTodosLosBomberosAsync(ConImagenes: true);
+            SinFiltrarB = bomberos.ToBomberoViewModelList();
 
-		isLoading = false; // <-- AÑADIDO
-		await InvokeAsync(StateHasChanged);
-	}
+            searchB(searchString, EstadoB);
+        }
+        else if (TipoPersonal.ToLower() == "comisiondirectiva")
+        {
+            var comisionDirectiva = await ComisionDirectivaService.ObtenerTodosLosMiembrosDeComisionDirectivaAsync(ConImagenes: true);
+            SinFiltrarCD = comisionDirectiva.ToComisionDirectivaViewModelList();
 
-	// Función para manejar el clic en una fila de la tabla de bomberos
-	private Dictionary<string, object> OnRowClick(RowData<BomberoViweModel> rowData)
-	{
-		return new Dictionary<string, object>
-		{
-			["onclick"] = Microsoft.AspNetCore.Components.EventCallback.Factory.Create<Microsoft.AspNetCore.Components.Web.MouseEventArgs>(this, () => DetallePersonal(rowData.Data.Id))
-		};
-	}
+            searchCD(searchString, EstadoCD);
+        }
+        else if (TipoPersonal.ToLower() == "cobradores")
+        {
+            var cobradores = await CobradorService.ObtenerTodosLosCobradoresAsync(ConImagenes: true);
+            SinFiltrarC = cobradores.ToCobradorViewModelList();
 
-	// Función para manejar el clic en una fila de la tabla de comisión directiva
-	private Dictionary<string, object> OnRowClick(RowData<ComisionDirectivaViewModel> rowData)
-	{
-		return new Dictionary<string, object>
-		{
-			["onclick"] = Microsoft.AspNetCore.Components.EventCallback.Factory.Create<Microsoft.AspNetCore.Components.Web.MouseEventArgs>(this, () => DetallePersonal(rowData.Data.Id))
-		};
-	}
+            searchC(searchString, EstadoC);
+        }
 
-	// Función para manejar el clic en una fila de la tabla de cobradores
-	private Dictionary<string, object> OnRowClick(RowData<CobradorViewModel> rowData)
-	{
-		return new Dictionary<string, object>
-		{
-			["onclick"] = Microsoft.AspNetCore.Components.EventCallback.Factory.Create<Microsoft.AspNetCore.Components.Web.MouseEventArgs>(this, () => DetallePersonal(rowData.Data.Id))
-		};
-	}
+        isLoading = false;
+        StateHasChanged();
+    }
 
-	private void searchB(string value, EstadoBombero estado)
-	{
-		int number;
+    // Función para manejar el clic en una fila de la tabla de bomberos
+    private Dictionary<string, object> OnRowClick(RowData<BomberoViweModel> rowData)
+    {
+        return new Dictionary<string, object>
+        {
+            ["onclick"] = Microsoft.AspNetCore.Components.EventCallback.Factory.Create<Microsoft.AspNetCore.Components.Web.MouseEventArgs>(this, () => DetallePersonal(rowData.Data.Id))
+        };
+    }
 
-		EstadoB = estado;
+    // Función para manejar el clic en una fila de la tabla de comisión directiva
+    private Dictionary<string, object> OnRowClick(RowData<ComisionDirectivaViewModel> rowData)
+    {
+        return new Dictionary<string, object>
+        {
+            ["onclick"] = Microsoft.AspNetCore.Components.EventCallback.Factory.Create<Microsoft.AspNetCore.Components.Web.MouseEventArgs>(this, () => DetallePersonal(rowData.Data.Id))
+        };
+    }
 
-		bomberos = SinFiltrarB.Where(d => d.Estado == EstadoB).ToList();
+    // Función para manejar el clic en una fila de la tabla de cobradores
+    private Dictionary<string, object> OnRowClick(RowData<CobradorViewModel> rowData)
+    {
+        return new Dictionary<string, object>
+        {
+            ["onclick"] = Microsoft.AspNetCore.Components.EventCallback.Factory.Create<Microsoft.AspNetCore.Components.Web.MouseEventArgs>(this, () => DetallePersonal(rowData.Data.Id))
+        };
+    }
 
-		if (string.IsNullOrEmpty(value))
-		{
-			StateHasChanged();
-			return;
-		}
+    private void searchB(string value, EstadoBombero estado)
+    {
+        int number;
 
-		bomberos = bomberos.Where(d =>
-		d.Nombre.Contains(value, StringComparison.OrdinalIgnoreCase) ||
-		Enum.GetName(typeof(EscalafonJerarquico), d.Grado).Contains(value, StringComparison.OrdinalIgnoreCase) ||
-		d.Apellido.Contains(value, StringComparison.OrdinalIgnoreCase))
-		.ToList();
-		if (int.TryParse(value, out number))
-		{
-			bomberos = bomberos.Where(d =>
-			d.NumeroLegajo.Equals(number)).ToList();
-		}
-		StateHasChanged();
-	}
+        EstadoB = estado;
 
-	private void searchCD(string value, EstadoComisionDirectiva estado)
-	{
-		int number;
+        bomberos = SinFiltrarB.Where(d => d.Estado == EstadoB).ToList();
 
-		EstadoCD = estado;
+        if (string.IsNullOrEmpty(value))
+        {
+            StateHasChanged();
+            return;
+        }
 
-		comisionDirectiva = SinFiltrarCD.Where(d => d.Estado == EstadoCD).ToList();
+        bomberos = bomberos.Where(d =>
+        d.Nombre.Contains(value, StringComparison.OrdinalIgnoreCase) ||
+        Enum.GetName(typeof(EscalafonJerarquico), d.Grado).Contains(value, StringComparison.OrdinalIgnoreCase) ||
+        d.Apellido.Contains(value, StringComparison.OrdinalIgnoreCase))
+        .ToList();
+        if (int.TryParse(value, out number))
+        {
+            bomberos = bomberos.Where(d =>
+            d.NumeroLegajo.Equals(number)).ToList();
+        }
+        StateHasChanged();
+    }
 
-		if (string.IsNullOrEmpty(value))
-		{
-			StateHasChanged();
-			return;
-		}
+    private void searchCD(string value, EstadoComisionDirectiva estado)
+    {
+        int number;
 
-		comisionDirectiva = comisionDirectiva.Where(d =>
-		d.Nombre.Contains(value, StringComparison.OrdinalIgnoreCase) ||
-		Enum.GetName(typeof(EscalafonJerarquico), d.Grado).Contains(value, StringComparison.OrdinalIgnoreCase) ||
-		d.Apellido.Contains(value, StringComparison.OrdinalIgnoreCase))
-		.ToList();
-		if (int.TryParse(value, out number))
-		{
-			comisionDirectiva = comisionDirectiva.Where(d =>
-			d.Documento.Equals(number)).ToList();
-		}
-		StateHasChanged();
-	}
+        EstadoCD = estado;
 
-	private void searchC(string value, EstadoCobrador estado)
-	{
-		int number;
+        comisionDirectiva = SinFiltrarCD.Where(d => d.Estado == EstadoCD).ToList();
 
-		EstadoC = estado;
+        if (string.IsNullOrEmpty(value))
+        {
+            StateHasChanged();
+            return;
+        }
 
-		cobradores = SinFiltrarC.Where(d => d.Estado == EstadoC).ToList();
+        comisionDirectiva = comisionDirectiva.Where(d =>
+        d.Nombre.Contains(value, StringComparison.OrdinalIgnoreCase) ||
+        Enum.GetName(typeof(EscalafonJerarquico), d.Grado).Contains(value, StringComparison.OrdinalIgnoreCase) ||
+        d.Apellido.Contains(value, StringComparison.OrdinalIgnoreCase))
+        .ToList();
+        if (int.TryParse(value, out number))
+        {
+            comisionDirectiva = comisionDirectiva.Where(d =>
+            d.Documento.Equals(number)).ToList();
+        }
+        StateHasChanged();
+    }
 
-		if (string.IsNullOrEmpty(value))
-		{
-			StateHasChanged();
-			return;
-		}
+    private void searchC(string value, EstadoCobrador estado)
+    {
+        int number;
 
-		cobradores = cobradores.Where(d =>
-		d.Nombre.Contains(value, StringComparison.OrdinalIgnoreCase) ||
-		d.Apellido.Contains(value, StringComparison.OrdinalIgnoreCase))
-		.ToList();
-		if (int.TryParse(value, out number))
-		{
-			cobradores = cobradores.Where(d =>
-			d.Documento.Equals(number)).ToList();
-		}
-		StateHasChanged();
-	}
+        EstadoC = estado;
+
+        cobradores = SinFiltrarC.Where(d => d.Estado == EstadoC).ToList();
+
+        if (string.IsNullOrEmpty(value))
+        {
+            StateHasChanged();
+            return;
+        }
+
+        cobradores = cobradores.Where(d =>
+        d.Nombre.Contains(value, StringComparison.OrdinalIgnoreCase) ||
+        d.Apellido.Contains(value, StringComparison.OrdinalIgnoreCase))
+        .ToList();
+        if (int.TryParse(value, out number))
+        {
+            cobradores = cobradores.Where(d =>
+            d.Documento.Equals(number)).ToList();
+        }
+        StateHasChanged();
+    }
 }

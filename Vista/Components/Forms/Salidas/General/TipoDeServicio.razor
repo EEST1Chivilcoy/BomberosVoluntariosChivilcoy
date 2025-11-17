@@ -48,7 +48,7 @@
     @if (Model is MaterialPeligrosoViewModels matpelView)
     {
         <FormItem Label="Tipo de Material Peligroso" Required>
-            <EnumSelect TEnum="TipoMaterialPeligroso" @bind-Value="@matpelView.Tipo" />
+            <EnumSelect TEnum="CategoriaMaterialPeligroso" @bind-Value="@matpelView.Tipo" />
         </FormItem>
         <FormItem Label="Sustancias Involucradas" Required>
             <TextArea @bind-Value="@matpelView.Sustancias" Placeholder="Describa las sustancias involucradas" />
@@ -199,7 +199,7 @@
     @if (Model is IncendioViewModels incendioView1)
     {
         <FormItem>
-            <Checkbox @bind-Checked="incendioView1.DeteccionAutomaticaId">
+            <Checkbox @bind-Checked="incendioView1.DeteccionAutomatica">
                 Detección Automática
             </Checkbox>
         </FormItem>
