@@ -12,6 +12,7 @@
 <div class="inicio-page">
     <AntDesign.Layout>
         <Header Class="custom-header">
+        <button class="mobile-menu-btn" @onclick="OpenDrawer">☰</button>
             <div style="display: flex; justify-content: flex-end;">
                 <Menu Mode="@MenuMode.Horizontal"
                       SelectedKeys="@(new[]{currentSection})"
@@ -35,6 +36,42 @@
                 </Menu>
             </div>
         </Header>
+
+         <!-- Drawer para móviles -->
+        <Drawer Closable="true"
+                Visible="@drawerVisible"
+                Placement="@DrawerPlacement.Left"
+                OnClose="@HandleDrawerClose"
+                Width="280">
+            <div class="mobile-drawer-menu">
+                <div class="@GetDrawerItemClass("inicio")" 
+                     @onclick="@(() => HandleDrawerClick("inicio"))">
+                    <span class="drawer-icon">🏠</span>
+                    <span class="drawer-text">INICIO</span>
+                </div>
+                <div class="@GetDrawerItemClass("contacto")" 
+                     @onclick="@(() => HandleDrawerClick("contacto"))">
+                    <span class="drawer-icon">📞</span>
+                    <span class="drawer-text">CONTACTO</span>
+                </div>
+                <div class="@GetDrawerItemClass("cuerpo")" 
+                     @onclick="@(() => HandleDrawerClick("cuerpo"))">
+                    <span class="drawer-icon">👥</span>
+                    <span class="drawer-text">CUERPO ACTIVO</span>
+                </div>
+                <div class="@GetDrawerItemClass("historia")" 
+                     @onclick="@(() => HandleDrawerClick("historia"))">
+                    <span class="drawer-icon">📖</span>
+                    <span class="drawer-text">NUESTRA HISTORIA</span>
+                </div>
+                <div class="drawer-menu-item" 
+                     @onclick="@(() => HandleDrawerClick("sesion"))">
+                    <span class="drawer-icon">🏢</span>
+                    <span class="drawer-text">SISTEMA</span>
+                </div>
+            </div>
+        </Drawer>
+
 
         @Body
 
@@ -74,6 +111,13 @@
         </div>
     </AntDesign.Layout>
 </div>
+
+
+
+
+
+
+
 
 @code {
     private string currentSection = "inicio";
@@ -126,4 +170,42 @@
     {
         NavManager.LocationChanged -= OnLocationChanged;
     }
+
+    // Control de visibilidad del Drawer
+private bool drawerVisible = false;
+
+// Abre el drawer (lo vas a llamar desde un botón tipo hamburguesa)
+private void OpenDrawer()
+{
+    drawerVisible = true;
+}
+
+// Cierra el drawer
+private void HandleDrawerClose()
+{
+    drawerVisible = false;
+}
+
+// Maneja la selección de un ítem del drawer
+private async Task HandleDrawerClick(string key)
+{
+    drawerVisible = false;
+
+    if (menuActions.TryGetValue(key, out var action))
+        await action.Invoke();
+}
+
+// Para marcar visualmente qué sección está activa en el drawer
+private string GetDrawerItemClass(string key)
+{
+    return key == currentSection
+        ? "drawer-menu-item active"
+        : "drawer-menu-item";
+}
+
+
+
+
+
+
 }
