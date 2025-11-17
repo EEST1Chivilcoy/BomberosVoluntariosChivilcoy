@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 namespace Vista.Data.Enums
 {
-    public enum TipoMaterialPeligroso
+    public enum CategoriaMaterialPeligroso
     {
         [Display(Name = "Escape o Fuga")]
         EscapeOFuga,

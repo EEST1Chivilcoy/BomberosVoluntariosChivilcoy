@@ -6,7 +6,7 @@ namespace Vista.Data.Models.Salidas.Planillas
     public class MaterialPeligroso : Salida
     {
         //Localización, datos del solicitante, personas damnificadas y datos del seguro
-        public TipoMaterialPeligroso Tipo { get; set; }  
+        public CategoriaMaterialPeligroso Tipo { get; set; }  
         [Required, StringLength(255)]  
         public string Sustancias { get; set; } // TODO: Consultar a Agustín
 

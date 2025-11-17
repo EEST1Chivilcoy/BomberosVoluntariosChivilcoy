@@ -4,7 +4,6 @@ namespace Vista.Data.ViewModels.Servicios
 {
     public class ServicioEspecialFalsaAlarmaViewModel : ServicioEspecialViewModel
     {
-        [Required, StringLength(255)]
-        public string Detalles { get; set; }
+        /// Dejo incompleto, porque no se especificaron propiedades adicionales para esta salida.
     }
 }

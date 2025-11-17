@@ -3,12 +3,12 @@ using Vista.Data.Enums;
 
 namespace Vista.Data.ViewModels.Incendios
 {
-    public class IncendioComercioViewModels : IncendioViewModels
+    public class IncendioForestalViewModels : IncendioViewModels
     {
         /// <summary>
-        /// Tipo de comercio donde ocurrió el incendio.
+        /// Tipo de lugar forestal donde ocurrió el incendio.
         /// </summary>
         [Required]
-        public TipoLugarComercioIncendio TipoLugar { get; set; }
+        public TipoIncendioForestal TipoLugar { get; set; }
     }
 }

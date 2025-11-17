@@ -1,4 +1,5 @@
 ﻿namespace Vista.Data.Enums;
+
 using System.ComponentModel.DataAnnotations;
 
 public enum TipoEvacuacion

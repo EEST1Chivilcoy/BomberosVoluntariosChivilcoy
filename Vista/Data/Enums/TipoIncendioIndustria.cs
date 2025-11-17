@@ -1,20 +1,42 @@
 ﻿using System.ComponentModel.DataAnnotations;
+
 namespace Vista.Data.Enums
 {
     public enum TipoIncendioIndustria
     {
-        [Display(Name = "Automotriz")]
-        Automotriz,
-        [Display(Name = "Textil")]
-        Textil,
-        [Display(Name = "Metalúrgica")]
-        Metalurgica,
-        [Display(Name = "Química")]
-        Quimica,
-        [Display(Name = "Alimentación")]
-        Alimentacion,
-        [Display(Name = "Petroquímica")]
-        Petroquimica,
+        [Display(Name = "Metalmecánica / Metalúrgica")]
+        MetalmecanicaMetalurgica,
+
+        [Display(Name = "Textil / Confección")]
+        TextilConfeccion,
+
+        [Display(Name = "Plásticos / Poliuretano")]
+        PlasticosPoliuretano,
+
+        [Display(Name = "Agroindustria / Alimentos")]
+        AgroindustriaAlimentos,
+
+        [Display(Name = "Molinería / Harinas")]
+        MolineriaHarinas,
+
+        [Display(Name = "Logística / Depósitos")]
+        LogisticaDepositos,
+
+        [Display(Name = "Química / Pinturas")]
+        QuimicaPinturas,
+
+        [Display(Name = "Automotriz / Autopartes")]
+        AutomotrizAutopartes,
+
+        [Display(Name = "Electromecánica / Electricidad")]
+        ElectromecanicaElectricidad,
+
+        [Display(Name = "Carpintería / Madera")]
+        CarpinteriaMadera,
+
+        [Display(Name = "Imprenta / Gráfica")]
+        ImprentaGrafica,
+
         [Display(Name = "Otro")]
         Otro
     }

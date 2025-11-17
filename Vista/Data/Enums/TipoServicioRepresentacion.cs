@@ -1,21 +1,43 @@
-﻿namespace Vista.Data.Enums;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-
-    public enum TipoServicioRepresentaciones
+namespace Vista.Data.Enums
 {
+    public enum TipoServicioRepresentaciones
+    {
         [Display(Name = "Desfiles")]
         Desfiles,
-        [Display(Name = "Honores Funerarios")]
+
+        [Display(Name = "Honores funerarios")]
         HonoresFunerarios,
-        [Display(Name = "Aniversarios")]
+
+        [Display(Name = "Aniversarios institucionales")]
         Aniversarios,
-        [Display(Name = "Eventos Públicos")]
+
+        [Display(Name = "Eventos públicos")]
         EventosPublicos,
-        [Display(Name = "Eventos Privados")]
+
+        [Display(Name = "Eventos privados")]
         EventosPrivados,
-        [Display(Name = "Ceremonias")]
+
+        [Display(Name = "Ceremonias protocolares")]
         Ceremonias,
+
+        [Display(Name = "Actos escolares / educativos")]
+        ActosEscolares,
+
+        [Display(Name = "Procesiones / eventos religiosos")]
+        ProcesionesReligiosas,
+
+        [Display(Name = "Reconocimientos / entregas de distinciones")]
+        ReconocimientosDistinciones,
+
+        [Display(Name = "Capacitaciones / charlas comunitarias")]
+        CapacitacionesCharlas,
+
+        [Display(Name = "Simulacros / ejercicios conjuntos")]
+        SimulacrosEjercicios,
+
         [Display(Name = "Otro")]
         Otro
     }
+}

@@ -4,6 +4,9 @@ namespace Vista.Data.ViewModels.Servicios
 {
     public class ServicioEspecialViewModel : SalidasViewModels
     {
-                public ServicioEspecialTipo Tipo { get; set; }
+        /// <summary>
+        /// Tipo de Servicio Especial
+        /// </summary>
+        public ServicioEspecialTipo Tipo { get; set; }
     }
 }

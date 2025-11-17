@@ -1,12 +1,13 @@
 ﻿namespace Vista.Data.Enums
 {
-    public enum TipoCondicionesClimaticas 
+    public enum TipoCondicionesClimaticas
     {
         Lluvia,
         Neblina,
         Soleado,
         Ventoso,
-        Noche,
-        Otro
+        Granizo,
+        Aguanieve,
+        Tornado,
     }
 }

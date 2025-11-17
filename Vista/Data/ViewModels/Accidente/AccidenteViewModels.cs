@@ -7,10 +7,9 @@ namespace Vista.Data.ViewModels.Accidente
 {
     public class AccidenteViewModels : SalidasViewModels
     {
-        public TipoAccidente Tipo { get; set; }
-        public TipoCondicionesClimaticas CondicionesClimaticas { get; set; }
-        [Required, StringLength(255)]
-        public string? OtroCondicion { get; set; }
-      
+        [Required]
+        public TipoAccidente? Tipo { get; set; } = TipoAccidente.Transito;
+
+        public TipoCondicionesClimaticas? CondicionesClimaticas { get; set; }
     }
 }

@@ -152,7 +152,7 @@ namespace Vista.Pages.Salidas
                 TipoDeEmergencia.IncendioComercio => new IncendioComercioViewModels(),
                 TipoDeEmergencia.IncendioEstablecimientoEducativo => new IncendioEstablecimientoEducativoViewModels(),
                 TipoDeEmergencia.IncendioEstablecimientoPublico => new IncendioEstablecimientoPublicoViewModels(),
-                TipoDeEmergencia.IncendioForestal => new IncendioForestaViewModels(),
+                TipoDeEmergencia.IncendioForestal => new IncendioForestalViewModels(),
                 TipoDeEmergencia.IncendioHospitalesYClinicas => new IncendioHospitalesYClinicasViewModels(),
                 TipoDeEmergencia.IncendioIndustria => new IncendioIndustriaViewModels(),
                 TipoDeEmergencia.IncendioVivienda => new IncendioViviendaViewModels(),
