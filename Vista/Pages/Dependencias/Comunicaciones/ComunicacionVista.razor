@@ -33,19 +33,18 @@
         --abm-gold-color: #FFD700;
     }
 
-            .licencias-abm .licenses-container {
-            padding: 12px !important;
-            min-height: 100vh !important;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;
-        }
+    .licencias-abm .licenses-container {
+        padding: 12px !important;
+        min-height: 100vh !important;
+    }
 
     .comunicaciones-abm .main-card {
-            background: rgba(255, 255, 255, 0.95) !important;
-            backdrop-filter: blur(10px) !important;
-            border-radius: 16px !important;
-            box-shadow: 0 8px 32px rgba(166, 51, 51, 0.1), 0 4px 16px rgba(0, 0, 0, 0.05) !important;
-            border: 1px solid rgba(255, 255, 255, 0.2) !important;
-            overflow: hidden !important;
+        background: rgba(255, 255, 255, 0.95) !important;
+        backdrop-filter: blur(10px) !important;
+        border-radius: 16px !important;
+        box-shadow: 0 8px 32px rgba(166, 51, 51, 0.1), 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        overflow: hidden !important;
     }
 
     .comunicaciones-abm .header-section {
@@ -56,65 +55,92 @@
         overflow: hidden !important;
     }
 
-    .comunicaciones-abm .header-section .lava-bubbles {
-        position: absolute;
-        top: 0; left: 0; width: 100%; height: 100%;
-        pointer-events: none;
-        z-index: 1;
-        overflow: hidden;
-    }
-    .comunicaciones-abm .header-section .lava-bubble {
-        position: absolute;
-        border-radius: 50%;
-        opacity: 0.45;
-        background: radial-gradient(circle at 60% 40%, #FFD54F 0%, #F9A825 80%, transparent 100%);
-        animation: lava-bubble-move 8s linear infinite;
-        filter: blur(1.5px);
-        mix-blend-mode: lighten;
-    }
-    .comunicaciones-abm .header-section .lava-bubble.b1 {
-        left: 10%; width: 60px; height: 60px; bottom: -70px;
-        animation-delay: 0s;
-        animation-duration: 7.5s;
-    }
-    .comunicaciones-abm .header-section .lava-bubble.b2 {
-         left: 35%; width: 90px; height: 90px; bottom: -100px;
-        animation-delay: 2s;
-        animation-duration: 9s;
-        background: radial-gradient(circle at 60% 40%, #FFEB3B 0%, #FFD54F 80%, transparent 100%);
-    }
-    .comunicaciones-abm .header-section .lava-bubble.b3 {
-        left: 65%; width: 50px; height: 50px; bottom: -60px;
-        animation-delay: 1.5s;
-        animation-duration: 6.5s;
-        background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #FFD54F 80%, transparent 100%);
-    }
-    .comunicaciones-abm .header-section .lava-bubble.b4 {
-        left: 80%; width: 70px; height: 70px; bottom: -80px;
-        animation-delay: 3.2s;
-        animation-duration: 8.5s;
-        background: radial-gradient(circle at 60% 40%, #F9A825 0%, #FFD54F 80%, transparent 100%);
-    }
-    .comunicaciones-abm .header-section .lava-bubble.b5 {
-        left: 55%; width: 40px; height: 40px; bottom: -50px;
-        animation-delay: 5s;
-        animation-duration: 7.2s;
-        background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #F9A825 80%, transparent 100%);
-    }
+        .comunicaciones-abm .header-section .lava-bubbles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .comunicaciones-abm .header-section .lava-bubble {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.45;
+            background: radial-gradient(circle at 60% 40%, #FFD54F 0%, #F9A825 80%, transparent 100%);
+            animation: lava-bubble-move 8s linear infinite;
+            filter: blur(1.5px);
+            mix-blend-mode: lighten;
+        }
+
+            .comunicaciones-abm .header-section .lava-bubble.b1 {
+                left: 10%;
+                width: 60px;
+                height: 60px;
+                bottom: -70px;
+                animation-delay: 0s;
+                animation-duration: 7.5s;
+            }
+
+            .comunicaciones-abm .header-section .lava-bubble.b2 {
+                left: 35%;
+                width: 90px;
+                height: 90px;
+                bottom: -100px;
+                animation-delay: 2s;
+                animation-duration: 9s;
+                background: radial-gradient(circle at 60% 40%, #FFEB3B 0%, #FFD54F 80%, transparent 100%);
+            }
+
+            .comunicaciones-abm .header-section .lava-bubble.b3 {
+                left: 65%;
+                width: 50px;
+                height: 50px;
+                bottom: -60px;
+                animation-delay: 1.5s;
+                animation-duration: 6.5s;
+                background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #FFD54F 80%, transparent 100%);
+            }
+
+            .comunicaciones-abm .header-section .lava-bubble.b4 {
+                left: 80%;
+                width: 70px;
+                height: 70px;
+                bottom: -80px;
+                animation-delay: 3.2s;
+                animation-duration: 8.5s;
+                background: radial-gradient(circle at 60% 40%, #F9A825 0%, #FFD54F 80%, transparent 100%);
+            }
+
+            .comunicaciones-abm .header-section .lava-bubble.b5 {
+                left: 55%;
+                width: 40px;
+                height: 40px;
+                bottom: -50px;
+                animation-delay: 5s;
+                animation-duration: 7.2s;
+                background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #F9A825 80%, transparent 100%);
+            }
 
     @@keyframes lava-bubble-move {
         0% {
             transform: translateY(0) scale(1) rotate(0deg);
             opacity: 0.45;
         }
+
         60% {
             opacity: 0.7;
             filter: blur(2.5px);
         }
+
         80% {
             transform: translateY(-220px) scale(1.15) rotate(10deg);
             opacity: 0.6;
         }
+
         100% {
             transform: translateY(-320px) scale(0.95) rotate(-8deg);
             opacity: 0;
@@ -134,14 +160,21 @@
         position: relative !important;
         z-index: 2 !important;
     }
+
     .comunicaciones-abm .title-icon {
         color: #FFD54F !important;
         font-size: 2rem !important;
         filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25)) !impo
     }
+
     @@keyframes text-glow {
-        0%, 100% { text-shadow: 0 0 5px #F9A825, 0 0 10px #FFD54F; }
-        50% { text-shadow: 0 0 12px #F9A825, 0 0 22px #FFD54F; }
+        0%, 100% {
+            text-shadow: 0 0 5px #F9A825, 0 0 10px #FFD54F;
+        }
+
+        50% {
+            text-shadow: 0 0 12px #F9A825, 0 0 22px #FFD54F;
+        }
     }
 
     .comunicaciones-abm .title-container {
@@ -156,7 +189,6 @@
         display: grid !important;
         grid-template-columns: 1fr !important;
         gap: 16px !important;
-                
     }
 
     .comunicaciones-abm .actions-row {
@@ -166,9 +198,11 @@
         align-items: center !important;
         width: 100% !important;
     }
+
     .comunicaciones-abm .search-container {
         min-width: 0 !important;
     }
+
     .comunicaciones-abm .add-button {
         background: linear-gradient(135deg, var(--abm-success-color) 0%, var(--abm-success-dark) 100%) !important;
         border: none !important;
@@ -176,12 +210,13 @@
         box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3) !important;
         padding: 0 20px !important;
     }
-    .comunicaciones-abm .add-button:hover {
-        transform: translateY(-2px) !important;
-        box-shadow: 0 6px 20px rgba(76, 175, 80, 0.22) !important;
-    }
 
-        .comunicaciones-abm .fade-in {
+        .comunicaciones-abm .add-button:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.22) !important;
+        }
+
+    .comunicaciones-abm .fade-in {
         animation: abm-fadeIn 0.5s ease-in-out !important;
     }
 
@@ -200,7 +235,6 @@
     .comunicaciones-abm .comunicaciones-container {
         padding: 12px !important;
         min-height: 100vh !important;
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;
     }
 
     /* Ajustes para pegar la tabla al header y eliminar espaciados */
@@ -225,10 +259,10 @@
         border-bottom: 2px solid #732D2D !important;
     }
 
-    .comunicaciones-abm .ant-table-thead > tr > th:hover {
-        background: #732D2D !important;
-        color: #fff !important;
-    }
+        .comunicaciones-abm .ant-table-thead > tr > th:hover {
+            background: #732D2D !important;
+            color: #fff !important;
+        }
 
     .comunicaciones-abm .ant-table-cell) {
         padding: 16px !important;
@@ -287,12 +321,12 @@
         color: rgb(255, 255, 255) !important;
     }
 
-    .comunicaciones-abm .button-wrapper .ant-btn:not(.ant-btn-icon-only){
+    .comunicaciones-abm .button-wrapper .ant-btn:not(.ant-btn-icon-only) {
         border-color: transparent !important;
-        color:#fff !important;
-        border-radius:8px;
-        font-weight:600;
-        box-shadow:0 2px 8px rgba(146,84,222,.22);
+        color: #fff !important;
+        border-radius: 8px;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(146,84,222,.22);
         margin-top: 1rem;
         height: 40px !important;
         font-size: 16px !important;
@@ -304,10 +338,10 @@
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
 
-    .comunicaciones-abm .button-wrapper .ant-btn.ant-btn-icon-only{
-        background:#fff !important;
-        color:#4caf50 !important;
-        border-radius:8px;
+    .comunicaciones-abm .button-wrapper .ant-btn.ant-btn-icon-only {
+        background: #fff !important;
+        color: #4caf50 !important;
+        border-radius: 8px;
     }
 
     .comunicaciones-abm .button-wrapper .ant-btn:hover {
@@ -316,32 +350,32 @@
     }
 
     .modal-crear-licencia .ant-modal-content {
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    border: 2px solid #732D2D;
-    margin-top: 55px;
-    max-width: 800px;
-}
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        border: 2px solid #732D2D;
+        margin-top: 55px;
+        max-width: 800px;
+    }
 
-.modal-crear-licencia .ant-modal {
-    top: 25px !important;
-    padding-bottom: 0 !important;
-}
+    .modal-crear-licencia .ant-modal {
+        top: 25px !important;
+        padding-bottom: 0 !important;
+    }
 
-.modal-crear-licencia .ant-modal-title {
-    color: white !important;
-}
+    .modal-crear-licencia .ant-modal-title {
+        color: white !important;
+    }
 
-.modal-crear-licencia .ant-modal-header {
+    .modal-crear-licencia .ant-modal-header {
         background-color: #A63333;
         padding: 16px 24px;
-}
+    }
 
 
 
-.modal-crear-licencia-row {
-    margin-bottom: 16px !important;
-}
+    .modal-crear-licencia-row {
+        margin-bottom: 16px !important;
+    }
 
 
 
@@ -352,10 +386,10 @@
         transition: color 0.3s ease;
     }
 
-    .modal-crear-licencia-form-item .ant-form-item-label > label:hover,
-    .modal-crear-licencia-form-full-width .ant-form-item-label > label:hover {
-        color: #FFD700;
-    }
+        .modal-crear-licencia-form-item .ant-form-item-label > label:hover,
+        .modal-crear-licencia-form-full-width .ant-form-item-label > label:hover {
+            color: #FFD700;
+        }
 
     .modal-crear-licencia .ant-input:focus,
     .modal-crear-licencia .ant-input:hover,
@@ -408,10 +442,10 @@
         transition: background 0.3s;
     }
 
-    .modal-crear-licencia .ant-btn-primary:hover {
-        background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
-        color: #fff !important;
-    }
+        .modal-crear-licencia .ant-btn-primary:hover {
+            background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
+            color: #fff !important;
+        }
 
     .boton-agregar {
         background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
@@ -424,28 +458,28 @@
         transition: background 0.3s;
     }
 
-    .boton-agregar:hover {
-        background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
-        color: #fff !important;
-    }
+        .boton-agregar:hover {
+            background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
+            color: #fff !important;
+        }
 
     @@media (max-width: 767px) {
         .modal-crear-licencia-content {
             padding: 16px;
         }
-        
+
         .modal-crear-licencia .ant-modal-content {
             width: 95vw !important;
             margin: 10px auto !important;
             top: 20px !important;
             transform: none !important;
         }
-        
+
         .modal-crear-licencia .ant-modal-wrap {
             align-items: flex-start !important;
             padding-top: 20px !important;
         }
-    }   
+    }
 </style>
 
 <div class="comunicaciones-abm">
@@ -471,7 +505,7 @@
                             <Search Placeholder="Buscar por marca" WrapperStyle="width: 500px;" AllowClear EnterButton="true" @bind-Value="searchString" OnChange="() => this.Search(new ChangeEventArgs { Value = searchString })" Size="InputSize.Large" />
                         </div>
                         <div class="button-wrapper">
-                            <Button OnClick="()=>ShowModalAgregar()" 
+                            <Button OnClick="() => ShowModalAgregar()"
                                     Type="ButtonType.Primary"
                                     class="ant-btn"
                                     style="background-color: #4CAF50; border-color: #4CAF50;">
@@ -521,12 +555,12 @@
                                         Sortable
                                         Width="120px"
                                         Filters="DiscriminadorFilter"
-                                        OnFilter="((value,name)=>Enum.GetName(typeof(TipoEstadoHandie), name).StartsWith(Enum.GetName(typeof(TipoEstadoHandie), value)))">
+                                        OnFilter="((value, name) => Enum.GetName(typeof(TipoEstadoHandie), name).StartsWith(Enum.GetName(typeof(TipoEstadoHandie), value)))">
                             <Template>
                                 @{
                                     string statusClass = "";
                                     string icon = "";
-                                    
+
                                     switch (comunicacion.Estado)
                                     {
                                         case TipoEstadoHandie.Activo:
@@ -583,7 +617,7 @@
                                     </Popconfirm>
                                 </SpaceItem>
                                 <SpaceItem>
-                                    <Button Type="@ButtonType.Primary" OnClick="()=>ShowModalEditar(comunicacion.NroEquipo)" Ghost>
+                                    <Button Type="@ButtonType.Primary" OnClick="() => ShowModalEditar(comunicacion.NroEquipo)" Ghost>
                                         <Icon Type="edit" />
                                     </Button>
                                 </SpaceItem>
@@ -612,97 +646,97 @@
        WrapClassName="modal-crear-licencia">
     <div class="modal-crear-licencia-content">
         <Form Loading="loading" Model="@ComunicacionVM"
-          OnFinish="OnFinish"
-          OnFinishFailed="OnFinishFailed"
-          @ref="@_form">
+              OnFinish="OnFinish"
+              OnFinishFailed="OnFinishFailed"
+              @ref="@_form">
 
-        <Row Class="modal-crear-licencia-row" Gutter="24">
-            <AntDesign.Col Span="12">
-                <FormItem Label="Nro Equipo" Class="modal-crear-licencia-form-item">
-                    <Input DefaultValue="@ComunicacionVM.NroEquipo" @bind-Value="@ComunicacionVM.NroEquipo" />
-                </FormItem>
-            </AntDesign.Col>
-            <AntDesign.Col Span="12">
-                <FormItem Label="Modelo" Class="modal-crear-licencia-form-item">
-                    <Input DefaultValue="@ComunicacionVM.Modelo" @bind-Value="@ComunicacionVM.Modelo" />
-                </FormItem>
-            </AntDesign.Col>
-        </Row>
-        <Row Class="modal-crear-licencia-row" Gutter="24">
-            <AntDesign.Col Span="12">
-                <FormItem Label="Marca" Class="modal-crear-licencia-form-item">
-                    <Input DefaultValue="@ComunicacionVM.Marca" @bind-Value="@ComunicacionVM.Marca" />
-                </FormItem>
-            </AntDesign.Col>
-            <AntDesign.Col Span="12">
-                <FormItem Label="Nro Serie" Class="modal-crear-licencia-form-item">
-                    <Input DefaultValue="@ComunicacionVM.NroSerie" @bind-Value="@ComunicacionVM.NroSerie" />
-                </FormItem>
-            </AntDesign.Col>
-        </Row>
-        <Row Class="modal-crear-licencia-row" Gutter="24">
-            <AntDesign.Col Span="24">
-                <FormItem Label="Estado" Class="modal-crear-licencia-form-item">
-                    <EnumSelect DefaultValue="@ComunicacionVM.Estado" TEnum="TipoEstadoHandie" @bind-Value="@ComunicacionVM.Estado" />
-                </FormItem>
-            </AntDesign.Col>
-        </Row>
-        @if (ComunicacionVM.Estado == TipoEstadoHandie.Activo)
-        {
             <Row Class="modal-crear-licencia-row" Gutter="24">
-                <AntDesign.Col Span="24">
-                    <FormItem Label="Seleccione una opción" Class="modal-crear-licencia-form-item">
-                        <Checkbox @bind-Checked="@selectBombero" OnChange="() => HandleCheckboxChange(true, checkboxBomberoLabel)">Elija el bombero</Checkbox>
-                        <Checkbox @bind-Checked="@selectMovil" OnChange="() => HandleCheckboxChange(true, checkboxMovilLabel)">Elija el móvil</Checkbox>
+                <AntDesign.Col Span="12">
+                    <FormItem Label="Nro Equipo" Class="modal-crear-licencia-form-item">
+                        <Input DefaultValue="@ComunicacionVM.NroEquipo" @bind-Value="@ComunicacionVM.NroEquipo" />
+                    </FormItem>
+                </AntDesign.Col>
+                <AntDesign.Col Span="12">
+                    <FormItem Label="Modelo" Class="modal-crear-licencia-form-item">
+                        <Input DefaultValue="@ComunicacionVM.Modelo" @bind-Value="@ComunicacionVM.Modelo" />
                     </FormItem>
                 </AntDesign.Col>
             </Row>
-            @if (selectBombero)
+            <Row Class="modal-crear-licencia-row" Gutter="24">
+                <AntDesign.Col Span="12">
+                    <FormItem Label="Marca" Class="modal-crear-licencia-form-item">
+                        <Input DefaultValue="@ComunicacionVM.Marca" @bind-Value="@ComunicacionVM.Marca" />
+                    </FormItem>
+                </AntDesign.Col>
+                <AntDesign.Col Span="12">
+                    <FormItem Label="Nro Serie" Class="modal-crear-licencia-form-item">
+                        <Input DefaultValue="@ComunicacionVM.NroSerie" @bind-Value="@ComunicacionVM.NroSerie" />
+                    </FormItem>
+                </AntDesign.Col>
+            </Row>
+            <Row Class="modal-crear-licencia-row" Gutter="24">
+                <AntDesign.Col Span="24">
+                    <FormItem Label="Estado" Class="modal-crear-licencia-form-item">
+                        <EnumSelect DefaultValue="@ComunicacionVM.Estado" TEnum="TipoEstadoHandie" @bind-Value="@ComunicacionVM.Estado" />
+                    </FormItem>
+                </AntDesign.Col>
+            </Row>
+            @if (ComunicacionVM.Estado == TipoEstadoHandie.Activo)
             {
                 <Row Class="modal-crear-licencia-row" Gutter="24">
                     <AntDesign.Col Span="24">
-                        <FormItem Label="@nameof(BomberoVM.NombreYApellido)" Class="modal-crear-licencia-form-item">
-                            <Select TItem="BomberoViewModel"
-                                    TItemValue="int?"
-                                    DataSource="@BomberosViewModel"
-                                    @bind-Value="@ComunicacionVM.NroLegajo"
-                                    LabelName="@nameof(BomberoVM.NombreYApellido)"
-                                    ValueName="@nameof(BomberoVM.NumeroLegajo)"
-                                    Placeholder="Seleccione a un bombero"
-                                    EnableSearch
-                                    AllowClear="true">
-                            </Select>
+                        <FormItem Label="Seleccione una opción" Class="modal-crear-licencia-form-item">
+                            <Checkbox @bind-Checked="@selectBombero" OnChange="() => HandleCheckboxChange(true, checkboxBomberoLabel)">Elija el bombero</Checkbox>
+                            <Checkbox @bind-Checked="@selectMovil" OnChange="() => HandleCheckboxChange(true, checkboxMovilLabel)">Elija el móvil</Checkbox>
                         </FormItem>
                     </AntDesign.Col>
                 </Row>
+                @if (selectBombero)
+                {
+                    <Row Class="modal-crear-licencia-row" Gutter="24">
+                        <AntDesign.Col Span="24">
+                            <FormItem Label="@nameof(BomberoVM.NombreYApellido)" Class="modal-crear-licencia-form-item">
+                                <Select TItem="BomberoViewModel"
+                                        TItemValue="int?"
+                                        DataSource="@BomberosViewModel"
+                                        @bind-Value="@ComunicacionVM.NroLegajo"
+                                        LabelName="@nameof(BomberoVM.NombreYApellido)"
+                                        ValueName="@nameof(BomberoVM.NumeroLegajo)"
+                                        Placeholder="Seleccione a un bombero"
+                                        EnableSearch
+                                        AllowClear="true">
+                                </Select>
+                            </FormItem>
+                        </AntDesign.Col>
+                    </Row>
+                }
+                else if (selectMovil)
+                {
+                    <Row Class="modal-crear-licencia-row" Gutter="24">
+                        <AntDesign.Col Span="24">
+                            <FormItem Label="@nameof(MovilVM.NumeroMovil)" Class="modal-crear-licencia-form-item">
+                                <Select TItem="MovilViewModel"
+                                        TItemValue="string"
+                                        DataSource="@MovilesViewModel"
+                                        @bind-Value="@ComunicacionVM.NumeroMovil"
+                                        LabelName="@nameof(MovilVM.NumeroMovil)"
+                                        ValueName="@nameof(MovilVM.NumeroMovil)"
+                                        Placeholder="Seleccione un móvil"
+                                        EnableSearch
+                                        AllowClear="true">
+                                </Select>
+                            </FormItem>
+                        </AntDesign.Col>
+                    </Row>
+                }
             }
-            else if (selectMovil)
-            {
-                <Row Class="modal-crear-licencia-row" Gutter="24">
-                    <AntDesign.Col Span="24">
-                        <FormItem Label="@nameof(MovilVM.NumeroMovil)" Class="modal-crear-licencia-form-item">
-                            <Select TItem="MovilViewModel"
-                                    TItemValue="string"
-                                    DataSource="@MovilesViewModel"
-                                    @bind-Value="@ComunicacionVM.NumeroMovil"
-                                    LabelName="@nameof(MovilVM.NumeroMovil)"
-                                    ValueName="@nameof(MovilVM.NumeroMovil)"
-                                    Placeholder="Seleccione un móvil"
-                                    EnableSearch
-                                    AllowClear="true">
-                            </Select>
-                        </FormItem>
-                    </AntDesign.Col>
-                </Row>
-            }
-        }
-    </Form>
+        </Form>
     </div>
 </Modal>
 
 @code {
 
-    
+
 
     private class ComunicacionViewModel
     {
@@ -824,17 +858,17 @@
         foreach (Comunicacion c in comunicacionesDB)
         {
             ComunicacionViewModel comunicacion = new()
-                {
-                    NroEquipo = c.NroEquipo,
-                    Marca = c.Marca,
-                    Modelo = c.Modelo,
-                    NroSerie = c.NroSerie,
-                    Nombre = c.Bombero?.Nombre,
-                    Apellido = c.Bombero?.Apellido,
-                    NumeroMovil = c.Movil?.NumeroMovil,
-                    NroLegajo = c.Bombero?.NumeroLegajo,
-                    Estado = c.Estado
-                };
+            {
+                NroEquipo = c.NroEquipo,
+                Marca = c.Marca,
+                Modelo = c.Modelo,
+                NroSerie = c.NroSerie,
+                Nombre = c.Bombero?.Nombre,
+                Apellido = c.Bombero?.Apellido,
+                NumeroMovil = c.Movil?.NumeroMovil,
+                NroLegajo = c.Bombero?.NumeroLegajo,
+                Estado = c.Estado
+            };
             ComunicacionesViewModel.Add(comunicacion);
         }
 
@@ -847,12 +881,12 @@
         foreach (Bombero b in bomberos)
         {
             BomberoViewModel bomberoVM = new()
-                {
-                    Nombre = b.Nombre,
-                    Apellido = b.Apellido,
-                    NumeroLegajo = b.NumeroLegajo,
-                    EquipoId = b.EquipoId,
-                };
+            {
+                Nombre = b.Nombre,
+                Apellido = b.Apellido,
+                NumeroLegajo = b.NumeroLegajo,
+                EquipoId = b.EquipoId,
+            };
             BomberosViewModel.Add(bomberoVM);
         }
     }
@@ -864,10 +898,10 @@
         foreach (Movil m in moviles)
         {
             MovilViewModel movilVM = new()
-                {
-                    NumeroMovil = m.NumeroMovil,
-                    HandieMovil = m.HandieMovil
-                };
+            {
+                NumeroMovil = m.NumeroMovil,
+                HandieMovil = m.HandieMovil
+            };
             MovilesViewModel.Add(movilVM);
         }
     }
@@ -880,12 +914,12 @@
     {
         if (e.Key == "Enter")
         {
-           this.Search(new ChangeEventArgs { Value = searchString }); // Call the search method when the Enter key is pressed
+            this.Search(new ChangeEventArgs { Value = searchString }); // Call the search method when the Enter key is pressed
         }
     }
     private void Search(ChangeEventArgs e)
     {
-        searchString = e.Value?.ToString()?.Trim()?.ToLower() ?? ""; 
+        searchString = e.Value?.ToString()?.Trim()?.ToLower() ?? "";
         filteredComunicaciones = ComunicacionesViewModel?
             .Where(c =>
                 string.IsNullOrWhiteSpace(searchString) ||

@@ -17,92 +17,118 @@
         --ascensos-warning-color: #F9A825;
     }
 
-    .ascensos-abm .ascensos-container {
-        padding: 12px !important;
-        min-height: 100vh !important;
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;
-    }
+        .ascensos-abm .ascensos-container {
+            padding: 12px !important;
+            min-height: 100vh !important;
+        }
 
-    .ascensos-abm .main-card {
-        background: rgba(255, 255, 255, 0.95) !important;
-        backdrop-filter: blur(10px) !important;
-        border-radius: 16px !important;
-        box-shadow: 0 8px 32px rgba(166, 51, 51, 0.1), 0 4px 16px rgba(0, 0, 0, 0.05) !important;
-        border: 1px solid rgba(255, 255, 255, 0.2) !important;
-        overflow: hidden !important;
-    }
+        .ascensos-abm .main-card {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(10px) !important;
+            border-radius: 16px !important;
+            box-shadow: 0 8px 32px rgba(166, 51, 51, 0.1), 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            overflow: hidden !important;
+        }
 
-    .ascensos-abm .header-section {
-        background: linear-gradient(135deg, var(--ascensos-primary-color) 0%, var(--ascensos-primary-dark) 100%) !important;
-        color: white !important;
-        padding: 28px !important;
-        position: relative !important;
-        overflow: hidden !important;
-        display: flex !important;
-        justify-content: space-between !important;
-        align-items: center !important;
-        flex-wrap: wrap;
-    }
+        .ascensos-abm .header-section {
+            background: linear-gradient(135deg, var(--ascensos-primary-color) 0%, var(--ascensos-primary-dark) 100%) !important;
+            color: white !important;
+            padding: 28px !important;
+            position: relative !important;
+            overflow: hidden !important;
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            flex-wrap: wrap;
+        }
 
-    .ascensos-abm .header-section .lava-bubbles {
-        position: absolute;
-        top: 0; left: 0; width: 100%; height: 100%;
-        pointer-events: none;
-        z-index: 1;
-        overflow: hidden;
-    }
-    .ascensos-abm .header-section .lava-bubble {
-        position: absolute;
-        border-radius: 50%;
-        opacity: 0.45;
-        background: radial-gradient(circle at 60% 40%, #FFD54F 0%, #F9A825 80%, transparent 100%);
-        animation: lava-bubble-move 8s linear infinite;
-        filter: blur(1.5px);
-        mix-blend-mode: lighten;
-    }
-    .ascensos-abm .header-section .lava-bubble.b1 {
-        left: 10%; width: 60px; height: 60px; bottom: -70px;
-        animation-delay: 0s;
-        animation-duration: 7.5s;
-    }
-    .ascensos-abm .header-section .lava-bubble.b2 {
-        left: 35%; width: 90px; height: 90px; bottom: -100px;
-        animation-delay: 2s;
-        animation-duration: 9s;
-        background: radial-gradient(circle at 60% 40%, #FFEB3B 0%, #FFD54F 80%, transparent 100%);
-    }
-    .ascensos-abm .header-section .lava-bubble.b3 {
-        left: 65%; width: 50px; height: 50px; bottom: -60px;
-        animation-delay: 1.5s;
-        animation-duration: 6.5s;
-        background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #FFD54F 80%, transparent 100%);
-    }
-    .ascensos-abm .header-section .lava-bubble.b4 {
-        left: 80%; width: 70px; height: 70px; bottom: -80px;
-        animation-delay: 3.2s;
-        animation-duration: 8.5s;
-        background: radial-gradient(circle at 60% 40%, #F9A825 0%, #FFD54F 80%, transparent 100%);
-    }
-    .ascensos-abm .header-section .lava-bubble.b5 {
-        left: 55%; width: 40px; height: 40px; bottom: -50px;
-        animation-delay: 5s;
-        animation-duration: 7.2s;
-        background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #F9A825 80%, transparent 100%);
-    }
+            .ascensos-abm .header-section .lava-bubbles {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                z-index: 1;
+                overflow: hidden;
+            }
+
+            .ascensos-abm .header-section .lava-bubble {
+                position: absolute;
+                border-radius: 50%;
+                opacity: 0.45;
+                background: radial-gradient(circle at 60% 40%, #FFD54F 0%, #F9A825 80%, transparent 100%);
+                animation: lava-bubble-move 8s linear infinite;
+                filter: blur(1.5px);
+                mix-blend-mode: lighten;
+            }
+
+                .ascensos-abm .header-section .lava-bubble.b1 {
+                    left: 10%;
+                    width: 60px;
+                    height: 60px;
+                    bottom: -70px;
+                    animation-delay: 0s;
+                    animation-duration: 7.5s;
+                }
+
+                .ascensos-abm .header-section .lava-bubble.b2 {
+                    left: 35%;
+                    width: 90px;
+                    height: 90px;
+                    bottom: -100px;
+                    animation-delay: 2s;
+                    animation-duration: 9s;
+                    background: radial-gradient(circle at 60% 40%, #FFEB3B 0%, #FFD54F 80%, transparent 100%);
+                }
+
+                .ascensos-abm .header-section .lava-bubble.b3 {
+                    left: 65%;
+                    width: 50px;
+                    height: 50px;
+                    bottom: -60px;
+                    animation-delay: 1.5s;
+                    animation-duration: 6.5s;
+                    background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #FFD54F 80%, transparent 100%);
+                }
+
+                .ascensos-abm .header-section .lava-bubble.b4 {
+                    left: 80%;
+                    width: 70px;
+                    height: 70px;
+                    bottom: -80px;
+                    animation-delay: 3.2s;
+                    animation-duration: 8.5s;
+                    background: radial-gradient(circle at 60% 40%, #F9A825 0%, #FFD54F 80%, transparent 100%);
+                }
+
+                .ascensos-abm .header-section .lava-bubble.b5 {
+                    left: 55%;
+                    width: 40px;
+                    height: 40px;
+                    bottom: -50px;
+                    animation-delay: 5s;
+                    animation-duration: 7.2s;
+                    background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #F9A825 80%, transparent 100%);
+                }
 
     @@keyframes lava-bubble-move {
         0% {
             transform: translateY(0) scale(1) rotate(0deg);
             opacity: 0.45;
         }
+
         60% {
             opacity: 0.7;
             filter: blur(2.5px);
         }
+
         80% {
             transform: translateY(-220px) scale(1.15) rotate(10deg);
             opacity: 0.6;
         }
+
         100% {
             transform: translateY(-320px) scale(0.95) rotate(-8deg);
             opacity: 0;
@@ -122,15 +148,23 @@
         position: relative !important;
         z-index: 2 !important;
     }
+
     .ascensos-abm .title-icon {
         color: #FFD54F !important;
         font-size: 2rem !important;
         filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25)) !important;
     }
+
     @@keyframes text-glow {
-        0%, 100% { text-shadow: 0 0 5px #F9A825, 0 0 10px #FFD54F; }
-        50% { text-shadow: 0 0 12px #F9A825, 0 0 22px #FFD54F; }
+        0%, 100% {
+            text-shadow: 0 0 5px #F9A825, 0 0 10px #FFD54F;
+        }
+
+        50% {
+            text-shadow: 0 0 12px #F9A825, 0 0 22px #FFD54F;
+        }
     }
+
     .ascensos-abm .title-container {
         position: relative !important;
         z-index: 2 !important;
@@ -170,10 +204,11 @@
         border-radius: 8px !important;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
-    .ascensos-abm .add-button:hover {
-        transform: translateY(-2px) !important;
-        box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4) !important;
-    }
+
+        .ascensos-abm .add-button:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4) !important;
+        }
 
     .ascensos-abm .ant-table-thead .ant-table-cell {
         background-color: #A63333 !important;
@@ -187,7 +222,7 @@
         padding: 16px !important;
     }
 
-        .ascensos-abm .fade-in {
+    .ascensos-abm .fade-in {
         animation: abm-fadeIn 0.5s ease-in-out !important;
     }
 
@@ -213,6 +248,7 @@
             flex-direction: column;
             align-items: flex-start !important;
         }
+
         .ascensos-abm .actions-row {
             margin-top: 15px;
             justify-content: flex-start !important;
@@ -376,16 +412,16 @@
         {
             var bomberoafectado = await Context.Bomberos.Where(b => b.PersonaId == a.PersonaId).SingleOrDefaultAsync();
             AscensoViewModel ac = new()
-                {
-                    PersonalAfectado = bomberoafectado,
-                    NombreYApellido = bomberoafectado.Nombre + " " + bomberoafectado.Apellido,
-                    FechaAscenso = a.FechaAscenso,
-                    Descripcion = a.Descripcion,
-                    GradoAntiguo = a.GradoAntiguo,
-                    GradoAscenso = a.GradoAscenso,
-                    NumeroLibro = a.NumeroLibero,
-                    NumeroActa = a.NumeroActa
-                };
+            {
+                PersonalAfectado = bomberoafectado,
+                NombreYApellido = bomberoafectado.Nombre + " " + bomberoafectado.Apellido,
+                FechaAscenso = a.FechaAscenso,
+                Descripcion = a.Descripcion,
+                GradoAntiguo = a.GradoAntiguo,
+                GradoAscenso = a.GradoAscenso,
+                NumeroLibro = a.NumeroLibero,
+                NumeroActa = a.NumeroActa
+            };
             ascensos.Add(ac);
         }
     }

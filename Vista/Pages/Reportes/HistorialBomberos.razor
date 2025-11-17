@@ -28,96 +28,122 @@
         --abm-gold-color: #FFD700;
     }
 
-    .historial-bomberos-abm .container {
-        padding: 12px !important;
-        min-height: 100vh !important;
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;
-    }
+        .historial-bomberos-abm .container {
+            padding: 12px !important;
+            min-height: 100vh !important;
+        }
 
-    .historial-bomberos-abm .main-card {
-        background: rgba(255, 255, 255, 0.95) !important;
-        backdrop-filter: blur(10px) !important;
-        border-radius: 16px !important;
-        box-shadow: 0 8px 32px rgba(166, 51, 51, 0.1), 0 4px 16px rgba(0, 0, 0, 0.05) !important;
-        border: 1px solid rgba(255, 255, 255, 0.2) !important;
-        overflow: hidden !important;
-    }
+        .historial-bomberos-abm .main-card {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(10px) !important;
+            border-radius: 16px !important;
+            box-shadow: 0 8px 32px rgba(166, 51, 51, 0.1), 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            overflow: hidden !important;
+        }
 
-    .historial-bomberos-abm .main-card :deep(.ant-card-body) {
-        padding: 0 !important;
-    }
+            .historial-bomberos-abm .main-card :deep(.ant-card-body) {
+                padding: 0 !important;
+            }
 
-    .historial-bomberos-abm .header-section {
-        background: linear-gradient(135deg, #A63333 0%, #732D2D 100%) !important;
-        color: white !important;
-        padding: 28px !important;
-        position: relative !important;
-        overflow: hidden !important;
-        display: flex !important;
-        justify-content: space-between !important;
-        align-items: center !important;
-        flex-wrap: wrap;
-    }
+        .historial-bomberos-abm .header-section {
+            background: linear-gradient(135deg, #A63333 0%, #732D2D 100%) !important;
+            color: white !important;
+            padding: 28px !important;
+            position: relative !important;
+            overflow: hidden !important;
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            flex-wrap: wrap;
+        }
 
-    .historial-bomberos-abm .header-section .lava-bubbles {
-        position: absolute;
-        top: 0; left: 0; width: 100%; height: 100%;
-        pointer-events: none;
-        z-index: 1;
-        overflow: hidden;
-    }
-    .historial-bomberos-abm .header-section .lava-bubble {
-        position: absolute;
-        border-radius: 50%;
-        opacity: 0.45;
-        background: radial-gradient(circle at 60% 40%, #FFD54F 0%, #F9A825 80%, transparent 100%);
-        animation: lava-bubble-move 8s linear infinite;
-        filter: blur(1.5px);
-        mix-blend-mode: lighten;
-    }
-    .historial-bomberos-abm .header-section .lava-bubble.b1 {
-        left: 10%; width: 60px; height: 60px; bottom: -70px;
-        animation-delay: 0s;
-        animation-duration: 7.5s;
-    }
-    .historial-bomberos-abm .header-section .lava-bubble.b2 {
-        left: 35%; width: 90px; height: 90px; bottom: -100px;
-        animation-delay: 2s;
-        animation-duration: 9s;
-        background: radial-gradient(circle at 60% 40%, #FFEB3B 0%, #FFD54F 80%, transparent 100%);
-    }
-    .historial-bomberos-abm .header-section .lava-bubble.b3 {
-        left: 65%; width: 50px; height: 50px; bottom: -60px;
-        animation-delay: 1.5s;
-        animation-duration: 6.5s;
-        background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #FFD54F 80%, transparent 100%);
-    }
-    .historial-bomberos-abm .header-section .lava-bubble.b4 {
-        left: 80%; width: 70px; height: 70px; bottom: -80px;
-        animation-delay: 3.2s;
-        animation-duration: 8.5s;
-        background: radial-gradient(circle at 60% 40%, #F9A825 0%, #FFD54F 80%, transparent 100%);
-    }
-    .historial-bomberos-abm .header-section .lava-bubble.b5 {
-        left: 55%; width: 40px; height: 40px; bottom: -50px;
-        animation-delay: 5s;
-        animation-duration: 7.2s;
-        background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #F9A825 80%, transparent 100%);
-    }
+            .historial-bomberos-abm .header-section .lava-bubbles {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                z-index: 1;
+                overflow: hidden;
+            }
+
+            .historial-bomberos-abm .header-section .lava-bubble {
+                position: absolute;
+                border-radius: 50%;
+                opacity: 0.45;
+                background: radial-gradient(circle at 60% 40%, #FFD54F 0%, #F9A825 80%, transparent 100%);
+                animation: lava-bubble-move 8s linear infinite;
+                filter: blur(1.5px);
+                mix-blend-mode: lighten;
+            }
+
+                .historial-bomberos-abm .header-section .lava-bubble.b1 {
+                    left: 10%;
+                    width: 60px;
+                    height: 60px;
+                    bottom: -70px;
+                    animation-delay: 0s;
+                    animation-duration: 7.5s;
+                }
+
+                .historial-bomberos-abm .header-section .lava-bubble.b2 {
+                    left: 35%;
+                    width: 90px;
+                    height: 90px;
+                    bottom: -100px;
+                    animation-delay: 2s;
+                    animation-duration: 9s;
+                    background: radial-gradient(circle at 60% 40%, #FFEB3B 0%, #FFD54F 80%, transparent 100%);
+                }
+
+                .historial-bomberos-abm .header-section .lava-bubble.b3 {
+                    left: 65%;
+                    width: 50px;
+                    height: 50px;
+                    bottom: -60px;
+                    animation-delay: 1.5s;
+                    animation-duration: 6.5s;
+                    background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #FFD54F 80%, transparent 100%);
+                }
+
+                .historial-bomberos-abm .header-section .lava-bubble.b4 {
+                    left: 80%;
+                    width: 70px;
+                    height: 70px;
+                    bottom: -80px;
+                    animation-delay: 3.2s;
+                    animation-duration: 8.5s;
+                    background: radial-gradient(circle at 60% 40%, #F9A825 0%, #FFD54F 80%, transparent 100%);
+                }
+
+                .historial-bomberos-abm .header-section .lava-bubble.b5 {
+                    left: 55%;
+                    width: 40px;
+                    height: 40px;
+                    bottom: -50px;
+                    animation-delay: 5s;
+                    animation-duration: 7.2s;
+                    background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #F9A825 80%, transparent 100%);
+                }
 
     @@keyframes lava-bubble-move {
         0% {
             transform: translateY(0) scale(1) rotate(0deg);
             opacity: 0.45;
         }
+
         60% {
             opacity: 0.7;
             filter: blur(2.5px);
         }
+
         80% {
             transform: translateY(-220px) scale(1.15) rotate(10deg);
             opacity: 0.6;
         }
+
         100% {
             transform: translateY(-320px) scale(0.95) rotate(-8deg);
             opacity: 0;
@@ -145,8 +171,13 @@
     }
 
     @@keyframes text-glow {
-        0%, 100% { text-shadow: 0 0 5px #F9A825, 0 0 10px #FFD54F; }
-        50% { text-shadow: 0 0 12px #F9A825, 0 0 22px #FFD54F; }
+        0%, 100% {
+            text-shadow: 0 0 5px #F9A825, 0 0 10px #FFD54F;
+        }
+
+        50% {
+            text-shadow: 0 0 12px #F9A825, 0 0 22px #FFD54F;
+        }
     }
 
     .historial-bomberos-abm .actions-row {
@@ -173,10 +204,10 @@
         padding: 0 20px !important;
     }
 
-    .historial-bomberos-abm .modern-button:hover {
-        transform: translateY(-2px) !important;
-        box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4) !important;
-    }
+        .historial-bomberos-abm .modern-button:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4) !important;
+        }
 
     .historial-bomberos-abm .table-container {
         padding: 0 !important;
@@ -194,57 +225,70 @@
     }
 
     .ant-table-cell {
-        min-width: 120px!important;
+        min-width: 120px !important;
         font-size: 1rem !important;
         padding: 16px !important;
     }
-    .ant-table-content{
+
+    .ant-table-content {
         min-width: 400px !important;
     }
-    .ant-table{
+
+    .ant-table {
         min-width: min-content;
         font-size: 1rem !important;
-    }   
-    @@media (max-width: 960px){
+    }
+
+    @@media (max-width: 960px) {
         .historial-bomberos-abm .container {
             padding: 8px !important;
         }
+
         .historial-bomberos-abm .main-card {
             max-width: 99vw;
             min-width: 0;
         }
+
         .historial-bomberos-abm .header-section {
             padding: 20px !important;
             flex-direction: column;
             align-items: flex-start !important;
         }
+
         .historial-bomberos-abm .actions-row {
             margin-top: 15px;
             justify-content: flex-start !important;
             width: 100%;
         }
+
         .historial-bomberos-abm .main-title {
             font-size: 2rem !important;
             flex-direction: column !important;
             text-align: center !important;
             gap: 8px !important;
         }
+
         .ant-table-row, .ant-table-row-level-0 {
             display: flex !important;
             flex-direction: column !important;
         }
-        .ant-table.ant-table-bordered > .ant-table-title{
+
+        .ant-table.ant-table-bordered > .ant-table-title {
             height: 15em !important;
         }
-        #ant-blazor-df7d6d62-e78b-479a-b209-8325c3889500{
-            width: 100%!important;
+
+        #ant-blazor-df7d6d62-e78b-479a-b209-8325c3889500 {
+            width: 100% !important;
         }
-        #ant-blazor-409acdf0-1470-4ab2-9ad6-e328b6913485{
-            align-items: flex-start!important;
+
+        #ant-blazor-409acdf0-1470-4ab2-9ad6-e328b6913485 {
+            align-items: flex-start !important;
         }
-        .notificacion{
-            margin-top: 15px!important;
+
+        .notificacion {
+            margin-top: 15px !important;
         }
+
         .inpt-cont-inline {
             flex-direction: column !important;
             gap: 0 !important;
@@ -255,9 +299,11 @@
         .historial-bomberos-abm .container {
             padding: 4px !important;
         }
+
         .historial-bomberos-abm .header-section {
             padding: 16px !important;
         }
+
         .historial-bomberos-abm .main-title {
             font-size: 1.8rem !important;
             letter-spacing: 2px !important;
@@ -271,7 +317,7 @@
     }
 
     .template {
-        display: none; 
+        display: none;
     }
 
     .historial-bomberos-abm .ant-table-thead > tr > th {
@@ -313,13 +359,13 @@
             <div class="table-container">
                 <Table DataSource="BomberosVM" PageSize="6" Responsive Bordered Style="min-width: 400px;">
                     <ColumnDefinitions>
-                        <PropertyColumn Property="c=>c.NumeroLegajo.Value" Title="Numero de Legajo" Sortable></PropertyColumn>
-                        <PropertyColumn Property="c=>c.NombreYApellido" Title="Nombre Y Apellido" Sortable></PropertyColumn>
-                        <PropertyColumn Property="c=>c.Grado" />
-                        <PropertyColumn Property="c=>c.TelefonoCel" Title="Telefono Cel" Sortable></PropertyColumn>
-                        <PropertyColumn Property="c=>c.TelefonoFijo" Title="Telefono Fijo" Sortable></PropertyColumn>
-                        <PropertyColumn Property="c=>c.TelefonoLaboral" Title="Telefono Laboral" Sortable></PropertyColumn>
-                        <PropertyColumn Property="c=>c.Email" Sortable></PropertyColumn>
+                        <PropertyColumn Property="c => c.NumeroLegajo.Value" Title="Numero de Legajo" Sortable></PropertyColumn>
+                        <PropertyColumn Property="c => c.NombreYApellido" Title="Nombre Y Apellido" Sortable></PropertyColumn>
+                        <PropertyColumn Property="c => c.Grado" />
+                        <PropertyColumn Property="c => c.TelefonoCel" Title="Telefono Cel" Sortable></PropertyColumn>
+                        <PropertyColumn Property="c => c.TelefonoFijo" Title="Telefono Fijo" Sortable></PropertyColumn>
+                        <PropertyColumn Property="c => c.TelefonoLaboral" Title="Telefono Laboral" Sortable></PropertyColumn>
+                        <PropertyColumn Property="c => c.Email" Sortable></PropertyColumn>
                     </ColumnDefinitions>
                 </Table>
             </div>

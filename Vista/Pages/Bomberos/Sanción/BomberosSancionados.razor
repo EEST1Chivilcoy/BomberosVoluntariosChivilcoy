@@ -16,92 +16,118 @@
         --sancionados-success-dark: #438E46;
     }
 
-    .sancionados-abm .sancionados-container {
-        padding: 12px !important;
-        min-height: 100vh !important;
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;
-    }
+        .sancionados-abm .sancionados-container {
+            padding: 12px !important;
+            min-height: 100vh !important;
+        }
 
-    .sancionados-abm .main-card {
-        background: rgba(255, 255, 255, 0.95) !important;
-        backdrop-filter: blur(10px) !important;
-        border-radius: 16px !important;
-        box-shadow: 0 8px 32px rgba(166, 51, 51, 0.1), 0 4px 16px rgba(0, 0, 0, 0.05) !important;
-        border: 1px solid rgba(255, 255, 255, 0.2) !important;
-        overflow: hidden !important;
-    }
+        .sancionados-abm .main-card {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(10px) !important;
+            border-radius: 16px !important;
+            box-shadow: 0 8px 32px rgba(166, 51, 51, 0.1), 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            overflow: hidden !important;
+        }
 
-    .sancionados-abm .header-section {
-        background: linear-gradient(135deg, var(--sancionados-primary-color) 0%, var(--sancionados-primary-dark) 100%) !important;
-        color: white !important;
-        padding: 28px !important;
-        position: relative !important;
-        overflow: hidden !important;
-        display: flex !important;
-        justify-content: space-between !important;
-        align-items: center !important;
-        flex-wrap: wrap;
-    }
+        .sancionados-abm .header-section {
+            background: linear-gradient(135deg, var(--sancionados-primary-color) 0%, var(--sancionados-primary-dark) 100%) !important;
+            color: white !important;
+            padding: 28px !important;
+            position: relative !important;
+            overflow: hidden !important;
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            flex-wrap: wrap;
+        }
 
-    .sancionados-abm .header-section .lava-bubbles {
-        position: absolute;
-        top: 0; left: 0; width: 100%; height: 100%;
-        pointer-events: none;
-        z-index: 1;
-        overflow: hidden;
-    }
-    .sancionados-abm .header-section .lava-bubble {
-        position: absolute;
-        border-radius: 50%;
-        opacity: 0.45;
-        background: radial-gradient(circle at 60% 40%, #FFD54F 0%, #F9A825 80%, transparent 100%);
-        animation: lava-bubble-move 8s linear infinite;
-        filter: blur(1.5px);
-        mix-blend-mode: lighten;
-    }
-    .sancionados-abm .header-section .lava-bubble.b1 {
-        left: 10%; width: 60px; height: 60px; bottom: -70px;
-        animation-delay: 0s;
-        animation-duration: 7.5s;
-    }
-    .sancionados-abm .header-section .lava-bubble.b2 {
-        left: 35%; width: 90px; height: 90px; bottom: -100px;
-        animation-delay: 2s;
-        animation-duration: 9s;
-        background: radial-gradient(circle at 60% 40%, #FFEB3B 0%, #FFD54F 80%, transparent 100%);
-    }
-    .sancionados-abm .header-section .lava-bubble.b3 {
-        left: 65%; width: 50px; height: 50px; bottom: -60px;
-        animation-delay: 1.5s;
-        animation-duration: 6.5s;
-        background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #FFD54F 80%, transparent 100%);
-    }
-    .sancionados-abm .header-section .lava-bubble.b4 {
-        left: 80%; width: 70px; height: 70px; bottom: -80px;
-        animation-delay: 3.2s;
-        animation-duration: 8.5s;
-        background: radial-gradient(circle at 60% 40%, #F9A825 0%, #FFD54F 80%, transparent 100%);
-    }
-    .sancionados-abm .header-section .lava-bubble.b5 {
-        left: 55%; width: 40px; height: 40px; bottom: -50px;
-        animation-delay: 5s;
-        animation-duration: 7.2s;
-        background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #F9A825 80%, transparent 100%);
-    }
+            .sancionados-abm .header-section .lava-bubbles {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                z-index: 1;
+                overflow: hidden;
+            }
+
+            .sancionados-abm .header-section .lava-bubble {
+                position: absolute;
+                border-radius: 50%;
+                opacity: 0.45;
+                background: radial-gradient(circle at 60% 40%, #FFD54F 0%, #F9A825 80%, transparent 100%);
+                animation: lava-bubble-move 8s linear infinite;
+                filter: blur(1.5px);
+                mix-blend-mode: lighten;
+            }
+
+                .sancionados-abm .header-section .lava-bubble.b1 {
+                    left: 10%;
+                    width: 60px;
+                    height: 60px;
+                    bottom: -70px;
+                    animation-delay: 0s;
+                    animation-duration: 7.5s;
+                }
+
+                .sancionados-abm .header-section .lava-bubble.b2 {
+                    left: 35%;
+                    width: 90px;
+                    height: 90px;
+                    bottom: -100px;
+                    animation-delay: 2s;
+                    animation-duration: 9s;
+                    background: radial-gradient(circle at 60% 40%, #FFEB3B 0%, #FFD54F 80%, transparent 100%);
+                }
+
+                .sancionados-abm .header-section .lava-bubble.b3 {
+                    left: 65%;
+                    width: 50px;
+                    height: 50px;
+                    bottom: -60px;
+                    animation-delay: 1.5s;
+                    animation-duration: 6.5s;
+                    background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #FFD54F 80%, transparent 100%);
+                }
+
+                .sancionados-abm .header-section .lava-bubble.b4 {
+                    left: 80%;
+                    width: 70px;
+                    height: 70px;
+                    bottom: -80px;
+                    animation-delay: 3.2s;
+                    animation-duration: 8.5s;
+                    background: radial-gradient(circle at 60% 40%, #F9A825 0%, #FFD54F 80%, transparent 100%);
+                }
+
+                .sancionados-abm .header-section .lava-bubble.b5 {
+                    left: 55%;
+                    width: 40px;
+                    height: 40px;
+                    bottom: -50px;
+                    animation-delay: 5s;
+                    animation-duration: 7.2s;
+                    background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #F9A825 80%, transparent 100%);
+                }
 
     @@keyframes lava-bubble-move {
         0% {
             transform: translateY(0) scale(1) rotate(0deg);
             opacity: 0.45;
         }
+
         60% {
             opacity: 0.7;
             filter: blur(2.5px);
         }
+
         80% {
             transform: translateY(-220px) scale(1.15) rotate(10deg);
             opacity: 0.6;
         }
+
         100% {
             transform: translateY(-320px) scale(0.95) rotate(-8deg);
             opacity: 0;
@@ -121,15 +147,23 @@
         position: relative !important;
         z-index: 2 !important;
     }
+
     .sancionados-abm .title-icon {
         color: var(--sancionados-accent-color) !important;
         font-size: 2rem !important;
         filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25)) !important;
     }
+
     @@keyframes text-glow {
-        0%, 100% { text-shadow: 0 0 5px var(--sancionados-warning-color), 0 0 10px var(--sancionados-accent-color); }
-        50% { text-shadow: 0 0 12px var(--sancionados-warning-color), 0 0 22px var(--sancionados-accent-color); }
+        0%, 100% {
+            text-shadow: 0 0 5px var(--sancionados-warning-color), 0 0 10px var(--sancionados-accent-color);
+        }
+
+        50% {
+            text-shadow: 0 0 12px var(--sancionados-warning-color), 0 0 22px var(--sancionados-accent-color);
+        }
     }
+
     .sancionados-abm .title-container {
         position: relative !important;
         z-index: 2 !important;
@@ -169,10 +203,11 @@
         border-radius: 8px !important;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
-    .sancionados-abm .add-button:hover {
-        transform: translateY(-2px) !important;
-        box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4) !important;
-    }
+
+        .sancionados-abm .add-button:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4) !important;
+        }
 
     .sancionados-abm .ant-table-thead .ant-table-cell {
         background-color: #A63333 !important;
@@ -226,6 +261,7 @@
         margin-top: -50px;
         margin-bottom: 0px;
     }
+
     .modal-crear-sancion .ant-modal-header {
         background: rgba(255, 255, 255, 0.2);
         padding: 32px 32px 24px 32px;
@@ -234,9 +270,10 @@
         display: flex;
         align-items: flex-end;
     }
+
     .modal-crear-sancion .ant-modal-title {
         font-weight: 600;
-        font-size: 1.5rem  !important;
+        font-size: 1.5rem !important;
         margin-left: 20px;
         color: #434343;
         display: flex;
@@ -245,35 +282,41 @@
         font-size: 14px;
         transition: color 0.3s ease;
     }
+
     .modal-crear-sancion-content {
         padding: 24px;
     }
+
     .modal-crear-sancion-form-item {
         margin-bottom: 20px;
         position: relative;
         padding-left: 10px;
     }
-    .modal-crear-sancion-form-item::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        height: 100%;
-        width: 3px;
-        border-radius: 5px;
-    }
-    .modal-crear-sancion-form-item .ant-form-item-label > label {
-        font-weight: 600;
-        color: #434343;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 14px;
-        transition: color 0.3s ease;
-    }
-    .modal-crear-sancion-form-item .ant-form-item-label > label:hover {
-        color: #FFD700;
-    }
+
+        .modal-crear-sancion-form-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            border-radius: 5px;
+        }
+
+        .modal-crear-sancion-form-item .ant-form-item-label > label {
+            font-weight: 600;
+            color: #434343;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+            .modal-crear-sancion-form-item .ant-form-item-label > label:hover {
+                color: #FFD700;
+            }
+
     .modal-crear-sancion .ant-input:focus,
     .modal-crear-sancion .ant-input:hover,
     .modal-crear-sancion .ant-select-selector:focus,
@@ -289,6 +332,7 @@
         border-color: #FFD700 !important;
         box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
     }
+
     .modal-crear-sancion .ant-picker,
     .modal-crear-sancion .ant-input,
     .modal-crear-sancion .ant-select-selector,
@@ -300,6 +344,7 @@
         color: #434343 !important;
         transition: all 0.3s ease !important;
     }
+
     .modal-crear-sancion .modal-crear-sancion-footer {
         display: flex;
         justify-content: flex-end;
@@ -307,20 +352,22 @@
         margin-top: 18px;
         margin-bottom: 0px;
     }
+
     .modal-crear-sancion .ant-btn-primary {
         background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
         border: none !important;
         color: #fff !important;
         font-weight: 600;
         box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
-        margin-top:  0;
+        margin-top: 0;
         margin-bottom: 0;
         padding: 0 20px !important;
     }
-    .modal-crear-sancion .ant-btn-primary:hover {
-        background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
-        color: #fff !important;
-    }
+
+        .modal-crear-sancion .ant-btn-primary:hover {
+            background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
+            color: #fff !important;
+        }
 
     .sancionados-abm .ant-modal-content {
         position: relative;
@@ -333,7 +380,7 @@
         border: 1px solid red !important;
     }
 
-        .sancionados-abm .fade-in {
+    .sancionados-abm .fade-in {
         animation: abm-fadeIn 0.5s ease-in-out !important;
     }
 
@@ -359,6 +406,7 @@
             flex-direction: column;
             align-items: flex-start !important;
         }
+
         .sancionados-abm .actions-row {
             margin-top: 15px;
             justify-content: flex-start !important;
@@ -460,19 +508,18 @@
     </div>
 </div>
 
-@if(_visibleCargar == true)
+@if (_visibleCargar == true)
 {
-    <Modal
-        Title="Nueva Sanción"
-        Width="@("100%")"
-        Style="max-width: 800px;"
-        Footer="null"
-        OnCancel="()=> _visibleCargar = false"
-        Visible="@_visibleCargar"
-        DestroyOnClose
-        WrapClassName="modal-crear-sancion">
+    <Modal Title="Nueva Sanción"
+           Width="@("100%")"
+           Style="max-width: 800px;"
+           Footer="null"
+           OnCancel="()=> _visibleCargar = false"
+           Visible="@_visibleCargar"
+           DestroyOnClose
+           WrapClassName="modal-crear-sancion">
         <div class="modal-crear-sancion-content">
-            <AgregarSancion OnClose="OnClose"/>
+            <AgregarSancion OnClose="OnClose" />
         </div>
     </Modal>
 }
@@ -515,15 +562,15 @@
             var bombero = await Context.Bomberos.Where(B => B.PersonaId == s.PersonaId).SingleOrDefaultAsync();
 
             SancionViewModel san = new()
-                {
-                    FechaDesde = s.FechaDesde,
-                    FechaHasta = s.FechaHasta,
-                    PersonalSancionado = bombero,
-                    Sancionado = bombero.Nombre + " " + bombero.Apellido,
-                    TipoSancion = s.TipoSancion,
-                    SancionArea = s.SacionArea,
-                    Observaciones = s.DescripcionSancion
-                };
+            {
+                FechaDesde = s.FechaDesde,
+                FechaHasta = s.FechaHasta,
+                PersonalSancionado = bombero,
+                Sancionado = bombero.Nombre + " " + bombero.Apellido,
+                TipoSancion = s.TipoSancion,
+                SancionArea = s.SacionArea,
+                Observaciones = s.DescripcionSancion
+            };
             sancionesVM.Add(san);
         }
     }
