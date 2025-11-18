@@ -61,7 +61,9 @@
 </style>
 
 <div class="datos-generales">
-    <Form Model="Model" OnFieldChanged="@ValidateForm" Loading="_formloading">
+    <Form Model="Model"
+          ValidateOnChange="@true"
+          Loading="_formloading">
 
         @* 🕒 Información Temporal *@
         <div style="margin-bottom: 24px;">
@@ -211,7 +213,6 @@
     [Parameter, EditorRequired] public required SalidasViewModels Model { get; set; } // Modelo de datos para el formulario
     [Parameter] public bool IsFormDisabled { get; set; }
     [Parameter] public bool MostrarOpcionDepartamento { get; set; } = true; // Indica si se muestra la opción de departamento (En algunos casos es imposible que sea un deparatamento)
-    [Parameter] public EventCallback<bool> OnCompleted { get; set; } // Evento para notificar que se ha completado el formulario
 
     private bool isApiAvailable;
 
@@ -259,24 +260,6 @@
             _formloading = false;
             StateHasChanged();
         }
-    }
-
-    private void ValidateForm()
-    {
-        _ = ValidateFormAsync();
-    }
-
-    private async Task ValidateFormAsync()
-    {
-        var esValido = true;
-
-        if (Model.FechaSalida == default ||
-            string.IsNullOrWhiteSpace(Model.Descripcion))
-        {
-            esValido = false;
-        }
-
-        await OnCompleted.InvokeAsync(esValido);
     }
 
     private void OnStreetSelected(Direccion selectedStreet)

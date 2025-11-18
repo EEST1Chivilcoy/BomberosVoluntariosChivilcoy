@@ -41,7 +41,7 @@
         <!-- Tabs container -->
         <Tabs DefaultActiveKey="1" Class="custom-tabs" Style="box-shadow: 0 4px 16px rgba(24,144,255,0.08); border-radius: 12px;">
             <TabPane Key="1" Tab="📋 Datos-Generales" Class="tab-general">
-                <DatosGenerales Model="@AccidenteViewModel" OnCompleted="@((bool done) => _parte1Completa = done)" />
+                <DatosGenerales Model="@AccidenteViewModel"  />
             </TabPane>
 
             <TabPane Key="2" Tab="📞 Datos Telefónicos">
@@ -53,7 +53,7 @@
             </TabPane>
 
             <TabPane Key="4" Tab="⚠️ Afectados">
-                
+
             </TabPane>
 
             <TabPane Key="5" Tab="🚒 Unidades">
