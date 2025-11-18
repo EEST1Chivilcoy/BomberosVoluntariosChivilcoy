@@ -44,6 +44,7 @@ html {
     background: transparent !important;
     border-bottom: none !important;
     justify-content: flex-end;
+
 }
 
 .ant-menu-item {
@@ -55,6 +56,7 @@ html {
     border-bottom: none !important;
     position: relative;
     overflow: hidden;
+    
 }
 
     .ant-menu-item::before {
@@ -66,6 +68,7 @@ html {
         height: 100%;
         background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
         transition: left 0.6s ease;
+        
     }
 
     .ant-menu-item:hover::before {
@@ -1420,6 +1423,102 @@ html {
 }
 
 
+
+.hero-content {
+    padding: 20px;
+}
+
+@media (min-width: 768px) {
+    .hero-content {
+        padding: 40px 20px;
+    }
+}
+
+.hero-title {
+    font-size: 1.8rem !important;
+    line-height: 1.2 !important;
+    margin-bottom: 20px !important;
+}
+
+@media (min-width: 768px) {
+    .hero-title {
+        font-size: 3rem !important;
+    }
+}
+
+.hero-description {
+    font-size: 0.9rem !important;
+    line-height: 1.5 !important;
+}
+
+@media (min-width: 768px) {
+    .hero-description {
+        font-size: 1.1rem !important;
+    }
+}
+
+.logo-container {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.main-logo {
+    max-width: 250px;
+    width: 100%;
+    height: auto;
+}
+
+@media (min-width: 768px) {
+    .main-logo {
+        max-width: 350px;
+    }
+    
+    .logo-container {
+        height: 100%;
+    }
+}
+
+/* Ajustes para la galería */
+.gallery-grid {
+    padding: 10px;
+}
+
+@media (min-width: 768px) {
+    .gallery-grid {
+        padding: 20px;
+    }
+}
+
+.gallery-title {
+    font-size: 1.5rem !important;
+    padding: 0 15px;
+}
+
+@media (min-width: 768px) {
+    .gallery-title {
+        font-size: 2.5rem !important;
+    }
+}
+
+.gallery-subtitle {
+    font-size: 0.9rem !important;
+    padding: 0 15px;
+}
+
+@media (min-width: 768px) {
+    .gallery-subtitle {
+        font-size: 1.2rem !important;
+    }
+}
+
+.emergency-image {
+    max-width: 100%;
+    height: auto;
+}
+
 @media (max-width: 576px) {
     .hero-title {
         font-size: 2rem !important;
@@ -1429,3 +1528,81 @@ html {
         max-width: 100px;
     }
 }
+
+
+@media (man-width: 768px) {
+    
+}
+
+
+
+
+
+.mobile-menu-btn {
+    display: none;
+}
+
+
+.custom-header menu,
+.custom-header .ant-menu {
+    display: flex !important;
+}
+
+
+@media (max-width: 768px) {
+
+
+    .custom-header .ant-menu {
+        display: none !important;
+    }
+
+
+    .mobile-menu-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        cursor: pointer;
+        padding: 10px 15px;
+        background: transparent;
+        border: none;
+        color: white;
+    }
+
+
+    .custom-header > div {
+        justify-content: flex-start !important;
+    }
+
+
+    .mobile-drawer-menu {
+        display: flex;
+        flex-direction: column;
+        padding: 10px 0;
+    }
+
+    .drawer-menu-item {
+        padding: 14px 18px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 1.1rem;
+        cursor: pointer;
+        border-bottom: 1px solid #eee;
+    }
+
+    .drawer-menu-item.active {
+        background: #f5f5f5;
+        font-weight: bold;
+    }
+
+    .drawer-icon {
+        font-size: 1.2rem;
+    }
+
+    .drawer-text {
+        font-size: 1rem;
+    }
+}
+
+
