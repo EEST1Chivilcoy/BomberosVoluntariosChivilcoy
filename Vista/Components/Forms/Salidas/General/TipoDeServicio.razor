@@ -9,7 +9,7 @@
 
 <Form Model="Model">
     <FormItem Label="Tipo de Servicio" Required>
-        <EnumSelect TEnum="TipoServicioSalida" @bind-Value="@Model.TipoServicio" />
+        <EnumSelect TEnum="TipoServicioSalida?" @bind-Value="@Model.TipoServicio" />
     </FormItem>
 
     @if (Model is IncendioViewModels incendioView)
@@ -19,7 +19,7 @@
         </FormItem>
 
         <FormItem Label="Dimensiones" Required>
-            <EnumSelect TEnum="TipoSuperficie" @bind-Value="@incendioView.TipoSuperficieAfectada" />
+            <EnumSelect TEnum="TipoSuperficie?" @bind-Value="@incendioView.TipoSuperficieAfectada" />
         </FormItem>
 
         <FormItem Label="Tipo de Evacuación">
@@ -48,7 +48,7 @@
     @if (Model is MaterialPeligrosoViewModels matpelView)
     {
         <FormItem Label="Tipo de Material Peligroso" Required>
-            <EnumSelect TEnum="CategoriaMaterialPeligroso" @bind-Value="@matpelView.Tipo" />
+            <EnumSelect TEnum="CategoriaMaterialPeligroso?" @bind-Value="@matpelView.Tipo" />
         </FormItem>
         <FormItem Label="Sustancias Involucradas" Required>
             <TextArea @bind-Value="@matpelView.Sustancias" Placeholder="Describa las sustancias involucradas" />
@@ -71,7 +71,7 @@
         <Row Gutter="16">
             <AntDesign.Col Span="12">
                 <FormItem Label="Evacuación">
-                    <EnumSelect TEnum="TipoEvacuacion" @bind-Value="@matpelView.Evacuacion" />
+                    <EnumSelect TEnum="TipoEvacuacion?" @bind-Value="@matpelView.Evacuacion" />
                 </FormItem>
             </AntDesign.Col>
             <AntDesign.Col Span="12" Style="padding-top: 32px;">
@@ -90,7 +90,7 @@
         <Row Gutter="16">
             <AntDesign.Col Span="12">
                 <FormItem Label="Tipo de Superficie">
-                    <EnumSelect TEnum="TipoSuperficie" @bind-Value="@matpelView.TipoSuperficie" />
+                    <EnumSelect TEnum="TipoSuperficie?" @bind-Value="@matpelView.TipoSuperficie" />
                 </FormItem>
             </AntDesign.Col>
             <AntDesign.Col Span="12">
@@ -100,17 +100,17 @@
             </AntDesign.Col>
         </Row>
         <FormItem Label="Situación de la Explosión">
-            <EnumSelect TEnum="TipoSituacionExplosion" @bind-Value="@matpelView.TipoSituacion" />
+            <EnumSelect TEnum="TipoSituacionExplosion?" @bind-Value="@matpelView.TipoSituacion" />
         </FormItem>
     }
 
     @if (Model is AccidenteViewModels accidenteView)
     {
         <FormItem Label="Tipo de Accidente" Required>
-            <EnumSelect TEnum="TipoAccidente" @bind-Value="@accidenteView.Tipo" />
+            <EnumSelect TEnum="TipoAccidente?" @bind-Value="@accidenteView.Tipo" />
         </FormItem>
         <FormItem Label="Condiciones Climáticas" Required>
-            <EnumSelect TEnum="TipoCondicionesClimaticas" @bind-Value="@accidenteView.CondicionesClimaticas" />
+            <EnumSelect TEnum="TipoCondicionesClimaticas?" @bind-Value="@accidenteView.CondicionesClimaticas" />
         </FormItem>
     }
 
@@ -120,10 +120,10 @@
             <EnumSelect TEnum="TipoFactoresClimaticos" @bind-Value="@factorClimaticoView.Tipo" />
         </FormItem>
         <FormItem Label="Tipo de Evacuación">
-            <EnumSelect TEnum="TipoEvacuacion" @bind-Value="@factorClimaticoView.Evacuacion" />
+            <EnumSelect TEnum="TipoEvacuacion?" @bind-Value="@factorClimaticoView.Evacuacion" />
         </FormItem>
         <FormItem Label="Tipo de Superficie">
-            <EnumSelect TEnum="TipoSuperficie" @bind-Value="@factorClimaticoView.Superficie" />
+            <EnumSelect TEnum="TipoSuperficie?" @bind-Value="@factorClimaticoView.Superficie" />
         </FormItem>
         <FormItem Label="Cantidad Afectada (m²)">
             <AntDesign.InputNumber @bind-Value="@factorClimaticoView.CantidadAfectada" />
@@ -153,10 +153,10 @@
             case ServicioEspecialTipo.Prevencion:
                 var prevencionView = (ServicioEspecialPrevencionViewModels)servicioEspecialView;
                 <FormItem Label="Tipo de Prevención" Required>
-                    <EnumSelect TEnum="TipoServicioPrevencion" @bind-Value="@prevencionView.TipoPrevencion" />
+                    <EnumSelect TEnum="TipoServicioPrevencion?" @bind-Value="@prevencionView.TipoPrevencion" />
                 </FormItem>
                 <FormItem Label="Organización Beneficiada" Required>
-                    <EnumSelect TEnum="TipoOrganizacionBeneficiada" @bind-Value="@prevencionView.TipoOrganizacion" />
+                    <EnumSelect TEnum="TipoOrganizacionBeneficiada?" @bind-Value="@prevencionView.TipoOrganizacion" />
                 </FormItem>
                 break;
 

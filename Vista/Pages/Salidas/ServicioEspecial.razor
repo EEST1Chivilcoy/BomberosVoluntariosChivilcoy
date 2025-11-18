@@ -49,7 +49,7 @@
                                OnCompleted="@((bool done) => _parte2Completa = done)" />
             </TabPane>
 
-            <TabPane Key="3" Tab="🛡️ Fuerzas Intervinientes" Disabled="@(ServicioEspecialViewModel.FuerzasIntervinientesParticipantes?.Any() != true)">
+            <TabPane Key="3" Tab="🛡️ Fuerzas Intervinientes">
                 <FuerzasIntervinientes Model="@ServicioEspecialViewModel" />
             </TabPane>
 

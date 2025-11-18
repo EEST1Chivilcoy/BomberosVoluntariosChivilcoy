@@ -100,12 +100,12 @@
                                OnCompleted="@((bool done) => _parte2Completa = done)" />
             </TabPane>
 
-            <TabPane Key="3" Tab="🛡️ Fuerzas Intervinientes" Disabled="@(IncendioViewModel.FuerzasIntervinientesParticipantes?.Any() != true)">
+            <TabPane Key="3" Tab="🛡️ Fuerzas Intervinientes">
                 <FuerzasIntervinientes Model="@IncendioViewModel" />
             </TabPane>
 
             <TabPane Key="4" Tab="⚠️ Afectados">
-                
+
             </TabPane>
 
             <TabPane Key="5" Tab="🚒 Unidades">

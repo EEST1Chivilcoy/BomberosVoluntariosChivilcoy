@@ -19,13 +19,13 @@ using Vista.Data.ViewModels.Servicios;
 using Vista.Data.Enums.Salidas;
 
 namespace Vista.Data.Mappers
-{   
+{
     public static class SalidasMapper
     {
         public static Salida ToSalida(this SalidasViewModels viewModel)
         {
             if (viewModel == null)
-            { 
+            {
                 return null;
             }
 
@@ -61,8 +61,8 @@ namespace Vista.Data.Mappers
         {
             var accidente = new Accidente();
             MapBaseProperties(viewModel, accidente);
-            accidente.Tipo = viewModel.Tipo;
-            accidente.CondicionesClimaticas = viewModel.CondicionesClimaticas;
+            accidente.Tipo = viewModel.Tipo!.Value;
+            accidente.CondicionesClimaticas = viewModel.CondicionesClimaticas!.Value;
             return accidente;
         }
 
@@ -89,9 +89,9 @@ namespace Vista.Data.Mappers
             var factorClimatico = new FactorClimatico();
             MapBaseProperties(viewModel, factorClimatico);
             factorClimatico.Tipo = viewModel.Tipo;
-            factorClimatico.Evacuacion = viewModel.Evacuacion;
-            factorClimatico.Superficie = viewModel.Superficie;
-            factorClimatico.CantidadAfectadaFactorClimatico = viewModel.CantidadAfectada;
+            factorClimatico.Evacuacion = viewModel.Evacuacion!.Value;
+            factorClimatico.Superficie = viewModel.Superficie!.Value;
+            factorClimatico.CantidadAfectadaFactorClimatico = viewModel.CantidadAfectada!.Value;
             return factorClimatico;
         }
 
@@ -99,7 +99,7 @@ namespace Vista.Data.Mappers
         {
             var matpel = new MaterialPeligroso();
             MapBaseProperties(viewModel, matpel);
-            matpel.Tipo = viewModel.Tipo;
+            matpel.Tipo = viewModel.Tipo!.Value;
             matpel.Sustancias = viewModel.Sustancias;
             matpel.Controlada = viewModel.Controlada;
             matpel.Venteo = viewModel.Venteo;
@@ -108,15 +108,15 @@ namespace Vista.Data.Mappers
             matpel.Trasvase = viewModel.Trasvase;
             matpel.OtraAccionesMateriales = viewModel.OtraAccionesMateriales;
             matpel.DetallesAccionesMateriales = viewModel.DetallesAccionesMateriales;
-            matpel.Evacuacion = viewModel.Evacuacion;
+            matpel.Evacuacion = viewModel.Evacuacion!.Value;
             matpel.Descontaminacion = viewModel.Descontaminacion;
             matpel.Confinamiento = viewModel.Confinamiento;
             matpel.SinAccion = viewModel.SinAccion;
             matpel.OtraAccionesPersonas = viewModel.OtraAccionesPersonas;
             matpel.DetallesAccionesPersonas = viewModel.DetallesAccionesPersonas;
-            matpel.TipoSuperficie = viewModel.TipoSuperficie;
-            matpel.CantidadAfectadaMaterialPeligroso = viewModel.Cantidad;
-            matpel.TipoSituacion = viewModel.TipoSituacion;
+            matpel.TipoSuperficie = viewModel.TipoSuperficie!.Value;
+            matpel.CantidadAfectadaMaterialPeligroso = viewModel.Cantidad!.Value;
+            matpel.TipoSituacion = viewModel.TipoSituacion!.Value;
             return matpel;
         }
 
@@ -133,8 +133,8 @@ namespace Vista.Data.Mappers
         {
             var servicio = new ServicioEspecialPrevencion();
             MapBaseProperties(viewModel, servicio);
-            servicio.TipoOrganizacion = viewModel.TipoOrganizacion;
-            servicio.TipoPrevencion = viewModel.TipoPrevencion;
+            servicio.TipoOrganizacion = viewModel.TipoOrganizacion!.Value;
+            servicio.TipoPrevencion = viewModel.TipoPrevencion!.Value;
             return servicio;
         }
 
@@ -145,8 +145,8 @@ namespace Vista.Data.Mappers
             servicio.NivelDeCapacitacion = viewModel.NivelDeCapacitacion;
             servicio.TipoCapacitacion = viewModel.TipoCapacitacion;
             servicio.DiaHora = viewModel.DiaHora ?? DateTime.MinValue;
-            servicio.TipoCapacitacionOtra = viewModel.TipoCapacitacionOtra;
-            servicio.NivelDeCapacitacionOtro = viewModel.NivelDeCapacitacionOtro;
+            servicio.TipoCapacitacionOtra = viewModel.TipoCapacitacionOtra!;
+            servicio.NivelDeCapacitacionOtro = viewModel.NivelDeCapacitacionOtro!;
             return servicio;
         }
 
@@ -154,7 +154,7 @@ namespace Vista.Data.Mappers
         {
             var servicio = new ServicioEspecialColocaciónDriza();
             MapBaseProperties(viewModel, servicio);
-            servicio.TipoLugar = viewModel.TipoLugar;
+            // ---> Aca cambiaron las propiedades
             servicio.NombreEstablecimiento = viewModel.NombreEstablecimiento;
             servicio.Detalles = viewModel.Detalles;
             return servicio;
@@ -164,8 +164,7 @@ namespace Vista.Data.Mappers
         {
             var servicio = new ServicioEspecialSuministroAgua();
             MapBaseProperties(viewModel, servicio);
-            servicio.NombreEstablecimientoSuministroAgua = viewModel.NombreEstablecimientoSuministroAgua;
-            servicio.DetallesSuministroAgua = viewModel.DetallesSuministroAgua;
+            // ---> Aca cambiaron las propiedades (Borrar datos viejos del Modelo)
             return servicio;
         }
 
@@ -173,7 +172,7 @@ namespace Vista.Data.Mappers
         {
             var servicio = new ServicioEspecialFalsaAlarma();
             MapBaseProperties(viewModel, servicio);
-            servicio.Detalles = viewModel.Detalles;
+            // ---> Aca cambiaron las propiedades (Borrar datos viejos del Modelo)
             return servicio;
         }
 
@@ -181,7 +180,7 @@ namespace Vista.Data.Mappers
         {
             var servicio = new ServicioEspecialRetiradoDeObito();
             MapBaseProperties(viewModel, servicio);
-            servicio.DetallesObito = viewModel.DetallesObito;
+            // ---> Aca cambiaron las propiedades (Borrar datos viejos del Modelo)
             return servicio;
         }
 
@@ -195,18 +194,18 @@ namespace Vista.Data.Mappers
 
         private static void MapIncendioCommonProperties(IncendioViewModels source, Incendio destination)
         {
+            // ---> Aca cambiaron las propiedades
             destination.DeteccionAutomatica = source.DeteccionAutomatica;
             destination.Extintor = source.Extintor;
             destination.Hidrante = source.Hidrante;
             destination.TipoEvacuacion = source.TipoEvacuacion;
-            destination.TipoSuperficieAfectada = source.TipoSuperficieAfectada;
+            destination.TipoSuperficieAfectada = source.TipoSuperficieAfectada!.Value;
             destination.DetalleSuperficieAfectadaIncendio = source.DetalleSuperficieAfectadaIncendio;
             destination.SuperficieAfectadaCausa = source.SuperficieAfectadaCausa;
             destination.TipoAbertura = source.TipoAbertura;
             destination.OtraAbertura = source.OtraAbertura;
             destination.TipoTecho = source.TipoTecho;
             destination.OtroTecho = source.OtroTecho;
-            destination.OtroLugarIncendio = source.OtroLugar;
             destination.NombreEstablecimiento = source.NombreEstablecimiento;
             destination.CantidadPisos = source.CantidadPisos;
             destination.PisoAfectado = source.PisoAfectado;
@@ -236,7 +235,7 @@ namespace Vista.Data.Mappers
             var incendio = new IncendioEstablecimientoPublico();
             MapBaseProperties(viewModel, incendio);
             MapIncendioCommonProperties(viewModel, incendio);
-            incendio.TipoLugar = viewModel.TipoLugar;
+            incendio.TipoLugar = viewModel.TipoLugar!.Value;
             return incendio;
         }
 
@@ -279,8 +278,8 @@ namespace Vista.Data.Mappers
         {
             var rescate = new RescatePersona();
             MapBaseProperties(viewModel, rescate);
-            rescate.LugarRescatePersona = viewModel.TipoRescatePersona;
-            rescate.OtroLugarRescate = viewModel.OtroLugar;
+            rescate.LugarRescatePersona = viewModel.TipoRescatePersona!.Value;
+            //rescate.OtroLugarRescate = viewModel.OtroLugar;
             return rescate;
         }
 
@@ -288,8 +287,8 @@ namespace Vista.Data.Mappers
         {
             var rescate = new RescateAnimal();
             MapBaseProperties(viewModel, rescate);
-            rescate.LugarRescateAnimal = viewModel.TipoRescateAnimal;
-            rescate.OtroLugarRescate = viewModel.OtroLugar;
+            rescate.LugarRescateAnimal = viewModel.TipoRescateAnimal!.Value;
+            //rescate.OtroLugarRescate = viewModel.OtroLugar;
             return rescate;
         }
 
@@ -309,7 +308,7 @@ namespace Vista.Data.Mappers
             destination.Direccion = source.Direccion;
             destination.PisoNumero = source.PisoNumero;
             destination.Depto = source.Depto;
-            destination.TipoZona = source.TipoZona;
+            destination.TipoZona = source.TipoZona!.Value;
             destination.CuartelRegion = source.CuartelRegion;
             destination.Latitud = source.Latitud;
             destination.Longitud = source.Longitud;
@@ -317,15 +316,9 @@ namespace Vista.Data.Mappers
             destination.ApellidoSolicitante = source.ApellidoSolicitante;
             destination.DniSolicitante = source.DniSolicitante;
             destination.TelefonoSolicitante = source.TelefonoSolicitante;
-            destination.NombreYApellidoReceptor = source.NombreYApellidoReceptor;
-            destination.TipoServicio = source.TipoServicio;
+            destination.TipoServicio = source.TipoServicio!.Value;
 
-           
-            if (source.LegajoEncargado > 0)
-                destination.Encargado = new Bombero { NumeroLegajo = source.LegajoEncargado };
-
-            if (source.LegajoLLenoPlanilla > 0)
-                destination.QuienLleno = new Bombero { NumeroLegajo = source.LegajoLLenoPlanilla };
+            // Arreglar lo de la planilla y el encargado
 
             // Mapeo de colecciones
             //destination.Damnificados = source.Damnificados?.Select(d => new Damnificado_Salida
@@ -381,11 +374,11 @@ namespace Vista.Data.Mappers
                 return fi;
             }).ToList() ?? new List<FuerzaInterviniente_Salida>();
         }
-        
+
         public static SalidasViewModels ToViewModel(this Salida model, List<SimpleFuerzaViewModel> todasLasFuerzas)
         {
             if (model == null) return null;
-            
+
             // 1. Crear la instancia del ViewModel específico
             SalidasViewModels viewModel = model switch
             {
@@ -425,12 +418,12 @@ namespace Vista.Data.Mappers
                 case RescatePersona RescaPerso:
                     var rpvm = (RescatePersonaViewModels)viewModel;
                     rpvm.TipoRescatePersona = RescaPerso.LugarRescatePersona;
-                    rpvm.OtroLugar = RescaPerso.OtroLugarRescate;
+                    //rpvm.OtroLugar = RescaPerso.OtroLugarRescate;
                     break;
                 case RescateAnimal RescaAnima:
                     var ravm = (RescateAnimaViewModels)viewModel;
                     ravm.TipoRescateAnimal = RescaAnima.LugarRescateAnimal;
-                    ravm.OtroLugar = RescaAnima.OtroLugarRescate;
+                    //ravm.OtroLugar = RescaAnima.OtroLugarRescate;
                     break;
                 case IncendioComercio IncenComer:
                     var icvm = (IncendioComercioViewModels)viewModel;
@@ -506,7 +499,7 @@ namespace Vista.Data.Mappers
                     var avm = (AccidenteViewModels)viewModel;
                     avm.Tipo = a.Tipo;
                     avm.CondicionesClimaticas = a.CondicionesClimaticas;
-                    avm.OtroCondicion = a.OtroCondicion;
+                    //avm.OtroCondicion = a.OtroCondicion;
                     break;
                 case FactorClimatico fc:
                     var fcvm = (FactorClimaticoViewModel)viewModel;
@@ -539,25 +532,25 @@ namespace Vista.Data.Mappers
                 case ServicioEspecialColocaciónDriza secd:
                     var secdvm = (ServicioEspecialColocaciónDrizaViewModels)viewModel;
                     secdvm.Tipo = ServicioEspecialTipo.ColocacionDriza;
-                    secdvm.TipoLugar = secd.TipoLugar;
+                    //secdvm.TipoLugar = secd.TipoLugar;
                     secdvm.NombreEstablecimiento = secd.NombreEstablecimiento;
                     secdvm.Detalles = secd.Detalles;
                     break;
                 case ServicioEspecialSuministroAgua sesa:
                     var sesavm = (ServicioEspecialSuministroAguaViewModels)viewModel;
                     sesavm.Tipo = ServicioEspecialTipo.SuministroAgua;
-                    sesavm.NombreEstablecimientoSuministroAgua = sesa.NombreEstablecimientoSuministroAgua;
-                    sesavm.DetallesSuministroAgua = sesa.DetallesSuministroAgua;
+                    //sesavm.NombreEstablecimientoSuministroAgua = sesa.NombreEstablecimientoSuministroAgua;
+                    //sesavm.DetallesSuministroAgua = sesa.DetallesSuministroAgua;
                     break;
                 case ServicioEspecialFalsaAlarma sefa:
                     var sefavm = (ServicioEspecialFalsaAlarmaViewModel)viewModel;
                     sefavm.Tipo = ServicioEspecialTipo.FalsaAlarma;
-                    sefavm.Detalles = sefa.Detalles;
+                    //sefavm.Detalles = sefa.Detalles;
                     break;
                 case ServicioEspecialRetiradoDeObito sero:
                     var serovm = (ServicioEspecialRetiradoDeObitoViewModel)viewModel;
                     serovm.Tipo = ServicioEspecialTipo.RetiradoDeObito;
-                    serovm.DetallesObito = sero.DetallesObito;
+                    //serovm.DetallesObito = sero.DetallesObito;
                     break;
                 case ServicioEspecialColaboraciónFuerzasSeguridad secfs:
                     var secfsvm = (ServicioEspecialColaboraciónFuerzasSeguridadViewModels)viewModel;
@@ -583,7 +576,6 @@ namespace Vista.Data.Mappers
             destination.OtraAbertura = source.OtraAbertura;
             destination.TipoTecho = source.TipoTecho;
             destination.OtroTecho = source.OtroTecho;
-            destination.OtroLugar = source.OtroLugarIncendio;
             destination.NombreEstablecimiento = source.NombreEstablecimiento;
             destination.CantidadPisos = source.CantidadPisos;
             destination.PisoAfectado = source.PisoAfectado;
@@ -615,17 +607,10 @@ namespace Vista.Data.Mappers
             viewModel.NombreReceptor = model.NombreYApellidoReceptor?.Split(new[] { ',' }, 2).LastOrDefault()?.Trim();
             viewModel.ApellidoReceptor = model.NombreYApellidoReceptor?.Split(new[] { ',' }, 2).FirstOrDefault()?.Trim();
             viewModel.TipoServicio = model.TipoServicio;
-            viewModel.LegajoEncargado = model.Encargado?.NumeroLegajo ?? 0;
-            viewModel.NombreEncargado = model.Encargado?.Nombre ?? string.Empty;
-            viewModel.ApellidoEncargado = model.Encargado?.Apellido ?? string.Empty;
-            viewModel.LegajoLLenoPlanilla = model.QuienLleno?.NumeroLegajo ?? 0;
-            viewModel.NombreLLenoPlanilla = model.QuienLleno?.Nombre ?? string.Empty;
-            viewModel.ApllidoLLenoPlanilla = model.QuienLleno?.Apellido ?? string.Empty;
             viewModel.CuerpoParticipante = model.CuerpoParticipante?.Select(cp => new BomberoSalida { BomberoSalidaId = cp.BomberoSalidaId, PersonaId = cp.PersonaId, Bombero = cp.Bombero, Grado = cp.Grado, MovilId = cp.MovilId, MovilAsignado = cp.MovilAsignado }).ToList() ?? new List<BomberoSalida>();
             viewModel.BomberosParticipantes = model.CuerpoParticipante?.Select(cp => new BomberoViweModel { Id = cp.PersonaId, Nombre = cp.Bombero?.Nombre, Apellido = cp.Bombero?.Apellido, NumeroLegajo = cp.Bombero?.NumeroLegajo ?? 0 }).ToList() ?? new List<BomberoViweModel>();
             viewModel.Moviles = model.Moviles.ToList();
             viewModel.FuerzasIntervinientes = model.FuerzasIntervinientes?.Select(f => new FuerzaIntervinienteViewModel { Id = f.Id, EncargadoApellidoyNombre = f.EncargadoApellidoyNombre, NumeroUnidad = f.NumeroUnidad, FuerzaViewModel = new SimpleFuerzaViewModel { Id = f.FuerzaIntervinienteId, Nombre = f.Fuerzainterviniente?.NombreFuerza ?? string.Empty } }).ToList() ?? new List<FuerzaIntervinienteViewModel>();
-            viewModel.FuerzasIntervinientesParticipantes = todasLasFuerzas.Where(f => idsFuerzasParticipantes.Contains(f.Id)).ToList();
         }
     }
 }

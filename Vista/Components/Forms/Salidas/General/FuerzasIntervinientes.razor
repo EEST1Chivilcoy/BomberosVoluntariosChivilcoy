@@ -9,6 +9,7 @@
 @*Servicios Utilizados*@
 @using Vista.Services
 @inject IMessageService MessageService
+@inject IFuerzaIntervinienteService FuerzaIntervinienteService
 
 <style>
     .fuerzas-intervinientes {
@@ -116,7 +117,7 @@
                     <FormItem Label="Fuerza Interviniente" Required>
                         <Select TItem="SimpleFuerzaViewModel"
                                 TItemValue="SimpleFuerzaViewModel"
-                                DataSource="@Model.FuerzasIntervinientesParticipantes"
+                                DataSource="@FuerzasIntervinientesList"
                                 @bind-Value="fuerzaForm.FuerzaViewModel"
                                 LabelName="@nameof(SimpleFuerzaViewModel.Nombre)"
                                 DefaultActiveFirstOption
@@ -151,7 +152,7 @@
         </div>
     </Form>
 
- @* Tabla de Fuerzas Intervinientes Cargadas *@
+    @* Tabla de Fuerzas Intervinientes Cargadas *@
     @if (Model.FuerzasIntervinientes.Any())
     {
         <div style="margin-top: 32px;">
@@ -203,6 +204,7 @@
     public bool IsFormDisabled { get; set; }
     private FuerzaIntervinienteViewModel fuerzaForm = new();
     private bool _isLoading = true;
+    private List<SimpleFuerzaViewModel> FuerzasIntervinientesList { get; set; } = new();
 
     private async Task CargarFuerza()
     {
@@ -258,17 +260,34 @@
         }
     }
 
+    private async Task<List<SimpleFuerzaViewModel>> LoadFuerzasIntervinientesAsync()
+    {
+        var fuerzas = await FuerzaIntervinienteService.ObtenerTodasLasFuerzasAsync();
+
+        return fuerzas.Select(f => new SimpleFuerzaViewModel
+        {
+            Id = f.Id,
+            Nombre = f.NombreFuerza!
+        }).ToList();
+
+    }
+
     protected override async Task OnInitializedAsync()
     {
         _isLoading = true;
 
-        if (Model.FuerzasIntervinientesParticipantes?.Any() == true)
+        try
+        {
+            FuerzasIntervinientesList = await LoadFuerzasIntervinientesAsync();
+        }
+        catch (Exception ex)
+        {
+            await MessageService.ErrorAsync($"Error: {ex.Message}");
+        }
+        finally
         {
             _isLoading = false;
-        }
-        else
-        {
-            await MessageService.ErrorAsync($"Error al cargar fuerzas intervinientes");
+            StateHasChanged();
         }
     }
 }

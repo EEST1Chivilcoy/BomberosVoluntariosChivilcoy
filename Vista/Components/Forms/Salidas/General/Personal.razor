@@ -222,10 +222,10 @@
                 <div class="inpt-cont">
                     <label class="inpt-cont--lbl">Lleno la planilla</label>
                     <Select TItem="BomberoViweModel"
-                            TItemValue="BomberoViweModel"
+                            TItemValue="int"
                             DataSource="@bomberosTodosView"
-                            Value="@PlanillaSeleccionado"
-                            ValueChanged="@PlanillaSeleccionadoChanged"
+                            Value="@Model.BomberoPlanillaId"
+                            ValueName="@nameof(BomberoViweModel.Id)"
                             LabelName="@nameof(BomberoViweModel.ApellidoYNombre)"
                             Placeholder="Seleccione un bombero"
                             DefaultActiveFirstOption="false"
@@ -238,10 +238,10 @@
                 <div class="inpt-cont">
                     <label class="inpt-cont--lbl">Encargado Del Servicio</label>
                     <Select TItem="BomberoViweModel"
-                            TItemValue="BomberoViweModel"
+                            TItemValue="int"
                             DataSource="@bomberosTodosView"
-                            Value="@EncargadoSeleccionado"
-                            ValueChanged="@EncargadoSeleccionadoChanged"
+                            Value="@Model.BomberoEncargadoId"
+                            ValueName="@nameof(BomberoViweModel.Id)"
                             LabelName="@nameof(BomberoViweModel.ApellidoYNombre)"
                             Placeholder="Seleccione  a un  bombero"
                             DefaultActiveFirstOption="false"
@@ -283,16 +283,6 @@
         if (Model.Moviles != null && Model.Moviles.Any())
         {
             MovilesParaAsignar = Model.Moviles.Select(ms => ms.Movil).ToList();
-        }
-
-        if (Model.LegajoEncargado != default)
-        {
-            EncargadoSeleccionado = bomberosTodosView.FirstOrDefault(b => b.NumeroLegajo == Model.LegajoEncargado);
-        }
-
-        if (Model.LegajoLLenoPlanilla != default)
-        {
-            PlanillaSeleccionado = bomberosTodosView.FirstOrDefault(b => b.NumeroLegajo == Model.LegajoLLenoPlanilla);
         }
 
         if (Model.CuerpoParticipante != null)
@@ -403,12 +393,6 @@
         }
     }
 
-    private void UpdateModel()
-    {
-        Model.LegajoEncargado = EncargadoSeleccionado?.NumeroLegajo ?? 0;
-        Model.LegajoLLenoPlanilla = PlanillaSeleccionado?.NumeroLegajo ?? 0;
-    }
-
     private async Task EliminarSeleccionados()
     {
         foreach (var Bom in _selectedRows)
@@ -440,18 +424,6 @@
             // Añade el bombero de vuelta a la lista de bomberos disponibles para salir
             bomberosSalirTodos.Add(bomberosTodosView.FirstOrDefault(b => b.NumeroLegajo == bomberoToRemove.NumeroLegajo));
         }
-    }
-
-    private void EncargadoSeleccionadoChanged(BomberoViweModel value)
-    {
-        EncargadoSeleccionado = value;
-        UpdateModel();
-    }
-
-    private void PlanillaSeleccionadoChanged(BomberoViweModel value)
-    {
-        PlanillaSeleccionado = value;
-        UpdateModel();
     }
 
     private async Task<List<BomberoViweModel>> MapBomberosViewModelAsync(List<Bombero> bomberos)

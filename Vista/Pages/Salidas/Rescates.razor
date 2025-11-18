@@ -57,7 +57,7 @@
                 <Participantes Model="@RescateViewModel" OnCompleted="@((bool done) => _parte2Completa = done)" />
             </TabPane>
 
-            <TabPane Key="3" Tab="🛡️ Fuerzas Intervinientes" Disabled="@(RescateViewModel.FuerzasIntervinientesParticipantes?.Any() != true)">
+            <TabPane Key="3" Tab="🛡️ Fuerzas Intervinientes">
                 <FuerzasIntervinientes Model="@RescateViewModel" />
             </TabPane>
 
