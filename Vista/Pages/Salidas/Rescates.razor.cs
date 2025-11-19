@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using System.Text.Json;
 using Vista.Data.Models.Personas.Personal;
@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 using Vista.Data.ViewModels.Personal;
 using Vista.Data.Enums;
 using Vista.Data.ViewModels;
-using Vista.Data.ViewModels.Rescates;
+
 namespace Vista.Pages.Salidas
 {
     public partial class Rescates
@@ -24,13 +24,10 @@ namespace Vista.Pages.Salidas
 
         // Listas de datos
         private List<Bombero> BomberosTodos = new();
+        private List<BomberoViweModel> BomberosVM = new();
 
         // Lista con todos los vehiculos de la flota del sistema.
         private List<VehiculoSalida> MovilesTodos = new();
-        // Variables tipo boolean para indicar las partes del formulario completadas.
-        private bool _parte1Completa = false;
-        private bool _parte2Completa = false;
-        private bool _parte3Completa = false;
 
         // Variables parametros para la carga de Rescates.
 
@@ -41,7 +38,7 @@ namespace Vista.Pages.Salidas
         // Anio de Salida del Año en Seleccionado.
         [Parameter]
         [SupplyParameterFromQuery] public int? AnioSalida { get; set; }
-        
+
         // Tipo de Rescate.
         [Parameter]
         public int TipoRescate { get; set; }
@@ -107,6 +104,14 @@ namespace Vista.Pages.Salidas
             BomberosTodos = await BomberoService.ObtenerTodosLosBomberosAsync();
             MovilesTodos = await VehiculoSalidaService.ObtenerVehiculosSalidasPorEstadoAsync(TipoEstadoMovil.Activo);
 
+            BomberosVM = BomberosTodos.Select(b => new BomberoViweModel
+            {
+                Id = b.PersonaId,
+                Nombre = b.Nombre,
+                Apellido = b.Apellido,
+                NumeroLegajo = b.NumeroLegajo,
+            }).ToList();
+
             if ((RescateTipo)TipoRescate == RescateTipo.Animal)
             {
                 RescateViewModel = new RescateAnimaViewModels();
@@ -154,7 +159,7 @@ namespace Vista.Pages.Salidas
         private void OnFinishFailed(EditContext editContext)
         {
             message.Error("Error al cargar, posible información ausente");
-             Console.WriteLine($"Failed:{JsonSerializer.Serialize(RescateViewModel)}");
+            Console.WriteLine($"Failed:{JsonSerializer.Serialize(RescateViewModel)}");
         }
         //Impresión
         bool _visible1;

@@ -12,18 +12,21 @@ using Vista.Data.ViewModels;
 using Vista.Data.ViewModels.Servicios;
 using Vista.Data.Models.Salidas.Planillas.Servicios;
 using Vista.Data.Enums.Discriminadores;
+using Vista.Data.ViewModels.Personal;
 
 namespace Vista.Pages.Salidas
 {
     public partial class ServicioEspecial
     {
+        // ViewModel para la carga de Servicios Especiales.
         private SalidasViewModels ServicioEspecialViewModel { get; set; } = new ServicioEspecialViewModel();
 
+        // Listas de datos
         private List<Bombero> BomberosTodos = new();
-        private List<VehiculoSalida> MovilesTodos = new();
+        private List<BomberoViweModel> BomberosVM = new();
 
-        private bool _parte1Completa = false;
-        private bool _parte2Completa = false;
+        // Lista con todos los vehiculos de la flota del sistema.
+        private List<VehiculoSalida> MovilesTodos = new();
 
         [Parameter]
         public int TipoServicioEspecial { get; set; }
@@ -43,6 +46,14 @@ namespace Vista.Pages.Salidas
         {
             BomberosTodos = await BomberoService.ObtenerTodosLosBomberosAsync();
             MovilesTodos = await VehiculoSalidaService.ObtenerVehiculosSalidasPorEstadoAsync(TipoEstadoMovil.Activo);
+
+            BomberosVM = BomberosTodos.Select(b => new BomberoViweModel
+            {
+                Id = b.PersonaId,
+                Nombre = b.Nombre,
+                Apellido = b.Apellido,
+                NumeroLegajo = b.NumeroLegajo,
+            }).ToList();
 
             if (NumeroSalida.HasValue && AnioSalida.HasValue && NumeroSalida.Value > 0 && AnioSalida.Value > 0)
             {

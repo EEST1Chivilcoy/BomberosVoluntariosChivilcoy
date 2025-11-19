@@ -92,12 +92,11 @@
         <!-- Tabs container -->
         <Tabs DefaultActiveKey="1" Class="custom-tabs" Style="box-shadow: 0 4px 16px rgba(24,144,255,0.08); border-radius: 12px;">
             <TabPane Key="1" Tab="📋 Datos-Generales" Class="tab-general">
-                <DatosGenerales Model="@IncendioViewModel"  />
+                <DatosGenerales Model="@IncendioViewModel" />
             </TabPane>
 
             <TabPane Key="2" Tab="📞 Datos Telefónicos">
-                <Participantes Model="@IncendioViewModel"
-                               OnCompleted="@((bool done) => _parte2Completa = done)" />
+                <Participantes Model="@IncendioViewModel" BomberosTodos="@BomberosVM" />
             </TabPane>
 
             <TabPane Key="3" Tab="🛡️ Fuerzas Intervinientes">

@@ -72,23 +72,23 @@
             </div>
             @if (Model.TimeLlegada < Model.TimeSalida)
             {
-                <FormItem Label="Fechas" Required>
+                <FormItem Label="Fechas">
                     <RangePicker TValue="DateTime[]" Disabled="new bool[] { false, true }"
                                  @bind-Value="@FechaRange" />
                 </FormItem>
             }
             else
             {
-                <FormItem Label="Fecha" Required>
+                <FormItem Label="Fecha">
                     <DatePicker TValue="DateTime" Picker="@DatePickerType.Date" @bind-Value="@Model.FechaSalida" />
                 </FormItem>
             }
 
             <div class="hora-row">
-                <FormItem Label="Hora Salida" Required>
+                <FormItem Label="Hora Salida">
                     <TimePicker @bind-Value="@Model.TimeSalida" Format="HH:mm" />
                 </FormItem>
-                <FormItem Label="Hora Llegada" Required>
+                <FormItem Label="Hora Llegada">
                     <TimePicker @bind-Value="@Model.TimeLlegada" Format="HH:mm" />
                 </FormItem>
             </div>
@@ -104,11 +104,11 @@
             {
                 <Row Gutter="24">
                     <AntDesign.Col Span="24">
-                        <FormItem Label="Dirección" Required>
+                        <FormItem Label="Dirección">
                             <Select TItem="Direccion"
                                     TItemValue="Direccion"
                                     DataSource="@direcciones"
-                                    @bind-Value="@DireccionSelecionada"
+                                    @bind-Value="@Model.DireccionDTO"
                                     Placeholder="Ingrese una direccion o coordenadas"
                                     LabelName="@nameof(Direccion.Descripcion)"
                                     OnSearch="OnSearch"
@@ -124,12 +124,12 @@
 
             <Row Gutter="16">
                 <AntDesign.Col Span="12">
-                    <FormItem Label="Tipo Zona" Required>
+                    <FormItem Label="Tipo Zona">
                         <EnumSelect TEnum="TipoZona ?" @bind-Value="@Model.TipoZona" />
                     </FormItem>
                 </AntDesign.Col>
                 <AntDesign.Col Span="12">
-                    <FormItem Label="Región Cuartel" Required>
+                    <FormItem Label="Región Cuartel">
                         <EnumSelect TEnum="CuartelRegionChivilcoy ?" @bind-Value="@Model.CuartelRegion" DefaultActiveFirstOption="false" />
                     </FormItem>
                 </AntDesign.Col>
@@ -199,7 +199,7 @@
             <div style="border-bottom: 2px solid #1890ff; padding-bottom: 8px; margin-bottom: 16px;">
                 <h4 style="color: #1890ff; margin: 0; font-weight: 600;">Detalles o Daños Generales</h4>
             </div>
-            <FormItem Required>
+            <FormItem>
                 <TextArea Placeholder="Describa la situación o evento..."
                           @bind-Value="@Model.Descripcion"
                           Rows="4" />
@@ -210,8 +210,7 @@
 </div>
 
 @code {
-    [Parameter, EditorRequired] public required SalidasViewModels Model { get; set; } // Modelo de datos para el formulario
-    [Parameter] public bool IsFormDisabled { get; set; }
+    [Parameter] public required SalidasViewModels Model { get; set; } // Modelo de datos para el formulario
     [Parameter] public bool MostrarOpcionDepartamento { get; set; } = true; // Indica si se muestra la opción de departamento (En algunos casos es imposible que sea un deparatamento)
 
     private bool isApiAvailable;
@@ -222,8 +221,6 @@
     private bool esDepartamento;
     private bool SeConvocoGuardia;
     private bool IntervencionDeFuerzasIntervinientes;
-
-    private Direccion DireccionSelecionada = new();
 
     private List<Direccion> direcciones = new();
 

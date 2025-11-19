@@ -9,7 +9,6 @@
 @inject IMessageService MessageService
 
 <style>
-
     .participantes {
         border: 2px solid #52c41a;
         background: #f6ffed;
@@ -18,11 +17,11 @@
         margin-bottom: 2rem;
         padding: 2rem 1.5rem;
     }
-
 </style>
 
 <div class="participantes">
-    <Form Model="Model">
+    <Form Model="Model"
+          ValidateOnChange="@true">
         @*Sección Solicitante*@
         <div style="margin-bottom: 24px;">
             <div style="border-bottom: 2px solid #52c41a; padding-bottom: 8px; margin-bottom: 16px;">
@@ -31,13 +30,13 @@
 
             <Row Gutter="16">
                 <AntDesign.Col Span="12">
-                    <FormItem Label="Nombre" Required>
+                    <FormItem Label="Nombre">
                         <Input @bind-Value="@Model.NombreSolicitante"
                                Placeholder="Ingrese el nombre" />
                     </FormItem>
                 </AntDesign.Col>
                 <AntDesign.Col Span="12">
-                    <FormItem Label="Apellido" Required>
+                    <FormItem Label="Apellido">
                         <Input @bind-Value="@Model.ApellidoSolicitante"
                                Placeholder="Ingrese el apellido" />
                     </FormItem>
@@ -52,7 +51,7 @@
                     </FormItem>
                 </AntDesign.Col>
                 <AntDesign.Col Span="12">
-                    <FormItem Label="Teléfono" Required>
+                    <FormItem Label="Teléfono">
                         <Input @bind-Value="@Model.TelefonoSolicitante"
                                Placeholder="Número de teléfono" />
                     </FormItem>
@@ -67,45 +66,47 @@
             </div>
 
             <Row Gutter="16">
-                <AntDesign.Col Span="12">
-                    <FormItem Label="Nombre" Required>
-                        <Input @bind-Value="@Model.NombreReceptor"
-                               Placeholder="Ingrese el nombre" />
-                    </FormItem>
-                </AntDesign.Col>
-                <AntDesign.Col Span="12">
-                    <FormItem Label="Apellido" Required>
-                        <Input @bind-Value="@Model.ApellidoReceptor"
-                               Placeholder="Ingrese el apellido" />
-                    </FormItem>
-                </AntDesign.Col>
-                <AntDesign.Col Span="12">
-                    <FormItem Label="Tipo" Required>
+
+                <AntDesign.Col Span="24">
+                    <FormItem Label="Tipo">
                         <EnumSelect TEnum="TipoReceptoria" @bind-Value="@Model.TipoReceptoria" DefaultActiveFirstOption="false" />
                     </FormItem>
                 </AntDesign.Col>
+
+                @if (TipoReceptoria.Bombero == Model.TipoReceptoria)
+                {
+                    <AntDesign.Col Span="24">
+                        <FormItem Label="Ingrese el bombero receptor">
+                            <Select @bind-Value="@Model.BomberoReceptor"
+                                    Placeholder="Seleccione un bombero"
+                                    TItemValue="int?"
+                                    TItem="BomberoViweModel"
+                                    DataSource="@BomberosTodos" />
+                        </FormItem>
+                    </AntDesign.Col>
+                }
+                else
+                {
+                    <AntDesign.Col Span="12">
+                        <FormItem Label="Nombre">
+                            <Input @bind-Value="@Model.NombreReceptor"
+                                   Placeholder="Ingrese el nombre" />
+                        </FormItem>
+                    </AntDesign.Col>
+
+                    <AntDesign.Col Span="12">
+                        <FormItem Label="Apellido">
+                            <Input @bind-Value="@Model.ApellidoReceptor"
+                                   Placeholder="Ingrese el apellido" />
+                        </FormItem>
+                    </AntDesign.Col>
+                }
             </Row>
         </div>
     </Form>
 </div>
 
 @code {
-    [Parameter, EditorRequired] public SalidasViewModels Model { get; set; } = null!;
-    [Parameter, EditorRequired] public EventCallback<bool> OnCompleted { get; set; } // Evento para notificar que se ha completado el formulario
-    [Parameter] public bool IsFormDisabled { get; set; }
-    // Variable del Formulario utilizada para la validación
-    private EditContext editContext;
-
-    private async Task ValidateForm()
-    {
-        var esValido = editContext.Validate();
-        if (esValido)
-        {
-            await OnCompleted.InvokeAsync(true); // Invoca el evento OnCompleted si el formulario es válido
-        }
-        else
-        {
-            await OnCompleted.InvokeAsync(false); // Invoca el evento OnCompleted si el formulario no es válido
-        }
-    }
+    [Parameter] public required SalidasViewModels Model { get; set; }
+    [Parameter] public required List<BomberoViweModel> BomberosTodos { get; set; }
 }

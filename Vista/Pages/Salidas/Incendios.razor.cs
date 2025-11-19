@@ -1,4 +1,4 @@
-﻿﻿﻿﻿using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Vista.Data.Models.Personas.Personal;
@@ -27,14 +27,11 @@ namespace Vista.Pages.Salidas
 
         // Listas de datos
         private List<Bombero> BomberosTodos = new();
+        private List<BomberoViweModel> BomberosVM = new();
 
         // Lista con todos los vehiculos de la flota del sistema.
         private List<VehiculoSalida> MovilesTodos = new();
-        // Variables tipo boolean para indicar las partes del formulario completadas.
-        private bool _parte1Completa = false;
-        private bool _parte2Completa = false;
-        private bool _parte3Completa = false;
-
+        
         // Variables parametros para la carga de Rescates.
 
         // Numero de Salida del Año en Seleccionado.
@@ -44,7 +41,7 @@ namespace Vista.Pages.Salidas
         // Anio de Salida del Año en Seleccionado.
         [Parameter]
         [SupplyParameterFromQuery] public int? AnioSalida { get; set; }
-        
+
         // Tipo de Incendio.
         [Parameter]
         public int TipoIncendio { get; set; }
@@ -61,9 +58,11 @@ namespace Vista.Pages.Salidas
                 Salida salidaGuardada;
 
                 if (IncendioViewModel.SalidaId > 0) // Asumimos que si tiene ID, es una edición
-                {                    salidaGuardada = await SalidaService.EditarSalida(incendio);
+                {
+                    salidaGuardada = await SalidaService.EditarSalida(incendio);
                     await message.SuccessAsync("Salida editada correctamente.");
-                    HandleOk1(salidaGuardada.AnioNumeroParte, salidaGuardada.NumeroParte);                }
+                    HandleOk1(salidaGuardada.AnioNumeroParte, salidaGuardada.NumeroParte);
+                }
                 else
                 {
                     // Modo creación
@@ -107,6 +106,14 @@ namespace Vista.Pages.Salidas
         {
             BomberosTodos = await BomberoService.ObtenerTodosLosBomberosAsync();
             MovilesTodos = await VehiculoSalidaService.ObtenerVehiculosSalidasPorEstadoAsync(TipoEstadoMovil.Activo);
+
+            BomberosVM = BomberosTodos.Select(b => new BomberoViweModel
+            {
+                Id = b.PersonaId,
+                Nombre = b.Nombre,
+                Apellido = b.Apellido,
+                NumeroLegajo = b.NumeroLegajo,
+            }).ToList();
 
             // Si se pasan parámetros, puede ser modo Visualización/Edición
             if (NumeroSalida.HasValue && AnioSalida.HasValue && NumeroSalida.Value > 0 && AnioSalida.Value > 0)
@@ -173,7 +180,7 @@ namespace Vista.Pages.Salidas
         private void OnFinishFailed(EditContext editContext)
         {
             message.Error("Error al cargar, posible información ausente");
-             Console.WriteLine($"Failed:{System.Text.Json.JsonSerializer.Serialize(IncendioViewModel)}");
+            Console.WriteLine($"Failed:{System.Text.Json.JsonSerializer.Serialize(IncendioViewModel)}");
         }
 
         //Impresión

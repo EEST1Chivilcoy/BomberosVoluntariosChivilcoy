@@ -22,11 +22,8 @@ namespace Vista.Pages.Salidas
         private MaterialPeligrosoViewModels MaterialPeligrosoViewModel = new MaterialPeligrosoViewModels();
 
         private List<Bombero> BomberosTodos = new();
+        private List<BomberoViweModel> BomberosVM = new();
         private List<VehiculoSalida> MovilesTodos = new();
-
-        // Variables de estado del formulario
-        private bool _parte1Completa = false;
-        private bool _parte2Completa = false;
 
         // Parámetros de la URL
         [Parameter]
@@ -76,7 +73,7 @@ namespace Vista.Pages.Salidas
 
                 if (salidaGuardada == null)
                     throw new Exception("No se pudo guardar o editar la salida.");
-                
+
                 await Init();
                 StateHasChanged();
             }
@@ -99,6 +96,14 @@ namespace Vista.Pages.Salidas
         {
             BomberosTodos = await BomberoService.ObtenerTodosLosBomberosAsync();
             MovilesTodos = await VehiculoSalidaService.ObtenerVehiculosSalidasPorEstadoAsync(TipoEstadoMovil.Activo);
+
+            BomberosVM = BomberosTodos.Select(b => new BomberoViweModel
+            {
+                Id = b.PersonaId,
+                Nombre = b.Nombre,
+                Apellido = b.Apellido,
+                NumeroLegajo = b.NumeroLegajo,
+            }).ToList();
 
             // Modo Visualización/Edición
             if (NumeroSalida.HasValue && AnioSalida.HasValue && NumeroSalida.Value > 0 && AnioSalida.Value > 0)
@@ -126,7 +131,7 @@ namespace Vista.Pages.Salidas
             MaterialPeligrosoViewModel.Tipo = (CategoriaMaterialPeligroso)TipoMaterialPeligroso;
             MaterialPeligrosoViewModel.AnioNumeroParte = AnioSalida.HasValue && AnioSalida.Value > 0 ? AnioSalida.Value : DateTime.Now.Year;
             MaterialPeligrosoViewModel.NumeroParte = NumeroSalida.HasValue && NumeroSalida.Value > 0 ? NumeroSalida.Value : await SalidaService.ObtenerUltimoNumeroParteDelAnioAsync(MaterialPeligrosoViewModel.AnioNumeroParte) + 1;
-            
+
         }
 
         private void OnFinishFailed(EditContext editContext)

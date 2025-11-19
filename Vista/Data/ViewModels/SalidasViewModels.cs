@@ -111,10 +111,16 @@ namespace Vista.Data.ViewModels
         /// <summary>
         /// Descripción del incidente o motivo de la salida.
         /// </summary>
-        [Required]
+        [Required(ErrorMessage = "La descripción del incidente o motivo de la salida es obligatoria.")]
         public string? Descripcion { get; set; }
 
         // --- Ubicación ---
+
+        /// <summary>
+        /// Dirección DTO seleccionada obtenida desde el servicio de geocodificación inversa.
+        /// </summary>
+        [Required]
+        public Direccion DireccionDTO { get; set; } = new Direccion();
 
         /// <summary>
         /// Dirección donde ocurrió el incidente o lugar de la salida.
@@ -164,28 +170,26 @@ namespace Vista.Data.ViewModels
 
         /// <summary>
         /// Nombre del solicitante de la salida. (Del que llamó y aviso del incidente).
-        /// Debería ser obligatorio.
         /// </summary>
-        [StringLength(100)]
+        [StringLength(255, ErrorMessage = "El nombre no puede superar los 255 caracteres.")]
         public string? NombreSolicitante { get; set; }
 
         /// <summary>
         /// Apellido del solicitante de la salida. (Del que llamó y aviso del incidente).
-        /// Debería ser obligatorio.
         /// </summary>
-        [StringLength(100)]
+        [StringLength(255, ErrorMessage = "El apellido no puede superar los 255 caracteres.")]
         public string? ApellidoSolicitante { get; set; }
 
         /// <summary>
         /// Documento Nacional de Identidad del solicitante. (DNI) (Del que llamó y aviso del incidente).
-        /// No es obligatorio, pero se recomienda.
         /// </summary>
+        [Range(1000000, 99999999, ErrorMessage = "El número de documento debe estar entre 1.000.000 y 99.999.999 para documentos argentinos.")]
         public string? DniSolicitante { get; set; }
 
         /// <summary>
         /// Telefono del solicitante de la salida. (Del que llamó y aviso del incidente).
-        /// Debería ser obligatorio.
         /// </summary>
+        [Phone(ErrorMessage = "El número de telefono no tiene un formato válido.")]
         public string? TelefonoSolicitante { get; set; }
 
         // --- Datos del Recepcionista de la salida ---
@@ -199,11 +203,13 @@ namespace Vista.Data.ViewModels
         /// <summary>
         /// Nombre del receptor de la salida.
         /// </summary>
+        [StringLength(255, ErrorMessage = "El nombre no puede superar los 255 caracteres.")]
         public string? NombreReceptor { get; set; }
 
         /// <summary>
         /// Apellido del receptor de la salida.
         /// </summary>
+        [StringLength(255, ErrorMessage = "El apellido no puede superar los 255 caracteres.")]
         public string? ApellidoReceptor { get; set; }
 
         /// <summary>

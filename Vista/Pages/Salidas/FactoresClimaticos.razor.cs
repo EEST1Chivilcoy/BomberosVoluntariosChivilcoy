@@ -26,10 +26,7 @@ namespace Vista.Pages.Salidas
 
         // Lista con todos los vehiculos de la flota del sistema.
         private List<VehiculoSalida> MovilesTodos = new();
-        // Variables tipo boolean para indicar las partes del formulario completadas.
-        private bool _parte1Completa = false;
-        private bool _parte2Completa = false;
-        private bool _parte3Completa = false;
+        private List<BomberoViweModel> BomberosVM = new();
 
         // Variables parametros para la carga de Factores Climáticos.
 
@@ -40,7 +37,7 @@ namespace Vista.Pages.Salidas
         // Anio de Salida del Año en Seleccionado.
         [Parameter]
         [SupplyParameterFromQuery] public int? AnioSalida { get; set; }
-        
+
         // Tipo de Factor Climático.
         [Parameter]
         public int TipoFactorClimatico { get; set; }
@@ -106,12 +103,16 @@ namespace Vista.Pages.Salidas
         {
             BomberosTodos = await BomberoService.ObtenerTodosLosBomberosAsync();
             MovilesTodos = await VehiculoSalidaService.ObtenerVehiculosSalidasPorEstadoAsync(TipoEstadoMovil.Activo);
-            
-           FactorClimaticoViewModel = new FactorClimaticoViewModel();
 
+            BomberosVM = BomberosTodos.Select(b => new BomberoViweModel
+            {
+                Id = b.PersonaId,
+                Nombre = b.Nombre,
+                Apellido = b.Apellido,
+                NumeroLegajo = b.NumeroLegajo,
+            }).ToList();
 
-            
-
+            FactorClimaticoViewModel = new FactorClimaticoViewModel();
 
             // Si se pasan parámetros, puede ser modo Visualización/Edición
             if (NumeroSalida.HasValue && AnioSalida.HasValue && NumeroSalida.Value > 0 && AnioSalida.Value > 0)
@@ -141,7 +142,7 @@ namespace Vista.Pages.Salidas
             if (AnioSalida.HasValue && AnioSalida.Value > 0)
                 FactorClimaticoViewModel.AnioNumeroParte = AnioSalida.Value;
             else
-            FactorClimaticoViewModel.AnioNumeroParte = DateTime.Now.Year;
+                FactorClimaticoViewModel.AnioNumeroParte = DateTime.Now.Year;
 
             if (NumeroSalida.HasValue && NumeroSalida.Value > 0)
                 FactorClimaticoViewModel.NumeroParte = NumeroSalida.Value;
@@ -152,7 +153,7 @@ namespace Vista.Pages.Salidas
         private void OnFinishFailed(EditContext editContext)
         {
             message.Error("Error al cargar, posible información ausente.");
-             Console.WriteLine($"Failed:{System.Text.Json.JsonSerializer.Serialize(FactorClimaticoViewModel)}");
+            Console.WriteLine($"Failed:{System.Text.Json.JsonSerializer.Serialize(FactorClimaticoViewModel)}");
         }
         //Impresión
         bool _visible1;
