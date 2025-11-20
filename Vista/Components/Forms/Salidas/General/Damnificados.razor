@@ -2,117 +2,119 @@
 @using Vista.Data.ViewModels.Personal;
 @using Vista.Data.Models.Salidas;
 @using Vista.Data.Models.Personas;
+@using Vista.Data.Enums;
 @using System.Linq;
+@using Vista.Data.Models.Salidas.Componentes;
 
 @inject IMessageService MessageService
 
 <style>
 
     .damnificados {
-    border: 2px solid #ffb366 !important;
-    background: linear-gradient(180deg, #fffdf9 0%, #fff7f0 100%);
-    box-shadow: 0 4px 12px rgba(255, 163, 77, 0.15);
-    border-radius: 16px;
-    margin-bottom: 2rem;
-    padding: 2.5rem 2rem 2rem 2rem;
-    transition: box-shadow 0.25s ease, transform 0.2s ease;
+        border: 2px solid #ffb366 !important;
+        background: linear-gradient(180deg, #fffdf9 0%, #fff7f0 100%);
+        box-shadow: 0 4px 12px rgba(255, 163, 77, 0.15);
+        border-radius: 16px;
+        margin-bottom: 2rem;
+        padding: 2.5rem 2rem 2rem 2rem;
+        transition: box-shadow 0.25s ease, transform 0.2s ease;
     }
 
 
 
     .damnificados-componente .ant-table {
-    background: #fff8f0 !important;
-    color: #ff6a33 !important;
-    font-weight: 500 !important;
-    font-size: 1.05rem !important;
-    border-radius: 14px !important;
+        background: #fff8f0 !important;
+        color: #ff6a33 !important;
+        font-weight: 500 !important;
+        font-size: 1.05rem !important;
+        border-radius: 14px !important;
     }
 
-    .damnificados-componente .ant-table-thead .ant-table-cell,
-    .damnificados-componente .ant-table thead th {
-    background: linear-gradient(135deg, #ff944d, #ff7a45) !important;
-    color: #fff !important;
-    font-weight: 600 !important;
-    text-align: center !important;
-    border-bottom: 2px solid #ffe0cc !important;
-    letter-spacing: 0.3px !important;
-    padding: 8px 10px !important;
-        font-size: 1.02rem !important;
-        height: 32px !important;
-        min-height: 24px !important;
-        line-height: 1.2 !important;
-        padding-top: 4px !important;
-        padding-bottom: 4px !important;
-    }
+        .damnificados-componente .ant-table-thead .ant-table-cell,
+        .damnificados-componente .ant-table thead th {
+            background: linear-gradient(135deg, #ff944d, #ff7a45) !important;
+            color: #fff !important;
+            font-weight: 600 !important;
+            text-align: center !important;
+            border-bottom: 2px solid #ffe0cc !important;
+            letter-spacing: 0.3px !important;
+            padding: 8px 10px !important;
+            font-size: 1.02rem !important;
+            height: 32px !important;
+            min-height: 24px !important;
+            line-height: 1.2 !important;
+            padding-top: 4px !important;
+            padding-bottom: 4px !important;
+        }
 
     .damnificados-componente .ant-table-title {
-    background: #fff8f0 !important;
-    color: #ff6a33 !important;
-    font-weight: 700 !important;
-    font-size: 1.05rem !important;
-    text-align: left !important;
-    padding: 0.5rem 0.8rem !important;
-    border-top-left-radius: 12px !important;
-    border-top-right-radius: 12px !important;
-    border-bottom: 1px solid #ffd6b3 !important;
+        background: #fff8f0 !important;
+        color: #ff6a33 !important;
+        font-weight: 700 !important;
+        font-size: 1.05rem !important;
+        text-align: left !important;
+        padding: 0.5rem 0.8rem !important;
+        border-top-left-radius: 12px !important;
+        border-top-right-radius: 12px !important;
+        border-bottom: 1px solid #ffd6b3 !important;
     }
 
     .damnificados-componente .ant-table-cell,
     .damnificados-componente .ant-table td {
-    background: #fff !important;
-    color: #333 !important;
-    padding: 6px 10px !important;
-    font-size: 1rem !important;
-    height: 12px !important;
+        background: #fff !important;
+        color: #333 !important;
+        padding: 6px 10px !important;
+        font-size: 1rem !important;
+        height: 12px !important;
     }
 
     .damnificados-componente .ant-btn {
-    font-size: 0.95rem !important;
-    padding: 4px 10px !important;
+        font-size: 0.95rem !important;
+        padding: 4px 10px !important;
     }
 
     /* Modal estilo Licencias adaptado para Damnificados */
     .modal-damnificado .ant-modal-content {
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(255, 163, 77, 0.15);
-    border: 4px solid #ffb366;
-    margin-top: -50px;
-    margin-bottom: 0px;
-    background: linear-gradient(180deg, #fffdf9 0%, #fff7f0 100%);
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(255, 163, 77, 0.15);
+        border: 4px solid #ffb366;
+        margin-top: -50px;
+        margin-bottom: 0px;
+        background: linear-gradient(180deg, #fffdf9 0%, #fff7f0 100%);
     }
 
     .modal-damnificado .ant-modal-header {
-    background-color: #fff8f0;
-    border-bottom: 1px solid #ffd6b3;
-    padding: 16px 24px;
-    border-radius: 9px 9px 0 0;
+        background-color: #fff8f0;
+        border-bottom: 1px solid #ffd6b3;
+        padding: 16px 24px;
+        border-radius: 9px 9px 0 0;
     }
 
     .modal-damnificado-content {
-    padding: 24px;
+        padding: 24px;
     }
 
     .modal-damnificado-form-item {
-    margin-bottom: 20px;
-    position: relative;
-    padding-left: 10px;
+        margin-bottom: 20px;
+        position: relative;
+        padding-left: 10px;
     }
 
-    .modal-damnificado-form-item .ant-form-item-label > label,
-    .modal-damnificado-form-full-width .ant-form-item-label > label {
-    font-weight: 600;
-    color: #ff6a33;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 14px;
-    transition: color 0.3s ease;
-    }
+        .modal-damnificado-form-item .ant-form-item-label > label,
+        .modal-damnificado-form-full-width .ant-form-item-label > label {
+            font-weight: 600;
+            color: #ff6a33;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
 
-    .modal-damnificado-form-item .ant-form-item-label > label:hover,
-    .modal-damnificado-form-full-width .ant-form-item-label > label:hover {
-    color: #ff944d;
-    }
+            .modal-damnificado-form-item .ant-form-item-label > label:hover,
+            .modal-damnificado-form-full-width .ant-form-item-label > label:hover {
+                color: #ff944d;
+            }
 
     .modal-damnificado .ant-input:focus,
     .modal-damnificado .ant-input:hover,
@@ -126,8 +128,8 @@
     .modal-damnificado .ant-input-number-input:hover,
     .modal-damnificado .ant-textarea:focus,
     .modal-damnificado .ant-textarea:hover {
-    border-color: #ffb366 !important;
-    box-shadow: 0 0 0 2px rgba(255, 163, 77, 0.15) !important;
+        border-color: #ffb366 !important;
+        box-shadow: 0 0 0 2px rgba(255, 163, 77, 0.15) !important;
     }
 
     .modal-damnificado .ant-picker,
@@ -135,52 +137,52 @@
     .modal-damnificado .ant-select-selector,
     .modal-damnificado .ant-input-number,
     .modal-damnificado .ant-textarea {
-    border-radius: 8px !important;
-    border: 1px solid #ffd6b3 !important;
-    background: #fff !important;
-    color: #434343 !important;
-    transition: all 0.3s ease !important;
+        border-radius: 8px !important;
+        border: 1px solid #ffd6b3 !important;
+        background: #fff !important;
+        color: #434343 !important;
+        transition: all 0.3s ease !important;
     }
 
     .modal-damnificado .modal-damnificado-footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
-    margin-top: 18px;
-    margin-bottom: 0px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 18px;
+        margin-bottom: 0px;
     }
 
     .modal-damnificado .ant-btn-primary {
-    background: linear-gradient(135deg, #ff944d 0%, #ff6a33 100%) !important;
-    border: none !important;
-    color: #fff !important;
-    font-weight: 600;
-    box-shadow: 0 2px 8px rgba(255, 163, 77, 0.18);
-    margin-top: 0;
-    margin-bottom: 0;
-    padding: 0 20px !important;
+        background: linear-gradient(135deg, #ff944d 0%, #ff6a33 100%) !important;
+        border: none !important;
+        color: #fff !important;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(255, 163, 77, 0.18);
+        margin-top: 0;
+        margin-bottom: 0;
+        padding: 0 20px !important;
     }
 
-    .modal-damnificado .ant-btn-primary:hover {
-    background: linear-gradient(135deg, #ff7a45 0%, #ff944d 100%) !important;
-    color: #fff !important;
-    }
+        .modal-damnificado .ant-btn-primary:hover {
+            background: linear-gradient(135deg, #ff7a45 0%, #ff944d 100%) !important;
+            color: #fff !important;
+        }
 
     .btn-nuevo-damnificado {
-    background: linear-gradient(135deg, #ff944d 0%, #ff6a33 100%) !important;
-    color: #fff !important;
-    font-weight: 600;
-    border: none !important;
-    box-shadow: 0 2px 8px rgba(255, 163, 77, 0.18);
-    border-radius: 8px;
-    padding: 0 20px !important;
-    transition: background 0.3s;
+        background: linear-gradient(135deg, #ff944d 0%, #ff6a33 100%) !important;
+        color: #fff !important;
+        font-weight: 600;
+        border: none !important;
+        box-shadow: 0 2px 8px rgba(255, 163, 77, 0.18);
+        border-radius: 8px;
+        padding: 0 20px !important;
+        transition: background 0.3s;
     }
 
-    .btn-nuevo-damnificado:hover {
-    background: linear-gradient(135deg, #ff7a45 0%, #ff944d 100%) !important;
-    color: #fff !important;
-    }
+        .btn-nuevo-damnificado:hover {
+            background: linear-gradient(135deg, #ff7a45 0%, #ff944d 100%) !important;
+            color: #fff !important;
+        }
 </style>
 
 
@@ -188,16 +190,16 @@
     <Tabs DefaultActiveKey="personas">
         <TabPane Key="personas" Tab="Personas">
             <Table Context="Damnificados"
-            DataSource="Model.Damnificados"
-            Size="TableSize.Small"
-            Class="damnificados-componente"
-            Bordered>
+                   DataSource="Model.Damnificados"
+                   Size="TableSize.Small"
+                   Class="damnificados-componente"
+                   Bordered>
                 <TitleTemplate>
                     <GridRow>
                         <GridCol Span="24" Style="text-align: right;">
                             <Button Type="ButtonType.Primary"
-                            Class="btn-nuevo-damnificado"
-                            OnClick="@(() => visibleDamnificados = true)">
+                                    Class="btn-nuevo-damnificado"
+                                    OnClick="@(() => visibleDamnificados = true)">
                                 <Icon Type="plus" /> Nuevo Damnificado
                             </Button>
                         </GridCol>
@@ -208,13 +210,13 @@
                     <PropertyColumn Property="d => d.Apellido"></PropertyColumn>
                     <PropertyColumn Property="d => d.Edad"></PropertyColumn>
                     <PropertyColumn Property="d => d.Estado"></PropertyColumn>
-                    <PropertyColumn Title="Fuerza Interviniente" Property="d => ObtenerNombreFuerza(d.FuerzaIntervinienteID)" />
+                    <PropertyColumn Title="Fuerza Interviniente" Property="d => ObtenerNombreFuerza(d.FuerzaIntervinienteId)" />
                     <PropertyColumn Title="Hacia dónde fue trasladado" Property="d => d.Destino" />
                     <ActionColumn Title="Acciones">
                         <Popconfirm Title="¿Quieres borrar este damnificado?"
-                        OnConfirm="@(() => deleteRowDamnificados(Damnificados.Documento))"
-                        OkText="Si"
-                        CancelText="No">
+                                    OnConfirm="@(() => deleteRowDamnificados(Damnificados.Documento))"
+                                    OkText="Si"
+                                    CancelText="No">
                             <Button Danger>
                                 <Icon Type="delete" />
                             </Button>
@@ -227,12 +229,12 @@
             </Table>
 
             <Modal @bind-Visible="visibleDamnificados"
-            Title="@(editandoDamnificado ? "Editar Damnificado" : "Datos del damnificado")"
-            OkText="@(editandoDamnificado ? "Editar" : "Agregar")"
-            CancelText="@("Cancelar")"
-            OnOk="@AgregarDamnificado"
-            OnCancel="@(() => {editandoDamnificado = false; documentoOriginal = null; Damnificado = new();})"
-            WrapClassName="modal-damnificado">
+                   Title="@(editandoDamnificado ? "Editar Damnificado" : "Datos del damnificado")"
+                   OkText="@(editandoDamnificado ? "Editar" : "Agregar")"
+                   CancelText="@("Cancelar")"
+                   OnOk="@AgregarDamnificado"
+                   OnCancel="@(() => {editandoDamnificado = false; documentoOriginal = null; Damnificado = new();})"
+                   WrapClassName="modal-damnificado">
                 <div class="modal-damnificado-content">
                     <Form Model="Damnificado" Layout="FormLayout.Vertical" Class="modal-damnificado-form">
                         <Row Gutter="16">
@@ -248,14 +250,14 @@
                             </AntDesign.Col>
                             <AntDesign.Col Span="8">
                                 <FormItem Label="Documento" Required="true" Class="modal-damnificado-form-item">
-                                    <Input @bind-Value="@Damnificado.Dni" Disabled=editandoDamnificado/>
+                                    <Input @bind-Value="@Damnificado.Dni" Disabled=editandoDamnificado />
                                 </FormItem>
                             </AntDesign.Col>
                         </Row>
                         <Row Gutter="16">
                             <AntDesign.Col Span="8">
                                 <FormItem Label="Sexo" Class="modal-damnificado-form-item">
-                                    <EnumSelect TEnum="TipoSexo?" @bind-Value="@Damnificado.Sexo" />
+                                    <EnumSelect TEnum="TipoSexo ?" @bind-Value="@Damnificado.Sexo" />
                                 </FormItem>
                             </AntDesign.Col>
                             <AntDesign.Col Span="8">
@@ -263,7 +265,7 @@
                                     <Input @bind-Value="@Damnificado.Edad" Disabled="@Damnificado.FechaDeNacimiento.HasValue" />
                                 </FormItem>
                             </AntDesign.Col>
-                            <AntDesign.Col Span="14">
+                            <AntDesign.Col Span="8">
                                 <FormItem Label="Lugar de Nacimiento" Class="modal-damnificado-form-item">
                                     <Input @bind-Value="@Damnificado.LugarDeNacimiento" />
                                 </FormItem>
@@ -274,13 +276,13 @@
                             {
                                 <AntDesign.Col Span="12">
                                     <FormItem Label="Fecha de Nacimiento" Class="modal-damnificado-form-item">
-                                        <DatePicker TValue="DateTime?" @bind-Value="@Damnificado.FechaDeNacimiento" OnChange="@CalcularEdad" />
+                                        <DatePicker TValue="DateTime ?" @bind-Value="@Damnificado.FechaDeNacimiento" OnChange="@CalcularEdad" />
                                     </FormItem>
                                 </AntDesign.Col>
                             }
                             <AntDesign.Col Span="12">
                                 <FormItem Label="Estado" Class="modal-damnificado-form-item">
-                                    <EnumSelect TEnum="TipoDamnificado" @bind-Value="@Damnificado.Estado" />
+                                    <EnumSelect TEnum="TipoDamnificado ?" @bind-Value="@Damnificado.Estado" />
                                 </FormItem>
                             </AntDesign.Col>
                         </Row>
@@ -288,13 +290,13 @@
                             <AntDesign.Col Span="12">
                                 <FormItem Label="Fuerza que lo trasladó" Class="modal-damnificado-form-item">
                                     <Select TItem="FuerzaIntervinienteViewModel"
-                                    TItemValue="int?"
-                                    DataSource="@Model.FuerzasIntervinientes"
-                                    @bind-Value="@Damnificado.FuerzaIntervinienteID"
-                                    ValueName="@nameof(FuerzaIntervinienteViewModel.Id)"
-                                    Placeholder="Seleccione la fuerza que lo trasladó"
-                                    AllowClear="true"
-                                    EnableSearch="true">
+                                            TItemValue="int?"
+                                            DataSource="@Model.FuerzasIntervinientes"
+                                            @bind-Value="@Damnificado.FuerzaIntervinienteID"
+                                            ValueName="@nameof(FuerzaIntervinienteViewModel.Id)"
+                                            Placeholder="Seleccione la fuerza que lo trasladó"
+                                            AllowClear="true"
+                                            EnableSearch="true">
                                         <LabelTemplate Context="fuerza">
                                             @($"{fuerza.FuerzaViewModel.Nombre} - Unidad {fuerza.NumeroUnidad}")
                                         </LabelTemplate>
@@ -304,7 +306,7 @@
                                     </Select>
                                 </FormItem>
                             </AntDesign.Col>
-                            <AntDesign.Col>
+                            <AntDesign.Col Span="12">
                                 <FormItem Label="Hacia donde?" Class="modal-damnificado-form-item">
                                     <Input @bind-Value="@Damnificado.Destino" />
                                 </FormItem>
@@ -316,16 +318,16 @@
         </TabPane>
         <TabPane Key="vehiculos" Tab="Vehículos">
             <Table Context="Vehiculos"
-            DataSource="Model.VehiculosAfectados"
-            Size="TableSize.Small"
-            Class="damnificados-componente"
-            Bordered>
+                   DataSource="Model.VehiculosAfectados"
+                   Size="TableSize.Small"
+                   Class="damnificados-componente"
+                   Bordered>
                 <TitleTemplate>
                     <GridRow>
                         <GridCol Span="24" Style="text-align: right;">
                             <Button Type="ButtonType.Primary"
-                            Class="btn-nuevo-damnificado"
-                            OnClick="@(() => visibleVehiculo = true)">
+                                    Class="btn-nuevo-damnificado"
+                                    OnClick="@(() => visibleVehiculo = true)">
                                 <Icon Type="plus" /> Nuevo Vehiculo
                             </Button>
                         </GridCol>
@@ -344,25 +346,40 @@
                             @(Vehiculos.Airbag ? "Si" : "No")
                         </Template>
                     </PropertyColumn>
-                    <PropertyColumn Property="v => v.Seguro.CompañiaAseguradora"></PropertyColumn>
-                    <PropertyColumn Property="v => v.Seguro.NumeroDePoliza"></PropertyColumn>
-                    <PropertyColumn Property="v => v.Seguro.FechaDeVencimineto"></PropertyColumn>
-                    <PropertyColumn Title="Conductor" TItem="VehiculoAfectado" TProp="string?">
+                    <PropertyColumn Title="Dueño" Property="v => v.NombreYApellidoDuenio"></PropertyColumn>
+                    <PropertyColumn Title="Seguro" Property="v => v.Seguro.CompañiaAseguradora"></PropertyColumn>
+                    <PropertyColumn Title="Poliza" Property="v => v.Seguro.NumeroDePoliza"></PropertyColumn>
+                    <PropertyColumn Title="Vencimiento" Property="v => v.Seguro.FechaDeVencimineto"></PropertyColumn>
+                    <PropertyColumn Title="Conductor" TItem="VehiculoAfectado" TProp="string">
                         <Template>
-                            @(Vehiculos.ConductorDamnificado != null
-                                ? ObtenerNombreCompleto(Vehiculos.ConductorDamnificado.Nombre, Vehiculos.ConductorDamnificado.Apellido)
-                                : "Sin conductor")
+                            @{
+                                var conductor = Vehiculos.Ocupantes?.FirstOrDefault(o => o.Rol == TipoOcupante.Conductor);
+                                @(conductor != null
+                                                            ? ObtenerNombreCompleto(conductor.Damnificado.Nombre, conductor.Damnificado.Apellido)
+                                                            : "Sin conductor")
+                            }
                         </Template>
                     </PropertyColumn>
-
-                    @*Falta listar los pasajeros*@
-
-
+                    <PropertyColumn Title="Pasajeros" TItem="VehiculoAfectado" TProp="string">
+                        <Template>
+                            @{
+                                var pasajeros = Vehiculos.Ocupantes?.Where(o => o.Rol == TipoOcupante.Pasajero).ToList();
+                                if (pasajeros != null && pasajeros.Any())
+                                {
+                                    <div>@string.Join(", ", pasajeros.Select(p => ObtenerNombreCompleto(p.Damnificado.Nombre, p.Damnificado.Apellido)))</div>
+                                }
+                                else
+                                {
+                                    <div>Sin pasajeros</div>
+                                }
+                            }
+                        </Template>
+                    </PropertyColumn>
                     <ActionColumn Title="Acciones">
-                        <Popconfirm Title="¿Quieres borrar este damnificado?"
-                        OnConfirm="@(() => deleteRowVehiculos(Vehiculos.Patente))"
-                        OkText="Si"
-                        CancelText="No">
+                        <Popconfirm Title="¿Quieres borrar este vehículo?"
+                                    OnConfirm="@(() => deleteRowVehiculos(Vehiculos.Patente))"
+                                    OkText="Si"
+                                    CancelText="No">
                             <Button Danger>
                                 <Icon Type="delete" />
                             </Button>
@@ -375,12 +392,12 @@
             </Table>
 
             <Modal @bind-Visible="visibleVehiculo"
-            Title="@(editandoVehiculo ? "Editar Vehiculo" : "Datos del vehiculo")"
-            OkText="@(editandoVehiculo ? "Editar" : "Agregar")"
-            CancelText="@("Cancelar")"
-            OnOk="@AgregarVehiculo"
-            OnCancel="@(() => {editandoVehiculo = false; patenteOriginal = null; Vehiculo = new();})"
-            WrapClassName="modal-damnificado">
+                   Title="@(editandoVehiculo ? "Editar Vehiculo" : "Datos del vehiculo")"
+                   OkText="@(editandoVehiculo ? "Editar" : "Agregar")"
+                   CancelText="@("Cancelar")"
+                   OnOk="@AgregarVehiculo"
+                   OnCancel="@(() => {editandoVehiculo = false; patenteOriginal = null; Vehiculo = new();})"
+                   WrapClassName="modal-damnificado">
                 <div class="modal-damnificado-content">
                     <Form Model="Vehiculo" Layout="FormLayout.Vertical" Class="modal-damnificado-form">
                         <Row Gutter="16">
@@ -403,7 +420,7 @@
                         <Row Gutter="16">
                             <AntDesign.Col Span="8">
                                 <FormItem Label="Patente" Class="modal-damnificado-form-item">
-                                    <Input @bind-Value="@Vehiculo.Patente" Disabled="@editandoVehiculo"/>
+                                    <Input @bind-Value="@Vehiculo.Patente" Disabled="@editandoVehiculo" />
                                 </FormItem>
                             </AntDesign.Col>
                             <AntDesign.Col Span="8">
@@ -420,10 +437,10 @@
                         <Row Gutter="16">
                             <AntDesign.Col Span="14">
                                 <FormItem Label="Observaciones" Class="modal-damnificado-form-item">
-                                    <Input @bind-Value="@Vehiculo.Observaciones" />
+                                    <TextArea @bind-Value="@Vehiculo.Observaciones" Rows="3" />
                                 </FormItem>
                             </AntDesign.Col>
-                            <AntDesign.Col Span="8">
+                            <AntDesign.Col Span="10">
                                 <FormItem Label="Se Activó el Airbag?" Class="modal-damnificado-form-item">
                                     <Switch @bind-Checked="@Vehiculo.Airbag" />
                                 </FormItem>
@@ -431,7 +448,7 @@
                         </Row>
                         <Row Gutter="16">
                             <AntDesign.Col Span="12">
-                                <FormItem Label="Dueño" Class="modal-damnificado-form-item">
+                                <FormItem Label="Dueño (Nombre y Apellido)" Class="modal-damnificado-form-item">
                                     <Input @bind-Value="@Vehiculo.Dueño" />
                                 </FormItem>
                             </AntDesign.Col>
@@ -440,6 +457,8 @@
                                     <Input @bind-Value="@Vehiculo.CompañiaAseguradora" />
                                 </FormItem>
                             </AntDesign.Col>
+                        </Row>
+                        <Row Gutter="16">
                             <AntDesign.Col Span="12">
                                 <FormItem Label="Numero de Poliza" Class="modal-damnificado-form-item">
                                     <Input @bind-Value="@Vehiculo.NumeroDePoliza" />
@@ -447,11 +466,11 @@
                             </AntDesign.Col>
                             <AntDesign.Col Span="12">
                                 <FormItem Label="Fecha de Vencimiento" Class="modal-damnificado-form-item">
-                                    <DatePicker TValue="DateTime?" @bind-Value="@Vehiculo.FechaDeVencimiento" />
+                                    <DatePicker TValue="DateTime ?" @bind-Value="@Vehiculo.FechaDeVencimiento" />
                                 </FormItem>
                             </AntDesign.Col>
                         </Row>
-                        @if (Model.Damnificados.Any())
+                        @if (Model.Damnificados != null && Model.Damnificados.Any())
                         {
                             <Row Gutter="16">
                                 <AntDesign.Col Span="12">
@@ -461,15 +480,15 @@
                                 </AntDesign.Col>
                                 @if (Vehiculo.seConoceConductor)
                                 {
-                                    <AntDesign.Col Span="14">
+                                    <AntDesign.Col Span="12">
                                         <FormItem Label="Conductor" Class="modal-damnificado-form-item">
                                             <Select TItem="Damnificado_Salida"
-                                            TItemValue="Damnificado_Salida"
-                                            DataSource="@Model.Damnificados"
-                                            @bind-Value="@Vehiculo.Conductor"
-                                            Placeholder="Seleccione el Conductor"
-                                            AllowClear="true"
-                                            EnableSearch="true">
+                                                    TItemValue="Damnificado_Salida"
+                                                    DataSource="@Model.Damnificados"
+                                                    @bind-Value="@Vehiculo.Conductor"
+                                                    Placeholder="Seleccione el Conductor"
+                                                    AllowClear="true"
+                                                    EnableSearch="true">
                                                 <LabelTemplate Context="conductor">
                                                     @($"{conductor.Apellido}, {conductor.Nombre}")
                                                 </LabelTemplate>
@@ -480,16 +499,18 @@
                                         </FormItem>
                                     </AntDesign.Col>
                                 }
-                                <AntDesign.Col Span="16">
+                            </Row>
+                            <Row Gutter="16">
+                                <AntDesign.Col Span="24">
                                     <FormItem Label="Pasajeros" Class="modal-damnificado-form-item">
                                         <Select Mode="SelectMode.Multiple"
-                                        TItem="Damnificado_Salida"
-                                        TItemValue="Damnificado_Salida"
-                                        @bind-Values="@Vehiculo.Pasajeros"
-                                        DataSource="@Model.Damnificados"
-                                        Placeholder="Seleccione los Pasajeros"
-                                        AllowClear="true"
-                                        EnableSearch="true">
+                                                TItem="Damnificado_Salida"
+                                                TItemValue="Damnificado_Salida"
+                                                @bind-Values="@Vehiculo.Pasajeros"
+                                                DataSource="@ObtenerDamnificadosDisponibles()"
+                                                Placeholder="Seleccione los Pasajeros"
+                                                AllowClear="true"
+                                                EnableSearch="true">
                                             <LabelTemplate Context="pasajero">
                                                 @($"{pasajero.Apellido}, {pasajero.Nombre}")
                                             </LabelTemplate>
@@ -509,7 +530,7 @@
 </div>
 
 @code {
-    [Parameter, EditorRequired] public SalidasViewModels Model { get; set; } = null!;
+    [Parameter] public required SalidasViewModels Model { get; set; }
 
     private DamnificadoViewModels Damnificado = new DamnificadoViewModels();
     private VehiculoDamnificadoViewModels Vehiculo = new VehiculoDamnificadoViewModels();
@@ -517,7 +538,9 @@
     private bool visibleVehiculo = false;
 
     private bool editandoDamnificado = false, editandoVehiculo = false;
-    private int? documentoOriginal = null; private string? patenteOriginal = null;
+    private int? documentoOriginal = null;
+    private string? patenteOriginal = null;
+
     private async Task deleteRowDamnificados(int? DNI)
     {
         if (Model.Damnificados == null || !Model.Damnificados.Any())
@@ -532,9 +555,27 @@
             return;
         }
 
+        var damnificadoAEliminar = Model.Damnificados.First(m => m.Documento == DNI);
+
+        // Verificar si está asociado a algún vehículo
+        var vehiculosConOcupante = Model.VehiculosAfectados?
+            .Where(v => v.Ocupantes != null && v.Ocupantes.Any(o => o.Damnificado.Documento == DNI))
+            .ToList();
+
+        if (vehiculosConOcupante != null && vehiculosConOcupante.Any())
+        {
+            await MessageService.WarningAsync($"El damnificado está asociado a {vehiculosConOcupante.Count} vehículo(s). Se eliminará la asociación.");
+
+            foreach (var vehiculo in vehiculosConOcupante)
+            {
+                vehiculo.Ocupantes = vehiculo.Ocupantes.Where(o => o.Damnificado.Documento != DNI).ToList();
+            }
+        }
+
         Model.Damnificados = Model.Damnificados.Where(m => m.Documento != DNI).ToList();
         await MessageService.SuccessAsync($"Damnificado con DNI {DNI} eliminado correctamente.");
     }
+
     private async Task deleteRowVehiculos(string? Patente)
     {
         if (Model.VehiculosAfectados == null || !Model.VehiculosAfectados.Any())
@@ -556,21 +597,22 @@
     private void EditarDamnificado(Damnificado_Salida dam)
     {
         Damnificado = new()
-            {
-                Nombre = dam.Nombre,
-                Apellido = dam.Apellido,
-                Dni = dam.Documento,
-                Sexo = dam.Sexo,
-                LugarDeNacimiento = dam.LugarNacimiento,
-                Edad = dam.Edad,
-                Estado = dam.Estado,
-                FuerzaIntervinienteID = dam.FuerzaIntervinienteID,
-                Destino = dam.Destino
-            };
+        {
+            Nombre = dam.Nombre,
+            Apellido = dam.Apellido,
+            Dni = dam.Documento,
+            Sexo = dam.Sexo,
+            LugarDeNacimiento = dam.LugarNacimiento,
+            Edad = dam.Edad,
+            Estado = dam.Estado,
+            FuerzaIntervinienteID = dam.FuerzaIntervinienteId,
+            Destino = dam.Destino
+        };
         documentoOriginal = dam.Documento;
         editandoDamnificado = true;
         visibleDamnificados = true;
     }
+
     private async Task AgregarDamnificado()
     {
         try
@@ -584,25 +626,26 @@
                 actual.LugarNacimiento = Damnificado.LugarDeNacimiento;
                 actual.Edad = Damnificado.Edad;
                 actual.Estado = Damnificado.Estado;
-                actual.FuerzaIntervinienteID = Damnificado.FuerzaIntervinienteID;
+                actual.FuerzaIntervinienteId = Damnificado.FuerzaIntervinienteID;
                 actual.Destino = Damnificado.Destino;
                 await MessageService.SuccessAsync("Damnificado actualizado correctamente");
-                editandoDamnificado = false; documentoOriginal = null;
+                editandoDamnificado = false;
+                documentoOriginal = null;
             }
-            else 
+            else
             {
                 Damnificado_Salida dp = new()
-                    {
-                        Nombre = Damnificado.Nombre,
-                        Apellido = Damnificado.Apellido,
-                        Documento = Damnificado.Dni,
-                        Sexo = Damnificado.Sexo,
-                        LugarNacimiento = Damnificado.LugarDeNacimiento,
-                        Edad = Damnificado.Edad,
-                        Estado = Damnificado.Estado,
-                        FuerzaIntervinienteID = Damnificado.FuerzaIntervinienteID,
-                        Destino = Damnificado.Destino
-                    };
+                {
+                    Nombre = Damnificado.Nombre,
+                    Apellido = Damnificado.Apellido,
+                    Documento = Damnificado.Dni,
+                    Sexo = Damnificado.Sexo,
+                    LugarNacimiento = Damnificado.LugarDeNacimiento,
+                    Edad = Damnificado.Edad,
+                    Estado = Damnificado.Estado,
+                    FuerzaIntervinienteId = Damnificado.FuerzaIntervinienteID,
+                    Destino = Damnificado.Destino
+                };
 
                 if (Model.Damnificados == null)
                 {
@@ -636,28 +679,32 @@
 
     private void EditarVehiculo(VehiculoAfectado veh)
     {
+        var conductor = veh.Ocupantes?.FirstOrDefault(o => o.Rol == TipoOcupante.Conductor)?.Damnificado;
+        var pasajeros = veh.Ocupantes?.Where(o => o.Rol == TipoOcupante.Pasajero).Select(o => o.Damnificado).ToList() ?? new List<Damnificado_Salida>();
+
         Vehiculo = new()
-            {
-                Marca = veh.Marca,
-                Modelo = veh.Modelo,
-                Año = veh.Año,
-                Patente = veh.Patente,
-                Tipo = veh.Tipo,
-                Color = veh.Color,
-                Airbag = veh.Airbag,
-                Observaciones = veh.Observaciones,
-                seConoceConductor = veh.seConoceConductor,
-                Dueño = veh.Dueño,
-                CompañiaAseguradora = veh.Seguro?.CompañiaAseguradora,
-                NumeroDePoliza = veh.Seguro?.NumeroDePoliza,
-                FechaDeVencimiento = veh.Seguro?.FechaDeVencimineto,
-                Conductor = veh.ConductorDamnificado,
-                Pasajeros = veh.PasajerosDamnificados
-            };
+        {
+            Marca = veh.Marca,
+            Modelo = veh.Modelo,
+            Año = veh.Año,
+            Patente = veh.Patente,
+            Tipo = veh.Tipo,
+            Color = veh.Color,
+            Airbag = veh.Airbag,
+            Observaciones = veh.Observaciones,
+            seConoceConductor = veh.SeConoceConductor,
+            Dueño = veh.NombreYApellidoDuenio,
+            CompañiaAseguradora = veh.Seguro?.CompañiaAseguradora,
+            NumeroDePoliza = veh.Seguro?.NumeroDePoliza,
+            FechaDeVencimiento = veh.Seguro?.FechaDeVencimineto,
+            Conductor = conductor,
+            Pasajeros = pasajeros
+        };
         patenteOriginal = veh.Patente;
         editandoVehiculo = true;
         visibleVehiculo = true;
     }
+
     private async Task AgregarVehiculo()
     {
         try
@@ -670,59 +717,117 @@
                 actual.Modelo = Vehiculo.Modelo;
                 actual.Año = Vehiculo.Año;
                 actual.Color = Vehiculo.Color;
-                actual.Dueño = Vehiculo.Dueño;
+                actual.NombreYApellidoDuenio = Vehiculo.Dueño;
                 actual.Observaciones = Vehiculo.Observaciones;
                 actual.Airbag = Vehiculo.Airbag;
-                actual.seConoceConductor = Vehiculo.seConoceConductor;
-                actual.ConductorDamnificado = Vehiculo.Conductor;
-                actual.PasajerosDamnificados = Vehiculo.Pasajeros.ToList();
-                if (actual.Seguro != null)
+                actual.SeConoceConductor = Vehiculo.seConoceConductor;
+
+                // Actualizar ocupantes
+                actual.Ocupantes = new List<OcupanteVehiculo>();
+                if (Vehiculo.Conductor != null && Vehiculo.seConoceConductor)
                 {
-                    actual.Seguro.CompañiaAseguradora = Vehiculo.CompañiaAseguradora;
-                    actual.Seguro.NumeroDePoliza = Vehiculo.NumeroDePoliza;
-                    actual.Seguro.FechaDeVencimineto = Vehiculo.FechaDeVencimiento;
+                    actual.Ocupantes.Add(new OcupanteVehiculo
+                    {
+                        Damnificado = Vehiculo.Conductor,
+                        Rol = TipoOcupante.Conductor,
+                        VehiculoAfectado = actual
+                    });
                 }
+
+                if (Vehiculo.Pasajeros != null && Vehiculo.Pasajeros.Any())
+                {
+                    foreach (var pasajero in Vehiculo.Pasajeros)
+                    {
+                        actual.Ocupantes.Add(new OcupanteVehiculo
+                        {
+                            Damnificado = pasajero,
+                            Rol = TipoOcupante.Pasajero,
+                            VehiculoAfectado = actual
+                        });
+                    }
+                }
+
+                // Actualizar seguro
+                if (actual.Seguro == null)
+                {
+                    actual.Seguro = new SeguroVehiculo();
+                }
+                actual.Seguro.CompañiaAseguradora = Vehiculo.CompañiaAseguradora;
+                actual.Seguro.NumeroDePoliza = Vehiculo.NumeroDePoliza;
+                actual.Seguro.FechaDeVencimineto = Vehiculo.FechaDeVencimiento;
+
                 await MessageService.SuccessAsync("Vehiculo actualizado correctamente");
-                editandoVehiculo = false; patenteOriginal = null;
+                editandoVehiculo = false;
+                patenteOriginal = null;
             }
-            else 
+            else
             {
                 SeguroVehiculo seguro = new()
-                    {
-                        CompañiaAseguradora = Vehiculo.CompañiaAseguradora,
-                        NumeroDePoliza = Vehiculo.NumeroDePoliza,
-                        FechaDeVencimineto = Vehiculo.FechaDeVencimiento
-                    };
+                {
+                    CompañiaAseguradora = Vehiculo.CompañiaAseguradora,
+                    NumeroDePoliza = Vehiculo.NumeroDePoliza,
+                    FechaDeVencimineto = Vehiculo.FechaDeVencimiento
+                };
+
                 VehiculoAfectado va = new()
+                {
+                    Tipo = Vehiculo.Tipo,
+                    Marca = Vehiculo.Marca,
+                    Modelo = Vehiculo.Modelo,
+                    Patente = Vehiculo.Patente,
+                    Año = Vehiculo.Año,
+                    Color = Vehiculo.Color,
+                    NombreYApellidoDuenio = Vehiculo.Dueño,
+                    Observaciones = Vehiculo.Observaciones,
+                    Airbag = Vehiculo.Airbag,
+                    Seguro = seguro,
+                    SeConoceConductor = Vehiculo.seConoceConductor,
+                    Ocupantes = new List<OcupanteVehiculo>()
+                };
+
+                // Agregar conductor si existe
+                if (Vehiculo.Conductor != null && Vehiculo.seConoceConductor)
+                {
+                    va.Ocupantes.Add(new OcupanteVehiculo
                     {
-                        Tipo = Vehiculo.Tipo,
-                        Marca = Vehiculo.Marca,
-                        Modelo = Vehiculo.Modelo,
-                        Patente = Vehiculo.Patente,
-                        Año = Vehiculo.Año,
-                        Color = Vehiculo.Color,
-                        Dueño = Vehiculo.Dueño,
-                        Observaciones = Vehiculo.Observaciones,
-                        Airbag = Vehiculo.Airbag,
-                        Seguro = seguro,
-                        seConoceConductor = Vehiculo.seConoceConductor,
-                        ConductorDamnificado = Vehiculo.Conductor,
-                        PasajerosDamnificados = Vehiculo.Pasajeros.ToList()
-                    };
+                        Damnificado = Vehiculo.Conductor,
+                        Rol = TipoOcupante.Conductor,
+                        VehiculoAfectado = va
+                    });
+                }
+
+                // Agregar pasajeros
+                if (Vehiculo.Pasajeros != null && Vehiculo.Pasajeros.Any())
+                {
+                    foreach (var pasajero in Vehiculo.Pasajeros)
+                    {
+                        va.Ocupantes.Add(new OcupanteVehiculo
+                        {
+                            Damnificado = pasajero,
+                            Rol = TipoOcupante.Pasajero,
+                            VehiculoAfectado = va
+                        });
+                    }
+                }
+
                 if (Model.VehiculosAfectados == null)
                     Model.VehiculosAfectados = new List<VehiculoAfectado>();
+
                 if (Model.VehiculosAfectados.Any(v => v.Patente == va.Patente))
                 {
                     await MessageService.ErrorAsync("Ya existe un vehiculo con esa Patente");
                     return;
                 }
-                if (Model.VehiculosAfectados.Any(v => v.Seguro.NumeroDePoliza == va.Seguro.NumeroDePoliza))
+
+                if (!string.IsNullOrEmpty(va.Seguro.NumeroDePoliza) &&
+                    Model.VehiculosAfectados.Any(v => v.Seguro?.NumeroDePoliza == va.Seguro.NumeroDePoliza))
                 {
                     await MessageService.ErrorAsync("Ya existe un seguro con ese Numero de Poliza");
                     return;
                 }
+
                 Model.VehiculosAfectados.Add(va);
-                await MessageService.SuccessAsync("Vehiculo cargado correctamente"); 
+                await MessageService.SuccessAsync("Vehiculo cargado correctamente");
             }
             Vehiculo = new VehiculoDamnificadoViewModels();
             visibleVehiculo = false;
@@ -737,20 +842,28 @@
                 await MessageService.ErrorAsync(e.Message, 5);
         }
     }
+
     private Task CalcularEdad()
     {
-        Damnificado.Edad = Damnificado.FechaDeNacimiento.HasValue
-            ? (int)((DateTime.Now - Damnificado.FechaDeNacimiento.Value).TotalDays / 365.25)
-            : 0;
+        if (Damnificado.FechaDeNacimiento.HasValue)
+        {
+            Damnificado.Edad = (int)((DateTime.Now - Damnificado.FechaDeNacimiento.Value).TotalDays / 365.25);
+        }
+        else
+        {
+            Damnificado.Edad = null;
+        }
 
         return Task.CompletedTask;
     }
+
     private string ObtenerNombreCompleto(string? Nombre, string? Apellido)
     {
-        if (string.IsNullOrEmpty(Nombre)) { Nombre = "Desconocido";}
-        if (string.IsNullOrEmpty(Apellido)) {Apellido = "Desconocido";}
+        if (string.IsNullOrEmpty(Nombre)) { Nombre = "Desconocido"; }
+        if (string.IsNullOrEmpty(Apellido)) { Apellido = "Desconocido"; }
         return Apellido + ", " + Nombre;
     }
+
     private string ObtenerNombreFuerza(int? fuerzaId)
     {
         if (!fuerzaId.HasValue || Model.FuerzasIntervinientes == null)
@@ -761,5 +874,14 @@
             return "Fuerza no encontrada";
 
         return $"{fuerza.FuerzaViewModel.Nombre} - Unidad {fuerza.NumeroUnidad}";
+    }
+
+    private IEnumerable<Damnificado_Salida> ObtenerDamnificadosDisponibles()
+    {
+        if (Model.Damnificados == null)
+            return new List<Damnificado_Salida>();
+
+        // Excluir al conductor seleccionado de la lista de pasajeros
+        return Model.Damnificados.Where(d => Vehiculo.Conductor == null || d.Documento != Vehiculo.Conductor.Documento);
     }
 }
