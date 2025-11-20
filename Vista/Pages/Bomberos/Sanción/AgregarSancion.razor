@@ -105,14 +105,14 @@
     <ValidationSummary />
     <Row Class="modal-crear-sancion-row" Gutter="24">
         <AntDesign.Col Span="12">
-            <FormItem Label="Fecha Desde" Required Class="modal-crear-sancion-form-item">
+            <FormItem Label="📅 Fecha Desde" Required Class="modal-crear-sancion-form-item">
                 <DatePicker AllowClear="false" @bind-Value="SancionVM.FechaDesde" Size="InputSize.Large" />
             </FormItem>
         </AntDesign.Col>
         <AntDesign.Col Span="12">
             @if (SancionVM.TipoSancion == TipoSancion.Sancion)
             {
-                <FormItem Label="Fecha Hasta" Required Class="modal-crear-sancion-form-item">
+                <FormItem Label="📅 Fecha Hasta" Required Class="modal-crear-sancion-form-item">
                     <DatePicker AllowClear="false" @bind-Value="SancionVM.FechaHasta" Size="InputSize.Large" />
                 </FormItem>
             }
@@ -122,7 +122,7 @@
 
     <Row Class="modal-crear-sancion-row" Gutter="24">
         <AntDesign.Col Span="12">
-            <FormItem Label="Personal Sancionado" Required Class="modal-crear-sancion-form-item">
+            <FormItem Label="👤 Personal Sancionado" Required Class="modal-crear-sancion-form-item">
                 <Select TItem="BomberoViweModel"
                         TItemValue="int"
                         DataSource="@ListabomberosVM"
@@ -138,7 +138,7 @@
             </FormItem>
         </AntDesign.Col>
         <AntDesign.Col Span="12">
-            <FormItem Label="Numero Legajo" Class="modal-crear-sancion-form-item">
+            <FormItem Label="📋 Numero Legajo" Class="modal-crear-sancion-form-item">
                 <AntDesign.InputNumber @bind-Value="SancionVM.NumeroLegajoSancionado" Disabled Size="InputSize.Large" />
             </FormItem>
         </AntDesign.Col>
@@ -146,12 +146,12 @@
 
     <Row Class="modal-crear-sancion-row" Gutter="24">
         <AntDesign.Col Span="12">
-            <FormItem Label="Tipo Sancion" Required Class="modal-crear-sancion-form-item">
+            <FormItem Label="🏷️ Tipo Sancion" Required Class="modal-crear-sancion-form-item">
                 <EnumSelect TEnum="TipoSancion" @bind-Value="@SancionVM.TipoSancion" Size="InputSize.Large" />
             </FormItem>
         </AntDesign.Col>
         <AntDesign.Col Span="12">
-            <FormItem Label="Area Sancion" Required Class="modal-crear-sancion-form-item">
+            <FormItem Label="🗂️ Área Sancion" Required Class="modal-crear-sancion-form-item">
                 <EnumSelect TEnum="AreaSancion" @bind-Value="@SancionVM.SancionArea" Size="InputSize.Large" />
             </FormItem>
         </AntDesign.Col>
@@ -159,7 +159,7 @@
 
     <Row Class="modal-crear-sancion-row" Gutter="38">
         <AntDesign.Col Span="24">
-            <FormItem Label="Observacion" Class="modal-crear-sancion-form-item">
+            <FormItem Label="📝 Observación" Class="modal-crear-sancion-form-item">
                 <TextArea @bind-Value="SancionVM.Observaciones" Size="InputSize.Large" Rows="4" />
             </FormItem>
         </AntDesign.Col>
