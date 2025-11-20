@@ -23,6 +23,19 @@
         margin: 20px auto;
     }
 
+    .DireccionLabel {
+    margin-top: 10px !important;    
+    }
+
+    .RegionLabel {
+    margin-top: 50px !important;
+    }
+
+    .TipoZonaLabel {
+    margin-top: 50px !important;
+}
+
+
     @@media screen and (max-width: 450px) {
         .map-container {
             width: 100%;
@@ -106,8 +119,9 @@
             @if (isApiAvailable)
             {
                 <Row Gutter="24">
-                    <AntDesign.Col Span="24">
-                        <FormItem Label="Dirección">
+                <AntDesign.Col Span="12" Class="col-izquierda">
+
+                        <FormItem Label="Dirección" class="DireccionLabel">
                             <Select TItem="Direccion"
                                     TItemValue="Direccion"
                                     DataSource="@direcciones"
@@ -121,24 +135,17 @@
                                     OnSelectedItemChanged="OnStreetSelected">
                             </Select>
                         </FormItem>
-                    </AntDesign.Col>
 
-                     <AntDesign.Col Span="12">
-                    <FormItem Label="Tipo Zona">
-                        <EnumSelect TEnum="TipoZona ?" @bind-Value="@Model.TipoZona" />
-                    </FormItem>
-                </AntDesign.Col>
-                </Row>
-            }
-
-            <Row Gutter="24">
-                <AntDesign.Col Span="12">
-                    <FormItem Label="Región Cuartel">
+                    <FormItem Label="Región Cuartel" class="RegionLabel">
                         <EnumSelect TEnum="CuartelRegionChivilcoy ?" @bind-Value="@Model.CuartelRegion" DefaultActiveFirstOption="false" />
                     </FormItem>
-                </AntDesign.Col>
 
-                <AntDesign.Col Span="12">
+
+                        <FormItem Label="Tipo Zona" class="TipoZonaLabel">
+                        <EnumSelect TEnum="TipoZona ?" @bind-Value="@Model.TipoZona" />
+                    </FormItem>
+                    </AntDesign.Col>        
+                      <AntDesign.Col Span="8">
                     @if (Model.Latitud.HasValue && Model.Longitud.HasValue)
                     {
                         <div class="map-container">
@@ -150,7 +157,11 @@
                         </div>
                     }
                 </AntDesign.Col>
-            </Row>
+
+                </Row>
+            }
+
+        
 
 
         </div>
