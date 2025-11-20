@@ -9,85 +9,28 @@
 @inject IDbContextFactory<BomberosDbContext> DbFactory
 
 <style>
+
+
 .modal-crear-licencia .ant-modal-content {
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    border: 2px solid #732D2D;
-    margin-top: 55px;
-    max-width: 800px;
+    width: 800px !important;   
+    max-width: 90vw !important;
+
 }
 
-.modal-crear-licencia .ant-modal {
-    top: 25px !important;
-    padding-bottom: 0 !important;
+.modal-crear-licencia  {
+    padding-right: 200px !important;
 }
 
-.modal-crear-licencia .ant-modal-title {
-    color: white !important;
-}
-
-.modal-crear-licencia .ant-modal-header {
-        background-color: #A63333;
-        padding: 16px 24px;
+.modal-crear-licencia .ant-modal-wrap {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    
 }
 
 
 
-.modal-crear-licencia-row {
-    margin-bottom: 16px !important;
-}
 
-
-
-    .modal-crear-licencia-form-item .ant-form-item-label > label,
-    .modal-crear-licencia-form-full-width .ant-form-item-label > label {
-        font-weight: 600;
-        color: #434343;
-        transition: color 0.3s ease;
-    }
-
-    .modal-crear-licencia-form-item .ant-form-item-label > label:hover,
-    .modal-crear-licencia-form-full-width .ant-form-item-label > label:hover {
-        color: #FFD700;
-    }
-
-    .modal-crear-licencia .ant-input:focus,
-    .modal-crear-licencia .ant-input:hover,
-    .modal-crear-licencia .ant-select-selector:focus,
-    .modal-crear-licencia .ant-select-selector:hover,
-    .modal-crear-licencia .ant-picker:focus,
-    .modal-crear-licencia .ant-picker:hover,
-    .modal-crear-licencia .ant-picker-input > input:focus,
-    .modal-crear-licencia .ant-picker-input > input:hover,
-    .modal-crear-licencia .ant-input-number-input:focus,
-    .modal-crear-licencia .ant-input-number-input:hover,
-    .modal-crear-licencia .ant-textarea:focus,
-    .modal-crear-licencia .ant-textarea:hover {
-        border-color: #FFD700 !important;
-        box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
-    }
-
-    .modal-crear-licencia .ant-picker,
-    .modal-crear-licencia .ant-input,
-    .modal-crear-licencia .ant-select-selector,
-    .modal-crear-licencia .ant-input-number,
-    .modal-crear-licencia .ant-textarea {
-        border-radius: 8px !important;
-        border: 1px solid #d9d9d9 !important;
-        background: #fff !important;
-        color: #434343 !important;
-        transition: all 0.3s ease !important;
-    }
-
-    .modal-crear-licencia-footer {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        gap: 16px;
-        margin-top: 18px;
-        margin-bottom: 0px;
-        width: 100%;
-    }
 
     .modal-crear-licencia .ant-btn-primary {
         background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
@@ -140,6 +83,8 @@
             padding-top: 20px !important;
         }
     }   
+
+    
 </style>
 
 <div class="modal-crear-licencia-content">
@@ -149,31 +94,33 @@
           OnFinishFailed="OnFinishFailed">
         
         <Row Class="modal-crear-licencia-row" Gutter="16">
-                  <AntDesign.Col Span="12">
-                <FormItem Label="Num. Serie" Class="modal-crear-licencia-form-item">
+                  <AntDesign.Col Span="8">
+                <FormItem Label="#️⃣ Num. Serie" Class="modal-crear-licencia-form-item">
                     <Input @bind-Value="@ComunicacionVM.NroSerie" />
                 </FormItem>
             </AntDesign.Col>
-            <AntDesign.Col Span="12">
-                <FormItem Label="Num. Equipo" Class="modal-crear-licencia-form-item">
+            <AntDesign.Col Span="8">
+                <FormItem Label="⚙️ Num. Equipo" Class="modal-crear-licencia-form-item">
                     <Input @bind-Value="@ComunicacionVM.NroEquipo" />
                 </FormItem>
             </AntDesign.Col>
-            <AntDesign.Col Span="12">
-                <FormItem Label="Modelo" Class="modal-crear-licencia-form-item">
+            <AntDesign.Col Span="8">
+                <FormItem Label="🏷️ Modelo" Class="modal-crear-licencia-form-item">
                     <Input @bind-Value="@ComunicacionVM.Modelo" />
                 </FormItem>
             </AntDesign.Col>
         </Row>
 
+
+
         <Row Class="modal-crear-licencia-row" Gutter="16">
             <AntDesign.Col Span="12">
-                <FormItem Label="Marca" Class="modal-crear-licencia-form-item">
+                <FormItem Label="🅜 Marca" Class="modal-crear-licencia-form-item">
                     <Input @bind-Value="@ComunicacionVM.Marca" />
                 </FormItem>
             </AntDesign.Col>
             <AntDesign.Col Span="12">
-                <FormItem Label="Estado" Class="modal-crear-licencia-form-item">
+                <FormItem Label="📌Estado" Class="modal-crear-licencia-form-item">
                     <EnumSelect TEnum="TipoEstadoHandie" @bind-Value="@ComunicacionVM.Estado" />
                 </FormItem>
             </AntDesign.Col>
