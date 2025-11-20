@@ -77,11 +77,15 @@
                 {
                     <AntDesign.Col Span="24">
                         <FormItem Label="Ingrese el bombero receptor">
-                            <Select @bind-Value="@Model.BomberoReceptor"
+                            <Select Value="@Model.BomberoReceptor"
                                     Placeholder="Seleccione un bombero"
                                     TItemValue="int?"
                                     TItem="BomberoViweModel"
-                                    DataSource="@BomberosTodos" />
+                                    ValueName="@nameof(BomberoViweModel.Id)"
+                                    LabelName="@nameof(BomberoViweModel.ApellidoYNombre)"
+                                    DataSource="@BomberosTodos"
+                                    DefaultActiveFirstOption="false"
+                                    AllowClear="true" EnableSearch />
                         </FormItem>
                     </AntDesign.Col>
                 }
