@@ -58,6 +58,9 @@
             margin-bottom: 0;
             min-width: 180px;
         }
+
+
+
 </style>
 
 <div class="datos-generales">
@@ -119,32 +122,37 @@
                             </Select>
                         </FormItem>
                     </AntDesign.Col>
-                </Row>
-            }
 
-            <Row Gutter="16">
-                <AntDesign.Col Span="12">
+                     <AntDesign.Col Span="12">
                     <FormItem Label="Tipo Zona">
                         <EnumSelect TEnum="TipoZona ?" @bind-Value="@Model.TipoZona" />
                     </FormItem>
                 </AntDesign.Col>
+                </Row>
+            }
+
+            <Row Gutter="24">
                 <AntDesign.Col Span="12">
                     <FormItem Label="Región Cuartel">
                         <EnumSelect TEnum="CuartelRegionChivilcoy ?" @bind-Value="@Model.CuartelRegion" DefaultActiveFirstOption="false" />
                     </FormItem>
                 </AntDesign.Col>
+
+                <AntDesign.Col Span="12">
+                    @if (Model.Latitud.HasValue && Model.Longitud.HasValue)
+                    {
+                        <div class="map-container">
+                            <iframe style="border:0; width: 100%; aspect-ratio: 1 / 1;"
+                                    src="@GetGoogleMapsSatelliteUrl(Model.Latitud.Value, Model.Longitud.Value)"
+                                    frameborder="0"
+                                    allowfullscreen>
+                            </iframe>
+                        </div>
+                    }
+                </AntDesign.Col>
             </Row>
 
-            @if (Model.Latitud.HasValue && Model.Longitud.HasValue)
-            {
-                <div class="map-container">
-                    <iframe style="border:0; width: 100%; aspect-ratio: 1 / 1;"
-                            src="@GetGoogleMapsSatelliteUrl(Model.Latitud.Value, Model.Longitud.Value)"
-                            frameborder="0"
-                            allowfullscreen>
-                    </iframe>
-                </div>
-            }
+
         </div>
 
         @* 🏢 Detalles del Lugar *@
