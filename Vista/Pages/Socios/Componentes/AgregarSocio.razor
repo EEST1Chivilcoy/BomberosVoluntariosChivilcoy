@@ -139,6 +139,22 @@
         padding-top: 12px !important;
         border-top: 1px dashed #f0f0f0 !important;
     }
+
+    .map-container {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        max-height: 350px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        overflow: hidden;
+    }
+
+    @@media screen and (max-width: 768px) {
+        .map-container {
+            max-height: 300px;
+            margin-top: 16px;
+        }
+    }
 </style>
 
 <div class="container">
@@ -246,6 +262,19 @@
                                     </FormItem>
                                 </AntDesign.Col>
                             </AntDesign.Row>
+
+                            @if (socioView.Latitud.HasValue && socioView.Longitud.HasValue)
+                            {
+                                <AntDesign.Row Gutter="16">
+                                    <div class="map-container">
+                                        <iframe style="border:0; width: 100%; height: 100%;"
+                                                src="@GetGoogleMapsSatelliteUrl(socioView.Latitud.Value, socioView.Longitud.Value)"
+                                                frameborder="0"
+                                                allowfullscreen>
+                                        </iframe>
+                                    </div>
+                                </AntDesign.Row>
+                            }
 
                             <AntDesign.Row Gutter="16">
                                 <AntDesign.Col Span="24">
