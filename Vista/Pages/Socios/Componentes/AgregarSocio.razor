@@ -249,14 +249,19 @@
 				<div class="card-title">Información Cuota</div>
 
 				<AntDesign.Row Gutter="16">
-					<AntDesign.Col Span="12">
+					<AntDesign.Col Span="8">
 						<FormItem Label="Frecuencia de Pago">
 							<EnumSelect TEnum="FrecuenciaPago ?" @bind-Value="@socioView.FrecuenciaPago" AllowClear Placeholder="Ingrese la frecuencia de pago" />
 						</FormItem>
 					</AntDesign.Col>
-					<AntDesign.Col Span="12">
+					<AntDesign.Col Span="8">
 						<FormItem Label="Monto">
 							<Input @bind-Value="@socioView.CuotaValor" Placeholder="Ingrese el monto de la cuota" />
+						</FormItem>
+					</AntDesign.Col>
+					<AntDesign.Col Span="8">
+						<FormItem Label="Forma de Pago">
+                            <EnumSelect TEnum="FormaDePago?" Placeholder="Seleccione forma de pago" DefaultValue="FormaDePago.Efectivo" Disabled />
 						</FormItem>
 					</AntDesign.Col>
 				</AntDesign.Row>
@@ -354,6 +359,9 @@
 
 		[Required(ErrorMessage = "La frecuencia de pago es obligatoria.")]
 		public FrecuenciaPago? FrecuenciaPago { get; set; }
+
+		[Required(ErrorMessage = "La forma de pago es obligatoria.")]
+        public FormaDePago? FormaPago { get; set; }
 	}
 
 	public class SocioPersonaViewModel : SocioViewModel
@@ -434,7 +442,8 @@
 				Telefono = socioView.Telefono!,
 				Email = socioView.Email,
 				MontoCuota = socioView.CuotaValor!.Value,
-				FrecuenciaDePago = socioView.FrecuenciaPago!.Value
+				FrecuenciaDePago = socioView.FrecuenciaPago!.Value,
+				FormaPago = socioView.FormaPago!.Value
 			};
 
 			if (socioView is SocioPersonaViewModel socioPersonaView)
