@@ -172,186 +172,179 @@
         </div>
     </div>
 
-    @if (isLoading)
+    @if (socioView != null)
     {
-        <Spin Tip="Cargando..." />
+        <Form Model="@socioView"
+              Layout="FormLayout.Vertical"
+              OnFinish="OnFinish"
+              ValidateOnChange="@true"
+              Loading="isLoading">
+
+            @*Información General (Común para todos)*@
+            <div class="card">
+                <div class="card-title">Información General</div>
+                <AntDesign.Row Gutter="24">
+                    <AntDesign.Col Span="24">
+                        <AntDesign.Row Gutter="16">
+                            <AntDesign.Col Span="4">
+                                <FormItem Label="Nro Socio">
+                                    <Input @bind-Value="@socioView.NroSocio" Placeholder="Ingrese Nro Socio" />
+                                </FormItem>
+                            </AntDesign.Col>
+                            <AntDesign.Col Span="10">
+                                <FormItem Label="Nombre">
+                                    <Input @bind-Value="@socioView.Nombre" />
+                                </FormItem>
+                            </AntDesign.Col>
+                            @if (socioView is SocioPersonaViewModel sociopersonaView)
+                            {
+                                <AntDesign.Col Span="10">
+                                    <FormItem Label="Apellido">
+                                        <Input @bind-Value="@sociopersonaView.Apellido" />
+                                    </FormItem>
+                                </AntDesign.Col>
+                            }
+                        </AntDesign.Row>
+
+
+                        <AntDesign.Row Gutter="16">
+                            <AntDesign.Col Span="8">
+                                @if (socioView is SocioPersonaViewModel personalView)
+                                {
+                                    <FormItem Label="DNI">
+                                        <Input @bind-Value="@personalView.Documento" Placeholder="Ingrese el DNI" />
+                                    </FormItem>
+                                }
+                                else if (socioView is SocioEmpresaViewModel empresaView)
+                                {
+                                    <FormItem Label="CUIT">
+                                        <Input @bind-Value="@empresaView.CUIT" Placeholder="Ingrese el CUIT" />
+                                    </FormItem>
+                                }
+                            </AntDesign.Col>
+                            <AntDesign.Col Span="8">
+                                <FormItem Label="Fecha de Ingreso">
+                                    <DatePicker @bind-Value="@socioView.FechaIngreso"
+                                                Picker="@DatePickerType.Date"
+                                                Style="width: 100%;"
+                                                Placeholder="@("Seleccione fecha")"
+                                                AllowClear />
+                                </FormItem>
+                            </AntDesign.Col>
+                        </AntDesign.Row>
+
+                        <AntDesign.Row Gutter="16">
+                            <AntDesign.Col Span="12">
+                                <FormItem Label="Dirección">
+                                    <Select TItem="Direccion"
+                                            TItemValue="Direccion"
+                                            DataSource="@direcciones"
+                                            @bind-Value="@socioView.Direccion"
+                                            Placeholder="Ingrese una direccion o coordenadas"
+                                            LabelName="@nameof(Direccion.Descripcion)"
+                                            OnSearch="OnSearch"
+                                            SearchDebounceMilliseconds="350"
+                                            EnableSearch
+                                            Loading="@_loading"
+                                            OnSelectedItemChanged="OnStreetSelected">
+                                    </Select>
+                                </FormItem>
+                            </AntDesign.Col>
+                            <AntDesign.Col Span="12">
+                                <FormItem Label="Zona">
+                                    <EnumSelect TEnum="Zona ?" @bind-Value="@socioView.Zona" />
+                                </FormItem>
+                            </AntDesign.Col>
+                        </AntDesign.Row>
+
+                        @if (socioView.Latitud.HasValue && socioView.Longitud.HasValue)
+                        {
+                            <AntDesign.Row Gutter="16">
+                                <div class="map-container">
+                                    <iframe style="border:0; width: 100%; height: 100%;"
+                                            src="@GetGoogleMapsSatelliteUrl(socioView.Latitud.Value, socioView.Longitud.Value)"
+                                            frameborder="0"
+                                            allowfullscreen>
+                                    </iframe>
+                                </div>
+                            </AntDesign.Row>
+                        }
+
+                        <AntDesign.Row Gutter="16">
+                            <AntDesign.Col Span="24">
+                                <FormItem Label="Ocupación">
+                                    <TextArea @bind-Value="@socioView.Ocupacion" Placeholder="Ingrese ocupación" Rows="2" MaxLength="255" />
+                                </FormItem>
+                            </AntDesign.Col>
+                        </AntDesign.Row>
+
+
+                    </AntDesign.Col>
+                </AntDesign.Row>
+            </div>
+
+            @*Información Profesional*@
+            <div class="card">
+                <div class="card-title">Información Cuota</div>
+
+                <AntDesign.Row Gutter="16">
+                    <AntDesign.Col Span="8">
+                        <FormItem Label="Frecuencia de Pago">
+                            <EnumSelect TEnum="FrecuenciaPago ?" @bind-Value="@socioView.FrecuenciaPago" AllowClear Placeholder="Ingrese la frecuencia de pago" />
+                        </FormItem>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="8">
+                        <FormItem Label="Monto">
+                            <Input @bind-Value="@socioView.CuotaValor" Placeholder="Ingrese el monto de la cuota" />
+                        </FormItem>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="8">
+                        <FormItem Label="Forma de Pago">
+                            <EnumSelect TEnum="FormaDePago ?" Placeholder="Seleccione forma de pago" DefaultValue="FormaDePago.Efectivo" Disabled />
+                        </FormItem>
+                    </AntDesign.Col>
+                </AntDesign.Row>
+            </div>
+
+            @*Información de Contacto*@
+            <div class="card">
+                <div class="card-title">Información de Contacto</div>
+                <AntDesign.Row Gutter="16">
+                    <AntDesign.Col Span="12">
+                        <FormItem Label="Teléfono">
+                            <Input @bind-Value="@socioView.Telefono" Placeholder="Ingrese teléfono celular" />
+                        </FormItem>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="12">
+                        <FormItem Label="Email">
+                            <Input @bind-Value="@socioView.Email" Placeholder="Ingrese correo electrónico" />
+                        </FormItem>
+                    </AntDesign.Col>
+                </AntDesign.Row>
+            </div>
+
+            @*Botones de Acción*@
+            <div class="action-buttons">
+                <Button Type="@ButtonType.Default" OnClick="Cancelar">
+                    Cancelar
+                </Button>
+                <Button Type="@ButtonType.Primary" HtmlType="submit" Class="primary-button">
+                    Registrar Socio
+                </Button>
+            </div>
+        </Form>
     }
     else
     {
-        @if (socioView != null)
-        {
-            <Form Model="@socioView"
-                  Layout="FormLayout.Vertical"
-                  OnFinish="OnFinish"
-                  ValidateOnChange="@true"
-                  Loading="isLoading">
-
-                @*Información General (Común para todos)*@
-                <div class="card">
-                    <div class="card-title">Información General</div>
-                    <AntDesign.Row Gutter="24">
-                        <AntDesign.Col Span="24">
-                            <AntDesign.Row Gutter="16">
-                                <AntDesign.Col Span="4">
-                                    <FormItem Label="Nro Socio">
-                                        <Input @bind-Value="@socioView.NroSocio" Placeholder="Ingrese Nro Socio" />
-                                    </FormItem>
-                                </AntDesign.Col>
-                                <AntDesign.Col Span="10">
-                                    <FormItem Label="Nombre">
-                                        <Input @bind-Value="@socioView.Nombre" />
-                                    </FormItem>
-                                </AntDesign.Col>
-                                @if (socioView is SocioPersonaViewModel sociopersonaView)
-                                {
-                                    <AntDesign.Col Span="10">
-                                        <FormItem Label="Apellido">
-                                            <Input @bind-Value="@sociopersonaView.Apellido" />
-                                        </FormItem>
-                                    </AntDesign.Col>
-                                }
-                            </AntDesign.Row>
-
-
-                            <AntDesign.Row Gutter="16">
-                                <AntDesign.Col Span="8">
-                                    @if (socioView is SocioPersonaViewModel personalView)
-                                    {
-                                        <FormItem Label="DNI">
-                                            <Input @bind-Value="@personalView.Documento" Placeholder="Ingrese el DNI" />
-                                        </FormItem>
-                                    }
-                                    else if (socioView is SocioEmpresaViewModel empresaView)
-                                    {
-                                        <FormItem Label="CUIT">
-                                            <Input @bind-Value="@empresaView.CUIT" Placeholder="Ingrese el CUIT" />
-                                        </FormItem>
-                                    }
-                                </AntDesign.Col>
-                                <AntDesign.Col Span="8">
-                                    <FormItem Label="Fecha de Ingreso">
-                                        <DatePicker @bind-Value="@socioView.FechaIngreso"
-                                                    Picker="@DatePickerType.Date"
-                                                    Style="width: 100%;"
-                                                    Placeholder="@("Seleccione fecha")"
-                                                    AllowClear />
-                                    </FormItem>
-                                </AntDesign.Col>
-                            </AntDesign.Row>
-
-                            <AntDesign.Row Gutter="16">
-                                <AntDesign.Col Span="12">
-                                    <FormItem Label="Dirección">
-                                        <Select TItem="Direccion"
-                                                TItemValue="Direccion"
-                                                DataSource="@direcciones"
-                                                @bind-Value="@socioView.Direccion"
-                                                Placeholder="Ingrese una direccion o coordenadas"
-                                                LabelName="@nameof(Direccion.Descripcion)"
-                                                OnSearch="OnSearch"
-                                                SearchDebounceMilliseconds="350"
-                                                EnableSearch
-                                                Loading="@_loading"
-                                                OnSelectedItemChanged="OnStreetSelected">
-                                        </Select>
-                                    </FormItem>
-                                </AntDesign.Col>
-                                <AntDesign.Col Span="12">
-                                    <FormItem Label="Zona">
-                                        <EnumSelect TEnum="Zona ?" @bind-Value="@socioView.Zona" />
-                                    </FormItem>
-                                </AntDesign.Col>
-                            </AntDesign.Row>
-
-                            @if (socioView.Latitud.HasValue && socioView.Longitud.HasValue)
-                            {
-                                <AntDesign.Row Gutter="16">
-                                    <div class="map-container">
-                                        <iframe style="border:0; width: 100%; height: 100%;"
-                                                src="@GetGoogleMapsSatelliteUrl(socioView.Latitud.Value, socioView.Longitud.Value)"
-                                                frameborder="0"
-                                                allowfullscreen>
-                                        </iframe>
-                                    </div>
-                                </AntDesign.Row>
-                            }
-
-                            <AntDesign.Row Gutter="16">
-                                <AntDesign.Col Span="24">
-                                    <FormItem Label="Ocupación">
-                                        <TextArea @bind-Value="@socioView.Ocupacion" Placeholder="Ingrese ocupación" Rows="2" MaxLength="255" />
-                                    </FormItem>
-                                </AntDesign.Col>
-                            </AntDesign.Row>
-
-
-                        </AntDesign.Col>
-                    </AntDesign.Row>
-                </div>
-
-                @*Información Profesional*@
-                <div class="card">
-                    <div class="card-title">Información Cuota</div>
-
-                    <AntDesign.Row Gutter="16">
-                        <AntDesign.Col Span="8">
-                            <FormItem Label="Frecuencia de Pago">
-                                <EnumSelect TEnum="FrecuenciaPago ?" @bind-Value="@socioView.FrecuenciaPago" AllowClear Placeholder="Ingrese la frecuencia de pago" />
-                            </FormItem>
-                        </AntDesign.Col>
-                        <AntDesign.Col Span="8">
-                            <FormItem Label="Monto">
-                                <Input @bind-Value="@socioView.CuotaValor" Placeholder="Ingrese el monto de la cuota" />
-                            </FormItem>
-                        </AntDesign.Col>
-                        <AntDesign.Col Span="8">
-                            <FormItem Label="Forma de Pago">
-                                <EnumSelect TEnum="FormaDePago ?" Placeholder="Seleccione forma de pago" DefaultValue="FormaDePago.Efectivo" Disabled />
-                            </FormItem>
-                        </AntDesign.Col>
-                    </AntDesign.Row>
-                </div>
-
-                @*Información de Contacto*@
-                <div class="card">
-                    <div class="card-title">Información de Contacto</div>
-                    <AntDesign.Row Gutter="16">
-                        <AntDesign.Col Span="12">
-                            <FormItem Label="Teléfono">
-                                <Input @bind-Value="@socioView.Telefono" Placeholder="Ingrese teléfono celular" />
-                            </FormItem>
-                        </AntDesign.Col>
-                        <AntDesign.Col Span="12">
-                            <FormItem Label="Email">
-                                <Input @bind-Value="@socioView.Email" Placeholder="Ingrese correo electrónico" />
-                            </FormItem>
-                        </AntDesign.Col>
-                    </AntDesign.Row>
-                </div>
-
-                @*Botones de Acción*@
-                <div class="action-buttons">
-                    <Button Type="@ButtonType.Default" OnClick="Cancelar">
-                        Cancelar
-                    </Button>
-                    <Button Type="@ButtonType.Primary" HtmlType="submit" Class="primary-button">
-                        Registrar Socio
-                    </Button>
-                </div>
-            </Form>
-        }
-        else
-        {
-            <Result Status="ResultStatus.Error"
-                    Title="Error"
-                    SubTitle="No se ha inicializado correctamente el formulario.">
-                <Extra>
-                    <Button Type="@ButtonType.Primary" OnClick="Cancelar">
-                        Volver al listado
-                    </Button>
-                </Extra>
-            </Result>
-        }
+        <Result Status="ResultStatus.Error"
+                Title="Error"
+                SubTitle="No se ha inicializado correctamente el formulario.">
+            <Extra>
+                <Button Type="@ButtonType.Primary" OnClick="Cancelar">
+                    Volver al listado
+                </Button>
+            </Extra>
+        </Result>
     }
 </div>
 
@@ -361,7 +354,7 @@
     private SocioViewModel? socioView;
     private List<Direccion> direcciones = new();
 
-    private bool isLoading = true;
+    private bool isLoading = false;
     private bool _loading = false; // Variable para controlar el estado de carga del select de direcciones
 
     private CancellationTokenSource? _searchCancellationTokenSource;
@@ -419,7 +412,7 @@
         public FrecuenciaPago? FrecuenciaPago { get; set; }
 
         [Required(ErrorMessage = "La forma de pago es obligatoria.")]
-        public FormaDePago? FormaPago { get; set; }
+        public FormaDePago? FormaPago { get; set; } = FormaDePago.Efectivo;
     }
 
     public class SocioPersonaViewModel : SocioViewModel
@@ -449,18 +442,8 @@
 
     protected override async Task OnInitializedAsync()
     {
-        isLoading = true;
-
         try
         {
-            isApiAvailable = await GeorefService.CheckApiConnectionAsync();
-
-            if (!isApiAvailable)
-            {
-                await message.ErrorAsync("La API de búsqueda de direcciones no está disponible.");
-                throw new InvalidOperationException("La API no está disponible en este momento.");
-            }
-
             TipoSocio = TipoSocio.ToLower();
 
             if (TipoSocio == "persona")
@@ -473,8 +456,17 @@
             }
             else
             {
-                await message.ErrorAsync("Tipo de socio inválido. Por favor, verifique la URL.");
-                Cancelar();
+                throw new InvalidOperationException("Tipo de socio inválido. Por favor, verifique la URL.");
+            }
+
+            isLoading = true;
+
+            isApiAvailable = await GeorefService.CheckApiConnectionAsync();
+
+            if (!isApiAvailable)
+            {
+                await message.ErrorAsync("La API de búsqueda de direcciones no está disponible.");
+                throw new InvalidOperationException("La API no está disponible en este momento.");
             }
         }
         catch (Exception ex)
