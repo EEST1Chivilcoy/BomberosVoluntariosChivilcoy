@@ -33,5 +33,8 @@ namespace Vista.Data.Enums.Socios
 
         [Display(Name = "Depósito Bancario")]
         DepositoBancario = 6,
+
+        [Display(Name = "Débito Automático")]
+        DebitoAutomatico = 7
     }
 }

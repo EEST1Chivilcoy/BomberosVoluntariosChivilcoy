@@ -241,7 +241,7 @@
                                         !string.IsNullOrEmpty(Model.Depto);
 
                 // Activa el switch si ya se había convocado una guardia
-                SeConvocoGuardia = Model.GuardiaSelecionada != default(Guardia);
+                SeConvocoGuardia = Model.GuardiaSelecionada != null;
             }
         }
         catch (Exception ex)
