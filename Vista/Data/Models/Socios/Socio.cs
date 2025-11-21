@@ -86,12 +86,6 @@ namespace Vista.Data.Models.Socios
         public string? Apellido { get; set; } = string.Empty;
 
         /// <summary>
-        /// Representa la localidad del socio.
-        /// </summary>
-        [Required(ErrorMessage = "la localidad del socio es obligatoria.")]
-        public string Localidad { get; set; } = string.Empty;
-
-        /// <summary>
         /// Representa la dirección del socio.
         /// </summary>
         [Required(ErrorMessage = "la dirección del socio es obligatoria.")]
@@ -100,12 +94,14 @@ namespace Vista.Data.Models.Socios
         /// <summary>
         /// Representa la Latitud del socio. (Dirección GPS)
         /// </summary>
-        public double? Latitud { get; set; }
+        [Required]
+        public double Latitud { get; set; }
 
         /// <summary>
         /// Representa la Longitud del socio. (Dirección GPS)
         /// </summary>
-        public double? Longitud { get; set; }
+        [Required]
+        public double Longitud { get; set; }
 
         /// <summary>
         /// Representa la zona del socio.

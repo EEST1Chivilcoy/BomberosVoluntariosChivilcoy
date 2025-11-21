@@ -1,480 +1,617 @@
 ﻿@using Vista.Data.Enums.Socios
 @using Vista.Data.Enums.Discriminadores
 @using Vista.Data.Models.Socios
+@using Vista.DTOs.Nominatim
 
 @page "/fire-force/socios/crear/{TipoSocio}"
 
 @*Servicios Utilizados*@
 @using Vista.Services
 @inject NavigationManager navigationManager
+@inject INominatimService GeorefService
 @inject ISocioService SocioService
 @inject IMessageService message
+@implements IDisposable
 
 <style>
-	/* Estilos generales */
-	.container {
-		padding: 24px !important;
-		min-height: 100vh !important;
-	}
+    /* Estilos generales */
+    .container {
+        padding: 24px !important;
+        min-height: 100vh !important;
+    }
 
-	.page-title {
-		font-size: 24px !important;
-		font-weight: 600 !important;
-		color: #1f1f1f !important;
-		margin-bottom: 24px !important;
-		display: flex !important;
-		align-items: center !important;
-	}
+    .page-title {
+        font-size: 24px !important;
+        font-weight: 600 !important;
+        color: #1f1f1f !important;
+        margin-bottom: 24px !important;
+        display: flex !important;
+        align-items: center !important;
+    }
 
-	.page-title-icon {
-		margin-right: 12px !important;
-		color: #c43a3a !important;
-	}
+    .page-title-icon {
+        margin-right: 12px !important;
+        color: #c43a3a !important;
+    }
 
-	.card {
-		background-color: white !important;
-		border-radius: 8px !important;
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
-		padding: 24px !important;
-		margin-bottom: 24px !important;
-	}
+    .card {
+        background-color: white !important;
+        border-radius: 8px !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+        padding: 24px !important;
+        margin-bottom: 24px !important;
+    }
 
-	.card-title {
-		font-size: 18px !important;
-		font-weight: 500 !important;
-		color: #434343 !important;
-		margin-bottom: 16px !important;
-		padding-bottom: 12px !important;
-		border-bottom: 1px solid #f0f0f0 !important;
-	}
+    .card-title {
+        font-size: 18px !important;
+        font-weight: 500 !important;
+        color: #434343 !important;
+        margin-bottom: 16px !important;
+        padding-bottom: 12px !important;
+        border-bottom: 1px solid #f0f0f0 !important;
+    }
 
-	/* Estilos de la foto */
-	.profile-photo-container {
-		display: flex !important;
-		flex-direction: column !important;
-		align-items: center !important;
-		padding: 16px !important;
-	}
+    /* Estilos de la foto */
+    .profile-photo-container {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        padding: 16px !important;
+    }
 
-	.photo-preview {
-		width: 150px !important;
-		height: 150px !important;
-		border-radius: 50% !important;
-		overflow: hidden !important;
-		margin-bottom: 16px !important;
-		display: flex !important;
-		align-items: center !important;
-		justify-content: center !important;
-	}
+    .photo-preview {
+        width: 150px !important;
+        height: 150px !important;
+        border-radius: 50% !important;
+        overflow: hidden !important;
+        margin-bottom: 16px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
 
-	.upload-actions {
-		display: flex !important;
-		gap: 8px !important;
-	}
+    .upload-actions {
+        display: flex !important;
+        gap: 8px !important;
+    }
 
-	/* Estilo para las secciones del formulario */
-	.form-section {
-		margin-bottom: 24px !important;
-	}
+    /* Estilo para las secciones del formulario */
+    .form-section {
+        margin-bottom: 24px !important;
+    }
 
-	/* Estilo para los botones de acción */
-	.action-buttons {
-		display: flex !important;
-		justify-content: flex-end !important;
-		gap: 12px !important;
-		margin-top: 24px !important;
-	}
+    /* Estilo para los botones de acción */
+    .action-buttons {
+        display: flex !important;
+        justify-content: flex-end !important;
+        gap: 12px !important;
+        margin-top: 24px !important;
+    }
 
-	/* Estilo para los campos */
-	.ant-form-item {
-		margin-bottom: 16px !important;
-	}
+    /* Estilo para los campos */
+    .ant-form-item {
+        margin-bottom: 16px !important;
+    }
 
-	.ant-form-item-label > label {
-		color: #595959 !important;
-		font-weight: 500 !important;
-	}
+    .ant-form-item-label > label {
+        color: #595959 !important;
+        font-weight: 500 !important;
+    }
 
-	.ant-input,
-	.ant-select:not(.ant-select-customize-input) .ant-select-selector,
-	.ant-picker,
-	.ant-input-number {
-		border-radius: 4px !important;
-		border: 1px solid #d9d9d9 !important;
-	}
+    .ant-input,
+    .ant-select:not(.ant-select-customize-input) .ant-select-selector,
+    .ant-picker,
+    .ant-input-number {
+        border-radius: 4px !important;
+        border: 1px solid #d9d9d9 !important;
+    }
 
-		.ant-input:hover,
-		.ant-select:not(.ant-select-customize-input) .ant-select-selector:hover,
-		.ant-picker:hover,
-		.ant-input-number:hover {
-			border-color: #c43a3a !important;
-		}
+        .ant-input:hover,
+        .ant-select:not(.ant-select-customize-input) .ant-select-selector:hover,
+        .ant-picker:hover,
+        .ant-input-number:hover {
+            border-color: #c43a3a !important;
+        }
 
-		.ant-input:focus,
-		.ant-select-focused:not(.ant-select-customize-input) .ant-select-selector,
-		.ant-picker-focused,
-		.ant-input-number-focused {
-			border-color: #c43a3a !important;
-			box-shadow: 0 0 0 2px rgba(196, 58, 58, 0.2) !important;
-		}
+        .ant-input:focus,
+        .ant-select-focused:not(.ant-select-customize-input) .ant-select-selector,
+        .ant-picker-focused,
+        .ant-input-number-focused {
+            border-color: #c43a3a !important;
+            box-shadow: 0 0 0 2px rgba(196, 58, 58, 0.2) !important;
+        }
 
-	/* Ajuste visual para el switch */
-	.ant-switch-checked {
-		background-color: #c43a3a !important;
-	}
+    /* Ajuste visual para el switch */
+    .ant-switch-checked {
+        background-color: #c43a3a !important;
+    }
 
-	/* Estilo para campos requeridos */
-	.required-field::after {
-		content: '*' !important;
-		color: #c43a3a !important;
-		margin-left: 4px !important;
-	}
+    /* Estilo para campos requeridos */
+    .required-field::after {
+        content: '*' !important;
+        color: #c43a3a !important;
+        margin-left: 4px !important;
+    }
 
-	/* Estilo para el campo condicional de chofer */
-	.conditional-field {
-		margin-top: 12px !important;
-		padding-top: 12px !important;
-		border-top: 1px dashed #f0f0f0 !important;
-	}
+    /* Estilo para el campo condicional de chofer */
+    .conditional-field {
+        margin-top: 12px !important;
+        padding-top: 12px !important;
+        border-top: 1px dashed #f0f0f0 !important;
+    }
 </style>
 
 <div class="container">
-	<div class="page-title">
-		<div>
-			@if (TipoSocio.ToLower() == "persona")
-			{
-				<Icon Type="user-add" Class="page-title-icon" />
-			}
-			else if (TipoSocio.ToLower() == "empresa")
-			{
-				<Icon Type="shop" Class="page-title-icon" />
-			}
-			<span>Registro de Nuevo Socio</span>
-		</div>
-	</div>
+    <div class="page-title">
+        <div>
+            @if (TipoSocio.ToLower() == "persona")
+            {
+                <Icon Type="user-add" Class="page-title-icon" />
+            }
+            else if (TipoSocio.ToLower() == "empresa")
+            {
+                <Icon Type="shop" Class="page-title-icon" />
+            }
+            <span>Registro de Nuevo Socio</span>
+        </div>
+    </div>
 
-	@if (socioView != null)
-	{
-		<Form Model="@socioView"
-			  Layout="FormLayout.Vertical"
-			  OnFinish="OnFinish"
-			  Loading="isLoading">
+    @if (isLoading)
+    {
+        <Spin Tip="Cargando..." />
+    }
+    else
+    {
+        @if (socioView != null)
+        {
+            <Form Model="@socioView"
+                  Layout="FormLayout.Vertical"
+                  OnFinish="OnFinish"
+                  ValidateOnChange="@true"
+                  Loading="isLoading">
 
-			@*Información General (Común para todos)*@
-			<div class="card">
-				<div class="card-title">Información General</div>
-				<AntDesign.Row Gutter="24">
-					<AntDesign.Col Span="24">
-						<AntDesign.Row Gutter="16">
-							<AntDesign.Col Span="4">
-								<FormItem Label="Nro Socio">
-									<Input @bind-Value="@socioView.NroSocio" Placeholder="Ingrese Nro Socio" />
-								</FormItem>
-							</AntDesign.Col>
-							<AntDesign.Col Span="10">
-								<FormItem Label="Nombre">
-									<Input @bind-Value="@socioView.Nombre" />
-								</FormItem>
-							</AntDesign.Col>
-							@if (socioView is SocioPersonaViewModel sociopersonaView)
-							{
-								<AntDesign.Col Span="10">
-									<FormItem Label="Apellido">
-										<Input @bind-Value="@sociopersonaView.Apellido" />
-									</FormItem>
-								</AntDesign.Col>
-							}
-						</AntDesign.Row>
-
-
-						<AntDesign.Row Gutter="16">
-							<AntDesign.Col Span="8">
-								@if (socioView is SocioPersonaViewModel personalView)
-								{
-									<FormItem Label="DNI">
-										<Input @bind-Value="@personalView.Documento" Placeholder="Ingrese el DNI" />
-									</FormItem>
-								}
-								else if (socioView is SocioEmpresaViewModel empresaView)
-								{
-									<FormItem Label="CUIT">
-										<Input @bind-Value="@empresaView.CUIT" Placeholder="Ingrese el CUIT" />
-									</FormItem>
-								}
-							</AntDesign.Col>
-							<AntDesign.Col Span="8">
-								<FormItem Label="Fecha de Ingreso">
-									<DatePicker @bind-Value="@socioView.FechaIngreso"
-												Picker="@DatePickerType.Date"
-												Style="width: 100%;"
-												Placeholder="@("Seleccione fecha")"
-												AllowClear />
-								</FormItem>
-							</AntDesign.Col>
-						</AntDesign.Row>
-
-						<AntDesign.Row Gutter="16">
-							<AntDesign.Col Span="12">
-								<FormItem Label="Dirección">
-									<Input @bind-Value="@socioView.Direccion" Placeholder="Ingrese dirección" />
-								</FormItem>
-							</AntDesign.Col>
-							<AntDesign.Col Span="6">
-								<FormItem Label="Zona">
-									<EnumSelect TEnum="Zona ?" @bind-Value="@socioView.Zona" />
-								</FormItem>
-							</AntDesign.Col>
-							<AntDesign.Col Span="6">
-								<FormItem Label="Localidad">
-									<Input @bind-Value="@socioView.Localidad" Placeholder="Ingrese localidad" />
-								</FormItem>
-							</AntDesign.Col>
-						</AntDesign.Row>
-
-						<AntDesign.Row Gutter="16">
-							<AntDesign.Col Span="24">
-								<FormItem Label="Ocupación">
-									<TextArea @bind-Value="@socioView.Ocupacion" Placeholder="Ingrese ocupación" Rows="2" MaxLength="255" />
-								</FormItem>
-							</AntDesign.Col>
-						</AntDesign.Row>
+                @*Información General (Común para todos)*@
+                <div class="card">
+                    <div class="card-title">Información General</div>
+                    <AntDesign.Row Gutter="24">
+                        <AntDesign.Col Span="24">
+                            <AntDesign.Row Gutter="16">
+                                <AntDesign.Col Span="4">
+                                    <FormItem Label="Nro Socio">
+                                        <Input @bind-Value="@socioView.NroSocio" Placeholder="Ingrese Nro Socio" />
+                                    </FormItem>
+                                </AntDesign.Col>
+                                <AntDesign.Col Span="10">
+                                    <FormItem Label="Nombre">
+                                        <Input @bind-Value="@socioView.Nombre" />
+                                    </FormItem>
+                                </AntDesign.Col>
+                                @if (socioView is SocioPersonaViewModel sociopersonaView)
+                                {
+                                    <AntDesign.Col Span="10">
+                                        <FormItem Label="Apellido">
+                                            <Input @bind-Value="@sociopersonaView.Apellido" />
+                                        </FormItem>
+                                    </AntDesign.Col>
+                                }
+                            </AntDesign.Row>
 
 
-					</AntDesign.Col>
-				</AntDesign.Row>
-			</div>
+                            <AntDesign.Row Gutter="16">
+                                <AntDesign.Col Span="8">
+                                    @if (socioView is SocioPersonaViewModel personalView)
+                                    {
+                                        <FormItem Label="DNI">
+                                            <Input @bind-Value="@personalView.Documento" Placeholder="Ingrese el DNI" />
+                                        </FormItem>
+                                    }
+                                    else if (socioView is SocioEmpresaViewModel empresaView)
+                                    {
+                                        <FormItem Label="CUIT">
+                                            <Input @bind-Value="@empresaView.CUIT" Placeholder="Ingrese el CUIT" />
+                                        </FormItem>
+                                    }
+                                </AntDesign.Col>
+                                <AntDesign.Col Span="8">
+                                    <FormItem Label="Fecha de Ingreso">
+                                        <DatePicker @bind-Value="@socioView.FechaIngreso"
+                                                    Picker="@DatePickerType.Date"
+                                                    Style="width: 100%;"
+                                                    Placeholder="@("Seleccione fecha")"
+                                                    AllowClear />
+                                    </FormItem>
+                                </AntDesign.Col>
+                            </AntDesign.Row>
 
-			@*Información Profesional*@
-			<div class="card">
-				<div class="card-title">Información Cuota</div>
+                            <AntDesign.Row Gutter="16">
+                                <AntDesign.Col Span="12">
+                                    <FormItem Label="Dirección">
+                                        <Select TItem="Direccion"
+                                                TItemValue="Direccion"
+                                                DataSource="@direcciones"
+                                                @bind-Value="@socioView.Direccion"
+                                                Placeholder="Ingrese una direccion o coordenadas"
+                                                LabelName="@nameof(Direccion.Descripcion)"
+                                                OnSearch="OnSearch"
+                                                SearchDebounceMilliseconds="350"
+                                                EnableSearch
+                                                Loading="@_loading"
+                                                OnSelectedItemChanged="OnStreetSelected">
+                                        </Select>
+                                    </FormItem>
+                                </AntDesign.Col>
+                                <AntDesign.Col Span="12">
+                                    <FormItem Label="Zona">
+                                        <EnumSelect TEnum="Zona ?" @bind-Value="@socioView.Zona" />
+                                    </FormItem>
+                                </AntDesign.Col>
+                            </AntDesign.Row>
 
-				<AntDesign.Row Gutter="16">
-					<AntDesign.Col Span="8">
-						<FormItem Label="Frecuencia de Pago">
-							<EnumSelect TEnum="FrecuenciaPago ?" @bind-Value="@socioView.FrecuenciaPago" AllowClear Placeholder="Ingrese la frecuencia de pago" />
-						</FormItem>
-					</AntDesign.Col>
-					<AntDesign.Col Span="8">
-						<FormItem Label="Monto">
-							<Input @bind-Value="@socioView.CuotaValor" Placeholder="Ingrese el monto de la cuota" />
-						</FormItem>
-					</AntDesign.Col>
-					<AntDesign.Col Span="8">
-						<FormItem Label="Forma de Pago">
-                            <EnumSelect TEnum="FormaDePago?" Placeholder="Seleccione forma de pago" DefaultValue="FormaDePago.Efectivo" Disabled />
-						</FormItem>
-					</AntDesign.Col>
-				</AntDesign.Row>
-			</div>
+                            <AntDesign.Row Gutter="16">
+                                <AntDesign.Col Span="24">
+                                    <FormItem Label="Ocupación">
+                                        <TextArea @bind-Value="@socioView.Ocupacion" Placeholder="Ingrese ocupación" Rows="2" MaxLength="255" />
+                                    </FormItem>
+                                </AntDesign.Col>
+                            </AntDesign.Row>
 
-			@*Información de Contacto*@
-			<div class="card">
-				<div class="card-title">Información de Contacto</div>
-				<AntDesign.Row Gutter="16">
-					<AntDesign.Col Span="12">
-						<FormItem Label="Teléfono">
-							<Input @bind-Value="@socioView.Telefono" Placeholder="Ingrese teléfono celular" />
-						</FormItem>
-					</AntDesign.Col>
-					<AntDesign.Col Span="12">
-						<FormItem Label="Email">
-							<Input @bind-Value="@socioView.Email" Placeholder="Ingrese correo electrónico" />
-						</FormItem>
-					</AntDesign.Col>
-				</AntDesign.Row>
-			</div>
 
-			@*Botones de Acción*@
-			<div class="action-buttons">
-				<Button Type="@ButtonType.Default" OnClick="Cancelar">
-					Cancelar
-				</Button>
-				<Button Type="@ButtonType.Primary" HtmlType="submit" Class="primary-button">
-					Registrar Socio
-				</Button>
-			</div>
-		</Form>
-	}
-	else
-	{
-		<Result Status="ResultStatus.Error"
-				Title="Error"
-				SubTitle="No se ha inicializado correctamente el formulario.">
-			<Extra>
-				<Button Type="@ButtonType.Primary" OnClick="Cancelar">
-					Volver al listado
-				</Button>
-			</Extra>
-		</Result>
-	}
+                        </AntDesign.Col>
+                    </AntDesign.Row>
+                </div>
+
+                @*Información Profesional*@
+                <div class="card">
+                    <div class="card-title">Información Cuota</div>
+
+                    <AntDesign.Row Gutter="16">
+                        <AntDesign.Col Span="8">
+                            <FormItem Label="Frecuencia de Pago">
+                                <EnumSelect TEnum="FrecuenciaPago ?" @bind-Value="@socioView.FrecuenciaPago" AllowClear Placeholder="Ingrese la frecuencia de pago" />
+                            </FormItem>
+                        </AntDesign.Col>
+                        <AntDesign.Col Span="8">
+                            <FormItem Label="Monto">
+                                <Input @bind-Value="@socioView.CuotaValor" Placeholder="Ingrese el monto de la cuota" />
+                            </FormItem>
+                        </AntDesign.Col>
+                        <AntDesign.Col Span="8">
+                            <FormItem Label="Forma de Pago">
+                                <EnumSelect TEnum="FormaDePago ?" Placeholder="Seleccione forma de pago" DefaultValue="FormaDePago.Efectivo" Disabled />
+                            </FormItem>
+                        </AntDesign.Col>
+                    </AntDesign.Row>
+                </div>
+
+                @*Información de Contacto*@
+                <div class="card">
+                    <div class="card-title">Información de Contacto</div>
+                    <AntDesign.Row Gutter="16">
+                        <AntDesign.Col Span="12">
+                            <FormItem Label="Teléfono">
+                                <Input @bind-Value="@socioView.Telefono" Placeholder="Ingrese teléfono celular" />
+                            </FormItem>
+                        </AntDesign.Col>
+                        <AntDesign.Col Span="12">
+                            <FormItem Label="Email">
+                                <Input @bind-Value="@socioView.Email" Placeholder="Ingrese correo electrónico" />
+                            </FormItem>
+                        </AntDesign.Col>
+                    </AntDesign.Row>
+                </div>
+
+                @*Botones de Acción*@
+                <div class="action-buttons">
+                    <Button Type="@ButtonType.Default" OnClick="Cancelar">
+                        Cancelar
+                    </Button>
+                    <Button Type="@ButtonType.Primary" HtmlType="submit" Class="primary-button">
+                        Registrar Socio
+                    </Button>
+                </div>
+            </Form>
+        }
+        else
+        {
+            <Result Status="ResultStatus.Error"
+                    Title="Error"
+                    SubTitle="No se ha inicializado correctamente el formulario.">
+                <Extra>
+                    <Button Type="@ButtonType.Primary" OnClick="Cancelar">
+                        Volver al listado
+                    </Button>
+                </Extra>
+            </Result>
+        }
+    }
 </div>
 
 @code {
-	[Parameter] public required string TipoSocio { get; set; } = null!; // Parámetro para el tipo de socio (empresa o persona)
+    [Parameter] public required string TipoSocio { get; set; } = null!; // Parámetro para el tipo de socio (empresa o persona)
 
-	private SocioViewModel? socioView;
+    private SocioViewModel? socioView;
+    private List<Direccion> direcciones = new();
 
-	private bool isLoading = true;
+    private bool isLoading = true;
+    private bool _loading = false; // Variable para controlar el estado de carga del select de direcciones
 
-	public abstract class SocioViewModel
-	{
-		[Required(ErrorMessage = "El número de socio es obligatorio.")]
-		public int? NroSocio { get; set; }
+    private CancellationTokenSource? _searchCancellationTokenSource;
+    private bool isApiAvailable;
 
-		// -- Datos Generales --
+    public abstract class SocioViewModel
+    {
+        [Required(ErrorMessage = "El número de socio es obligatorio.")]
+        public int? NroSocio { get; set; }
 
-		[Required(ErrorMessage = "El nombre es obligatorio.")]
-		[StringLength(255, ErrorMessage = "El nombre no puede superar los 255 caracteres.")]
-		public string? Nombre { get; set; }
+        // -- Datos Generales --
 
-		[Required(ErrorMessage = "La localidad es obligatoria.")]
-		[StringLength(255, ErrorMessage = "La localidad no puede superar los 255 caracteres.")]
-		public string? Localidad { get; set; }
+        [Required(ErrorMessage = "El nombre es obligatorio.")]
+        [StringLength(255, ErrorMessage = "El nombre no puede superar los 255 caracteres.")]
+        public string? Nombre { get; set; }
 
-		[Required(ErrorMessage = "La dirección es obligatoria.")]
-		[StringLength(255, ErrorMessage = "La dirección no puede superar los 255 caracteres.")]
-		public string? Direccion { get; set; }
+        [Required(ErrorMessage = "La dirección es obligatoria.")]
+        public Direccion? Direccion { get; set; }
 
-		[Required(ErrorMessage = "La zona es obligatoria.")]
-		public Zona? Zona { get; set; }
+        [Required(ErrorMessage = "El detalle de la dirección es obligatorio.")]
+        public string? DetalleDireccion { get; set; }
 
-		[Required(ErrorMessage = "La fecha de ingreso es obligatoria.")]
-		public DateTime? FechaIngreso { get; set; } = DateTime.Now;
+        [Required(ErrorMessage = "La latitud es obligatoria.")]
+        public double? Latitud { get; set; }
 
-		[StringLength(255, ErrorMessage = "La ocupación no puede superar los 255 caracteres.")]
-		public string? Ocupacion { get; set; }
+        [Required(ErrorMessage = "La longitud es obligatoria.")]
+        public double? Longitud { get; set; }
 
-		// -- Datos de Contacto --
+        [Required(ErrorMessage = "La zona es obligatoria.")]
+        public Zona? Zona { get; set; }
 
-		[Required(ErrorMessage = "El teléfono es obligatorio.")]
-		[StringLength(255, ErrorMessage = "El teléfono no puede superar los 255 caracteres.")]
-		public string? Telefono { get; set; }
+        [Required(ErrorMessage = "La fecha de ingreso es obligatoria.")]
+        public DateTime? FechaIngreso { get; set; } = DateTime.Now;
 
-		public string? Email { get; set; }
+        [StringLength(255, ErrorMessage = "La ocupación no puede superar los 255 caracteres.")]
+        public string? Ocupacion { get; set; }
 
-		// -- Datos de la Cuota --
+        // -- Datos de Contacto --
 
-		[Required(ErrorMessage = "El valor de la cuota es obligatoria.")]
-		public double? CuotaValor { get; set; }
+        [Required(ErrorMessage = "El teléfono es obligatorio.")]
+        [StringLength(255, ErrorMessage = "El teléfono no puede superar los 255 caracteres.")]
+        [Phone(ErrorMessage = "El número de telefono no tiene un formato válido.")]
+        public string? Telefono { get; set; }
 
-		[Required(ErrorMessage = "La frecuencia de pago es obligatoria.")]
-		public FrecuenciaPago? FrecuenciaPago { get; set; }
+        [StringLength(255, ErrorMessage = "El email no puede superar los 255 caracteres.")]
+        [EmailAddress(ErrorMessage = "El email no tiene un formato válido.")]
+        public string? Email { get; set; }
 
-		[Required(ErrorMessage = "La forma de pago es obligatoria.")]
+        // -- Datos de la Cuota --
+
+        [Required(ErrorMessage = "El valor de la cuota es obligatoria.")]
+        public double? CuotaValor { get; set; }
+
+        [Required(ErrorMessage = "La frecuencia de pago es obligatoria.")]
+        public FrecuenciaPago? FrecuenciaPago { get; set; }
+
+        [Required(ErrorMessage = "La forma de pago es obligatoria.")]
         public FormaDePago? FormaPago { get; set; }
-	}
+    }
 
-	public class SocioPersonaViewModel : SocioViewModel
-	{
-		// -- Datos Personales --
+    public class SocioPersonaViewModel : SocioViewModel
+    {
+        // -- Datos Personales --
 
-		[Required(ErrorMessage = "El número de documento es obligatorio.")]
-		[StringLength(8, MinimumLength = 7, ErrorMessage = "El documento debe tener entre 7 y 8 dígitos.")]
-		[RegularExpression(@"^\d{7,8}$", ErrorMessage = "El documento debe contener solo números.")]
-		public string? Documento { get; set; }
-
-
-		[Required(ErrorMessage = "El apellido es obligatorio.")]
-		[StringLength(255, ErrorMessage = "El apellido no puede superar los 255 caracteres.")]
-		public string? Apellido { get; set; }
-	}
+        [Required(ErrorMessage = "El número de documento es obligatorio.")]
+        [StringLength(8, MinimumLength = 7, ErrorMessage = "El documento debe tener entre 7 y 8 dígitos.")]
+        [RegularExpression(@"^\d{7,8}$", ErrorMessage = "El documento debe contener solo números.")]
+        public string? Documento { get; set; }
 
 
-	public class SocioEmpresaViewModel : SocioViewModel
-	{
-		// -- Datos de la Empresa --
-		[Required(ErrorMessage = "El CUIT es obligatorio.")]
-		[StringLength(11, MinimumLength = 11, ErrorMessage = "El CUIT debe tener exactamente 11 dígitos.")]
-		[RegularExpression(@"^(20|23|24|27|30|33|34)\d{8}\d$", ErrorMessage = "El CUIT no tiene un formato válido.")]
-		public string? CUIT { get; set; }
-	}
+        [Required(ErrorMessage = "El apellido es obligatorio.")]
+        [StringLength(255, ErrorMessage = "El apellido no puede superar los 255 caracteres.")]
+        public string? Apellido { get; set; }
+    }
 
-	protected override async Task OnInitializedAsync()
-	{
-		isLoading = true;
 
-		try
-		{
-			TipoSocio = TipoSocio.ToLower();
+    public class SocioEmpresaViewModel : SocioViewModel
+    {
+        // -- Datos de la Empresa --
+        [Required(ErrorMessage = "El CUIT es obligatorio.")]
+        [StringLength(11, MinimumLength = 11, ErrorMessage = "El CUIT debe tener exactamente 11 dígitos.")]
+        [RegularExpression(@"^(20|23|24|27|30|33|34)\d{8}\d$", ErrorMessage = "El CUIT no tiene un formato válido.")]
+        public string? CUIT { get; set; }
+    }
 
-			if (TipoSocio == "persona")
-			{
-				socioView = new SocioPersonaViewModel();
-			}
-			else if (TipoSocio == "empresa")
-			{
-				socioView = new SocioEmpresaViewModel();
-			}
-			else
-			{
-				await message.ErrorAsync("Tipo de socio inválido. Por favor, verifique la URL.");
-				Cancelar();
-			}
-		}
-		catch (Exception ex)
-		{
-			await message.ErrorAsync($"Error: {ex.Message}");
-			Cancelar();
-		}
-		finally
-		{
-			isLoading = false;
-		}
-	}
+    protected override async Task OnInitializedAsync()
+    {
+        isLoading = true;
 
-	private async Task OnFinish(EditContext editContext)
-	{
-		isLoading = true;
+        try
+        {
+            isApiAvailable = await GeorefService.CheckApiConnectionAsync();
 
-		try
-		{
+            if (!isApiAvailable)
+            {
+                await message.ErrorAsync("La API de búsqueda de direcciones no está disponible.");
+                throw new InvalidOperationException("La API no está disponible en este momento.");
+            }
 
-			// Preparar el objeto Socio para enviarlo al servicio
-			Socio socio = new Socio()
-			{
-				Id = socioView!.NroSocio!.Value,
-				Nombre = socioView.Nombre!,
-				Direccion = socioView.Direccion!,
-				Localidad = socioView.Localidad!,
-				Zona = socioView.Zona!.Value,
-				FechaIngreso = socioView.FechaIngreso!.Value,
-				Ocupacion = socioView.Ocupacion,
-				Telefono = socioView.Telefono!,
-				Email = socioView.Email,
-				MontoCuota = socioView.CuotaValor!.Value,
-				FrecuenciaDePago = socioView.FrecuenciaPago!.Value,
-				FormaPago = socioView.FormaPago!.Value
-			};
+            TipoSocio = TipoSocio.ToLower();
 
-			if (socioView is SocioPersonaViewModel socioPersonaView)
-			{
-				socio.Tipo = Data.Enums.Discriminadores.TipoSocio.Persona;
-				socio.DocumentoOCUIT = socioPersonaView.Documento!;
-				socio.Apellido = socioPersonaView.Apellido!;
-			}
-			else if (socioView is SocioEmpresaViewModel socioEmpresaView)
-			{
-				socio.Tipo = Data.Enums.Discriminadores.TipoSocio.Empresa;
-				socio.DocumentoOCUIT = socioEmpresaView.CUIT!;
-			}
+            if (TipoSocio == "persona")
+            {
+                socioView = new SocioPersonaViewModel();
+            }
+            else if (TipoSocio == "empresa")
+            {
+                socioView = new SocioEmpresaViewModel();
+            }
+            else
+            {
+                await message.ErrorAsync("Tipo de socio inválido. Por favor, verifique la URL.");
+                Cancelar();
+            }
+        }
+        catch (Exception ex)
+        {
+            await message.ErrorAsync($"Error: {ex.Message}");
+            Cancelar();
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
 
-			// Creamos el socio
-			await SocioService.CrearSocioAsync(socio);
-			message.Success("Se agregó el socio.");
-			Cancelar();
-		}
-		catch (Exception ex)
-		{
-			await message.ErrorAsync($"Error: {ex.Message}");
-		}
-		finally
-		{
-			isLoading = false;
-		}
-	}
+    private async Task OnFinish(EditContext editContext)
+    {
+        isLoading = true;
 
-	private void Cancelar()
-	{
-		navigationManager.NavigateTo($"/fire-force/socios", true);
-	}
+        try
+        {
+            ValidationHelper.Validar(socioView!);
+
+            // Preparar el objeto Socio para enviarlo al servicio
+            Socio socio = new Socio()
+            {
+                Id = socioView!.NroSocio!.Value,
+                Nombre = socioView.Nombre!,
+                Direccion = socioView.DetalleDireccion!,
+                Latitud = socioView.Latitud!.Value,
+                Longitud = socioView.Longitud!.Value,
+                Zona = socioView.Zona!.Value,
+                FechaIngreso = socioView.FechaIngreso!.Value,
+                Ocupacion = socioView.Ocupacion,
+                Telefono = socioView.Telefono!,
+                Email = socioView.Email,
+                MontoCuota = socioView.CuotaValor!.Value,
+                FrecuenciaDePago = socioView.FrecuenciaPago!.Value,
+                FormaPago = socioView.FormaPago!.Value
+            };
+
+            if (socioView is SocioPersonaViewModel socioPersonaView)
+            {
+                socio.Tipo = Data.Enums.Discriminadores.TipoSocio.Persona;
+                socio.DocumentoOCUIT = socioPersonaView.Documento!;
+                socio.Apellido = socioPersonaView.Apellido!;
+            }
+            else if (socioView is SocioEmpresaViewModel socioEmpresaView)
+            {
+                socio.Tipo = Data.Enums.Discriminadores.TipoSocio.Empresa;
+                socio.DocumentoOCUIT = socioEmpresaView.CUIT!;
+            }
+
+            // Creamos el socio
+            await SocioService.CrearSocioAsync(socio);
+            message.Success("Se agregó el socio.");
+            Cancelar();
+        }
+        catch (Exception ex)
+        {
+            await message.ErrorAsync($"Error: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private void OnStreetSelected(Direccion selectedStreet)
+    {
+        if (selectedStreet != null)
+        {
+            socioView!.DetalleDireccion = selectedStreet.Descripcion;
+            socioView.Latitud = selectedStreet.Lat;
+            socioView.Longitud = selectedStreet.Lon;
+            StateHasChanged();
+        }
+    }
+
+    private void OnSearch(string value)
+    {
+        // Ejecutar la búsqueda en segundo plano sin bloquear la UI
+        _ = PerformSearchAsync(value);
+    }
+
+    private async Task PerformSearchAsync(string value)
+    {
+        // Cancelar búsqueda anterior si existe
+        _searchCancellationTokenSource?.Cancel();
+        _searchCancellationTokenSource?.Dispose();
+        _searchCancellationTokenSource = new CancellationTokenSource();
+        var cancellationToken = _searchCancellationTokenSource.Token;
+
+        // Validar longitud mínima
+        if (string.IsNullOrWhiteSpace(value) || value.Length < 3)
+        {
+            direcciones.Clear();
+            _loading = false;
+            await InvokeAsync(StateHasChanged);
+            return;
+        }
+
+        // Si la API no está disponible, no intentar buscar
+        if (!isApiAvailable)
+        {
+            await message.WarningAsync("La API de búsqueda de direcciones no está disponible.");
+            return;
+        }
+
+        _loading = true;
+        await InvokeAsync(StateHasChanged);
+
+        try
+        {
+            // Realizar la búsqueda
+            direcciones = await GeorefService.GetSuggestionsAsync(value);
+
+            // Si la tarea fue cancelada, no actualizar
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return;
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // Búsqueda cancelada, no hacer nada
+            return;
+        }
+        catch (Exception ex)
+        {
+            // Solo mostrar el error si no fue cancelado
+            if (!cancellationToken.IsCancellationRequested)
+            {
+                Console.Error.WriteLine($"Error al buscar direcciones: {ex.Message}");
+                direcciones.Clear();
+            }
+        }
+        finally
+        {
+            _loading = false;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private void Cancelar()
+    {
+        navigationManager.NavigateTo($"/fire-force/socios", true);
+    }
+
+    private string GetGoogleMapsSatelliteUrl(double latitud, double longitud)
+    {
+        // Redondear coordenadas
+        string latString = Math.Round(latitud, 5).ToString(System.Globalization.CultureInfo.InvariantCulture);
+        string lonString = Math.Round(longitud, 5).ToString(System.Globalization.CultureInfo.InvariantCulture);
+
+        // URL base de Google Maps sin API Key
+        // Parámetros:
+        // q = coordenadas
+        // t = tipo de mapa (k = satélite)
+        // z = zoom (18 = máximo zoom cercano para ver detalles de la calle)
+        string url = $"https://www.google.com/maps?q={latString},{lonString}&t=k&z=18&output=embed";
+
+        return url;
+    }
+
+    public void Dispose()
+    {
+        _searchCancellationTokenSource?.Cancel();
+        _searchCancellationTokenSource?.Dispose();
+    }
 }
