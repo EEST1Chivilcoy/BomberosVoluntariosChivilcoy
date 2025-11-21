@@ -18,6 +18,23 @@ namespace Vista.Data.Enums.Socios
         /// Representa el pago mediante transferencia bancaria.
         /// </summary>
         [Display(Name = "Transferencia")]
-        Transferencia = 2
+        Transferencia = 2,
+
+        // --- Otros métodos de pago --- (Borrar luego de la presentación)
+
+        [Display(Name = "Tarjeta de Débito / Crédito")]
+        Tarjeta = 3,
+
+        [Display(Name = "Cheque")]
+        Cheque = 4,
+
+        [Display(Name = "Billetera Virtual")]
+        BilleteraVirtual = 5,
+
+        [Display(Name = "Depósito Bancario")]
+        DepositoBancario = 6,
+
+        [Display(Name = "Débito Automático")]
+        DebitoAutomatico = 7
     }
 }

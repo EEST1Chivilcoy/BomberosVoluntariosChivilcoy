@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Vista.Data;
 
@@ -11,9 +12,11 @@ using Vista.Data;
 namespace Vista.Data.Migrations
 {
     [DbContext(typeof(BomberosDbContext))]
-    partial class BomberosDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251121144241_AniadirFormaDePagoSocioBorrarLuego")]
+    partial class AniadirFormaDePagoSocioBorrarLuego
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -939,10 +942,14 @@ namespace Vista.Data.Migrations
                     b.Property<int>("FrecuenciaDePago")
                         .HasColumnType("int");
 
-                    b.Property<double>("Latitud")
+                    b.Property<double?>("Latitud")
                         .HasColumnType("double");
 
-                    b.Property<double>("Longitud")
+                    b.Property<string>("Localidad")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<double?>("Longitud")
                         .HasColumnType("double");
 
                     b.Property<double>("MontoCuota")

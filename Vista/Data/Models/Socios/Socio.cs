@@ -57,6 +57,12 @@ namespace Vista.Data.Models.Socios
         [Required(ErrorMessage = "La frecuencia de pago es obligatoria.")]
         public FrecuenciaPago? FrecuenciaDePago { get; set; } = FrecuenciaPago.Mensual;
 
+        /// <summary>
+        /// Representa la forma de pago del socio. (Por defecto es Efectivo) (Igual es algo que se va a borrar, solo incluido para la presentacion del proyecto) (Borrar Luego)
+        /// </summary>
+        [Required(ErrorMessage = "La forma de pago es obligatoria.")]
+        public FormaDePago? FormaPago { get; set; } = FormaDePago.Efectivo;
+
         // --- Datos personales ---
 
         /// <summary>
@@ -80,12 +86,6 @@ namespace Vista.Data.Models.Socios
         public string? Apellido { get; set; } = string.Empty;
 
         /// <summary>
-        /// Representa la localidad del socio.
-        /// </summary>
-        [Required(ErrorMessage = "la localidad del socio es obligatoria.")]
-        public string Localidad { get; set; } = string.Empty;
-
-        /// <summary>
         /// Representa la dirección del socio.
         /// </summary>
         [Required(ErrorMessage = "la dirección del socio es obligatoria.")]
@@ -94,12 +94,14 @@ namespace Vista.Data.Models.Socios
         /// <summary>
         /// Representa la Latitud del socio. (Dirección GPS)
         /// </summary>
-        public double? Latitud { get; set; }
+        [Required]
+        public double Latitud { get; set; }
 
         /// <summary>
         /// Representa la Longitud del socio. (Dirección GPS)
         /// </summary>
-        public double? Longitud { get; set; }
+        [Required]
+        public double Longitud { get; set; }
 
         /// <summary>
         /// Representa la zona del socio.

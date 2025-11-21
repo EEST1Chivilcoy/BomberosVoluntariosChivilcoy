@@ -324,9 +324,9 @@
 
     bool IsHome()
     {
-    var uri = navigationManager.Uri.ToLower().TrimEnd('/');
-    var baseUri = navigationManager.BaseUri.ToLower().TrimEnd('/');
-    return uri == baseUri || uri == $"{baseUri}/fire-force";
+        var uri = navigationManager.Uri.ToLower().TrimEnd('/');
+        var baseUri = navigationManager.BaseUri.ToLower().TrimEnd('/');
+        return uri == baseUri || uri == $"{baseUri}/fire-force";
     }
 
     string[] GetSelectedMenuKeys()
@@ -405,12 +405,4 @@
         @<span class="compact-submenu-title">
         <i class="fa-solid fa-gavel compact-icon"></i> <span class="compact-text">Ética</span>
     </span>;
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            await iconService.CreateFromIconfontCN("//at.alicdn.com/t/font_2735473_hi62ezq5579.js");
-        }
-    }
 }

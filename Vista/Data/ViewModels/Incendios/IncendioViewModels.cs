@@ -41,6 +41,11 @@ public class IncendioViewModels : SalidasViewModels
     public TipoSuperficie? TipoSuperficieAfectada { get; set; }
 
     /// <summary>
+    /// Tamaño de la superficie afectada por el incendio.
+    /// </summary>
+    public double? SuperficieAfectadaIncendio { get; set; }
+
+    /// <summary>
     /// Detalle de la superficie afectada por el incendio.
     /// </summary>
     public string? DetalleSuperficieAfectadaIncendio { get; set; }

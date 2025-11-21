@@ -15,31 +15,18 @@
 <style>
 
     .map-container {
-        width: 300px;
-        height: 300px;
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        max-height: 350px;
         border: 1px solid #ccc;
         border-radius: 6px;
         overflow: hidden;
-        margin: 20px auto;
     }
 
-    .DireccionLabel {
-    margin-top: 10px !important;    
-    }
-
-    .RegionLabel {
-    margin-top: 50px !important;
-    }
-
-    .TipoZonaLabel {
-    margin-top: 50px !important;
-}
-
-
-    @@media screen and (max-width: 450px) {
+    @@media screen and (max-width: 768px) {
         .map-container {
-            width: 100%;
-            height: auto;
+            max-height: 300px;
+            margin-top: 16px;
         }
     }
 
@@ -71,8 +58,6 @@
             margin-bottom: 0;
             min-width: 180px;
         }
-
-
 
 </style>
 
@@ -119,9 +104,8 @@
             @if (isApiAvailable)
             {
                 <Row Gutter="24">
-                <AntDesign.Col Span="12" Class="col-izquierda">
-
-                        <FormItem Label="Dirección" class="DireccionLabel">
+                    <AntDesign.Col Xs="24" Md="12">
+                        <FormItem Label="Dirección">
                             <Select TItem="Direccion"
                                     TItemValue="Direccion"
                                     DataSource="@direcciones"
@@ -135,35 +119,28 @@
                                     OnSelectedItemChanged="OnStreetSelected">
                             </Select>
                         </FormItem>
+                        <FormItem Label="Región Cuartel">
+                            <EnumSelect TEnum="CuartelRegionChivilcoy ?" @bind-Value="@Model.CuartelRegion" DefaultActiveFirstOption="false" />
+                        </FormItem>
+                        <FormItem Label="Tipo Zona">
+                            <EnumSelect TEnum="TipoZona ?" @bind-Value="@Model.TipoZona" />
+                        </FormItem>
+                    </AntDesign.Col>
 
-                    <FormItem Label="Región Cuartel" class="RegionLabel">
-                        <EnumSelect TEnum="CuartelRegionChivilcoy ?" @bind-Value="@Model.CuartelRegion" DefaultActiveFirstOption="false" />
-                    </FormItem>
-
-
-                        <FormItem Label="Tipo Zona" class="TipoZonaLabel">
-                        <EnumSelect TEnum="TipoZona ?" @bind-Value="@Model.TipoZona" />
-                    </FormItem>
-                    </AntDesign.Col>        
-                      <AntDesign.Col Span="8">
-                    @if (Model.Latitud.HasValue && Model.Longitud.HasValue)
-                    {
-                        <div class="map-container">
-                            <iframe style="border:0; width: 100%; aspect-ratio: 1 / 1;"
-                                    src="@GetGoogleMapsSatelliteUrl(Model.Latitud.Value, Model.Longitud.Value)"
-                                    frameborder="0"
-                                    allowfullscreen>
-                            </iframe>
-                        </div>
-                    }
-                </AntDesign.Col>
-
+                    <AntDesign.Col Xs="24" Md="12">
+                        @if (Model.Latitud.HasValue && Model.Longitud.HasValue)
+                        {
+                            <div class="map-container">
+                                <iframe style="border:0; width: 100%; height: 100%;"
+                                        src="@GetGoogleMapsSatelliteUrl(Model.Latitud.Value, Model.Longitud.Value)"
+                                        frameborder="0"
+                                        allowfullscreen>
+                                </iframe>
+                            </div>
+                        }
+                    </AntDesign.Col>
                 </Row>
             }
-
-        
-
-
         </div>
 
         @* 🏢 Detalles del Lugar *@
@@ -264,7 +241,7 @@
                                         !string.IsNullOrEmpty(Model.Depto);
 
                 // Activa el switch si ya se había convocado una guardia
-                SeConvocoGuardia = Model.GuardiaSelecionada != default(Guardia);
+                SeConvocoGuardia = Model.GuardiaSelecionada != null;
             }
         }
         catch (Exception ex)
@@ -386,8 +363,8 @@
         // Parámetros:
         // q = coordenadas
         // t = tipo de mapa (k = satélite)
-        // z = zoom (ej. 14)
-        string url = $"https://www.google.com/maps?q={latString},{lonString}&t=k&z=14&output=embed";
+        // z = zoom (18 = máximo zoom cercano para ver detalles de la calle)
+        string url = $"https://www.google.com/maps?q={latString},{lonString}&t=k&z=18&output=embed";
 
         return url;
     }

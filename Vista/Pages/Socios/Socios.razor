@@ -5,14 +5,8 @@
 @using AntDesign.TableModels
 @using System.Text.Json
 @using Vista.Data.Models.Imagenes
-@using Vista.Data.Enums.Personal.ComisionDirectiva
+@using Vista.Pages.Socios.Componentes
 @using Vista.Data.Enums.Personal.Cobrador
-@using Vista.Data.Models.Personas.Personal
-@using Vista.Data.Models.Personas.Personal.Componentes
-@using Vista.Pages.Personal.ABM.Componentes.Bomberos
-@using Vista.Pages.Personal.ABM.Componentes.Comision
-@using Vista.Pages.Personal.ABM.Componentes.Cobradores
-@using Vista.Pages.Personal.ABM.Componentes
 @using Vista.Data.Mappers
 
 @page "/fire-force/socios"
@@ -513,7 +507,15 @@
 }
 
 @*Modal Detalle Socio*@
-
+<Modal Footer="footer"
+       Centered="@true"
+       OnCancel="CloseModals"
+       Visible="@isModalDetalleVisible"
+       DestroyOnClose
+       Title=@($"Detalle del Socio N°{selectedSocioId}")
+       DefaultMaximized="@true">
+    <DetalleSocio SocioId="selectedSocioId" OnFinishCallback="CloseModals" />
+</Modal>
 
 
 @*Modal Editar Socio*@
@@ -591,7 +593,7 @@
     {
         public int Id { get; set; }
         public string? NombreYApellidoSiVa { get; set; }
-        public string DocumentoOCUIT { get; set; }
+        public string? DocumentoOCUIT { get; set; }
         public TipoSocio Tipo { get; set; }
         public Zona Zona { get; set; }
         public TipoEstadoSocio Estado { get; set; }

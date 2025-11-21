@@ -8,7 +8,8 @@ namespace Vista.Services
     public interface ISocioService
     {
         Task CrearSocioAsync(Socio socio);
-        Task <List<Socio>?> ObtenerSociosAsync();
+        Task<List<Socio>?> ObtenerSociosAsync();
+        Task<Socio?> ObtenerSocioPorIdAsync(int socioId, bool asNoTracking = true);
     }
 
     public class SocioService : ISocioService
@@ -83,6 +84,16 @@ namespace Vista.Services
             return await _context.Socios
                 .AsNoTracking()
                 .ToListAsync();
+        }
+
+        public async Task<Socio?> ObtenerSocioPorIdAsync(int socioId, bool asNoTracking = true)
+        {
+            IQueryable<Socio> query = _context.Socios;
+
+            if (asNoTracking)
+                query = query.AsNoTracking();
+
+            return await query.FirstOrDefaultAsync(s => s.Id == socioId);
         }
     }
 }

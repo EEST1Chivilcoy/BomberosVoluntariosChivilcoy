@@ -107,34 +107,39 @@
 </style>
 
 <div class="fuerzas-intervinientes">
-    <Form Model="fuerzaForm">
+    <Form Model="fuerzaForm"
+          Loading="_isLoading"
+          ValidateOnChange="@true"
+          OnFinish="OnFinish">
+
         <div style="margin-bottom: 24px;">
             <div style="border-bottom: 2px solid #e53935; padding-bottom: 8px; margin-bottom: 16px;">
                 <h4 style="color: #e53935; margin: 0; font-weight: 600;">Fuerza Interviniente</h4>
             </div>
             <Row Gutter="16">
                 <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12">
-                    <FormItem Label="Fuerza Interviniente" Required>
+                    <FormItem Label="Fuerza Interviniente">
                         <Select TItem="SimpleFuerzaViewModel"
-                                TItemValue="SimpleFuerzaViewModel"
+                                TItemValue="int"
                                 DataSource="@FuerzasIntervinientesList"
                                 @bind-Value="fuerzaForm.FuerzaViewModel"
+                                ValueName="@nameof(SimpleFuerzaViewModel.Id)"
                                 LabelName="@nameof(SimpleFuerzaViewModel.Nombre)"
-                                DefaultActiveFirstOption
+                                DefaultActiveFirstOption="@true"
                                 AllowClear
                                 EnableSearch>
                         </Select>
                     </FormItem>
                 </AntDesign.Col>
                 <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12">
-                    <FormItem Label="N° Unidad" Required>
+                    <FormItem Label="N° Unidad">
                         <Input @bind-Value="fuerzaForm.NumeroUnidad" Placeholder="Ingrese el número de unidad" />
                     </FormItem>
                 </AntDesign.Col>
             </Row>
             <Row Gutter="16">
                 <AntDesign.Col Xs="24" Sm="12" Md="8" Lg="8">
-                    <FormItem Label="Encargado" Required>
+                    <FormItem Label="Encargado">
                         <Input @bind-Value="fuerzaForm.EncargadoApellidoyNombre" Placeholder="Nombre del encargado" />
                     </FormItem>
                 </AntDesign.Col>
@@ -142,7 +147,7 @@
             <Row Justify="RowJustify.End" style="margin-top: 16px;">
                 <AntDesign.Col>
                     <Button Type="@ButtonType.Primary"
-                            OnClick="@CargarFuerza"
+                            HtmlType="submit"
                             Icon="plus"
                             Style="background-color: #e53935; border-color: #e53935;">
                         Cargar Fuerza Interviniente
@@ -169,16 +174,16 @@
                        DataSource="@Model.FuerzasIntervinientes"
                        Responsive>
                     <ColumnDefinitions Context="item">
+                        <PropertyColumn Title="Fuerza"
+                                        Property="f => f.NombreFuerza"
+                                        Align="ColumnAlign.Center">
+                        </PropertyColumn>
                         <PropertyColumn Title="Encargado"
                                         Property="f => f.EncargadoApellidoyNombre"
                                         Align="ColumnAlign.Center">
                         </PropertyColumn>
                         <PropertyColumn Title="N° Unidad"
                                         Property="f => f.NumeroUnidad"
-                                        Align="ColumnAlign.Center">
-                        </PropertyColumn>
-                        <PropertyColumn Title="Fuerza"
-                                        Property="f => f.FuerzaViewModel.Nombre"
                                         Align="ColumnAlign.Center">
                         </PropertyColumn>
                         <ActionColumn Title="Acciones" Align="ColumnAlign.Center">
@@ -197,66 +202,21 @@
     }
 </div>
 
-
-
 @code {
-    [Parameter, EditorRequired] public SalidasViewModels Model { get; set; } = null!;
-    public bool IsFormDisabled { get; set; }
-    private FuerzaIntervinienteViewModel fuerzaForm = new();
+    [Parameter] public required SalidasViewModels Model { get; set; } = null!;
+
+    // Inicializamos explícitamente para evitar nulos en el binding inicial
+    private FuerzaIntervinienteViewModel fuerzaForm = new() { FuerzaViewModel = new() };
+
     private bool _isLoading = true;
     private List<SimpleFuerzaViewModel> FuerzasIntervinientesList { get; set; } = new();
 
-    private async Task CargarFuerza()
-    {
-        if (fuerzaForm.FuerzaViewModel.Id <= 0 ||
-            string.IsNullOrWhiteSpace(fuerzaForm.NumeroUnidad) ||
-            string.IsNullOrWhiteSpace(fuerzaForm.EncargadoApellidoyNombre))
-        {
-            await MessageService.ErrorAsync("Por favor, complete todos los campos requeridos.");
-            return;
-        }
-
-        // Verificar si ya existe la combinación completa (fuerza + unidad + encargado)
-        bool duplicado = Model.FuerzasIntervinientes.Any(f =>
-            f.FuerzaViewModel.Id == fuerzaForm.FuerzaViewModel.Id &&
-            f.NumeroUnidad == fuerzaForm.NumeroUnidad &&
-            f.EncargadoApellidoyNombre == fuerzaForm.EncargadoApellidoyNombre);
-
-        if (duplicado)
-        {
-            await MessageService.WarningAsync("Esta fuerza, unidad y encargado ya han sido agregadas.");
-            return;
-        }
-
-        // Verificar si ya existe el mismo número de unidad para la misma fuerza
-        bool unidadRepetida = Model.FuerzasIntervinientes.Any(f =>
-            f.FuerzaViewModel.Id == fuerzaForm.FuerzaViewModel.Id &&
-            f.NumeroUnidad == fuerzaForm.NumeroUnidad);
-
-        if (unidadRepetida)
-        {
-            await MessageService.WarningAsync("El número de unidad ya existe para esta fuerza.");
-            return;
-        }
-
-        Model.FuerzasIntervinientes.Add(fuerzaForm);
-
-        fuerzaForm = new(); // Reinicia el formulario
-        await MessageService.SuccessAsync("Fuerza interviniente agregada.");
-        StateHasChanged();
-    }
-
     private async Task EliminarFuerza(FuerzaIntervinienteViewModel fuerza)
     {
-        try
+        if (Model.FuerzasIntervinientes.Contains(fuerza))
         {
             Model.FuerzasIntervinientes.Remove(fuerza);
             await MessageService.SuccessAsync("Fuerza interviniente eliminada");
-            StateHasChanged();
-        }
-        catch (Exception ex)
-        {
-            await MessageService.ErrorAsync($"Error al eliminar fuerza: {ex.Message}");
         }
     }
 
@@ -264,12 +224,14 @@
     {
         var fuerzas = await FuerzaIntervinienteService.ObtenerTodasLasFuerzasAsync();
 
+        // Pequeña optimización: si la lista es null, devolvemos vacía para evitar excepciones en el Select
+        if (fuerzas == null) return new List<SimpleFuerzaViewModel>();
+
         return fuerzas.Select(f => new SimpleFuerzaViewModel
         {
             Id = f.Id,
-            Nombre = f.NombreFuerza!
+            Nombre = f.NombreFuerza ?? "Sin Nombre" // Manejo de posible string null
         }).ToList();
-
     }
 
     protected override async Task OnInitializedAsync()
@@ -282,11 +244,54 @@
         }
         catch (Exception ex)
         {
-            await MessageService.ErrorAsync($"Error: {ex.Message}");
+            await MessageService.ErrorAsync($"Error al cargar fuerzas: {ex.Message}");
         }
         finally
         {
             _isLoading = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task OnFinish(EditContext editContext)
+    {
+        try
+        {
+            // 1. VALIDACIÓN: Campos Obligatorios
+            ValidationHelper.Validar(fuerzaForm);
+
+            // 2. MEJORA: Simplificación de Lógica de Duplicados
+            // No es necesario chequear (Fuerza + Unidad + Encargado).
+            // Si la regla es que un móvil (Fuerza + Unidad) es único en la salida, esta validación basta y sobra.
+            bool unidadRepetida = Model.FuerzasIntervinientes.Any(f =>
+                f.FuerzaViewModel == fuerzaForm.FuerzaViewModel! &&
+                f.NumeroUnidad!.Trim().Equals(fuerzaForm.NumeroUnidad!.Trim(), StringComparison.OrdinalIgnoreCase));
+
+            if (unidadRepetida)
+            {
+                await MessageService.WarningAsync($"La unidad {fuerzaForm.NumeroUnidad} de esta fuerza ya ha sido asignada.");
+                return;
+            }
+
+            // 3. Extraer nombre de fuerza para el ViewModel
+            string nombreFuerza = FuerzasIntervinientesList
+                .FirstOrDefault(f => f.Id == fuerzaForm.FuerzaViewModel!)?.Nombre ?? "Desconocida";
+
+            fuerzaForm.NombreFuerza = nombreFuerza;
+
+            Model.FuerzasIntervinientes.Add(fuerzaForm);
+
+            // Reiniciar formulario limpiamente
+            fuerzaForm = new() { FuerzaViewModel = new() };
+
+            await MessageService.SuccessAsync("Fuerza interviniente agregada.");
+        }
+        catch (Exception ex)
+        {
+            await MessageService.ErrorAsync($"Error al agregar fuerza interviniente: {ex.Message}");
+        }
+        finally
+        {
             StateHasChanged();
         }
     }

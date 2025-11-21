@@ -351,17 +351,17 @@ namespace Vista.Data.Mappers
                 var fi = new FuerzaInterviniente_Salida
                 {
                     Id = (fvm?.Id) ?? 0,
-                    FuerzaIntervinienteId = (fvm?.FuerzaViewModel?.Id) ?? 0,
+                    FuerzaIntervinienteId = (fvm?.FuerzaViewModel) ?? 0,
                     EncargadoApellidoyNombre = fvm?.EncargadoApellidoyNombre,
                     NumeroUnidad = fvm?.NumeroUnidad,
                     // Damnificados = new List<Damnificado_Salida>() 
                 };
-                if (!string.IsNullOrWhiteSpace(fvm?.FuerzaViewModel?.Nombre))
+                if (!string.IsNullOrWhiteSpace(fvm?.NombreFuerza))
                 {
                     fi.Fuerzainterviniente = new FuerzaInterviniente
                     {
-                        Id = fvm.FuerzaViewModel.Id,
-                        NombreFuerza = fvm.FuerzaViewModel.Nombre
+                        Id = fvm.FuerzaViewModel,
+                        NombreFuerza = fvm.NombreFuerza
                     };
                 }
 
@@ -610,7 +610,7 @@ namespace Vista.Data.Mappers
             viewModel.CuerpoParticipante = model.CuerpoParticipante?.Select(cp => new BomberoSalida { BomberoSalidaId = cp.BomberoSalidaId, PersonaId = cp.PersonaId, Bombero = cp.Bombero, Grado = cp.Grado, MovilId = cp.MovilId, MovilAsignado = cp.MovilAsignado }).ToList() ?? new List<BomberoSalida>();
             viewModel.BomberosParticipantes = model.CuerpoParticipante?.Select(cp => new BomberoViweModel { Id = cp.PersonaId, Nombre = cp.Bombero?.Nombre, Apellido = cp.Bombero?.Apellido, NumeroLegajo = cp.Bombero?.NumeroLegajo ?? 0 }).ToList() ?? new List<BomberoViweModel>();
             viewModel.Moviles = model.Moviles.ToList();
-            viewModel.FuerzasIntervinientes = model.FuerzasIntervinientes?.Select(f => new FuerzaIntervinienteViewModel { Id = f.Id, EncargadoApellidoyNombre = f.EncargadoApellidoyNombre, NumeroUnidad = f.NumeroUnidad, FuerzaViewModel = new SimpleFuerzaViewModel { Id = f.FuerzaIntervinienteId, Nombre = f.Fuerzainterviniente?.NombreFuerza ?? string.Empty } }).ToList() ?? new List<FuerzaIntervinienteViewModel>();
+            //viewModel.FuerzasIntervinientes = model.FuerzasIntervinientes?.Select(f => new FuerzaIntervinienteViewModel { Id = f.Id, EncargadoApellidoyNombre = f.EncargadoApellidoyNombre, NumeroUnidad = f.NumeroUnidad, FuerzaViewModel = new SimpleFuerzaViewModel { Id = f.FuerzaIntervinienteId, Nombre = f.Fuerzainterviniente?.NombreFuerza ?? string.Empty } }).ToList() ?? new List<FuerzaIntervinienteViewModel>();
         }
     }
 }
