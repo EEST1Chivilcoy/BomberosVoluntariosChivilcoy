@@ -195,6 +195,11 @@
             <div style="border-bottom: 2px solid #1890ff; padding-bottom: 8px; margin-bottom: 16px;">
                 <h4 style="color: #1890ff; margin: 0; font-weight: 600;">Detalles o Daños Generales</h4>
             </div>
+        
+            <FormItem Label="Tipo de Servicio" Required>
+                <EnumSelect TEnum="TipoServicioSalida?" @bind-Value="@Model.TipoServicio" />
+            </FormItem>
+        
             <FormItem>
                 <TextArea Placeholder="Describa la situación o evento..."
                           @bind-Value="@Model.Descripcion"
