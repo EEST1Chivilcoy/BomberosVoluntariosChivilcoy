@@ -109,14 +109,12 @@
     box-shadow: none !important;
 }
 
-/* Estados hover y selected del menú superior */
 .top-menu .ant-menu-item:hover,
 .top-menu .ant-menu-item-active,
 .top-menu .ant-menu-item-selected,
 .top-menu .ant-menu-submenu-title:hover,
-.top-menu .ant-menu-submenu-active .ant-menu-submenu-title,
-.top-menu .ant-menu-submenu-selected .ant-menu-submenu-title,
-.top-menu .ant-menu-submenu-open .ant-menu-submenu-title {
+.top-menu .ant-menu-submenu-active,
+.top-menu .ant-menu-submenu-selected {
     color: var(--gold-color) !important;
     background: transparent !important;
     box-shadow: none !important;
@@ -125,21 +123,12 @@
     animation: none !important;
 }
 
-/* Asegurar que el texto dentro también sea dorado */
 .top-menu .ant-menu-item:hover > span,
 .top-menu .ant-menu-item-active > span,
 .top-menu .ant-menu-item-selected > span,
 .top-menu .ant-menu-submenu-title:hover > span,
-.top-menu .ant-menu-submenu-active .ant-menu-submenu-title > span,
-.top-menu .ant-menu-submenu-selected .ant-menu-submenu-title > span,
-.top-menu .ant-menu-submenu-open .ant-menu-submenu-title > span,
-.top-menu .ant-menu-item:hover .compact-text,
-.top-menu .ant-menu-item-active .compact-text,
-.top-menu .ant-menu-item-selected .compact-text,
-.top-menu .ant-menu-submenu-title:hover .compact-text,
-.top-menu .ant-menu-submenu-active .ant-menu-submenu-title .compact-text,
-.top-menu .ant-menu-submenu-selected .ant-menu-submenu-title .compact-text,
-.top-menu .ant-menu-submenu-open .ant-menu-submenu-title .compact-text {
+.top-menu .ant-menu-submenu-active > span,
+.top-menu .ant-menu-submenu-selected > span {
     color: var(--gold-color) !important;
     background: none !important;
     background-clip: initial !important;
@@ -149,21 +138,25 @@
     filter: none !important;
 }
 
-/* Iconos del menú superior también en dorado */
-.top-menu .ant-menu-item:hover i,
-.top-menu .ant-menu-item-active i,
-.top-menu .ant-menu-item-selected i,
-.top-menu .ant-menu-submenu-title:hover i,
-.top-menu .ant-menu-submenu-active .ant-menu-submenu-title i,
-.top-menu .ant-menu-submenu-selected .ant-menu-submenu-title i,
-.top-menu .ant-menu-submenu-open .ant-menu-submenu-title i {
-    color: var(--gold-color) !important;
-}
-
 @keyframes gold-glow-pulse {
     0% { box-shadow: 0 0 16px 2px #ffd70055; }
     50% { box-shadow: 0 0 24px 6px #ffd70099; }
     100% { box-shadow: 0 0 16px 2px #ffd70055; }
+}
+
+.top-menu .ant-menu-item:hover > span,
+.top-menu .ant-menu-item-active > span,
+.top-menu .ant-menu-item-selected > span,
+.top-menu .ant-menu-submenu-title:hover > span,
+.top-menu .ant-menu-submenu-active > span,
+.top-menu .ant-menu-submenu-selected > span {
+    color: var(--gold-color) !important;
+    background: none !important;
+    background-clip: initial !important;
+    -webkit-background-clip: initial !important;
+    -webkit-text-fill-color: var(--gold-color) !important;
+    animation: none !important;
+    filter: none !important;
 }
 
 @keyframes gold-shine {
@@ -229,7 +222,6 @@
     100% { opacity: 1; transform: translateY(0) scale(1);}
 }
 
-/* Items dentro del submenu desplegable */
 .top-menu .ant-menu-submenu-popup .ant-menu-item {
     color: var(--text-light) !important;
     border-radius: 6px !important;
@@ -248,266 +240,349 @@
     transform: none !important;
 }
 
-/* Asegurar que los textos en submenú desplegable sean dorados cuando están seleccionados */
-.top-menu .ant-menu-submenu-popup .ant-menu-item-selected .compact-text,
-.top-menu .ant-menu-submenu-popup .ant-menu-item:hover .compact-text {
-    color: var(--gold-color) !important;
+/* ==========================================================================
+   Sidebar
+   ========================================================================== */
+
+.main-sider {
+    background: var(--text-light) !important;
+    box-shadow: 2px 0 6px var(--shadow-light) !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
 }
 
-/* =========================================================
-   VARIABLES GLOBALES
-   ========================================================= */
-:root {
-    --primary-color: #820014 !important;
-    --primary-light: #a8071a !important;
-    --text-dark: #263040 !important;
-    --text-light: #ffffff !important;
-    --bg-light: #f5f5f5 !important;
-    --bg-selected: #e6e6e6 !important;
-    --header-height: 60px !important;
-    --sidebar-width: 260px !important;
-    --sidebar-collapsed-width: 80px !important;
-    --shadow-light: rgba(0, 0, 0, 0.1) !important;
-    --gold-color: #ffd700 !important;
-    --gold-glow: 0 0 8px 2px #ffd70055;
-}
-
-/* =========================================================
-   HEADER Y BRAND
-   ========================================================= */
-.main-header {
-    height: var(--header-height) !important;
-    position: relative;
-    overflow: visible;
-    background-color: var(--primary-color) !important;
-    box-shadow: 0 2px 8px var(--shadow-light) !important;
-    z-index: 1000 !important;
-    padding: 0 !important;
-}
-
-.menu-toggle {
-    background: none !important;
-    border: none !important;
-    color: var(--text-light) !important;
-    font-size: 20px !important;
-    padding: 8px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-}
-
-    .menu-toggle:hover {
-        background-color: rgba(255, 255, 255, 0.1) !important;
+    .main-sider:not(.ant-layout-sider-collapsed) {
+        width: var(--sidebar-width) !important;
+        max-width: var(--sidebar-width) !important;
+        min-width: var(--sidebar-width) !important;
+        flex: 0 0 var(--sidebar-width) !important;
     }
 
-.brand-link {
-    display: flex !important;
-    align-items: center !important;
-    gap: 10px !important;
-    color: var(--text-light) !important;
-    text-decoration: none !important;
-    font-size: 18px !important;
-    font-weight: 500 !important;
+    .main-sider.ant-layout-sider-collapsed {
+        width: var(--sidebar-collapsed-width) !important;
+        max-width: var(--sidebar-collapsed-width) !important;
+        min-width: var(--sidebar-collapsed-width) !important;
+        flex: 0 0 var(--sidebar-collapsed-width) !important;
+    }
+
+/* ==========================================================================
+   Menú
+   ========================================================================== */
+
+.main-menu {
     height: 100% !important;
+    border-right: none !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
 }
 
-/* =========================================================
-   TOP MENU (principal y submenús)
-   ========================================================= */
-.top-menu {
-    position: absolute;
-    top: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 0 !important;
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    width: calc(100vw - 40px) !important;
-    max-width: calc(100vw - 40px) !important;
-    overflow: visible !important;
-}
+    .main-menu .ant-menu-item,
+    .main-menu .ant-menu-submenu-title {
+        height: 50px !important;
+        line-height: 50px !important;
+        margin: 0 !important;
+        padding: 0 20px !important;
+        border-radius: 0 !important;
+    }
 
+        .main-menu .ant-menu-item::after {
+            display: none !important;
+        }
 
+    .main-menu .ant-menu-item {
+        display: flex !important;
+        align-items: center !important;
+        gap: 12px !important;
+    }
 
-.top-menu .ant-menu-item,
-.top-menu .ant-menu-submenu,
-.top-menu .ant-menu-submenu-title {
-    flex: 1 !important;
-    min-width: 0 !important;
-    max-width: none !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    height: 80px !important;
-    line-height: 80px !important;
-    margin: 0 !important;
-    padding: 0 12px !important;
-    color: var(--text-light) !important;
-    font-family: 'Fjalla One', sans-serif !important;
-    font-size: 1.4rem !important;
-    font-weight: 600 !important;
-    background: transparent !important;
-    border-radius: 0 !important;
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
+        .main-menu .ant-menu-item:hover {
+            background-color: var(--bg-selected) !important;
+        }
+
+            .main-menu .ant-menu-item:hover .menu-icon,
+            .main-menu .ant-menu-item:hover .menu-link {
+                color: var(--primary-light) !important;
+            }
+
+    .main-menu .ant-menu-item-selected {
+        background-color: var(--primary-color) !important;
+        color: var(--text-light) !important;
+    }
+
+        .main-menu .ant-menu-item-selected .menu-icon,
+        .main-menu .ant-menu-item-selected .menu-link {
+            color: var(--text-light) !important;
+        }
+
+        .main-menu .ant-menu-item-selected:hover .menu-icon,
+        .main-menu .ant-menu-item-selected:hover .menu-link {
+            color: var(--text-light) !important;
+        }
+
+/* Iconos del menú */
+.menu-icon {
+    color: var(--text-dark) !important;
+    font-size: 18px !important;
+    width: 20px !important;
     text-align: center !important;
-    transition:
-        color 0.25s cubic-bezier(.4,0,.2,1),
-        background 0.25s cubic-bezier(.4,0,.2,1),
-        box-shadow 0.25s cubic-bezier(.4,0,.2,1),
-        transform 0.18s cubic-bezier(.4,0,.2,1);
-    box-shadow: none !important;
 }
 
-/* Estados hover y selected del menú superior */
-.top-menu .ant-menu-item:hover,
-.top-menu .ant-menu-item-active,
-.top-menu .ant-menu-item-selected,
-.top-menu .ant-menu-submenu-title:hover,
-.top-menu .ant-menu-submenu-active .ant-menu-submenu-title,
-.top-menu .ant-menu-submenu-selected .ant-menu-submenu-title,
-.top-menu .ant-menu-submenu-open .ant-menu-submenu-title {
-    color: var(--gold-color) !important;
-    background: transparent !important;
-    box-shadow: none !important;
-    transform: none !important;
-    z-index: 2;
-    animation: none !important;
+.menu-link {
+    color: var(--text-dark) !important;
+    text-decoration: none !important;
+    flex: 1 !important;
 }
 
-/* Asegurar que el texto dentro también sea dorado */
-.top-menu .ant-menu-item:hover > span,
-.top-menu .ant-menu-item-active > span,
-.top-menu .ant-menu-item-selected > span,
-.top-menu .ant-menu-submenu-title:hover > span,
-.top-menu .ant-menu-submenu-active .ant-menu-submenu-title > span,
-.top-menu .ant-menu-submenu-selected .ant-menu-submenu-title > span,
-.top-menu .ant-menu-submenu-open .ant-menu-submenu-title > span,
-.top-menu .ant-menu-item:hover .compact-text,
-.top-menu .ant-menu-item-active .compact-text,
-.top-menu .ant-menu-item-selected .compact-text,
-.top-menu .ant-menu-submenu-title:hover .compact-text,
-.top-menu .ant-menu-submenu-active .ant-menu-submenu-title .compact-text,
-.top-menu .ant-menu-submenu-selected .ant-menu-submenu-title .compact-text,
-.top-menu .ant-menu-submenu-open .ant-menu-submenu-title .compact-text {
-    color: var(--gold-color) !important;
-    background: none !important;
-    background-clip: initial !important;
-    -webkit-background-clip: initial !important;
-    -webkit-text-fill-color: var(--gold-color) !important;
-    animation: none !important;
-    filter: none !important;
+    .menu-link:hover {
+        color: var(--primary-light) !important;
+        text-decoration: none !important;
+    }
+
+/* ==========================================================================
+   Submenús
+   ========================================================================== */
+
+.main-menu .ant-menu-submenu-title {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
 }
 
-/* Iconos del menú superior también en dorado */
-.top-menu .ant-menu-item:hover i,
-.top-menu .ant-menu-item-active i,
-.top-menu .ant-menu-item-selected i,
-.top-menu .ant-menu-submenu-title:hover i,
-.top-menu .ant-menu-submenu-active .ant-menu-submenu-title i,
-.top-menu .ant-menu-submenu-selected .ant-menu-submenu-title i,
-.top-menu .ant-menu-submenu-open .ant-menu-submenu-title i {
-    color: var(--gold-color) !important;
-}
+    .main-menu .ant-menu-submenu-title:hover {
+        background-color: var(--bg-selected) !important;
+    }
 
-@keyframes gold-glow-pulse {
-    0% { box-shadow: 0 0 16px 2px #ffd70055; }
-    50% { box-shadow: 0 0 24px 6px #ffd70099; }
-    100% { box-shadow: 0 0 16px 2px #ffd70055; }
-}
+        .main-menu .ant-menu-submenu-title:hover .submenu-title-icon,
+        .main-menu .ant-menu-submenu-title:hover .submenu-title-text {
+            color: var(--primary-light) !important;
+        }
 
-@keyframes gold-shine {
-    0% { background-position: -120px; }
-    60% { background-position: 220px; }
-    100% { background-position: 220px; }
-}
-
-@keyframes menu-bounce {
-    0%   { transform: scale(1);}
-    40%  { transform: scale(1.10);}
-    60%  { transform: scale(0.97);}
-    100% { transform: scale(1.04);}
-}
-
-@keyframes gold-pulse {
-    0% { box-shadow: 0 0 0 0 #ffd70055; }
-    70% { box-shadow: 0 0 16px 8px #ffd70033; }
-    100% { box-shadow: 0 0 0 0 #ffd70000; }
-}
-
-
-.top-menu .ant-menu-item-selected,
-.top-menu .ant-menu-item-active,
-.top-menu .ant-menu-item:hover,
-.top-menu .ant-menu-submenu-active,
-.top-menu .ant-menu-submenu-selected,
-.top-menu .ant-menu-submenu-title:hover {
-    border-bottom: none !important;
-    box-shadow: none !important;
-    color: #ffd700 !important;
-}
-
-.top-menu .ant-menu-item::after,
-.top-menu .ant-menu-submenu::after,
-.top-menu .ant-menu-submenu-title::after {
-    border-bottom: none !important;
-    box-shadow: none !important;
-    content: none !important;
-}
-
-.top-menu .ant-menu-submenu-popup {
-    background: var(--primary-color) !important;
-    border-radius: 8px !important;
-    box-shadow: 0 6px 24px 0 rgba(0,0,0,0.18);
-    padding: 6px 0 !important;
-    animation: submenuFadeIn 0.25s cubic-bezier(.4,0,.2,1);
-    backdrop-filter: blur(8px) saturate(1.2);
-    background: linear-gradient(120deg, rgba(130,0,20,0.92) 60%, rgba(255,215,0,0.10) 100%) !important;
-    border: 1px solid rgba(255,215,0,0.13);
-}
-@keyframes submenuFadeIn {
-    from { opacity: 0; transform: translateY(-10px);}
-    to   { opacity: 1; transform: translateY(0);}
-}
-
-.top-menu .ant-menu-submenu-popup {
-    animation: submenuSlideFadeIn 0.18s cubic-bezier(.4,0,.2,1);
-}
-@keyframes submenuSlideFadeIn {
-    0% { opacity: 0; transform: translateY(-18px) scale(0.98);}
-    60% { opacity: 0.7; }
-    100% { opacity: 1; transform: translateY(0) scale(1);}
-}
-
-/* Items dentro del submenu desplegable */
-.top-menu .ant-menu-submenu-popup .ant-menu-item {
+.main-menu .ant-menu-submenu-selected > .ant-menu-submenu-title {
+    background-color: var(--primary-color) !important;
     color: var(--text-light) !important;
-    border-radius: 6px !important;
-    transition:
-        color 0.22s cubic-bezier(.4,0,.2,1),
-        background 0.22s cubic-bezier(.4,0,.2,1),
-        box-shadow 0.22s cubic-bezier(.4,0,.2,1),
-        transform 0.15s cubic-bezier(.4,0,.2,1);
-}
-.top-menu .ant-menu-submenu-popup .ant-menu-item:hover,
-.top-menu .ant-menu-submenu-popup .ant-menu-item-active,
-.top-menu .ant-menu-submenu-popup .ant-menu-item-selected {
-    color: var(--gold-color) !important;
-    background: transparent !important;
-    box-shadow: none !important;
-    transform: none !important;
 }
 
-/* Asegurar que los textos en submenú desplegable sean dorados cuando están seleccionados */
-.top-menu .ant-menu-submenu-popup .ant-menu-item-selected .compact-text,
-.top-menu .ant-menu-submenu-popup .ant-menu-item:hover .compact-text {
-    color: var(--gold-color) !important;
+    .main-menu .ant-menu-submenu-selected > .ant-menu-submenu-title .submenu-title-icon,
+    .main-menu .ant-menu-submenu-selected > .ant-menu-submenu-title .submenu-title-text,
+    .main-menu .ant-menu-submenu-selected > .ant-menu-submenu-title .ant-menu-submenu-arrow {
+        color: var(--text-light) !important;
+    }
+
+.submenu-title {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    width: 100% !important;
+}
+
+.submenu-title-icon {
+    color: var(--text-dark) !important;
+    font-size: 18px !important;
+    width: 20px !important;
+}
+
+.submenu-title-text {
+    color: var(--text-dark) !important;
+    flex: 1 !important;
+}
+
+.main-menu .ant-menu-sub .ant-menu-item {
+    padding-left: 52px !important;
+    background: var(--text-light) !important;
+}
+
+    .main-menu .ant-menu-sub .ant-menu-item:hover {
+        background-color: var(--bg-selected) !important;
+    }
+
+.main-menu .ant-menu-sub .ant-menu-item-selected {
+    background-color: var(--bg-selected) !important;
+    border-left: 3px solid var(--primary-color) !important;
+}
+
+    .main-menu .ant-menu-sub .ant-menu-item-selected .submenu-icon,
+    .main-menu .ant-menu-sub .ant-menu-item-selected .menu-link {
+        color: var(--primary-color) !important;
+    }
+
+.submenu-icon {
+    color: var(--text-dark) !important;
+    font-size: 16px !important;
+    width: 18px !important;
+    text-align: center !important;
+}
+
+/* ==========================================================================
+   Contenido Principal
+   ========================================================================== */
+
+.main-content {
+    padding: 20px !important;
+    background: var(--bg-light) !important;
+    overflow-y: auto !important;
+    min-height: calc(100vh - var(--header-height)) !important;
+}
+
+/* ==========================================================================
+   Menú Colapsado - Fix para centrar iconos
+   ========================================================================== */
+
+
+
+
+.main-menu.ant-menu-inline-collapsed .ant-menu-item {
+    gap: 0 !important;
+}
+
+
+    .main-menu.ant-menu-inline-collapsed .ant-menu-item > span:first-child,
+    .main-menu.ant-menu-inline-collapsed .ant-menu-submenu-title > span:first-child {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 100% !important;
+        margin: 0 !important;
+    }
+
+
+.main-menu.ant-menu-inline-collapsed .menu-icon,
+.main-menu.ant-menu-inline-collapsed .submenu-title-icon {
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 18px !important;
+    width: 100% !important;
+    height: auto !important;
+}
+
+
+    .main-menu.ant-menu-inline-collapsed .menu-icon.fa-solid,
+    .main-menu.ant-menu-inline-collapsed .submenu-title-icon.fa-solid {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 100% !important;
+    }
+
+.main-menu.ant-menu-inline-collapsed .anticon {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    margin: 0 !important;
+    color: var(--text-dark) !important;
+    font-size: 18px !important;
+}
+
+.main-menu.ant-menu-inline-collapsed .submenu-title-icon,
+.main-menu.ant-menu-inline-collapsed .submenu-title .anticon {
+    color: var(--text-dark) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    font-size: 18px !important;
+}
+
+.main-menu.ant-menu-inline-collapsed .anticon svg {
+    color: var(--text-dark) !important;
+    fill: var(--text-dark) !important;
+    width: 18px !important;
+    height: 18px !important;
+}
+
+.main-menu.ant-menu-inline-collapsed .menu-link,
+.main-menu.ant-menu-inline-collapsed .submenu-title-text {
+    display: none !important;
+}
+
+.main-menu.ant-menu-inline-collapsed .ant-menu-item > span:last-child {
+    display: none !important;
+}
+
+.main-menu.ant-menu-inline-collapsed .ant-menu-submenu-title > span:last-child {
+    display: none !important;
+}
+
+
+.main-menu.ant-menu-inline-collapsed .ant-menu-submenu-title > span:first-child {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+}
+
+
+.main-menu.ant-menu-inline-collapsed .submenu-title {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+}
+
+    .main-menu.ant-menu-inline-collapsed .submenu-title > .submenu-title-icon {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 100% !important;
+        color: var(--text-dark) !important;
+    }
+
+    .main-menu.ant-menu-inline-collapsed .submenu-title > .anticon {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 100% !important;
+        color: var(--text-dark) !important;
+    }
+
+
+    .main-menu.ant-menu-inline-collapsed .submenu-title > .submenu-title-text {
+        display: none !important;
+    }
+
+
+.main-menu.ant-menu-inline-collapsed .ant-menu-item *,
+.main-menu.ant-menu-inline-collapsed .ant-menu-submenu-title * {
+    text-align: center !important;
+}
+
+
+.main-menu.ant-menu-inline-collapsed .ant-menu-item > span > i,
+.main-menu.ant-menu-inline-collapsed .ant-menu-submenu-title > span > i {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    margin: 0 !important;
+}
+
+
+.main-menu.ant-menu-inline-collapsed .ant-menu-submenu-title:hover .anticon,
+.main-menu.ant-menu-inline-collapsed .ant-menu-submenu-title:hover .submenu-title-icon {
+    color: var(--primary-light) !important;
+}
+
+    .main-menu.ant-menu-inline-collapsed .ant-menu-submenu-title:hover .anticon svg {
+        color: var(--primary-light) !important;
+        fill: var(--primary-light) !important;
+    }
+
+.main-menu.ant-menu-inline-collapsed .ant-menu-submenu-selected > .ant-menu-submenu-title .anticon,
+.main-menu.ant-menu-inline-collapsed .ant-menu-submenu-selected > .ant-menu-submenu-title .submenu-title-icon {
+    color: var(--text-light) !important;
+}
+
+    .main-menu.ant-menu-inline-collapsed .ant-menu-submenu-selected > .ant-menu-submenu-title .anticon svg {
+        color: var(--text-light) !important;
+        fill: var(--text-light) !important;
+    }
+
+
+    .ant-menu-submenu .ant-menu-sub{
+            transform: translateY(-14px) !important;
 }
 
 /* =========================================================
