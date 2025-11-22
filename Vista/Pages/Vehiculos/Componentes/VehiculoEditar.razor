@@ -15,482 +15,491 @@
 <link rel="stylesheet" href="css/EditarMovilEstilos.css">
 
 <div style="display: flex; align-items: center; justify-content: flex-start; padding-left: 20px;">
-	<Icon Type="edit" Style="font-size: 24px; margin-right: 10px; color: #ff0000;" />
-	<Title Level="2" style="margin-bottom: 0;">
-		Editar la Unidad
-	</Title>
+    <Icon Type="edit" Style="font-size: 24px; margin-right: 10px; color: #ff0000;" />
+    <Title Level="2" style="margin-bottom: 0;">
+        Editar la Unidad
+    </Title>
 </div>
 
 <div class="modal-body-content">
-	<div class="modal-left-panel">
-		<Card Style="border: 1px solid #d9d9d9; border-radius: 20px;">
-			<div style="text-align: center;">
-				@if (!string.IsNullOrEmpty(imagenView.Base64))
-				{
-					<img src="data:@imagenView.TipoImagen;base64,@imagenView.Base64" alt="Foto del vehículo" style="width: 100%; max-height: 150px; object-fit: contain;" />
-				}
-				else
-				{
-					<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 120px; background: #f0f2f5; color: #999; border-radius: 4px;">
-						<Icon Type="picture" Theme="IconThemeType.Outline" Style="font-size: 2em; margin-bottom: 5px;" />
-						<span>Ninguna foto seleccionada</span>
-					</div>
-				}
-			</div>
-			<div style="font-weight: 500; margin-top: 10px; text-align: center;">
-				@if (!string.IsNullOrEmpty(vehiculoView.NumeroMovil))
-				{
-					<span>Nº Unidad @vehiculoView.NumeroMovil</span>
-				}
-			</div>
-		</Card>
-		<div style="text-align: center; margin-top: 10px;">
-			<Button Type="@ButtonType.Primary">
-				<label for="fotoMovil" style="cursor: pointer; margin: 0;">
-					<Icon Type="upload" /> Cargar foto del móvil
-					<InputFile OnChange="SubirFoto" id="fotoMovil" accept=".jpg,.jpeg,.png" style="display: none;" />
-				</label>
-			</Button>
-		</div>
-	</div>
+    <div class="modal-left-panel">
+        <Card Style="border: 1px solid #d9d9d9; border-radius: 20px;">
+            <div style="text-align: center;">
+                @if (!string.IsNullOrEmpty(imagenView.Base64))
+                {
+                    <img src="data:@imagenView.TipoImagen;base64,@imagenView.Base64" alt="Foto del vehículo" style="width: 100%; max-height: 150px; object-fit: contain;" />
+                }
+                else
+                {
+                    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 120px; background: #f0f2f5; color: #999; border-radius: 4px;">
+                        <Icon Type="picture" Theme="IconThemeType.Outline" Style="font-size: 2em; margin-bottom: 5px;" />
+                        <span>Ninguna foto seleccionada</span>
+                    </div>
+                }
+            </div>
+            <div style="font-weight: 500; margin-top: 10px; text-align: center;">
+                @if (!string.IsNullOrEmpty(vehiculoView.NumeroMovil))
+                {
+                    <span>Nº Unidad @vehiculoView.NumeroMovil</span>
+                }
+            </div>
+        </Card>
+        <div style="text-align: center; margin-top: 10px;">
+            <Button Type="@ButtonType.Primary">
+                <label for="fotoMovil" style="cursor: pointer; margin: 0;">
+                    <Icon Type="upload" /> Cargar foto del móvil
+                    <InputFile OnChange="SubirFoto" id="fotoMovil" accept=".jpg,.jpeg,.png" style="display: none;" />
+                </label>
+            </Button>
+        </div>
+    </div>
 
-	<div class="modal-right-panel">
-		<Form Model="vehiculoView" Layout="@FormLayout.Vertical">
-			<Card Title="Información Básica" Style="margin-bottom: 24px;">
-				<div class="form-grid-4-col">
-					<FormItem Label="Nº de la Unidad">
-						<Input @bind-Value="vehiculoView.NumeroMovil" Placeholder="Número de la Unidad" />
-					</FormItem>
-					<FormItem Label="Estado de la Unidad">
-						<EnumSelect TEnum="TipoEstadoMovil" @bind-Value="vehiculoView.Estado" Placeholder="Seleccione estado" AllowClear />
-					</FormItem>
-					<FormItem Label="Encargado">
-						<Select TItem="BomberoViweModel"
-								TItemValue="int"
-								DataSource="@ListaBomberos"
-								Placeholder="Seleccione al Encargado"
-								@bind-Value="@vehiculoView.EncargadoId"
-								LabelName="@nameof(BomberoViweModel.NombreYApellido)"
-								ValueName="@nameof(BomberoViweModel.Id)">
-						</Select>
-					</FormItem>
-					<FormItem Label="Tipo">
-						<Input @bind-Value="vehiculoView.Tipo" Placeholder="Tipo" />
-					</FormItem>
+    <div class="modal-right-panel">
+        <Form Model="vehiculoView" Layout="@FormLayout.Vertical">
+            <Card Title="Información Básica" Style="margin-bottom: 24px;">
+                <div class="form-grid-4-col">
+                    <FormItem Label="Nº de la Unidad">
+                        <Input @bind-Value="vehiculoView.NumeroMovil" Placeholder="Número de la Unidad" />
+                    </FormItem>
+                    <FormItem Label="Estado de la Unidad">
+                        <EnumSelect TEnum="TipoEstadoMovil" @bind-Value="vehiculoView.Estado" Placeholder="Seleccione estado" AllowClear />
+                    </FormItem>
+                    <FormItem Label="Encargado">
+                        <Select TItem="BomberoViweModel"
+                                TItemValue="int?"
+                                DataSource="@ListaBomberos"
+                                Placeholder="Seleccione al Encargado"
+                                @bind-Value="@vehiculoView.EncargadoId"
+                                LabelName="@nameof(BomberoViweModel.NombreYApellido)"
+                                ValueName="@nameof(BomberoViweModel.Id)">
+                        </Select>
+                    </FormItem>
+                    <FormItem Label="Tipo">
+                        <Input @bind-Value="vehiculoView.Tipo" Placeholder="Tipo" />
+                    </FormItem>
 
-					<FormItem Label="Marca">
-						<Input @bind-Value="vehiculoView.Marca" Placeholder="Marca" />
-					</FormItem>
-					<FormItem Label="Modelo de la Bomba">
-						<Input @bind-Value="vehiculoView.Modelo" Placeholder="Modelo de la Bomba" />
-					</FormItem>
-					<FormItem Label="Año">
-						<AntDesign.InputNumber @bind-Value="vehiculoView.Año" Placeholder="Año" Style="width: 100%;" />
-					</FormItem>
-					<FormItem Label="Patente">
-						<Input @bind-Value="vehiculoView.Patente" Placeholder="Patente" />
-					</FormItem>
+                    <FormItem Label="Marca">
+                        <Input @bind-Value="vehiculoView.Marca" Placeholder="Marca" />
+                    </FormItem>
+                    <FormItem Label="Modelo de la Bomba">
+                        <Input @bind-Value="vehiculoView.Modelo" Placeholder="Modelo de la Bomba" />
+                    </FormItem>
+                    <FormItem Label="Año">
+                        <AntDesign.InputNumber @bind-Value="vehiculoView.Año" Placeholder="Año" Style="width: 100%;" />
+                    </FormItem>
+                    <FormItem Label="Patente">
+                        <Input @bind-Value="vehiculoView.Patente" Placeholder="Patente" />
+                    </FormItem>
 
-					<FormItem Label="Observaciones" Class="full-width-4">
-						<TextArea @bind-Value="vehiculoView.Observaciones" Placeholder="Observaciones" Rows="3" />
-					</FormItem>
+                    <FormItem Label="Observaciones" Class="full-width-4">
+                        <TextArea @bind-Value="vehiculoView.Observaciones" Placeholder="Observaciones" Rows="3" />
+                    </FormItem>
 
-					<div class="full-width-4">
-						<FormItem Label="Es una embarcación">
-							<Switch @bind-Checked="@EsEmbarcacion" />
-						</FormItem>
-					</div>
-				</div>
-			</Card>
+                    <div class="full-width-4">
+                        <FormItem Label="Es una embarcación">
+                            <Switch @bind-Checked="@EsEmbarcacion" />
+                        </FormItem>
+                    </div>
+                </div>
+            </Card>
 
-			<Card Title="Ficha Técnica">
-				@if (EsEmbarcacion == false)
-				{
-					<div class="form-grid-4-col">
-						<FormItem Label="Nº Motor">
-							<Input @bind-Value="movilView.NumeroMotor" Placeholder="Número de motor" />
-						</FormItem>
-						<FormItem Label="Nº Chasis">
-							<Input @bind-Value="movilView.NumeroChasis" Placeholder="Número de chasis" />
-						</FormItem>
-						<FormItem Label="Modelo de bomba">
-							<Input @bind-Value="movilView.ModeloBomba" Placeholder="Modelo de bomba" />
-						</FormItem>
-						<FormItem Label="Tipo de combustible">
-							<Input @bind-Value="vehiculoView.Combustible" Placeholder="Combustible" />
-						</FormItem>
+            <Card Title="Ficha Técnica">
+                @if (EsEmbarcacion == false)
+                {
+                    <div class="form-grid-4-col">
+                        <FormItem Label="Nº Motor">
+                            <Input @bind-Value="movilView.NumeroMotor" Placeholder="Número de motor" />
+                        </FormItem>
+                        <FormItem Label="Nº Chasis">
+                            <Input @bind-Value="movilView.NumeroChasis" Placeholder="Número de chasis" />
+                        </FormItem>
+                        <FormItem Label="Modelo de bomba">
+                            <Input @bind-Value="movilView.ModeloBomba" Placeholder="Modelo de bomba" />
+                        </FormItem>
+                        <FormItem Label="Tipo de combustible">
+                            <Input @bind-Value="vehiculoView.Combustible" Placeholder="Combustible" />
+                        </FormItem>
 
-						<FormItem Label="Litros de Combustible">
-							<AntDesign.InputNumber @bind-Value="@movilView.CantidadLitros" Min="0" Placeholder="Cantidad de litros" Style="width: 100%;" />
-						</FormItem>
-						<FormItem Label="Tipo de aceite">
-							<Input @bind-Value="movilView.TipoAceite" Placeholder="Tipo de aceite" />
-						</FormItem>
-						<FormItem Label="Marca de aceite">
-							<Input @bind-Value="movilView.MarcaAceite" Placeholder="Marca de aceite" />
-						</FormItem>
-						<FormItem Label="Litros de aceite">
-							<AntDesign.InputNumber @bind-Value="@movilView.CantidadAceite" Min="0" Placeholder="Cantidad de aceite" Style="width: 100%;" />
-						</FormItem>
+                        <FormItem Label="Litros de Combustible">
+                            <AntDesign.InputNumber @bind-Value="@movilView.CantidadLitros" Min="0" Placeholder="Cantidad de litros" Style="width: 100%;" />
+                        </FormItem>
+                        <FormItem Label="Tipo de aceite">
+                            <Input @bind-Value="movilView.TipoAceite" Placeholder="Tipo de aceite" />
+                        </FormItem>
+                        <FormItem Label="Marca de aceite">
+                            <Input @bind-Value="movilView.MarcaAceite" Placeholder="Marca de aceite" />
+                        </FormItem>
+                        <FormItem Label="Litros de aceite">
+                            <AntDesign.InputNumber @bind-Value="@movilView.CantidadAceite" Min="0" Placeholder="Cantidad de aceite" Style="width: 100%;" />
+                        </FormItem>
 
-						<FormItem Label="Modelo de filtro de aire">
-							<Input @bind-Value="movilView.ModeloFiltroAire" Placeholder="Modelo de filtro de aire" />
-						</FormItem>
-						<FormItem Label="Medidas de las cubiertas">
-							<Input @bind-Value="movilView.MedidasCubiertas" Placeholder="Medidas de las cubiertas" />
-						</FormItem>
-						<FormItem Label="Presión de Cubiertas">
-							<Input @bind-Value="movilView.LibrasCubiertas" Placeholder="Presión de Cubiertas" />
-						</FormItem>
-						<FormItem Label="Caja de velocidades">
-							<EnumSelect TEnum="TipoCajaVelocidades ?" @bind-Value="movilView.CajaVelocidades" Placeholder="Seleccione caja de velocidades" AllowClear />
-						</FormItem>
+                        <FormItem Label="Modelo de filtro de aire">
+                            <Input @bind-Value="movilView.ModeloFiltroAire" Placeholder="Modelo de filtro de aire" />
+                        </FormItem>
+                        <FormItem Label="Medidas de las cubiertas">
+                            <Input @bind-Value="movilView.MedidasCubiertas" Placeholder="Medidas de las cubiertas" />
+                        </FormItem>
+                        <FormItem Label="Presión de Cubiertas">
+                            <Input @bind-Value="movilView.LibrasCubiertas" Placeholder="Presión de Cubiertas" />
+                        </FormItem>
+                        <FormItem Label="Caja de velocidades">
+                            <EnumSelect TEnum="TipoCajaVelocidades ?" @bind-Value="movilView.CajaVelocidades" Placeholder="Seleccione caja de velocidades" AllowClear />
+                        </FormItem>
 
-						<FormItem Label="Tensión del sistema eléctrico">
-							<EnumSelect TEnum="TipoTension ?" @bind-Value="movilView.TensionCElectrico" Placeholder="Seleccione tensión" AllowClear />
-						</FormItem>
-						<FormItem Label="Tipo de dirección">
-							<EnumSelect TEnum="TipoDireccionUnidades ?" @bind-Value="movilView.TipoDireccion" Placeholder="Seleccione dirección" AllowClear />
-						</FormItem>
-						<FormItem Label="Marca de batería">
-							<Input @bind-Value="movilView.MarcaBateria" Placeholder="Marca de batería" />
-						</FormItem>
-						<FormItem Label="Fecha del último cambio de batería">
-							<DatePicker @bind-Value="movilView.FechaUltimoCambioBateria" Style="width: 100%;" />
-						</FormItem>
+                        <FormItem Label="Tensión del sistema eléctrico">
+                            <EnumSelect TEnum="TipoTension ?" @bind-Value="movilView.TensionCElectrico" Placeholder="Seleccione tensión" AllowClear />
+                        </FormItem>
+                        <FormItem Label="Tipo de dirección">
+                            <EnumSelect TEnum="TipoDireccionUnidades ?" @bind-Value="movilView.TipoDireccion" Placeholder="Seleccione dirección" AllowClear />
+                        </FormItem>
+                        <FormItem Label="Marca de batería">
+                            <Input @bind-Value="movilView.MarcaBateria" Placeholder="Marca de batería" />
+                        </FormItem>
+                        <FormItem Label="Fecha del último cambio de batería">
+                            <DatePicker @bind-Value="movilView.FechaUltimoCambioBateria" Style="width: 100%;" />
+                        </FormItem>
 
-						<FormItem Label="Fecha del último service">
-							<DatePicker @bind-Value="vehiculoView.FechaUltimoService" Style="width: 100%;" />
-						</FormItem>
-						<FormItem Label="Fecha del próximo service">
-							<DatePicker @bind-Value="vehiculoView.FechaProximoService" Style="width: 100%;" />
-						</FormItem>
-					</div>
-				}
-				else
-				{
-					<div class="form-grid-4-col">
-						<FormItem Label="Tipo de Combustible">
-							<Input @bind-Value="vehiculoView.Combustible" Placeholder="Tipo de Combustible" />
-						</FormItem>
-						<FormItem Label="Litros de Combustible">
-							<AntDesign.InputNumber @bind-Value="@movilView.CantidadLitros" Min="0" Placeholder="Litros de Combustible" Style="width: 100%;" />
-						</FormItem>
-						<FormItem Label="Fecha del último service">
-							<DatePicker @bind-Value="vehiculoView.FechaUltimoService" Style="width: 100%;" />
-						</FormItem>
-						<FormItem Label="Fecha del próximo service">
-							<DatePicker @bind-Value="vehiculoView.FechaProximoService" Style="width: 100%;" />
-						</FormItem>
-					</div>
-				}
-			</Card>
-		</Form>
-	</div>
+                        <FormItem Label="Fecha del último service">
+                            <DatePicker @bind-Value="vehiculoView.FechaUltimoService" Style="width: 100%;" />
+                        </FormItem>
+                        <FormItem Label="Fecha del próximo service">
+                            <DatePicker @bind-Value="vehiculoView.FechaProximoService" Style="width: 100%;" />
+                        </FormItem>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-grid-4-col">
+                        <FormItem Label="Tipo de Combustible">
+                            <Input @bind-Value="vehiculoView.Combustible" Placeholder="Tipo de Combustible" />
+                        </FormItem>
+                        <FormItem Label="Litros de Combustible">
+                            <AntDesign.InputNumber @bind-Value="@movilView.CantidadLitros" Min="0" Placeholder="Litros de Combustible" Style="width: 100%;" />
+                        </FormItem>
+                        <FormItem Label="Fecha del último service">
+                            <DatePicker @bind-Value="vehiculoView.FechaUltimoService" Style="width: 100%;" />
+                        </FormItem>
+                        <FormItem Label="Fecha del próximo service">
+                            <DatePicker @bind-Value="vehiculoView.FechaProximoService" Style="width: 100%;" />
+                        </FormItem>
+                    </div>
+                }
+            </Card>
+        </Form>
+    </div>
 </div>
 
 <div class="modal-footer">
-	<Button Type="@ButtonType.Primary" OnClick="EditarMovil">Guardar</Button>
+    <Button Type="@ButtonType.Primary" OnClick="EditarMovil">Guardar</Button>
 </div>
 
 @code {
-	[Parameter] public int VehiculoId { get; set; }
-	[Parameter] public EventCallback OnClose { get; set; }
+    [Parameter] public int VehiculoId { get; set; }
+    [Parameter] public EventCallback OnClose { get; set; }
 
-	public VehiculoSalida? vehiculo { get; set; }
-	public VehiculoViewModel vehiculoView { get; set; } = new();
-	public MovilViewModel movilView { get; set; } = new();
-	public ImagenViewModel imagenView { get; set; } = new();
-	public List<BomberoViweModel> ListaBomberos = new();
-	bool EsEmbarcacion = false;
+    public VehiculoSalida? vehiculo { get; set; }
+    public VehiculoViewModel vehiculoView { get; set; } = new();
+    public MovilViewModel movilView { get; set; } = new();
+    public ImagenViewModel imagenView { get; set; } = new();
+    public List<BomberoViweModel> ListaBomberos = new();
+    bool EsEmbarcacion = false;
 
-	// View Models
+    // View Models
 
-	public class VehiculoViewModel
-	{
-		public string? Marca { get; set; }
-		public string? Modelo { get; set; }
-		public int? Año { get; set; }
-		public string? Patente { get; set; }
-		public string? NombreYApellido { get; set; }
-		public string? Tipo { get; set; }
-		public string? NumeroMovil { get; set; }
-		public TipoEstadoMovil Estado { get; set; }
-		public int EncargadoId { get; set; }
-		public string? Combustible { get; set; }
-		public DateTime? FechaUltimoService { get; set; }
-		public DateTime? FechaProximoService { get; set; }
-		public string? Observaciones { get; set; }
-	}
+    public class VehiculoViewModel
+    {
+        public string? Marca { get; set; }
+        public string? Modelo { get; set; }
+        public int? Año { get; set; }
+        public string? Patente { get; set; }
+        public string? NombreYApellido { get; set; }
+        public string? Tipo { get; set; }
+        public string? NumeroMovil { get; set; }
+        public TipoEstadoMovil Estado { get; set; }
+        public int? EncargadoId { get; set; }
+        public string? Combustible { get; set; }
+        public DateTime? FechaUltimoService { get; set; }
+        public DateTime? FechaProximoService { get; set; }
+        public string? Observaciones { get; set; }
+    }
 
-	public class MovilViewModel
-	{
-		public string? NumeroMotor { get; set; }
-		public string? NumeroChasis { get; set; }
-		public string? ModeloBomba { get; set; }
-		public int? CantidadLitros { get; set; }
-		public string? TipoAceite { get; set; }
-		public string? MarcaAceite { get; set; }
-		public int? CantidadAceite { get; set; }
-		public string? ModeloFiltroAire { get; set; }
-		public string? MedidasCubiertas { get; set; }
-		public string? LibrasCubiertas { get; set; }
-		public TipoCajaVelocidades? CajaVelocidades { get; set; }
-		public TipoTension? TensionCElectrico { get; set; }
-		public TipoDireccionUnidades? TipoDireccion { get; set; }
-		public string? MarcaBateria { get; set; }
-		public DateTime? FechaUltimoCambioBateria { get; set; }
-	}
+    public class MovilViewModel
+    {
+        public string? NumeroMotor { get; set; }
+        public string? NumeroChasis { get; set; }
+        public string? ModeloBomba { get; set; }
+        public int? CantidadLitros { get; set; }
+        public string? TipoAceite { get; set; }
+        public string? MarcaAceite { get; set; }
+        public int? CantidadAceite { get; set; }
+        public string? ModeloFiltroAire { get; set; }
+        public string? MedidasCubiertas { get; set; }
+        public string? LibrasCubiertas { get; set; }
+        public TipoCajaVelocidades? CajaVelocidades { get; set; }
+        public TipoTension? TensionCElectrico { get; set; }
+        public TipoDireccionUnidades? TipoDireccion { get; set; }
+        public string? MarcaBateria { get; set; }
+        public DateTime? FechaUltimoCambioBateria { get; set; }
+    }
 
-	public class ImagenViewModel
-	{
-		public string? Base64 { get; set; }
-		public string? TipoImagen { get; set; }
-		public string? Nombre { get; set; }
-	}
+    public class ImagenViewModel
+    {
+        public string? Base64 { get; set; }
+        public string? TipoImagen { get; set; }
+        public string? Nombre { get; set; }
+    }
 
-	// Carga de datos
+    // Carga de datos
 
-	private async Task CargarMovil()
-	{
+    private async Task CargarMovil()
+    {
 
-		vehiculo = await VehiculoSalidaService.ObtenerVehiculoSalidaPorIdAsync(VehiculoId, false);
+        vehiculo = await VehiculoSalidaService.ObtenerVehiculoSalidaPorIdAsync(VehiculoId, false);
 
-		if (vehiculo is not null)
-		{
-			vehiculoView.Marca = vehiculo.Marca;
-			vehiculoView.Modelo = vehiculo.Modelo;
-			vehiculoView.Año = vehiculo.Año;
-			vehiculoView.Patente = vehiculo.Patente;
-			vehiculoView.Tipo = vehiculo.Tipo;
-			vehiculoView.Combustible = vehiculo.Combustible;
-			vehiculoView.FechaUltimoService = vehiculo.FechaUltimoService;
-			vehiculoView.FechaProximoService = vehiculo.FechaProximoService;
-			vehiculoView.NumeroMovil = vehiculo.NumeroMovil;
-			vehiculoView.Observaciones = vehiculo.Observaciones;
+        if (vehiculo is not null)
+        {
+            vehiculoView.Marca = vehiculo.Marca;
+            vehiculoView.Modelo = vehiculo.Modelo;
+            vehiculoView.Año = vehiculo.Año;
+            vehiculoView.Patente = vehiculo.Patente;
+            vehiculoView.Tipo = vehiculo.Tipo;
+            vehiculoView.Combustible = vehiculo.Combustible;
+            vehiculoView.FechaUltimoService = vehiculo.FechaUltimoService;
+            vehiculoView.FechaProximoService = vehiculo.FechaProximoService;
+            vehiculoView.NumeroMovil = vehiculo.NumeroMovil;
+            vehiculoView.Observaciones = vehiculo.Observaciones;
 
-			if (vehiculo is Movil)
-			{
-				EsEmbarcacion = false;
-				var movil = (Movil)vehiculo;
-				movilView.NumeroMotor = movil.NumeroMotor;
-				movilView.NumeroChasis = movil.NumeroChasis;
-				movilView.ModeloBomba = movil.ModeloBomba;
-				movilView.CantidadLitros = movil.CantidadLitros;
-				movilView.TipoAceite = movil.TipoAceite;
-				movilView.MarcaAceite = movil.MarcaAceite;
-				movilView.CantidadAceite = movil.CantidadAceite;
-				movilView.ModeloFiltroAire = movil.ModeloFiltroAire;
-				movilView.MedidasCubiertas = movil.MedidasCubiertas;
-				movilView.LibrasCubiertas = movil.LibrasCubiertas;
-				movilView.CajaVelocidades = movil.CajaVelocidades;
-				movilView.TensionCElectrico = movil.TensionCElectrico;
-				movilView.TipoDireccion = movil.TipoDireccion;
-				movilView.MarcaBateria = movil.MarcaBateria;
-				movilView.FechaUltimoCambioBateria = movil.FechaUltCambioBateria;
-			}
+            if (vehiculo is Movil)
+            {
+                EsEmbarcacion = false;
+                var movil = (Movil)vehiculo;
+                movilView.NumeroMotor = movil.NumeroMotor;
+                movilView.NumeroChasis = movil.NumeroChasis;
+                movilView.ModeloBomba = movil.ModeloBomba;
+                movilView.CantidadLitros = movil.CantidadLitros;
+                movilView.TipoAceite = movil.TipoAceite;
+                movilView.MarcaAceite = movil.MarcaAceite;
+                movilView.CantidadAceite = movil.CantidadAceite;
+                movilView.ModeloFiltroAire = movil.ModeloFiltroAire;
+                movilView.MedidasCubiertas = movil.MedidasCubiertas;
+                movilView.LibrasCubiertas = movil.LibrasCubiertas;
+                movilView.CajaVelocidades = movil.CajaVelocidades;
+                movilView.TensionCElectrico = movil.TensionCElectrico;
+                movilView.TipoDireccion = movil.TipoDireccion;
+                movilView.MarcaBateria = movil.MarcaBateria;
+                movilView.FechaUltimoCambioBateria = movil.FechaUltCambioBateria;
+            }
 
-			vehiculoView.Estado = vehiculo.Estado;
+            vehiculoView.Estado = vehiculo.Estado;
 
-			if (vehiculo.Imagen != null)
-			{
-				imagenView.Nombre = vehiculo.Imagen.NombreImagen;
-				imagenView.TipoImagen = vehiculo.Imagen.TipoImagen;
-				imagenView.Base64 = vehiculo.Imagen.Base64Imagen;
-			}
+            if (vehiculo.Imagen != null)
+            {
+                imagenView.Nombre = vehiculo.Imagen.NombreImagen;
+                imagenView.TipoImagen = vehiculo.Imagen.TipoImagen;
+                imagenView.Base64 = vehiculo.Imagen.Base64Imagen;
+            }
 
-			vehiculoView.EncargadoId = vehiculo.Encargado.PersonaId;
+            vehiculoView.EncargadoId = vehiculo.Encargado?.PersonaId;
 
-			StateHasChanged();
-		}
-	}
+            StateHasChanged();
+        }
+    }
 
-	public async void EditarMovil()
-	{
-		try
-		{
-			if (vehiculoView.NumeroMovil is not null)
-			{
-				VehiculoSalida? comprobante = await VehiculoSalidaService.ObtenerVehiculoSalidaPorNumeroMovilAsync(vehiculoView.NumeroMovil); // Verifica si ya existe un movil con ese numero
-				Bombero? EncargadoNew = await BomberoService.ObtenerBomberoPorIdAsync(vehiculoView.EncargadoId); // Verifica si existe el bombero encargado
+    public async void EditarMovil()
+    {
+        try
+        {
+            if (vehiculoView.NumeroMovil is not null)
+            {
+                VehiculoSalida? comprobante = await VehiculoSalidaService.ObtenerVehiculoSalidaPorNumeroMovilAsync(vehiculoView.NumeroMovil); // Verifica si ya existe un movil con ese numero
+                Bombero? EncargadoNew;
 
-				if (comprobante != null && vehiculoView.NumeroMovil != vehiculo.NumeroMovil) // Si encuentra un movil con ese numero y no es el mismo que se esta editando
-				{
-					await message.ErrorAsync("Existe un vehiculo con el mismo Nº Móvil");
-					return;
-				}
+                if (vehiculoView.EncargadoId.HasValue)
+                {
+                    EncargadoNew = await BomberoService.ObtenerBomberoPorIdAsync(vehiculoView.EncargadoId.Value); // Verifica si existe el bombero encargado
 
-				// Validación de la imagen
-				if (imagenView == null || string.IsNullOrWhiteSpace(imagenView.Base64))
-				{
-					await message.ErrorAsync("No se ingresó una foto del vehículo");
-					return;
-				}
+                    if (EncargadoNew == null) // Avisar si no se encontro el bombero encargado
+                    {
+                        await message.ErrorAsync("No se encontro el bombero encargado");
+                        return;
+                    }
+                }
+                else
+                {
+                    EncargadoNew = null;
+                }
 
-				if (EncargadoNew == null) // Avisar si no se encontro el bombero encargado
-				{
-					await message.ErrorAsync("No se encontro el bombero encargado");
-					return;
-				}
+                if (comprobante != null && vehiculoView.NumeroMovil != vehiculo.NumeroMovil) // Si encuentra un movil con ese numero y no es el mismo que se esta editando
+                {
+                    await message.ErrorAsync("Existe un vehiculo con el mismo Nº Móvil");
+                    return;
+                }
 
-				Imagen_VehiculoSalida? imagen = string.IsNullOrEmpty(imagenView.Base64) ? null : new()
-				{
-					NombreImagen = imagenView.Nombre,
-					TipoImagen = imagenView.TipoImagen,
-					Base64Imagen = imagenView.Base64
-				};
+                // Validación de la imagen
+                if (imagenView == null || string.IsNullOrWhiteSpace(imagenView.Base64))
+                {
+                    await message.ErrorAsync("No se ingresó una foto del vehículo");
+                    return;
+                }
 
-				Embarcacion vehiculoNew = new Embarcacion()
-				{
-					VehiculoId = VehiculoId,
-					Marca = vehiculoView.Marca,
-					Modelo = vehiculoView.Modelo,
-					Año = vehiculoView.Año,
-					Patente = vehiculoView.Patente,
-					Tipo = vehiculoView.Tipo,
-					Combustible = vehiculoView.Combustible,
-					FechaUltimoService = vehiculoView.FechaUltimoService,
-					FechaProximoService = vehiculoView.FechaProximoService,
-					Observaciones = vehiculoView.Observaciones,
-					Encargado = EncargadoNew != null ? EncargadoNew : vehiculo.Encargado,
-					NumeroMovil = vehiculoView.NumeroMovil,
-					Estado = vehiculoView.Estado,
-					Discriminador = Data.Enums.Discriminadores.TipoVehiculo.Embarcacion,
-				};
+                Imagen_VehiculoSalida? imagen = string.IsNullOrEmpty(imagenView.Base64) ? null : new()
+                {
+                    NombreImagen = imagenView.Nombre,
+                    TipoImagen = imagenView.TipoImagen,
+                    Base64Imagen = imagenView.Base64
+                };
 
-				if (EsEmbarcacion == false)
-				{
-					Movil movil = Convertir<Movil>(vehiculoNew);
-					movil.NumeroMotor = movilView.NumeroMotor;
-					movil.NumeroChasis = movilView.NumeroChasis;
-					movil.ModeloBomba = movilView.ModeloBomba;
-					movil.CantidadLitros = movilView.CantidadLitros;
-					movil.TipoAceite = movilView.TipoAceite;
-					movil.MarcaAceite = movilView.MarcaAceite;
-					movil.CantidadAceite = movilView.CantidadAceite;
-					movil.Discriminador = Data.Enums.Discriminadores.TipoVehiculo.Movil;
-					movil.ModeloFiltroAire = movilView.ModeloFiltroAire;
-					movil.MedidasCubiertas = movilView.MedidasCubiertas;
-					movil.LibrasCubiertas = movilView.LibrasCubiertas;
-					movil.CajaVelocidades = movilView.CajaVelocidades;
-					movil.TensionCElectrico = movilView.TensionCElectrico;
-					movil.TipoDireccion = movilView.TipoDireccion;
-					movil.MarcaBateria = movilView.MarcaBateria;
-					movil.FechaUltCambioBateria = movilView.FechaUltimoCambioBateria;
-					await VehiculoSalidaService.EditarVehiculo(movil, imagen);
-				}
-				else
-				{
-					await VehiculoSalidaService.EditarVehiculo(vehiculoNew, imagen);
-				}
-				StateHasChanged();
-				await Init();
-				await OnClose.InvokeAsync();
-				await message.SuccessAsync("Se logro editar correctamente");
-			}
-		}
-		catch (Exception e)
-		{
-			await Init();
-			StateHasChanged();
-			if (e.InnerException != null)
-				await message.ErrorAsync(e.InnerException.Message, 5);
-			else
-				await message.ErrorAsync(e.Message, 5);
-		}
-	}
+                Embarcacion vehiculoNew = new Embarcacion()
+                {
+                    VehiculoId = VehiculoId,
+                    Marca = vehiculoView.Marca,
+                    Modelo = vehiculoView.Modelo,
+                    Año = vehiculoView.Año,
+                    Patente = vehiculoView.Patente,
+                    Tipo = vehiculoView.Tipo,
+                    Combustible = vehiculoView.Combustible,
+                    FechaUltimoService = vehiculoView.FechaUltimoService,
+                    FechaProximoService = vehiculoView.FechaProximoService,
+                    Observaciones = vehiculoView.Observaciones,
+                    Encargado = EncargadoNew != null ? EncargadoNew : vehiculo?.Encargado,
+                    NumeroMovil = vehiculoView.NumeroMovil,
+                    Estado = vehiculoView.Estado,
+                    Discriminador = Data.Enums.Discriminadores.TipoVehiculo.Embarcacion,
+                };
 
-	// MÉTODO MEJORADO PARA SUBIR FOTO
-	private async Task SubirFoto(InputFileChangeEventArgs e)
-	{
-		try
-		{
-			var archivo = e.File;
+                if (EsEmbarcacion == false)
+                {
+                    Movil movil = Convertir<Movil>(vehiculoNew);
+                    movil.NumeroMotor = movilView.NumeroMotor;
+                    movil.NumeroChasis = movilView.NumeroChasis;
+                    movil.ModeloBomba = movilView.ModeloBomba;
+                    movil.CantidadLitros = movilView.CantidadLitros;
+                    movil.TipoAceite = movilView.TipoAceite;
+                    movil.MarcaAceite = movilView.MarcaAceite;
+                    movil.CantidadAceite = movilView.CantidadAceite;
+                    movil.Discriminador = Data.Enums.Discriminadores.TipoVehiculo.Movil;
+                    movil.ModeloFiltroAire = movilView.ModeloFiltroAire;
+                    movil.MedidasCubiertas = movilView.MedidasCubiertas;
+                    movil.LibrasCubiertas = movilView.LibrasCubiertas;
+                    movil.CajaVelocidades = movilView.CajaVelocidades;
+                    movil.TensionCElectrico = movilView.TensionCElectrico;
+                    movil.TipoDireccion = movilView.TipoDireccion;
+                    movil.MarcaBateria = movilView.MarcaBateria;
+                    movil.FechaUltCambioBateria = movilView.FechaUltimoCambioBateria;
+                    await VehiculoSalidaService.EditarVehiculo(movil, imagen);
+                }
+                else
+                {
+                    await VehiculoSalidaService.EditarVehiculo(vehiculoNew, imagen);
+                }
+                StateHasChanged();
+                await Init();
+                await OnClose.InvokeAsync();
+                await message.SuccessAsync("Se logro editar correctamente");
+            }
+        }
+        catch (Exception e)
+        {
+            await Init();
+            StateHasChanged();
+            if (e.InnerException != null)
+                await message.ErrorAsync(e.InnerException.Message, 5);
+            else
+                await message.ErrorAsync(e.Message, 5);
+        }
+    }
 
-			// Validar tamaño
-			const long maxSizeInBytes = 5 * 1024 * 1024;
-			if (archivo.Size > maxSizeInBytes)
-			{
-				await message.ErrorAsync("El archivo no debe superar los 5MB");
-				return;
-			}
+    // MÉTODO MEJORADO PARA SUBIR FOTO
+    private async Task SubirFoto(InputFileChangeEventArgs e)
+    {
+        try
+        {
+            var archivo = e.File;
 
-			// Validar extensión
-			string[] allowedExtensions = { ".jpg", ".jpeg", ".png" };
-			string extension = Path.GetExtension(archivo.Name).ToLower();
-			if (!allowedExtensions.Contains(extension))
-			{
-				await message.ErrorAsync("Solo se permiten archivos JPG, JPEG o PNG");
-				return;
-			}
+            // Validar tamaño
+            const long maxSizeInBytes = 5 * 1024 * 1024;
+            if (archivo.Size > maxSizeInBytes)
+            {
+                await message.ErrorAsync("El archivo no debe superar los 5MB");
+                return;
+            }
 
-			Console.WriteLine($"📤 Procesando archivo: {archivo.Name}, Tamaño: {archivo.Size} bytes");
+            // Validar extensión
+            string[] allowedExtensions = { ".jpg", ".jpeg", ".png" };
+            string extension = Path.GetExtension(archivo.Name).ToLower();
+            if (!allowedExtensions.Contains(extension))
+            {
+                await message.ErrorAsync("Solo se permiten archivos JPG, JPEG o PNG");
+                return;
+            }
 
-			// Convertir a Base64
-			using var stream = archivo.OpenReadStream(maxSizeInBytes);
-			string imagenBase64 = await Base64Helper.StreamToBase64(stream);
+            Console.WriteLine($"📤 Procesando archivo: {archivo.Name}, Tamaño: {archivo.Size} bytes");
 
-			// Verificar que el Base64 se generó correctamente
-			if (string.IsNullOrWhiteSpace(imagenBase64))
-			{
-				await message.ErrorAsync("Error al convertir la imagen a Base64");
-				return;
-			}
+            // Convertir a Base64
+            using var stream = archivo.OpenReadStream(maxSizeInBytes);
+            string imagenBase64 = await Base64Helper.StreamToBase64(stream);
 
-			// Asignar valores
-			imagenView.Base64 = imagenBase64;
-			imagenView.TipoImagen = archivo.ContentType;
-			imagenView.Nombre = archivo.Name;
+            // Verificar que el Base64 se generó correctamente
+            if (string.IsNullOrWhiteSpace(imagenBase64))
+            {
+                await message.ErrorAsync("Error al convertir la imagen a Base64");
+                return;
+            }
 
-			Console.WriteLine($"✅ Imagen cargada: Base64 Length: {imagenBase64.Length}");
-			await message.SuccessAsync("Imagen cargada exitosamente");
+            // Asignar valores
+            imagenView.Base64 = imagenBase64;
+            imagenView.TipoImagen = archivo.ContentType;
+            imagenView.Nombre = archivo.Name;
 
-			StateHasChanged();
-		}
-		catch (Exception ex)
-		{
-			Console.WriteLine($"❌ Error en SubirFoto: {ex}");
-			await message.ErrorAsync($"Error al procesar la imagen: {ex.Message}");
-		}
-	}
+            Console.WriteLine($"✅ Imagen cargada: Base64 Length: {imagenBase64.Length}");
+            await message.SuccessAsync("Imagen cargada exitosamente");
 
-	// Convertir a Móvil
-	private T Convertir<T>(object source) where T : new()
-	{
-		T movil = new T();
-		PropertyInfo[] Propiedades = typeof(T).GetProperties();
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"❌ Error en SubirFoto: {ex}");
+            await message.ErrorAsync($"Error al procesar la imagen: {ex.Message}");
+        }
+    }
 
-		foreach (PropertyInfo PropModificar in Propiedades)
-		{
-			PropertyInfo PropValor = source.GetType().GetProperty(PropModificar.Name);
-			if (PropValor != null && PropValor.PropertyType == PropModificar.PropertyType)
-			{
-				PropModificar.SetValue(movil, PropValor.GetValue(source));
-			}
-		}
+    // Convertir a Móvil
+    private T Convertir<T>(object source) where T : new()
+    {
+        T movil = new T();
+        PropertyInfo[] Propiedades = typeof(T).GetProperties();
 
-		return movil;
-	}
+        foreach (PropertyInfo PropModificar in Propiedades)
+        {
+            PropertyInfo PropValor = source.GetType().GetProperty(PropModificar.Name);
+            if (PropValor != null && PropValor.PropertyType == PropModificar.PropertyType)
+            {
+                PropModificar.SetValue(movil, PropValor.GetValue(source));
+            }
+        }
 
-	// Otros
+        return movil;
+    }
 
-	protected override async Task OnInitializedAsync()
-	{
-		await Init();
-	}
+    // Otros
 
-	private async Task Init()
-	{
-		movilView = new();
-		imagenView = new();
+    protected override async Task OnInitializedAsync()
+    {
+        await Init();
+    }
 
-		await CargarBomberos();
-		await CargarMovil();
-	}
+    private async Task Init()
+    {
+        movilView = new();
+        imagenView = new();
 
-	private async Task CargarBomberos()
-	{
-		var BomberosObjectList = await BomberoService.ObtenerTodosLosBomberosAsync();
-		ListaBomberos = BomberosObjectList.ToBomberoViewModelList().ToList();
-	}
+        await CargarBomberos();
+        await CargarMovil();
+    }
+
+    private async Task CargarBomberos()
+    {
+        var BomberosObjectList = await BomberoService.ObtenerTodosLosBomberosAsync();
+        ListaBomberos = BomberosObjectList.ToBomberoViewModelList().ToList();
+    }
 }

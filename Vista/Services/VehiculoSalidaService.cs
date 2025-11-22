@@ -128,21 +128,21 @@ namespace Vista.Services
                     }
                 }
 
-                _context.VehiculoSalidas.Add(vehiculo);
-
-                await _context.SaveChangesAsync(); // Guardamos primero el vehículo para obtener su ID
-
-                // Si hay imagen, la vinculamos y la guardamos
+                // Si hay imagen, la vinculamos
 
                 if (imagen is Imagen_VehiculoSalida imagenVehiculo)
                 {
-                    imagenVehiculo.VehiculoId = vehiculo.VehiculoId; // Asignamos el ID recién generado
-                    await _imagenService.GuardarImagenAsync(imagenVehiculo);
+                    ValidationHelper.Validar(imagen);
+                    vehiculo.Imagen = imagenVehiculo;                    
                 }
                 else
                 {
                     throw new InvalidOperationException("Tipo de imagen no soportado para vehículos.");
                 }
+
+                _context.VehiculoSalidas.Add(vehiculo);
+
+                await _context.SaveChangesAsync(); // Guardamos primero el vehículo para obtener su ID
 
                 await transaction.CommitAsync(); // Confirmamos la transacción si todo salió bien
             }
@@ -197,13 +197,7 @@ namespace Vista.Services
 
         private async Task SetEncargadoAsync(VehiculoSalida destino, VehiculoSalida origen)
         {
-            var id = origen.Encargado?.PersonaId ?? origen.EncargadoId;
-            if (id.HasValue)
-            {
-                var enc = await _bomberosService.ObtenerBomberoPorIdAsync(id.Value);
-                destino.Encargado = enc;
-                destino.EncargadoId = enc?.PersonaId;
-            }
+            destino.EncargadoId = origen.Encargado?.PersonaId;
         }
 
         private void ActualizarPropiedadesEscalares(VehiculoSalida destino, VehiculoSalida origen)

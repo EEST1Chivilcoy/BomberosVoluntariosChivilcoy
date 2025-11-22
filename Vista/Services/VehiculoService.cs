@@ -1,9 +1,4 @@
-﻿using DocumentFormat.OpenXml.InkML;
-using Microsoft.AspNetCore.Components;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
 using Vista.Data;
 using Vista.Data.Enums;
 using Vista.Data.Models.Imagenes;
@@ -27,32 +22,25 @@ namespace Vista.Services
         {
             _context = context;
         }
+
         public async Task<VehiculoSalida> AgregarVehiculo(VehiculoSalida vehiculo)
         {
             if (vehiculo.Encargado != null)
-            {
-                Bombero? Encargado = await _context.Bomberos.SingleOrDefaultAsync(b => b.PersonaId == vehiculo.Encargado.PersonaId);
-                vehiculo.Encargado = Encargado;
-                if (Encargado.VehiculosEncargado == null) Encargado.VehiculosEncargado = new();
-                Encargado.VehiculosEncargado.Add(vehiculo);
-            }
-            if (vehiculo is Movil)
-            {
-                _context.Moviles.Add((Movil)vehiculo);
-            }
-            else
-            {
-                _context.Embarcacion.Add((Embarcacion)vehiculo);
-            }
+                vehiculo.EncargadoId = vehiculo.Encargado.PersonaId;
+            _context.Add(vehiculo);
             await _context.SaveChangesAsync();
             return vehiculo;
         }
+
         public async Task<VehiculoSalida> EditarVehiculo(VehiculoSalida vehiculo)
         {
             try
             { //PENDIENTE: Terminar de pulir
-                VehiculoSalida Editar = await _context.Set<VehiculoSalida>().SingleOrDefaultAsync(e => e.VehiculoId == vehiculo.VehiculoId);
-                if( (Editar is Embarcacion && vehiculo is Movil) || (Editar is Movil && vehiculo is Embarcacion) )
+                VehiculoSalida? Editar = await _context.Set<VehiculoSalida>()
+                    .Include(x => x.Imagen)
+                    .SingleOrDefaultAsync(e => e.VehiculoId == vehiculo.VehiculoId);
+
+                if ((Editar is Embarcacion && vehiculo is Movil) || (Editar is Movil && vehiculo is Embarcacion))
                 {
                     int? ImagenId = 0;
                     if (vehiculo.Imagen == null && Editar.Imagen != null)
@@ -68,9 +56,9 @@ namespace Vista.Services
                         if (Encargado.VehiculosEncargado == null) Encargado.VehiculosEncargado = new();
                         Encargado.VehiculosEncargado.Add(vehiculo);
                     }
-                    if(ImagenId != null && ImagenId != 0)
+                    if (ImagenId != null && ImagenId != 0)
                     {
-                        Imagen_VehiculoSalida EditarImagen = await _context.ImagenesVehiculo.SingleOrDefaultAsync(i=>i.ImagenId == ImagenId);
+                        Imagen_VehiculoSalida EditarImagen = await _context.ImagenesVehiculo.SingleOrDefaultAsync(i => i.ImagenId == ImagenId);
                         vehiculo.Imagen = EditarImagen;
                         vehiculo.ImagenId = EditarImagen.ImagenId;
                     }
