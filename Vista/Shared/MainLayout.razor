@@ -332,48 +332,127 @@
     string[] GetSelectedMenuKeys()
     {
         var uri = navigationManager.Uri.ToLower();
+        List<string> selectedKeys = new List<string>();
 
         // Verificar primero si es la página de inicio
         if (IsHome())
-            return new[] { "home" };
+        {
+            selectedKeys.Add("home");
+            return selectedKeys.ToArray();
+        }
 
-        // Verificar rutas específicas primero (más específicas antes que las generales)
-        if (uri.Contains("/bomberos/legajo"))
-            return new[] { "legajo" };
-        if (uri.Contains("/bomberos") && !uri.Contains("/legajo") && !uri.Contains("/sancionados") && !uri.Contains("/ascenso"))
-            return new[] { "personal" };
-        if (uri.Contains("/licencias"))
-            return new[] { "licencias" };
-        if (uri.Contains("/unidades"))
-            return new[] { "moviles" };
-        if (uri.Contains("/salidas"))
-            return new[] { "salidas" };
-        if (uri.Contains("/incidentes-vehiculos"))
-            return new[] { "firmas" };
+        // Verificar rutas específicas de submenús primero
+        // Submenú Ética
+        if (uri.Contains("/bomberos/sancionados"))
+        {
+            selectedKeys.Add("etica");
+            selectedKeys.Add("sanciones");
+            return selectedKeys.ToArray();
+        }
+        if (uri.Contains("/bomberos/ascenso"))
+        {
+            selectedKeys.Add("etica");
+            selectedKeys.Add("ascensos");
+            return selectedKeys.ToArray();
+        }
+        
+        // Submenú Reportes
         if (uri.Contains("/reportes/historialsalidas"))
-            return new[] { "reportes-salidas" };
+        {
+            selectedKeys.Add("reportes");
+            selectedKeys.Add("reportes-salidas");
+            return selectedKeys.ToArray();
+        }
         if (uri.Contains("/reportes/historialbomberos"))
-            return new[] { "reportes-bomberos" };
+        {
+            selectedKeys.Add("reportes");
+            selectedKeys.Add("reportes-bomberos");
+            return selectedKeys.ToArray();
+        }
         if (uri.Contains("/reportes/reportes_choferes"))
-            return new[] { "reportes-choferes" };
+        {
+            selectedKeys.Add("reportes");
+            selectedKeys.Add("reportes-choferes");
+            return selectedKeys.ToArray();
+        }
         if (uri.Contains("/reportes/historialmoviles"))
-            return new[] { "reportes-moviles" };
-        if (uri.Contains("/reportes"))
-            return new[] { "reportes" };
-        if (uri.Contains("/brigadas"))
-            return new[] { "brigadas" };
-        if (uri.Contains("/equiposautonomos"))
-            return new[] { "equipos-autonomos" };
+        {
+            selectedKeys.Add("reportes");
+            selectedKeys.Add("reportes-moviles");
+            return selectedKeys.ToArray();
+        }
+        
+        // Submenú Herramientas
+        if (uri.Contains("/fuerzasintervinientes"))
+        {
+            selectedKeys.Add("herramientas");
+            selectedKeys.Add("fuerzas");
+            return selectedKeys.ToArray();
+        }
         if (uri.Contains("/dependencias/comunicacion"))
-            return new[] { "comunicacion" };
+        {
+            selectedKeys.Add("herramientas");
+            selectedKeys.Add("comunicacion");
+            return selectedKeys.ToArray();
+        }
         if (uri.Contains("/dependencias/deposito"))
-            return new[] { "deposito" };
-        if (uri.Contains("/brigadas") || uri.Contains("/dependencias") || uri.Contains("/equiposautonomos"))
-            return new[] { "herramientas" };
-        if (uri.Contains("/bomberos/sancionados") || uri.Contains("/bomberos/ascenso"))
-            return new[] { "etica" };
+        {
+            selectedKeys.Add("herramientas");
+            selectedKeys.Add("deposito");
+            return selectedKeys.ToArray();
+        }
+        if (uri.Contains("/dependencias") && !uri.Contains("/comunicacion") && !uri.Contains("/deposito"))
+        {
+            selectedKeys.Add("herramientas");
+            selectedKeys.Add("dependencias");
+            return selectedKeys.ToArray();
+        }
+        if (uri.Contains("/brigadas"))
+        {
+            selectedKeys.Add("herramientas");
+            selectedKeys.Add("brigadas");
+            return selectedKeys.ToArray();
+        }
+        if (uri.Contains("/equiposautonomos"))
+        {
+            selectedKeys.Add("herramientas");
+            selectedKeys.Add("equipos-autonomos");
+            return selectedKeys.ToArray();
+        }
 
-        return Array.Empty<string>();
+        // Páginas principales
+        if (uri.Contains("/bomberos/legajo"))
+        {
+            selectedKeys.Add("legajo");
+            return selectedKeys.ToArray();
+        }
+        if (uri.Contains("/personal/bomberos") || (uri.Contains("/bomberos") && !uri.Contains("/legajo") && !uri.Contains("/sancionados") && !uri.Contains("/ascenso")))
+        {
+            selectedKeys.Add("personal");
+            return selectedKeys.ToArray();
+        }
+        if (uri.Contains("/licencias"))
+        {
+            selectedKeys.Add("licencias");
+            return selectedKeys.ToArray();
+        }
+        if (uri.Contains("/unidades"))
+        {
+            selectedKeys.Add("moviles");
+            return selectedKeys.ToArray();
+        }
+        if (uri.Contains("/salidas"))
+        {
+            selectedKeys.Add("salidas");
+            return selectedKeys.ToArray();
+        }
+        if (uri.Contains("/incidentes-vehiculos"))
+        {
+            selectedKeys.Add("firmas");
+            return selectedKeys.ToArray();
+        }
+
+        return selectedKeys.ToArray();
     }
 
     RenderFragment reportesTitle =
