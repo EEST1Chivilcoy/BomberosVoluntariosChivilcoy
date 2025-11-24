@@ -45,53 +45,57 @@
 
         <Row Gutter="30" Style="justify-content: center;">
             <AntDesign.Col Xs="12" Sm="6" Md="6" Lg="6" Xl="6">
-                <Card Style="@GetCardStyle(CategoriaPersonal.CuerpoActivo)"
-                      @onclick="() => CambiarCategoria(CategoriaPersonal.CuerpoActivo)">
-                    <div class="stat-icon-large">👥</div>
-                    <Title Level="2" Style="color: #8b0000; margin: 15px 0 10px 0; font-size: 2.5rem; font-weight: 700; line-height: 1;">
-                        @cantidadCuerpoActivo
-                    </Title>
-                    <Text Style="color: #666; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; font-size: 1rem;">
-                        Bomberos Activos
-                    </Text>
-                </Card>
+                <div @onclick="() => CambiarCategoria(CategoriaPersonal.CuerpoActivo)">
+                    <Card Style="@GetCardStyle(CategoriaPersonal.CuerpoActivo)">
+                        <div class="stat-icon-large">👥</div>
+                        <Title Level="2" Style="color: #8b0000; margin: 15px 0 10px 0; font-size: 2.5rem; font-weight: 700; line-height: 1;">
+                            @cantidadCuerpoActivo
+                        </Title>
+                        <Text Style="color: #666; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; font-size: 1rem;">
+                            Bomberos Activos
+                        </Text>
+                    </Card>
+                </div>
             </AntDesign.Col>
             <AntDesign.Col Xs="12" Sm="6" Md="6" Lg="6" Xl="6">
-                <Card Style="@GetCardStyle(CategoriaPersonal.Reserva)"
-                      @onclick="() => CambiarCategoria(CategoriaPersonal.Reserva)">
-                    <div class="stat-icon-large">👥</div>
-                    <Title Level="2" Style="color: #8b0000; margin: 15px 0 10px 0; font-size: 2.5rem; font-weight: 700; line-height: 1;">
-                        @cantidadReserva
-                    </Title>
-                    <Text Style="color: #666; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; font-size: 1rem;">
-                        Personal de reserva
-                    </Text>
-                </Card>
+                <div @onclick="() => CambiarCategoria(CategoriaPersonal.Reserva)">
+                    <Card Style="@GetCardStyle(CategoriaPersonal.Reserva)">
+                        <div class="stat-icon-large">👥</div>
+                        <Title Level="2" Style="color: #8b0000; margin: 15px 0 10px 0; font-size: 2.5rem; font-weight: 700; line-height: 1;">
+                            @cantidadReserva
+                        </Title>
+                        <Text Style="color: #666; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; font-size: 1rem;">
+                            Personal de reserva
+                        </Text>
+                    </Card>
+                </div>
             </AntDesign.Col>
             <AntDesign.Col Xs="12" Sm="6" Md="6" Lg="6" Xl="6">
-                <Card Style="@GetCardStyle(CategoriaPersonal.ComisionDirectiva)"
-                      @onclick="() => CambiarCategoria(CategoriaPersonal.ComisionDirectiva)">
-                    <div class="stat-icon-large">👥</div>
-                    <Title Level="2" Style="color: #8b0000; margin: 15px 0 10px 0; font-size: 2.5rem; font-weight: 700; line-height: 1;">
-                        @cantidadComisionDirectiva
-                    </Title>
-                    <Text Style="color: #666; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; font-size: 1rem;">
-                        Comision Directiva
-                    </Text>
-                </Card>
+                <div @onclick="() => CambiarCategoria(CategoriaPersonal.ComisionDirectiva)">
+                    <Card Style="@GetCardStyle(CategoriaPersonal.ComisionDirectiva)">
+                        <div class="stat-icon-large">👥</div>
+                        <Title Level="2" Style="color: #8b0000; margin: 15px 0 10px 0; font-size: 2.5rem; font-weight: 700; line-height: 1;">
+                            @cantidadComisionDirectiva
+                        </Title>
+                        <Text Style="color: #666; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; font-size: 1rem;">
+                            Comision Directiva
+                        </Text>
+                    </Card>
+                </div>
             </AntDesign.Col>
 
             <AntDesign.Col Xs="12" Sm="6" Md="6" Lg="6" Xl="6">
-                <Card Style="@GetCardStyle(CategoriaPersonal.Aspirantes)"
-                      @onclick="() => CambiarCategoria(CategoriaPersonal.Aspirantes)">
-                    <div class="stat-icon-large">👥</div>
-                    <Title Level="2" Style="color: #8b0000; margin: 15px 0 10px 0; font-size: 2.5rem; font-weight: 700; line-height: 1;">
-                        @cantidadAspirantes
-                    </Title>
-                    <Text Style="color: #666; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; font-size: 1rem;">
-                        Aspirantes
-                    </Text>
-                </Card>
+                <div @onclick="() => CambiarCategoria(CategoriaPersonal.Aspirantes)">
+                    <Card Style="@GetCardStyle(CategoriaPersonal.Aspirantes)">
+                        <div class="stat-icon-large">👥</div>
+                        <Title Level="2" Style="color: #8b0000; margin: 15px 0 10px 0; font-size: 2.5rem; font-weight: 700; line-height: 1;">
+                            @cantidadAspirantes
+                        </Title>
+                        <Text Style="color: #666; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; font-size: 1rem;">
+                            Aspirantes
+                        </Text>
+                    </Card>
+                </div>
             </AntDesign.Col>
         </Row>
     </div>
