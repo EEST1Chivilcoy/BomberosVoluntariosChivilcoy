@@ -656,5 +656,19 @@
                 FormaPago = socio.FormaPago
             };
         }
+
+        // Agregar la dirección actual a la lista de direcciones para que aparezca en el Select
+        if (!string.IsNullOrWhiteSpace(socio.Direccion))
+        {
+            direcciones = new List<Direccion>
+            {
+                new Direccion
+                {
+                    Descripcion = socio.Direccion,
+                    Lat = socio.Latitud,
+                    Lon = socio.Longitud
+                }
+            };
+        }
     }
 }
