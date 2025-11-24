@@ -94,6 +94,11 @@
         background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
         color: #fff !important;
     }
+    .grado-error {
+        color: #ff4d4f;
+        font-size: 12px;
+        margin-top: 4px;
+    }
 </style>
 
 <Modal Visible="@Visible"
@@ -149,7 +154,29 @@
                 </AntDesign.Col>
                 <AntDesign.Col Span="12">
                     <FormItem Label="🎖️ Grado ascenso" Required Class="modal-crear-ascenso-form-item">
-                        <EnumSelect TEnum="@EscalafonJerarquico" @bind-Value="AscensoVM.GradoAscenso" />
+                        <Select TItem="EscalafonJerarquico"
+                                TItemValue="EscalafonJerarquico"
+                                DataSource="@GradosDisponiblesParaAscenso"
+                                @bind-Value="@AscensoVM.GradoAscenso"
+                                Placeholder="Seleccione grado de ascenso"
+                                DefaultActiveFirstOption="false"
+                                Disabled="@(AscensoVM.GradoAntiguo == EscalafonJerarquico.Jefe)"
+                                OnSelectedItemChanged="@OnGradoAscensoChange">
+                            <LabelTemplate Context="item">
+                                @item.GetDisplayName()
+                            </LabelTemplate>
+                            <ItemTemplate Context="item">
+                                @item.GetDisplayName()
+                            </ItemTemplate>
+                        </Select>
+                        @if (AscensoVM.GradoAntiguo == EscalafonJerarquico.Jefe)
+                        {
+                            <div class="grado-error">Ya se encuentra en el grado máximo</div>
+                        }
+                        @if (!string.IsNullOrEmpty(gradoAscensoError))
+                        {
+                            <div class="grado-error">@gradoAscensoError</div>
+                        }
                     </FormItem>
                 </AntDesign.Col>
             </Row>
@@ -184,12 +211,55 @@
 
 @code {
     [Parameter] public EventCallback OnClose { get; set; }
-    [Parameter] public bool Visible { get; set; } // <-- Nuevo parámetro para visibilidad
+    [Parameter] public bool Visible { get; set; }
     List<BomberoViweModel> BomberoTodos = new List<BomberoViweModel>();
     public Bombero[]? bomberos;
     public int Bombero { get; set; }
     BomberosDbContext Context { get; set; }
     AscensoViewModel AscensoVM { get; set; } = new AscensoViewModel();
+    private string gradoAscensoError = string.Empty;
+
+    // Computed property para obtener grados disponibles para ascenso
+    private List<EscalafonJerarquico> GradosDisponiblesParaAscenso
+    {
+        get
+        {
+            if (AscensoVM.GradoAntiguo == EscalafonJerarquico.Jefe)
+            {
+                return new List<EscalafonJerarquico>();
+            }
+
+            // Retorna solo los grados con valor numérico menor (mayor jerarquía)
+            return Enum.GetValues<EscalafonJerarquico>()
+                .Where(g => (int)g < (int)AscensoVM.GradoAntiguo)
+                .OrderBy(g => (int)g)
+                .ToList();
+        }
+    }
+
+    private void OnGradoAscensoChange(EscalafonJerarquico gradoSeleccionado)
+    {
+        ValidateGradoAscenso();
+    }
+
+    private void ValidateGradoAscenso()
+    {
+        gradoAscensoError = string.Empty;
+
+        if (AscensoVM.GradoAscenso == default(EscalafonJerarquico))
+        {
+            return;
+        }
+
+        // Validar que el nuevo grado sea superior (menor valor numérico)
+        if ((int)AscensoVM.GradoAscenso >= (int)AscensoVM.GradoAntiguo)
+        {
+            gradoAscensoError = "El grado de ascenso debe ser superior al grado actual";
+            AscensoVM.GradoAscenso = default(EscalafonJerarquico);
+        }
+
+        StateHasChanged();
+    }
 
     private async void HandleChange()
     {
@@ -197,12 +267,15 @@
         if (bombero != null)
         {
             AscensoVM.GradoAntiguo = bombero.Grado;
+            AscensoVM.GradoAscenso = default(EscalafonJerarquico); // Reset grado ascenso
+            gradoAscensoError = string.Empty;
+            StateHasChanged();
         }
     }
 
-    // View Model
+    // View Model with validation
 
-    public class AscensoViewModel
+    public class AscensoViewModel : IValidatableObject
     {
         public Bombero PersonalAfectado { get; set; }
 
@@ -220,6 +293,27 @@
 
         [Range(1, int.MaxValue, ErrorMessage = "El número de acta debe ser mayor que 0.")]
         public int NumeroActa { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            // Validar que GradoAscenso sea superior (menor valor numérico) a GradoAntiguo
+            if (GradoAscenso != default(EscalafonJerarquico) && (int)GradoAscenso >= (int)GradoAntiguo)
+            {
+                yield return new ValidationResult(
+                    "El grado de ascenso debe ser superior al grado actual.",
+                    new[] { nameof(GradoAscenso) }
+                );
+            }
+
+            // Validar que no se intente ascender si ya está en el grado máximo
+            if (GradoAntiguo == EscalafonJerarquico.Jefe)
+            {
+                yield return new ValidationResult(
+                    "El bombero ya se encuentra en el grado máximo (Jefe).",
+                    new[] { nameof(GradoAntiguo) }
+                );
+            }
+        }
     }
 
 
@@ -229,7 +323,27 @@
     {
         try
         {
+            // Validación adicional antes de guardar
+            if ((int)AscensoVM.GradoAscenso >= (int)AscensoVM.GradoAntiguo)
+            {
+                await message.ErrorAsync("El grado de ascenso debe ser superior al grado actual");
+                return;
+            }
+
+            if (AscensoVM.GradoAntiguo == EscalafonJerarquico.Jefe)
+            {
+                await message.ErrorAsync("El bombero ya se encuentra en el grado máximo");
+                return;
+            }
+
             Bombero? BomberoAfectado = await Context.Bomberos.Where(b => b.NumeroLegajo == Bombero).SingleOrDefaultAsync();
+            
+            if (BomberoAfectado == null)
+            {
+                await message.ErrorAsync("No se encontró el bombero seleccionado");
+                return;
+            }
+
             AscensoBombero ascenso = new()
                 {
                     FechaAscenso = DateOnly.FromDateTime(AscensoVM.FechaAscenso),
@@ -240,6 +354,7 @@
                     NumeroActa = AscensoVM.NumeroActa,
                     NumeroLibero = AscensoVM.NumeroLibro
                 };
+            
             await BomberoService.AscenderBombero(ascenso);
             await Init();
             await OnClose.InvokeAsync();
@@ -257,6 +372,7 @@
 
         }
     }
+    
     private void OnFinishFailed(EditContext editContext)
     {
         Console.WriteLine($"Failed:{JsonSerializer.Serialize(AscensoVM)}");
@@ -288,6 +404,7 @@
     private async Task Init()
     {
         AscensoVM = new();
+        gradoAscensoError = string.Empty;
 
         Context = DbFactory.CreateDbContext();
 
