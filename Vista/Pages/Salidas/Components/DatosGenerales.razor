@@ -63,8 +63,8 @@
 
 <div class="datos-generales">
     <Form Model="Model"
-          ValidateOnChange="@true"
-          Loading="_formloading">
+          ValidateOnChange="true"
+          Loading="@(_formloading || !isApiAvailable)">
 
         @* 🕒 Información Temporal *@
         <div style="margin-bottom: 24px;">
@@ -75,13 +75,14 @@
             {
                 <FormItem Label="Fechas">
                     <RangePicker TValue="DateTime[]" Disabled="new bool[] { false, true }"
-                                 @bind-Value="@FechaRange" />
+                                 @bind-Value="@FechaRange"
+                                 DisabledDate="@(date => date > DateTime.Today)" />
                 </FormItem>
             }
             else
             {
                 <FormItem Label="Fecha">
-                    <DatePicker TValue="DateTime" Picker="@DatePickerType.Date" @bind-Value="@Model.FechaSalida" />
+                    <DatePicker TValue="DateTime" Picker="@DatePickerType.Date" @bind-Value="@Model.FechaSalida" DisabledDate="@(date => date > DateTime.Today)" />
                 </FormItem>
             }
 
@@ -101,43 +102,41 @@
                 <h4 style="color: #1890ff; margin: 0; font-weight: 600; font-size: 1.08rem;">📍 Ubicación</h4>
             </div>
 
-            @if (isApiAvailable)
-            {
-                <Row Gutter="24">
-                    <AntDesign.Col Xs="24" Md="12">
-                        <FormItem Label="Dirección">
-                            <Select TItem="Direccion"
-                                    TItemValue="Direccion"
-                                    DataSource="@direcciones"
-                                    @bind-Value="@Model.DireccionDTO"
-                                    Placeholder="Ingrese una direccion o coordenadas"
-                                    LabelName="@nameof(Direccion.Descripcion)"
-                                    OnSearch="OnSearch"
-                                    SearchDebounceMilliseconds="350"
-                                    EnableSearch
-                                    Loading="@_loading"
-                                    OnSelectedItemChanged="OnStreetSelected">
-                            </Select>
-                        </FormItem>
-                        <FormItem Label="Tipo Zona">
-                            <EnumSelect TEnum="TipoZona ?" @bind-Value="@Model.TipoZona" />
-                        </FormItem>
-                    </AntDesign.Col>
+            <Row Gutter="24">
+                <AntDesign.Col Xs="24" Md="12">
+                    <FormItem Label="Dirección">
+                        <Select TItem="Direccion"
+                                TItemValue="Direccion"
+                                DataSource="@direcciones"
+                                @bind-Value="@Model.DireccionDTO"
+                                Placeholder="Ingrese una direccion o coordenadas"
+                                LabelName="@nameof(Direccion.Descripcion)"
+                                OnSearch="OnSearch"
+                                SearchDebounceMilliseconds="350"
+                                EnableSearch
+                                Loading="@_loading"
+                                OnSelectedItemChanged="OnStreetSelected">
+                        </Select>
+                    </FormItem>
+                    <FormItem Label="Tipo Zona">
+                        <EnumSelect TEnum="TipoZona ?" @bind-Value="@Model.TipoZona" />
+                    </FormItem>
+                </AntDesign.Col>
 
-                    <AntDesign.Col Xs="24" Md="12">
-                        @if (Model.Latitud.HasValue && Model.Longitud.HasValue)
-                        {
-                            <div class="map-container">
-                                <iframe style="border:0; width: 100%; height: 100%;"
-                                        src="@GetGoogleMapsSatelliteUrl(Model.Latitud.Value, Model.Longitud.Value)"
-                                        frameborder="0"
-                                        allowfullscreen>
-                                </iframe>
-                            </div>
-                        }
-                    </AntDesign.Col>
-                </Row>
-            }
+                <AntDesign.Col Xs="24" Md="12">
+                    @if (Model.Latitud.HasValue && Model.Longitud.HasValue)
+                    {
+                        <div class="map-container">
+                            <iframe style="border:0; width: 100%; height: 100%;"
+                                    src="@GetGoogleMapsSatelliteUrl(Model.Latitud.Value, Model.Longitud.Value)"
+                                    frameborder="0"
+                                    allowfullscreen>
+                            </iframe>
+                        </div>
+                    }
+                </AntDesign.Col>
+            </Row>
+
         </div>
 
         @* 🏢 Detalles del Lugar *@
@@ -192,11 +191,11 @@
             <div style="border-bottom: 2px solid #1890ff; padding-bottom: 8px; margin-bottom: 16px;">
                 <h4 style="color: #1890ff; margin: 0; font-weight: 600;">Detalles o Daños Generales</h4>
             </div>
-        
+
             <FormItem Label="Tipo de Servicio" Required>
-                <EnumSelect TEnum="TipoServicioSalida?" @bind-Value="@Model.TipoServicio" />
+                <EnumSelect TEnum="TipoServicioSalida ?" @bind-Value="@Model.TipoServicio" />
             </FormItem>
-        
+
             <FormItem>
                 <TextArea Placeholder="Describa la situación o evento..."
                           @bind-Value="@Model.Descripcion"
