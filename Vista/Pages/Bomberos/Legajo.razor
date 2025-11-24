@@ -50,49 +50,16 @@
         </AntDesign.Col>
 
         <AntDesign.Col Xs="24" Sm="24" Md="24" Lg="16" Xl="18">
+
             <Card Bordered="false" class="services-card2">
                 <div class="header-servicios">
                     <div class="banner-container">
                         <div class="servicios-banner">
                             <div class="banner-image-container">
-                                <img src="Imagenes/banderin.png" alt="Banderín de puntaje" class="banderin-image" />
-                            </div>
-                            <div class="banner-text" role="heading" aria-level="2">PUNTAJE</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="estadisticas-puntuaje" role="region" aria-label="Estadísticas de puntaje">
-                    <Statistic Title="PUNTAJE MENSUAL"
-                               Value="14"
-                               ValueStyle=" color: #a51c16; font-weight: bold;" />
-                    <Divider Type="@DividerType.Vertical" class="stats-divider" />
-                    <Statistic Title="PUNTAJE ANUAL"
-                               Value="41"
-                               ValueStyle=" color: #a51c16; font-weight: bold;" />
-                    <Divider Type="@DividerType.Vertical" class="stats-divider" />
-                    <Statistic Title="LICENCIA MENSUAL"
-                               Value="23"
-                               ValueStyle=" color: #a51c16; font-weight: bold;" />
-                    <Divider Type="@DividerType.Vertical" class="stats-divider" />
-                    <Statistic Title="LICENCIA ANUAL"
-                               Value="12"
-                               ValueStyle=" color: #a51c16; font-weight: bold;" />
-                    <Divider Type="@DividerType.Vertical" class="stats-divider" />
-                    <Statistic Title="FIRMAS"
-                               Value="65"
-                               ValueStyle=" color: #a51c16; font-weight: bold;" />
-                </div>
-            </Card>
-
-            <Card Bordered="false" class="services-card">
-                <div class="header-servicios">
-                    <div class="banner-container">
-                        <div class="servicios-banner">
-                            <div class="banner-image-container">
                                 <img src="Imagenes/banderin.png" alt="Banderín de servicios" class="banderin-image" />
-                                <div class="banner-number-overlay" aria-label="55 servicios totales">55</div>
+                                <div class="banner-number-overlay" aria-label="63 servicios totales">63</div>
                             </div>
-                            <div class="banner-text" role="heading" aria-level="2">TOTAL DE SERVICIOS EN 2024</div>
+                            <div class="banner-text" role="heading" aria-level="2">@($"TOTAL DE SERVICIOS EN {añoActual}")</div>
                         </div>
                     </div>
                 </div>
@@ -109,6 +76,44 @@
                     <Statistic Title="SERVICIOS CHOFER"
                                Value="0"
                                ValueStyle="font-size: 2em; color: #a51c16; font-weight: bold;" />
+                    <Divider Type="@DividerType.Vertical" class="stats-divider" />
+                    <Statistic Title="SERVICIOS A CARGO"
+                               Value="8"
+                               ValueStyle="font-size: 2em; color: #a51c16; font-weight: bold;" />
+                </div>
+            </Card>
+
+            <Card Bordered="false" class="services-card">
+                <div class="header-servicios">
+                    <div class="banner-container">
+                        <div class="servicios-banner">
+                            <div class="banner-image-container">
+                                <img src="Imagenes/banderin.png" alt="Banderín de puntaje" class="banderin-image" />
+                            </div>
+                            <div class="banner-text" role="heading" aria-level="2">PUNTAJE</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="estadisticas-puntuaje" role="region" aria-label="Estadísticas de puntaje">
+                    <Statistic Title="@($"PUNTAJE MENSUAL ({mesAnterior})")"
+                               Value="14"
+                               ValueStyle=" color: #a51c16; font-weight: bold;" />
+                    <Divider Type="@DividerType.Vertical" class="stats-divider" />
+                    <Statistic Title="@($"LICENCIA MENSUAL ({mesAnterior})")"
+                               Value="23"
+                               ValueStyle=" color: #a51c16; font-weight: bold;" />
+                    <Statistic Title="@($"PUNTAJE ANUAL ({añoActual})")"
+                               Value="41"
+                               ValueStyle=" color: #a51c16; font-weight: bold;" />
+                    <Divider Type="@DividerType.Vertical" class="stats-divider" />
+                    <Divider Type="@DividerType.Vertical" class="stats-divider" />
+                    <Statistic Title="@($"LICENCIA ANUAL ({añoActual})")"
+                               Value="12"
+                               ValueStyle=" color: #a51c16; font-weight: bold;" />
+                    <Divider Type="@DividerType.Vertical" class="stats-divider" />
+                    <Statistic Title="@($"FIRMAS ({mesActual})")"
+                               Value="65"
+                               ValueStyle=" color: #a51c16; font-weight: bold;" />
                 </div>
             </Card>
         </AntDesign.Col>
@@ -116,6 +121,10 @@
 </div>
 
 @code {
+    private string mesAnterior = DateTime.Now.AddMonths(-1).ToString("MMMM", new System.Globalization.CultureInfo("es-ES")).ToUpper();
+    private string mesActual = DateTime.Now.ToString("MMMM", new System.Globalization.CultureInfo("es-ES")).ToUpper();
+    private string añoActual = DateTime.Now.Year.ToString();
+
     private void CerrarSesion()
     {
         // Cierra sesión local sin cerrar la sesión de Microsoft Entra ID

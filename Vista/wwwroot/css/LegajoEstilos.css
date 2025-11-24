@@ -1,3 +1,5 @@
+/* File: Vista\wwwroot\css\LegajoEstilos.css */
+
 :root {
     --color-rojo: #a51c16;
     --color-amarillo-acento: #edb34d;
@@ -244,7 +246,7 @@
     flex-wrap: nowrap;
     justify-content: space-around;
     align-items: center;
-    gap: 15px;
+    gap: 10px;
     margin-top: 50px;
 }
 
@@ -255,7 +257,7 @@
         text-align: center;
         flex-grow: 1;
         margin: 0 5px;
-        min-width: 80px;
+        min-width: 70px;
     }
 
 .ant-statistic-title {
@@ -394,12 +396,12 @@
         }
 
     .estadisticas-servicios {
-        gap: 10px;
+        gap: 8px;
         margin-top: 40px;
     }
 
         .estadisticas-servicios .ant-statistic {
-            min-width: 70px;
+            min-width: 60px;
         }
 }
 
@@ -543,7 +545,7 @@
 
         .estadisticas-servicios .ant-statistic,
         .estadisticas-puntuaje .ant-statistic {
-            min-width: 50px;
+            min-width: 45px;
             margin: 0 1px;
         }
 
