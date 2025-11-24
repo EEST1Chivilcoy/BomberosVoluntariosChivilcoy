@@ -75,40 +75,70 @@
 
         @Body
 
-        <div class="footer-section">
-            <div class="footer-content">
-                <Row Gutter="40">
-                    <AntDesign.Col Xs="24" Sm="24" Md="12" Lg="12" Xl="12">
-                        <div class="footer-left">
-                            <img src="/Imagenes/Logos.png"
-                                 alt="Logo Bomberos Voluntarios Chivilcoy"
-                                 class="footer-logo" />
-                            <div class="footer-info">
-                                <Title Level="3" Style="color: white; font-size: 1.4rem; font-weight: 600; margin: 0 0 5px 0; text-transform: uppercase;">
-                                    Sociedad de Bomberos<br />Voluntarios de Chivilcoy
-                                </Title>
-                                <Paragraph Style="color: #ccc; font-size: 0.9rem; margin: 0; line-height: 1.4;">
-                                    Desde 1945 al Servicio de la Comunidad
-                                </Paragraph>
-                            </div>
-                        </div>
-                    </AntDesign.Col>
-                    <AntDesign.Col Xs="24" Sm="24" Md="12" Lg="12" Xl="12">
-                        <div class="footer-right">
-                            <div class="footer-contact">
-                                <Title Level="4" Style="color: white; font-size: 1.2rem; font-weight: 600; margin: 0 0 10px 0; text-transform: uppercase;">
-                                    Contacto
-                                </Title>
-                                <Paragraph Class="footer-phone" Style="color: #ccc; font-size: 1rem; margin: 0; display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
-                                    <span class="phone-icon">📞</span>
-                                    100 / 424319-426066
-                                </Paragraph>
-                            </div>
-                        </div>
-                    </AntDesign.Col>
-                </Row>
-            </div>
-        </div>
+@Body
+
+<div class="footer-section">
+    <div class="footer-content">
+        <Row Gutter="40">
+            <AntDesign.Col Xs="24" Sm="24" Md="12" Lg="12" Xl="12">
+                <div class="footer-left">
+                    <img src="/Imagenes/Logos.png"
+                        alt="Logo Bomberos Voluntarios Chivilcoy"
+                        class="footer-logo" />
+                    <div class="footer-info">
+                        <Title Level="3" Style="color: white; font-size: 1.4rem; font-weight: 600; margin: 0 0 5px 0; text-transform: uppercase;">
+                            Sociedad de Bomberos<br />Voluntarios de Chivilcoy
+                        </Title>
+                        <Paragraph Style="color: #ccc; font-size: 0.9rem; margin: 0; line-height: 1.4;">
+                            Desde 1945 al Servicio de la Comunidad
+                        </Paragraph>
+                    </div>
+                </div>
+            </AntDesign.Col>
+            
+            <AntDesign.Col Xs="24" Sm="24" Md="12" Lg="12" Xl="12">
+                <div class="footer-right" style="display: flex; flex-direction: row; justify-content: flex-end;">
+                    
+                    <div class="footer-contact" style="margin-right: 40px; text-align: right; margin-bottom: 35px;">
+                        <Title Level="4" Style="color: white; font-size: 1.2rem; font-weight: 600;  text-transform: uppercase;">
+                            Contacto
+                        </Title>
+                        <Paragraph Class="footer-phone" Style="color: #ccc; font-size: 1rem; margin: 0; display: flex; align-items: center; justify-content: flex-end; gap: 10px;">
+                            <span class="phone-icon">📞</span>
+                            100 / 424319-426066
+                        </Paragraph>
+                    </div>
+
+                    <div class="footer-contact" style="display: flex; flex-direction: column; align-items: flex-end;">
+                        <Title Level="4" Style="color: white; font-size: 1.2rem; font-weight: 600; text-transform: uppercase;">
+                            Redes Sociales
+                        </Title>
+                        
+                        <Paragraph Class="footer-phone" 
+                                Style="color: #ccc; font-size: 1rem; margin: 0 0 10px 0; display: flex; align-items: center; justify-content: flex-end; gap: 10px;">
+                            <a href="https://www.instagram.com/bomberoschivilcoy?igsh=MnRucDJxbmo5ZDRl" 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                style="color:#ccc; text-decoration:none;">
+                                <span class="phone-icon">📸</span> </a>
+                            Instagram
+                        </Paragraph>
+                        
+                        <Paragraph Class="footer-phone"
+                                Style="color: #ccc; font-size: 1rem; margin: 0; display: flex; align-items: center; justify-content: flex-end; gap: 10px;">
+                            <a href="https://www.facebook.com/share/19yaF9vtHA/?mibextid=wwXIfr" 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                style="color:#ccc; text-decoration:none;">
+                                <span class="phone-icon">👍</span> </a>
+                            Facebook
+                        </Paragraph>
+                    </div>
+                </div>
+            </AntDesign.Col>
+        </Row>
+    </div>
+</div>
     </AntDesign.Layout>
 </div>
 
