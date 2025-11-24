@@ -68,7 +68,7 @@ namespace Vista.Data.Models.Socios
         /// Representa la forma de pago del socio. (Por defecto es Efectivo) (Igual es algo que se va a borrar, solo incluido para la presentacion del proyecto) (Borrar Luego)
         /// </summary>
         [Required(ErrorMessage = "La forma de pago es obligatoria.")]
-        public FormaDePago? FormaPago { get; set; } = FormaDePago.Efectivo;
+        public FormaDePago? FormaPago { get; set; }
 
         // --- Datos personales ---
 
