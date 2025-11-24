@@ -144,7 +144,7 @@
             <Row Class="modal-crear-ascenso-row" Gutter="16">
                 <AntDesign.Col Span="12">
                     <FormItem Label="🎖️ Grado anterior" Class="modal-crear-ascenso-form-item">
-                        <Input Value="@AscensoVM.GradoAntiguo" Disabled />
+                        <Input Value="@AscensoVM.GradoAntiguo.GetDisplayName()" ReadOnly />
                     </FormItem>
                 </AntDesign.Col>
                 <AntDesign.Col Span="12">
