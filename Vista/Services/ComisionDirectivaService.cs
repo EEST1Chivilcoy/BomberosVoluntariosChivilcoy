@@ -165,7 +165,6 @@ namespace Vista.Services
                         PersonalId = existente.PersonaId,
                         TelefonoCel = comisionDirectiva.Contacto?.TelefonoCel,
                         TelefonoLaboral = comisionDirectiva.Contacto?.TelefonoLaboral,
-                        TelefonoFijo = comisionDirectiva.Contacto?.TelefonoFijo,
                         Email = comisionDirectiva.Contacto?.Email
                     };
                 }
@@ -173,7 +172,6 @@ namespace Vista.Services
                 {
                     existente.Contacto.TelefonoCel = comisionDirectiva.Contacto?.TelefonoCel;
                     existente.Contacto.TelefonoLaboral = comisionDirectiva.Contacto?.TelefonoLaboral;
-                    existente.Contacto.TelefonoFijo = comisionDirectiva.Contacto?.TelefonoFijo;
                     existente.Contacto.Email = comisionDirectiva.Contacto?.Email;
                 }
 

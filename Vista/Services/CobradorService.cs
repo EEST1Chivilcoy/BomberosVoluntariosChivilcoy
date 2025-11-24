@@ -174,7 +174,6 @@ namespace Vista.Services
                         PersonalId = cobradorExistente.PersonaId,
                         TelefonoCel = cobrador.Contacto?.TelefonoCel,
                         TelefonoLaboral = cobrador.Contacto?.TelefonoLaboral,
-                        TelefonoFijo = cobrador.Contacto?.TelefonoFijo,
                         Email = cobrador.Contacto?.Email
                     };
                 }
@@ -182,7 +181,6 @@ namespace Vista.Services
                 {
                     cobradorExistente.Contacto.TelefonoCel = cobrador.Contacto?.TelefonoCel;
                     cobradorExistente.Contacto.TelefonoLaboral = cobrador.Contacto?.TelefonoLaboral;
-                    cobradorExistente.Contacto.TelefonoFijo = cobrador.Contacto?.TelefonoFijo;
                     cobradorExistente.Contacto.Email = cobrador.Contacto?.Email;
                 }
 

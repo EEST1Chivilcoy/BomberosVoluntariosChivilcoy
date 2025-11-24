@@ -376,11 +376,6 @@
                         </FormItem>
                     </AntDesign.Col>
                     <AntDesign.Col Span="6">
-                        <FormItem Label="Teléfono Fijo">
-                            <Input @bind-Value="@personalView.TelefonoFijo" Placeholder="Ingrese teléfono fijo" />
-                        </FormItem>
-                    </AntDesign.Col>
-                    <AntDesign.Col Span="6">
                         <FormItem Label="Teléfono Laboral">
                             <Input @bind-Value="@personalView.TelefonoLaboral" Placeholder="Ingrese teléfono laboral" />
                         </FormItem>
@@ -573,7 +568,6 @@
                 Contacto = new Contacto
                 {
                     TelefonoCel = personalView.TelefonoCel,
-                    TelefonoFijo = personalView.TelefonoFijo,
                     TelefonoLaboral = personalView.TelefonoLaboral,
                     Email = personalView.Email
                 }

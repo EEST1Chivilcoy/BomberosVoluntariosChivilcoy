@@ -28,13 +28,6 @@ namespace Vista.Data.Models.Personas.Personal.Componentes
         public string? TelefonoLaboral { get; set; }
 
         /// <summary>
-        /// Número de teléfono fijo del contacto. Longitud máxima de 255 caracteres.
-        /// </summary>
-        [StringLength(255, ErrorMessage = "El número fijo no puede superar los 255 caracteres.")]
-        [Phone(ErrorMessage = "El número fijo no tiene un formato válido.")]
-        public string? TelefonoFijo { get; set; }
-
-        /// <summary>
         /// Dirección de correo electrónico del contacto. Longitud máxima de 255 caracteres.
         /// </summary>
         [StringLength(255, ErrorMessage = "El email no puede superar los 255 caracteres.")]
