@@ -500,6 +500,12 @@ namespace Vista.Data
                 .Property(s => s.FrecuenciaDePago)
                 .HasConversion<int>();
 
+            // Socio - Enum FormaDePago
+            modelBuilder
+                .Entity<Socio>()
+                .Property(s => s.FormaPago)
+                .HasConversion<int>();
+
             // HistorialEstado_Socio - Enum TipoEstadoSocio
 
             modelBuilder

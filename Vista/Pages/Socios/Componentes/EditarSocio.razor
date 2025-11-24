@@ -285,7 +285,7 @@
                     </AntDesign.Col>
                     <AntDesign.Col Span="8">
                         <FormItem Label="Forma de Pago">
-                            <EnumSelect TEnum="FormaDePago ?" Placeholder="Seleccione forma de pago" AllowClear />
+                            <EnumSelect TEnum="FormaDePago ?" @bind-Value="@socioView.FormaPago" Placeholder="Seleccione forma de pago" AllowClear />
                         </FormItem>
                     </AntDesign.Col>
                 </AntDesign.Row>

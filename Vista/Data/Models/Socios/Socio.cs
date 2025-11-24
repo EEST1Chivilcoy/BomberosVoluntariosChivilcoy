@@ -59,10 +59,10 @@ namespace Vista.Data.Models.Socios
         public double MontoCuota { get; set; }
 
         /// <summary>
-        /// Representa la frecuencia de pago del socio. (Mensual, Trimestral, Semestral, Anual) (Por defecto es Mensual)
+        /// Representa la frecuencia de pago del socio. (Mensual, Trimestral, Semestral, Anual)
         /// </summary>
         [Required(ErrorMessage = "La frecuencia de pago es obligatoria.")]
-        public FrecuenciaPago? FrecuenciaDePago { get; set; } = FrecuenciaPago.Mensual;
+        public FrecuenciaPago? FrecuenciaDePago { get; set; }
 
         /// <summary>
         /// Representa la forma de pago del socio. (Por defecto es Efectivo) (Igual es algo que se va a borrar, solo incluido para la presentacion del proyecto) (Borrar Luego)
