@@ -309,7 +309,6 @@ namespace Vista.Data.Mappers
             destination.PisoNumero = source.PisoNumero;
             destination.Depto = source.Depto;
             destination.TipoZona = source.TipoZona!.Value;
-            destination.CuartelRegion = source.CuartelRegion;
             destination.Latitud = source.Latitud;
             destination.Longitud = source.Longitud;
             destination.NombreSolicitante = source.NombreSolicitante;
@@ -597,7 +596,6 @@ namespace Vista.Data.Mappers
             viewModel.PisoNumero = model.PisoNumero;
             viewModel.Depto = model.Depto;
             viewModel.TipoZona = model.TipoZona;
-            viewModel.CuartelRegion = model.CuartelRegion ?? 0;
             viewModel.Latitud = model.Latitud;
             viewModel.Longitud = model.Longitud;
             viewModel.NombreSolicitante = model.NombreSolicitante;

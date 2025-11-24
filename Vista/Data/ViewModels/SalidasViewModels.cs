@@ -161,11 +161,6 @@ namespace Vista.Data.ViewModels
         [Required]
         public TipoZona? TipoZona { get; set; }
 
-        /// <summary>
-        /// Cuartel o región donde ocurrió el incidente.
-        /// </summary>
-        public CuartelRegionChivilcoy? CuartelRegion { get; set; }
-
         // --- Sección de Datos del Solicitante ---
 
         /// <summary>
