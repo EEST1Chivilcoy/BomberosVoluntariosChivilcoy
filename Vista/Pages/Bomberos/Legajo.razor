@@ -1,4 +1,5 @@
 ﻿@page "/fire-force/Bomberos/Legajo"
+@inject NavigationManager NavigationManager
 
 <link rel="stylesheet" href="css/LegajoEstilos.css" />
 
@@ -26,10 +27,6 @@
                             <Input Id="legajo-input" Value="@("170")" Disabled aria-label="Número de legajo" />
                         </div>
                         <div class="info-block">
-                            <div class="label">CUERPO</div>
-                            <div class="value-box" role="text">Sociedad de Bomberos Voluntarios Chivilcoy</div>
-                        </div>
-                        <div class="info-block">
                             <label class="label" for="fecha-input">FECHA DE INGRESO</label>
                             <Input Id="fecha-input" Value="@("01/01/25")" Disabled aria-label="Fecha de ingreso" />
                         </div>
@@ -43,7 +40,7 @@
                         </div>
 
                         <div class="info-block">
-                            <Button class="modal-footer">
+                            <Button class="modal-footer" OnClick="CerrarSesion">
                                 Cerrar Sesion
                             </Button>
                         </div>
@@ -117,3 +114,11 @@
         </AntDesign.Col>
     </Row>
 </div>
+
+@code {
+    private void CerrarSesion()
+    {
+        // Cierra sesión local sin cerrar la sesión de Microsoft Entra ID
+        NavigationManager.NavigateTo("MicrosoftIdentity/Account/SignOut?local=true", forceLoad: true);
+    }
+}
