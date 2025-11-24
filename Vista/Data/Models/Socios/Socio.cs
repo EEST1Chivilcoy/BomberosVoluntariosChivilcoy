@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Vista.Data.Enums;
 using Vista.Data.Enums.Discriminadores;
@@ -12,6 +13,7 @@ namespace Vista.Data.Models.Socios
     /// Representa un socio en el sistema.
     /// Puede ser una persona o una empresa.
     /// </summary>
+    [Index(nameof(NroSocio), IsUnique = true)]
     public class Socio
     {
         // -- Datos socio --
@@ -20,8 +22,13 @@ namespace Vista.Data.Models.Socios
         /// Identificador único del socio.
         /// </summary>
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)] // Evita autogeneración
         public int Id { get; set; }
+
+        /// <summary>
+        /// Numero de Socio (Número correlativo asignado automáticamente). (Único)
+        /// </summary>
+        [Required(ErrorMessage = "El número de socio es obligatorio.")]
+        public int NroSocio { get; set; }
 
         /// <summary>
         /// Representa el tipo de socio. (Empresa o Persona)
