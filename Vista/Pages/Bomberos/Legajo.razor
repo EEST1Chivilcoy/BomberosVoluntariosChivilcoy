@@ -2,124 +2,118 @@
 
 <link rel="stylesheet" href="css/LegajoEstilos.css" />
 
-<PageTitle>Panel de Control de Legajos</PageTitle>
+<div class="main-container">
+    <Row Gutter="30">
+        <AntDesign.Col Xs="24" Sm="24" Md="24" Lg="8" Xl="6">
+            <div class="profile-section">
+                <div class="avatar-container">
+                    <Avatar Icon="user" Class="profile-avatar" Alt="Avatar del usuario" />
+                </div>
 
-<Layout>
-    <Content>
-        <div class="main-container">
-            <Row Gutter="30">
-                <AntDesign.Col Xs="24" Sm="24" Md="24" Lg="8" Xl="6">
-                    <div class="profile-section">
-                        <div class="avatar-container">
-                            <Avatar Icon="user" Class="profile-avatar" Alt="Avatar del usuario" />
+                <Card Bordered="false" Class="profile-card">
+                    <div class="profile-content">
+                        <div class="profile-header">
+                            <h1 class="name-box">AGUSTIN ESTEBAN ROSSI</h1>
+                            <p class="subtitle-text">AYUDANTE MAYOR</p>
                         </div>
 
-                        <Card Bordered="false" Class="profile-card">
-                            <div class="profile-content">
-                                <div class="profile-header">
-                                    <h1 class="name-box">AGUSTIN ESTEBAN ROSSI</h1>
-                                    <p class="subtitle-text">AYUDANTE MAYOR</p>
-                                </div>
+                        <div class="info-block">
+                            <label class="label" for="dni-input">D.N.I</label>
+                            <Input Id="dni-input" Value="@("36.997.084")" Disabled aria-label="Documento Nacional de Identidad" />
+                        </div>
+                        <div class="info-block">
+                            <label class="label" for="legajo-input">LEGAJO</label>
+                            <Input Id="legajo-input" Value="@("170")" Disabled aria-label="Número de legajo" />
+                        </div>
+                        <div class="info-block">
+                            <div class="label">CUERPO</div>
+                            <div class="value-box" role="text">Sociedad de Bomberos Voluntarios Chivilcoy</div>
+                        </div>
+                        <div class="info-block">
+                            <label class="label" for="fecha-input">FECHA DE INGRESO</label>
+                            <Input Id="fecha-input" Value="@("01/01/25")" Disabled aria-label="Fecha de ingreso" />
+                        </div>
+                        <div class="info-block">
+                            <label class="label" for="handy-input">AÑOS DE SERVICIO</label>
+                            <Input Id="handy-input" Value="@("2")" Disabled aria-label="Años de servicio" />
+                        </div>
+                        <div class="info-block">
+                            <label class="label" for="handy-input">NÚMERO DE HANDY</label>
+                            <Input Id="handy-input" Value="@("2")" Disabled aria-label="Número de handy" />
+                        </div>
 
-                                <div class="info-block">
-                                    <label class="label" for="dni-input">D.N.I</label>
-                                    <Input Id="dni-input" Value="@("36.997.084")" Disabled aria-label="Documento Nacional de Identidad" />
-                                </div>
-                                <div class="info-block">
-                                    <label class="label" for="legajo-input">LEGAJO</label>
-                                    <Input Id="legajo-input" Value="@("170")" Disabled aria-label="Número de legajo" />
-                                </div>
-                                <div class="info-block">
-                                    <div class="label">CUERPO</div>
-                                    <div class="value-box" role="text">Sociedad de Bomberos Voluntarios Chivilcoy</div>
-                                </div>
-                                <div class="info-block">
-                                    <label class="label" for="fecha-input">FECHA DE INGRESO</label>
-                                    <Input Id="fecha-input" Value="@("01/01/25")" Disabled aria-label="Fecha de ingreso" />
-                                </div>
-                                <div class="info-block">
-                                    <label class="label" for="handy-input">AÑOS DE SERVICIO</label>
-                                    <Input Id="handy-input" Value="@("2")" Disabled aria-label="Años de servicio" />
-                                </div>
-                                <div class="info-block">
-                                    <label class="label" for="handy-input">NÚMERO DE HANDY</label>
-                                    <Input Id="handy-input" Value="@("2")" Disabled aria-label="Número de handy" />
-                                </div>
-                                
-                                <div class="info-block">
-                                    <Button class="modal-footer">
-                                        Cerrar Sesion
-                                    </Button>
-                                </div>
-                            </div>
-                        </Card>
+                        <div class="info-block">
+                            <Button class="modal-footer">
+                                Cerrar Sesion
+                            </Button>
+                        </div>
                     </div>
-                </AntDesign.Col>
+                </Card>
+            </div>
+        </AntDesign.Col>
 
-                <AntDesign.Col Xs="24" Sm="24" Md="24" Lg="16" Xl="18">
-                    <Card Bordered="false" class="services-card2">
-                        <div class="header-servicios">
-                            <div class="banner-container">
-                                <div class="servicios-banner">
-                                    <div class="banner-image-container">
-                                        <img src="Imagenes/banderin.png" alt="Banderín de puntaje" class="banderin-image" />
-                                    </div>
-                                    <div class="banner-text" role="heading" aria-level="2">PUNTAJE</div>
-                                </div>
+        <AntDesign.Col Xs="24" Sm="24" Md="24" Lg="16" Xl="18">
+            <Card Bordered="false" class="services-card2">
+                <div class="header-servicios">
+                    <div class="banner-container">
+                        <div class="servicios-banner">
+                            <div class="banner-image-container">
+                                <img src="Imagenes/banderin.png" alt="Banderín de puntaje" class="banderin-image" />
                             </div>
+                            <div class="banner-text" role="heading" aria-level="2">PUNTAJE</div>
                         </div>
-                        <div class="estadisticas-puntuaje" role="region" aria-label="Estadísticas de puntaje">
-                            <Statistic Title="PUNTAJE MENSUAL"
-                                       Value="14"
-                                       ValueStyle=" color: #a51c16; font-weight: bold;" />
-                            <Divider Type="@DividerType.Vertical" class="stats-divider" />
-                            <Statistic Title="PUNTAJE ANUAL"
-                                       Value="41"
-                                       ValueStyle=" color: #a51c16; font-weight: bold;" />
-                            <Divider Type="@DividerType.Vertical" class="stats-divider" />
-                            <Statistic Title="LICENCIA MENSUAL"
-                                       Value="23"
-                                       ValueStyle=" color: #a51c16; font-weight: bold;" />
-                            <Divider Type="@DividerType.Vertical" class="stats-divider" />
-                            <Statistic Title="LICENCIA ANUAL"
-                                       Value="12"
-                                       ValueStyle=" color: #a51c16; font-weight: bold;" />
-                            <Divider Type="@DividerType.Vertical" class="stats-divider" />
-                            <Statistic Title="FIRMAS"
-                                       Value="65"
-                                       ValueStyle=" color: #a51c16; font-weight: bold;" />
-                        </div>
-                    </Card>
+                    </div>
+                </div>
+                <div class="estadisticas-puntuaje" role="region" aria-label="Estadísticas de puntaje">
+                    <Statistic Title="PUNTAJE MENSUAL"
+                               Value="14"
+                               ValueStyle=" color: #a51c16; font-weight: bold;" />
+                    <Divider Type="@DividerType.Vertical" class="stats-divider" />
+                    <Statistic Title="PUNTAJE ANUAL"
+                               Value="41"
+                               ValueStyle=" color: #a51c16; font-weight: bold;" />
+                    <Divider Type="@DividerType.Vertical" class="stats-divider" />
+                    <Statistic Title="LICENCIA MENSUAL"
+                               Value="23"
+                               ValueStyle=" color: #a51c16; font-weight: bold;" />
+                    <Divider Type="@DividerType.Vertical" class="stats-divider" />
+                    <Statistic Title="LICENCIA ANUAL"
+                               Value="12"
+                               ValueStyle=" color: #a51c16; font-weight: bold;" />
+                    <Divider Type="@DividerType.Vertical" class="stats-divider" />
+                    <Statistic Title="FIRMAS"
+                               Value="65"
+                               ValueStyle=" color: #a51c16; font-weight: bold;" />
+                </div>
+            </Card>
 
-                    <Card Bordered="false" class="services-card">
-                        <div class="header-servicios">
-                            <div class="banner-container">
-                                <div class="servicios-banner">
-                                    <div class="banner-image-container">
-                                        <img src="Imagenes/banderin.png" alt="Banderín de servicios" class="banderin-image" />
-                                        <div class="banner-number-overlay" aria-label="55 servicios totales">55</div>
-                                    </div>
-                                    <div class="banner-text" role="heading" aria-level="2">TOTAL DE SERVICIOS EN 2024</div>
-                                </div>
+            <Card Bordered="false" class="services-card">
+                <div class="header-servicios">
+                    <div class="banner-container">
+                        <div class="servicios-banner">
+                            <div class="banner-image-container">
+                                <img src="Imagenes/banderin.png" alt="Banderín de servicios" class="banderin-image" />
+                                <div class="banner-number-overlay" aria-label="55 servicios totales">55</div>
                             </div>
+                            <div class="banner-text" role="heading" aria-level="2">TOTAL DE SERVICIOS EN 2024</div>
                         </div>
+                    </div>
+                </div>
 
-                        <div class="estadisticas-servicios" role="region" aria-label="Estadísticas de servicios">
-                            <Statistic Title="SERVICIOS INTERVINIENTES"
-                                       Value="14"
-                                       ValueStyle="font-size: 2em; color: #a51c16; font-weight: bold;" />
-                            <Divider Type="@DividerType.Vertical" class="stats-divider" />
-                            <Statistic Title="SERVICIOS APRESTOS"
-                                       Value="41"
-                                       ValueStyle="font-size: 2em; color: #a51c16; font-weight: bold;" />
-                            <Divider Type="@DividerType.Vertical" class="stats-divider" />
-                            <Statistic Title="SERVICIOS CHOFER"
-                                       Value="0"
-                                       ValueStyle="font-size: 2em; color: #a51c16; font-weight: bold;" />
-                        </div>
-                    </Card>
-                </AntDesign.Col>
-            </Row>
-        </div>
-    </Content>
-</Layout>
+                <div class="estadisticas-servicios" role="region" aria-label="Estadísticas de servicios">
+                    <Statistic Title="SERVICIOS INTERVINIENTES"
+                               Value="14"
+                               ValueStyle="font-size: 2em; color: #a51c16; font-weight: bold;" />
+                    <Divider Type="@DividerType.Vertical" class="stats-divider" />
+                    <Statistic Title="SERVICIOS APRESTOS"
+                               Value="41"
+                               ValueStyle="font-size: 2em; color: #a51c16; font-weight: bold;" />
+                    <Divider Type="@DividerType.Vertical" class="stats-divider" />
+                    <Statistic Title="SERVICIOS CHOFER"
+                               Value="0"
+                               ValueStyle="font-size: 2em; color: #a51c16; font-weight: bold;" />
+                </div>
+            </Card>
+        </AntDesign.Col>
+    </Row>
+</div>
