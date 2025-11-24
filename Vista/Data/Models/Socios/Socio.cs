@@ -51,7 +51,7 @@ namespace Vista.Data.Models.Socios
         /// <summary>
         /// Representa la relación del con el historial del socio. (1 a n) (Componente)
         /// </summary>
-        public List<Historial_Socio> Historial { get; set; } = new();
+        //public List<Historial_Socio> Historial { get; set; } = new();
 
         /// <summary>
         /// Representa el monto actual de la cuota del socio.

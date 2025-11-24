@@ -34,7 +34,7 @@ namespace Vista.Data.Migrations
 
                     b.HasIndex("BrigadaId");
 
-                    b.ToTable("bombero_brigada", (string)null);
+                    b.ToTable("bombero_brigada");
                 });
 
             modelBuilder.Entity("Vista.Data.Models.Grupos.Brigadas.Brigada", b =>
@@ -60,7 +60,7 @@ namespace Vista.Data.Migrations
                     b.HasIndex("NombreBrigada")
                         .IsUnique();
 
-                    b.ToTable("Brigadas", (string)null);
+                    b.ToTable("Brigadas");
                 });
 
             modelBuilder.Entity("Vista.Data.Models.Grupos.Dependencias.Bombero_Dependencia", b =>
@@ -75,7 +75,7 @@ namespace Vista.Data.Migrations
 
                     b.HasIndex("DependenciaId");
 
-                    b.ToTable("bombero_dependencia", (string)null);
+                    b.ToTable("bombero_dependencia");
                 });
 
             modelBuilder.Entity("Vista.Data.Models.Grupos.Dependencias.Comunicaciones.Comunicacion", b =>
@@ -109,7 +109,7 @@ namespace Vista.Data.Migrations
                     b.HasIndex("NroEquipo")
                         .IsUnique();
 
-                    b.ToTable("Comunicacion", (string)null);
+                    b.ToTable("Comunicacion");
                 });
 
             modelBuilder.Entity("Vista.Data.Models.Grupos.Dependencias.Dependencia", b =>
@@ -132,7 +132,7 @@ namespace Vista.Data.Migrations
 
                     b.HasIndex("EncargadoPersonaId");
 
-                    b.ToTable("Dependencias", (string)null);
+                    b.ToTable("Dependencias");
                 });
 
             modelBuilder.Entity("Vista.Data.Models.Grupos.Dependencias.EquiposAutonomos.EquipoAutonomo", b =>
@@ -164,7 +164,7 @@ namespace Vista.Data.Migrations
 
                     b.HasKey("EquipoAutonomoId");
 
-                    b.ToTable("EquiposAutonomos", (string)null);
+                    b.ToTable("EquiposAutonomos");
                 });
 
             modelBuilder.Entity("Vista.Data.Models.Grupos.Dependencias.EquiposAutonomos.Movimiento_EquipoAutonomo", b =>
@@ -212,7 +212,7 @@ namespace Vista.Data.Migrations
 
                     b.HasIndex("VehiculoDestinoId");
 
-                    b.ToTable("MovimientosEquiposAutonomos", (string)null);
+                    b.ToTable("MovimientosEquiposAutonomos");
                 });
 
             modelBuilder.Entity("Vista.Data.Models.Grupos.FuerzasIntervinientes.FuerzaInterviniente", b =>
@@ -228,7 +228,7 @@ namespace Vista.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Fuerzas", (string)null);
+                    b.ToTable("Fuerzas");
                 });
 
             modelBuilder.Entity("Vista.Data.Models.Imagenes.Imagen", b =>
@@ -258,7 +258,7 @@ namespace Vista.Data.Migrations
 
                     b.HasKey("ImagenId");
 
-                    b.ToTable("Imagen", (string)null);
+                    b.ToTable("Imagen");
 
                     b.HasDiscriminator<int>("Tipo");
 
@@ -304,7 +304,7 @@ namespace Vista.Data.Migrations
 
                     b.HasIndex("MaterialesMaterialId");
 
-                    b.ToTable("Movimientos", (string)null);
+                    b.ToTable("Movimientos");
                 });
 
             modelBuilder.Entity("Vista.Data.Models.Objetos.Material", b =>
@@ -335,7 +335,7 @@ namespace Vista.Data.Migrations
 
                     b.HasKey("MaterialId");
 
-                    b.ToTable("Materiales", (string)null);
+                    b.ToTable("Materiales");
                 });
 
             modelBuilder.Entity("Vista.Data.Models.Otros.Partes.ParteVehiculo", b =>
@@ -358,7 +358,7 @@ namespace Vista.Data.Migrations
                     b.HasIndex("Nombre", "Tipo")
                         .IsUnique();
 
-                    b.ToTable("PartesVehiculo", (string)null);
+                    b.ToTable("PartesVehiculo");
                 });
 
             modelBuilder.Entity("Vista.Data.Models.Personas.Damnificado_Salida", b =>
@@ -408,7 +408,7 @@ namespace Vista.Data.Migrations
 
                     b.HasIndex("SalidaId");
 
-                    b.ToTable("Damnificados", (string)null);
+                    b.ToTable("Damnificados");
                 });
 
             modelBuilder.Entity("Vista.Data.Models.Personas.Persona", b =>
@@ -453,7 +453,7 @@ namespace Vista.Data.Migrations
 
                     b.HasKey("PersonaId");
 
-                    b.ToTable("Persona", (string)null);
+                    b.ToTable("Persona");
 
                     b.HasDiscriminator<int>("Tipo");
 
@@ -498,7 +498,7 @@ namespace Vista.Data.Migrations
 
                     b.HasIndex("PersonaId");
 
-                    b.ToTable("AscensoBomberos", (string)null);
+                    b.ToTable("AscensoBomberos");
                 });
 
             modelBuilder.Entity("Vista.Data.Models.Personas.Personal.Componentes.Contacto", b =>
@@ -533,7 +533,7 @@ namespace Vista.Data.Migrations
                     b.HasIndex("PersonalId")
                         .IsUnique();
 
-                    b.ToTable("Contactos", (string)null);
+                    b.ToTable("Contactos");
                 });
 
             modelBuilder.Entity("Vista.Data.Models.Personas.Personal.Componentes.Licencia", b =>
@@ -571,7 +571,7 @@ namespace Vista.Data.Migrations
 
                     b.HasIndex("PersonalId");
 
-                    b.ToTable("Licencias", (string)null);
+                    b.ToTable("Licencias");
                 });
 
             modelBuilder.Entity("Vista.Data.Models.Personas.Personal.Componentes.Sancion", b =>
@@ -606,7 +606,7 @@ namespace Vista.Data.Migrations
 
                     b.HasIndex("PersonaId");
 
-                    b.ToTable("Sanciones", (string)null);
+                    b.ToTable("Sanciones");
                 });
 
             modelBuilder.Entity("Vista.Data.Models.Salidas.Componentes.BomberoSalida", b =>
@@ -639,7 +639,7 @@ namespace Vista.Data.Migrations
 
                     b.HasIndex("SalidaId");
 
-                    b.ToTable("BomberosSalida", (string)null);
+                    b.ToTable("BomberosSalida");
                 });
 
             modelBuilder.Entity("Vista.Data.Models.Salidas.Componentes.FuerzaInterviniente_Salida", b =>
@@ -670,7 +670,7 @@ namespace Vista.Data.Migrations
 
                     b.HasIndex("SalidaId");
 
-                    b.ToTable("fuerzaInterviniente_Salidas", (string)null);
+                    b.ToTable("fuerzaInterviniente_Salidas");
                 });
 
             modelBuilder.Entity("Vista.Data.Models.Salidas.Componentes.Movil_Salida", b =>
@@ -727,7 +727,7 @@ namespace Vista.Data.Migrations
 
                     b.HasIndex("SalidaId");
 
-                    b.ToTable("MovilesSalida", (string)null);
+                    b.ToTable("MovilesSalida");
                 });
 
             modelBuilder.Entity("Vista.Data.Models.Salidas.Componentes.OcupanteVehiculo", b =>
@@ -754,7 +754,7 @@ namespace Vista.Data.Migrations
 
                     b.HasIndex("VehiculoAfectadoId");
 
-                    b.ToTable("OcupantesVehiculos", (string)null);
+                    b.ToTable("OcupantesVehiculos");
                 });
 
             modelBuilder.Entity("Vista.Data.Models.Salidas.Componentes.Seguro", b =>
@@ -773,7 +773,7 @@ namespace Vista.Data.Migrations
 
                     b.HasKey("SeguroId");
 
-                    b.ToTable("Seguro", (string)null);
+                    b.ToTable("Seguro");
 
                     b.HasDiscriminator<int>("Tipo");
 
@@ -870,39 +870,9 @@ namespace Vista.Data.Migrations
                     b.HasIndex("SeguroId")
                         .IsUnique();
 
-                    b.ToTable("Salidas", (string)null);
+                    b.ToTable("Salidas");
 
                     b.HasDiscriminator<int>("TipoEmergencia");
-
-                    b.UseTphMappingStrategy();
-                });
-
-            modelBuilder.Entity("Vista.Data.Models.Socios.Componentes.Historial_Socio", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(21)
-                        .HasColumnType("varchar(21)");
-
-                    b.Property<DateTime>("FechaDeCambio")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int>("SocioId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SocioId");
-
-                    b.ToTable("HistorialesSocios", (string)null);
-
-                    b.HasDiscriminator().HasValue("Historial_Socio");
 
                     b.UseTphMappingStrategy();
                 });
@@ -978,7 +948,7 @@ namespace Vista.Data.Migrations
                     b.HasIndex("NroSocio")
                         .IsUnique();
 
-                    b.ToTable("Socios", (string)null);
+                    b.ToTable("Socios");
                 });
 
             modelBuilder.Entity("Vista.Data.Models.Vehiculos.Flota.EmbarcacionAfectada", b =>
@@ -1015,7 +985,7 @@ namespace Vista.Data.Migrations
 
                     b.HasIndex("SalidaId");
 
-                    b.ToTable("EmbarcacionesAfectadas", (string)null);
+                    b.ToTable("EmbarcacionesAfectadas");
                 });
 
             modelBuilder.Entity("Vista.Data.Models.Vehiculos.Vehiculo", b =>
@@ -1050,7 +1020,7 @@ namespace Vista.Data.Migrations
 
                     b.HasKey("VehiculoId");
 
-                    b.ToTable("Vehiculo", (string)null);
+                    b.ToTable("Vehiculo");
 
                     b.HasDiscriminator<int>("Discriminador");
 
@@ -1168,7 +1138,7 @@ namespace Vista.Data.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
-                    b.ToTable("Salidas", null, t =>
+                    b.ToTable("Salidas", t =>
                         {
                             t.Property("Tipo")
                                 .HasColumnName("Accidente_Tipo");
@@ -1199,7 +1169,7 @@ namespace Vista.Data.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
-                    b.ToTable("Salidas", null, t =>
+                    b.ToTable("Salidas", t =>
                         {
                             t.Property("Evacuacion")
                                 .HasColumnName("FactorClimatico_Evacuacion");
@@ -1392,44 +1362,6 @@ namespace Vista.Data.Migrations
                         .HasColumnType("varchar(255)");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Socios.Componentes.HistorialCuota_Socio", b =>
-                {
-                    b.HasBaseType("Vista.Data.Models.Socios.Componentes.Historial_Socio");
-
-                    b.Property<int>("FrecuenciaDePagoAnterior")
-                        .HasColumnType("int");
-
-                    b.Property<int>("FrecuenciaDePagoNueva")
-                        .HasColumnType("int");
-
-                    b.Property<double>("MontoAnterior")
-                        .HasColumnType("double");
-
-                    b.Property<double>("MontoNuevo")
-                        .HasColumnType("double");
-
-                    b.HasDiscriminator().HasValue("HistorialCuota_Socio");
-                });
-
-            modelBuilder.Entity("Vista.Data.Models.Socios.Componentes.HistorialEstado_Socio", b =>
-                {
-                    b.HasBaseType("Vista.Data.Models.Socios.Componentes.Historial_Socio");
-
-                    b.Property<int>("EstadoAnterior")
-                        .HasColumnType("int");
-
-                    b.Property<int>("EstadoNuevo")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Fecha")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Motivo")
-                        .HasColumnType("longtext");
-
-                    b.HasDiscriminator().HasValue("HistorialEstado_Socio");
-                });
-
             modelBuilder.Entity("Vista.Data.Models.Salidas.Componentes.VehiculoAfectado", b =>
                 {
                     b.HasBaseType("Vista.Data.Models.Vehiculos.Vehiculo");
@@ -1457,7 +1389,7 @@ namespace Vista.Data.Migrations
                     b.HasIndex("SeguroId")
                         .IsUnique();
 
-                    b.ToTable("Vehiculo", null, t =>
+                    b.ToTable("Vehiculo", t =>
                         {
                             t.Property("Observaciones")
                                 .HasColumnName("VehiculoAfectado_Observaciones");
@@ -1586,7 +1518,7 @@ namespace Vista.Data.Migrations
                     b.Property<int>("ZonasAsignadas")
                         .HasColumnType("int");
 
-                    b.ToTable("Persona", null, t =>
+                    b.ToTable("Persona", t =>
                         {
                             t.Property("Estado")
                                 .HasColumnName("Cobrador_Estado");
@@ -1609,7 +1541,7 @@ namespace Vista.Data.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
-                    b.ToTable("Persona", null, t =>
+                    b.ToTable("Persona", t =>
                         {
                             t.Property("Estado")
                                 .HasColumnName("ComisionDirectiva_Estado");
@@ -1652,7 +1584,7 @@ namespace Vista.Data.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
-                    b.ToTable("Salidas", null, t =>
+                    b.ToTable("Salidas", t =>
                         {
                             t.Property("TipoLugar")
                                 .HasColumnName("IncendioEstablecimientoEducativo_TipoLugar");
@@ -1670,7 +1602,7 @@ namespace Vista.Data.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
-                    b.ToTable("Salidas", null, t =>
+                    b.ToTable("Salidas", t =>
                         {
                             t.Property("TipoLugar")
                                 .HasColumnName("IncendioEstablecimientoPublico_TipoLugar");
@@ -1688,7 +1620,7 @@ namespace Vista.Data.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
-                    b.ToTable("Salidas", null, t =>
+                    b.ToTable("Salidas", t =>
                         {
                             t.Property("TipoLugar")
                                 .HasColumnName("IncendioForestal_TipoLugar");
@@ -1706,7 +1638,7 @@ namespace Vista.Data.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
-                    b.ToTable("Salidas", null, t =>
+                    b.ToTable("Salidas", t =>
                         {
                             t.Property("TipoLugar")
                                 .HasColumnName("IncendioHospitalesYClinicas_TipoLugar");
@@ -1724,7 +1656,7 @@ namespace Vista.Data.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
-                    b.ToTable("Salidas", null, t =>
+                    b.ToTable("Salidas", t =>
                         {
                             t.Property("TipoLugar")
                                 .HasColumnName("IncendioIndustria_TipoLugar");
@@ -1742,7 +1674,7 @@ namespace Vista.Data.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
-                    b.ToTable("Salidas", null, t =>
+                    b.ToTable("Salidas", t =>
                         {
                             t.Property("TipoLugar")
                                 .HasColumnName("IncendioVivienda_TipoLugar");
@@ -1806,7 +1738,7 @@ namespace Vista.Data.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
-                    b.ToTable("Salidas", null, t =>
+                    b.ToTable("Salidas", t =>
                         {
                             t.Property("NombreEstablecimiento")
                                 .HasColumnName("ServicioEspecialColocaciónDriza_NombreEstablecimiento");
@@ -1827,7 +1759,7 @@ namespace Vista.Data.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
-                    b.ToTable("Salidas", null, t =>
+                    b.ToTable("Salidas", t =>
                         {
                             t.Property("Detalles")
                                 .HasColumnName("ServicioEspecialFalsaAlarma_Detalles");
@@ -2264,17 +2196,6 @@ namespace Vista.Data.Migrations
                     b.Navigation("Seguro");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Socios.Componentes.Historial_Socio", b =>
-                {
-                    b.HasOne("Vista.Data.Models.Socios.Socio", "Socio")
-                        .WithMany("Historial")
-                        .HasForeignKey("SocioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Socio");
-                });
-
             modelBuilder.Entity("Vista.Data.Models.Vehiculos.Flota.EmbarcacionAfectada", b =>
                 {
                     b.HasOne("Vista.Data.Models.Salidas.Planillas.Incendios.Incendio", "Incendio")
@@ -2418,11 +2339,6 @@ namespace Vista.Data.Migrations
                     b.Navigation("FuerzasIntervinientes");
 
                     b.Navigation("Moviles");
-                });
-
-            modelBuilder.Entity("Vista.Data.Models.Socios.Socio", b =>
-                {
-                    b.Navigation("Historial");
                 });
 
             modelBuilder.Entity("Vista.Data.Models.Imagenes.Imagen_VehiculoSalida", b =>
