@@ -152,18 +152,33 @@
 
                 @if (esDepartamento)
                 {
-                    <Row Gutter="16">
-                        <AntDesign.Col Span="12">
-                            <FormItem Label="Piso">
-                                <Input @bind-Value="@Model.PisoNumero" Placeholder="Número de piso" />
-                            </FormItem>
-                        </AntDesign.Col>
-                        <AntDesign.Col Span="12">
-                            <FormItem Label="Departamento">
-                                <Input @bind-Value="@Model.Depto" Placeholder="Nro. de depto." />
-                            </FormItem>
-                        </AntDesign.Col>
-                    </Row>
+                    <div style="margin-bottom: 16px;">
+                        @foreach (var depto in Model.Departamentos)
+                        {
+                            <Row Gutter="16" Style="margin-bottom: 12px; padding: 12px; background: #f5f5f5; border-radius: 8px;">
+                                <AntDesign.Col Span="10">
+                                    <FormItem Label="Piso">
+                                        <Input @bind-Value="@depto.PisoNumero" Placeholder="Número de piso" />
+                                    </FormItem>
+                                </AntDesign.Col>
+                                <AntDesign.Col Span="10">
+                                    <FormItem Label="Departamento">
+                                        <Input @bind-Value="@depto.Depto" Placeholder="Nro. de depto." />
+                                    </FormItem>
+                                </AntDesign.Col>
+                                <AntDesign.Col Span="4" Style="display: flex; align-items: flex-end;">
+                                    <FormItem Style="margin-bottom: 0;">
+                                        <Button Danger OnClick="() => EliminarDepartamento(depto)" Icon="delete">
+                                        </Button>
+                                    </FormItem>
+                                </AntDesign.Col>
+                            </Row>
+                        }
+                    </div>
+
+                    <Button Type="@ButtonType.Dashed" OnClick="AgregarDepartamento" Icon="plus" Style="width: 100%;">
+                        Agregar Departamento
+                    </Button>
                 }
             </div>
         }
@@ -238,8 +253,20 @@
                     Model.FechaSalida = DateTime.Today;
                 }
 
-                esDepartamento = !string.IsNullOrEmpty(Model.PisoNumero) ||
-                                        !string.IsNullOrEmpty(Model.Depto);
+                // Migrar datos antiguos si existen
+                if (!string.IsNullOrEmpty(Model.PisoNumero) || !string.IsNullOrEmpty(Model.Depto))
+                {
+                    if (Model.Departamentos.Count == 0)
+                    {
+                        Model.Departamentos.Add(new DepartamentoViewModel
+                        {
+                            PisoNumero = Model.PisoNumero,
+                            Depto = Model.Depto
+                        });
+                    }
+                }
+
+                esDepartamento = Model.Departamentos.Any();
 
                 // Activa el switch si ya se había convocado una guardia
                 SeConvocoGuardia = Model.GuardiaSelecionada != null;
@@ -374,5 +401,21 @@
     {
         _searchCancellationTokenSource?.Cancel();
         _searchCancellationTokenSource?.Dispose();
+    }
+
+    private void AgregarDepartamento()
+    {
+        Model.Departamentos.Add(new DepartamentoViewModel());
+        StateHasChanged();
+    }
+
+    private void EliminarDepartamento(DepartamentoViewModel depto)
+    {
+        Model.Departamentos.Remove(depto);
+        if (Model.Departamentos.Count == 0)
+        {
+            esDepartamento = false;
+        }
+        StateHasChanged();
     }
 }
