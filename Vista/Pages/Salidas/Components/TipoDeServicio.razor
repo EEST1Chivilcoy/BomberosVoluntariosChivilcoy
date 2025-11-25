@@ -197,6 +197,13 @@
                     <TextArea Placeholder="Describí qué zonas fueron afectadas y en qué medida" @bind-Value="@incendioView.DetalleSuperficieAfectadaIncendio" />
                 </FormItem>
 
+                @if (incendioView is IncendioViviendaViewModels incendioViviendaView)
+                {
+                        <FormItem Label="Vivienda" Required>
+                         <EnumSelect TEnum="TipoIncendioVivienda" @bind-Value="@incendioViviendaView.TipoLugar" />
+                        </FormItem>
+                }
+
                 @if (incendioView is IncendioAeronavesViewModels incendioAeronavesView)
                 {
                     <FormItem Label="Tipo de Aeronave" Required>
