@@ -188,6 +188,19 @@
                     <EnumSelect TEnum="Guardia ?" @bind-Value="@Model.GuardiaSelecionada" />
                 </FormItem>
             }
+
+            
+
+            <FormItem Label="¿Se convoca Brigada?">
+                <Switch @bind-Checked="@SeConvocoGuardia" />
+            </FormItem>
+
+            @if (SeConvocoGuardia)
+            {
+                <FormItem Label="Brigada">
+                    <EnumSelect TEnum="Guardia ?" @bind-Value="@Model.GuardiaSelecionada" /> 
+                </FormItem>
+            }
         </div>
 
         @* Detalles o Daños Generales *@
