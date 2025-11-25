@@ -781,12 +781,12 @@
             }
             else if (newSalida.Categoria == CategoriaEmergencia.MaterialPeligroso)
             {
-                finalRoute = string.Format(rutaTemplate, newSalida.Anio, newSalida.NumeroSalida);
+                finalRoute = string.Format(rutaTemplate);
             }
             else
             {
                 // Para Incendio, Rescate, Accidente, etc.
-                finalRoute = $"{rutaTemplate}/{(int)newSalida.TipoEmergencia}/{newSalida.Anio}/{newSalida.NumeroSalida}";
+                finalRoute = $"{rutaTemplate}/{(int)newSalida.TipoEmergencia}";
             }
             NavigationManager?.NavigateTo(finalRoute);
         }
@@ -838,6 +838,6 @@
         { TipoDeEmergencia.ServicioEspecialColaboracionFuerzasSeguridad, "/fire-force/salidas/servicio-especial/{0}" },
         { TipoDeEmergencia.Accidente, "/fire-force/salidas/accidente" },
         { TipoDeEmergencia.FactorClimatico, "/fire-force/salidas/factores-climaticos/{0}" },
-        { TipoDeEmergencia.MaterialPeligroso, "/fire-force/salidas/materiales-peligrosos/{0}/{1}" }
+        { TipoDeEmergencia.MaterialPeligroso, "/fire-force/salidas/materiales-peligrosos" }
     };
 }
