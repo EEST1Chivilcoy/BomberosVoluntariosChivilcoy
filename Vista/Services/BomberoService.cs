@@ -228,7 +228,6 @@ namespace Vista.Services
                         PersonalId = bomberoExistente.PersonaId,
                         TelefonoCel = bombero.Contacto?.TelefonoCel,
                         TelefonoLaboral = bombero.Contacto?.TelefonoLaboral,
-                        TelefonoFijo = bombero.Contacto?.TelefonoFijo,
                         Email = bombero.Contacto?.Email
                     };
                 }
@@ -236,7 +235,6 @@ namespace Vista.Services
                 {
                     bomberoExistente.Contacto.TelefonoCel = bombero.Contacto?.TelefonoCel;
                     bomberoExistente.Contacto.TelefonoLaboral = bombero.Contacto?.TelefonoLaboral;
-                    bomberoExistente.Contacto.TelefonoFijo = bombero.Contacto?.TelefonoFijo;
                     bomberoExistente.Contacto.Email = bombero.Contacto?.Email;
                 }
 

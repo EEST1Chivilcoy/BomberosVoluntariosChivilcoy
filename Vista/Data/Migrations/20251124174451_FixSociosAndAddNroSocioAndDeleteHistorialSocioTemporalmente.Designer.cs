@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Vista.Data;
 
@@ -11,9 +12,11 @@ using Vista.Data;
 namespace Vista.Data.Migrations
 {
     [DbContext(typeof(BomberosDbContext))]
-    partial class BomberosDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251124174451_FixSociosAndAddNroSocioAndDeleteHistorialSocioTemporalmente")]
+    partial class FixSociosAndAddNroSocioAndDeleteHistorialSocioTemporalmente
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -520,6 +523,10 @@ namespace Vista.Data.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
+                    b.Property<string>("TelefonoFijo")
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
                     b.Property<string>("TelefonoLaboral")
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
@@ -789,6 +796,9 @@ namespace Vista.Data.Migrations
 
                     b.Property<string>("ApellidoSolicitante")
                         .HasColumnType("longtext");
+
+                    b.Property<int?>("CuartelRegion")
+                        .HasColumnType("int");
 
                     b.Property<string>("Depto")
                         .HasMaxLength(255)

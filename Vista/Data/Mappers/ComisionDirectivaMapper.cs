@@ -37,7 +37,6 @@ namespace Vista.Data.Mappers
                 // Mapeo de Contacto (si existe)
                 TelefonoCel = comisionDirectiva.Contacto?.TelefonoCel,
                 TelefonoLaboral = comisionDirectiva.Contacto?.TelefonoLaboral,
-                TelefonoFijo = comisionDirectiva.Contacto?.TelefonoFijo,
                 Email = comisionDirectiva.Contacto?.Email,
 
                 // Mapeo de Imagen (si existe)

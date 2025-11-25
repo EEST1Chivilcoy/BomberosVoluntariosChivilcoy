@@ -51,7 +51,6 @@ namespace Vista.Data.Mappers
                 // Mapeo de Contacto (si existe)
                 TelefonoCel = bombero.Contacto?.TelefonoCel,
                 TelefonoLaboral = bombero.Contacto?.TelefonoLaboral,
-                TelefonoFijo = bombero.Contacto?.TelefonoFijo,
                 Email = bombero.Contacto?.Email,
 
                 // Mapeo de Imagen (si existe)

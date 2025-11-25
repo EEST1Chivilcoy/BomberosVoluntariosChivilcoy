@@ -63,8 +63,8 @@
 
 <div class="datos-generales">
     <Form Model="Model"
-          ValidateOnChange="@true"
-          Loading="_formloading">
+          ValidateOnChange="true"
+          Loading="@(_formloading || !isApiAvailable)">
 
         @* 🕒 Información Temporal *@
         <div style="margin-bottom: 24px;">
@@ -75,13 +75,14 @@
             {
                 <FormItem Label="Fechas">
                     <RangePicker TValue="DateTime[]" Disabled="new bool[] { false, true }"
-                                 @bind-Value="@FechaRange" />
+                                 @bind-Value="@FechaRange"
+                                 DisabledDate="@(date => date > DateTime.Today)" />
                 </FormItem>
             }
             else
             {
                 <FormItem Label="Fecha">
-                    <DatePicker TValue="DateTime" Picker="@DatePickerType.Date" @bind-Value="@Model.FechaSalida" />
+                    <DatePicker TValue="DateTime" Picker="@DatePickerType.Date" @bind-Value="@Model.FechaSalida" DisabledDate="@(date => date > DateTime.Today)" />
                 </FormItem>
             }
 
@@ -101,46 +102,41 @@
                 <h4 style="color: #1890ff; margin: 0; font-weight: 600; font-size: 1.08rem;">📍 Ubicación</h4>
             </div>
 
-            @if (isApiAvailable)
-            {
-                <Row Gutter="24">
-                    <AntDesign.Col Xs="24" Md="12">
-                        <FormItem Label="Dirección">
-                            <Select TItem="Direccion"
-                                    TItemValue="Direccion"
-                                    DataSource="@direcciones"
-                                    @bind-Value="@Model.DireccionDTO"
-                                    Placeholder="Ingrese una direccion o coordenadas"
-                                    LabelName="@nameof(Direccion.Descripcion)"
-                                    OnSearch="OnSearch"
-                                    SearchDebounceMilliseconds="350"
-                                    EnableSearch
-                                    Loading="@_loading"
-                                    OnSelectedItemChanged="OnStreetSelected">
-                            </Select>
-                        </FormItem>
-                        <FormItem Label="Región Cuartel">
-                            <EnumSelect TEnum="CuartelRegionChivilcoy ?" @bind-Value="@Model.CuartelRegion" DefaultActiveFirstOption="false" />
-                        </FormItem>
-                        <FormItem Label="Tipo Zona">
-                            <EnumSelect TEnum="TipoZona ?" @bind-Value="@Model.TipoZona" />
-                        </FormItem>
-                    </AntDesign.Col>
+            <Row Gutter="24">
+                <AntDesign.Col Xs="24" Md="12">
+                    <FormItem Label="Dirección">
+                        <Select TItem="Direccion"
+                                TItemValue="Direccion"
+                                DataSource="@direcciones"
+                                @bind-Value="@Model.DireccionDTO"
+                                Placeholder="Ingrese una direccion o coordenadas"
+                                LabelName="@nameof(Direccion.Descripcion)"
+                                OnSearch="OnSearch"
+                                SearchDebounceMilliseconds="350"
+                                EnableSearch
+                                Loading="@_loading"
+                                OnSelectedItemChanged="OnStreetSelected">
+                        </Select>
+                    </FormItem>
+                    <FormItem Label="Tipo Zona">
+                        <EnumSelect TEnum="TipoZona ?" @bind-Value="@Model.TipoZona" />
+                    </FormItem>
+                </AntDesign.Col>
 
-                    <AntDesign.Col Xs="24" Md="12">
-                        @if (Model.Latitud.HasValue && Model.Longitud.HasValue)
-                        {
-                            <div class="map-container">
-                                <iframe style="border:0; width: 100%; height: 100%;"
-                                        src="@GetGoogleMapsSatelliteUrl(Model.Latitud.Value, Model.Longitud.Value)"
-                                        frameborder="0"
-                                        allowfullscreen>
-                                </iframe>
-                            </div>
-                        }
-                    </AntDesign.Col>
-                </Row>
-            }
+                <AntDesign.Col Xs="24" Md="12">
+                    @if (Model.Latitud.HasValue && Model.Longitud.HasValue)
+                    {
+                        <div class="map-container">
+                            <iframe style="border:0; width: 100%; height: 100%;"
+                                    src="@GetGoogleMapsSatelliteUrl(Model.Latitud.Value, Model.Longitud.Value)"
+                                    frameborder="0"
+                                    allowfullscreen>
+                            </iframe>
+                        </div>
+                    }
+                </AntDesign.Col>
+            </Row>
+
         </div>
 
         @* 🏢 Detalles del Lugar *@
@@ -156,18 +152,33 @@
 
                 @if (esDepartamento)
                 {
-                    <Row Gutter="16">
-                        <AntDesign.Col Span="12">
-                            <FormItem Label="Piso">
-                                <Input @bind-Value="@Model.PisoNumero" Placeholder="Número de piso" />
-                            </FormItem>
-                        </AntDesign.Col>
-                        <AntDesign.Col Span="12">
-                            <FormItem Label="Departamento">
-                                <Input @bind-Value="@Model.Depto" Placeholder="Nro. de depto." />
-                            </FormItem>
-                        </AntDesign.Col>
-                    </Row>
+                    <div style="margin-bottom: 16px;">
+                        @foreach (var depto in Model.Departamentos)
+                        {
+                            <Row Gutter="16" Style="margin-bottom: 12px; padding: 12px; background: #f5f5f5; border-radius: 8px;">
+                                <AntDesign.Col Span="10">
+                                    <FormItem Label="Piso">
+                                        <Input @bind-Value="@depto.PisoNumero" Placeholder="Número de piso" />
+                                    </FormItem>
+                                </AntDesign.Col>
+                                <AntDesign.Col Span="10">
+                                    <FormItem Label="Departamento">
+                                        <Input @bind-Value="@depto.Depto" Placeholder="Nro. de depto." />
+                                    </FormItem>
+                                </AntDesign.Col>
+                                <AntDesign.Col Span="4" Style="display: flex; align-items: flex-end;">
+                                    <FormItem Style="margin-bottom: 0;">
+                                        <Button Danger OnClick="() => EliminarDepartamento(depto)" Icon="delete">
+                                        </Button>
+                                    </FormItem>
+                                </AntDesign.Col>
+                            </Row>
+                        }
+                    </div>
+
+                    <Button Type="@ButtonType.Dashed" OnClick="AgregarDepartamento" Icon="plus" Style="width: 100%;">
+                        Agregar Departamento
+                    </Button>
                 }
             </div>
         }
@@ -208,11 +219,11 @@
             <div style="border-bottom: 2px solid #1890ff; padding-bottom: 8px; margin-bottom: 16px;">
                 <h4 style="color: #1890ff; margin: 0; font-weight: 600;">Detalles o Daños Generales</h4>
             </div>
-        
+
             <FormItem Label="Tipo de Servicio" Required>
-                <EnumSelect TEnum="TipoServicioSalida?" @bind-Value="@Model.TipoServicio" />
+                <EnumSelect TEnum="TipoServicioSalida ?" @bind-Value="@Model.TipoServicio" />
             </FormItem>
-        
+
             <FormItem>
                 <TextArea Placeholder="Describa la situación o evento..."
                           @bind-Value="@Model.Descripcion"
@@ -255,8 +266,20 @@
                     Model.FechaSalida = DateTime.Today;
                 }
 
-                esDepartamento = !string.IsNullOrEmpty(Model.PisoNumero) ||
-                                        !string.IsNullOrEmpty(Model.Depto);
+                // Migrar datos antiguos si existen
+                if (!string.IsNullOrEmpty(Model.PisoNumero) || !string.IsNullOrEmpty(Model.Depto))
+                {
+                    if (Model.Departamentos.Count == 0)
+                    {
+                        Model.Departamentos.Add(new DepartamentoViewModel
+                        {
+                            PisoNumero = Model.PisoNumero,
+                            Depto = Model.Depto
+                        });
+                    }
+                }
+
+                esDepartamento = Model.Departamentos.Any();
 
                 // Activa el switch si ya se había convocado una guardia
                 SeConvocoGuardia = Model.GuardiaSelecionada != null;
@@ -391,5 +414,21 @@
     {
         _searchCancellationTokenSource?.Cancel();
         _searchCancellationTokenSource?.Dispose();
+    }
+
+    private void AgregarDepartamento()
+    {
+        Model.Departamentos.Add(new DepartamentoViewModel());
+        StateHasChanged();
+    }
+
+    private void EliminarDepartamento(DepartamentoViewModel depto)
+    {
+        Model.Departamentos.Remove(depto);
+        if (Model.Departamentos.Count == 0)
+        {
+            esDepartamento = false;
+        }
+        StateHasChanged();
     }
 }

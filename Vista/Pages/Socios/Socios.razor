@@ -462,7 +462,7 @@
                    Loading="isLoading"
                    Responsive>
                 <ColumnDefinitions>
-                    <PropertyColumn Title="🆔 N° Socio" Property="s => s.Id" Sortable />
+                    <PropertyColumn Title="🆔 N° Socio" Property="s => s.NroSocio" Sortable />
                     <PropertyColumn Title="🏷️ Nombre / Razón Social" Property="s => s.NombreYApellidoSiVa" Sortable />
                     <PropertyColumn Title="📇 Documento / CUIT" Property="s => s.DocumentoOCUIT" Sortable />
                     <PropertyColumn Title="🏘️ Zona" Property="@(c => c.Zona.GetDisplayName())" Sortable />
@@ -512,14 +512,22 @@
        OnCancel="CloseModals"
        Visible="@isModalDetalleVisible"
        DestroyOnClose
-       Title=@($"Detalle del Socio N°{selectedSocioId}")
+       Title=@($"Detalle del Socio")
        DefaultMaximized="@true">
     <DetalleSocio SocioId="selectedSocioId" OnFinishCallback="CloseModals" />
 </Modal>
 
 
 @*Modal Editar Socio*@
-
+<Modal Footer="null"
+       Centered="@true"
+       OnCancel="CloseModals"
+       Visible="@isModalEditarVisible"
+       DestroyOnClose
+       Title=@($"Editar Socio")
+       DefaultMaximized="@true">
+    <EditarSocio SocioId="selectedSocioId" OnFinishCallback="CloseEditarModal" />
+</Modal>
 
 
 @*Modal Crear Socio*@
@@ -592,6 +600,7 @@
     public class SocioTableViewModel
     {
         public int Id { get; set; }
+        public int NroSocio { get; set; }
         public string? NombreYApellidoSiVa { get; set; }
         public string? DocumentoOCUIT { get; set; }
         public TipoSocio Tipo { get; set; }
@@ -610,9 +619,14 @@
 
     private void CloseModals()
     {
-        isModalEditarVisible = false;
         isModalDetalleVisible = false;
         isModalCrearVisible = false;
+    }
+
+    private async Task CloseEditarModal()
+    {
+        isModalEditarVisible = false;
+        await OnInitializedAsync();
     }
 
     private void OpenDetalleModal(int socioId)
@@ -657,7 +671,7 @@
             query = query.Where(s =>
                 (s.NombreYApellidoSiVa != null && s.NombreYApellidoSiVa.ToLower().Contains(searchTerm)) ||
                 (s.DocumentoOCUIT != null && s.DocumentoOCUIT.ToLower().Contains(searchTerm)) ||
-                s.Id.ToString().Contains(searchTerm)
+                s.NroSocio.ToString().Contains(searchTerm)
             );
         }
 
@@ -687,6 +701,7 @@
             socios = sociosData.Select(s => new SocioTableViewModel
             {
                 Id = s.Id,
+                NroSocio = s.NroSocio,
                 NombreYApellidoSiVa = s.Nombre + " " + s.Apellido,
                 DocumentoOCUIT = s.DocumentoOCUIT,
                 Tipo = s.Tipo!.Value,

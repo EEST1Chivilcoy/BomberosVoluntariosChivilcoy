@@ -146,13 +146,20 @@ namespace Vista.Data.ViewModels
         /// Piso donde ocurrió el incidente.
         /// </summary>
         [StringLength(50)]
+        [Obsolete("Use Departamentos en su lugar. Esta propiedad se mantiene por compatibilidad.")]
         public string? PisoNumero { get; set; }
 
         /// <summary>
         /// Departamento o unidad dentro del edificio donde ocurrió el incidente.
         /// </summary>
         [StringLength(50)]
+        [Obsolete("Use Departamentos en su lugar. Esta propiedad se mantiene por compatibilidad.")]
         public string? Depto { get; set; }
+
+        /// <summary>
+        /// Lista de departamentos o unidades afectadas en el edificio.
+        /// </summary>
+        public List<DepartamentoViewModel> Departamentos { get; set; } = new();
 
         /// <summary>
         /// Tipo de zona donde ocurrió el incidente.
@@ -160,11 +167,6 @@ namespace Vista.Data.ViewModels
         /// </summary>
         [Required]
         public TipoZona? TipoZona { get; set; }
-
-        /// <summary>
-        /// Cuartel o región donde ocurrió el incidente.
-        /// </summary>
-        public CuartelRegionChivilcoy? CuartelRegion { get; set; }
 
         // --- Sección de Datos del Solicitante ---
 

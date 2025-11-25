@@ -12,8 +12,8 @@ using Vista.Data;
 namespace Vista.Data.Migrations
 {
     [DbContext(typeof(BomberosDbContext))]
-    [Migration("20251124153420_AddNroSocio")]
-    partial class AddNroSocio
+    [Migration("20251124201605_BorrarCuartelesDeSalidas")]
+    partial class BorrarCuartelesDeSalidas
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -523,10 +523,6 @@ namespace Vista.Data.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
-                    b.Property<string>("TelefonoFijo")
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)");
-
                     b.Property<string>("TelefonoLaboral")
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
@@ -797,9 +793,6 @@ namespace Vista.Data.Migrations
                     b.Property<string>("ApellidoSolicitante")
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("CuartelRegion")
-                        .HasColumnType("int");
-
                     b.Property<string>("Depto")
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
@@ -876,36 +869,6 @@ namespace Vista.Data.Migrations
                     b.ToTable("Salidas");
 
                     b.HasDiscriminator<int>("TipoEmergencia");
-
-                    b.UseTphMappingStrategy();
-                });
-
-            modelBuilder.Entity("Vista.Data.Models.Socios.Componentes.Historial_Socio", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(21)
-                        .HasColumnType("varchar(21)");
-
-                    b.Property<DateTime>("FechaDeCambio")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int>("SocioId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SocioId");
-
-                    b.ToTable("HistorialesSocios");
-
-                    b.HasDiscriminator().HasValue("Historial_Socio");
 
                     b.UseTphMappingStrategy();
                 });
@@ -1393,44 +1356,6 @@ namespace Vista.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
-                });
-
-            modelBuilder.Entity("Vista.Data.Models.Socios.Componentes.HistorialCuota_Socio", b =>
-                {
-                    b.HasBaseType("Vista.Data.Models.Socios.Componentes.Historial_Socio");
-
-                    b.Property<int>("FrecuenciaDePagoAnterior")
-                        .HasColumnType("int");
-
-                    b.Property<int>("FrecuenciaDePagoNueva")
-                        .HasColumnType("int");
-
-                    b.Property<double>("MontoAnterior")
-                        .HasColumnType("double");
-
-                    b.Property<double>("MontoNuevo")
-                        .HasColumnType("double");
-
-                    b.HasDiscriminator().HasValue("HistorialCuota_Socio");
-                });
-
-            modelBuilder.Entity("Vista.Data.Models.Socios.Componentes.HistorialEstado_Socio", b =>
-                {
-                    b.HasBaseType("Vista.Data.Models.Socios.Componentes.Historial_Socio");
-
-                    b.Property<int>("EstadoAnterior")
-                        .HasColumnType("int");
-
-                    b.Property<int>("EstadoNuevo")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Fecha")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Motivo")
-                        .HasColumnType("longtext");
-
-                    b.HasDiscriminator().HasValue("HistorialEstado_Socio");
                 });
 
             modelBuilder.Entity("Vista.Data.Models.Salidas.Componentes.VehiculoAfectado", b =>
@@ -2267,17 +2192,6 @@ namespace Vista.Data.Migrations
                     b.Navigation("Seguro");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Socios.Componentes.Historial_Socio", b =>
-                {
-                    b.HasOne("Vista.Data.Models.Socios.Socio", "Socio")
-                        .WithMany("Historial")
-                        .HasForeignKey("SocioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Socio");
-                });
-
             modelBuilder.Entity("Vista.Data.Models.Vehiculos.Flota.EmbarcacionAfectada", b =>
                 {
                     b.HasOne("Vista.Data.Models.Salidas.Planillas.Incendios.Incendio", "Incendio")
@@ -2421,11 +2335,6 @@ namespace Vista.Data.Migrations
                     b.Navigation("FuerzasIntervinientes");
 
                     b.Navigation("Moviles");
-                });
-
-            modelBuilder.Entity("Vista.Data.Models.Socios.Socio", b =>
-                {
-                    b.Navigation("Historial");
                 });
 
             modelBuilder.Entity("Vista.Data.Models.Imagenes.Imagen_VehiculoSalida", b =>

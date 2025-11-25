@@ -37,7 +37,6 @@ namespace Vista.Data.Mappers
                 // Mapeo de Contacto (si existe)
                 TelefonoCel = cobrador.Contacto?.TelefonoCel,
                 TelefonoLaboral = cobrador.Contacto?.TelefonoLaboral,
-                TelefonoFijo = cobrador.Contacto?.TelefonoFijo,
                 Email = cobrador.Contacto?.Email,
 
                 // Mapeo de Imagen (si existe)

@@ -263,7 +263,7 @@
                         </FormItem>
                     </AntDesign.Col>
                     <AntDesign.Col Span="6">
-                        <FormItem Label="Grado">
+                        <FormItem Label="Jerarquía">
                             <EnumSelect TEnum="EscalafonJerarquico ?" @bind-Value="@personalView.Grado" AllowClear />
                         </FormItem>
                     </AntDesign.Col>
@@ -350,11 +350,6 @@
                     <AntDesign.Col Span="6">
                         <FormItem Label="Teléfono Celular">
                             <Input @bind-Value="@personalView.TelefonoCel" Placeholder="Ingrese teléfono celular" />
-                        </FormItem>
-                    </AntDesign.Col>
-                    <AntDesign.Col Span="6">
-                        <FormItem Label="Teléfono Fijo">
-                            <Input @bind-Value="@personalView.TelefonoFijo" Placeholder="Ingrese teléfono fijo" />
                         </FormItem>
                     </AntDesign.Col>
                     <AntDesign.Col Span="6">
@@ -478,7 +473,6 @@
                 Contacto = new Contacto
                 {
                     TelefonoCel = personalView.TelefonoCel,
-                    TelefonoFijo = personalView.TelefonoFijo,
                     TelefonoLaboral = personalView.TelefonoLaboral,
                     Email = personalView.Email
                 }

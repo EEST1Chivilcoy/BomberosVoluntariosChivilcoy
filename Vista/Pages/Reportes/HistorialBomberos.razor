@@ -363,7 +363,6 @@
                         <PropertyColumn Property="c => c.NombreYApellido" Title="Nombre Y Apellido" Sortable></PropertyColumn>
                         <PropertyColumn Property="c => c.Grado" />
                         <PropertyColumn Property="c => c.TelefonoCel" Title="Telefono Cel" Sortable></PropertyColumn>
-                        <PropertyColumn Property="c => c.TelefonoFijo" Title="Telefono Fijo" Sortable></PropertyColumn>
                         <PropertyColumn Property="c => c.TelefonoLaboral" Title="Telefono Laboral" Sortable></PropertyColumn>
                         <PropertyColumn Property="c => c.Email" Sortable></PropertyColumn>
                     </ColumnDefinitions>
@@ -405,7 +404,6 @@
             b.Apellido,
             b.Grado,
             TelefonoCel = b.TelefonoCel,
-            TelefonoFijo = b.TelefonoFijo,
             TelefonoLaboral = b.TelefonoLaboral,
             Email = b.Email
         });
@@ -424,7 +422,6 @@
             b.Apellido,
             b.Grado,
             TelefonoCel = b.TelefonoCel,
-            b.TelefonoFijo,
             b.TelefonoLaboral,
             b.Email
         });
@@ -446,7 +443,6 @@
                 Apellido = a.Apellido,
                 Grado = a.Grado,
                 TelefonoCel = contacto.TelefonoCel,
-                TelefonoFijo = contacto.TelefonoFijo,
                 TelefonoLaboral = contacto.TelefonoLaboral,
                 Email = contacto.Email
             };

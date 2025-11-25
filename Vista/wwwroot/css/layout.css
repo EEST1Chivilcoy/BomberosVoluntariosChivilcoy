@@ -418,7 +418,7 @@
    ========================================================================== */
 
 .main-content {
-    padding: 20px !important;
+    padding: 40px 20px 20px 20px !important;
     background: var(--bg-light) !important;
     overflow-y: auto !important;
     min-height: calc(100vh - var(--header-height)) !important;
