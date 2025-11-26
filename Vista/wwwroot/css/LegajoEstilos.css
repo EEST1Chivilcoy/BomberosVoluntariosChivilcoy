@@ -192,7 +192,7 @@
     left: 53%;
     top: 41%;
     transform: translate(-50%, -50%);
-    font-size: clamp(2.5em, 6vw, 4em);
+    font-size: clamp(1.5em, 4vw, 2.5em);
     font-weight: 1000;
     color: white;
     z-index: 20;
