@@ -5,7 +5,15 @@
 @using Vista.Data.Models.Vehiculos.Flota
 @using Vista.Services
 @using Vista.Data.Enums
+@using Microsoft.Identity.Web
+@using Microsoft.Graph
 
+@attribute [Authorize]
+
+@*Servicios Utilizados*@
+@inject NavigationManager navigationManager
+@inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
+@inject IEntraIDService EntraIDService
 @inject IMessageService message
 @inject IEquipoAutonomoService EquipoAutonomoService
 @inject IMovimientoEquipoAutonomoService MovimientoEquipoAutonomoService
@@ -426,10 +434,17 @@
 
         try
         {
+            var encargadoId = await GetIdEncargado();
+
+            if (encargadoId == null)
+            {
+                throw new Exception("No se pudo obtener el ID del encargado para el movimiento.");
+            }
+
             var movimiento = new Movimiento_EquipoAutonomo
             {
                 EquipoAutonomoId = EquipoIDSel,
-                EncargadoId = movimientoViewModel.Encargado.BomberoId,
+                EncargadoId = encargadoId.Value,
                 EstadoNuevo = estadoEquipoAutonomo,
                 DependenciaDestinoId = movimientoViewModel.DependenciaDestino?.DependenciaId,
                 VehiculoDestinoId = movimientoViewModel.UnidadDestino?.UnidadId,
@@ -471,8 +486,10 @@
     protected override async Task OnInitializedAsync()
     {
         loading = true;
+
         try
         {
+            var EntraIDisDisponbile = await EntraIDService.CheckDisponibilidadAsync();
             await LoadEquipoAsync();
             CargarTiposMovimientoPermitidos();
             await LoadDependenciasAsync();
@@ -480,6 +497,7 @@
         }
         catch (Exception ex)
         {
+            ConsentHandler.HandleException(ex);
             await message.ErrorAsync($"Error: Se produjo un error al inicializar el formulario.\nDetalles: {ex.Message}");
         }
         finally
@@ -491,6 +509,7 @@
     private async Task LoadEquipoAsync()
     {
         equipoActual = await EquipoAutonomoService.ObtenerEquipoAutonomoAsync(EquipoIDSel);
+
         if (equipoActual == null)
         {
             await message.ErrorAsync($"Error: No se encontró el equipo autónomo con ID {EquipoIDSel}.");
@@ -529,5 +548,30 @@
             UnidadId = u.VehiculoId,
             Nombre = u.NumeroMovil
         }).ToList();
+    }
+
+    private async Task<int?> GetIdEncargado()
+    {
+        try
+        {
+            string userIdString = await EntraIDService.GetUserIdAsync();
+            Guid userId = Guid.Parse(userIdString);
+            var bombero = await BomberoService.ObtenerBomberoPorEntraIdAsync(userId);
+
+            if (bombero != null)
+            {
+                return bombero.PersonaId;
+            }
+            else
+            {
+                await message.ErrorAsync("Error al obtener el ID del responsable: Bombero no encontrado.");
+            }
+        }
+        catch (Exception ex)
+        {
+            await message.ErrorAsync($"Error al obtener el ID del responsable: {ex.Message}");
+            return null;
+        }
+        return null;
     }
 }

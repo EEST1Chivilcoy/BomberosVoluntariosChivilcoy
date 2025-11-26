@@ -109,10 +109,6 @@ namespace Vista.Services
                 // Asignamos la entidad navegada (opcional, pero buena práctica)
                 Movimiento.VehiculoDestino = vehiculo;
             }
-            else if (!string.IsNullOrWhiteSpace(Movimiento.OtroDestino))
-            {
-                throw new InvalidOperationException("El destino 'OtroDestino' debe ser una cadena de texto válida.");
-            }
 
             // ---- Lógica de Agente Anterior ----
             var agenteAnterior = await _context.MovimientosEquiposAutonomos

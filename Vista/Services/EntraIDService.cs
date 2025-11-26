@@ -15,7 +15,7 @@ namespace Vista.Services
         Task<(PersonalViewModel? personal, ImagenResultado? foto)> BuscarPorUPNAsync(string upn, CancellationToken token);
         Task<bool> CheckDisponibilidadAsync();
         Task<User> GetUserAsync();
-
+        Task<string> GetUserIdAsync();
     }
 
     public class EntraIDService : IEntraIDService
@@ -164,6 +164,32 @@ namespace Vista.Services
                 var graphClient = new GraphServiceClient(authProvider);
 
                 return await graphClient.Me.Request().GetAsync();
+            }
+            catch (MsalUiRequiredException ex)
+            {
+                throw new InvalidOperationException("🧠 Se requiere interacción del usuario para obtener el token.", ex);
+            }
+            catch (ServiceException ex)
+            {
+                throw new InvalidOperationException("📡 Error al comunicarse con Microsoft Graph.", ex);
+            }
+        }
+
+        public async Task<string> GetUserIdAsync()
+        {
+            var userPrincipal = _httpContextAccessor.HttpContext?.User;
+
+            if (userPrincipal == null || !userPrincipal.Identity?.IsAuthenticated == true)
+                throw new InvalidOperationException("🔒 No hay usuario autenticado en el contexto actual.");
+
+            try
+            {
+                var user = await GetUserAsync();
+                
+                if (user == null || string.IsNullOrEmpty(user.Id))
+                    throw new InvalidOperationException("⚠️ No se pudo obtener el ID del usuario.");
+
+                return user.Id;
             }
             catch (MsalUiRequiredException ex)
             {
