@@ -11,6 +11,7 @@ namespace Vista.Data.ViewModels.Personal
         public string Nombre { get; set; }
         public string Apellido { get; set; }
         public int NumeroLegajo { get; set; }
+        public int BomberoId { get; set; }
         public string ApellidoYNombre
         {
             get { return Apellido + "," + Nombre; }

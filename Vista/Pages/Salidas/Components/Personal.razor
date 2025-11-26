@@ -196,7 +196,7 @@
                 <PropertyColumn Property="c => c.ApellidoYNombre" Title="Apellido y Nombre" Sortable="true" DefaultSortOrder="@SortDirection.Ascending"></PropertyColumn>
                 <PropertyColumn Property="@(c => c.MovilAsignado != null ? c.MovilAsignado.NumeroMovil : "Cuartel")" Title="Asignación"></PropertyColumn>
                 <ActionColumn Title="Acciones">
-                    <Popconfirm Title="¿Quieres eliminar este bombero?" OnConfirm="() => deleteRow(row.NumeroLegajo)" OkText="Si" CancelText="No">
+                    <Popconfirm Title="¿Quieres eliminar este bombero?" OnConfirm="() => deleteRow(row.BomberoId)" OkText="Si" CancelText="No">
                         <i class="fa-solid fa-trash" style="color: #e90c0c; cursor: pointer;"></i>
                     </Popconfirm>
                 </ActionColumn>
@@ -293,16 +293,18 @@
 
             foreach (var participante in Model.CuerpoParticipante)
             {
+                // Buscar por PersonaId en lugar de NumeroLegajo para evitar null reference
                 BomberoViweModel? bombero = bomberosTodosView
-                    .FirstOrDefault(b => b.NumeroLegajo == participante.Bombero.NumeroLegajo);
+                    .FirstOrDefault(b => b.Id == participante.PersonaId);
 
                 if (bombero != null)
                 {
                     BomberoSalidaViewModels bomberoSalidaViewModel = new()
                     {
-                        NumeroLegajo = bombero.NumeroLegajo.Value,
-                        Nombre = bombero.Nombre,
-                        Apellido = bombero.Apellido,
+                        NumeroLegajo = bombero.NumeroLegajo!.Value,
+                        Nombre = bombero.Nombre!,
+                        Apellido = bombero.Apellido!,
+                        BomberoId = bombero.Id,
                         MovilAsignado = participante.MovilAsignado
                     };
 
@@ -359,9 +361,10 @@
             var nuevoBomberoSalida = new BomberoSalidaViewModels
             {
                 MovilAsignado = MovilParaAsignar,
-                Nombre = bomberoSeleccionado.Nombre,
-                Apellido = bomberoSeleccionado.Apellido,
-                NumeroLegajo = bomberoSeleccionado.NumeroLegajo ?? 0
+                Nombre = bomberoSeleccionado.Nombre!,
+                Apellido = bomberoSeleccionado.Apellido!,
+                NumeroLegajo = bomberoSeleccionado.NumeroLegajo ?? 0,
+                BomberoId = bomberoSeleccionado.Id
             };
 
             // Añade el nuevo bombero a la lista de salidas
@@ -407,15 +410,14 @@
         _selectedRows = Enumerable.Empty<BomberoSalidaViewModels>(); // Suponiendo que IEnumerable<BomberoSalidaViewModels>
     }
 
-    private async Task deleteRow(int numlegajo)
+    private async Task deleteRow(int id)
     {
         // Encuentra el bombero con el número de legajo especificado en la lista del componente
-        var bomberoToRemove = bomberosSalida.FirstOrDefault(b => b.NumeroLegajo == numlegajo);
+        var bomberoToRemove = bomberosSalida.FirstOrDefault(b => b.BomberoId == id);
 
         if (bomberoToRemove != null)
         {
-            // Encuentra el bombero con el número de legajo especificado en la lista del Model
-            var bomberoToRemoveModel = Model.CuerpoParticipante.FirstOrDefault(b => b.Bombero.NumeroLegajo == numlegajo);
+            var bomberoToRemoveModel = Model.CuerpoParticipante.FirstOrDefault(b => b.Bombero.PersonaId == id);
 
             if (bomberoToRemoveModel != null)
             {
@@ -427,40 +429,5 @@
             // Añade el bombero de vuelta a la lista de bomberos disponibles para salir
             bomberosSalirTodos.Add(bomberosTodosView.FirstOrDefault(b => b.NumeroLegajo == bomberoToRemove.NumeroLegajo));
         }
-    }
-
-    private async Task<List<BomberoViweModel>> MapBomberosViewModelAsync(List<Bombero> bomberos)
-    {
-        if (bomberos == null || !bomberos.Any())
-        {
-            await MessageService.ErrorAsync("No hay bomberos disponibles para mapear.");
-            return new List<BomberoViweModel>();
-        }
-
-        var bomberosViewModel = bomberos.Select(b => new BomberoViweModel
-        {
-            Id = b.PersonaId,
-            FechaNacimiento = b.FechaNacimiento,
-            Sexo = b.Sexo,
-            Nombre = b.Nombre,
-            Apellido = b.Apellido,
-            Documento = b.Documento,
-            NumeroLegajo = b.NumeroLegajo,
-            NumeroIoma = b.NumeroIoma,
-            LugarNacimiento = b.LugarNacimiento,
-            Grado = b.Grado,
-            Dotacion = b.Dotacion,
-            Estado = b.Estado,
-            EsChofer = b.Chofer,
-            VencimientoRegistro = b.VencimientoRegistro,
-            Direccion = b.Direccion,
-            Observaciones = b.Observaciones,
-            Profesion = b.Profesion,
-            NivelEstudios = b.NivelEstudios,
-            FechaAceptacion = b.FechaAceptacion,
-        }).ToList();
-
-        await MessageService.SuccessAsync("Bomberos mapeados correctamente.");
-        return bomberosViewModel;
     }
 }
