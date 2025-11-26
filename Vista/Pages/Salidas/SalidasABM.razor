@@ -1,6 +1,8 @@
 ﻿@page "/fire-force/Salidas"
 @using Data.Enums.Discriminadores
+@using System.Globalization;
 @using Data.Enums.Salidas
+@inject IJSRuntime JS
 
 <style>
 
@@ -437,7 +439,8 @@
                         <Button Type="ButtonType.Primary"
                                 OnClick="() => VerAñadirSalida()"
                                 class="ant-btn"
-                                style="background-color: #4CAF50; border-color: #4CAF50;">
+                                style="background-color: #4CAF50; border-color: #4CAF50;"
+                                Loading="isLoadingTable">
                             <Icon Type="plus" /> Nueva Salida
                         </Button>
                     </div>
@@ -448,6 +451,7 @@
                        DataSource="SalidaViewModels"
                        @bind-PageIndex="_pageIndex"
                        @bind-PageSize="_pageSize"
+                       Loading="isLoadingTable"
                        Responsive>
                     <ColumnDefinitions>
                         <PropertyColumn Title="🔢 Número Parte" Property="s => s.Numero" Sortable Width="170px">
@@ -465,18 +469,6 @@
                                         <Icon Type="aim" />
                                     </Button>
                                 </SpaceItem>
-                                @*
-                                <SpaceItem>
-                                    <Popconfirm Title="¿Eliminar esta salida?"
-                                                OnConfirm="() => BorrarSalida(context.Id)"
-                                                OkText="Si"
-                                                CancelText="No">
-                                        <Button Danger>
-                                            <Icon Type="delete" />
-                                        </Button>
-                                    </Popconfirm>
-                                </SpaceItem>
-                                *@
                                 <SpaceItem>
                                     <Button Type="@ButtonType.Primary" OnClick="() => VerEditarSalida(context.Id)" Ghost>
                                         <Icon Type="edit" />
@@ -566,8 +558,12 @@
     int _pageIndex = 1;
     int _pageSize = 5;
 
+    // Variable de Loading de la Tabla
+    bool isLoadingTable = true;
+
     // Variables de Modal
     bool _modalAñadirVisible = false;
+
     public class SalidaViewModelTable
     {
         public int Id { get; set; }
@@ -600,14 +596,24 @@
     {
         await ObtenerSalidas(_anioSeleccionado);
     }
-    /*
-    private async Task BorrarSalida(int id)
-    {
-    }
-    */
-    private async Task VerUbicacionSalida(double? Longitud, double? Latitud)
-    {
 
+    private async Task VerUbicacionSalida(double? longitud, double? latitud)
+    {
+        if (longitud.HasValue && latitud.HasValue)
+        {
+            // Convertimos con punto decimal usando cultura invariante
+            string latStr = latitud.Value.ToString(CultureInfo.InvariantCulture);
+            string lonStr = longitud.Value.ToString(CultureInfo.InvariantCulture);
+
+            // URL que intenta abrir Street View; si no hay cobertura, Google redirige al mapa normal
+            string url = $"https://www.google.com/maps/@?api=1&map_action=pano&viewpoint={latStr},{lonStr}";
+
+            await JS.InvokeVoidAsync("open", url, "_blank");
+        }
+        else
+        {
+            await MessageService.ErrorAsync("No se encontraron coordenadas para la salida.");
+        }
     }
 
     private async Task VerEditarSalida(int id)
@@ -722,7 +728,7 @@
                     IncendioTipo.Aeronaves => TipoDeEmergencia.IncendioAeronaves, // Ya estaba, se confirma
                     IncendioTipo.Otro => TipoDeEmergencia.Incendio,
                     _ => throw new InvalidOperationException("Tipo de incendio no reconocido.")
-                };                
+                };
                 break;
 
             case CategoriaEmergencia.Rescate:
@@ -731,7 +737,7 @@
                     RescateTipo.Persona => TipoDeEmergencia.RescatePersona,
                     RescateTipo.Animal => TipoDeEmergencia.RescateAnimal,
                     _ => throw new InvalidOperationException("Tipo de rescate no reconocido.")
-                };                
+                };
                 break;
 
             case CategoriaEmergencia.ServicioEspecial:
@@ -746,7 +752,7 @@
                     ServicioEspecialTipo.RetiradoDeObito => TipoDeEmergencia.ServicioEspecialRetiradoDeObito,
                     ServicioEspecialTipo.ColaboracionFuerzasSeguridad => TipoDeEmergencia.ServicioEspecialColaboracionFuerzasSeguridad,
                     _ => throw new InvalidOperationException("Tipo de servicio especial no reconocido.")
-                };                
+                };
                 break;
 
             case CategoriaEmergencia.Accidente:
@@ -798,25 +804,39 @@
 
     private async Task ObtenerSalidas(int anio)
     {
-        var salidas = await SalidaService.ObtenerSalidasPorAnioAsync(anio);
-        SalidaViewModels = salidas.Select(s => new SalidaViewModelTable
+        isLoadingTable = true;
+        try
         {
-            Id = s.SalidaId,
-            Numero = $"{s.NumeroParte}/{s.AnioNumeroParte}",
-            TipoSalida = s.TipoEmergencia.GetDisplayName(),
-            Descripcion = string.IsNullOrWhiteSpace(s.Descripcion) ? "Sin descripción" : s.Descripcion,
-            Direccion = string.IsNullOrWhiteSpace(s.Direccion) ? "Desconocida" : s.Direccion,
-            Fecha = s.HoraSalida.ToString("yyyy-MM-dd"),
-            Hora = s.HoraSalida.ToString("HH:mm"),
-            Latitud = s.Latitud,
-            Longitud = s.Longitud
-        }).ToList();
-        StateHasChanged();
+            var salidas = await SalidaService.ObtenerSalidasPorAnioAsync(anio);
+
+            SalidaViewModels = salidas.Select(s => new SalidaViewModelTable
+            {
+                Id = s.SalidaId,
+                Numero = $"{s.NumeroParte}/{s.AnioNumeroParte}",
+                TipoSalida = s.TipoEmergencia.GetDisplayName(),
+                Descripcion = string.IsNullOrWhiteSpace(s.Descripcion) ? "Sin descripción" : s.Descripcion,
+                Direccion = string.IsNullOrWhiteSpace(s.Direccion) ? "Desconocida" : s.Direccion,
+                Fecha = s.HoraSalida.ToString("yyyy-MM-dd"),
+                Hora = s.HoraSalida.ToString("HH:mm"),
+                Latitud = s.Latitud,
+                Longitud = s.Longitud
+            }).ToList();
+
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            await MessageService.ErrorAsync($"Ocurrió un error al cargar las salidas: {ex.InnerException?.Message ?? ex.Message}");
+        }
+        finally
+        {
+            isLoadingTable = false;
+        }
     }
 
     // Diccionario de rutas según el tipo de emergencia
     public Dictionary<TipoDeEmergencia, string> RutasEmergencia = new()
-    {        
+    {
         { TipoDeEmergencia.IncendioComercio, "/fire-force/salidas/incendio" },
         { TipoDeEmergencia.IncendioEstablecimientoEducativo, "/fire-force/salidas/incendio" },
         { TipoDeEmergencia.IncendioEstablecimientoPublico, "/fire-force/salidas/incendio" },

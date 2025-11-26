@@ -12,7 +12,7 @@
 <div class="inicio-page">
     <AntDesign.Layout>
         <Header Class="custom-header">
-        <button class="mobile-menu-btn" @onclick="OpenDrawer">☰</button>
+            <button class="mobile-menu-btn" @onclick="OpenDrawer">☰</button>
             <div style="display: flex; justify-content: flex-end;">
                 <Menu Mode="@MenuMode.Horizontal"
                       SelectedKeys="@(new[]{currentSection})"
@@ -37,34 +37,34 @@
             </div>
         </Header>
 
-         <!-- Drawer para celulares -->
+        <!-- Drawer para celulares -->
         <Drawer Closable="true"
                 Visible="@drawerVisible"
                 Placement="@DrawerPlacement.Left"
                 OnClose="@HandleDrawerClose"
                 Width="280">
             <div class="mobile-drawer-menu">
-                <div class="@GetDrawerItemClass("inicio")" 
+                <div class="@GetDrawerItemClass("inicio")"
                      @onclick="@(() => HandleDrawerClick("inicio"))">
                     <span class="drawer-icon">🏠</span>
                     <span class="drawer-text">INICIO</span>
                 </div>
-                <div class="@GetDrawerItemClass("contacto")" 
+                <div class="@GetDrawerItemClass("contacto")"
                      @onclick="@(() => HandleDrawerClick("contacto"))">
                     <span class="drawer-icon">📞</span>
                     <span class="drawer-text">CONTACTO</span>
                 </div>
-                <div class="@GetDrawerItemClass("cuerpo")" 
+                <div class="@GetDrawerItemClass("cuerpo")"
                      @onclick="@(() => HandleDrawerClick("cuerpo"))">
                     <span class="drawer-icon">👥</span>
                     <span class="drawer-text">CUERPO ACTIVO</span>
                 </div>
-                <div class="@GetDrawerItemClass("historia")" 
+                <div class="@GetDrawerItemClass("historia")"
                      @onclick="@(() => HandleDrawerClick("historia"))">
                     <span class="drawer-icon">📖</span>
                     <span class="drawer-text">NUESTRA HISTORIA</span>
                 </div>
-                <div class="drawer-menu-item" 
+                <div class="drawer-menu-item"
                      @onclick="@(() => HandleDrawerClick("sesion"))">
                     <span class="drawer-icon">🏢</span>
                     <span class="drawer-text">SISTEMA</span>
@@ -74,68 +74,70 @@
 
         @Body
 
-<div class="footer-section">
-    <div class="footer-content">
-        <Row Gutter="40">
-            <AntDesign.Col Xs="24" Sm="24" Md="12" Lg="12" Xl="12">
-                <div class="footer-left">
-                    <img src="/Imagenes/Logos.png"
-                        alt="Logo Bomberos Voluntarios Chivilcoy"
-                        class="footer-logo" />
-                    <div class="footer-info">
-                        <Title Level="3" Style="color: white; font-size: 1.4rem; font-weight: 600; margin: 0 0 5px 0; text-transform: uppercase;">
-                            Sociedad de Bomberos<br />Voluntarios de Chivilcoy
-                        </Title>
-                        <Paragraph Style="color: #ccc; font-size: 0.9rem; margin: 0; line-height: 1.4;">
-                            Desde 1945 al Servicio de la Comunidad
-                        </Paragraph>
-                    </div>
-                </div>
-            </AntDesign.Col>
-            
-            <AntDesign.Col Xs="24" Sm="24" Md="12" Lg="12" Xl="12">
-                <div class="footer-right" style="display: flex; flex-direction: row; justify-content: flex-end;">
-                    
-                    <div class="footer-contact" style="margin-right: 40px; text-align: right; margin-bottom: 35px;">
-                        <Title Level="4" Style="color: white; font-size: 1.2rem; font-weight: 600;  text-transform: uppercase;">
-                            Contacto
-                        </Title>
-                        <Paragraph Class="footer-phone" Style="color: #ccc; font-size: 1rem; margin: 0; display: flex; align-items: center; justify-content: flex-end; gap: 10px;">
-                            <span class="phone-icon">📞</span>
-                            100 / 424319-426066
-                        </Paragraph>
-                    </div>
+        <div class="footer-section">
+            <div class="footer-content">
+                <Row Gutter="40">
+                    <AntDesign.Col Xs="24" Sm="24" Md="12" Lg="12" Xl="12">
+                        <div class="footer-left">
+                            <img src="/Imagenes/Logos.png"
+                                 alt="Logo Bomberos Voluntarios Chivilcoy"
+                                 class="footer-logo" />
+                            <div class="footer-info">
+                                <Title Level="3" Style="color: white; font-size: 1.4rem; font-weight: 600; margin: 0 0 5px 0; text-transform: uppercase;">
+                                    Sociedad de Bomberos<br />Voluntarios de Chivilcoy
+                                </Title>
+                                <Paragraph Style="color: #ccc; font-size: 0.9rem; margin: 0; line-height: 1.4;">
+                                    Desde 1945 al Servicio de la Comunidad
+                                </Paragraph>
+                            </div>
+                        </div>
+                    </AntDesign.Col>
 
-                    <div class="footer-contact" style="display: flex; flex-direction: column; align-items: flex-end;">
-                        <Title Level="4" Style="color: white; font-size: 1.2rem; font-weight: 600; text-transform: uppercase;">
-                            Redes Sociales
-                        </Title>
-                        
-                        <Paragraph Class="footer-phone" 
-                                Style="color: #ccc; font-size: 1rem; margin: 0 0 10px 0; display: flex; align-items: center; justify-content: flex-end; gap: 10px;">
-                            <a href="https://www.instagram.com/bomberoschivilcoy?igsh=MnRucDJxbmo5ZDRl" 
-                                target="_blank" 
-                                rel="noopener noreferrer" 
-                                style="color:#ccc; text-decoration:none;">
-                                <span class="phone-icon">📸</span> </a>
-                            Instagram
-                        </Paragraph>
-                        
-                        <Paragraph Class="footer-phone"
-                                Style="color: #ccc; font-size: 1rem; margin: 0; display: flex; align-items: center; justify-content: flex-end; gap: 10px;">
-                            <a href="https://www.facebook.com/share/19yaF9vtHA/?mibextid=wwXIfr" 
-                                target="_blank" 
-                                rel="noopener noreferrer" 
-                                style="color:#ccc; text-decoration:none;">
-                                <span class="phone-icon">👍</span> </a>
-                            Facebook
-                        </Paragraph>
-                    </div>
-                </div>
-            </AntDesign.Col>
-        </Row>
-    </div>
-</div>
+                    <AntDesign.Col Xs="24" Sm="24" Md="12" Lg="12" Xl="12">
+                        <div class="footer-right" style="display: flex; flex-direction: row; justify-content: flex-end;">
+
+                            <div class="footer-contact" style="margin-right: 40px; text-align: right; margin-bottom: 35px;">
+                                <Title Level="4" Style="color: white; font-size: 1.2rem; font-weight: 600;  text-transform: uppercase;">
+                                    Contacto
+                                </Title>
+                                <Paragraph Class="footer-phone" Style="color: #ccc; font-size: 1rem; margin: 0; display: flex; align-items: center; justify-content: flex-end; gap: 10px;">
+                                    <span class="phone-icon">📞</span>
+                                    100 / 424319-426066
+                                </Paragraph>
+                            </div>
+
+                            <div class="footer-contact" style="display: flex; flex-direction: column; align-items: flex-end;">
+                                <Title Level="4" Style="color: white; font-size: 1.2rem; font-weight: 600; text-transform: uppercase;">
+                                    Redes Sociales
+                                </Title>
+
+                                <Paragraph Class="footer-phone"
+                                           Style="color: #ccc; font-size: 1rem; margin: 0 0 10px 0; display: flex; align-items: center; justify-content: flex-end; gap: 10px;">
+                                    <a href="https://www.instagram.com/bomberoschivilcoy?igsh=MnRucDJxbmo5ZDRl"
+                                       target="_blank"
+                                       rel="noopener noreferrer"
+                                       style="color:#ccc; text-decoration:none;">
+                                        <span class="phone-icon">📸</span>
+                                    </a>
+                                    Instagram
+                                </Paragraph>
+
+                                <Paragraph Class="footer-phone"
+                                           Style="color: #ccc; font-size: 1rem; margin: 0; display: flex; align-items: center; justify-content: flex-end; gap: 10px;">
+                                    <a href="https://www.facebook.com/share/19yaF9vtHA/?mibextid=wwXIfr"
+                                       target="_blank"
+                                       rel="noopener noreferrer"
+                                       style="color:#ccc; text-decoration:none;">
+                                        <span class="phone-icon">👍</span>
+                                    </a>
+                                    Facebook
+                                </Paragraph>
+                            </div>
+                        </div>
+                    </AntDesign.Col>
+                </Row>
+            </div>
+        </div>
     </AntDesign.Layout>
 </div>
 
@@ -192,38 +194,34 @@
     }
 
     // Control de visibilidad del Drawer
-private bool drawerVisible = false;
+    private bool drawerVisible = false;
 
-// Abre el drawer (lo vas a llamar desde un botón tipo hamburguesa)
-private void OpenDrawer()
-{
-    drawerVisible = true;
-}
+    // Abre el drawer (lo vas a llamar desde un botón tipo hamburguesa)
+    private void OpenDrawer()
+    {
+        drawerVisible = true;
+    }
 
-// Cierra el drawer
-private void HandleDrawerClose()
-{
-    drawerVisible = false;
-}
+    // Cierra el drawer
+    private void HandleDrawerClose()
+    {
+        drawerVisible = false;
+    }
 
-// Maneja la selección de un ítem del drawer
-private async Task HandleDrawerClick(string key)
-{
-    drawerVisible = false;
+    // Maneja la selección de un ítem del drawer
+    private async Task HandleDrawerClick(string key)
+    {
+        drawerVisible = false;
 
-    if (menuActions.TryGetValue(key, out var action))
-        await action.Invoke();
-}
+        if (menuActions.TryGetValue(key, out var action))
+            await action.Invoke();
+    }
 
-// Para marcar visualmente qué sección está activa en el drawer
-private string GetDrawerItemClass(string key)
-{
-    return key == currentSection
-        ? "drawer-menu-item active"
-        : "drawer-menu-item";
-}
-
-
-
-
+    // Para marcar visualmente qué sección está activa en el drawer
+    private string GetDrawerItemClass(string key)
+    {
+        return key == currentSection
+            ? "drawer-menu-item active"
+            : "drawer-menu-item";
+    }
 }
