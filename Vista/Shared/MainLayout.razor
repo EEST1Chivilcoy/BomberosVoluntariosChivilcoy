@@ -64,7 +64,9 @@
 
                 <SubMenu Key="reportes" TitleTemplate="@reportesCompactTitle" class="compact-submenu">
 
-
+                    <MenuItem Key="reportes-bomberos" OnClick="@(() => navigationManager.NavigateTo("/fire-force/Reportes/HistorialBomberos"))" class="compact-item">
+                        <span class="compact-text">Bomberos</span>
+                    </MenuItem>
                     <MenuItem Key="reportes-choferes" OnClick="@(() => navigationManager.NavigateTo("/fire-force/Reportes/Reportes_Choferes"))" class="compact-item">
                         <span class="compact-text">Choferes</span>
                     </MenuItem>
