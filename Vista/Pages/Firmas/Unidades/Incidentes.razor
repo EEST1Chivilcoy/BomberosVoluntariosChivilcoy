@@ -11,19 +11,18 @@
 @inject IBomberoService BomberoService
 
 <style>
-
     .firmas-abm {
-        --abm-primary-color: #A63333;       
-        --abm-primary-dark: #732D2D;        
-        --abm-success-color: #2E7D32;       
-        --abm-success-dark: #1B5E20;        
-        --abm-warning-color: #F9A825;       
-        --abm-warning-light: #FFFDE7;       
-        --abm-error-color: #C62828;        
-        --abm-error-light: #FFEBEE;         
-        --abm-info-color: #1565C0;         
-        --abm-info-light: #E1F5FE;          
-        --abm-accent-color: #FFD54F;        
+        --abm-primary-color: #A63333;
+        --abm-primary-dark: #732D2D;
+        --abm-success-color: #2E7D32;
+        --abm-success-dark: #1B5E20;
+        --abm-warning-color: #F9A825;
+        --abm-warning-light: #FFFDE7;
+        --abm-error-color: #C62828;
+        --abm-error-light: #FFEBEE;
+        --abm-info-color: #1565C0;
+        --abm-info-light: #E1F5FE;
+        --abm-accent-color: #FFD54F;
     }
 
     .firmas-abm .licenses-container {
@@ -49,15 +48,20 @@
 
     .firmas-abm .header-section::before {
         content: '';
-        display: none; 
+        display: none;
     }
+
     .firmas-abm .header-section .lava-bubbles {
         position: absolute;
-        top: 0; left: 0; width: 100%; height: 100%;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
         pointer-events: none;
         z-index: 1;
         overflow: hidden;
     }
+
     .firmas-abm .header-section .lava-bubble {
         position: absolute;
         border-radius: 50%;
@@ -67,31 +71,51 @@
         filter: blur(1.5px);
         mix-blend-mode: lighten;
     }
+
     .firmas-abm .header-section .lava-bubble.b1 {
-        left: 10%; width: 60px; height: 60px; bottom: -70px;
+        left: 10%;
+        width: 60px;
+        height: 60px;
+        bottom: -70px;
         animation-delay: 0s;
         animation-duration: 7.5s;
     }
+
     .firmas-abm .header-section .lava-bubble.b2 {
-        left: 35%; width: 90px; height: 90px; bottom: -100px;
+        left: 35%;
+        width: 90px;
+        height: 90px;
+        bottom: -100px;
         animation-delay: 2s;
         animation-duration: 9s;
         background: radial-gradient(circle at 60% 40%, #FFEB3B 0%, #FFD54F 80%, transparent 100%);
     }
+
     .firmas-abm .header-section .lava-bubble.b3 {
-        left: 65%; width: 50px; height: 50px; bottom: -60px;
+        left: 65%;
+        width: 50px;
+        height: 50px;
+        bottom: -60px;
         animation-delay: 1.5s;
         animation-duration: 6.5s;
         background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #FFD54F 80%, transparent 100%);
     }
+
     .firmas-abm .header-section .lava-bubble.b4 {
-        left: 80%; width: 70px; height: 70px; bottom: -80px;
+        left: 80%;
+        width: 70px;
+        height: 70px;
+        bottom: -80px;
         animation-delay: 3.2s;
         animation-duration: 8.5s;
         background: radial-gradient(circle at 60% 40%, #F9A825 0%, #FFD54F 80%, transparent 100%);
     }
+
     .firmas-abm .header-section .lava-bubble.b5 {
-        left: 55%; width: 40px; height: 40px; bottom: -50px;
+        left: 55%;
+        width: 40px;
+        height: 40px;
+        bottom: -50px;
         animation-delay: 5s;
         animation-duration: 7.2s;
         background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #F9A825 80%, transparent 100%);
@@ -102,14 +126,17 @@
             transform: translateY(0) scale(1) rotate(0deg);
             opacity: 0.45;
         }
+
         60% {
             opacity: 0.7;
             filter: blur(2.5px);
         }
+
         80% {
             transform: translateY(-220px) scale(1.15) rotate(10deg);
             opacity: 0.6;
         }
+
         100% {
             transform: translateY(-320px) scale(0.95) rotate(-8deg);
             opacity: 0;
@@ -131,14 +158,29 @@
 
 
     @@keyframes button-pulse {
-        0% { box-shadow: 0 4px 14px rgba(249, 168, 37, 0.45); }
-        50% { box-shadow: 0 6px 22px rgba(249, 168, 37, 0.65); }
-        100% { box-shadow: 0 4px 14px rgba(249, 168, 37, 0.45); }
+        0% {
+            box-shadow: 0 4px 14px rgba(249, 168, 37, 0.45);
+        }
+
+        50% {
+            box-shadow: 0 6px 22px rgba(249, 168, 37, 0.65);
+        }
+
+        100% {
+            box-shadow: 0 4px 14px rgba(249, 168, 37, 0.45);
+        }
     }
 
     @@keyframes text-glow {
-        0%, 100% { text-shadow: 0 0 5px var(--abm-warning-color), 0 0 10px var(--abm-accent-color); }
-        50% { text-shadow: 0 0 12px var(--abm-warning-color), 0 0 22px var(--abm-accent-color); }
+
+        0%,
+        100% {
+            text-shadow: 0 0 5px var(--abm-warning-color), 0 0 10px var(--abm-accent-color);
+        }
+
+        50% {
+            text-shadow: 0 0 12px var(--abm-warning-color), 0 0 22px var(--abm-accent-color);
+        }
     }
 
     .firmas-abm .title-container {
@@ -251,19 +293,20 @@
     }
 
 
-    .firmas-abm .ant-table-tbody > tr {
+    .firmas-abm .ant-table-tbody>tr {
         transition: background 0.22s, box-shadow 0.22s;
         border-bottom: 1px solid #f3e6e6;
         cursor: pointer;
     }
-    .firmas-abm .ant-table-tbody > tr:hover {
+
+    .firmas-abm .ant-table-tbody>tr:hover {
         background: #fffbe7 !important;
         box-shadow: 0 2px 12px rgba(249, 168, 37, 0.08);
         z-index: 2;
     }
 
 
-    .firmas-abm .ant-table-tbody > tr > td {
+    .firmas-abm .ant-table-tbody>tr>td {
         border-bottom: 1px solid #f3e6e6 !important;
     }
 
@@ -280,6 +323,7 @@
         border: none !important;
         padding: 16px !important;
     }
+
     .firmas-abm th.ant-table-cell .ant-table-column-sorters {
 
         z-index: 2;
@@ -290,115 +334,118 @@
         min-width: 220px;
         flex: 1 1 220px;
     }
+
     .col-departamento {
         min-width: 220px;
         flex: 1 1 220px;
     }
 
 
-.modal-crear-firma .ant-modal-content {
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    border: 2px solid #732D2D;
-    margin-top: -50px;
-    margin-bottom: 0px;
-}
+    .modal-crear-firma .ant-modal-content {
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        border: 2px solid #732D2D;
+        margin-top: -50px;
+        margin-bottom: 0px;
+    }
 
-.modal-crear-firma .ant-modal-title {
-    color: white !important;
-}
+    .modal-crear-firma .ant-modal-title {
+        color: white !important;
+    }
 
-.modal-crear-firma .ant-modal-header {
+    .modal-crear-firma .ant-modal-header {
         background-color: #A63333;
         padding: 16px 24px;
 
-}
+    }
 
-.modal-crear-firma-content {
-    padding: 24px;
-}
+    .modal-crear-firma-content {
+        padding: 24px;
+    }
 
-.modal-crear-firma-form-item {
-    margin-bottom: 20px;
-    position: relative;
-    padding-left: 10px;
-}
+    .modal-crear-firma-form-item {
+        margin-bottom: 20px;
+        position: relative;
+        padding-left: 10px;
+    }
 
-.modal-crear-firma-form-item::before {
-    content: ''; 
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 3px;
-    border-radius: 5px;
-}
+    .modal-crear-firma-form-item::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 3px;
+        border-radius: 5px;
+    }
 
-.modal-crear-firma-form-item .ant-form-item-label > label,
-.modal-crear-firma-form-full-width .ant-form-item-label > label {
-    font-weight: 600;
-    color: #434343;
-    display: flex; 
-    align-items: center;
-    gap: 8px;
-    font-size: 14px;
-    transition: color 0.3s ease;
-}
+    .modal-crear-firma-form-item .ant-form-item-label>label,
+    .modal-crear-firma-form-full-width .ant-form-item-label>label {
+        font-weight: 600;
+        color: #434343;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        transition: color 0.3s ease;
+    }
 
-.modal-crear-firma-form-item .ant-form-item-label > label:hover,
-.modal-crear-firma-form-full-width .ant-form-item-label > label:hover {
-    color: #A63333;
-}
+    .modal-crear-firma-form-item .ant-form-item-label>label:hover,
+    .modal-crear-firma-form-full-width .ant-form-item-label>label:hover {
+        color: #A63333;
+    }
 
-.modal-crear-firma .ant-input:focus,
-.modal-crear-firma .ant-input:hover,
-.modal-crear-firma .ant-select-selector:focus,
-.modal-crear-firma .ant-select-selector:hover,
-.modal-crear-firma .ant-picker:focus,
-.modal-crear-firma .ant-picker:hover,
-.modal-crear-firma .ant-picker-input > input:focus,
-.modal-crear-firma .ant-picker-input > input:hover,
-.modal-crear-firma .ant-input-number-input:focus,
-.modal-crear-firma .ant-input-number-input:hover,
-.modal-crear-firma .ant-textarea:focus,
-.modal-crear-firma .ant-textarea:hover {
-    border-color: #FFD700 !important;
-    box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
-}
+    .modal-crear-firma .ant-input:focus,
+    .modal-crear-firma .ant-input:hover,
+    .modal-crear-firma .ant-select-selector:focus,
+    .modal-crear-firma .ant-select-selector:hover,
+    .modal-crear-firma .ant-picker:focus,
+    .modal-crear-firma .ant-picker:hover,
+    .modal-crear-firma .ant-picker-input>input:focus,
+    .modal-crear-firma .ant-picker-input>input:hover,
+    .modal-crear-firma .ant-input-number-input:focus,
+    .modal-crear-firma .ant-input-number-input:hover,
+    .modal-crear-firma .ant-textarea:focus,
+    .modal-crear-firma .ant-textarea:hover {
+        border-color: #FFD700 !important;
+        box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
+    }
 
-.modal-crear-firma .ant-picker,
-.modal-crear-firma .ant-input,
-.modal-crear-firma .ant-select-selector,
-.modal-crear-firma .ant-input-number,
-.modal-crear-firma .ant-textarea {
-    border-radius: 8px !important;
-    border: 1px solid #d9d9d9 !important;
-    background: #fff !important;
-    color: #434343 !important;
-    transition: all 0.3s ease !important;
-}
+    .modal-crear-firma .ant-picker,
+    .modal-crear-firma .ant-input,
+    .modal-crear-firma .ant-select-selector,
+    .modal-crear-firma .ant-input-number,
+    .modal-crear-firma .ant-textarea {
+        border-radius: 8px !important;
+        border: 1px solid #d9d9d9 !important;
+        background: #fff !important;
+        color: #434343 !important;
+        transition: all 0.3s ease !important;
+    }
 
-.modal-crear-firma .modal-crear-firma-footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
-    margin-top: 18px;
-    margin-bottom: 0px;
-}
-.modal-crear-firma .ant-btn-primary {
-    background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
-    border: none !important;
-    color: #fff !important;
-    font-weight: 600;
-    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
-    margin-top:  0;
-    margin-bottom: 0;
-    padding: 0 20px !important;
-}
-.modal-crear-firma .ant-btn-primary:hover {
-    background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
-    color: #fff !important;
-}
+    .modal-crear-firma .modal-crear-firma-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 18px;
+        margin-bottom: 0px;
+    }
+
+    .modal-crear-firma .ant-btn-primary {
+        background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
+        border: none !important;
+        color: #fff !important;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
+        margin-top: 0;
+        margin-bottom: 0;
+        padding: 0 20px !important;
+    }
+
+    .modal-crear-firma .ant-btn-primary:hover {
+        background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
+        color: #fff !important;
+    }
 
     .firmas-abm .fade-in {
         animation: abm-fadeIn 0.5s ease-in-out !important;
@@ -415,7 +462,6 @@
             transform: translateY(0);
         }
     }
-
 </style>
 
 
@@ -440,117 +486,71 @@
                 <div class="filters-section">
                     <Row Gutter="16">
                         <Col Span="3">
-                            <label class="filter-label">📅 Fecha Desde</label>
-                            <DatePicker TValue="DateTime"
-                                        DefaultValue="@FechaBuscarI"
-                                        @bind-Value="@FechaBuscarI"
-                                        Size="InputSize.Large"/>
+                        <label class="filter-label">📅 Fecha Desde</label>
+                        <DatePicker TValue="DateTime" DefaultValue="@FechaBuscarI" @bind-Value="@FechaBuscarI"
+                            Size="InputSize.Large" />
                         </Col>
                         <Col Span="3">
-                            <label class="filter-label">📅 Fecha Hasta</label>
-                            <DatePicker TValue="DateTime"
-                                        DefaultValue="@FechaBuscarF"
-                                        @bind-Value="@FechaBuscarF"
-                                        Size="InputSize.Large" />
+                        <label class="filter-label">📅 Fecha Hasta</label>
+                        <DatePicker TValue="DateTime" DefaultValue="@FechaBuscarF" @bind-Value="@FechaBuscarF"
+                            Size="InputSize.Large" />
                         </Col>
                     </Row>
                     <Row Gutter="16">
                         <Col Span="10" Class="col-busqueda-bombero">
-                            <Search Placeholder="🔍 Buscar por bombero..."
-                                    AllowClear
-                                    EnterButton="true"
-                                    Size="InputSize.Large"
-                                    OnSearch="@(() => FirmasVM = FiltrarFirmas())"
-                                    @bind-Value="Busqueda" />
+                        <Search Placeholder="🔍 Buscar por bombero..." AllowClear EnterButton="true"
+                            Size="InputSize.Large" OnSearch="@(() => FirmasVM = FiltrarFirmas())"
+                            @bind-Value="Busqueda" />
                         </Col>
                         <Col Span="5" Class="col-unidad">
-                            <Select TItem="string"
-                                    TItemValue="string"
-                                    DataSource="@UnidadesDisponibles"
-                                    Value="UnidadSeleccionada"
-                                    ValueChanged="@(v => { UnidadSeleccionada = v; FirmasVM = FiltrarFirmas(); })"
-                                    Placeholder="Filtrar por unidad"
-                                    AllowClear
-                                    EnableSearch
-                                    Size="InputSize.Large" />
+                        <Select TItem="string" TItemValue="string" DataSource="@UnidadesDisponibles"
+                            Value="UnidadSeleccionada"
+                            ValueChanged="@(v => { UnidadSeleccionada = v; FirmasVM = FiltrarFirmas(); })"
+                            Placeholder="Filtrar por unidad" AllowClear EnableSearch Size="InputSize.Large" />
                         </Col>
                         <Col Span="5" Class="col-departamento">
-                            <Select TItem="string"
-                                    TItemValue="string"
-                                    DataSource="@DepartamentosDisponibles"
-                                    Value="DepartamentoSeleccionado"
-                                    ValueChanged="@(v => { DepartamentoSeleccionado = v; FirmasVM = FiltrarFirmas(); })"
-                                    Placeholder="Filtrar por departamento"
-                                    AllowClear
-                                    EnableSearch
-                                    Size="InputSize.Large" />
+                        <Select TItem="string" TItemValue="string" DataSource="@DepartamentosDisponibles"
+                            Value="DepartamentoSeleccionado"
+                            ValueChanged="@(v => { DepartamentoSeleccionado = v; FirmasVM = FiltrarFirmas(); })"
+                            Placeholder="Filtrar por departamento" AllowClear EnableSearch Size="InputSize.Large" />
                         </Col>
                         <Col Span="4" Class="col-nueva-firma">
-                            <Button Class="modern-button add-button"
-                                    OnClick="@(() => _modalAñadirVisible = true)"
-                                    Icon="plus"
-                                    Size="ButtonSize.Large">
-                                Nueva Firma
-                            </Button>
+                        <Button Class="modern-button add-button" OnClick="@(() => _modalAñadirVisible = true)"
+                            Icon="plus" Size="ButtonSize.Large">
+                            Nueva Firma
+                        </Button>
                         </Col>
                     </Row>
                 </div>
             </div>
 
             <div class="table-container">
-                <Table DataSource="FirmasVM"
-                       PageSize="10"
-                       Responsive
-                       TItem="FirmaViewModel"
-                       RowClassName="@(c => c.Data.EstadoFirma)"
-                       OnRow="@OnRowClick"
-                       Loading="@_loading">
+                <Table DataSource="FirmasVM" PageSize="10" Responsive TItem="FirmaViewModel"
+                    RowClassName="@(c => c.Data.EstadoFirma)" OnRow="@OnRowClick" Loading="@_loading">
 
                     <ColumnDefinitions Context="firma">
-                        <PropertyColumn  Title = "📅 Fecha"
-                                        Property="c => c.Fecha"
-                                        Format="dd/MM/yyyy"
-                                        Sortable
-                                        Width="110px" />
+                        <PropertyColumn Title="📅 Fecha" Property="c => c.Fecha" Format="dd/MM/yyyy" Sortable
+                            Width="110px" />
 
-                        <PropertyColumn Title="📝 Descripción"
-                                        Property="c => c.Descripcion"
-                                        Sortable
-                                        Width="160px" />
+                        <PropertyColumn Title="📝 Descripción" Property="c => c.Descripcion" Sortable Width="160px" />
 
-                        <PropertyColumn Title="🏷️ Tipo de Incidente"
-                                        Property="c => c.TipoIncidente"
-                                        Sortable
-                                        Width="120px" />
+                        <PropertyColumn Title="🏷️ Tipo de Incidente" Property="c => c.TipoIncidente" Sortable
+                            Width="120px" />
 
-                        <PropertyColumn Title="🏢 Unidad"
-                                        Property="c => c.Unidad"
-                                        Sortable
-                                        Width="110px" />
+                        <PropertyColumn Title="🏢 Unidad" Property="c => c.Unidad" Sortable Width="110px" />
 
-                        <PropertyColumn Title="🏬 Departamento"
-                                        Property="c => c.Departamento"
-                                        Sortable
-                                        Width="120px" />
+                        <PropertyColumn Title="🏬 Departamento" Property="c => c.Departamento" Sortable Width="120px" />
 
-                        <PropertyColumn Title="👤 Informado por"
-                                        Property="c => c.InformadoPor"
-                                        Sortable
-                                        Width="120px" />
+                        <PropertyColumn Title="👤 Informado por" Property="c => c.InformadoPor" Sortable
+                            Width="120px" />
 
-                        <PropertyColumn Title="📊 Estado"
-                                        Property="c => c.EstadoFirma"
-                                        Sortable
-                                        Width="110px">
+                        <PropertyColumn Title="📊 Estado" Property="c => c.EstadoFirma" Sortable Width="110px">
                             <Template>
                                 <span class="status-badge">@firma.EstadoFirma</span>
                             </Template>
                         </PropertyColumn>
 
-                        <PropertyColumn Title="👤 Bombero"
-                                        Property="c => c.Bombero"
-                                        Sortable
-                                        Width="120px" />
+                        <PropertyColumn Title="👤 Bombero" Property="c => c.Bombero" Sortable Width="120px" />
                     </ColumnDefinitions>
                 </Table>
             </div>
@@ -558,52 +558,36 @@
     </div>
 </div>
 
-<Modal @bind-Visible="_modalAñadirVisible"
-       Title="➕ Nueva Firma"
-       Width="@("100%")"
-       Style="max-width: 800px;"
-       OkText="@("Crear Firma")"
-       CancelText="@("Cancelar")"
-       OnOk="@AddFirma"
-       DestroyOnClose
-       WrapClassName="modal-crear-firma">
+<Modal @bind-Visible="_modalAñadirVisible" Title="➕ Nueva Firma" Width="@("100%")" Style="max-width: 800px;"
+    OkText="@("Crear Firma")" CancelText="@("Cancelar")" OnOk="@AddFirma" DestroyOnClose
+    WrapClassName="modal-crear-firma">
     <div class="modal-crear-firma-content">
         <Form Model="nuevaFirma" Layout="FormLayout.Vertical" Class="modal-crear-firma-form">
-            <Row Class="modal-crear-firma-row" Gutter="16">
-                <AntDesign.Col Span="12">
-                    <FormItem Label="👤 Bombero" Required Class="modal-crear-firma-form-item">
-                        <Select TItem="BomberoViewModel"
-                                TItemValue="int"
-                                DataSource="@BomberosVM"
-                                Value="nuevaFirma.BomberoId"
-                                ValueChanged="OnBomberoChanged"
-                                LabelName="@nameof(BomberoViewModel.NombreYApellido)"
-                                ValueName="@nameof(BomberoViewModel.Id)"
-                                Placeholder="Seleccione el bombero"
-                                AllowClear
-                                EnableSearch
-                                Size="InputSize.Large" />
+
+            <Row Class="modal-crear-firma-row" Gutter="24">
+                <AntDesign.Col Span="8">
+                    <FormItem Label="🏢 Unidad" Class="modal-crear-firma-form-item">
+                        <EnumSelect TEnum="TipoUnidadTest" @bind-Value="nuevaFirma.UnidadT"
+                            EnableSearch Size="InputSize.Large" />
                     </FormItem>
                 </AntDesign.Col>
-                <AntDesign.Col Span="12">
-                    <FormItem Label="🏷️ Tipo de Incidente" Required Class="modal-crear-firma-form-item">
-                <EnumSelect TEnum="TipoIncidente" @bind-Value="@IncidenteView.Tipo"
-                               Placeholder="Tipo de incidente"
-                               Size="InputSize.Large" />
+                <AntDesign.Col Span="8">
+                    <FormItem Label="🏬 Departamento" Class="modal-crear-firma-form-item">
+                        <EnumSelect TEnum="TipoDepartamentoTest" @bind-Value="nuevaFirma.DepartamentoT"
+                            AllowClear EnableSearch Size="InputSize.Large" />
                     </FormItem>
                 </AntDesign.Col>
             </Row>
-            <AntDesign.Col Span="24" Class="modal-crear-firma-form-full-width">
-                <FormItem Label="📝 Descripción">
-                    <TextArea @bind-Value="@nuevaFirma.Descripcion"
-                              Placeholder="Ingrese una descripción del incidente"
-                              Rows="4"
-                              ShowCounts
-                              MaxLength="500" />
-                </FormItem>
-            </AntDesign.Col>
-            <Row Class="modal-crear-firma-row" Gutter="100">
+
+            <Row Class="modal-crear-firma-row" Gutter="24">
                 <AntDesign.Col Span="8">
+                    <FormItem Label="🏷️ Tipo de Incidente" Required Class="modal-crear-firma-form-item">
+                        <EnumSelect TEnum="TipoIncidente" @bind-Value="@IncidenteView.Tipo"
+                            Placeholder="Tipo de incidente" DefaultValue="TipoIncidente.Limpieza"
+                            Size="InputSize.Large" />
+                    </FormItem>
+                </AntDesign.Col>
+                @*      <AntDesign.Col Span="8">
                     <FormItem Label="📅 Fecha" Required Class="modal-crear-firma-form-item">
                         <DatePicker TValue="DateTime"
                                     @bind-Value="@nuevaFirma.Fecha"
@@ -611,43 +595,32 @@
                                     Placeholder="@("Seleccione fecha")"
                                     Size="InputSize.Large" />
                     </FormItem>
-                </AntDesign.Col>
-                <AntDesign.Col Span="8">
-                    <FormItem Label="🏢 Unidad" Class="modal-crear-firma-form-item">
-                        <Select TItem="string"
-                                TItemValue="string"
-                                DataSource="@UnidadesDisponibles"
-                                Value="nuevaFirma.Unidad"
-                                ValueChanged="@(v => nuevaFirma.Unidad = v)"
-                                Placeholder="Filtrar por unidad"
-                                AllowClear
-                                EnableSearch
-                                Size="InputSize.Large" />
+                </AntDesign.Col> *@  
+            </Row>
+            <AntDesign.Col Span="24" Class="modal-crear-firma-form-full-width">
+                <FormItem Label="📝 Descripción">
+                    <TextArea @bind-Value="@nuevaFirma.Descripcion" Placeholder="Ingrese una descripción del incidente"
+                        Rows="4" ShowCounts MaxLength="500" />
+                </FormItem>
+            </AntDesign.Col>
+            <Row Class="modal-crear-firma-row" Gutter="100">
+                <AntDesign.Col Span="12">
+                    <FormItem Label="👤 Bombero" Required Class="modal-crear-firma-form-item">
+                        <Select TItem="BomberoViewModel" TItemValue="int" DataSource="@BomberosVM"
+                            Value="nuevaFirma.BomberoId" ValueChanged="OnBomberoChanged"
+                            LabelName="@nameof(BomberoViewModel.NombreYApellido)"
+                            ValueName="@nameof(BomberoViewModel.Id)" Placeholder="Seleccione el bombero" AllowClear
+                            EnableSearch Size="InputSize.Large" />
                     </FormItem>
                 </AntDesign.Col>
-                <AntDesign.Col Span="8">
-                    <FormItem Label="🏬 Departamento" Class="modal-crear-firma-form-item">
-                        <Select TItem="string"
-                                TItemValue="string"
-                                DataSource="@DepartamentosDisponibles"
-                                Value="nuevaFirma.Departamento"
-                                ValueChanged="@(v => nuevaFirma.Departamento = v)"
-                                Placeholder="Filtrar por departamento"
-                                AllowClear
-                                EnableSearch
-                                Size="InputSize.Large" />
-                    </FormItem>
-                </AntDesign.Col>
+
             </Row>
         </Form>
     </div>
 </Modal>
 
-<Modal @bind-Visible="_modalDetalleVisible"
-       Title="@($"📋 Detalle de Firma - {firmaSeleccionada?.Bombero}")"
-       Footer="null"
-       Width="@("90%")"
-       Style="max-width: 1000px;">
+<Modal @bind-Visible="_modalDetalleVisible" Title="@($"📋 Detalle de Firma - {firmaSeleccionada?.Bombero}")"
+    Footer="null" Width="@("90%")" Style="max-width: 1000px;">
     @if (firmaSeleccionada != null)
     {
         <div class="firmas-abm">
@@ -681,9 +654,8 @@
                     </div>
                 </div>
                 <div style="display: flex; justify-content: center; margin-top: 24px;">
-                    <Button Type="ButtonType.Primary"
-                            Size="ButtonSize.Large"
-                            OnClick="@(() => _modalDetalleVisible = false)">
+                    <Button Type="ButtonType.Primary" Size="ButtonSize.Large"
+                        OnClick="@(() => _modalDetalleVisible = false)">
                         Cerrar
                     </Button>
                 </div>
@@ -713,7 +685,63 @@
 
     // Nuevos filtros para Unidad y Departamento
 
-        public class IncidenteViewModel
+
+    public enum TipoDepartamentoTest
+    {
+        [Display(Name = "Depto. de detall")]
+    DepartamentoDeDetal,
+            [Display(Name = "Depto. de materiales")]
+    DepartamentoDeMateriales,
+            [Display(Name = "Depto. de taller")]
+    DepartamentoDeTaller,
+            [Display(Name = "Depto. de deposito")]
+    DepartamentoDeDeposito,
+            [Display(Name = "Depto. de capacitacion")]
+    DepartamentoDeCapacitacion,
+            [Display(Name = "Depto. de edificio")]
+    DepartamentoDeEdificio,
+            [Display(Name = "Depto. de electricidad")]
+    DepartamentoDeElectricidad,
+            [Display(Name = "Depto. de comunicacion")]
+    DepartamentoDeComunicacion
+
+    }
+
+    public enum TipoUnidadTest
+    {
+        [Display(Name = "Unidad 1")]
+    Uno,
+            [Display(Name = "Unidad 13")]
+    Trece,
+            [Display(Name = "Unidad 17")]
+    Diecisiete,
+            [Display(Name = "Unidad 18")]
+    Dieciocho,
+            [Display(Name = "Unidad 21")]
+    Veintiuno,
+            [Display(Name = "Unidad 22")]
+    Veintidos,
+            [Display(Name = "Unidad 25")]
+    Veinticinco,
+            [Display(Name = "Unidad 28")]
+    Veintiocho,
+            [Display(Name = "Unidad 29")]
+    Veintinueve,
+            [Display(Name = "Unidad 30")]
+    Treinta,
+            [Display(Name = "Unidad 31")]
+    Treintayuno,
+            [Display(Name = "Unidad 32")]
+    Treintaydos,
+            [Display(Name = "Unidad 33")]
+    Treintaytres,
+            [Display(Name = "Unidad 34")]
+    Treintaycuatro,
+            [Display(Name = "Unidad 35")]
+    Treintaycinco
+}
+
+    public class IncidenteViewModel
     {
         public DateTime Fecha { get; set; }
         public string? Observacion { get; set; }
@@ -739,7 +767,9 @@
     {
         return new Dictionary<string, object>
         {
-            ["onclick"] = Microsoft.AspNetCore.Components.EventCallback.Factory.Create<Microsoft.AspNetCore.Components.Web.MouseEventArgs>(this, () => MostrarDetalleFirma(rowData.Data))
+            ["onclick"] =
+        Microsoft.AspNetCore.Components.EventCallback.Factory.Create<Microsoft.AspNetCore.Components.Web.MouseEventArgs>(this,
+        () => MostrarDetalleFirma(rowData.Data))
         };
     }
 
@@ -752,14 +782,14 @@
     private List<FirmaViewModel> FiltrarFirmas()
     {
         var filtered = FirmasVM_SinFiltro
-            .Where(f =>
-                (FechaBuscarI == default || f.Fecha >= FechaBuscarI) &&
-                (FechaBuscarF == default || f.Fecha <= FechaBuscarF) &&
-                (string.IsNullOrWhiteSpace(Busqueda) || (f.Bombero?.Contains(Busqueda, StringComparison.OrdinalIgnoreCase) ?? false)) &&
-                (string.IsNullOrWhiteSpace(UnidadSeleccionada) || f.Unidad == UnidadSeleccionada) &&
-                (string.IsNullOrWhiteSpace(DepartamentoSeleccionado) || f.Departamento == DepartamentoSeleccionado)
-            )
-            .ToList();
+        .Where(f =>
+        (FechaBuscarI == default || f.Fecha >= FechaBuscarI) &&
+        (FechaBuscarF == default || f.Fecha <= FechaBuscarF) &&
+        (string.IsNullOrWhiteSpace(Busqueda) || (f.Bombero?.Contains(Busqueda, StringComparison.OrdinalIgnoreCase) ?? false)) &&
+        (string.IsNullOrWhiteSpace(UnidadSeleccionada) || f.Unidad == UnidadSeleccionada) &&
+        (string.IsNullOrWhiteSpace(DepartamentoSeleccionado) || f.Departamento == DepartamentoSeleccionado)
+        )
+        .ToList();
 
         return filtered;
     }
@@ -788,9 +818,9 @@
     private async Task AddFirma()
     {
         if (string.IsNullOrWhiteSpace(nuevaFirma.Bombero) ||
-            nuevaFirma.BomberoId <= 0 ||
-            nuevaFirma.Fecha == default ||
-            string.IsNullOrWhiteSpace(nuevaFirma.TipoIncidente))
+        nuevaFirma.BomberoId <= 0 ||
+        nuevaFirma.Fecha == default ||
+        string.IsNullOrWhiteSpace(nuevaFirma.TipoIncidente))
         {
             await MessageService.ErrorAsync("⚠️ Por favor, complete todos los campos obligatorios.");
             return;
@@ -815,10 +845,12 @@
         public DateTime Fecha { get; set; }
         public string? Descripcion { get; set; }
         public string? TipoIncidente { get; set; }
-        public string? Unidad { get; set; }         
-        public string? Departamento { get; set; }  
+        public string? Unidad { get; set; }
+        public string? Departamento { get; set; }
         public string? InformadoPor { get; set; }
         public string? EstadoFirma { get; set; }
+        public TipoUnidadTest UnidadT { get; set; }
+        public TipoDepartamentoTest DepartamentoT { get; set; }
     }
 
     public class BomberoViewModel
