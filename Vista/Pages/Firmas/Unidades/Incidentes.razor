@@ -587,7 +587,7 @@
                 </AntDesign.Col>
                 <AntDesign.Col Span="12">
                     <FormItem Label="🏷️ Tipo de Incidente" Required Class="modal-crear-firma-form-item">
-                        <Input @bind-Value="nuevaFirma.TipoIncidente"
+                <EnumSelect TEnum="TipoIncidente" @bind-Value="@IncidenteView.Tipo"
                                Placeholder="Tipo de incidente"
                                Size="InputSize.Large" />
                     </FormItem>
@@ -639,13 +639,6 @@
                     </FormItem>
                 </AntDesign.Col>
             </Row>
-            <AntDesign.Col Span="24" Class="modal-crear-firma-form-full-width">
-                <FormItem Label="👤 Informado por">
-                    <Input @bind-Value="nuevaFirma.InformadoPor"
-                           Placeholder="Nombre de quien informa"
-                           Size="InputSize.Large" />
-                </FormItem>
-            </AntDesign.Col>
         </Form>
     </div>
 </Modal>
@@ -719,6 +712,17 @@
     private FirmaViewModel? firmaSeleccionada;
 
     // Nuevos filtros para Unidad y Departamento
+
+        public class IncidenteViewModel
+    {
+        public DateTime Fecha { get; set; }
+        public string? Observacion { get; set; }
+        public TipoIncidente Tipo { get; set; }
+        public int ResponsableId { get; set; }
+    }
+    public IncidenteViewModel IncidenteView = new();
+
+
     string? UnidadSeleccionada;
     string? DepartamentoSeleccionado;
 
