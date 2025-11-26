@@ -17,7 +17,7 @@
                   Class="modal-crear-fuerza-form-item">
             <AntDesign.Col Span="24">
                 <Input @bind-Value="@agregarParteVehiculoViewModel.Nombre"
-                       AllowClear Size="InputSize.Large" />
+                      />
             </AntDesign.Col>
         </FormItem>
     </Row>
@@ -32,14 +32,15 @@
 
     <div class="modal-crear-fuerza-footer">
         <FormItem>
+            <Button Type="ButtonType.Primary" HtmlType="submit" Disabled="!_form.IsModified">
+                Agregar Parte del Vehículo
+            </Button>
             <Button Style="margin-right: 8px;"
                     OnClick="CancelarAsync"
                     Danger>
                 Cancelar
             </Button>
-            <Button Type="ButtonType.Primary" HtmlType="submit" Disabled="!_form.IsModified">
-                Agregar Parte del Vehículo
-            </Button>
+
         </FormItem>
     </div>
 </Form>
