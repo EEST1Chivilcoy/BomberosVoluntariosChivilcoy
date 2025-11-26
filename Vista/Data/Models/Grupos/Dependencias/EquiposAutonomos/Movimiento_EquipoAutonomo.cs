@@ -85,5 +85,11 @@ namespace Vista.Data.Models.Grupos.Dependencias.EquiposAutonomos
         /// Si el destino no es un vehículo ni una dependencia registrada, se puede especificar aquí.
         /// </summary>
         public string? OtroDestino { get; set; } = null;
+
+        /// <summary>
+        /// Si el equipo autónomo fue devuelto al stock luego de una prueba hidráulica exitosa. Se registra la fecha de vencimiento (próxima prueba hidráulica).
+        /// </summary>
+        [NotMapped]
+        public DateTime? FechaVencimientoPruebaHidraulica { get; set; } = null;
     }
 }

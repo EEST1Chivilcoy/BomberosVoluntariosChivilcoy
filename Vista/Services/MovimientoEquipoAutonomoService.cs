@@ -54,6 +54,16 @@ namespace Vista.Services
                 throw new KeyNotFoundException($"No se encontró el bombero encargado con el ID {Movimiento.EncargadoId}.");
             }
 
+            // Validación: Si el equipo está en Prueba Hidráulica, solo permite Baja o Stock
+            if (equipo.Estado == TipoEstadoEquipoAutonomo.PruebaHidraulica)
+            {
+                if (Movimiento.EstadoNuevo != TipoEstadoEquipoAutonomo.Baja &&
+                    Movimiento.EstadoNuevo != TipoEstadoEquipoAutonomo.Stock)
+                {
+                    throw new InvalidOperationException("El equipo está en Prueba Hidráulica. Solo puede darse de baja o devolverse al stock.");
+                }
+            }
+
             // ---- Validación de Destino (Corregida) ----
             // Contamos cuántos destinos se especificaron.
             int destinationCount = 0;
@@ -123,18 +133,25 @@ namespace Vista.Services
             // 1. Asigna el estado actual del equipo como el "EstadoAnterior" del movimiento.
             Movimiento.EstadoAnterior = equipo.Estado;
 
-            // 2. Modifica el estado del equipo *directamente* en la entidad que ya cargamos.
+            // 2. Si el equipo está en Prueba Hidráulica y pasa a Stock, actualizar fechas
+            if (equipo.Estado == TipoEstadoEquipoAutonomo.PruebaHidraulica &&
+                Movimiento.EstadoNuevo == TipoEstadoEquipoAutonomo.Stock)
+            {
+                await _equipoAutonomoService.ActualizarFechasPruebaHidraulicaAsync(Movimiento.EquipoAutonomoId, Movimiento.FechaVencimientoPruebaHidraulica!.Value);
+            }
+
+            // 3. Modifica el estado del equipo *directamente* en la entidad que ya cargamos.
             equipo.Estado = Movimiento.EstadoNuevo;
 
-            // 3. Configura el resto del movimiento
+            // 4. Configura el resto del movimiento
             Movimiento.EquipoAutonomo = equipo;
             Movimiento.Encargado = encargado; // Asignar el encargado también
             Movimiento.FechaMovimiento = DateTime.Now;
 
-            // 4. Agrega el nuevo registro de movimiento.
+            // 5. Agrega el nuevo registro de movimiento.
             await _context.MovimientosEquiposAutonomos.AddAsync(Movimiento);
 
-            // 5. Guarda TODOS los cambios (el estado actualizado del equipo Y el nuevo movimiento)
+            // 6. Guarda TODOS los cambios (el estado actualizado del equipo Y el nuevo movimiento)
             //    en una sola transacción.
             await _context.SaveChangesAsync();
         }

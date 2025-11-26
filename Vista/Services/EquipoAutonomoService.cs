@@ -13,6 +13,7 @@ namespace Vista.Services
         Task<List<EquipoAutonomo>> ObtenerEquiposAutonomosAsync();
         Task<List<EquipoAutonomo>> ObtenerEquiposAutonomosPorEstadoAsync(TipoEstadoEquipoAutonomo estado);
         Task CambiarEstadoEquipoAutonomoAsync(int equipoId, TipoEstadoEquipoAutonomo nuevoEstado);
+        Task ActualizarFechasPruebaHidraulicaAsync(int equipoId, DateTime fechaVencimiento);
     }
     public class EquipoAutonomoService : IEquipoAutonomoService
     {
@@ -88,6 +89,22 @@ namespace Vista.Services
         {
             return await _context.EquiposAutonomos
                                  .FirstOrDefaultAsync(e => e.EquipoAutonomoId == equipoId);
+        }
+
+        public async Task ActualizarFechasPruebaHidraulicaAsync(int equipoId, DateTime fechaVencimiento)
+        {
+            var equipo = await _context.EquiposAutonomos.FindAsync(equipoId);
+
+            if (equipo == null)
+            {
+                throw new KeyNotFoundException("Equipo autónomo no encontrado.");
+            }
+
+            equipo.UltimaFechaPruebaHidraulica = DateTime.Now;
+            equipo.FechaVencimientoPruebaHidraulica = fechaVencimiento;
+
+            _context.EquiposAutonomos.Update(equipo);
+            await _context.SaveChangesAsync();
         }
     }
 }

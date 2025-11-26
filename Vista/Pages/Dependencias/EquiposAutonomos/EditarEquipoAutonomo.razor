@@ -9,275 +9,306 @@
 @inject IEquipoAutonomoService EquipoAutonomoService
 
 <style>
-	.modal-crear-equipo .ant-modal-content {
-		border-radius: 12px;
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-		border: 2px solid #732D2D;
-		margin-top: -100px;
-		margin-left: -125px;
-		margin-bottom: 0px;
-		max-width: 800px; /* Aumenta el ancho máximo del modal */
-		width: 90vw; /* Responsive: ocupa el 90% del viewport */
-	}
+    .modal-crear-equipo .ant-modal-content {
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        border: 2px solid #732D2D;
+        margin-top: -100px;
+        margin-left: -125px;
+        margin-bottom: 0px;
+        max-width: 800px; /* Aumenta el ancho máximo del modal */
+        width: 90vw; /* Responsive: ocupa el 90% del viewport */
+    }
 
-	.modal-crear-equipo .ant-modal-title {
-		color: white !important;
-	}
+    .modal-crear-equipo .ant-modal-title {
+        color: white !important;
+    }
 
-	.modal-crear-equipo .ant-modal-header {
-		background-color: #A63333;
-		padding: 16px 24px;
-	}
+    .modal-crear-equipo .ant-modal-header {
+        background-color: #A63333;
+        padding: 16px 24px;
+    }
 
-	.modal-crear-equipo-content {
-		padding: 36px 32px; /* Más espacio interno */
-	}
+    .modal-crear-equipo-content {
+        padding: 36px 32px; /* Más espacio interno */
+    }
 
-	.modal-crear-equipo-form-item {
-		margin-bottom: 24px; /* Más espacio entre items */
-		position: relative;
-		padding-left: 10px;
-	}
+    .modal-crear-equipo-form-item {
+        margin-bottom: 24px; /* Más espacio entre items */
+        position: relative;
+        padding-left: 10px;
+    }
 
-		.modal-crear-equipo-form-item::before {
-			content: '';
-			position: absolute;
-			left: 0;
-			top: 0;
-			height: 100%;
-			width: 3px;
-			border-radius: 5px;
-		}
+        .modal-crear-equipo-form-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            border-radius: 5px;
+        }
 
-		.modal-crear-equipo-form-item .ant-form-item-label > label,
-		.modal-crear-equipo-form-full-width .ant-form-item-label > label {
-			font-weight: 600;
-			color: #434343;
-			display: flex;
-			align-items: center;
-			gap: 8px;
-			font-size: 15px;
-			transition: color 0.3s ease;
-		}
+        .modal-crear-equipo-form-item .ant-form-item-label > label,
+        .modal-crear-equipo-form-full-width .ant-form-item-label > label {
+            font-weight: 600;
+            color: #434343;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 15px;
+            transition: color 0.3s ease;
+        }
 
-			.modal-crear-equipo-form-item .ant-form-item-label > label:hover,
-			.modal-crear-equipo-form-full-width .ant-form-item-label > label:hover {
-				color: #A63333;
-			}
+            .modal-crear-equipo-form-item .ant-form-item-label > label:hover,
+            .modal-crear-equipo-form-full-width .ant-form-item-label > label:hover {
+                color: #A63333;
+            }
 
-	.modal-crear-equipo .ant-input:focus,
-	.modal-crear-equipo .ant-input:hover,
-	.modal-crear-equipo .ant-select-selector:focus,
-	.modal-crear-equipo .ant-select-selector:hover,
-	.modal-crear-equipo .ant-picker:focus,
-	.modal-crear-equipo .ant-picker:hover,
-	.modal-crear-equipo .ant-picker-input > input:focus,
-	.modal-crear-equipo .ant-picker-input > input:hover,
-	.modal-crear-equipo .ant-input-number-input:focus,
-	.modal-crear-equipo .ant-input-number-input:hover {
-		border-color: #FFD700 !important;
-		box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
-	}
+    .modal-crear-equipo .ant-input:focus,
+    .modal-crear-equipo .ant-input:hover,
+    .modal-crear-equipo .ant-select-selector:focus,
+    .modal-crear-equipo .ant-select-selector:hover,
+    .modal-crear-equipo .ant-picker:focus,
+    .modal-crear-equipo .ant-picker:hover,
+    .modal-crear-equipo .ant-picker-input > input:focus,
+    .modal-crear-equipo .ant-picker-input > input:hover,
+    .modal-crear-equipo .ant-input-number-input:focus,
+    .modal-crear-equipo .ant-input-number-input:hover {
+        border-color: #FFD700 !important;
+        box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
+    }
 
-	.modal-crear-equipo .ant-picker,
-	.modal-crear-equipo .ant-input,
-	.modal-crear-equipo .ant-select-selector,
-	.modal-crear-equipo .ant-input-number {
-		border-radius: 8px !important;
-		border: 1px solid #d9d9d9 !important;
-		background: #fff !important;
-		color: #434343 !important;
-		transition: all 0.3s ease !important;
-		font-size: 15px !important;
-	}
+    .modal-crear-equipo .ant-picker,
+    .modal-crear-equipo .ant-input,
+    .modal-crear-equipo .ant-select-selector,
+    .modal-crear-equipo .ant-input-number {
+        border-radius: 8px !important;
+        border: 1px solid #d9d9d9 !important;
+        background: #fff !important;
+        color: #434343 !important;
+        transition: all 0.3s ease !important;
+        font-size: 15px !important;
+    }
 
-	.modal-crear-equipo-footer {
-		display: flex;
-		justify-content: flex-end;
-		gap: 16px;
-		margin-top: 24px;
-		margin-bottom: 0px;
-	}
+    .modal-crear-equipo-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 16px;
+        margin-top: 24px;
+        margin-bottom: 0px;
+    }
 
-	.modal-crear-equipo .ant-btn-primary {
-		background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
-		border: none !important;
-		color: #fff !important;
-		font-weight: 600;
-		box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
-		margin-top: 0;
-		margin-bottom: 0;
-		padding: 0 28px !important;
-		font-size: 16px !important;
-	}
+    .modal-crear-equipo .ant-btn-primary {
+        background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
+        border: none !important;
+        color: #fff !important;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
+        margin-top: 0;
+        margin-bottom: 0;
+        padding: 0 28px !important;
+        font-size: 16px !important;
+    }
 
-		.modal-crear-equipo .ant-btn-primary:hover {
-			background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
-			color: #fff !important;
-		}
+        .modal-crear-equipo .ant-btn-primary:hover {
+            background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
+            color: #fff !important;
+        }
 
-	@@media (max-width: 1199px) {
-		.modal-crear-equipo .ant-modal-content {
-			max-width: 98vw;
-		}
+    @@media (max-width: 1199px) {
+        .modal-crear-equipo .ant-modal-content {
+            max-width: 98vw;
+        }
 
-		.modal-crear-equipo-content {
-			padding: 18px 10px;
-			gap: 16px;
-		}
+        .modal-crear-equipo-content {
+            padding: 18px 10px;
+            gap: 16px;
+        }
 
-		.modal-crear-equipo-form-row {
-			grid-template-columns: 1fr;
-			gap: 16px;
-		}
-	}
+        .modal-crear-equipo-form-row {
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+    }
 
-	@@media (max-width: 767px) {
-		.modal-crear-equipo .ant-modal-content {
-			max-width: 100vw;
-		}
+    @@media (max-width: 767px) {
+        .modal-crear-equipo .ant-modal-content {
+            max-width: 100vw;
+        }
 
-		.modal-crear-equipo-content {
-			padding: 8px 2px;
-			gap: 12px;
-		}
+        .modal-crear-equipo-content {
+            padding: 8px 2px;
+            gap: 12px;
+        }
 
-		.modal-crear-equipo-form-row {
-			grid-template-columns: 1fr;
-			gap: 12px;
-		}
-	}
+        .modal-crear-equipo-form-row {
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+    }
 </style>
 
 <Form Loading="isLoading" Model="@viewModel"
-              Layout="FormLayout.Vertical"
-              Class="modal-crear-equipo-form"
-              OnFinish="OnFinish"
-              OnFinishFailed="OnFinishFailed">
+      Layout="FormLayout.Vertical"
+      Class="modal-crear-equipo-form"
+      OnFinish="OnFinish"
+      OnFinishFailed="OnFinishFailed">
 
 
-		<Row Class="modal-crear-equipo-row" Gutter="16">
-			<AntDesign.Col Span="12">
-				<FormItem Label="📋 Número de Serie" Required Class="modal-crear-equipo-form-item">
-					<Input @bind-Value="@viewModel.NroSerie"
-						   Placeholder="Ingrese el número de serie" />
-				</FormItem>
-			</AntDesign.Col>
-			<AntDesign.Col Span="12">
-				<FormItem Label="🔧 Número de Tubo" Class="modal-crear-equipo-form-item">
-					<Input @bind-Value="@viewModel.NroTubo"
-						   Placeholder="Ingrese el número de tubo" />
-				</FormItem>
-			</AntDesign.Col>
-		</Row>
-		<Row Class="modal-crear-equipo-row" Gutter="16">
-			<AntDesign.Col Span="12">
-				<FormItem Label="🏭 Marca" Class="modal-crear-equipo-form-item">
-					<Input @bind-Value="@viewModel.Marca"
-						   Placeholder="Ingrese la marca" />
-				</FormItem>
-			</AntDesign.Col>
-			<AntDesign.Col Span="12">
-				<FormItem Label="📱 Modelo" Class="modal-crear-equipo-form-item">
-					<Input @bind-Value="@viewModel.Modelo"
-						   Placeholder="Ingrese el modelo" />
-				</FormItem>
-			</AntDesign.Col>
-		</Row>
-		<Row Class="modal-crear-equipo-row" Gutter="16">
-			<AntDesign.Col Span="12">
-				<FormItem Label="🧱 Tipo de Material" Class="modal-crear-equipo-form-item">
-					<Input @bind-Value="@viewModel.TipoMaterial"
-						   Placeholder="Ingrese el tipo de material" />
-				</FormItem>
-			</AntDesign.Col>
-		</Row>
-		<div class="modal-crear-equipo-footer">
-			<Button Type="@ButtonType.Primary" HtmlType="submit">
-				Guardar Equipo
-			</Button>
-		</div>
+    <Row Class="modal-crear-equipo-row" Gutter="16">
+        <AntDesign.Col Span="12">
+            <FormItem Label="📋 Número de Serie" Required Class="modal-crear-equipo-form-item">
+                <Input @bind-Value="@viewModel.NroSerie"
+                       Placeholder="Ingrese el número de serie" />
+            </FormItem>
+        </AntDesign.Col>
+        <AntDesign.Col Span="12">
+            <FormItem Label="🔧 Número de Tubo" Class="modal-crear-equipo-form-item">
+                <Input @bind-Value="@viewModel.NroTubo"
+                       Placeholder="Ingrese el número de tubo" />
+            </FormItem>
+        </AntDesign.Col>
+    </Row>
+    <Row Class="modal-crear-equipo-row" Gutter="16">
+        <AntDesign.Col Span="12">
+            <FormItem Label="🏭 Marca" Class="modal-crear-equipo-form-item">
+                <Input @bind-Value="@viewModel.Marca"
+                       Placeholder="Ingrese la marca" />
+            </FormItem>
+        </AntDesign.Col>
+        <AntDesign.Col Span="12">
+            <FormItem Label="📱 Modelo" Class="modal-crear-equipo-form-item">
+                <Input @bind-Value="@viewModel.Modelo"
+                       Placeholder="Ingrese el modelo" />
+            </FormItem>
+        </AntDesign.Col>
+    </Row>
+    <Row Class="modal-crear-equipo-row" Gutter="16">
+        <AntDesign.Col Span="12">
+            <FormItem Label="📅 Fecha de vencimiento de la prueba hidráulica"
+                      Class="modal-crear-equipo-form-item">
+                <DatePicker @bind-Value="@viewModel.FechaVencimientoPruebaHidraulica"
+                            Size="InputSize.Large"
+                            Placeholder=@("Seleccione la fecha de vencimiento") />
+            </FormItem>
+        </AntDesign.Col>
+
+        <AntDesign.Col Span="12">
+            <FormItem Label="🧪 Fecha de la última prueba hidráulica"
+                      Class="modal-crear-equipo-form-item">
+                <DatePicker @bind-Value="@viewModel.UltimaFechaPruebaHidraulica"
+                            Size="InputSize.Large"
+                            Placeholder=@("Seleccione la fecha anterior de prueba") />
+            </FormItem>
+        </AntDesign.Col>
+    </Row>
+    <Row Class="modal-crear-equipo-row" Gutter="16">
+        <AntDesign.Col Span="12">
+            <FormItem Label="🧱 Tipo de Material" Class="modal-crear-equipo-form-item">
+                <Input @bind-Value="@viewModel.TipoMaterial"
+                       Placeholder="Ingrese el tipo de material" />
+            </FormItem>
+        </AntDesign.Col>
+    </Row>
+    <div class="modal-crear-equipo-footer">
+        <Button Type="@ButtonType.Primary" HtmlType="submit">
+            Guardar Equipo
+        </Button>
+    </div>
 </Form>
 
 @code {
-	[Parameter] public EventCallback OnFinishCallback { get; set; }
-	[Parameter] public EquipoAutonomo EquipoAutonomo { get; set; } = new();
+    [Parameter] public EventCallback OnFinishCallback { get; set; }
+    [Parameter] public EquipoAutonomo EquipoAutonomo { get; set; } = new();
 
-	private bool isLoading = false;
-	private EquipoAutonomoViewModel viewModel = new();
+    private bool isLoading = false;
+    private EquipoAutonomoViewModel viewModel = new();
 
-	private class EquipoAutonomoViewModel
-	{
-		public int Id { get; set; }
+    private class EquipoAutonomoViewModel
+    {
+        public int Id { get; set; }
 
-		[Required(ErrorMessage = "El número de serie es obligatorio.")]
-		public string NroSerie { get; set; } = string.Empty;
+        [Required(ErrorMessage = "El número de serie es obligatorio.")]
+        public string NroSerie { get; set; } = string.Empty;
 
-		public string? NroTubo { get; set; }
-		public string? Marca { get; set; }
-		public string? Modelo { get; set; }
-		public string? TipoMaterial { get; set; }
-	}
+        public string? NroTubo { get; set; }
 
-	protected override async Task OnInitializedAsync()
-	{
-		await LoadEquipoData();
-	}
+        public string? Marca { get; set; }
 
-	private async Task OnFinish(EditContext editContext)
-	{
-		isLoading = true;
+        public string? Modelo { get; set; }
 
-		try
-		{
-			var equipo = MapToModel(viewModel);
-			await EquipoAutonomoService.EditarEquipoAutonomoAsync(equipo);
-			await message.SuccessAsync("Equipo autónomo agregado correctamente.");
+        public string? TipoMaterial { get; set; }
 
-			viewModel = new(); // Reiniciar formulario
-			await OnFinishCallback.InvokeAsync();
-		}
-		catch (Exception ex)
-		{
-			await message.ErrorAsync(ex.Message, 5);
-		}
-		finally
-		{
-			isLoading = false;
-		}
-	}
+        public DateTime? UltimaFechaPruebaHidraulica { get; set; }
 
-	private void OnFinishFailed(EditContext editContext)
-	{
-		message.Error("Error en el formulario. Verifique los datos.");
-	}
+        [Required(ErrorMessage = "La fecha de vencimiento de la prueba hidráulica es obligatoria")]
+        public DateTime? FechaVencimientoPruebaHidraulica { get; set; }
+    }
 
-	private async Task LoadEquipoData()
-	{
-		isLoading = true;
-		if (EquipoAutonomo is null) return;
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadEquipoData();
+    }
 
-		viewModel = MapToViewModel(EquipoAutonomo);
-		isLoading = false;
-	}
+    private async Task OnFinish(EditContext editContext)
+    {
+        isLoading = true;
 
-	private EquipoAutonomo MapToModel(EquipoAutonomoViewModel vm) => new()
-	{
-		EquipoAutonomoId = vm.Id,
-		NroSerie = vm.NroSerie,
-		NroTubo = vm.NroTubo,
-		Marca = vm.Marca,
-		Modelo = vm.Modelo,
-		TipoMaterial = vm.TipoMaterial,
-	};
+        try
+        {
+            var equipo = MapToModel(viewModel);
+            await EquipoAutonomoService.EditarEquipoAutonomoAsync(equipo);
+            await message.SuccessAsync("Equipo autónomo agregado correctamente.");
 
-	private EquipoAutonomoViewModel MapToViewModel(EquipoAutonomo model) => new()
-	{
-		Id = model.EquipoAutonomoId,
-		NroSerie = model.NroSerie,
-		NroTubo = model.NroTubo,
-		Marca = model.Marca,
-		Modelo = model.Modelo,
-		TipoMaterial = model.TipoMaterial,
-	};
+            viewModel = new(); // Reiniciar formulario
+            await OnFinishCallback.InvokeAsync();
+        }
+        catch (Exception ex)
+        {
+            await message.ErrorAsync(ex.Message, 5);
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private void OnFinishFailed(EditContext editContext)
+    {
+        message.Error("Error en el formulario. Verifique los datos.");
+    }
+
+    private async Task LoadEquipoData()
+    {
+        isLoading = true;
+        if (EquipoAutonomo is null) return;
+
+        viewModel = MapToViewModel(EquipoAutonomo);
+        isLoading = false;
+    }
+
+    private EquipoAutonomo MapToModel(EquipoAutonomoViewModel vm) => new()
+    {
+        EquipoAutonomoId = vm.Id,
+        NroSerie = vm.NroSerie,
+        NroTubo = vm.NroTubo,
+        Marca = vm.Marca,
+        Modelo = vm.Modelo,
+        TipoMaterial = vm.TipoMaterial,
+        FechaVencimientoPruebaHidraulica = vm.FechaVencimientoPruebaHidraulica!.Value,
+        UltimaFechaPruebaHidraulica = vm.UltimaFechaPruebaHidraulica
+    };
+
+    private EquipoAutonomoViewModel MapToViewModel(EquipoAutonomo model) => new()
+    {
+        Id = model.EquipoAutonomoId,
+        NroSerie = model.NroSerie,
+        NroTubo = model.NroTubo,
+        Marca = model.Marca,
+        Modelo = model.Modelo,
+        TipoMaterial = model.TipoMaterial,
+        FechaVencimientoPruebaHidraulica = model.FechaVencimientoPruebaHidraulica,
+        UltimaFechaPruebaHidraulica = model.UltimaFechaPruebaHidraulica
+    };
 }

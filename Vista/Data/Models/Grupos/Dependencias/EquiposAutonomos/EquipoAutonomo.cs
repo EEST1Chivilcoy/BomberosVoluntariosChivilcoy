@@ -49,6 +49,18 @@ namespace Vista.Data.Models.Grupos.Dependencias.EquiposAutonomos
         public TipoEstadoEquipoAutonomo Estado { get; set; } = TipoEstadoEquipoAutonomo.Stock;
 
         /// <summary>
+        /// Fecha de la última prueba hidráulica del equipo autónomo. Opcional.
+        /// </summary>
+        public DateTime? UltimaFechaPruebaHidraulica { get; set; }
+
+        /// <summary>
+        /// Fecha de vencimiento de la prueba hidráulica del equipo autónomo. Requerido.
+        /// </summary>
+
+        [Required(ErrorMessage = "La fecha de vencimiento de la prueba hidráulica es obligatoria")]
+        public DateTime FechaVencimientoPruebaHidraulica { get; set; }
+
+        /// <summary>
         /// Movimientos históricos del equipo autónomo.
         /// </summary>
         public List<Movimiento_EquipoAutonomo> Movimientos { get; set; } = new();
