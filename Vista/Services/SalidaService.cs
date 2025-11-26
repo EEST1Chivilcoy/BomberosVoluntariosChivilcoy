@@ -14,6 +14,7 @@ using Vista.Data.Models.Vehiculos.Flota;
 using Vista.Data.ViewModels.Personal;
 using Vista.Data.Models.Personas;
 using Vista.Data.Models.Grupos.FuerzasIntervinientes;
+using Vista.Helpers;
 
 namespace Vista.Services
 {
@@ -59,9 +60,10 @@ namespace Vista.Services
         public async Task<Salida> GuardarSalida<T>(T salida) where T : Salida
         {
             using var transaction = await _context.Database.BeginTransactionAsync();
-
             try
             {
+                ValidationHelper.Validar(salida);
+
                 await PreProcesarEntidadSalidaAsync(salida);
 
                 if (salida.AnioNumeroParte <= 0)
