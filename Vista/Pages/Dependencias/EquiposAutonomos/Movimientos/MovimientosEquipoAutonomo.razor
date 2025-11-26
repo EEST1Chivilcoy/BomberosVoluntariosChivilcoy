@@ -163,7 +163,7 @@
 		<div class="table-container">
 			<Table DataSource="movimientosTabla" Bordered Responsive PageSize="10" Size="TableSize.Small" Loading="@isLoading">
 				<ColumnDefinitions Context="movimiento">
-					<PropertyColumn Property="c => c.EncargadoApellidoYNombre" Title="Encargado" Sortable />
+					@* <PropertyColumn Property="c => c.EncargadoApellidoYNombre" Title="Encargado" Sortable /> *@
 					<PropertyColumn Property="c => c.UbicacionOrigen" Title="Origen" Sortable />
 					<PropertyColumn Property="c => c.FechaMovimiento" Title="Fecha" Format="dd/MM/yyyy" Sortable />
 					<PropertyColumn Property="c => c.TipoMovimiento" Title="Tipo de Movimiento" Sortable />
