@@ -6,12 +6,14 @@
 <Modal Footer="null" Title="@("Success")"
        Visible="@_visible1"
        OnCancel="@HandleCancel1">
+
     <Result Status="ResultStatus.Success"
             Title="Se cargo correctamente la salida"
             SubTitle="">
     </Result>
+
     <p style="font-size: 20px; text-align: center;">¿Desea imprimir la planilla de intervención?</p>
-    <button @onclick="@(() => { navigationManager.NavigateTo($"/PlanillasIntervencion/Imprimir/{AnioNumeroParte}/{NumeroParte}/{true}", true); })">Si</button>
+    <button @onclick="@(() => { navigationManager.NavigateTo($"/fire-force/PlanillasIntervencion/Imprimir/{AnioNumeroParte}/{NumeroParte}/{true}", true); })">Si</button>
     <button @onclick="@(() => { navigationManager.NavigateTo("/fire-force/Salidas"); })">No</button>
 </Modal>
 
