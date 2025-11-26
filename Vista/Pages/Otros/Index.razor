@@ -15,7 +15,7 @@
         --bg-white: #ffffff;
         --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
         --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
-        --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.16);
+        --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.16);    
         --radius-sm: 8px;
         --radius-md: 12px;
         --radius-lg: 16px;
@@ -116,16 +116,17 @@
                        GRID DE DASHBOARD
                        Layout responsivo para las tarjetas
                        ======================================== */
-    .dashboard-grid {
-        margin-top: 0;
-    }
+.dashboard-grid {
+    row-gap: 32px !important; /* espacio vertical entre filas */
+}
+
 
     /* ========================================
                        TARJETAS DE NAVEGACIÓN
                        Cards modernos con mejor accesibilidad
                        ======================================== */
     .dashboard-card {
-        height: 100%;
+        height: 300px;
         min-height: 380px;
         border-radius: var(--radius-md) !important;
         transition: var(--transition) !important;
