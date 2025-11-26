@@ -352,19 +352,17 @@
                     HISTORIAL DE BOMBEROS
                 </h1>
                 <div class="actions-row">
-                    <Button Class="modern-button" OnClick="@(async () => await GenerarYMostrarPDF())" Icon="printer">Imprimir</Button>
                     <Button Class="modern-button" OnClick="@(async () => await GuardarEnExcel())" Icon="file-excel">Exportar en Excel</Button>
                 </div>
             </div>
             <div class="table-container">
                 <Table DataSource="BomberosVM" PageSize="6" Responsive Bordered Style="min-width: 400px;">
                     <ColumnDefinitions>
-                        <PropertyColumn Property="c => c.NumeroLegajo.Value" Title="Numero de Legajo" Sortable></PropertyColumn>
+                        <PropertyColumn Property="c => c.NumeroLegajo!.Value" Title="N° Legajo" Sortable></PropertyColumn>
                         <PropertyColumn Property="c => c.NombreYApellido" Title="Nombre Y Apellido" Sortable></PropertyColumn>
-                        <PropertyColumn Property="c => c.Grado" />
+                        <PropertyColumn Property="c => c.Grado.GetDisplayName()" Title="Grado" />
+                        <PropertyColumn Property="c => c.Direccion" Title="Dirección" Sortable></PropertyColumn>
                         <PropertyColumn Property="c => c.TelefonoCel" Title="Telefono Cel" Sortable></PropertyColumn>
-                        <PropertyColumn Property="c => c.TelefonoLaboral" Title="Telefono Laboral" Sortable></PropertyColumn>
-                        <PropertyColumn Property="c => c.Email" Sortable></PropertyColumn>
                     </ColumnDefinitions>
                 </Table>
             </div>
