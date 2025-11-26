@@ -227,7 +227,8 @@
                                     OnFilter="((value, name) => Enum.GetName(typeof(TipoMovimiento), name).StartsWith(Enum.GetName(typeof(TipoMovimiento), value)))">
                     </PropertyColumn>
                     <PropertyColumn Property="c => c.MaterialAsignado.Descripcion" Title="Material" Sortable></PropertyColumn>
-                    <PropertyColumn Property="c => c.BomberoOMovil" Title="Bombero/Móvil" Sortable></PropertyColumn>
+                    <PropertyColumn Property="c => c.Cantidad" Title="Cantidad" Sortable></PropertyColumn>
+                    <PropertyColumn Property="c => c.BomberoOMovil" Title="Bombero / Móvil / Comisión" Sortable></PropertyColumn>
                 </ColumnDefinitions>
             </Table>
         </div>
@@ -280,6 +281,7 @@
                                     <CheckboxGroup Style="display: flex; gap: 20px;" @bind-Value="@_value" TValue="string" OnChange="OnChange">
                                         <Checkbox Label="Bombero" @bind-Value="@chIsBombero">Bombero</Checkbox>
                                         <Checkbox Label="Movil" @bind-Value="@chIsMovil">Móvil</Checkbox>
+                                        <Checkbox Label="Comisión Diretiva" @bind-Value="@MovimientoVM.esComisionDirectiva">Comisión Directiva</Checkbox>"
                                     </CheckboxGroup>
                                 </FormItem>
                             </div>
@@ -385,6 +387,7 @@
         public int MaterialId { get; set; }
         public int? BomberoAsignado { get; set; }
         public string? MovilAsignado { get; set; }
+        public bool esComisionDirectiva { get; set; }
         public string Observaciones { get; set; }
     }
 
@@ -395,6 +398,8 @@
         public int Cantidad { get; set; }
         public Bombero? BomberoAsignado { get; set; }
         public Movil? MovilAsignado { get; set; }
+        public bool esComisionDirectiva { get; set; }
+
         public string BomberoOMovil
         {
             get
@@ -406,6 +411,10 @@
                 else if (MovilAsignado != null)
                 {
                     return MovilAsignado.NumeroMovil;
+                }
+                else if (esComisionDirectiva)
+                {
+                    return "Comisión Directiva";
                 }
                 else
                 {
@@ -454,11 +463,13 @@
             var BomberoDestino = MovimientoVM.BomberoAsignado.HasValue ? await Context.Bomberos.SingleOrDefaultAsync(b => b.NumeroLegajo == MovimientoVM.BomberoAsignado) : null;
             var MovilDestino = !string.IsNullOrEmpty(MovimientoVM.MovilAsignado) ? await Context.Moviles.SingleOrDefaultAsync(m => m.NumeroMovil == MovimientoVM.MovilAsignado) : null;
             var MaterialAsignado = await Context.Materiales.SingleOrDefaultAsync(ma => ma.MaterialId == MovimientoVM.MaterialId);
+
             if (MaterialAsignado == null)
             {
                 await message.ErrorAsync("No se encontró el material asignado.");
                 return;
             }
+
             MovimientoMaterial movimiento = new()
             {
                 TipoMovimiento = MovimientoVM.TipoMovimiento,
@@ -466,14 +477,17 @@
                 DestinoMovil = MovilDestino,
                 Cantidad = MovimientoVM.Cantidad,
                 Observaciones = MovimientoVM.Observaciones,
+                esComisionDirectiva = MovimientoVM.esComisionDirectiva,
                 FechaIngreso = DateTime.Now,
                 Materiales = MaterialAsignado
             };
+
             if (MovimientoVM.TipoMovimiento != TipoMovimiento.Entrada && MaterialAsignado.Stock - MovimientoVM.Cantidad < 0)
             {
                 message.Error("Stock insuficiente");
                 return;
             }
+
             await DepositoService.CargarMovimiento(movimiento);
             await Init();
             HandleModalClose();
@@ -488,7 +502,6 @@
                 await message.ErrorAsync(e.InnerException.Message, 5);
             else
                 await message.ErrorAsync(e.Message, 5);
-
         }
     }
     private async Task CargarBomberos()
@@ -545,6 +558,7 @@
     int FiltrarBombero = 0;
     int FiltrarMovil = 0;
     int FiltrarMaterial = 0;
+
     private async Task CargarMovimientos()
     {
         ListasMoviminetosVista = new();
@@ -576,12 +590,14 @@
                 MaterialAsignado = m.Materiales,
                 BomberoAsignado = m.DestinoBombero,
                 MovilAsignado = m.DestinoMovil,
-
+                Cantidad = m.Cantidad,
+                esComisionDirectiva = m.esComisionDirectiva,
             };
+
             ListasMoviminetosVista.Add(mov);
         }
-
     }
+
     private void OnFinishFailed(EditContext editContext)
     {
         Console.WriteLine($"Failed:{JsonSerializer.Serialize(MovimientoVM)}");

@@ -15,5 +15,6 @@ namespace Vista.Data.Models.Objetos.Componentes
         public Movil? DestinoMovil { get; set; }
         public int Cantidad { get; set; }
         public Material? Materiales { get; set; }
+        public bool esComisionDirectiva { get; set; } = false;
     }
 }
