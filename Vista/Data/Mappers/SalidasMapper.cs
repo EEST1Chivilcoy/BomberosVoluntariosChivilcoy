@@ -316,8 +316,8 @@ namespace Vista.Data.Mappers
             destination.DniSolicitante = source.DniSolicitante;
             destination.TelefonoSolicitante = source.TelefonoSolicitante;
             destination.TipoServicio = source.TipoServicio!.Value;
-
-            // Arreglar lo de la planilla y el encargado
+            destination.EncargadoId = source.BomberoEncargadoId;
+            destination.QuienLlenoId = source.BomberoPlanillaId;
 
             // Mapeo de colecciones
             //destination.Damnificados = source.Damnificados?.Select(d => new Damnificado_Salida

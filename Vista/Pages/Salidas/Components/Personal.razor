@@ -223,13 +223,14 @@
                     <label class="inpt-cont--lbl">Lleno la planilla</label>
                     <Select TItem="BomberoViweModel"
                             TItemValue="int"
-                            DataSource="@bomberosTodosView"
+                            DataSource="@BomberosTodos"
                             Value="@Model.BomberoPlanillaId"
                             ValueName="@nameof(BomberoViweModel.Id)"
                             LabelName="@nameof(BomberoViweModel.ApellidoYNombre)"
                             Placeholder="Seleccione un bombero"
                             DefaultActiveFirstOption="false"
-                            AllowClear="true" EnableSearch>
+                            EnableSearch
+                            AllowClear="true">
                     </Select>
                 </div>
             </AntDesign.Col>
@@ -239,13 +240,14 @@
                     <label class="inpt-cont--lbl">Encargado Del Servicio</label>
                     <Select TItem="BomberoViweModel"
                             TItemValue="int"
-                            DataSource="@bomberosTodosView"
+                            DataSource="@BomberosTodos"
                             Value="@Model.BomberoEncargadoId"
                             ValueName="@nameof(BomberoViweModel.Id)"
                             LabelName="@nameof(BomberoViweModel.ApellidoYNombre)"
                             Placeholder="Seleccione  a un  bombero"
                             DefaultActiveFirstOption="false"
-                            AllowClear="true" EnableSearch>
+                            EnableSearch
+                            AllowClear="true">
                     </Select>
                 </div>
             </AntDesign.Col>
@@ -254,9 +256,9 @@
 </div>
 
 @code {
-    [Parameter, EditorRequired] public SalidasViewModels Model { get; set; } = null!;
-    [Parameter, EditorRequired] public List<Bombero> BomberosTodos { get; set; } = null!;
-    [Parameter] public bool IsFormDisabled { get; set; }
+    [Parameter] public required SalidasViewModels Model { get; set; } = null!;
+    [Parameter] public required List<BomberoViweModel> BomberosTodos { get; set; } = null!;
+
     private IEnumerable<BomberoSalidaViewModels> _selectedRows = new List<BomberoSalidaViewModels>(); //Bomberos Seleccionados
     private List<BomberoViweModel> bomberosTodosView = new(); //Lista con todos los bomberos
     private List<BomberoViweModel> bomberosSalirTodos = new(); //Lista con todos los bomberos para salida
@@ -275,7 +277,7 @@
     protected override async Task OnParametersSetAsync()
     {
         // Clonar la lista para que el componente hijo trabaje con una copia
-        bomberosTodosView = (await MapBomberosViewModelAsync(BomberosTodos)).ToList();
+        bomberosTodosView = BomberosTodos.ToList();
 
         // Crea una copia independiente para manipular en pantalla sin afectar la lista original.
         bomberosSalirTodos = bomberosTodosView.Select(b => b).ToList();
@@ -379,10 +381,11 @@
                 await MessageService.ErrorAsync($"No se encontró el bombero con legajo {bomberoSeleccionado.NumeroLegajo}.");
                 return;
             }
+
             var bomSalida = new BomberoSalida
             {
                 MovilAsignado = nuevoBomberoSalida.MovilAsignado,
-                Bombero = bombero
+                PersonaId = bombero.Id
             };
 
             // Añade el bombero a la lista de CuerpoParticipante
