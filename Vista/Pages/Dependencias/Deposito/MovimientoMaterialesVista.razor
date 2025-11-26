@@ -219,16 +219,16 @@
         <div class="table-container">
             <Table DataSource="ListasMoviminetosVista" Bordered Responsive PageSize="5" Size="TableSize.Small">
                 <ColumnDefinitions Context="muestra">
-                    <PropertyColumn Property="c => c.FechaIngreso" Title="Fecha de Ingreso" Format="dd/MM/yyyy" Sortable></PropertyColumn>
-                    <PropertyColumn Property="c => c.MaterialAsignado.Codigo" Title="Código" Sortable></PropertyColumn>
-                    <PropertyColumn Property="c => c.TipoMovimiento" Title="Tipo de Movimiento"
+                <PropertyColumn Property="c => c.TipoMovimiento" Title="Tipo de Movimiento"
                                     SortDirections="new[] { SortDirection.Descending }"
                                     Filters="DiscriminadorFilter"
                                     OnFilter="((value, name) => Enum.GetName(typeof(TipoMovimiento), name).StartsWith(Enum.GetName(typeof(TipoMovimiento), value)))">
                     </PropertyColumn>
+                   @* <PropertyColumn Property="c => c.MaterialAsignado.Codigo" Title="Código" Sortable></PropertyColumn>*@
+                
                     <PropertyColumn Property="c => c.MaterialAsignado.Descripcion" Title="Material" Sortable></PropertyColumn>
-                    <PropertyColumn Property="c => c.Cantidad" Title="Cantidad" Sortable></PropertyColumn>
-                    <PropertyColumn Property="c => c.BomberoOMovil" Title="Bombero / Móvil / Comisión" Sortable></PropertyColumn>
+                    <PropertyColumn Property="c => c.BomberoOMovil" Title="Bombero/Móvil" Sortable></PropertyColumn>
+                    <PropertyColumn Property="c => c.FechaIngreso" Title="Fecha de Ingreso" Format="dd/MM/yyyy" Sortable></PropertyColumn>
                 </ColumnDefinitions>
             </Table>
         </div>
