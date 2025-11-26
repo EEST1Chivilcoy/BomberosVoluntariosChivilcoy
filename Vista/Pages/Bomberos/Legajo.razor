@@ -28,15 +28,15 @@
                         </div>
                         <div class="info-block">
                             <label class="label" for="fecha-input">FECHA DE INGRESO</label>
-                            <Input Id="fecha-input" Value="@("01/01/25")" Disabled aria-label="Fecha de ingreso" />
+                            <Input Id="fecha-input" Value="@("08/02/2011")" Disabled aria-label="Fecha de ingreso" />
                         </div>
                         <div class="info-block">
                             <label class="label" for="handy-input">AÑOS DE SERVICIO</label>
-                            <Input Id="handy-input" Value="@("2")" Disabled aria-label="Años de servicio" />
+                            <Input Id="handy-input" Value="@("15")" Disabled aria-label="Años de servicio" />
                         </div>
                         <div class="info-block">
                             <label class="label" for="handy-input">NÚMERO DE HANDY</label>
-                            <Input Id="handy-input" Value="@("2")" Disabled aria-label="Número de handy" />
+                            <Input Id="handy-input" Value="@("120")" Disabled aria-label="Número de handy" />
                         </div>
 
                         <div class="info-block">
@@ -50,8 +50,42 @@
         </AntDesign.Col>
 
         <AntDesign.Col Xs="24" Sm="24" Md="24" Lg="16" Xl="18">
-
             <Card Bordered="false" class="services-card2">
+                <div class="header-servicios">
+                    <div class="banner-container">
+                        <div class="servicios-banner">
+                            <div class="banner-image-container">
+                                <img src="Imagenes/banderin.png" alt="Banderín de puntaje" class="banderin-image" />
+                            </div>
+                            <div class="banner-text" role="heading" aria-level="2">PUNTAJE</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="estadisticas-servicios" role="region" aria-label="Estadísticas de puntaje">
+                    <Statistic Title="@($"PUNTAJE MENSUAL ({mesAnterior})")"
+                               Value="68"
+                               ValueStyle=" color: #a51c16; font-weight: bold;" />
+                    <Divider Type="@DividerType.Vertical" class="stats-divider" />
+                    <Statistic Title="@($"LICENCIA MENSUAL ({mesAnterior})")"
+                               Value="2"
+                               ValueStyle=" color: #a51c16; font-weight: bold;" />
+                    <Divider Type="@DividerType.Vertical" class="stats-divider" />
+                    <Statistic Title="@($"PUNTAJE ANUAL ({añoActual})")"
+                               Value="700"
+                               ValueStyle=" color: #a51c16; font-weight: bold;" />
+                    <Divider Type="@DividerType.Vertical" class="stats-divider" />
+                    <Statistic Title="@($"LICENCIA ANUAL ({añoActual})")"
+                               Value="25"
+                               ValueStyle=" color: #a51c16; font-weight: bold;" />
+                    <Divider Type="@DividerType.Vertical" class="stats-divider" />
+                    <Statistic Title="@($"FIRMAS ({mesActual})")"
+                               Value="8"
+                               ValueStyle=" color: #a51c16; font-weight: bold;" />
+                </div>
+            </Card>
+
+
+                <Card Bordered="false" class="services-card2">
                 <div class="header-servicios">
                     <div class="banner-container">
                         <div class="servicios-banner">
@@ -83,40 +117,9 @@
                 </div>
             </Card>
 
-            <Card Bordered="false" class="services-card">
-                <div class="header-servicios">
-                    <div class="banner-container">
-                        <div class="servicios-banner">
-                            <div class="banner-image-container">
-                                <img src="Imagenes/banderin.png" alt="Banderín de puntaje" class="banderin-image" />
-                            </div>
-                            <div class="banner-text" role="heading" aria-level="2">PUNTAJE</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="estadisticas-puntuaje" role="region" aria-label="Estadísticas de puntaje">
-                    <Statistic Title="@($"PUNTAJE MENSUAL ({mesAnterior})")"
-                               Value="68"
-                               ValueStyle=" color: #a51c16; font-weight: bold;" />
-                    <Divider Type="@DividerType.Vertical" class="stats-divider" />
-                    <Statistic Title="@($"LICENCIA MENSUAL ({mesAnterior})")"
-                               Value="2"
-                               ValueStyle=" color: #a51c16; font-weight: bold;" />
-                    <Divider Type="@DividerType.Vertical" class="stats-divider" />
-                    <Statistic Title="@($"PUNTAJE ANUAL ({añoActual})")"
-                               Value="700"
-                               ValueStyle=" color: #a51c16; font-weight: bold;" />
-                    <Divider Type="@DividerType.Vertical" class="stats-divider" />
-                    <Statistic Title="@($"LICENCIA ANUAL ({añoActual})")"
-                               Value="25"
-                               ValueStyle=" color: #a51c16; font-weight: bold;" />
-                    <Divider Type="@DividerType.Vertical" class="stats-divider" />
-                    <Statistic Title="@($"FIRMAS ({mesActual})")"
-                               Value="8"
-                               ValueStyle=" color: #a51c16; font-weight: bold;" />
-                </div>
-            </Card>
+
         </AntDesign.Col>
+
     </Row>
 </div>
 

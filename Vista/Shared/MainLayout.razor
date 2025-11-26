@@ -92,6 +92,9 @@
                     <MenuItem Key="equipos-autonomos" OnClick="@(() => navigationManager.NavigateTo("/fire-force/Dependencias/EquiposAutonomos"))" class="compact-item">
                         <span class="compact-text">Equipos Autónomos</span>
                     </MenuItem>
+                        <MenuItem Key="partes" OnClick="@(() => navigationManager.NavigateTo("/fire-force/partes-vehiculos"))" class="compact-item">
+                            <span class="compact-text">Partes</span>
+                        </MenuItem>
                 </SubMenu>
 
             </Menu>
@@ -185,6 +188,9 @@
                     <MenuItem Key="equipos-autonomos"><IconTemplate><i class="fa-solid fa-mask-face submenu-icon"></i></IconTemplate>
                         <ChildContent><a class="menu-link" href="/fire-force/Dependencias/EquiposAutonomos">Equipos Autónomos</a></ChildContent>
                     </MenuItem>
+                     <MenuItem Key="partes"><IconTemplate><i class="fa-solid fa-mask-face submenu-icon"></i></IconTemplate>
+                        <ChildContent><a class="menu-link" href="/fire-force/Dependencias/Partes">Partes</a></ChildContent>
+                    </MenuItem>
                 </SubMenu>
 
                 <SubMenu Key="etica" TitleTemplate="@eticaTitle">
@@ -238,7 +244,7 @@
         if (uri.Contains("/incidentes-vehiculos")) return "FIRMAS";
 
 
-
+        if (uri.Contains("/fire-force/partes-vehiculos")) return "PARTES VEHÍCULOS";
         if (uri.Contains("/reportes/reportes_choferes")) return "CHOFERES";
         if (uri.Contains("/reportes/historialmoviles")) return "HISTORIAL MÓVILES";
 
