@@ -17,6 +17,19 @@
 @*Componentes Generales*@
 @using Vista.Data.Models.Salidas.Componentes;
 
+@code {
+    private string activeTab = "1";
+
+    void NextTab()
+    {
+        int num = int.Parse(activeTab);
+        if (num < 7)
+        {
+            activeTab = (num + 1).ToString();
+        }
+    }
+}
+
 <Form Model="@RescateViewModel"
       LabelColSpan="8"
       WrapperColSpan="16"
@@ -47,7 +60,9 @@
         </div>
 
         <!-- Tabs container -->
-        <Tabs DefaultActiveKey="1" Class="custom-tabs" Style="box-shadow: 0 4px 16px rgba(24,144,255,0.08); border-radius: 12px;">
+         <Tabs ActiveKey="@activeTab" OnChange="@(key => activeTab = key)"
+        Class="custom-tabs" 
+        Style="box-shadow: 0 4px 16px rgba(24,144,255,0.08); border-radius: 12px;">
             <TabPane Key="1" Tab="📋 Datos-Generales" Class="tab-general">
                 <DatosGenerales Model="@RescateViewModel" />
             </TabPane>
@@ -85,6 +100,15 @@
             </TabPane>
 
         </Tabs>
+
+                @if (activeTab != "7")
+    {
+        <div style="text-align:right; margin-top: 1.5rem;">
+            <Button OnClick="NextTab">
+                Siguiente →
+            </Button>
+        </div>
+    }
 
         @if (_visible1 == true)
         {
