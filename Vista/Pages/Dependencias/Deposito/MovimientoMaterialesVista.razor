@@ -43,9 +43,9 @@
         border-bottom: none !important;
     }
 
-    .ant-modal-header .ant-modal-title {
-        color: white !important;
-    }
+        .ant-modal-header .ant-modal-title {
+            color: white !important;
+        }
 
     .ant-modal-close {
         color: white !important;
@@ -65,7 +65,7 @@
         border: none;
         color: white;
         box-shadow: 0 2px 8px rgba(47, 84, 235, 0.3);
-        height: 32px; 
+        height: 32px;
         font-weight: 500;
         border-radius: 6px;
         padding: 0 15px;
@@ -76,7 +76,7 @@
         border: none;
         color: white;
         box-shadow: none;
-        height: 32px; 
+        height: 32px;
         font-weight: 500;
         border-radius: 6px;
         padding: 0 15px;
@@ -99,7 +99,7 @@
         color: white;
         box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
         font-weight: 600;
-        height: 32px; 
+        height: 32px;
         border-radius: 6px;
         padding: 0 15px;
     }
@@ -153,13 +153,11 @@
         padding: 0 20px !important;
     }
 
-        .modal-crear-licencia .ant-btn-primary:hover {
-            background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
-            color: #fff !important;
-        }
+    .modal-crear-licencia .ant-btn-primary:hover {
+        background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
+        color: #fff !important;
+    }
 
-
-    
 </style>
 
 <div class="movimientos-abm">
@@ -176,8 +174,8 @@
               Style="width: 100%;height: 100%;">
 
             <div class="form-row" style="align-items: flex-end; margin-top: 20px;">
-                <FormItem >
-                    <Select @bind-value="@FiltrarDestino" TItemValue="string" TItem="string" >
+                <FormItem>
+                    <Select @bind-value="@FiltrarDestino" TItemValue="string" TItem="string">
                         <SelectOptions>
                             <SelectOption Value="@("Sin asignar")" Label="Sin asignar" />
                             <SelectOption Value="@("Bombero")" Label="Bombero" />
@@ -203,6 +201,14 @@
                                 Placeholder="Selecione el movil" DefaultActiveFirstOption="false" AllowClear="true" EnableSearch />
                     </FormItem>
                 }
+                else if (FiltrarDestino == "Material")
+                {
+                    <FormItem Label="Material">
+                        <Select TItem="MaterialVM" TItemValue="int" DataSource="@MaterialesVM" @bind-Value="@FiltrarMaterial"
+                                LabelName="@nameof(MaterialVM.Descripcion)" ValueName="@nameof(MaterialVM.MaterialId)"
+                                Placeholder="Seleccione el material" DefaultActiveFirstOption="false" AllowClear="true" EnableSearch />
+                    </FormItem>
+                }
 
                 <Button OnClick="CargarMovimientos" Class="primary-button" Style="margin-bottom: 24px;">
                     <Icon Type="search" Theme="IconThemeType.Outline" /> Filtrar
@@ -213,20 +219,20 @@
         <div class="table-container">
             <Table DataSource="ListasMoviminetosVista" Bordered Responsive PageSize="5" Size="TableSize.Small">
                 <ColumnDefinitions Context="muestra">
-                    <PropertyColumn Property="c=>c.FechaIngreso" Title="Fecha de Ingreso" Format="dd/MM/yyyy" Sortable></PropertyColumn>
-                    <PropertyColumn Property="c=>c.MaterialAsignado.Codigo" Title="Código" Sortable></PropertyColumn>
-                    <PropertyColumn Property="c=>c.TipoMovimiento" Title="Tipo de Movimiento"
+                    <PropertyColumn Property="c => c.FechaIngreso" Title="Fecha de Ingreso" Format="dd/MM/yyyy" Sortable></PropertyColumn>
+                    <PropertyColumn Property="c => c.MaterialAsignado.Codigo" Title="Código" Sortable></PropertyColumn>
+                    <PropertyColumn Property="c => c.TipoMovimiento" Title="Tipo de Movimiento"
                                     SortDirections="new[] { SortDirection.Descending }"
                                     Filters="DiscriminadorFilter"
-                                    OnFilter="((value,name)=>Enum.GetName(typeof(TipoMovimiento), name).StartsWith(Enum.GetName(typeof(TipoMovimiento), value)))">
+                                    OnFilter="((value, name) => Enum.GetName(typeof(TipoMovimiento), name).StartsWith(Enum.GetName(typeof(TipoMovimiento), value)))">
                     </PropertyColumn>
-                    <PropertyColumn Property="c=>c.MaterialAsignado.Descripcion" Title="Material" Sortable></PropertyColumn>
-                    <PropertyColumn Property="c=>c.BomberoOMovil" Title="Bombero/Móvil" Sortable></PropertyColumn>
+                    <PropertyColumn Property="c => c.MaterialAsignado.Descripcion" Title="Material" Sortable></PropertyColumn>
+                    <PropertyColumn Property="c => c.BomberoOMovil" Title="Bombero/Móvil" Sortable></PropertyColumn>
                 </ColumnDefinitions>
             </Table>
         </div>
 
-         <Modal Visible="@isModalVisible"
+        <Modal Visible="@isModalVisible"
                Title="Cargar Movimiento"
                Width=@("100%")
                Style="max-width: 800px;"
@@ -237,7 +243,7 @@
             <div class="modal-crear-movimiento-content">
                 <Form Model="MovimientoVM"
                       Class="modal-crear-movimiento-form"
-                    Layout="FormLayout.Vertical"
+                      Layout="FormLayout.Vertical"
                       OnFinish="OnFinish"
                       OnFinishFailed="OnFinishFailed">
                     <Row Gutter="16">
@@ -250,7 +256,7 @@
                         </AntDesign.Col>
                         <AntDesign.Col Span="12">
                             <div class="modal-crear-movimiento-form-item">
-                               <FormItem  Label="🔢 Cantidad" Required>
+                                <FormItem Label="🔢 Cantidad" Required>
                                     <AntDesign.InputNumber @bind-Value="MovimientoVM.Cantidad" />
                                 </FormItem>
                             </div>
@@ -261,8 +267,8 @@
                             <div class="modal-crear-movimiento-form-item">
                                 <FormItem Label="🧱 Material otorgado" Required>
                                     <Select TItem="MaterialVM" TItemValue="int" DataSource="@MaterialesVM" @bind-Value="@MovimientoVM.MaterialId"
-                                        LabelName="@nameof(MaterialVM.Descripcion)" ValueName="@nameof(MaterialVM.MaterialId)"
-                                        Placeholder="Seleccione el material" DefaultActiveFirstOption="false" AllowClear="true" EnableSearch />
+                                            LabelName="@nameof(MaterialVM.Descripcion)" ValueName="@nameof(MaterialVM.MaterialId)"
+                                            Placeholder="Seleccione el material" DefaultActiveFirstOption="false" AllowClear="true" EnableSearch />
                                 </FormItem>
                             </div>
                         </AntDesign.Col>
@@ -286,8 +292,8 @@
                                 <div class="modal-crear-movimiento-form-item">
                                     <FormItem Label="Bombero asignado">
                                         <Select TItem="BomberoViewModel" TItemValue="int?" DataSource="@bomberoTodos" @bind-Value="@MovimientoVM.BomberoAsignado"
-                                            LabelName="@nameof(BomberoViewModel.NombreYApellido)" ValueName="@nameof(BomberoViewModel.NumeroLegajo)"
-                                            Placeholder="Seleccione el bombero" DefaultActiveFirstOption="false" AllowClear="true" EnableSearch />
+                                                LabelName="@nameof(BomberoViewModel.NombreYApellido)" ValueName="@nameof(BomberoViewModel.NumeroLegajo)"
+                                                Placeholder="Seleccione el bombero" DefaultActiveFirstOption="false" AllowClear="true" EnableSearch />
                                     </FormItem>
                                 </div>
                             </AntDesign.Col>
@@ -298,26 +304,26 @@
                                 <div class="modal-crear-movimiento-form-item">
                                     <FormItem Label="Móvil asignado">
                                         <Select TItem="MovilViewModel" TItemValue="string" DataSource="@MovilTodos" @bind-Value="@MovimientoVM.MovilAsignado"
-                                            LabelName="@nameof(MovilViewModel.NumeroMovil)" ValueName="@nameof(MovilViewModel.NumeroMovil)"
-                                            Placeholder="Seleccione el móvil" DefaultActiveFirstOption="false" AllowClear="true" EnableSearch />
+                                                LabelName="@nameof(MovilViewModel.NumeroMovil)" ValueName="@nameof(MovilViewModel.NumeroMovil)"
+                                                Placeholder="Seleccione el móvil" DefaultActiveFirstOption="false" AllowClear="true" EnableSearch />
                                     </FormItem>
                                 </div>
                             </AntDesign.Col>
                         }
-                    </Row> 
+                    </Row>
                     <Row Gutter="24">
                         <AntDesign.Col Span="24">
                             <div class="modal-crear-movimiento-form-full-width">
                                 <FormItem Label="🧾 Observaciones">
-                                    <TextArea @bind-Value="MovimientoVM.Observaciones" 
-                                        Placeholder="Ingrese una descripción detallada de la licencia"
-                                        Rows="4"/>
+                                    <TextArea @bind-Value="MovimientoVM.Observaciones"
+                                              Placeholder="Ingrese una descripción detallada de la licencia"
+                                              Rows="4" />
                                 </FormItem>
                             </div>
                         </AntDesign.Col>
                     </Row>
                     <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;" class="modal-crear-movimiento-footer">
-                         <Button Class="ant-btn-primary" HtmlType="submit">
+                        <Button Class="ant-btn-primary" HtmlType="submit">
                             Guardar
                         </Button>
                         <Button Type="ButtonType.Default" OnClick="HandleModalClose">
@@ -332,258 +338,263 @@
     </div>
 </div>
 @code {
-    BomberosDbContext Context { get; set; }
-    bool chIsBombero;
-    bool chIsMovil;
-    bool isModalVisible = false; 
+    BomberosDbContext Context { get; set; }
+    bool chIsBombero;
+    bool chIsMovil;
+    bool isModalVisible = false;
 
-    private void OpenFormModal()
-    {
-        isModalVisible = true;
-        MovimientoVM = new();
-    }
+    private void OpenFormModal()
+    {
+        isModalVisible = true;
+        MovimientoVM = new();
+    }
 
-    private void HandleModalClose()
-    {
-        isModalVisible = false;
-    }
-    
-    public class MovilViewModel
-    {
-        public int VehiculoId { get; set; }
-        public string NumeroMovil { get; set; }
-    }
+    private void HandleModalClose()
+    {
+        isModalVisible = false;
+    }
 
-    public class BomberoViewModel
-    {
-        public int PersonaId { get; set; }
-        public string NombreYApellido { get; set; }
-        public int NumeroLegajo { get; set; }
-    }
-    public class MaterialVM
-    {
-        public int MaterialId { get; set; }
-        [Required]
-        public DateTime FechaAlta { get; set; }
-        public string? Descripcion { get; set; }
-        public string? Codigo { get; set; }
-        public int Stock { get; set; }
-        public TipoRubro Rubro { get; set; }
+    public class MovilViewModel
+    {
+        public int VehiculoId { get; set; }
+        public string NumeroMovil { get; set; }
+    }
 
-    }
-    public class MovimientoMaterialesViewModel
-    {
-        public DateTime FechaIngreso { get; set; }
-        public TipoMovimiento TipoMovimiento { get; set; }
-        public int Cantidad { get; set; }
-        public int MaterialId { get; set; }
-        public int? BomberoAsignado { get; set; }
-        public string? MovilAsignado { get; set; }
-        public string Observaciones { get; set; }
-    }
+    public class BomberoViewModel
+    {
+        public int PersonaId { get; set; }
+        public string NombreYApellido { get; set; }
+        public int NumeroLegajo { get; set; }
+    }
+    public class MaterialVM
+    {
+        public int MaterialId { get; set; }
+        [Required]
+        public DateTime FechaAlta { get; set; }
+        public string? Descripcion { get; set; }
+        public string? Codigo { get; set; }
+        public int Stock { get; set; }
+        public TipoRubro Rubro { get; set; }
 
-    public class TodosMovimientosviewModel
-    {
-        public DateTime FechaIngreso { get; set; }
-        public TipoMovimiento TipoMovimiento { get; set; }
-        public int Cantidad { get; set; }
-        public Bombero? BomberoAsignado { get; set; }
-        public Movil? MovilAsignado { get; set; }
-        public string BomberoOMovil
-        {
-            get
-            {
-                if (BomberoAsignado != null)
-                {
-                    return BomberoAsignado.Nombre +","+ BomberoAsignado.Apellido;
-                }
-                else if (MovilAsignado != null)
-                {
-                    return MovilAsignado.NumeroMovil;
-                }
-                else
-                {
-                    return "No asignado";
-                }
-            }
-        }
-        public Material? MaterialAsignado { get; set; }
-    }
+    }
+    public class MovimientoMaterialesViewModel
+    {
+        public DateTime FechaIngreso { get; set; }
+        public TipoMovimiento TipoMovimiento { get; set; }
+        public int Cantidad { get; set; }
+        public int MaterialId { get; set; }
+        public int? BomberoAsignado { get; set; }
+        public string? MovilAsignado { get; set; }
+        public string Observaciones { get; set; }
+    }
 
-    MovimientoMaterialesViewModel MovimientoVM = new();
-    List<MaterialVM> MaterialesVM = new();
-    List<BomberoViewModel> bomberoTodos = new();
-    List<MovilViewModel> MovilTodos = new();
-    List<MovimientoMaterialesViewModel> ListasMoviminetos = new();
-    List<TodosMovimientosviewModel> ListasMoviminetosVista = new();
-    private TableFilter<TipoMovimiento>[] DiscriminadorFilter;
-    private string[] _value = new string[] { };
-    protected override async Task OnInitializedAsync()
-    {
-        await Init();
-        DiscriminadorFilter = new TableFilter<TipoMovimiento>[Enum.GetValues(typeof(TipoMovimiento)).Length];
-        int i = 0;
-        foreach (TipoMovimiento value in Enum.GetValues(typeof(TipoMovimiento)))
-        {
-            DiscriminadorFilter[i] = new() { Text = Enum.GetName(typeof(TipoMovimiento), value), Value = value };
-            i++;
-        }
-    }
+    public class TodosMovimientosviewModel
+    {
+        public DateTime FechaIngreso { get; set; }
+        public TipoMovimiento TipoMovimiento { get; set; }
+        public int Cantidad { get; set; }
+        public Bombero? BomberoAsignado { get; set; }
+        public Movil? MovilAsignado { get; set; }
+        public string BomberoOMovil
+        {
+            get
+            {
+                if (BomberoAsignado != null)
+                {
+                    return BomberoAsignado.Nombre + "," + BomberoAsignado.Apellido;
+                }
+                else if (MovilAsignado != null)
+                {
+                    return MovilAsignado.NumeroMovil;
+                }
+                else
+                {
+                    return "No asignado";
+                }
+            }
+        }
+        public Material? MaterialAsignado { get; set; }
+    }
 
-    private async Task Init()
-    {
-        MovimientoVM = new();
-        Context = DbFactory.CreateDbContext();
+    MovimientoMaterialesViewModel MovimientoVM = new();
+    List<MaterialVM> MaterialesVM = new();
+    List<BomberoViewModel> bomberoTodos = new();
+    List<MovilViewModel> MovilTodos = new();
+    List<MovimientoMaterialesViewModel> ListasMoviminetos = new();
+    List<TodosMovimientosviewModel> ListasMoviminetosVista = new();
+    private TableFilter<TipoMovimiento>[] DiscriminadorFilter;
+    private string[] _value = new string[] { };
+    protected override async Task OnInitializedAsync()
+    {
+        await Init();
+        DiscriminadorFilter = new TableFilter<TipoMovimiento>[Enum.GetValues(typeof(TipoMovimiento)).Length];
+        int i = 0;
+        foreach (TipoMovimiento value in Enum.GetValues(typeof(TipoMovimiento)))
+        {
+            DiscriminadorFilter[i] = new() { Text = Enum.GetName(typeof(TipoMovimiento), value), Value = value };
+            i++;
+        }
+    }
 
-        await CargarMaterial();
-        await CargarBomberos();
-        await CargarMovil();
-        await CargarMovimientos();
+    private async Task Init()
+    {
+        MovimientoVM = new();
+        Context = DbFactory.CreateDbContext();
 
-    }
-    private async void OnFinish(EditContext editContext)
-    {
-        try
-        {
-            var BomberoDestino = MovimientoVM.BomberoAsignado.HasValue ? await Context.Bomberos.SingleOrDefaultAsync(b => b.NumeroLegajo == MovimientoVM.BomberoAsignado) : null;
-            var MovilDestino = !string.IsNullOrEmpty(MovimientoVM.MovilAsignado) ? await Context.Moviles.SingleOrDefaultAsync(m => m.NumeroMovil == MovimientoVM.MovilAsignado) : null;
-            var MaterialAsignado = await Context.Materiales.SingleOrDefaultAsync(ma => ma.MaterialId == MovimientoVM.MaterialId);
-            if (MaterialAsignado == null)
-            {
-                await message.ErrorAsync("No se encontró el material asignado.");
-                return;
-            }
-            MovimientoMaterial movimiento = new()
-                {
-                    TipoMovimiento = MovimientoVM.TipoMovimiento,
-                    DestinoBombero = BomberoDestino,
-                    DestinoMovil = MovilDestino,
-                    Cantidad = MovimientoVM.Cantidad,
-                    Observaciones = MovimientoVM.Observaciones,
-                    FechaIngreso = DateTime.Now,
-                    Materiales = MaterialAsignado
-                };
-            if (MovimientoVM.TipoMovimiento != TipoMovimiento.Entrada && MaterialAsignado.Stock - MovimientoVM.Cantidad < 0)
-            {
-                message.Error("Stock insuficiente");
-                return;
-            }
-            await DepositoService.CargarMovimiento(movimiento);
-            await Init();
-            HandleModalClose(); 
-            StateHasChanged();
-            await message.SuccessAsync("Movimiento cargado");
-        }
-        catch (Exception e)
-        {
-            await Init();
-            StateHasChanged();
-            if (e.InnerException != null)
-                await message.ErrorAsync(e.InnerException.Message, 5);
-            else
-                await message.ErrorAsync(e.Message, 5);
+        await CargarMaterial();
+        await CargarBomberos();
+        await CargarMovil();
+        await CargarMovimientos();
 
-        }
-    }
-    private async Task CargarBomberos()
-    {
-        bomberoTodos = new();
-        var bom = await Context.Bomberos.ToListAsync();
-        foreach (var item in bom)
-        {
-            BomberoViewModel b = new()
-                {
-                    PersonaId = item.PersonaId,
-                    NombreYApellido = item.Nombre + ' ' + item.Apellido,
-                    NumeroLegajo = item.NumeroLegajo
-                };
-            bomberoTodos.Add(b);
-        }
-    }
-    private async Task CargarMovil()
-    {
-        MovilTodos = new();
-        var movil = await Context.Moviles.ToListAsync();
-        foreach (var item in movil)
-        {
-            MovilViewModel m = new()
-                {
-                    VehiculoId = item.VehiculoId,
-                    NumeroMovil = item.NumeroMovil
-                };
-            MovilTodos.Add(m);
-        }
-    }
-    private async Task CargarMaterial()
-    {
-        MaterialesVM.Clear();
-        var Materiales = await Context.Materiales.ToArrayAsync();
-        foreach (var m in Materiales)
-        {
-            MaterialVM materialVM = new()
-                {
-                    MaterialId = m.MaterialId,
-                    Codigo = m.Codigo,
-                    Stock = m.Stock,
-                    Rubro = m.Rubro,
-                    Descripcion = m.Descripcion,
-                    FechaAlta = m.FechaAlta
-                };
-            MaterialesVM.Add(materialVM);
-            await Context.SaveChangesAsync();
-            StateHasChanged();
-        }
-    }
+    }
+    private async void OnFinish(EditContext editContext)
+    {
+        try
+        {
+            var BomberoDestino = MovimientoVM.BomberoAsignado.HasValue ? await Context.Bomberos.SingleOrDefaultAsync(b => b.NumeroLegajo == MovimientoVM.BomberoAsignado) : null;
+            var MovilDestino = !string.IsNullOrEmpty(MovimientoVM.MovilAsignado) ? await Context.Moviles.SingleOrDefaultAsync(m => m.NumeroMovil == MovimientoVM.MovilAsignado) : null;
+            var MaterialAsignado = await Context.Materiales.SingleOrDefaultAsync(ma => ma.MaterialId == MovimientoVM.MaterialId);
+            if (MaterialAsignado == null)
+            {
+                await message.ErrorAsync("No se encontró el material asignado.");
+                return;
+            }
+            MovimientoMaterial movimiento = new()
+            {
+                TipoMovimiento = MovimientoVM.TipoMovimiento,
+                DestinoBombero = BomberoDestino,
+                DestinoMovil = MovilDestino,
+                Cantidad = MovimientoVM.Cantidad,
+                Observaciones = MovimientoVM.Observaciones,
+                FechaIngreso = DateTime.Now,
+                Materiales = MaterialAsignado
+            };
+            if (MovimientoVM.TipoMovimiento != TipoMovimiento.Entrada && MaterialAsignado.Stock - MovimientoVM.Cantidad < 0)
+            {
+                message.Error("Stock insuficiente");
+                return;
+            }
+            await DepositoService.CargarMovimiento(movimiento);
+            await Init();
+            HandleModalClose();
+            StateHasChanged();
+            await message.SuccessAsync("Movimiento cargado");
+        }
+        catch (Exception e)
+        {
+            await Init();
+            StateHasChanged();
+            if (e.InnerException != null)
+                await message.ErrorAsync(e.InnerException.Message, 5);
+            else
+                await message.ErrorAsync(e.Message, 5);
 
-    string FiltrarDestino = "Sin asignar";
-    int FiltrarBombero = 0;
-    int FiltrarMovil = 0;
-    private async Task CargarMovimientos()
-    {
-        ListasMoviminetosVista = new();
+        }
+    }
+    private async Task CargarBomberos()
+    {
+        bomberoTodos = new();
+        var bom = await Context.Bomberos.ToListAsync();
+        foreach (var item in bom)
+        {
+            BomberoViewModel b = new()
+            {
+                PersonaId = item.PersonaId,
+                NombreYApellido = item.Nombre + ' ' + item.Apellido,
+                NumeroLegajo = item.NumeroLegajo
+            };
+            bomberoTodos.Add(b);
+        }
+    }
+    private async Task CargarMovil()
+    {
+        MovilTodos = new();
+        var movil = await Context.Moviles.ToListAsync();
+        foreach (var item in movil)
+        {
+            MovilViewModel m = new()
+            {
+                VehiculoId = item.VehiculoId,
+                NumeroMovil = item.NumeroMovil
+            };
+            MovilTodos.Add(m);
+        }
+    }
+    private async Task CargarMaterial()
+    {
+        MaterialesVM.Clear();
+        var Materiales = await Context.Materiales.ToArrayAsync();
+        foreach (var m in Materiales)
+        {
+            MaterialVM materialVM = new()
+            {
+                MaterialId = m.MaterialId,
+                Codigo = m.Codigo,
+                Stock = m.Stock,
+                Rubro = m.Rubro,
+                Descripcion = m.Descripcion,
+                FechaAlta = m.FechaAlta
+            };
+            MaterialesVM.Add(materialVM);
+            await Context.SaveChangesAsync();
+            StateHasChanged();
+        }
+    }
 
-        List<MovimientoMaterial> Movimientos = Context.Movimientos.Include(b => b.DestinoBombero).Include(ma => ma.Materiales).Include(m => m.DestinoMovil).ToList();
+    string FiltrarDestino = "Sin asignar";
+    int FiltrarBombero = 0;
+    int FiltrarMovil = 0;
+    int FiltrarMaterial = 0;
+    private async Task CargarMovimientos()
+    {
+        ListasMoviminetosVista = new();
 
-        if (FiltrarDestino != "Sin asignar")
-        {
-            if(FiltrarDestino == "Bombero")
-            {
-                Movimientos = Movimientos.Where(b=>b.DestinoBombero?.PersonaId == FiltrarBombero).ToList();
-            }
-            else
-            {
-                Movimientos = Movimientos.Where(b => b.DestinoMovil?.VehiculoId == FiltrarMovil).ToList();
-            }
-        }
+        List<MovimientoMaterial> Movimientos = Context.Movimientos.Include(b => b.DestinoBombero).Include(ma => ma.Materiales).Include(m => m.DestinoMovil).ToList();
 
-        foreach (var m in Movimientos)
-        {
-            TodosMovimientosviewModel mov = new()
-                {
-                    FechaIngreso = m.FechaIngreso,
-                    TipoMovimiento=m.TipoMovimiento,
-                    MaterialAsignado = m.Materiales,
-                    BomberoAsignado = m.DestinoBombero,
-                    MovilAsignado = m.DestinoMovil,
+        if (FiltrarDestino != "Sin asignar")
+        {
+            if (FiltrarDestino == "Bombero")
+            {
+                Movimientos = Movimientos.Where(b => b.DestinoBombero?.PersonaId == FiltrarBombero).ToList();
+            }
+            else if (FiltrarDestino == "Movil")
+            {
+                Movimientos = Movimientos.Where(b => b.DestinoMovil?.VehiculoId == FiltrarMovil).ToList();
+            }
+            else if (FiltrarDestino == "Material")
+            {
+                Movimientos = Movimientos.Where(b => b.Materiales?.MaterialId == FiltrarMaterial).ToList();
+            }
+        }
 
-                };
-            ListasMoviminetosVista.Add(mov);
-        }
+        foreach (var m in Movimientos)
+        {
+            TodosMovimientosviewModel mov = new()
+            {
+                FechaIngreso = m.FechaIngreso,
+                TipoMovimiento = m.TipoMovimiento,
+                MaterialAsignado = m.Materiales,
+                BomberoAsignado = m.DestinoBombero,
+                MovilAsignado = m.DestinoMovil,
 
-    }
-    private void OnFinishFailed(EditContext editContext)
-    {
-        Console.WriteLine($"Failed:{JsonSerializer.Serialize(MovimientoVM)}");
-    }
+            };
+            ListasMoviminetosVista.Add(mov);
+        }
 
-    void OnChange(string[] checkedValues)
-    {
-        Console.WriteLine($"checked = {JsonSerializer.Serialize(checkedValues)}");
-    }
+    }
+    private void OnFinishFailed(EditContext editContext)
+    {
+        Console.WriteLine($"Failed:{JsonSerializer.Serialize(MovimientoVM)}");
+    }
+
+    void OnChange(string[] checkedValues)
+    {
+        Console.WriteLine($"checked = {JsonSerializer.Serialize(checkedValues)}");
+    }
 
 
-    public void Dispose()
-    {
-        Context?.Dispose();
-    }
+    public void Dispose()
+    {
+        Context?.Dispose();
+    }
 }
