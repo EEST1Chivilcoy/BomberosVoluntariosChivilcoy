@@ -399,40 +399,6 @@
                                         Placeholder="@("Seleccionar fecha")" />
                         </div>
                     </div>
-
-                    <div class="actions-row">
-                        <Button Class="modern-button blue-gradient"
-                                OnClick="()=> FiltrarResultados(fechaInicio, fechaFin)"
-                                Icon="search"
-                                Size="ButtonSize.Large">
-                            Filtrar
-                        </Button>
-
-                        <Button Class="modern-button blue-gradient"
-                                OnClick="() => CargarSalidasMovil()"
-                                Icon="reload"
-                                Size="ButtonSize.Large">
-                            Mostrar todos
-                        </Button>
-
-                        <div class="search-container">
-                            <!-- Espacio para búsqueda si se desea agregar en el futuro -->
-                        </div>
-
-                        <Button Class="modern-button"
-                                OnClick="@(async () => await GenerarYMostrarPDF())"
-                                Icon="printer"
-                                Size="ButtonSize.Large">
-                            Imprimir
-                        </Button>
-
-                        <Button Class="modern-button"
-                                OnClick="@(async () => await GuardarEnExcel())"
-                                Icon="file-excel"
-                                Size="ButtonSize.Large">
-                            Exportar en Excel
-                        </Button>
-                    </div>
                 </div>
             </div>
 
@@ -441,8 +407,6 @@
                     <ColumnDefinitions Context="muestra">
                         <PropertyColumn Property="c => c.NumeroMovil" Title="Numero de Movil" Sortable></PropertyColumn>
                         <PropertyColumn Property="c => c.Kilometraje" Sortable></PropertyColumn>
-                        <PropertyColumn Property="c => c.NumeroParte" Title="Numero de Parte" Sortable></PropertyColumn>
-                        <PropertyColumn Property="c => c.Hrllegada" Title="Hora de Llegada" Sortable></PropertyColumn>
                         <PropertyColumn Property="c => c.CargoCombustibleTexto" Title="Cargo Combustible" Sortable></PropertyColumn>
                     </ColumnDefinitions>
                 </Table>
