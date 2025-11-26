@@ -31,5 +31,7 @@ namespace Vista.Data.ViewModels.Personal
         /// </summary>
         [Required(ErrorMessage = "Debe seleccionar la fuerza interviniente.")]
         public int FuerzaViewModel { get; set; }
+
+        public string NombreCompleto => $"{NombreFuerza} - Unidad {NumeroUnidad}";
     }
 }

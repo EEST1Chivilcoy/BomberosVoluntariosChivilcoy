@@ -223,9 +223,8 @@ namespace Vista.Data.ViewModels
 
         public List<FuerzaIntervinienteViewModel> FuerzasIntervinientes { get; set; } = new();
 
-        public List<Damnificado_Salida> Damnificados { get; set; } = new();
-
-        public List<VehiculoAfectado> VehiculosAfectados { get; set; } = new();
+        public List<DamnificadoViewModel> Damnificados { get; set; } = new();
+        public List<VehiculoDamnificadoViewModel> VehiculosDamnificados { get; set; } = new();
 
         // --- Sección del Seguro ---
 

@@ -1,4 +1,4 @@
-﻿@*@using Vista.Data.ViewModels;
+﻿@using Vista.Data.ViewModels;
 @using Vista.Data.ViewModels.Personal;
 @using Vista.Data.Models.Salidas;
 @using Vista.Data.Models.Personas;
@@ -189,8 +189,7 @@
 <div class="damnificados damnificados-componente">
     <Tabs DefaultActiveKey="personas">
         <TabPane Key="personas" Tab="Personas">
-            <Table Context="Damnificados"
-                   DataSource="Model.Damnificados"
+            <Table DataSource="Model.Damnificados"
                    Size="TableSize.Small"
                    Class="damnificados-componente"
                    Bordered>
@@ -199,90 +198,89 @@
                         <GridCol Span="24" Style="text-align: right;">
                             <Button Type="ButtonType.Primary"
                                     Class="btn-nuevo-damnificado"
-                                    OnClick="@(() => visibleDamnificados = true)">
+                                    OnClick="@(() => modalDamnificados = true)">
                                 <Icon Type="plus" /> Nuevo Damnificado
                             </Button>
                         </GridCol>
                     </GridRow>
                 </TitleTemplate>
-                <ColumnDefinitions>
+                <ColumnDefinitions Context="damnificado">
+                    <PropertyColumn Title="N°" Property="d => d.Numero"></PropertyColumn>
                     <PropertyColumn Property="d => d.Nombre"></PropertyColumn>
                     <PropertyColumn Property="d => d.Apellido"></PropertyColumn>
                     <PropertyColumn Property="d => d.Edad"></PropertyColumn>
+                    <PropertyColumn Title="Fecha de nacimiento" Property="d => d.FechaDeNacimiento.HasValue ? d.FechaDeNacimiento.Value.ToShortDateString() : string.Empty"></PropertyColumn>
                     <PropertyColumn Property="d => d.Estado"></PropertyColumn>
-                    <PropertyColumn Title="Fuerza Interviniente" Property="d => ObtenerNombreFuerza(d.FuerzaIntervinienteId)" />
+                    <PropertyColumn Title="Fuerza interviniente" Property="d => d.FuerzaIntervinienteNombre" />
                     <PropertyColumn Title="Hacia dónde fue trasladado" Property="d => d.Destino" />
                     <ActionColumn Title="Acciones">
                         <Popconfirm Title="¿Quieres borrar este damnificado?"
-                                    OnConfirm="@(() => deleteRowDamnificados(Damnificados.Documento))"
+                                    OnConfirm="@(() => EliminarDamnificado(damnificado))"
                                     OkText="Si"
                                     CancelText="No">
                             <Button Danger>
                                 <Icon Type="delete" />
                             </Button>
                         </Popconfirm>
-                        <Button Type="@ButtonType.Primary" OnClick="@(() => EditarDamnificado(Damnificados))">
+                        <Button Type="@ButtonType.Primary" OnClick="@(() => EditarDamnificado(damnificado))">
                             <Icon Type="edit" />
                         </Button>
                     </ActionColumn>
                 </ColumnDefinitions>
             </Table>
 
-            <Modal @bind-Visible="visibleDamnificados"
-                   Title="@(editandoDamnificado ? "Editar Damnificado" : "Datos del damnificado")"
+            <Modal @bind-Visible="modalDamnificados"
+                   Title="@(editandoDamnificado ? "Editar damnificado" : "Datos del damnificado")"
                    OkText="@(editandoDamnificado ? "Editar" : "Agregar")"
                    CancelText="@("Cancelar")"
-                   OnOk="@AgregarDamnificado"
-                   OnCancel="@(() => {editandoDamnificado = false; documentoOriginal = null; Damnificado = new();})"
+                   OnOk="@AgregarEditarDamnificado"
+                   OnCancel="@(() => {editandoDamnificado = false; Damnificado = new();})"
                    WrapClassName="modal-damnificado">
                 <div class="modal-damnificado-content">
                     <Form Model="Damnificado" Layout="FormLayout.Vertical" Class="modal-damnificado-form">
                         <Row Gutter="16">
                             <AntDesign.Col Span="8">
-                                <FormItem Label="Nombre" Required="true" Class="modal-damnificado-form-item">
+                                <FormItem Label="Nombre" Class="modal-damnificado-form-item">
                                     <Input @bind-Value="@Damnificado.Nombre" />
                                 </FormItem>
                             </AntDesign.Col>
                             <AntDesign.Col Span="8">
-                                <FormItem Label="Apellido" Required="true" Class="modal-damnificado-form-item">
+                                <FormItem Label="Apellido" Class="modal-damnificado-form-item">
                                     <Input @bind-Value="@Damnificado.Apellido" />
                                 </FormItem>
                             </AntDesign.Col>
                             <AntDesign.Col Span="8">
-                                <FormItem Label="Documento" Required="true" Class="modal-damnificado-form-item">
-                                    <Input @bind-Value="@Damnificado.Dni" Disabled=editandoDamnificado />
+                                <FormItem Label="Documento" Class="modal-damnificado-form-item">
+                                    <Input @bind-Value="@Damnificado.Dni" />
                                 </FormItem>
                             </AntDesign.Col>
                         </Row>
                         <Row Gutter="16">
                             <AntDesign.Col Span="8">
                                 <FormItem Label="Sexo" Class="modal-damnificado-form-item">
-                                    <EnumSelect TEnum="TipoSexo ?" @bind-Value="@Damnificado.Sexo" />
+                                    <EnumSelect TEnum="TipoSexo ?" @bind-Value="@Damnificado.Sexo" AllowClear />
                                 </FormItem>
                             </AntDesign.Col>
-                            <AntDesign.Col Span="8">
+                            <AntDesign.Col Span="10">
+                                <FormItem Label="Fecha de nacimiento" Class="modal-damnificado-form-item">
+                                    <DatePicker TValue="DateTime ?" @bind-Value="@Damnificado.FechaDeNacimiento" OnChange="@CalcularEdad" />
+                                </FormItem>
+                            </AntDesign.Col>
+                            <AntDesign.Col Span="6">
                                 <FormItem Label="Edad" Class="modal-damnificado-form-item">
                                     <Input @bind-Value="@Damnificado.Edad" Disabled="@Damnificado.FechaDeNacimiento.HasValue" />
                                 </FormItem>
                             </AntDesign.Col>
-                            <AntDesign.Col Span="8">
-                                <FormItem Label="Lugar de Nacimiento" Class="modal-damnificado-form-item">
+                        </Row>
+                        <Row Gutter="16">
+                            <AntDesign.Col Span="14">
+                                <FormItem Label="Lugar de nacimiento" Class="modal-damnificado-form-item">
                                     <Input @bind-Value="@Damnificado.LugarDeNacimiento" />
                                 </FormItem>
                             </AntDesign.Col>
-                        </Row>
-                        <Row Gutter="16">
-                            @if (!editandoDamnificado)
-                            {
-                                <AntDesign.Col Span="12">
-                                    <FormItem Label="Fecha de Nacimiento" Class="modal-damnificado-form-item">
-                                        <DatePicker TValue="DateTime ?" @bind-Value="@Damnificado.FechaDeNacimiento" OnChange="@CalcularEdad" />
-                                    </FormItem>
-                                </AntDesign.Col>
-                            }
-                            <AntDesign.Col Span="12">
+                            <AntDesign.Col Span="10">
                                 <FormItem Label="Estado" Class="modal-damnificado-form-item">
-                                    <EnumSelect TEnum="TipoDamnificado ?" @bind-Value="@Damnificado.Estado" />
+                                    <EnumSelect TEnum="TipoDamnificado ?" @bind-Value="@Damnificado.Estado" AllowClear />
                                 </FormItem>
                             </AntDesign.Col>
                         </Row>
@@ -292,22 +290,18 @@
                                     <Select TItem="FuerzaIntervinienteViewModel"
                                             TItemValue="int?"
                                             DataSource="@Model.FuerzasIntervinientes"
-                                            @bind-Value="@Damnificado.FuerzaIntervinienteID"
+                                            @bind-Value="@Damnificado.FuerzaIntervinienteId"
                                             ValueName="@nameof(FuerzaIntervinienteViewModel.Id)"
+                                            ItemLabel="f => f.NombreCompleto"
                                             Placeholder="Seleccione la fuerza que lo trasladó"
                                             AllowClear="true"
-                                            EnableSearch="true">
-                                        <LabelTemplate Context="fuerza">
-                                            @($"{fuerza.FuerzaViewModel.Nombre} - Unidad {fuerza.NumeroUnidad}")
-                                        </LabelTemplate>
-                                        <ItemTemplate Context="fuerza">
-                                            @($"{fuerza.FuerzaViewModel.Nombre} - Unidad {fuerza.NumeroUnidad}")
-                                        </ItemTemplate>
+                                            EnableSearch="true"
+                                            OnSelectedItemChanged="OnFuerzaSeleccionada">
                                     </Select>
                                 </FormItem>
                             </AntDesign.Col>
                             <AntDesign.Col Span="12">
-                                <FormItem Label="Hacia donde?" Class="modal-damnificado-form-item">
+                                <FormItem Label="¿Hacia dónde?" Class="modal-damnificado-form-item">
                                     <Input @bind-Value="@Damnificado.Destino" />
                                 </FormItem>
                             </AntDesign.Col>
@@ -317,8 +311,7 @@
             </Modal>
         </TabPane>
         <TabPane Key="vehiculos" Tab="Vehículos">
-            <Table Context="Vehiculos"
-                   DataSource="Model.VehiculosAfectados"
+            <Table DataSource="Model.VehiculosDamnificados"
                    Size="TableSize.Small"
                    Class="damnificados-componente"
                    Bordered>
@@ -327,13 +320,14 @@
                         <GridCol Span="24" Style="text-align: right;">
                             <Button Type="ButtonType.Primary"
                                     Class="btn-nuevo-damnificado"
-                                    OnClick="@(() => visibleVehiculo = true)">
+                                    OnClick="@(() => modalVehiculo = true)">
                                 <Icon Type="plus" /> Nuevo Vehiculo
                             </Button>
                         </GridCol>
                     </GridRow>
                 </TitleTemplate>
-                <ColumnDefinitions>
+                <ColumnDefinitions Context="vehiculo">
+                    <PropertyColumn Title="N°" Property="v => v.Numero"></PropertyColumn>
                     <PropertyColumn Property="v => v.Tipo"></PropertyColumn>
                     <PropertyColumn Property="v => v.Marca"></PropertyColumn>
                     <PropertyColumn Property="v => v.Modelo"></PropertyColumn>
@@ -341,62 +335,35 @@
                     <PropertyColumn Property="v => v.Patente"></PropertyColumn>
                     <PropertyColumn Property="v => v.Color"></PropertyColumn>
                     <PropertyColumn Property="v => v.Observaciones"></PropertyColumn>
-                    <PropertyColumn Title="Se activó el Airbag?" Property="v => v.Airbag">
-                        <Template>
-                            @(Vehiculos.Airbag ? "Si" : "No")
-                        </Template>
-                    </PropertyColumn>
-                    <PropertyColumn Title="Dueño" Property="v => v.NombreYApellidoDuenio"></PropertyColumn>
-                    <PropertyColumn Title="Seguro" Property="v => v.Seguro.CompañiaAseguradora"></PropertyColumn>
-                    <PropertyColumn Title="Poliza" Property="v => v.Seguro.NumeroDePoliza"></PropertyColumn>
-                    <PropertyColumn Title="Vencimiento" Property="v => v.Seguro.FechaDeVencimineto"></PropertyColumn>
-                    <PropertyColumn Title="Conductor" TItem="VehiculoAfectado" TProp="string">
-                        <Template>
-                            @{
-                                var conductor = Vehiculos.Ocupantes?.FirstOrDefault(o => o.Rol == TipoOcupante.Conductor);
-                                @(conductor != null
-                                                            ? ObtenerNombreCompleto(conductor.Damnificado.Nombre, conductor.Damnificado.Apellido)
-                                                            : "Sin conductor")
-                            }
-                        </Template>
-                    </PropertyColumn>
-                    <PropertyColumn Title="Pasajeros" TItem="VehiculoAfectado" TProp="string">
-                        <Template>
-                            @{
-                                var pasajeros = Vehiculos.Ocupantes?.Where(o => o.Rol == TipoOcupante.Pasajero).ToList();
-                                if (pasajeros != null && pasajeros.Any())
-                                {
-                                    <div>@string.Join(", ", pasajeros.Select(p => ObtenerNombreCompleto(p.Damnificado.Nombre, p.Damnificado.Apellido)))</div>
-                                }
-                                else
-                                {
-                                    <div>Sin pasajeros</div>
-                                }
-                            }
-                        </Template>
-                    </PropertyColumn>
+                    <PropertyColumn Title="¿Se activó el Airbag?" Property="@(v => v.Airbag ? "Si" : "No")"></PropertyColumn>
+                    <PropertyColumn Title="Dueño" Property="v => v.Dueño"></PropertyColumn>
+                    <PropertyColumn Title="Seguro" Property="v => v.CompañiaAseguradora"></PropertyColumn>
+                    <PropertyColumn Title="Poliza" Property="v => v.NumeroDePoliza"></PropertyColumn>
+                    <PropertyColumn Title="Vencimiento" Property="v => v.FechaDeVencimiento.HasValue ? v.FechaDeVencimiento.Value.ToShortDateString() : string.Empty"></PropertyColumn>
+                    <PropertyColumn Title="Conductor" Property="@(v => v.Conductor != null ? v.Conductor.NombreYApellido : "Sin conductor")"></PropertyColumn>
+                    <PropertyColumn Title="Pasajeros" Property="@(v => ObtenerPasajerosTexto(v))"></PropertyColumn>
                     <ActionColumn Title="Acciones">
                         <Popconfirm Title="¿Quieres borrar este vehículo?"
-                                    OnConfirm="@(() => deleteRowVehiculos(Vehiculos.Patente))"
+                                    OnConfirm="@(() => EliminarVehiculo(vehiculo))"
                                     OkText="Si"
                                     CancelText="No">
                             <Button Danger>
                                 <Icon Type="delete" />
                             </Button>
                         </Popconfirm>
-                        <Button Type="@ButtonType.Primary" OnClick="@(() => EditarVehiculo(Vehiculos))">
+                        <Button Type="@ButtonType.Primary" OnClick="@(() => EditarVehiculo(vehiculo))">
                             <Icon Type="edit" />
                         </Button>
                     </ActionColumn>
                 </ColumnDefinitions>
             </Table>
 
-            <Modal @bind-Visible="visibleVehiculo"
-                   Title="@(editandoVehiculo ? "Editar Vehiculo" : "Datos del vehiculo")"
+            <Modal @bind-Visible="modalVehiculo"
+                   Title="@(editandoVehiculo ? "Editar vehiculo" : "Datos del vehiculo")"
                    OkText="@(editandoVehiculo ? "Editar" : "Agregar")"
                    CancelText="@("Cancelar")"
-                   OnOk="@AgregarVehiculo"
-                   OnCancel="@(() => {editandoVehiculo = false; patenteOriginal = null; Vehiculo = new();})"
+                   OnOk="@AgregarEditarVehiculo"
+                   OnCancel="@(() => {editandoVehiculo = false; Vehiculo = new();})"
                    WrapClassName="modal-damnificado">
                 <div class="modal-damnificado-content">
                     <Form Model="Vehiculo" Layout="FormLayout.Vertical" Class="modal-damnificado-form">
@@ -420,7 +387,7 @@
                         <Row Gutter="16">
                             <AntDesign.Col Span="8">
                                 <FormItem Label="Patente" Class="modal-damnificado-form-item">
-                                    <Input @bind-Value="@Vehiculo.Patente" Disabled="@editandoVehiculo" />
+                                    <Input @bind-Value="@Vehiculo.Patente" />
                                 </FormItem>
                             </AntDesign.Col>
                             <AntDesign.Col Span="8">
@@ -441,7 +408,7 @@
                                 </FormItem>
                             </AntDesign.Col>
                             <AntDesign.Col Span="10">
-                                <FormItem Label="Se Activó el Airbag?" Class="modal-damnificado-form-item">
+                                <FormItem Label="¿Se activó el Airbag?" Class="modal-damnificado-form-item">
                                     <Switch @bind-Checked="@Vehiculo.Airbag" />
                                 </FormItem>
                             </AntDesign.Col>
@@ -474,27 +441,24 @@
                         {
                             <Row Gutter="16">
                                 <AntDesign.Col Span="12">
-                                    <FormItem Label="Se Conoce el Conductor?" Class="modal-damnificado-form-item">
-                                        <Switch @bind-Checked="@Vehiculo.seConoceConductor" />
+                                    <FormItem Label="¿Se conoce el conductor?" Class="modal-damnificado-form-item">
+                                        <Switch @bind-Checked="@Vehiculo.SeConoceConductor" />
                                     </FormItem>
                                 </AntDesign.Col>
-                                @if (Vehiculo.seConoceConductor)
+                                @if (Vehiculo.SeConoceConductor)
                                 {
                                     <AntDesign.Col Span="12">
                                         <FormItem Label="Conductor" Class="modal-damnificado-form-item">
-                                            <Select TItem="Damnificado_Salida"
-                                                    TItemValue="Damnificado_Salida"
+                                            <Select TItem="DamnificadoViewModel"
+                                                    TItemValue="int?"
                                                     DataSource="@Model.Damnificados"
-                                                    @bind-Value="@Vehiculo.Conductor"
-                                                    Placeholder="Seleccione el Conductor"
+                                                    @bind-Value="@Vehiculo.ConductorId"
+                                                    ValueName="@nameof(DamnificadoViewModel.Numero)"
+                                                    ItemLabel="c => c.NombreYApellido"
+                                                    Placeholder="Seleccione el conductor"
                                                     AllowClear="true"
-                                                    EnableSearch="true">
-                                                <LabelTemplate Context="conductor">
-                                                    @($"{conductor.Apellido}, {conductor.Nombre}")
-                                                </LabelTemplate>
-                                                <ItemTemplate Context="conductor">
-                                                    @($"{conductor.Apellido}, {conductor.Nombre}")
-                                                </ItemTemplate>
+                                                    EnableSearch="true"
+                                                    OnSelectedItemChanged="OnConductorSeleccionado">
                                             </Select>
                                         </FormItem>
                                     </AntDesign.Col>
@@ -504,19 +468,15 @@
                                 <AntDesign.Col Span="24">
                                     <FormItem Label="Pasajeros" Class="modal-damnificado-form-item">
                                         <Select Mode="SelectMode.Multiple"
-                                                TItem="Damnificado_Salida"
-                                                TItemValue="Damnificado_Salida"
-                                                @bind-Values="@Vehiculo.Pasajeros"
+                                                TItem="DamnificadoViewModel"
+                                                TItemValue="int"
                                                 DataSource="@ObtenerDamnificadosDisponibles()"
+                                                @bind-Values="@PasajerosSeleccionados"
+                                                ValueName="@nameof(DamnificadoViewModel.Numero)"
+                                                ItemLabel="p => p.NombreYApellido"
                                                 Placeholder="Seleccione los Pasajeros"
                                                 AllowClear="true"
                                                 EnableSearch="true">
-                                            <LabelTemplate Context="pasajero">
-                                                @($"{pasajero.Apellido}, {pasajero.Nombre}")
-                                            </LabelTemplate>
-                                            <ItemTemplate Context="pasajero">
-                                                @($"{pasajero.Apellido}, {pasajero.Nombre}")
-                                            </ItemTemplate>
                                         </Select>
                                     </FormItem>
                                 </AntDesign.Col>
@@ -532,357 +492,210 @@
 @code {
     [Parameter] public required SalidasViewModels Model { get; set; }
 
-    private DamnificadoViewModels Damnificado = new DamnificadoViewModels();
-    private VehiculoDamnificadoViewModels Vehiculo = new VehiculoDamnificadoViewModels();
-    private bool visibleDamnificados = false;
-    private bool visibleVehiculo = false;
-
+    private DamnificadoViewModel Damnificado = new DamnificadoViewModel();
+    private VehiculoDamnificadoViewModel Vehiculo = new VehiculoDamnificadoViewModel();
+    private bool modalDamnificados = false, modalVehiculo = false;
     private bool editandoDamnificado = false, editandoVehiculo = false;
-    private int? documentoOriginal = null;
-    private string? patenteOriginal = null;
 
-    private async Task deleteRowDamnificados(int? DNI)
+    private string ObtenerPasajerosTexto(VehiculoDamnificadoViewModel vehiculo)
     {
-        if (Model.Damnificados == null || !Model.Damnificados.Any())
+        if (vehiculo.Pasajeros != null && vehiculo.Pasajeros.Any())
+            return string.Join(", ", vehiculo.Pasajeros.Select(p => p.NombreYApellido));
+        else
+            return "Sin pasajeros";
+    }
+
+    private async Task EliminarDamnificado(DamnificadoViewModel damnificado)
+    {
+        var damnificadoAEliminar = Model.Damnificados.SingleOrDefault(d => d.Numero == damnificado.Numero);
+
+        if (damnificadoAEliminar == null)
         {
-            await MessageService.ErrorAsync("No hay damnificados registrados.");
+            MessageService.Error("Damnificado no encontrado");
             return;
         }
 
-        if (!Model.Damnificados.Any(m => m.Documento == DNI))
+        if (Model.VehiculosDamnificados != null && Model.VehiculosDamnificados.Any())
         {
-            await MessageService.ErrorAsync($"No se encontró un damnificado con el DNI {DNI}.");
-            return;
-        }
-
-        var damnificadoAEliminar = Model.Damnificados.First(m => m.Documento == DNI);
-
-        // Verificar si está asociado a algún vehículo
-        var vehiculosConOcupante = Model.VehiculosAfectados?
-            .Where(v => v.Ocupantes != null && v.Ocupantes.Any(o => o.Damnificado.Documento == DNI))
-            .ToList();
-
-        if (vehiculosConOcupante != null && vehiculosConOcupante.Any())
-        {
-            await MessageService.WarningAsync($"El damnificado está asociado a {vehiculosConOcupante.Count} vehículo(s). Se eliminará la asociación.");
-
-            foreach (var vehiculo in vehiculosConOcupante)
+            foreach (var vehiculo in Model.VehiculosDamnificados)
             {
-                vehiculo.Ocupantes = vehiculo.Ocupantes.Where(o => o.Damnificado.Documento != DNI).ToList();
+                if (vehiculo.Conductor != null && vehiculo.Conductor.Numero == damnificadoAEliminar.Numero)
+                {
+                    vehiculo.Conductor = null;
+                    vehiculo.ConductorId = null;
+                }
+                if (vehiculo.Pasajeros != null && vehiculo.Pasajeros.Any(p => p.Numero == damnificadoAEliminar.Numero))
+                {
+                    vehiculo.Pasajeros = vehiculo.Pasajeros.Where(p => p.Numero != damnificadoAEliminar.Numero).ToList();
+                }
             }
         }
 
-        Model.Damnificados = Model.Damnificados.Where(m => m.Documento != DNI).ToList();
-        await MessageService.SuccessAsync($"Damnificado con DNI {DNI} eliminado correctamente.");
+        Model.Damnificados.Remove(damnificadoAEliminar);
+
+        for (int i = 0; i < Model.Damnificados.Count; i++)
+        {
+            Model.Damnificados[i].Numero = i + 1;
+        }
+
+        MessageService.Success("Damnificado eliminado correctamente");
     }
 
-    private async Task deleteRowVehiculos(string? Patente)
+    private async Task EliminarVehiculo(VehiculoDamnificadoViewModel vehiculo)
     {
-        if (Model.VehiculosAfectados == null || !Model.VehiculosAfectados.Any())
+        var vehiculoAEliminar = Model.VehiculosDamnificados.SingleOrDefault(v => v.Numero == vehiculo.Numero);
+
+        if (vehiculoAEliminar == null)
         {
-            await MessageService.ErrorAsync("No hay vehiculos registrados.");
+            MessageService.Error("Vehiculo no encontrado");
             return;
         }
 
-        if (!Model.VehiculosAfectados.Any(v => v.Patente == Patente))
+        Model.VehiculosDamnificados.Remove(vehiculoAEliminar);
+
+        for (int i = 0; i < Model.VehiculosDamnificados.Count; i++)
         {
-            await MessageService.ErrorAsync($"No se encontró un vehiculo con la patente {Patente}.");
-            return;
+            Model.VehiculosDamnificados[i].Numero = i + 1;
         }
 
-        Model.VehiculosAfectados = Model.VehiculosAfectados.Where(v => v.Patente != Patente).ToList();
-        await MessageService.SuccessAsync($"Vehiculo con patente {Patente} eliminado correctamente.");
+        MessageService.Success("Vehiculo eliminado correctamente");
     }
 
-    private void EditarDamnificado(Damnificado_Salida dam)
+    private void EditarDamnificado(DamnificadoViewModel damnificado)
     {
-        Damnificado = new()
-        {
-            Nombre = dam.Nombre,
-            Apellido = dam.Apellido,
-            Dni = dam.Documento,
-            Sexo = dam.Sexo,
-            LugarDeNacimiento = dam.LugarNacimiento,
-            Edad = dam.Edad,
-            Estado = dam.Estado,
-            FuerzaIntervinienteID = dam.FuerzaIntervinienteId,
-            Destino = dam.Destino
-        };
-        documentoOriginal = dam.Documento;
+        Damnificado = damnificado.Clonar();
         editandoDamnificado = true;
-        visibleDamnificados = true;
+        modalDamnificados = true;
     }
 
-    private async Task AgregarDamnificado()
+    private void AgregarEditarDamnificado()
     {
         try
         {
-            if (editandoDamnificado)
+            if (!editandoDamnificado)
             {
-                var actual = Model.Damnificados.First(d => d.Documento == documentoOriginal);
-                actual.Nombre = Damnificado.Nombre;
-                actual.Apellido = Damnificado.Apellido;
-                actual.Sexo = Damnificado.Sexo;
-                actual.LugarNacimiento = Damnificado.LugarDeNacimiento;
-                actual.Edad = Damnificado.Edad;
-                actual.Estado = Damnificado.Estado;
-                actual.FuerzaIntervinienteId = Damnificado.FuerzaIntervinienteID;
-                actual.Destino = Damnificado.Destino;
-                await MessageService.SuccessAsync("Damnificado actualizado correctamente");
+                Damnificado.Numero = Model.Damnificados.Count + 1;
+                Model.Damnificados.Add(Damnificado);
+                MessageService.Success("Damnificado agregado correctamente");
+            }
+            else
+            {
+                var damnificadoAEditar = Model.Damnificados.SingleOrDefault(d => d.Numero == Damnificado.Numero);
+
+                if (damnificadoAEditar == null)
+                {
+                    MessageService.Error("Damnificado no encontrado");
+                    return;
+                }
+
+                damnificadoAEditar.ActualizarDesde(Damnificado);
+                MessageService.Success("Damnificado actualizado correctamente");
                 editandoDamnificado = false;
-                documentoOriginal = null;
             }
-            else
-            {
-                Damnificado_Salida dp = new()
-                {
-                    Nombre = Damnificado.Nombre,
-                    Apellido = Damnificado.Apellido,
-                    Documento = Damnificado.Dni,
-                    Sexo = Damnificado.Sexo,
-                    LugarNacimiento = Damnificado.LugarDeNacimiento,
-                    Edad = Damnificado.Edad,
-                    Estado = Damnificado.Estado,
-                    FuerzaIntervinienteId = Damnificado.FuerzaIntervinienteID,
-                    Destino = Damnificado.Destino
-                };
 
-                if (Model.Damnificados == null)
-                {
-                    Model.Damnificados = new List<Damnificado_Salida>();
-                }
-
-                if (Model.Damnificados.Any(d => d.Documento == dp.Documento))
-                {
-                    await MessageService.ErrorAsync("Ya existe un damnificado con ese documento", 5);
-                    return;
-                }
-
-                Model.Damnificados.Add(dp);
-
-                await MessageService.SuccessAsync("Damnificado agregado correctamente");
-            }
-            Damnificado = new DamnificadoViewModels();
-            visibleDamnificados = false;
-            StateHasChanged();
+            modalDamnificados = false;
+            Damnificado = new DamnificadoViewModel();
         }
         catch (Exception e)
         {
             StateHasChanged();
-
             if (e.InnerException != null)
-                await MessageService.ErrorAsync(e.InnerException.Message, 5);
+                MessageService.Error(e.InnerException.Message, 5);
             else
-                await MessageService.ErrorAsync(e.Message, 5);
+                MessageService.Error(e.Message, 5);
         }
     }
 
-    private void EditarVehiculo(VehiculoAfectado veh)
+    private void EditarVehiculo(VehiculoDamnificadoViewModel vehiculo)
     {
-        var conductor = veh.Ocupantes?.FirstOrDefault(o => o.Rol == TipoOcupante.Conductor)?.Damnificado;
-        var pasajeros = veh.Ocupantes?.Where(o => o.Rol == TipoOcupante.Pasajero).Select(o => o.Damnificado).ToList() ?? new List<Damnificado_Salida>();
-
-        Vehiculo = new()
-        {
-            Marca = veh.Marca,
-            Modelo = veh.Modelo,
-            Año = veh.Año,
-            Patente = veh.Patente,
-            Tipo = veh.Tipo,
-            Color = veh.Color,
-            Airbag = veh.Airbag,
-            Observaciones = veh.Observaciones,
-            seConoceConductor = veh.SeConoceConductor,
-            Dueño = veh.NombreYApellidoDuenio,
-            CompañiaAseguradora = veh.Seguro?.CompañiaAseguradora,
-            NumeroDePoliza = veh.Seguro?.NumeroDePoliza,
-            FechaDeVencimiento = veh.Seguro?.FechaDeVencimineto,
-            Conductor = conductor,
-            Pasajeros = pasajeros
-        };
-        patenteOriginal = veh.Patente;
+        Vehiculo = vehiculo.Clonar();
         editandoVehiculo = true;
-        visibleVehiculo = true;
+        modalVehiculo = true;
     }
 
-    private async Task AgregarVehiculo()
+    private void AgregarEditarVehiculo()
     {
         try
         {
-            if (editandoVehiculo)
+            if (!editandoVehiculo)
             {
-                var actual = Model.VehiculosAfectados.First(p => p.Patente == patenteOriginal);
-                actual.Tipo = Vehiculo.Tipo;
-                actual.Marca = Vehiculo.Marca;
-                actual.Modelo = Vehiculo.Modelo;
-                actual.Año = Vehiculo.Año;
-                actual.Color = Vehiculo.Color;
-                actual.NombreYApellidoDuenio = Vehiculo.Dueño;
-                actual.Observaciones = Vehiculo.Observaciones;
-                actual.Airbag = Vehiculo.Airbag;
-                actual.SeConoceConductor = Vehiculo.seConoceConductor;
-
-                // Actualizar ocupantes
-                actual.Ocupantes = new List<OcupanteVehiculo>();
-                if (Vehiculo.Conductor != null && Vehiculo.seConoceConductor)
-                {
-                    actual.Ocupantes.Add(new OcupanteVehiculo
-                    {
-                        Damnificado = Vehiculo.Conductor,
-                        Rol = TipoOcupante.Conductor,
-                        VehiculoAfectado = actual
-                    });
-                }
-
-                if (Vehiculo.Pasajeros != null && Vehiculo.Pasajeros.Any())
-                {
-                    foreach (var pasajero in Vehiculo.Pasajeros)
-                    {
-                        actual.Ocupantes.Add(new OcupanteVehiculo
-                        {
-                            Damnificado = pasajero,
-                            Rol = TipoOcupante.Pasajero,
-                            VehiculoAfectado = actual
-                        });
-                    }
-                }
-
-                // Actualizar seguro
-                if (actual.Seguro == null)
-                {
-                    actual.Seguro = new SeguroVehiculo();
-                }
-                actual.Seguro.CompañiaAseguradora = Vehiculo.CompañiaAseguradora;
-                actual.Seguro.NumeroDePoliza = Vehiculo.NumeroDePoliza;
-                actual.Seguro.FechaDeVencimineto = Vehiculo.FechaDeVencimiento;
-
-                await MessageService.SuccessAsync("Vehiculo actualizado correctamente");
-                editandoVehiculo = false;
-                patenteOriginal = null;
+                Vehiculo.Numero = Model.VehiculosDamnificados.Count + 1;
+                Model.VehiculosDamnificados.Add(Vehiculo);
+                MessageService.Success("Vehiculo agregado correctamente");
             }
             else
             {
-                SeguroVehiculo seguro = new()
-                {
-                    CompañiaAseguradora = Vehiculo.CompañiaAseguradora,
-                    NumeroDePoliza = Vehiculo.NumeroDePoliza,
-                    FechaDeVencimineto = Vehiculo.FechaDeVencimiento
-                };
+                var vehiculoAEditar = Model.VehiculosDamnificados.SingleOrDefault(v => v.Numero == Vehiculo.Numero);
 
-                VehiculoAfectado va = new()
+                if (vehiculoAEditar == null)
                 {
-                    Tipo = Vehiculo.Tipo,
-                    Marca = Vehiculo.Marca,
-                    Modelo = Vehiculo.Modelo,
-                    Patente = Vehiculo.Patente,
-                    Año = Vehiculo.Año,
-                    Color = Vehiculo.Color,
-                    NombreYApellidoDuenio = Vehiculo.Dueño,
-                    Observaciones = Vehiculo.Observaciones,
-                    Airbag = Vehiculo.Airbag,
-                    Seguro = seguro,
-                    SeConoceConductor = Vehiculo.seConoceConductor,
-                    Ocupantes = new List<OcupanteVehiculo>()
-                };
-
-                // Agregar conductor si existe
-                if (Vehiculo.Conductor != null && Vehiculo.seConoceConductor)
-                {
-                    va.Ocupantes.Add(new OcupanteVehiculo
-                    {
-                        Damnificado = Vehiculo.Conductor,
-                        Rol = TipoOcupante.Conductor,
-                        VehiculoAfectado = va
-                    });
-                }
-
-                // Agregar pasajeros
-                if (Vehiculo.Pasajeros != null && Vehiculo.Pasajeros.Any())
-                {
-                    foreach (var pasajero in Vehiculo.Pasajeros)
-                    {
-                        va.Ocupantes.Add(new OcupanteVehiculo
-                        {
-                            Damnificado = pasajero,
-                            Rol = TipoOcupante.Pasajero,
-                            VehiculoAfectado = va
-                        });
-                    }
-                }
-
-                if (Model.VehiculosAfectados == null)
-                    Model.VehiculosAfectados = new List<VehiculoAfectado>();
-
-                if (Model.VehiculosAfectados.Any(v => v.Patente == va.Patente))
-                {
-                    await MessageService.ErrorAsync("Ya existe un vehiculo con esa Patente");
+                    MessageService.Error("Vehiculo no encontrado");
                     return;
                 }
 
-                if (!string.IsNullOrEmpty(va.Seguro.NumeroDePoliza) &&
-                    Model.VehiculosAfectados.Any(v => v.Seguro?.NumeroDePoliza == va.Seguro.NumeroDePoliza))
-                {
-                    await MessageService.ErrorAsync("Ya existe un seguro con ese Numero de Poliza");
-                    return;
-                }
-
-                Model.VehiculosAfectados.Add(va);
-                await MessageService.SuccessAsync("Vehiculo cargado correctamente");
+                vehiculoAEditar.ActualizarDesde(Vehiculo);
+                MessageService.Success("Vehiculo actualizado correctamente");
+                editandoVehiculo = false;
             }
-            Vehiculo = new VehiculoDamnificadoViewModels();
-            visibleVehiculo = false;
-            StateHasChanged();
+            modalVehiculo = false;
+            Vehiculo = new VehiculoDamnificadoViewModel();
         }
         catch (Exception e)
         {
             StateHasChanged();
             if (e.InnerException != null)
-                await MessageService.ErrorAsync(e.InnerException.Message, 5);
+                MessageService.Error(e.InnerException.Message, 5);
             else
-                await MessageService.ErrorAsync(e.Message, 5);
+                MessageService.Error(e.Message, 5);
         }
     }
 
-    private Task CalcularEdad()
+    private void CalcularEdad()
     {
         if (Damnificado.FechaDeNacimiento.HasValue)
-        {
             Damnificado.Edad = (int)((DateTime.Now - Damnificado.FechaDeNacimiento.Value).TotalDays / 365.25);
+        else
+            Damnificado.Edad = null;
+    }
+
+    private void OnConductorSeleccionado(DamnificadoViewModel conductor)
+    {
+        if (conductor != null)
+        {
+            Vehiculo.Conductor = conductor;
+            if (Vehiculo.Pasajeros != null && Vehiculo.Pasajeros.Any(p => p.Numero == conductor.Numero))
+            {
+                Vehiculo.Pasajeros = Vehiculo.Pasajeros.Where(p => p.Numero != conductor.Numero).ToList();
+            }
         }
         else
+            Vehiculo.Conductor = null;
+    }
+
+    private IEnumerable<int> PasajerosSeleccionados
+    {
+        get => Vehiculo.Pasajeros?.Select(p => p.Numero) ?? Enumerable.Empty<int>();
+        set
         {
-            Damnificado.Edad = null;
+            Vehiculo.Pasajeros = (value != null && value.Any())
+                ? Model.Damnificados.Where(d => value.Contains(d.Numero)).ToList()
+                : new List<DamnificadoViewModel>();
         }
-
-        return Task.CompletedTask;
     }
 
-    private string ObtenerNombreCompleto(string? Nombre, string? Apellido)
+    private IEnumerable<DamnificadoViewModel> ObtenerDamnificadosDisponibles()
     {
-        if (string.IsNullOrEmpty(Nombre)) { Nombre = "Desconocido"; }
-        if (string.IsNullOrEmpty(Apellido)) { Apellido = "Desconocido"; }
-        return Apellido + ", " + Nombre;
+        if (Vehiculo.Conductor == null)
+            return Model.Damnificados;
+        else
+            return Model.Damnificados.Where(d => d.Numero != Vehiculo.Conductor.Numero);
     }
 
-    private string ObtenerNombreFuerza(int? fuerzaId)
+    private void OnFuerzaSeleccionada(FuerzaIntervinienteViewModel fuerza)
     {
-        if (!fuerzaId.HasValue || Model.FuerzasIntervinientes == null)
-            return "No especificada";
-
-        var fuerza = Model.FuerzasIntervinientes.FirstOrDefault(f => f.Id == fuerzaId.Value);
-        if (fuerza == null)
-            return "Fuerza no encontrada";
-
-        return $"{fuerza.FuerzaViewModel.Nombre} - Unidad {fuerza.NumeroUnidad}";
-    }
-
-    private IEnumerable<Damnificado_Salida> ObtenerDamnificadosDisponibles()
-    {
-        if (Model.Damnificados == null)
-            return new List<Damnificado_Salida>();
-
-        // Excluir al conductor seleccionado de la lista de pasajeros
-        return Model.Damnificados.Where(d => Vehiculo.Conductor == null || d.Documento != Vehiculo.Conductor.Documento);
+        if (fuerza != null)
+            Damnificado.FuerzaInterviniente = fuerza;
+        else
+            Damnificado.FuerzaInterviniente = null;
     }
 }
-*@
