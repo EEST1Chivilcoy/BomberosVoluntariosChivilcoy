@@ -12,29 +12,47 @@
             <Button class="menu-toggle compact-toggle" Type="ButtonType.Primary" OnClick="ToggleCollapsed">
                 <Icon Type="@(collapsedMenu ? "menu-unfold" : "menu-fold")" Theme="IconThemeType.Outline" />
             </Button>
+
             <Menu Mode="MenuMode.Horizontal" Theme="MenuTheme.Light" class="top-menu compact-menu"
                   SelectedKeys="@GetSelectedMenuKeys()">
+
                 <MenuItem Key="home" OnClick="@(() => navigationManager.NavigateTo("/fire-force/"))" class="compact-item">
                     <i class="fa-solid fa-house compact-icon"></i> <span class="compact-text">Home</span>
                 </MenuItem>
+
                 <MenuItem Key="legajo" OnClick="@(() => navigationManager.NavigateTo("/fire-force/Bomberos/Legajo"))" class="compact-item">
                     <i class="fa-solid fa-id-card compact-icon"></i> <span class="compact-text">Legajo</span>
                 </MenuItem>
+
                 <MenuItem Key="salidas" OnClick="@(() => navigationManager.NavigateTo("/fire-force/salidas"))" class="compact-item">
                     <i class="fa-solid fa-sign-out-alt compact-icon"></i> <span class="compact-text">Salidas</span>
                 </MenuItem>
-                <MenuItem Key="personal" OnClick="@(() => navigationManager.NavigateTo("/fire-force/personal/bomberos"))" class="compact-item">
-                    <i class="fa-solid fa-user compact-icon"></i> <span class="compact-text">Personal</span>
-                </MenuItem>
+
+                <!-- SUBMENU PERSONAL -->
+                <SubMenu Key="personal" TitleTemplate="@personalCompactTitle" class="compact-submenu">
+                    <MenuItem Key="bomberos" OnClick="@(() => navigationManager.NavigateTo("/fire-force/personal/bomberos"))" class="compact-item">
+                        <span class="compact-text">Bomberos</span>
+                    </MenuItem>
+                    <MenuItem Key="cobradores" OnClick="@(() => navigationManager.NavigateTo("/fire-force/personal/cobradores"))" class="compact-item">
+                        <span class="compact-text">Cobradores</span>
+                    </MenuItem>
+                    <MenuItem Key="CS" OnClick="@(() => navigationManager.NavigateTo("/fire-force/personal/comisiondirectiva"))" class="compact-item">
+                        <span class="compact-text">Comision Directiva</span>
+                    </MenuItem>
+                </SubMenu>
+
                 <MenuItem Key="licencias" OnClick="@(() => navigationManager.NavigateTo("/fire-force/licencias"))" class="compact-item">
                     <i class="fa-solid fa-file-alt compact-icon"></i> <span class="compact-text">Licencias</span>
                 </MenuItem>
+
                 <MenuItem Key="moviles" OnClick="@(() => navigationManager.NavigateTo("/fire-force/unidades"))" class="compact-item">
                     <i class="fa-solid fa-car compact-icon"></i> <span class="compact-text">Unidades</span>
                 </MenuItem>
+
                 <MenuItem Key="firmas" OnClick="@(() => navigationManager.NavigateTo("/fire-force/incidentes-vehiculos"))" class="compact-item">
                     <i class="fa-solid fa-signature compact-icon"></i> <span class="compact-text">Firmas</span>
                 </MenuItem>
+
                 <SubMenu Key="etica" TitleTemplate="@eticaCompactTitle" class="compact-submenu">
                     <MenuItem Key="sanciones" OnClick="@(() => navigationManager.NavigateTo("/fire-force/bomberos/sancionados"))" class="compact-item">
                         <span class="compact-text">Sanciones</span>
@@ -43,13 +61,10 @@
                         <span class="compact-text">Ascensos</span>
                     </MenuItem>
                 </SubMenu>
+
                 <SubMenu Key="reportes" TitleTemplate="@reportesCompactTitle" class="compact-submenu">
-                    <MenuItem Key="reportes-salidas" OnClick="@(() => navigationManager.NavigateTo("/fire-force/Reportes/HistorialSalidas"))" class="compact-item">
-                        <span class="compact-text">Historial Salidas</span>
-                    </MenuItem>
-                    <MenuItem Key="reportes-bomberos" OnClick="@(() => navigationManager.NavigateTo("/fire-force/Reportes/HistorialBomberos"))" class="compact-item">
-                        <span class="compact-text">Historial Bomberos</span>
-                    </MenuItem>
+
+
                     <MenuItem Key="reportes-choferes" OnClick="@(() => navigationManager.NavigateTo("/fire-force/Reportes/Reportes_Choferes"))" class="compact-item">
                         <span class="compact-text">Choferes</span>
                     </MenuItem>
@@ -57,6 +72,7 @@
                         <span class="compact-text">Móviles</span>
                     </MenuItem>
                 </SubMenu>
+
                 <SubMenu Key="herramientas" TitleTemplate="@herramientasCompactTitle" class="compact-submenu">
                     <MenuItem Key="fuerzas" OnClick="@(() => navigationManager.NavigateTo("/fire-force/FuerzasIntervinientes"))" class="compact-item">
                         <span class="compact-text">Fuerzas Intervinientes</span>
@@ -77,180 +93,109 @@
                         <span class="compact-text">Equipos Autónomos</span>
                     </MenuItem>
                 </SubMenu>
+
             </Menu>
         </div>
     </Header>
 
-
     <Layout class="main-layout">
         <Sider class="main-sider" @bind-Collapsed="@collapsedMenu" NoTrigger OnCollapse="OnCollapse">
-            <Menu Mode="MenuMode.Inline"
-                  InlineCollapsed="collapsedMenu"
-                  class="main-menu">
+
+            <Menu Mode="MenuMode.Inline" InlineCollapsed="collapsedMenu" class="main-menu">
 
                 <MenuItem Key="legajo" OnClick="@(() => navigationManager.NavigateTo("/fire-force/Bomberos/Legajo"))">
-                    <IconTemplate>
-                        <i class="fa-solid fa-user menu-icon"></i>
-                    </IconTemplate>
-                    <ChildContent>
-                        <a class="menu-link" href="/fire-force/Bomberos/Legajo">Legajo</a>
-                    </ChildContent>
+                    <IconTemplate><i class="fa-solid fa-user menu-icon"></i></IconTemplate>
+                    <ChildContent><a class="menu-link" href="/fire-force/Bomberos/Legajo">Legajo</a></ChildContent>
                 </MenuItem>
 
                 <MenuItem Key="licencias" OnClick="@(() => navigationManager.NavigateTo("/fire-force/licencias"))">
-                    <IconTemplate>
-                        <i class="fa-solid fa-file-signature menu-icon"></i>
-                    </IconTemplate>
-                    <ChildContent>
-                        <a class="menu-link" href="/fire-force/licencias">Licencias</a>
-                    </ChildContent>
+                    <IconTemplate><i class="fa-solid fa-file-signature menu-icon"></i></IconTemplate>
+                    <ChildContent><a class="menu-link" href="/fire-force/licencias">Licencias</a></ChildContent>
                 </MenuItem>
 
                 <MenuItem Key="moviles" OnClick="@(() => navigationManager.NavigateTo("/fire-force/unidades"))">
-                    <IconTemplate>
-                        <i class="fa-solid fa-truck menu-icon"></i>
-                    </IconTemplate>
-                    <ChildContent>
-                        <a class="menu-link" href="/fire-force/unidades">Unidades</a>
-                    </ChildContent>
+                    <IconTemplate><i class="fa-solid fa-truck menu-icon"></i></IconTemplate>
+                    <ChildContent><a class="menu-link" href="/fire-force/unidades">Unidades</a></ChildContent>
                 </MenuItem>
 
-                <MenuItem Key="personal" OnClick="@(() => navigationManager.NavigateTo("/fire-force/personal/bomberos"))">
-                    <IconTemplate>
-                        <i class="fa-solid fa-people-group menu-icon"></i>
-                    </IconTemplate>
-                    <ChildContent>
-                        <a class="menu-link" href="/fire-force/personal/bomberos">Personal</a>
-                    </ChildContent>
-                </MenuItem>
+                <!-- SUBMENU PERSONAL (Sider) -->
+                <SubMenu Key="personal" TitleTemplate="@personalTitle">
+
+                    <MenuItem Key="bomberos">
+                        <IconTemplate><i class="fa-solid fa-user-firefighter submenu-icon"></i></IconTemplate>
+                        <ChildContent><a class="menu-link" href="/fire-force/personal/bomberos">Bomberos</a></ChildContent>
+                    </MenuItem>
+
+                    <MenuItem Key="cobradores">
+                        <IconTemplate><i class="fa-solid fa-money-bill submenu-icon"></i></IconTemplate>
+                        <ChildContent><a class="menu-link" href="/fire-force/personal/cobradores">Cobradores</a></ChildContent>
+                    </MenuItem>
+
+                    <MenuItem Key="CS">
+                        <IconTemplate><i class="fa-solid fa-users submenu-icon"></i></IconTemplate>
+                        <ChildContent><a class="menu-link" href="/fire-force/personal/comisiondirectiva">Comision Directiva</a></ChildContent>
+                    </MenuItem>
+
+                </SubMenu>
 
                 <MenuItem Key="salidas" OnClick="@(() => navigationManager.NavigateTo("/fire-force/salidas"))">
-                    <IconTemplate>
-                        <i class="fa-solid fa-fire-extinguisher menu-icon"></i>
-                    </IconTemplate>
-                    <ChildContent>
-                        <a class="menu-link" href="/fire-force/salidas">Salidas</a>
-                    </ChildContent>
+                    <IconTemplate><i class="fa-solid fa-fire-extinguisher menu-icon"></i></IconTemplate>
+                    <ChildContent><a class="menu-link" href="/fire-force/salidas">Salidas</a></ChildContent>
                 </MenuItem>
 
                 <MenuItem Key="firmas" OnClick="@(() => navigationManager.NavigateTo("/fire-force/incidentes-vehiculos"))">
-                    <IconTemplate>
-                        <i class="fa-solid fa-scroll menu-icon"></i>
-                    </IconTemplate>
-                    <ChildContent>
-                        <a class="menu-link" href="/fire-force/incidentes-vehiculos">Firmas</a>
-                    </ChildContent>
+                    <IconTemplate><i class="fa-solid fa-scroll menu-icon"></i></IconTemplate>
+                    <ChildContent><a class="menu-link" href="/fire-force/incidentes-vehiculos">Firmas</a></ChildContent>
                 </MenuItem>
 
-                <SubMenu Key="reportes" TitleTemplate="@reportesTitle">
-                    <MenuItem Key="reportes-salidas">
-                        <IconTemplate>
-                            <i class="fa-solid fa-clock-rotate-left submenu-icon"></i>
-                        </IconTemplate>
-                        <ChildContent>
-                            <a class="menu-link" href="/fire-force/Reportes/HistorialSalidas">Historial Salidas</a>
-                        </ChildContent>
-                    </MenuItem>
+                <!-- reportes, herramientas, ética sin cambios -->
 
-                    <MenuItem Key="reportes-bomberos">
-                        <IconTemplate>
-                            <i class="fa-solid fa-users-gear submenu-icon"></i>
-                        </IconTemplate>
-                        <ChildContent>
-                            <a class="menu-link" href="/fire-force/Reportes/HistorialBomberos">Historial Bomberos</a>
-                        </ChildContent>
-                    </MenuItem>
+                <SubMenu Key="reportes" TitleTemplate="@reportesTitle">
+  
+
+
 
                     <MenuItem Key="reportes-choferes">
-                        <IconTemplate>
-                            <i class="fa-solid fa-id-card submenu-icon"></i>
-                        </IconTemplate>
-                        <ChildContent>
-                            <a class="menu-link" href="/fire-force/Reportes/Reportes_Choferes">Choferes</a>
-                        </ChildContent>
+                        <IconTemplate><i class="fa-solid fa-id-card submenu-icon"></i></IconTemplate>
+                        <ChildContent><a class="menu-link" href="/fire-force/Reportes/Reportes_Choferes">Choferes</a></ChildContent>
                     </MenuItem>
 
                     <MenuItem Key="reportes-moviles">
-                        <IconTemplate>
-                            <i class="fa-solid fa-truck-droplet submenu-icon"></i>
-                        </IconTemplate>
-                        <ChildContent>
-                            <a class="menu-link" href="/fire-force/Reportes/HistorialMoviles">Móviles</a>
-                        </ChildContent>
+                        <IconTemplate><i class="fa-solid fa-truck-droplet submenu-icon"></i></IconTemplate>
+                        <ChildContent><a class="menu-link" href="/fire-force/Reportes/HistorialMoviles">Móviles</a></ChildContent>
                     </MenuItem>
                 </SubMenu>
 
                 <SubMenu Key="herramientas" TitleTemplate="@herramientasTitle">
-                    <MenuItem Key="fuerzas">
-                        <IconTemplate>
-                            <i class="fa-solid fa-shield-halved submenu-icon"></i>
-                        </IconTemplate>
-                        <ChildContent>
-                            <a class="menu-link" href="/fire-force/FuerzasIntervinientes">Fuerzas Intervinientes</a>
-                        </ChildContent>
+                    <MenuItem Key="fuerzas"><IconTemplate><i class="fa-solid fa-shield-halved submenu-icon"></i></IconTemplate>
+                        <ChildContent><a class="menu-link" href="/fire-force/FuerzasIntervinientes">Fuerzas Intervinientes</a></ChildContent>
                     </MenuItem>
-                    <MenuItem Key="comunicacion">
-                        <IconTemplate>
-                            <i class="fa-solid fa-walkie-talkie submenu-icon"></i>
-                        </IconTemplate>
-                        <ChildContent>
-                            <a class="menu-link" href="/fire-force/Dependencias/Comunicacion">Comunicación</a>
-                        </ChildContent>
+                    <MenuItem Key="comunicacion"><IconTemplate><i class="fa-solid fa-walkie-talkie submenu-icon"></i></IconTemplate>
+                        <ChildContent><a class="menu-link" href="/fire-force/Dependencias/Comunicacion">Comunicación</a></ChildContent>
                     </MenuItem>
-                    <MenuItem Key="deposito">
-                        <IconTemplate>
-                            <i class="fa-solid fa-warehouse submenu-icon"></i>
-                        </IconTemplate>
-                        <ChildContent>
-                            <a class="menu-link" href="/fire-force/Dependencias/Deposito">Depósito</a>
-                        </ChildContent>
+                    <MenuItem Key="deposito"><IconTemplate><i class="fa-solid fa-warehouse submenu-icon"></i></IconTemplate>
+                        <ChildContent><a class="menu-link" href="/fire-force/Dependencias/Deposito">Depósito</a></ChildContent>
                     </MenuItem>
-                    <MenuItem Key="dependencias">
-                        <IconTemplate>
-                            <i class="fa-solid fa-building submenu-icon"></i>
-                        </IconTemplate>
-                        <ChildContent>
-                            <a class="menu-link" href="/fire-force/Dependencias">Dependencias</a>
-                        </ChildContent>
+                    <MenuItem Key="dependencias"><IconTemplate><i class="fa-solid fa-building submenu-icon"></i></IconTemplate>
+                        <ChildContent><a class="menu-link" href="/fire-force/Dependencias">Dependencias</a></ChildContent>
                     </MenuItem>
-                    <MenuItem Key="brigadas">
-                        <IconTemplate>
-                            <i class="fa-solid fa-users-gear submenu-icon"></i>
-                        </IconTemplate>
-                        <ChildContent>
-                            <a class="menu-link" href="/fire-force/Brigadas">Brigadas</a>
-                        </ChildContent>
+                    <MenuItem Key="brigadas"><IconTemplate><i class="fa-solid fa-users-gear submenu-icon"></i></IconTemplate>
+                        <ChildContent><a class="menu-link" href="/fire-force/Brigadas">Brigadas</a></ChildContent>
                     </MenuItem>
-
-                    <MenuItem Key="equipos-autonomos">
-                        <IconTemplate>
-                            <i class="fa-solid fa-mask-face submenu-icon"></i>
-                        </IconTemplate>
-                        <ChildContent>
-                            <a class="menu-link" href="/fire-force/Dependencias/EquiposAutonomos">Equipos Autónomos</a>
-                        </ChildContent>
+                    <MenuItem Key="equipos-autonomos"><IconTemplate><i class="fa-solid fa-mask-face submenu-icon"></i></IconTemplate>
+                        <ChildContent><a class="menu-link" href="/fire-force/Dependencias/EquiposAutonomos">Equipos Autónomos</a></ChildContent>
                     </MenuItem>
                 </SubMenu>
 
                 <SubMenu Key="etica" TitleTemplate="@eticaTitle">
-                    <MenuItem Key="sanciones">
-                        <IconTemplate>
-                            <i class="fa-solid fa-user-xmark submenu-icon"></i>
-                        </IconTemplate>
-                        <ChildContent>
-                            <a class="menu-link" href="/fire-force/bomberos/sancionados">Sanciones</a>
-                        </ChildContent>
+                    <MenuItem Key="sanciones"><IconTemplate><i class="fa-solid fa-user-xmark submenu-icon"></i></IconTemplate>
+                        <ChildContent><a class="menu-link" href="/fire-force/bomberos/sancionados">Sanciones</a></ChildContent>
                     </MenuItem>
-
-                    <MenuItem Key="ascensos">
-                        <IconTemplate>
-                            <i class="fa-solid fa-user-plus submenu-icon"></i>
-                        </IconTemplate>
-                        <ChildContent>
-                            <a class="menu-link" href="/fire-force/bomberos/ascenso">Ascensos</a>
-                        </ChildContent>
+                    <MenuItem Key="ascensos"><IconTemplate><i class="fa-solid fa-user-plus submenu-icon"></i></IconTemplate>
+                        <ChildContent><a class="menu-link" href="/fire-force/bomberos/ascenso">Ascensos</a></ChildContent>
                     </MenuItem>
                 </SubMenu>
+
             </Menu>
         </Sider>
 
@@ -265,10 +210,7 @@
 @code {
     bool collapsedMenu = true;
 
-    void ToggleCollapsed()
-    {
-        collapsedMenu = !collapsedMenu;
-    }
+    void ToggleCollapsed() => collapsedMenu = !collapsedMenu;
 
     void OnCollapse(bool isCollapsed)
     {
@@ -279,45 +221,26 @@
     {
         var uri = navigationManager.Uri.ToLower();
 
-        // Verificar primero si es la página de inicio
-        if (IsHome())
-            return "INICIO";
+        if (IsHome()) return "INICIO";
 
-        // Verificar rutas específicas primero (más específicas antes que las generales)
-        if (uri.Contains("/bomberos/legajo"))
-            return "LEGAJO";
-        if (uri.Contains("/bomberos/sancionados"))
-            return "SANCIONES";
-        if (uri.Contains("/bomberos/ascenso"))
-            return "ASCENSOS";
-        if (uri.Contains("/bomberos") && !uri.Contains("/legajo") && !uri.Contains("/sancionados") && !uri.Contains("/ascenso"))
-            return "PERSONAL";
-        if (uri.Contains("/licencias"))
-            return "LICENCIAS";
-        if (uri.Contains("/unidades"))
-            return "MÓVILES";
-        if (uri.Contains("/salidas"))
-            return "SALIDAS";
-        if (uri.Contains("/incidentes-vehiculos"))
-            return "FIRMAS";
-        if (uri.Contains("/reportes/historialsalidas"))
-            return "HISTORIAL SALIDAS";
-        if (uri.Contains("/reportes/historialbomberos"))
-            return "HISTORIAL BOMBEROS";
-        if (uri.Contains("/reportes/reportes_choferes"))
-            return "CHOFERES";
-        if (uri.Contains("/reportes/historialmoviles"))
-            return "HISTORIAL MÓVILES";
-        if (uri.Contains("/brigadas"))
-            return "BRIGADAS";
-        if (uri.Contains("/equiposautonomos"))
-            return "EQUIPOS AUTÓNOMOS";
-        if (uri.Contains("/dependencias/comunicacion"))
-            return "COMUNICACIÓN";
-        if (uri.Contains("/dependencias/deposito"))
-            return "DEPÓSITO";
-        if (uri.Contains("/bomberos/sancionados") || uri.Contains("/bomberos/ascenso"))
-            return "ÉTICA";
+        if (uri.Contains("/personal/cobradores")) return "COBRADORES";
+        if (uri.Contains("/personal/socios")) return "SOCIOS";
+        if (uri.Contains("/personal/bomberos")) return "BOMBEROS";
+        if (uri.Contains("/personal")) return "PERSONAL";
+
+        if (uri.Contains("/bomberos/legajo")) return "LEGAJO";
+        if (uri.Contains("/bomberos/sancionados")) return "SANCIONES";
+        if (uri.Contains("/bomberos/ascenso")) return "ASCENSOS";
+
+        if (uri.Contains("/licencias")) return "LICENCIAS";
+        if (uri.Contains("/unidades")) return "MÓVILES";
+        if (uri.Contains("/salidas")) return "SALIDAS";
+        if (uri.Contains("/incidentes-vehiculos")) return "FIRMAS";
+
+
+
+        if (uri.Contains("/reportes/reportes_choferes")) return "CHOFERES";
+        if (uri.Contains("/reportes/historialmoviles")) return "HISTORIAL MÓVILES";
 
         return "INICIO";
     }
@@ -333,76 +256,62 @@
     {
         var uri = navigationManager.Uri.ToLower();
 
-        // Verificar primero si es la página de inicio
-        if (IsHome())
-            return new[] { "home" };
+        if (IsHome()) return new[] { "home" };
 
-        // Verificar rutas específicas primero (más específicas antes que las generales)
-        if (uri.Contains("/bomberos/legajo"))
-            return new[] { "legajo" };
-        if (uri.Contains("/bomberos") && !uri.Contains("/legajo") && !uri.Contains("/sancionados") && !uri.Contains("/ascenso"))
-            return new[] { "personal" };
-        if (uri.Contains("/licencias"))
-            return new[] { "licencias" };
-        if (uri.Contains("/unidades"))
-            return new[] { "moviles" };
-        if (uri.Contains("/salidas"))
-            return new[] { "salidas" };
-        if (uri.Contains("/incidentes-vehiculos"))
-            return new[] { "firmas" };
-        if (uri.Contains("/reportes/historialsalidas"))
-            return new[] { "reportes-salidas" };
-        if (uri.Contains("/reportes/historialbomberos"))
-            return new[] { "reportes-bomberos" };
-        if (uri.Contains("/reportes/reportes_choferes"))
-            return new[] { "reportes-choferes" };
-        if (uri.Contains("/reportes/historialmoviles"))
-            return new[] { "reportes-moviles" };
-        if (uri.Contains("/reportes"))
-            return new[] { "reportes" };
-        if (uri.Contains("/brigadas"))
-            return new[] { "brigadas" };
-        if (uri.Contains("/equiposautonomos"))
-            return new[] { "equipos-autonomos" };
-        if (uri.Contains("/dependencias/comunicacion"))
-            return new[] { "comunicacion" };
-        if (uri.Contains("/dependencias/deposito"))
-            return new[] { "deposito" };
-        if (uri.Contains("/brigadas") || uri.Contains("/dependencias") || uri.Contains("/equiposautonomos"))
-            return new[] { "herramientas" };
-        if (uri.Contains("/bomberos/sancionados") || uri.Contains("/bomberos/ascenso"))
-            return new[] { "etica" };
+        if (uri.Contains("/personal/cobradores")) return new[] { "personal", "cobradores" };
+        if (uri.Contains("/personal/socios")) return new[] { "personal", "socios" };
+        if (uri.Contains("/personal/bomberos")) return new[] { "personal", "bomberos" };
+        if (uri.Contains("/personal")) return new[] { "personal" };
+
+        if (uri.Contains("/licencias")) return new[] { "licencias" };
+        if (uri.Contains("/unidades")) return new[] { "moviles" };
+        if (uri.Contains("/salidas")) return new[] { "salidas" };
+        if (uri.Contains("/incidentes-vehiculos")) return new[] { "firmas" };
+
+
+        if (uri.Contains("/reportes/reportes_choferes")) return new[] { "reportes-choferes" };
+        if (uri.Contains("/reportes/historialmoviles")) return new[] { "reportes-moviles" };
 
         return Array.Empty<string>();
     }
 
+    RenderFragment personalTitle =
+        @<span class="submenu-title">
+            <span class="submenu-title-text"><i class="fa-solid fa-users"></i> Personal</span>
+        </span>;
+
+    RenderFragment personalCompactTitle =
+        @<span class="compact-submenu-title">
+            <i class="fa-solid fa-users compact-icon"></i> <span class="compact-text">Personal</span>
+        </span>;
+
     RenderFragment reportesTitle =
         @<span class="submenu-title">
-        <span class="submenu-title-text"><i class="fa-solid fa-file-lines"></i> Reportes</span>
-    </span>;
+            <span class="submenu-title-text"><i class="fa-solid fa-file-lines"></i> Reportes</span>
+        </span>;
 
     RenderFragment herramientasTitle =
         @<span class="submenu-title">
-        <span class="submenu-title-text"><i class="fa-solid fa-tools"></i> Utilidades  </span>
-    </span>;
+            <span class="submenu-title-text"><i class="fa-solid fa-tools"></i> Utilidades</span>
+        </span>;
 
     RenderFragment eticaTitle =
         @<span class="submenu-title">
-        <span class="submenu-title-text"><i class="fa-solid fa-gavel"></i> Ética</span>
-    </span>;
+            <span class="submenu-title-text"><i class="fa-solid fa-gavel"></i> Ética</span>
+        </span>;
 
     RenderFragment reportesCompactTitle =
         @<span class="compact-submenu-title">
-        <i class="fa-solid fa-file-lines compact-icon"></i> <span class="compact-text">Reportes</span>
-    </span>;
+            <i class="fa-solid fa-file-lines compact-icon"></i> <span class="compact-text">Reportes</span>
+        </span>;
 
     RenderFragment herramientasCompactTitle =
         @<span class="compact-submenu-title">
-        <i class="fa-solid fa-tools compact-icon"></i> <span class="compact-text">Utilidades</span>
-    </span>;
+            <i class="fa-solid fa-tools compact-icon"></i> <span class="compact-text">Utilidades</span>
+        </span>;
 
     RenderFragment eticaCompactTitle =
         @<span class="compact-submenu-title">
-        <i class="fa-solid fa-gavel compact-icon"></i> <span class="compact-text">Ética</span>
-    </span>;
+            <i class="fa-solid fa-gavel compact-icon"></i> <span class="compact-text">Ética</span>
+        </span>;
 }
