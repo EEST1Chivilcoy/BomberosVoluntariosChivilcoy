@@ -5,8 +5,8 @@
 
 <style>
     /* ========================================
-                   VARIABLES Y CONFIGURACIÓN BASE
-                   ======================================== */
+                       VARIABLES Y CONFIGURACIÓN BASE
+                       ======================================== */
     :root {
         --primary-color: #1890ff;
         --text-primary: #262626;
@@ -23,9 +23,9 @@
     }
 
     /* ========================================
-                   CONTENEDOR PRINCIPAL
-                   Dashboard container con fondo limpio
-                   ======================================== */
+                       CONTENEDOR PRINCIPAL
+                       Dashboard container con fondo limpio
+                       ======================================== */
     .dashboard-container {
         padding: 24px;
         background-color: var(--bg-light);
@@ -34,9 +34,9 @@
     }
 
     /* ========================================
-                   SECCIÓN DE BANNER / HERO
-                   Banner principal con overlay accesible
-                   ======================================== */
+                       SECCIÓN DE BANNER / HERO
+                       Banner principal con overlay accesible
+                       ======================================== */
     .banner-section {
         margin-bottom: 32px;
     }
@@ -99,9 +99,9 @@
     }
 
     /* ========================================
-                   TÍTULO DE SECCIÓN
-                   Mejora la organización visual
-                   ======================================== */
+                       TÍTULO DE SECCIÓN
+                       Mejora la organización visual
+                       ======================================== */
     .section-title {
         font-size: 1.75rem !important;
         font-weight: 600 !important;
@@ -113,27 +113,27 @@
     }
 
     /* ========================================
-                   GRID DE DASHBOARD
-                   Layout responsivo para las tarjetas
-                   ======================================== */
+                       GRID DE DASHBOARD
+                       Layout responsivo para las tarjetas
+                       ======================================== */
     .dashboard-grid {
         margin-top: 0;
     }
 
     /* ========================================
-                   TARJETAS DE NAVEGACIÓN
-                   Cards modernos con mejor accesibilidad
-                   ======================================== */
+                       TARJETAS DE NAVEGACIÓN
+                       Cards modernos con mejor accesibilidad
+                       ======================================== */
     .dashboard-card {
         height: 100%;
-        min-height: 200px;
+        min-height: 380px;
         border-radius: var(--radius-md) !important;
         transition: var(--transition) !important;
         cursor: pointer;
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         text-align: center;
         padding: 32px 24px !important;
         box-shadow: var(--shadow-sm) !important;
@@ -173,12 +173,13 @@
         }
 
     /* ========================================
-                   ICONOS DE TARJETAS
-                   Iconos grandes y claros
-                   ======================================== */
+                       ICONOS DE TARJETAS
+                       Iconos grandes y claros
+                       ======================================== */
     .card-icon {
         font-size: 48px !important;
         margin-bottom: 16px;
+        margin-top: 20px;
         color: var(--card-color, #1890ff);
         transition: transform 0.3s ease;
         filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
@@ -189,9 +190,9 @@
     }
 
     /* ========================================
-                   TÍTULOS Y DESCRIPCIONES DE TARJETAS
-                   Tipografía clara y legible
-                   ======================================== */
+                       TÍTULOS Y DESCRIPCIONES DE TARJETAS
+                       Tipografía clara y legible
+                       ======================================== */
     .card-title {
         margin: 12px 0 8px 0 !important;
         font-size: 1.35rem !important;
@@ -202,28 +203,30 @@
     }
 
     .card-description {
-        margin: 0 !important;
+        margin: 0 0 16px 0 !important;
         font-size: 1rem !important;
         color: var(--text-secondary) !important;
         line-height: 1.5;
     }
 
     /* ========================================
-                   TARJETAS CON MÚLTIPLES ACCIONES
-                   Para secciones con varios botones
-                   ======================================== */
+                       TARJETAS CON MÚLTIPLES ACCIONES
+                       Para secciones con varios botones
+                       ======================================== */
     .multi-action-card {
-        padding: 28px 24px !important;
+        padding: 28px 24px 24px 24px !important;
+        justify-content: flex-start;
     }
 
     .action-buttons-container {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        align-items: center;
+        align-items: flex-start;
         gap: 12px;
         width: 100%;
-        margin-top: 12px;
+        margin-top: auto;
+        padding-top: 16px;
     }
 
     .action-button {
@@ -261,9 +264,9 @@
         }
 
     /* ========================================
-                   ESQUEMAS DE COLOR POR CATEGORÍA
-                   Colores accesibles con buen contraste
-                   ======================================== */
+                       ESQUEMAS DE COLOR POR CATEGORÍA
+                       Colores accesibles con buen contraste
+                       ======================================== */
 
     /* Legajo - Azul profesional */
     .legajo-card {
@@ -331,16 +334,16 @@
         --card-color-dark: #237804;
     }
 
-    /* Socios - Dorado membresía */
+    /* Socios - Dorado miembros */
     .socios-card {
         --card-color: #fa8c16;
         --card-color-dark: #d46b08;
     }
 
     /* ========================================
-                   ACCESIBILIDAD
-                   Skip link para navegación por teclado
-                   ======================================== */
+                       ACCESIBILIDAD
+                       Skip link para navegación por teclado
+                       ======================================== */
     .skip-link {
         position: absolute;
         top: -40px;
@@ -358,17 +361,17 @@
         }
 
     /* ========================================
-                   ESTADOS DE CARGA Y FEEDBACK
-                   ======================================== */
+                       ESTADOS DE CARGA Y FEEDBACK
+                       ======================================== */
     .loading-state {
         opacity: 0.6;
         pointer-events: none;
     }
 
     /* ========================================
-                   RESPONSIVE DESIGN
-                   Adaptación para móviles y tablets
-                   ======================================== */
+                       RESPONSIVE DESIGN
+                       Adaptación para móviles y tablets
+                       ======================================== */
     @@media (max-width: 992px) {
         .dashboard-container {
             padding: 16px;
@@ -405,12 +408,13 @@
         }
 
         .dashboard-card {
-            min-height: 180px;
+            min-height: 320px;
             padding: 24px 16px !important;
         }
 
         .card-icon {
             font-size: 40px !important;
+            margin-top: 10px;
         }
 
         .card-title {
@@ -459,13 +463,13 @@
         }
 
         .dashboard-card {
-            min-height: 160px;
+            min-height: 280px;
         }
     }
 
     /* ========================================
-                   MEJORAS DE IMPRESIÓN
-                   ======================================== */
+                       MEJORAS DE IMPRESIÓN
+                       ======================================== */
     @@media print {
         .dashboard-container {
             background: white;
