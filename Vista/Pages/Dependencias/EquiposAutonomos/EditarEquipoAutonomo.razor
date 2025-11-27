@@ -65,25 +65,24 @@
                 color: #A63333;
             }
 
-            .modal-crear-equipo .ant-picker {
-    height: 40px !important;           
-    padding: 8px 12px !important;      
-    display: flex !important;
-    align-items: center !important;  
-
-}
-
-
-.modal-crear-equipo .ant-picker-input > input {
-    font-size: 15px !important;
-    padding: 4px 8px !important;
-}
+    .modal-crear-equipo .ant-picker {
+        height: 40px !important;
+        padding: 8px 12px !important;
+        display: flex !important;
+        align-items: center !important;
+    }
 
 
-.modal-crear-equipo .ant-picker-suffix {
-    display: flex !important;
-    align-items: center !important;
-}
+    .modal-crear-equipo .ant-picker-input > input {
+        font-size: 15px !important;
+        padding: 4px 8px !important;
+    }
+
+
+    .modal-crear-equipo .ant-picker-suffix {
+        display: flex !important;
+        align-items: center !important;
+    }
 
 
     .modal-crear-equipo .ant-input:focus,
@@ -207,7 +206,7 @@
     </Row>
     <Row Class="modal-crear-equipo-row" Gutter="16">
         <AntDesign.Col Span="12">
-            <FormItem Label="📅 Fecha de vencimiento de la prueba hidráulica"
+            <FormItem Label="📅 Fecha de vencimiento de la prueba hidráulica">
                 <DatePicker @bind-Value="@viewModel.FechaVencimientoPruebaHidraulica"
                             Size="InputSize.Large"
                             Placeholder=@("Seleccione la fecha de vencimiento") />
@@ -215,7 +214,7 @@
         </AntDesign.Col>
 
         <AntDesign.Col Span="12">
-            <FormItem Label="🧪 Fecha de la última prueba hidráulica"
+            <FormItem Label="🧪 Fecha de la última prueba hidráulica">
                 <DatePicker @bind-Value="@viewModel.UltimaFechaPruebaHidraulica"
                             Size="InputSize.Large"
                             Placeholder=@("Seleccione la fecha anterior de prueba") />
