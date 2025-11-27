@@ -110,6 +110,7 @@ namespace Vista.Services
                 throw new ArgumentException("Debe proporcionar al menos una imagen y un vehículo.");
 
             ValidationHelper.Validar(vehiculo);
+            ValidationHelper.Validar(imagen);
 
             // --- 2. Inicio de la Transacción ---
             // Esta será la transacción "principal" que controlará todo.
@@ -128,21 +129,22 @@ namespace Vista.Services
                     }
                 }
 
-                // Si hay imagen, la vinculamos
+                // No asignamos la imagen aún, primero guardamos el vehículo
+                _context.VehiculoSalidas.Add(vehiculo);
+                await _context.SaveChangesAsync(); // Guardamos primero el vehículo para obtener su ID
 
+                // Ahora que tenemos el ID del vehículo, podemos asignar la imagen
                 if (imagen is Imagen_VehiculoSalida imagenVehiculo)
                 {
-                    ValidationHelper.Validar(imagen);
-                    vehiculo.Imagen = imagenVehiculo;                    
+                    imagenVehiculo.VehiculoId = vehiculo.VehiculoId;
+                    await _imagenService.GuardarImagenAsync(imagenVehiculo);
+                    vehiculo.ImagenId = imagenVehiculo.ImagenId;
+                    await _context.SaveChangesAsync(); // Guardamos la relación
                 }
                 else
                 {
                     throw new InvalidOperationException("Tipo de imagen no soportado para vehículos.");
                 }
-
-                _context.VehiculoSalidas.Add(vehiculo);
-
-                await _context.SaveChangesAsync(); // Guardamos primero el vehículo para obtener su ID
 
                 await transaction.CommitAsync(); // Confirmamos la transacción si todo salió bien
             }
