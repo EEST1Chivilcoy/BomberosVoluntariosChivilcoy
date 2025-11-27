@@ -550,7 +550,7 @@
                             </Template>
                         </PropertyColumn>
 
-                        <PropertyColumn Title="👤 Bombero" Property="c => c.Bombero" Sortable Width="120px" />
+                      @*  <PropertyColumn Title="👤 Bombero" Property="c => c.Bombero" Sortable Width="120px" />*@
                     </ColumnDefinitions>
                 </Table>
             </div>
@@ -605,13 +605,13 @@
             </AntDesign.Col>
             <Row Class="modal-crear-firma-row" Gutter="100">
                 <AntDesign.Col Span="12">
-                    <FormItem Label="👤 Bombero" Required Class="modal-crear-firma-form-item">
+                    @*<FormItem Label="👤 Bombero" Required Class="modal-crear-firma-form-item">
                         <Select TItem="BomberoViewModel" TItemValue="int" DataSource="@BomberosVM"
                             Value="nuevaFirma.BomberoId" ValueChanged="OnBomberoChanged"
                             LabelName="@nameof(BomberoViewModel.NombreYApellido)"
                             ValueName="@nameof(BomberoViewModel.Id)" Placeholder="Seleccione el bombero" AllowClear
                             EnableSearch Size="InputSize.Large" />
-                    </FormItem>
+                    </FormItem> *@
                 </AntDesign.Col>
 
             </Row>
