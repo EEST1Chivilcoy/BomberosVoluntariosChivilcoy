@@ -225,6 +225,7 @@
                                     OnFilter="((value, name) => Enum.GetName(typeof(TipoMovimiento), name).StartsWith(Enum.GetName(typeof(TipoMovimiento), value)))">
                     </PropertyColumn>
                     <PropertyColumn Property="c => c.MaterialAsignado.Descripcion" Title="Material" Sortable></PropertyColumn>
+                    <PropertyColumn Property="c => c.Cantidad" Title="Cantidad" Sortable />
                     <PropertyColumn Property="c => c.BomberoOMovil" Title="Bombero/Móvil" Sortable></PropertyColumn>
                     <PropertyColumn Property="c => c.FechaIngreso" Title="Fecha de Ingreso" Format="dd/MM/yyyy" Sortable></PropertyColumn>
                 </ColumnDefinitions>
