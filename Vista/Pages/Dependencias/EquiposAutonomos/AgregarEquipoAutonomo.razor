@@ -79,6 +79,28 @@
         box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
     }
 
+
+.modal-crear-equipo .ant-picker {
+    height: 40px !important;           
+    padding: 8px 12px !important;      
+    display: flex !important;
+    align-items: center !important;  
+
+}
+
+
+.modal-crear-equipo .ant-picker-input > input {
+    font-size: 15px !important;
+    padding: 4px 8px !important;
+}
+
+
+.modal-crear-equipo .ant-picker-suffix {
+    display: flex !important;
+    align-items: center !important;
+}
+
+
     .modal-crear-equipo .ant-picker,
     .modal-crear-equipo .ant-input,
     .modal-crear-equipo .ant-select-selector,
@@ -147,6 +169,10 @@
             gap: 12px;
         }
     }
+
+
+
+
 </style>
 
 <Form Model="@equipoAutonomo"
@@ -191,10 +217,10 @@
         </AntDesign.Col>
     </Row>
 
-    <Row Class="modal-crear-equipo-row" Gutter="16">
+    <Row Class="modal-crear-equipo-row" Gutter="24">
         <AntDesign.Col Span="12">
             <FormItem Label="📅 Fecha de vencimiento de la prueba hidráulica"
-                      Class="modal-crear-equipo-form-item">
+                      
                 <DatePicker @bind-Value="@equipoAutonomo.FechaVencimientoPruebaHidraulica"
                             Size="InputSize.Large"
                             Placeholder=@("Seleccione la fecha de vencimiento") />
@@ -203,7 +229,7 @@
 
         <AntDesign.Col Span="12">
             <FormItem Label="🧪 Fecha de la última prueba hidráulica"
-                      Class="modal-crear-equipo-form-item">
+                      Class=>
                 <DatePicker @bind-Value="@equipoAutonomo.UltimaFechaPruebaHidraulica"
                             Size="InputSize.Large"
                             Placeholder=@("Seleccione la fecha anterior de prueba") />
