@@ -117,7 +117,7 @@
                             <Input Placeholder="Tipo de Combustible" @bind-Value="@vehiculoView.Combustible" AllowClear />
                         </FormItem>
                         <FormItem Label="Litros de Combustible">
-                            <AntDesign.InputNumber @bind-Value="@movilView.CantidadLitros" Placeholder="Litros de Combustible" Min="0" Style="width: 100%;" AllowClear />
+                            <AntDesign.InputNumber @bind-Value="@movilView.CantidadLitros" Placeholder="Litros de Combustible" Min="0" Style="width: 100%;" />
                         </FormItem>
                         <FormItem Label="Tipo de aceite">
                             <Input Placeholder="Tipo de aceite" @bind-Value="@movilView.TipoAceite" AllowClear />
@@ -126,7 +126,7 @@
                             <Input Placeholder="Marca de aceite" @bind-Value="@movilView.MarcaAceite" AllowClear />
                         </FormItem>
                         <FormItem Label="Litros de aceite">
-                            <AntDesign.InputNumber @bind-Value="@movilView.CantidadAceite" Placeholder="Litros de aceite" Min="0" Style="width: 100%;" AllowClear />
+                            <AntDesign.InputNumber @bind-Value="@movilView.CantidadAceite" Placeholder="Litros de aceite" Min="0" Style="width: 100%;" />
                         </FormItem>
                         <FormItem Label="Modelo de filtro de aire">
                             <Input Placeholder="Modelo de filtro de aire" @bind-Value="@movilView.ModeloFiltroAire" AllowClear />
@@ -138,13 +138,13 @@
                             <Input Placeholder="Presión de Cubiertas" @bind-Value="@movilView.LibrasCubiertas" AllowClear />
                         </FormItem>
                         <FormItem Label="Tipo de caja de velocidades">
-                            <EnumSelect TEnum="TipoCajaVelocidades?" Placeholder="Seleccione tipo de caja de velocidades" @bind-Value="movilView.CajaVelocidades" />
+                            <EnumSelect TEnum="TipoCajaVelocidades ?" Placeholder="Seleccione tipo de caja de velocidades" @bind-Value="movilView.CajaVelocidades" />
                         </FormItem>
                         <FormItem Label="Tipo de tensión eléctrica">
-                            <EnumSelect TEnum="TipoTension?" Placeholder="Seleccione tipo de tensión eléctrica" @bind-Value="movilView.TensionCElectrico" />
+                            <EnumSelect TEnum="TipoTension ?" Placeholder="Seleccione tipo de tensión eléctrica" @bind-Value="movilView.TensionCElectrico" />
                         </FormItem>
                         <FormItem Label="Tipo de dirección">
-                            <EnumSelect TEnum="TipoDireccionUnidades?" Placeholder="Seleccione tipo de dirección" @bind-Value="movilView.TipoDireccion" />
+                            <EnumSelect TEnum="TipoDireccionUnidades ?" Placeholder="Seleccione tipo de dirección" @bind-Value="movilView.TipoDireccion" />
                         </FormItem>
                         <FormItem Label="Marca de batería">
                             <Input Placeholder="Marca de batería" @bind-Value="@movilView.MarcaBateria" AllowClear />

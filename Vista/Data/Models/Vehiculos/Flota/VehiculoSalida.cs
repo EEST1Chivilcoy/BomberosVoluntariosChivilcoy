@@ -47,7 +47,6 @@ namespace Vista.Data.Models.Vehiculos.Flota
         /// </summary>
         public Imagen_VehiculoSalida? Imagen { get; set; }
 
-
         /// <summary>
         /// Tipo de combustible (por ejemplo, Diesel). Con un maximo de 255 caracteres.
         /// </summary>

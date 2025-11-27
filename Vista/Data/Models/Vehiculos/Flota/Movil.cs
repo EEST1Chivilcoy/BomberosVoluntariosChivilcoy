@@ -39,7 +39,6 @@ namespace Vista.Data.Models.Vehiculos.Flota
         /// Cantidad de litros que puede contener el tanque de agua o combustible del vehículo móvil.
         /// Este campo es opcional.
         /// </summary>
-        [StringLength(255)]
         public int? CantidadLitros { get; set; }
 
         /// <summary>
