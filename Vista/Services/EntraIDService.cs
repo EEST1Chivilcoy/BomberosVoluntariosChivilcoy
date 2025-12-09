@@ -20,19 +20,30 @@ namespace Vista.Services
 
     public class EntraIDService : IEntraIDService
     {
-        private readonly GraphServiceClient _graphClient;
         private readonly MicrosoftIdentityConsentAndConditionalAccessHandler _consentHandler;
         private readonly IWebHostEnvironment _env;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ITokenAcquisition _tokenAcquisition;
 
-        public EntraIDService(GraphServiceClient graphClient, MicrosoftIdentityConsentAndConditionalAccessHandler consentHandler, IWebHostEnvironment env, IHttpContextAccessor httpContextAccessor, ITokenAcquisition tokenAcquisition)
+        public EntraIDService(MicrosoftIdentityConsentAndConditionalAccessHandler consentHandler, IWebHostEnvironment env, IHttpContextAccessor httpContextAccessor, ITokenAcquisition tokenAcquisition)
         {
-            _graphClient = graphClient;
             _consentHandler = consentHandler;
             _env = env;
             _httpContextAccessor = httpContextAccessor;
             _tokenAcquisition = tokenAcquisition;
+        }
+
+        private async Task<GraphServiceClient> CreateGraphClientAsync()
+        {
+            var token = await _tokenAcquisition.GetAccessTokenForUserAsync(new[] { "User.ReadBasic.All" });
+
+            var authProvider = new DelegateAuthenticationProvider(request =>
+            {
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                return Task.CompletedTask;
+            });
+
+            return new GraphServiceClient(authProvider);
         }
 
         public async Task<(PersonalViewModel? personal, ImagenResultado? foto)> BuscarPorUPNAsync(string upn, CancellationToken token)
@@ -45,8 +56,10 @@ namespace Vista.Services
 
             try
             {
+                var graphClient = await CreateGraphClientAsync();
+
                 // Buscar usuario
-                var user = await _graphClient.Users[fullUpn]
+                var user = await graphClient.Users[fullUpn]
                     .Request()
                     .Select(u => new
                     {
@@ -66,14 +79,14 @@ namespace Vista.Services
 
                 try
                 {
-                    var photoMetadata = await _graphClient.Users[fullUpn]
+                    var photoMetadata = await graphClient.Users[fullUpn]
                         .Photo
                         .Request()
                         .GetAsync(token);
 
                     if (photoMetadata != null)
                     {
-                        var photoStream = await _graphClient.Users[fullUpn]
+                        var photoStream = await graphClient.Users[fullUpn]
                             .Photo
                             .Content
                             .Request()
@@ -135,7 +148,8 @@ namespace Vista.Services
                 if (graphUser == null)
                     throw new InvalidOperationException("⚠️ No se pudo obtener el usuario actual desde Graph.");
 
-                var users = await _graphClient.Users.Request().Top(1).GetAsync();
+                var graphClient = await CreateGraphClientAsync();
+                var users = await graphClient.Users.Request().Top(1).GetAsync();
                 return users?.Count > 0;
             }
             catch (ServiceException ex)
