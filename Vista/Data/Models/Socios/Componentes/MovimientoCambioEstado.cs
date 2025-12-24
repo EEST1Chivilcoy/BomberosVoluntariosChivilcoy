@@ -5,7 +5,7 @@ namespace Vista.Data.Models.Socios.Componentes
     /// <summary>
     /// Representa el historial de un socio, incluyendo fechas de alta y baja, motivo de baja.
     /// </summary>
-    public class HistorialEstado_Socio : Historial_Socio
+    public class MovimientoCambioEstado : MovimientoSocio
     {
         /// <summary>
         /// Representa la fecha del evento en el historial del socio.
@@ -16,11 +16,6 @@ namespace Vista.Data.Models.Socios.Componentes
         /// Representa el Estado anterior del socio antes del cambio.
         /// </summary>
         public TipoEstadoSocio EstadoAnterior { get; set; }
-
-        /// <summary>
-        /// Representa el nuevo Estado del socio después del cambio.
-        /// </summary>
-        public TipoEstadoSocio EstadoNuevo { get; set; }
 
         /// <summary>
         /// Representa el motivo del cambio de estado del socio. (No es obligatorio)

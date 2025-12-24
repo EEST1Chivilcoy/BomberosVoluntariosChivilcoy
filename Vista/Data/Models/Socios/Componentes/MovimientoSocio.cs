@@ -1,6 +1,6 @@
 ﻿namespace Vista.Data.Models.Socios.Componentes
 {
-    public abstract class Historial_Socio
+    public abstract class MovimientoSocio
     {
         /// <summary>
         /// Identificador único del historial.

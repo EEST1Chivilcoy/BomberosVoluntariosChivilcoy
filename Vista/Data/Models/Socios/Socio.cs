@@ -51,7 +51,7 @@ namespace Vista.Data.Models.Socios
         /// <summary>
         /// Representa la relación del con el historial del socio. (1 a n) (Componente)
         /// </summary>
-        //public List<Historial_Socio> Historial { get; set; } = new();
+        public List<MovimientoSocio> Historial { get; set; } = new();
 
         /// <summary>
         /// Representa el monto actual de la cuota del socio.
@@ -65,7 +65,7 @@ namespace Vista.Data.Models.Socios
         public FrecuenciaPago? FrecuenciaDePago { get; set; }
 
         /// <summary>
-        /// Representa la forma de pago del socio. (Por defecto es Efectivo) (Igual es algo que se va a borrar, solo incluido para la presentacion del proyecto) (Borrar Luego)
+        /// Representa la forma de pago del socio.
         /// </summary>
         [Required(ErrorMessage = "La forma de pago es obligatoria.")]
         public FormaDePago? FormaPago { get; set; }

@@ -46,9 +46,7 @@ namespace Vista.Data
 
         // Socios Assets
 
-        //public DbSet<Historial_Socio> HistorialesSocios { get; set; }
-        //public DbSet<HistorialCuota_Socio> HistorialCuotas { get; set; }
-        //public DbSet<HistorialEstado_Socio> HistorialEstados { get; set; }
+        public DbSet<MovimientoSocio> HistorialSocios { get; set; }
 
         // Dependencias (Departamentos)
 
@@ -175,11 +173,11 @@ namespace Vista.Data
                 .OnDelete(DeleteBehavior.Restrict);   // Esto evita borrado en cascada
 
             // Relación uno a muchos entre Socio y HistorialSocio
-            //modelBuilder.Entity<Historial_Socio>()
-            //    .HasOne(hs => hs.Socio)               // Un historial pertenece a un socio
-            //    .WithMany(s => s.Historial)         // Un socio tiene muchos movimientos en su historial
-            //    .HasForeignKey(hs => hs.SocioId)      // Clave foránea en HistorialSocio
-            //    .OnDelete(DeleteBehavior.Cascade);    // Borrado en cascada si se borra el socio
+            modelBuilder.Entity<MovimientoSocio>()
+                .HasOne(hs => hs.Socio)               // Un historial pertenece a un socio
+                .WithMany(s => s.Historial)         // Un socio tiene muchos movimientos en su historial
+                .HasForeignKey(hs => hs.SocioId)      // Clave foránea en HistorialSocio
+                .OnDelete(DeleteBehavior.Cascade);    // Borrado en cascada si se borra el socio
 
             // --- Configuración para FuerzaInterviniente_Salida ---
             modelBuilder.Entity<FuerzaInterviniente_Salida>(entity =>
@@ -506,29 +504,26 @@ namespace Vista.Data
                 .Property(s => s.FormaPago)
                 .HasConversion<int>();
 
-            // HistorialEstado_Socio - Enum TipoEstadoSocio
+            // MovimientoCambioCuota - Enum TipoEstadoSocio
 
-            //modelBuilder
-            //    .Entity<HistorialEstado_Socio>()
-            //    .Property(he => he.EstadoAnterior)
-            //    .HasConversion<int>();
+            modelBuilder
+                .Entity<MovimientoCambioEstado>()
+                .Property(he => he.EstadoAnterior)
+                .HasConversion<int>();
 
-            //modelBuilder
-            //    .Entity<HistorialEstado_Socio>()
-            //    .Property(he => he.EstadoNuevo)
-            //    .HasConversion<int>();
+            // MovimientoCambioCuota - Enum FrecuenciaDePago
 
-            // HistorialCuota_Socio - Enum FrecuenciaDePago
+            modelBuilder
+                .Entity<MovimientoCambioCuota>()
+                .Property(hc => hc.FrecuenciaDePagoAnterior)
+                .HasConversion<int>();
 
-            //modelBuilder
-            //    .Entity<HistorialCuota_Socio>()
-            //    .Property(hc => hc.FrecuenciaDePagoAnterior)
-            //    .HasConversion<int>();
+            // MovimientoCambioCuota - Enum FormaDePago
 
-            //modelBuilder
-            //    .Entity<HistorialCuota_Socio>()
-            //    .Property(hc => hc.FrecuenciaDePagoNueva)
-            //    .HasConversion<int>();
+            modelBuilder
+                .Entity<MovimientoCambioCuota>()
+                .Property(mc => mc.FormaDePagoAnterior)
+                .HasConversion<int>();
 
             // Enum Conversiones a String (Texto)
 

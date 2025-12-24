@@ -120,6 +120,7 @@ builder.Services.AddScoped<IDependenciaService, DependenciaService>();
 builder.Services.AddScoped<ILicenciaService, LicenciaService>();
 builder.Services.AddScoped<IVehiculoSalidaService, VehiculoSalidaService>();
 builder.Services.AddScoped<IFuerzaIntervinienteService, FuerzaIntervinienteService>();
+builder.Services.AddScoped<IHistorialSocioService, HistorialSocioService>();
 builder.Services.AddScoped<ISocioService, SocioService>();
 builder.Services.AddScoped<IEntraIDService, EntraIDService>();
 builder.Services.AddScoped<IParteVehiculoService, ParteVehiculoService>();

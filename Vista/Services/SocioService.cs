@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DocumentFormat.OpenXml.Drawing;
+using Microsoft.EntityFrameworkCore;
 using Vista.Data;
 using Vista.Data.Models.Personas.Personal;
 using Vista.Data.Models.Socios;
+using Vista.Data.Models.Socios.Componentes;
 using Vista.Helpers;
 
 namespace Vista.Services
@@ -17,10 +19,12 @@ namespace Vista.Services
     public class SocioService : ISocioService
     {
         private readonly BomberosDbContext _context;
+        private readonly IHistorialSocioService _historialSocioService;
 
-        public SocioService(BomberosDbContext context)
+        public SocioService(BomberosDbContext context, IHistorialSocioService historialSocioService)
         {
             _context = context;
+            _historialSocioService = historialSocioService;
         }
 
         public async Task CrearSocioAsync(Socio socio)
@@ -149,7 +153,25 @@ namespace Vista.Services
                     }
                 }
 
-                // --- Paso C: Actualizar los campos del Socio ---
+                // --- Paso C: Crear Movimientos en el Historial ---
+
+                // Detectar cambios en la cuota
+                if (SocioAEditar.MontoCuota != socio.MontoCuota ||
+                    SocioAEditar.FrecuenciaDePago != socio.FrecuenciaDePago ||
+                    SocioAEditar.FormaPago != socio.FormaPago)
+                {
+                    var movimiento = new MovimientoCambioCuota
+                    {
+                        FechaDeCambio = DateTime.Now,
+                        MontoAnterior = SocioAEditar.MontoCuota,
+                        FormaDePagoAnterior = SocioAEditar.FormaPago ?? Data.Enums.Socios.FormaDePago.Efectivo,
+                        FrecuenciaDePagoAnterior = SocioAEditar.FrecuenciaDePago ?? Data.Enums.Socios.FrecuenciaPago.Mensual,
+                    };
+
+                    await _historialSocioService.CrearMovimientoSocio(socioId:socio.Id, movimiento);
+                }
+
+                // --- Paso D: Actualizar los campos del Socio ---
                 SocioAEditar.Id = socio.Id;
                 SocioAEditar.NroSocio = socio.NroSocio;
                 SocioAEditar.Nombre = socio.Nombre;
@@ -169,12 +191,7 @@ namespace Vista.Services
                 SocioAEditar.FrecuenciaDePago = socio.FrecuenciaDePago;
                 SocioAEditar.FormaPago = socio.FormaPago;
 
-                // --- Paso D: Crear Movimientos en el Historial ---
-
-                // Pendiente de implementar
-
                 // --- Paso E: Inicio de la Transacción ---
-                // Esta será la transacción "principal" que controlará todo.
                 using var transaction = await _context.Database.BeginTransactionAsync();
 
                 // Guardar los cambios

@@ -10,7 +10,7 @@ namespace Vista.Services
 {
     public interface IHistorialSocioService
     {
-        Task CrearMovimientoSocio(int socioId, Historial_Socio historial);
+        Task CrearMovimientoSocio(int socioId, MovimientoSocio historial);
     }
 
     public class HistorialSocioService : IHistorialSocioService
@@ -22,8 +22,7 @@ namespace Vista.Services
             _context = context;
         }
 
-
-        public async Task CrearMovimientoSocio(int socioId, Historial_Socio historial)
+        public async Task CrearMovimientoSocio(int socioId, MovimientoSocio historial)
         {
             // --- 1. Validaciones ---
 
@@ -52,8 +51,8 @@ namespace Vista.Services
                 historial.SocioId = socioId;
                 historial.FechaDeCambio = DateTime.UtcNow;
 
-
                 // --- Paso B: Guardamos ---
+                await _context.HistorialSocios.AddAsync(historial);
                 await _context.SaveChangesAsync();
 
                 // --- Paso C: Confirmar la Transacción ---
