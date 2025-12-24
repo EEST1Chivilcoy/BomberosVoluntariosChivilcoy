@@ -1,0 +1,671 @@
+﻿@*Layout Vacio*@
+@layout EmptyLayout
+
+@page "/fire-force/comision-directiva/imprimibles/lista-de-socios"
+@page "/fire-force/comision-directiva/imprimibles/lista-de-socios/{ZonaParam:int}"
+
+@using Vista.Services
+@using Vista.Data.Models.Socios
+@using Vista.Data.Enums.Socios
+@using System.ComponentModel.DataAnnotations
+
+@inject ISocioService SocioService
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Socios - Bomberos Voluntarios de Chivilcoy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-red: #B22234;
+            --dark-red: #8B0000;
+            --light-red: #DC3545;
+            --accent-gold: #D4A84B;
+            --text-dark: #2C2C2C;
+            --text-light: #666666;
+            --bg-light: #F8F9FA;
+            --border-color: #DEE2E6;
+            --white: #FFFFFF;
+        }
+
+        @@page {
+            size: A4;
+            margin: 15mm 10mm;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 10pt;
+            line-height: 1.4;
+            color: var(--text-dark);
+            background: var(--white);
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .page-container {
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 15px;
+            border-bottom: 3px solid var(--primary-red);
+            margin-bottom: 20px;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-red) 0%, var(--dark-red) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 28px;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(178, 34, 52, 0.3);
+        }
+
+        .header-title {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header-title h1 {
+            font-size: 18pt;
+            font-weight: 700;
+            color: var(--primary-red);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .header-title h2 {
+            font-size: 11pt;
+            font-weight: 400;
+            color: var(--text-light);
+        }
+
+        .header-info {
+            text-align: right;
+            font-size: 9pt;
+            color: var(--text-light);
+        }
+
+        .header-info p {
+            margin: 2px 0;
+        }
+
+        .header-info .date {
+            font-weight: 600;
+            color: var(--primary-red);
+            font-size: 10pt;
+        }
+
+        /* Title Section */
+        .title-section {
+            background: linear-gradient(135deg, var(--primary-red) 0%, var(--dark-red) 100%);
+            color: var(--white);
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .title-section h3 {
+            font-size: 14pt;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .title-section .badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 9pt;
+            font-weight: 500;
+        }
+
+        /* Summary Cards */
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .summary-card {
+            background: var(--bg-light);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            border-left: 4px solid var(--primary-red);
+        }
+
+        .summary-card .number {
+            font-size: 20pt;
+            font-weight: 700;
+            color: var(--primary-red);
+        }
+
+        .summary-card .label {
+            font-size: 8pt;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Table */
+        .table-container {
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 8.5pt;
+        }
+
+        thead {
+            background: linear-gradient(135deg, var(--primary-red) 0%, var(--dark-red) 100%);
+            color: var(--white);
+        }
+
+        th {
+            padding: 10px 8px;
+            text-align: left;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 7.5pt;
+        }
+
+        th:first-child {
+            border-radius: 8px 0 0 0;
+        }
+
+        th:last-child {
+            border-radius: 0 8px 0 0;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.2s;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: var(--bg-light);
+        }
+
+        tbody tr:hover {
+            background-color: #FFF5F5;
+        }
+
+        td {
+            padding: 8px;
+            vertical-align: middle;
+        }
+
+        .socio-number {
+            font-weight: 700;
+            color: var(--primary-red);
+            font-size: 9pt;
+        }
+
+        .socio-name {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .socio-type {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 7pt;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .socio-type.persona {
+            background: #E3F2FD;
+            color: #1565C0;
+        }
+
+        .socio-type.empresa {
+            background: #FFF3E0;
+            color: #EF6C00;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 7pt;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-badge.activo {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+
+        .status-badge.inactivo {
+            background: #FFEBEE;
+            color: #C62828;
+        }
+
+        .status-badge.suspendido {
+            background: #FFF8E1;
+            color: #F57F17;
+        }
+
+        .zona-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 7pt;
+            font-weight: 500;
+            background: var(--primary-red);
+            color: var(--white);
+        }
+
+        .cuota-info {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .contact-info {
+            font-size: 7.5pt;
+            color: var(--text-light);
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 2px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 8pt;
+            color: var(--text-light);
+        }
+
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-badge {
+            background: var(--primary-red);
+            color: var(--white);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 7pt;
+        }
+
+        .page-number {
+            font-weight: 600;
+            color: var(--primary-red);
+        }
+
+        /* Loading State */
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+            gap: 20px;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--border-color);
+            border-top-color: var(--primary-red);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @@keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: var(--text-light);
+            font-size: 12pt;
+        }
+
+        /* No Data */
+        .no-data {
+            text-align: center;
+            padding: 50px 20px;
+            color: var(--text-light);
+        }
+
+        .no-data-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        /* Print Styles */
+        @@media print {
+            body {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .page-container {
+                padding: 0;
+                max-width: none;
+            }
+
+            .loading-container {
+                display: none;
+            }
+
+            tbody tr:hover {
+                background-color: inherit;
+            }
+
+            .table-container {
+                box-shadow: none;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+        }
+
+        /* Screen only button */
+        .print-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--primary-red) 0%, var(--dark-red) 100%);
+            color: var(--white);
+            border: none;
+            padding: 15px 25px;
+            border-radius: 8px;
+            font-size: 11pt;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(178, 34, 52, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            z-index: 1000;
+        }
+
+        .print-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(178, 34, 52, 0.5);
+        }
+
+        @@media print {
+            .print-button {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        @if (IsLoading)
+        {
+            <div class="loading-container">
+                <div class="loading-spinner"></div>
+                <p class="loading-text">Cargando lista de socios...</p>
+            </div>
+        }
+        else if (Socios == null || !Socios.Any())
+        {
+            <div class="no-data">
+                <div class="no-data-icon">📋</div>
+                <h3>No se encontraron socios</h3>
+                <p>@(ZonaParam.HasValue ? $"No hay socios registrados en la {GetZonaNombre((Zona)ZonaParam.Value)}" : "No hay socios registrados en el sistema")</p>
+            </div>
+        }
+        else
+        {
+            <!-- Header -->
+            <header class="header">
+                <div class="header-logo">
+                    <div class="logo-icon">🔥</div>
+                    <div class="header-title">
+                        <h1>Bomberos Voluntarios</h1>
+                        <h2>Chivilcoy - Provincia de Buenos Aires</h2>
+                    </div>
+                </div>
+                <div class="header-info">
+                    <p class="date">@DateTime.Now.ToString("dd/MM/yyyy")</p>
+                    <p>Hora: @DateTime.Now.ToString("HH:mm")</p>
+                    <p>Documento Oficial</p>
+                </div>
+            </header>
+
+            <!-- Title -->
+            <div class="title-section">
+                <h3>📋 Listado de Socios @(ZonaParam.HasValue ? $"- {GetZonaNombre((Zona)ZonaParam.Value)}" : "- Todas las Zonas")</h3>
+                <span class="badge">@Socios.Count socios registrados</span>
+            </div>
+
+            <!-- Summary Cards -->
+            <div class="summary-cards">
+                <div class="summary-card">
+                    <div class="number">@Socios.Count</div>
+                    <div class="label">Total Socios</div>
+                </div>
+                <div class="summary-card">
+                    <div class="number">@Socios.Count(s => s.EstadoSocio == TipoEstadoSocio.Activo)</div>
+                    <div class="label">Activos</div>
+                </div>
+                <div class="summary-card">
+                    <div class="number">@Socios.Count(s => s.Tipo == Vista.Data.Enums.Discriminadores.TipoSocio.Persona)</div>
+                    <div class="label">Personas</div>
+                </div>
+                <div class="summary-card">
+                    <div class="number">@Socios.Count(s => s.Tipo == Vista.Data.Enums.Discriminadores.TipoSocio.Empresa)</div>
+                    <div class="label">Empresas</div>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>N°</th>
+                            <th>Nombre / Razón Social</th>
+                            <th>DNI/CUIT</th>
+                            <th>Tipo</th>
+                            <th>Zona</th>
+                            <th>Teléfono</th>
+                            <th>Dirección</th>
+                            <th>Cuota</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var socio in Socios.OrderBy(s => s.NroSocio))
+                        {
+                            <tr>
+                                <td><span class="socio-number">@socio.NroSocio</span></td>
+                                <td>
+                                    <span class="socio-name">
+                                        @if (socio.Tipo == Vista.Data.Enums.Discriminadores.TipoSocio.Persona)
+                                        {
+                                            @($"{socio.Apellido}, {socio.Nombre}")
+                                        }
+                                        else
+                                        {
+                                            @socio.Nombre
+                                        }
+                                    </span>
+                                </td>
+                                <td>@socio.DocumentoOCUIT</td>
+                                <td>
+                                    <span class="socio-type @(socio.Tipo == Vista.Data.Enums.Discriminadores.TipoSocio.Persona ? "persona" : "empresa")">
+                                        @GetEnumDisplayName(socio.Tipo)
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="zona-badge">@GetZonaNombre(socio.Zona)</span>
+                                </td>
+                                <td class="contact-info">@socio.Telefono</td>
+                                <td class="contact-info" title="@socio.Direccion">@TruncateText(socio.Direccion, 25)</td>
+                                <td class="cuota-info">$@socio.MontoCuota.ToString("N0")</td>
+                                <td>
+                                    <span class="status-badge @GetEstadoClass(socio.EstadoSocio)">
+                                        @GetEnumDisplayName(socio.EstadoSocio)
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Footer -->
+            <footer class="footer">
+                <div class="footer-left">
+                    <span class="footer-badge">DOCUMENTO OFICIAL</span>
+                    <span>Bomberos Voluntarios de Chivilcoy</span>
+                </div>
+                <div>
+                    <span>Generado el @DateTime.Now.ToString("dd/MM/yyyy") a las @DateTime.Now.ToString("HH:mm:ss")</span>
+                </div>
+            </footer>
+        }
+    </div>
+
+    <button class="print-button no-print" onclick="window.print()">
+        🖨️ Imprimir Lista
+    </button>
+
+    <script>
+        // Auto-print when page loads
+        window.onload = function() {
+            // Small delay to ensure styles are applied
+            setTimeout(function() {
+                window.print();
+            }, 500);
+        };
+    </script>
+</body>
+</html>
+
+@code {
+    [Parameter]
+    public int? ZonaParam { get; set; }
+
+    private List<Socio>? Socios { get; set; }
+    private bool IsLoading { get; set; } = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarSocios();
+    }
+
+    private async Task CargarSocios()
+    {
+        IsLoading = true;
+        
+        try
+        {
+            var todosSocios = await SocioService.ObtenerSociosAsync();
+            
+            if (todosSocios != null)
+            {
+                if (ZonaParam.HasValue)
+                {
+                    var zonaFiltro = (Zona)ZonaParam.Value;
+                    Socios = todosSocios.Where(s => s.Zona.HasValue && s.Zona.Value.HasFlag(zonaFiltro)).ToList();
+                }
+                else
+                {
+                    Socios = todosSocios;
+                }
+            }
+            else
+            {
+                Socios = new List<Socio>();
+            }
+        }
+        catch (Exception)
+        {
+            Socios = new List<Socio>();
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+    private string GetEnumDisplayName<TEnum>(TEnum? enumValue) where TEnum : struct, Enum
+    {
+        if (!enumValue.HasValue) return "-";
+        
+        var memberInfo = typeof(TEnum).GetMember(enumValue.Value.ToString()).FirstOrDefault();
+        if (memberInfo != null)
+        {
+            var displayAttribute = memberInfo.GetCustomAttributes(typeof(DisplayAttribute), false).FirstOrDefault() as DisplayAttribute;
+            if (displayAttribute != null)
+            {
+                return displayAttribute.Name ?? enumValue.Value.ToString();
+            }
+        }
+        return enumValue.Value.ToString();
+    }
+
+    private string GetZonaNombre(Zona? zona)
+    {
+        if (!zona.HasValue || zona.Value == Zona.Ninguna)
+            return "Sin zona";
+        
+        return GetEnumDisplayName(zona);
+    }
+
+    private string GetEstadoClass(TipoEstadoSocio? estado)
+    {
+        return estado switch
+        {
+            TipoEstadoSocio.Activo => "activo",
+            TipoEstadoSocio.Inactivo => "inactivo",
+            TipoEstadoSocio.Suspendido => "suspendido",
+            _ => ""
+        };
+    }
+
+    private string TruncateText(string? text, int maxLength)
+    {
+        if (string.IsNullOrEmpty(text)) return "-";
+        return text.Length <= maxLength ? text : text.Substring(0, maxLength) + "...";
+    }
+}
