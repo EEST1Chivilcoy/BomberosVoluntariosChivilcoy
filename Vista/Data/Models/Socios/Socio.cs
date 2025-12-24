@@ -43,6 +43,14 @@ namespace Vista.Data.Models.Socios
         public DateTime FechaIngreso { get; set; } = DateTime.Now;
 
         /// <summary>
+        /// Representa la fecha de ingreso del socio al nuevo sistema.
+        /// Ya habia socios antes de implementar el sistema.
+        /// Esta fecha es para calcular correctamente las cuotas y pagos.
+        /// </summary>
+        [Required(ErrorMessage = "La fecha de ingreso al nuevo sistema es obligatoria.")]
+        public DateTime FechaIngresoSistemaNuevo { get; set; } = DateTime.Now;
+
+        /// <summary>
         /// Representa el estado actual del socio. (Activo, Inactivo, Suspendido)
         /// </summary>
         [Required(ErrorMessage = "El estado del socio es obligatorio.")]
