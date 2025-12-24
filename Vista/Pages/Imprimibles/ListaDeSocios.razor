@@ -76,15 +76,15 @@
         .logo-icon {
             width: 60px;
             height: 60px;
-            background: linear-gradient(135deg, var(--primary-red) 0%, var(--dark-red) 100%);
-            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--white);
-            font-size: 28px;
-            font-weight: bold;
-            box-shadow: 0 4px 8px rgba(178, 34, 52, 0.3);
+        }
+
+        .logo-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
 
         .header-title {
@@ -449,7 +449,7 @@
             <div class="no-data">
                 <div class="no-data-icon">📋</div>
                 <h3>No se encontraron socios</h3>
-                <p>@(ZonaParam.HasValue ? $"No hay socios registrados en la {GetZonaNombre((Zona)ZonaParam.Value)}" : "No hay socios registrados en el sistema")</p>
+                <p>@(ZonaParam.HasValue ? $"No hay socios registros en la {GetZonaNombre((Zona)ZonaParam.Value)}" : "No hay socios registrados en el sistema")</p>
             </div>
         }
         else
@@ -457,7 +457,9 @@
             <!-- Header -->
             <header class="header">
                 <div class="header-logo">
-                    <div class="logo-icon">🔥</div>
+                    <div class="logo-icon">
+                        <img src="/Imagenes/Logo.svg" alt="Logo Bomberos Voluntarios de Chivilcoy" />
+                    </div>
                     <div class="header-title">
                         <h1>Bomberos Voluntarios</h1>
                         <h2>Chivilcoy - Provincia de Buenos Aires</h2>
