@@ -148,6 +148,6 @@ namespace Vista.Data.Models.Socios
         /// Pagos realizados por este socio.
         /// Incluye pagos en efectivo y pagos electrónicos.
         /// </summary>
-        // public List<PagoSocio> Pagos { get; set; } = new();
+        public List<PagoSocio> Pagos { get; set; } = new();
     }
 }

@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Vista.Data.Enums.Discriminadores;
 using Vista.Data.Enums.Socios;
 using Vista.Data.Models.Personas.Personal;
 using Vista.Data.Models.Socios;
@@ -11,16 +12,33 @@ namespace Vista.Data.Models.Socios.Componentes.Pagos
     /// </summary>
     public abstract class PagoSocio
     {
+        /// <summary>
+        /// Identificador único del pago.
+        /// </summary>
         [Key]
         public int Id { get; set; }
 
-        public FormaDePago Tipo { get; set; }
+        /// <summary>
+        /// Tipo de pago realizado.
+        /// </summary>
+        public TipoPagoSocio Tipo { get; set; }
 
         /// <summary>
-        /// Fecha en que se registró el pago.
+        /// Fecha en que se generó el pago pendiente.
         /// </summary>
         [Required]
-        public DateTime Fecha { get; set; } = DateTime.Now;
+        public DateTime FechaGeneradoPendiente { get; set; } = DateTime.Now;
+
+        /// <summary>
+        /// Fecha en la que se va a cobrar el pago.
+        /// </summary>
+        [Required]
+        public DateTime FechaCobro { get; set; }
+
+        /// <summary>
+        /// Fecha en que el pago fue confirmado o rechazado.
+        /// </summary>
+        public DateTime? FechaConfirmadoORechazado { get; set; }
 
         /// <summary>
         /// Monto pagado.
@@ -34,13 +52,15 @@ namespace Vista.Data.Models.Socios.Componentes.Pagos
         [Required]
         public int SocioId { get; set; }
 
-        public Socio Socio { get; set; } = null!;
+        /// <summary>
+        /// Estado del pago.
+        /// </summary>
+        public EstadoPago Estado { get; set; } = EstadoPago.Pendiente;
 
         /// <summary>
-        /// Flag que indica si el pago fue confirmado por la Comisión Directiva.
-        /// La doble validación se modela con: cobradoPor (cobrador) y confirmadoPorComision (comisionDirectiva)
+        /// Socio que realizó el pago.
         /// </summary>
-        public bool ConfirmadoPorComision { get; set; }
+        public Socio Socio { get; set; } = null!;
 
         /// <summary>
         /// Miembro de la Comisión Directiva que confirmó el pago.
