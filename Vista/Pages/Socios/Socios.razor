@@ -327,87 +327,79 @@
             box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4) !important;
         }
 
-    .personal-abm .abm-select-estado {
-        width: 100% !important;
-        min-width: 0 !important;
-        box-sizing: border-box !important;
-        height: 40px !important;
-        font-size: 14px !important;
-        display: block !important;
+    .personal-abm .print-button {
+        background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%) !important;
+        border: none !important;
+        color: white !important;
+        box-shadow: 0 4px 12px rgba(24, 144, 255, 0.3) !important;
+        padding: 0 20px !important;
+        font-weight: 600 !important;
+        border-radius: 8px !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
 
-    .personal-abm .flex-container .fade-in {
-        animation: abm-fadeIn 0.5s ease-in-out !important;
+        .personal-abm .print-button:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 20px rgba(24, 144, 255, 0.4) !important;
+        }
+
+    .print-modal-option {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px;
+        border: 2px solid #e8e8e8;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-bottom: 12px;
     }
 
-    @@keyframes abm-fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
+        .print-modal-option:hover {
+            border-color: #A63333;
+            background-color: #fff5f5;
         }
 
-        to {
-            opacity: 1;
-            transform: translateY(0);
+        .print-modal-option.selected {
+            border-color: #A63333;
+            background-color: #fff5f5;
         }
+
+        .print-modal-option .option-icon {
+            font-size: 28px;
+            color: #A63333;
+        }
+
+        .print-modal-option .option-text h4 {
+            margin: 0 0 4px 0;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .print-modal-option .option-text p {
+            margin: 0;
+            color: #666;
+            font-size: 13px;
+        }
+
+    .print-modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 24px;
+        padding-top: 16px;
+        border-top: 1px solid #f0f0f0;
     }
 
-    /* Responsive adjustments - Matching licenses */
-    @@media (max-width: 1199px) {
-        .personal-abm .abm-container {
-            padding: 8px !important;
-        }
-
-        .personal-abm .abm-header-section {
-            padding: 20px !important;
-        }
-
-        .personal-abm .main-title {
-            font-size: 2rem !important;
-            flex-direction: column !important;
-            text-align: center !important;
-            gap: 8px !important;
-        }
-
-        .personal-abm .abm-filters {
-            grid-template-columns: 1fr !important;
-        }
-
-        .personal-abm .actions-row {
-            grid-template-columns: 1fr !important;
-            gap: 12px !important;
-        }
+    .print-confirm-button {
+        background: linear-gradient(135deg, #A63333 0%, #732D2D 100%) !important;
+        border: none !important;
+        color: white !important;
     }
 
-    @@media (max-width: 768px) {
-        .personal-abm .abm-container {
-            padding: 4px !important;
+        .print-confirm-button:hover {
+            background: linear-gradient(135deg, #732D2D 0%, #5a2323 100%) !important;
         }
-
-        .personal-abm .abm-header-section {
-            padding: 16px !important;
-        }
-
-        .personal-abm .main-title {
-            font-size: 1.8rem !important;
-            letter-spacing: 2px !important;
-        }
-
-        .personal-abm .abm-action-buttons {
-            flex-direction: column !important;
-            align-items: stretch !important;
-        }
-
-            .personal-abm .abm-action-buttons .ant-btn {
-                width: 100% !important;
-            }
-    }
-
-    @@media (max-width: 575px) {
-        .personal-abm .main-title {
-            font-size: 1.5rem !important;
-        }
-    }
 </style>
 
 
@@ -444,11 +436,19 @@
                                     BindOnInput />
                         </div>
 
-                        <Button Type="ButtonType.Primary"
-                                Class="add-button"
-                                OnClick="@OpenCrearModal">
-                            <Icon Type="user-add" /> Agregar Socio
-                        </Button>
+                        <div style="display: flex; gap: 12px;">
+                            <Button Type="ButtonType.Primary"
+                                    Class="print-button"
+                                    OnClick="@OpenPrintModal">
+                                <Icon Type="printer" /> Imprimir Lista
+                            </Button>
+
+                            <Button Type="ButtonType.Primary"
+                                    Class="add-button"
+                                    OnClick="@OpenCrearModal">
+                                <Icon Type="user-add" /> Agregar Socio
+                            </Button>
+                        </div>
 
                     </div>
                 </div>
@@ -569,6 +569,51 @@
     </div>
 </Modal>
 
+@*Modal Imprimir Lista de Socios*@
+<Modal Title="Imprimir Lista de Socios"
+       Footer="null"
+       Centered="@true"
+       OnCancel="ClosePrintModal"
+       Visible="@isModalPrintVisible"
+       Width="500">
+    <div style="padding: 16px;">
+        <h4 style="text-align: center; margin-bottom: 24px; color: #A63333; font-weight: 600;">
+            <Icon Type="printer" style="margin-right: 8px;" />
+            Seleccione qué desea imprimir
+        </h4>
+
+        <div class="print-modal-option @(selectedPrintZona == null ? "selected" : "")"
+             @onclick="() => SelectPrintZona(null)">
+            <Icon Type="global" Class="option-icon" />
+            <div class="option-text">
+                <h4>Todas las Zonas</h4>
+                <p>Imprimir listado completo de todos los socios</p>
+            </div>
+        </div>
+
+        @foreach (var zona in GetZonasDisponibles())
+        {
+            <div class="print-modal-option @(selectedPrintZona == zona ? "selected" : "")"
+                 @onclick="() => SelectPrintZona(zona)">
+                <Icon Type="environment" Class="option-icon" />
+                <div class="option-text">
+                    <h4>@zona.GetDisplayName()</h4>
+                    <p>Imprimir solo socios de esta zona</p>
+                </div>
+            </div>
+        }
+
+        <div class="print-modal-actions">
+            <Button OnClick="ClosePrintModal">
+                Cancelar
+            </Button>
+            <Button Type="ButtonType.Primary" Class="print-confirm-button" OnClick="ConfirmPrint">
+                <Icon Type="printer" /> Imprimir
+            </Button>
+        </div>
+    </div>
+</Modal>
+
 @code {
     // Referencia a la tabla
     ITable table;
@@ -587,6 +632,10 @@
     bool isModalEditarVisible = false;
     bool isModalDetalleVisible = false;
     bool isModalCrearVisible = false;
+    bool isModalPrintVisible = false;
+
+    // Zona seleccionada para imprimir
+    Zona? selectedPrintZona = null;
 
     // Filtros
     private string searchString = string.Empty;
@@ -644,6 +693,43 @@
     private void OpenCrearModal()
     {
         isModalCrearVisible = true;
+    }
+
+    private void OpenPrintModal()
+    {
+        selectedPrintZona = null;
+        isModalPrintVisible = true;
+    }
+
+    private void ClosePrintModal()
+    {
+        isModalPrintVisible = false;
+    }
+
+    private void SelectPrintZona(Zona? zona)
+    {
+        selectedPrintZona = zona;
+    }
+
+    private IEnumerable<Zona> GetZonasDisponibles()
+    {
+        return new[] { Zona.Zona1, Zona.Zona2, Zona.Zona3, Zona.Zona4, Zona.Zona5 };
+    }
+
+    private void ConfirmPrint()
+    {
+        string url;
+        if (selectedPrintZona.HasValue)
+        {
+            url = $"/fire-force/comision-directiva/imprimibles/lista-de-socios/{(int)selectedPrintZona.Value}";
+        }
+        else
+        {
+            url = "/fire-force/comision-directiva/imprimibles/lista-de-socios";
+        }
+
+        navigationManager.NavigateTo(url, forceLoad: true);
+        isModalPrintVisible = false;
     }
 
     private void OnEstadoChanged(TipoEstadoSocio estado)
