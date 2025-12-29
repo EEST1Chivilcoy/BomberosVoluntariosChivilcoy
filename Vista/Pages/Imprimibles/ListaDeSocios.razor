@@ -53,6 +53,9 @@
             max-width: 210mm;
             margin: 0 auto;
             padding: 20px;
+            display: flex;
+            flex-direction: column;
+            min-height: calc(100vh - 40px);
         }
 
         /* Page break styles */
@@ -62,11 +65,17 @@
             page-break-inside: avoid;
             min-height: 277mm; /* A4 height minus margins */
             padding-bottom: 20px;
+            display: flex;
+            flex-direction: column;
         }
 
             .page:last-child {
                 page-break-after: auto;
             }
+
+        .page-content {
+            flex: 1;
+        }
 
         /* Header Formal */
         .header {
@@ -80,16 +89,17 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 20px;
+            gap: 25px;
             margin-bottom: 10px;
         }
 
         .logo-icon {
-            width: 70px;
-            height: 70px;
+            width: 100px;
+            height: 100px;
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
         }
 
             .logo-icon img {
@@ -100,16 +110,16 @@
             }
 
         .header-title h1 {
-            font-size: 22pt;
+            font-size: 26pt;
             font-weight: 700;
             color: var(--black);
             text-transform: uppercase;
             letter-spacing: 2px;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
         }
 
         .header-title h2 {
-            font-size: 13pt;
+            font-size: 14pt;
             font-weight: 400;
             color: var(--dark-gray);
             font-style: italic;
@@ -153,21 +163,22 @@
         .title-section {
             background: var(--black);
             color: var(--white);
-            padding: 12px 20px;
+            padding: 15px 20px;
             margin-bottom: 15px;
             text-align: center;
             border: 2px solid var(--black);
         }
 
             .title-section h3 {
-                font-size: 14pt;
+                font-size: 16pt;
                 font-weight: 700;
-                letter-spacing: 1px;
+                letter-spacing: 1.5px;
                 text-transform: uppercase;
+                margin-bottom: 5px;
             }
 
             .title-section .subtitle {
-                font-size: 10pt;
+                font-size: 12pt;
                 font-weight: 400;
                 margin-top: 5px;
             }
@@ -175,17 +186,20 @@
         /* Summary Section */
         .summary-section {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
+            gap: 0;
             margin-bottom: 15px;
-            padding: 12px;
+            padding: 15px 10px;
             border: 2px solid var(--black);
             background: var(--bg-light);
         }
 
         .summary-item {
             text-align: center;
-            padding: 0 15px;
+            padding: 5px 25px;
             border-right: 1px solid var(--border-gray);
+            flex: 1;
+            max-width: 150px;
         }
 
             .summary-item:last-child {
@@ -193,17 +207,20 @@
             }
 
             .summary-item .number {
-                font-size: 20pt;
+                font-size: 22pt;
                 font-weight: 700;
                 color: var(--black);
                 display: block;
+                line-height: 1.2;
             }
 
             .summary-item .label {
-                font-size: 9pt;
+                font-size: 8pt;
                 color: var(--dark-gray);
                 text-transform: uppercase;
                 letter-spacing: 0.5px;
+                margin-top: 3px;
+                display: block;
             }
 
         /* Table */
@@ -318,7 +335,7 @@
 
         /* Footer */
         .footer {
-            margin-top: 20px;
+            margin-top: auto;
             padding-top: 10px;
             border-top: 3px double var(--black);
         }
@@ -486,118 +503,120 @@
                 var numeroPagina = pagina + 1;
 
                 <div class="page">
-                    @if (pagina == 0)
-                    {
-                        <!-- Header completo para primera página -->
-                        <header class="header">
-                            <div class="header-logo">
-                                <div class="logo-icon">
-                                    <img src="/Imagenes/Logo.svg" alt="Logo Bomberos Voluntarios de Chivilcoy" />
+                    <div class="page-content">
+                        @if (pagina == 0)
+                        {
+                            <!-- Header completo para primera página -->
+                            <header class="header">
+                                <div class="header-logo">
+                                    <div class="logo-icon">
+                                        <img src="/Imagenes/Logo.svg" alt="Logo Bomberos Voluntarios de Chivilcoy" />
+                                    </div>
+                                    <div class="header-title">
+                                        <h1>Bomberos Voluntarios de Chivilcoy</h1>
+                                        <h2>Asociación Civil - Provincia de Buenos Aires</h2>
+                                    </div>
                                 </div>
-                                <div class="header-title">
-                                    <h1>Bomberos Voluntarios de Chivilcoy</h1>
-                                    <h2>Asociación Civil - Provincia de Buenos Aires</h2>
+                                <div class="header-info">
+                                    <p><strong>Fecha de emisión:</strong> @DateTime.Now.ToString("dd 'de' MMMM 'de' yyyy", new System.Globalization.CultureInfo("es-AR"))</p>
+                                    <p><strong>Hora:</strong> @DateTime.Now.ToString("HH:mm") hs</p>
+                                </div>
+                            </header>
+
+                            <!-- Title -->
+                            <div class="title-section">
+                                <h3>Listado Oficial de Socios</h3>
+                                <p class="subtitle">@(ZonaParam.HasValue ? $"Zona {ZonaParam.Value}" : "Todas las Zonas")</p>
+                            </div>
+
+                            <!-- Summary Section -->
+                            <div class="summary-section">
+                                <div class="summary-item">
+                                    <span class="number">@Socios.Count</span>
+                                    <span class="label">Total Socios</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="number">@Socios.Count(s => s.EstadoSocio == TipoEstadoSocio.Activo)</span>
+                                    <span class="label">Activos</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="number">@Socios.Count(s => s.EstadoSocio == TipoEstadoSocio.Inactivo)</span>
+                                    <span class="label">Inactivos</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="number">@Socios.Count(s => s.Tipo == Vista.Data.Enums.Discriminadores.TipoSocio.Persona)</span>
+                                    <span class="label">Personas</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="number">@Socios.Count(s => s.Tipo == Vista.Data.Enums.Discriminadores.TipoSocio.Empresa)</span>
+                                    <span class="label">Empresas</span>
                                 </div>
                             </div>
-                            <div class="header-info">
-                                <p><strong>Fecha de emisión:</strong> @DateTime.Now.ToString("dd 'de' MMMM 'de' yyyy", new System.Globalization.CultureInfo("es-AR"))</p>
-                                <p><strong>Hora:</strong> @DateTime.Now.ToString("HH:mm") hs</p>
+                        }
+                        else
+                        {
+                            <!-- Header compacto para páginas siguientes -->
+                            <div class="header-compact">
+                                <h3>Bomberos Voluntarios de Chivilcoy - Listado de Socios</h3>
+                                <span class="page-info">@DateTime.Now.ToString("dd/MM/yyyy")</span>
                             </div>
-                        </header>
+                        }
 
-                        <!-- Title -->
-                        <div class="title-section">
-                            <h3>Listado Oficial de Socios</h3>
-                            <p class="subtitle">@(ZonaParam.HasValue ? $"Zona {ZonaParam.Value}" : "Todas las Zonas")</p>
-                        </div>
-
-                        <!-- Summary Section -->
-                        <div class="summary-section">
-                            <div class="summary-item">
-                                <span class="number">@Socios.Count</span>
-                                <span class="label">Total Socios</span>
-                            </div>
-                            <div class="summary-item">
-                                <span class="number">@Socios.Count(s => s.EstadoSocio == TipoEstadoSocio.Activo)</span>
-                                <span class="label">Activos</span>
-                            </div>
-                            <div class="summary-item">
-                                <span class="number">@Socios.Count(s => s.EstadoSocio == TipoEstadoSocio.Inactivo)</span>
-                                <span class="label">Inactivos</span>
-                            </div>
-                            <div class="summary-item">
-                                <span class="number">@Socios.Count(s => s.Tipo == Vista.Data.Enums.Discriminadores.TipoSocio.Persona)</span>
-                                <span class="label">Personas</span>
-                            </div>
-                            <div class="summary-item">
-                                <span class="number">@Socios.Count(s => s.Tipo == Vista.Data.Enums.Discriminadores.TipoSocio.Empresa)</span>
-                                <span class="label">Empresas</span>
-                            </div>
-                        </div>
-                    }
-                    else
-                    {
-                        <!-- Header compacto para páginas siguientes -->
-                        <div class="header-compact">
-                            <h3>Bomberos Voluntarios de Chivilcoy - Listado de Socios</h3>
-                            <span class="page-info">@DateTime.Now.ToString("dd/MM/yyyy")</span>
-                        </div>
-                    }
-
-                    <!-- Table -->
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>N°</th>
-                                    <th>Nombre / Razón Social</th>
-                                    <th>DNI/CUIT</th>
-                                    <th>Tipo</th>
-                                    <th>Zona</th>
-                                    <th>Teléfono</th>
-                                    <th>Dirección</th>
-                                    <th>Cuota</th>
-                                    <th>Estado</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var socio in sociosPagina)
-                                {
+                        <!-- Table -->
+                        <div class="table-container">
+                            <table>
+                                <thead>
                                     <tr>
-                                        <td><span class="socio-number">@socio.NroSocio</span></td>
-                                        <td>
-                                            <span class="socio-name">
-                                                @if (socio.Tipo == Vista.Data.Enums.Discriminadores.TipoSocio.Persona)
-                                                {
-                                                    @($"{socio.Apellido}, {socio.Nombre}")
-                                                }
-                                                else
-                                                {
-                                                    @socio.Nombre
-                                                }
-                                            </span>
-                                        </td>
-                                        <td>@socio.DocumentoOCUIT</td>
-                                        <td>
-                                            <span class="socio-type @(socio.Tipo == Vista.Data.Enums.Discriminadores.TipoSocio.Persona ? "persona" : "empresa")">
-                                                @GetEnumDisplayName(socio.Tipo)
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span class="zona-number">@GetZonaNumero(socio.Zona)</span>
-                                        </td>
-                                        <td class="contact-info">@socio.Telefono</td>
-                                        <td class="contact-info" title="@socio.Direccion">@TruncateText(socio.Direccion, 20)</td>
-                                        <td class="cuota-info">$@socio.MontoCuota.ToString("N0")</td>
-                                        <td>
-                                            <span class="status-badge @GetEstadoClass(socio.EstadoSocio)">
-                                                @GetEnumDisplayName(socio.EstadoSocio)
-                                            </span>
-                                        </td>
+                                        <th>N°</th>
+                                        <th>Nombre / Razón Social</th>
+                                        <th>DNI/CUIT</th>
+                                        <th>Tipo</th>
+                                        <th>Zona</th>
+                                        <th>Teléfono</th>
+                                        <th>Dirección</th>
+                                        <th>Cuota</th>
+                                        <th>Estado</th>
                                     </tr>
-                                }
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @foreach (var socio in sociosPagina)
+                                    {
+                                        <tr>
+                                            <td><span class="socio-number">@socio.NroSocio</span></td>
+                                            <td>
+                                                <span class="socio-name">
+                                                    @if (socio.Tipo == Vista.Data.Enums.Discriminadores.TipoSocio.Persona)
+                                                    {
+                                                        @($"{socio.Apellido}, {socio.Nombre}")
+                                                    }
+                                                    else
+                                                    {
+                                                        @socio.Nombre
+                                                    }
+                                                </span>
+                                            </td>
+                                            <td>@socio.DocumentoOCUIT</td>
+                                            <td>
+                                                <span class="socio-type @(socio.Tipo == Vista.Data.Enums.Discriminadores.TipoSocio.Persona ? "persona" : "empresa")">
+                                                    @GetEnumDisplayName(socio.Tipo)
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="zona-number">@GetZonaNumero(socio.Zona)</span>
+                                            </td>
+                                            <td class="contact-info">@socio.Telefono</td>
+                                            <td class="contact-info" title="@socio.Direccion">@TruncateText(socio.Direccion, 20)</td>
+                                            <td class="cuota-info">$@socio.MontoCuota.ToString("N0")</td>
+                                            <td>
+                                                <span class="status-badge @GetEstadoClass(socio.EstadoSocio)">
+                                                    @GetEnumDisplayName(socio.EstadoSocio)
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
                     <!-- Footer -->
@@ -647,7 +666,7 @@
     private bool IsLoading { get; set; } = true;
 
     // Aproximadamente 25 registros por página A4 considerando:
-    // - Header completo en primera página (~80mm)
+    // - Header completo in primera página (~80mm)
     // - Header compacto en siguientes (~25mm)
     // - Cada fila de tabla (~8mm)
     // - Footer (~30mm)
