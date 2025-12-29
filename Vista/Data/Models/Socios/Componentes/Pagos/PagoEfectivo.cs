@@ -14,15 +14,15 @@ namespace Vista.Data.Models.Socios.Componentes.Pagos
         /// <summary>
         /// Identificador del cobrador que recibió el efectivo del socio.
         /// Este es quien realiza la primera validación (cobranza).
+        /// Null si el pago aún está pendiente de cobro.
         /// </summary>
-        [Required]
-        public int CobradorId { get; set; }
+        public int? CobradorId { get; set; }
 
         /// <summary>
         /// Cobrador que recibió el efectivo del socio.
+        /// Null si el pago aún está pendiente de cobro.
         /// </summary>
-        [Required]
-        public Cobrador Cobrador { get; set; } = null!;
+        public Cobrador? Cobrador { get; set; }
 
         /// <summary>
         /// Fecha en que el efectivo fue entregado a la Comisión Directiva.

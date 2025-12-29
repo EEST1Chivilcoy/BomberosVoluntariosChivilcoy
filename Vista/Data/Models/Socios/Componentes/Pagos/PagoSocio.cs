@@ -55,7 +55,7 @@ namespace Vista.Data.Models.Socios.Componentes.Pagos
         /// <summary>
         /// Estado del pago.
         /// </summary>
-        public EstadoPago Estado { get; set; } = EstadoPago.Pendiente;
+        public EstadoPago Estado { get; set; } = EstadoPago.PendienteAPagar;
 
         /// <summary>
         /// Socio que realizó el pago.

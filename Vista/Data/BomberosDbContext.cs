@@ -47,6 +47,8 @@ namespace Vista.Data
         // Socios Assets
 
         public DbSet<MovimientoSocio> HistorialSocios { get; set; }
+        public DbSet<PagoSocio> PagoSocio { get; set; }
+        public DbSet<PagoEfectivo> PagosEfectivo { get; set; }
 
         // Dependencias (Departamentos)
 
