@@ -516,21 +516,21 @@ namespace Vista.Data
 
             modelBuilder
                 .Entity<MovimientoCambioEstado>()
-                .Property(he => he.EstadoAnterior)
+                .Property(he => he.Estado)
                 .HasConversion<int>();
 
             // MovimientoCambioCuota - Enum FrecuenciaDePago
 
             modelBuilder
                 .Entity<MovimientoCambioCuota>()
-                .Property(hc => hc.FrecuenciaDePagoAnterior)
+                .Property(hc => hc.FrecuenciaDePago)
                 .HasConversion<int>();
 
             // MovimientoCambioCuota - Enum FormaDePago
 
             modelBuilder
                 .Entity<MovimientoCambioCuota>()
-                .Property(mc => mc.FormaDePagoAnterior)
+                .Property(mc => mc.FormaDePago)
                 .HasConversion<int>();
 
             // Enum Conversiones a String (Texto)

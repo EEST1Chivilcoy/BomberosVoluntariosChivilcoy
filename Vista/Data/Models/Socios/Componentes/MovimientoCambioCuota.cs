@@ -3,23 +3,24 @@
 namespace Vista.Data.Models.Socios.Componentes
 {
     /// <summary>
-    /// Historial del costo de las cuotas de un socio.
+    /// Representa un período de cuota de un socio.
+    /// Registra la cuota vigente desde FechaDesde hasta FechaHasta.
     /// </summary>
     public class MovimientoCambioCuota : MovimientoSocio
     {
         /// <summary>
-        /// Representa la frecuencia de pago anterior a la fecha del cambio.
+        /// Representa la frecuencia de pago durante este período.
         /// </summary>
-        public FrecuenciaPago FrecuenciaDePagoAnterior { get; set; }
+        public FrecuenciaPago FrecuenciaDePago { get; set; }
 
         /// <summary>
-        /// Representa la forma de pago anterior a la fecha del cambio.
+        /// Representa la forma de pago durante este período.
         /// </summary>
-        public FormaDePago FormaDePagoAnterior { get; set; }
+        public FormaDePago FormaDePago { get; set; }
 
         /// <summary>
-        /// Monto de la cuota anterior a la fecha del cambio.
+        /// Monto de la cuota durante este período.
         /// </summary>
-        public double MontoAnterior { get; set; }
+        public double Monto { get; set; }
     }
 }

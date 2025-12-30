@@ -49,13 +49,17 @@ namespace Vista.Services
             {
                 // --- Paso A: Ajustar el Modelo ---
                 historial.SocioId = socioId;
-                historial.FechaDeCambio = DateTime.UtcNow;
+                historial.FechaDesde = DateTime.UtcNow;
+                historial.FechaHasta = null; // El nuevo movimiento queda abierto
 
-                // --- Paso B: Guardamos ---
+                // --- Paso B: Cerrar movimiento anterior del mismo tipo ---
+                await CerrarMovimientoAnteriorAsync(socioId, historial);
+
+                // --- Paso C: Guardamos el nuevo movimiento ---
                 await _context.HistorialSocios.AddAsync(historial);
                 await _context.SaveChangesAsync();
 
-                // --- Paso C: Confirmar la Transacción ---
+                // --- Paso D: Confirmar la Transacción ---
                 await transaction.CommitAsync();
             }
             catch (Exception ex)
@@ -78,6 +82,36 @@ namespace Vista.Services
 
                 // Re-lanza la excepción (ej. la ValidationException del service)
                 throw;
+            }
+        }
+
+        /// <summary>
+        /// Cierra el movimiento anterior del mismo tipo (si existe) estableciendo FechaHasta.
+        /// </summary>
+        private async Task CerrarMovimientoAnteriorAsync(int socioId, MovimientoSocio nuevoMovimiento)
+        {
+            MovimientoSocio? movimientoAnterior = null;
+
+            // Buscar el movimiento vigente del mismo tipo
+            if (nuevoMovimiento is MovimientoCambioEstado)
+            {
+                movimientoAnterior = await _context.HistorialSocios
+                    .OfType<MovimientoCambioEstado>()
+                    .Where(m => m.SocioId == socioId && m.FechaHasta == null)
+                    .FirstOrDefaultAsync();
+            }
+            else if (nuevoMovimiento is MovimientoCambioCuota)
+            {
+                movimientoAnterior = await _context.HistorialSocios
+                    .OfType<MovimientoCambioCuota>()
+                    .Where(m => m.SocioId == socioId && m.FechaHasta == null)
+                    .FirstOrDefaultAsync();
+            }
+
+            // Si existe un movimiento anterior vigente, cerrarlo
+            if (movimientoAnterior != null)
+            {
+                movimientoAnterior.FechaHasta = nuevoMovimiento.FechaDesde;
             }
         }
     }

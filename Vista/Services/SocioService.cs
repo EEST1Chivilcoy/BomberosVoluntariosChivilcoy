@@ -61,31 +61,55 @@ namespace Vista.Services
                 // --- Paso A: Guardar el Socio ---
                 _context.Socios.Add(socio);
 
-                // Guardamos en la BD
+                // Guardamos en la BD para obtener el Id del socio
                 await _context.SaveChangesAsync();
 
-                // --- Paso B: Confirmamos la transacción ---
+                // --- Paso B: Crear Movimientos Iniciales ---
+
+                // Movimiento inicial de cuota
+                var movimientoCuota = new MovimientoCambioCuota
+                {
+                    FechaDesde = socio.FechaIngresoSistemaNuevo,
+                    FechaHasta = null, // Vigente
+                    Monto = socio.MontoCuota,
+                    FormaDePago = socio.FormaPago ?? Data.Enums.Socios.FormaDePago.Efectivo,
+                    FrecuenciaDePago = socio.FrecuenciaDePago ?? Data.Enums.Socios.FrecuenciaPago.Mensual,
+                    SocioId = socio.Id
+                };
+
+                _context.HistorialSocios.Add(movimientoCuota);
+
+                // Movimiento inicial de estado
+                var movimientoEstado = new MovimientoCambioEstado
+                {
+                    FechaDesde = socio.FechaIngresoSistemaNuevo,
+                    FechaHasta = null, // Vigente
+                    Estado = socio.EstadoSocio ?? Data.Enums.Socios.TipoEstadoSocio.Activo,
+                    Motivo = "Alta de socio en el sistema",
+                    SocioId = socio.Id
+                };
+
+                _context.HistorialSocios.Add(movimientoEstado);
+
+                // Guardamos los movimientos
+                await _context.SaveChangesAsync();
+
+                // --- Paso C: Confirmamos la transacción ---
                 await transaction.CommitAsync();
             }
             catch (Exception ex)
             {
                 // --- Manejo de Error ---
-                // Si CUALQUIER operación falla (el primer SaveChanges,
-                // la lógica del service, o el segundo SaveChanges dentro del service),
-                // revertimos TODA la operación.
                 await transaction.RollbackAsync();
 
                 // Limpiar el contexto para evitar conflictos futuros
                 _context.ChangeTracker.Clear();
 
-                // Lanza una excepción genérica o la 'ex' original
-                // para que la capa superior sepa que algo falló.
                 if (ex is DbUpdateException)
                 {
                     throw new Exception("Error al guardar en la base de datos. Verifique datos duplicados.", ex);
                 }
 
-                // Re-lanza la excepción (ej. la ValidationException del service)
                 throw;
             }
         }
@@ -109,50 +133,51 @@ namespace Vista.Services
 
         public async Task EditarSocioAsync(Socio socio)
         {
+            // --- 1. Validaciones ---
+
+            // --- Paso A: Validaciones "Baratas" (en memoria) ---
+
+            if (socio == null)
+            {
+                throw new ArgumentNullException(nameof(socio), "El socio no puede ser nulo.");
+            }
+
+            ValidationHelper.Validar(socio);
+
+            // --- Paso B: Validaciones "Caras" (contra la BD) ---
+
+            Socio SocioAEditar = await ObtenerSocioPorIdAsync(socio.Id, asNoTracking: false)
+                ?? throw new KeyNotFoundException($"No se encontró un socio con Id '{socio.Id}'.");
+
+            // Validar que no exista el mismo NroSocio para otro Socio (si se cambió)
+            if (SocioAEditar.NroSocio != socio.NroSocio)
+            {
+                bool NroSocioExistente = await _context.Socios
+                    .AnyAsync(s => s.NroSocio == socio.NroSocio && s.Id != socio.Id);
+
+                if (NroSocioExistente)
+                {
+                    throw new InvalidOperationException("Número de socio ya existente para otro socio.");
+                }
+            }
+
+            // Validar que no exista otro Socio con el mismo documento o CUIT (si se cambió)
+            if (SocioAEditar.DocumentoOCUIT != socio.DocumentoOCUIT)
+            {
+                bool documentoExistente = await _context.Socios
+                    .AnyAsync(s => s.DocumentoOCUIT == socio.DocumentoOCUIT && s.Id != socio.Id);
+
+                if (documentoExistente)
+                {
+                    throw new InvalidOperationException("Número de documento ya existente para otro socio.");
+                }
+            }
+
+            // --- 2. Inicio de la Transacción ---
+            await using var transaction = await _context.Database.BeginTransactionAsync();
 
             try
             {
-                // --- 1. Validaciones ---
-
-                // --- Paso A: Validaciones "Baratas" (en memoria) ---
-
-                if (socio == null)
-                {
-                    throw new ArgumentNullException(nameof(socio), "El socio no puede ser nulo.");
-                }
-
-                ValidationHelper.Validar(socio);
-
-                // --- Paso B: Validaciones "Caras" (contra la BD) ---
-                // (Se hacen antes de iniciar la transacción para no abrirla innecesariamente)
-
-                Socio SocioAEditar = await ObtenerSocioPorIdAsync(socio.Id, asNoTracking: false)
-                    ?? throw new KeyNotFoundException($"No se encontró un socio con Id '{socio.Id}'.");
-
-                // Validar que no exista el mismo NroSocio para otro Socio (si se cambió)
-                if (SocioAEditar.NroSocio != socio.NroSocio)
-                {
-                    bool NroSocioExistente = await _context.Socios
-                        .AnyAsync(s => s.NroSocio == socio.NroSocio && s.Id != socio.Id);
-
-                    if (NroSocioExistente)
-                    {
-                        throw new InvalidOperationException("Número de socio ya existente para otro socio.");
-                    }
-                }
-
-                // Validar que no exista otro Socio con el mismo documento o CUIT (si se cambió)
-                if (SocioAEditar.DocumentoOCUIT != socio.DocumentoOCUIT)
-                {
-                    bool documentoExistente = await _context.Socios
-                        .AnyAsync(s => s.DocumentoOCUIT == socio.DocumentoOCUIT && s.Id != socio.Id);
-
-                    if (documentoExistente)
-                    {
-                        throw new InvalidOperationException("Número de documento ya existente para otro bombero.");
-                    }
-                }
-
                 // --- Paso C: Crear Movimientos en el Historial ---
 
                 // Detectar cambios en la cuota
@@ -160,19 +185,33 @@ namespace Vista.Services
                     SocioAEditar.FrecuenciaDePago != socio.FrecuenciaDePago ||
                     SocioAEditar.FormaPago != socio.FormaPago)
                 {
-                    var movimiento = new MovimientoCambioCuota
+                    // El movimiento registra los nuevos valores de la cuota
+                    // El servicio de historial se encargará de cerrar el movimiento anterior
+                    var movimientoCuota = new MovimientoCambioCuota
                     {
-                        FechaDeCambio = DateTime.Now,
-                        MontoAnterior = SocioAEditar.MontoCuota,
-                        FormaDePagoAnterior = SocioAEditar.FormaPago ?? Data.Enums.Socios.FormaDePago.Efectivo,
-                        FrecuenciaDePagoAnterior = SocioAEditar.FrecuenciaDePago ?? Data.Enums.Socios.FrecuenciaPago.Mensual,
+                        Monto = socio.MontoCuota,
+                        FormaDePago = socio.FormaPago ?? Data.Enums.Socios.FormaDePago.Efectivo,
+                        FrecuenciaDePago = socio.FrecuenciaDePago ?? Data.Enums.Socios.FrecuenciaPago.Mensual,
                     };
 
-                    await _historialSocioService.CrearMovimientoSocio(socioId:socio.Id, movimiento);
+                    await _historialSocioService.CrearMovimientoSocio(socioId: socio.Id, movimientoCuota);
+                }
+
+                // Detectar cambios en el estado
+                if (SocioAEditar.EstadoSocio != socio.EstadoSocio)
+                {
+                    // El movimiento registra el nuevo estado
+                    // El servicio de historial se encargará de cerrar el movimiento anterior
+                    var movimientoEstado = new MovimientoCambioEstado
+                    {
+                        Estado = socio.EstadoSocio ?? Data.Enums.Socios.TipoEstadoSocio.Activo,
+                        Motivo = $"Cambio de estado de {SocioAEditar.EstadoSocio} a {socio.EstadoSocio}",
+                    };
+
+                    await _historialSocioService.CrearMovimientoSocio(socioId: socio.Id, movimientoEstado);
                 }
 
                 // --- Paso D: Actualizar los campos del Socio ---
-                SocioAEditar.Id = socio.Id;
                 SocioAEditar.NroSocio = socio.NroSocio;
                 SocioAEditar.Nombre = socio.Nombre;
                 SocioAEditar.Apellido = socio.Apellido;
@@ -191,32 +230,23 @@ namespace Vista.Services
                 SocioAEditar.FrecuenciaDePago = socio.FrecuenciaDePago;
                 SocioAEditar.FormaPago = socio.FormaPago;
 
-                // --- Paso E: Inicio de la Transacción ---
-                using var transaction = await _context.Database.BeginTransactionAsync();
-
-                // Guardar los cambios
+                // --- Paso E: Guardar los cambios ---
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
             }
             catch (Exception ex)
             {
                 // --- Manejo de Error ---
-                // Si CUALQUIER operación falla (el primer SaveChanges,
-                // la lógica del service, o el segundo SaveChanges dentro del service),
-                // revertimos TODA la operación.
-                //await transaction.RollbackAsync();
+                await transaction.RollbackAsync();
 
                 // Limpiar el contexto para evitar conflictos futuros
                 _context.ChangeTracker.Clear();
 
-                // Lanza una excepción genérica o la 'ex' original
-                // para que la capa superior sepa que algo falló.
                 if (ex is DbUpdateException)
                 {
                     throw new Exception("Error al guardar en la base de datos. Verifique datos duplicados.", ex);
                 }
 
-                // Re-lanza la excepción (ej. la ValidationException del service)
                 throw;
             }
         }
