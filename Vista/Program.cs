@@ -124,6 +124,7 @@ builder.Services.AddScoped<IHistorialSocioService, HistorialSocioService>();
 builder.Services.AddScoped<ISocioService, SocioService>();
 builder.Services.AddScoped<IEntraIDService, EntraIDService>();
 builder.Services.AddScoped<IParteVehiculoService, ParteVehiculoService>();
+builder.Services.AddScoped<IPagoService, PagoService>();
 builder.Services.AddScoped<IImagenService, ImagenService>();
 
 // Servicios HttpClient
