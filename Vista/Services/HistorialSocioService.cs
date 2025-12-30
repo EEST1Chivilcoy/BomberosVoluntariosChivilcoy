@@ -1,8 +1,10 @@
 ﻿using AntDesign;
 using Microsoft.EntityFrameworkCore;
 using Vista.Data;
+using Vista.Data.Enums.Socios;
 using Vista.Data.Models.Imagenes;
 using Vista.Data.Models.Personas.Personal;
+using Vista.Data.Models.Socios;
 using Vista.Data.Models.Socios.Componentes;
 using Vista.Helpers;
 
@@ -10,7 +12,33 @@ namespace Vista.Services
 {
     public interface IHistorialSocioService
     {
+        /// <summary>
+        /// Registra un nuevo movimiento en el historial de un socio.
+        /// </summary>
+        /// <param name="socioId">Identificador único del socio al que se le agrega el movimiento.</param>
+        /// <param name="historial">Objeto que contiene la información del movimiento realizado.</param>
         Task CrearMovimientoSocio(int socioId, MovimientoSocio historial);
+
+        /// <summary>
+        /// Obtiene el historial completo de movimientos registrados para un socio.
+        /// </summary>
+        /// <param name="socioId">Identificador único del socio cuyo historial se desea consultar.</param>
+        /// <returns>Una lista de <see cref="MovimientoSocio"/> con todos los movimientos asociados al socio.</returns>
+        Task<List<MovimientoSocio>> ObtenerHistorialSocio(int socioId);
+
+        /// <summary>
+        /// Obtiene el historial de modificaciones en la cuota de un socio.
+        /// </summary>
+        /// <param name="socioId">Identificador único del socio cuyo historial de cuotas se desea consultar.</param>
+        /// <returns>Una lista de <see cref="MovimientoCambioCuota"/> con los cambios de cuota registrados.</returns>
+        Task<List<MovimientoCambioCuota>> ObtenerHistorialCuotas(int socioId);
+
+        /// <summary>
+        /// Obtiene el historial de cambios de estado de un socio.
+        /// </summary>
+        /// <param name="socioId">Identificador único del socio cuyo historial de estados se desea consultar.</param>
+        /// <returns>Una lista de <see cref="MovimientoCambioEstado"/> con los cambios de estado registrados.</returns>
+        Task<List<MovimientoCambioEstado>> ObtenerHistorialEstados(int socioId);
     }
 
     public class HistorialSocioService : IHistorialSocioService
@@ -20,6 +48,32 @@ namespace Vista.Services
         public HistorialSocioService(BomberosDbContext context)
         {
             _context = context;
+        }
+
+        public async Task<List<MovimientoSocio>> ObtenerHistorialSocio(int socioId)
+        {
+            return await _context.HistorialSocios
+                .Where(h => h.SocioId == socioId)
+                .OrderByDescending(h => h.FechaDesde)
+                .ToListAsync();
+        }
+
+        public async Task<List<MovimientoCambioCuota>> ObtenerHistorialCuotas(int socioId)
+        {
+            return await _context.HistorialSocios
+                .OfType<MovimientoCambioCuota>()
+                .Where(h => h.SocioId == socioId)
+                .OrderBy(h => h.FechaDesde)
+                .ToListAsync();
+        }
+
+        public async Task<List<MovimientoCambioEstado>> ObtenerHistorialEstados(int socioId)
+        {
+            return await _context.HistorialSocios
+                .OfType<MovimientoCambioEstado>()
+                .Where(h => h.SocioId == socioId)
+                .OrderBy(h => h.FechaDesde)
+                .ToListAsync();
         }
 
         public async Task CrearMovimientoSocio(int socioId, MovimientoSocio historial)
