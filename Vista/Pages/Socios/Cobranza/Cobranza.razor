@@ -16,33 +16,17 @@
 
 <style>
     /* ========================================
-       ESTILOS GENERALES DE LA PÁGINA
-       ======================================== */
+           ESTILOS GENERALES DE LA PÁGINA
+           ======================================== */
     .cobranza-container {
         padding: 24px;
         background-color: #f5f5f5;
         min-height: 100vh;
     }
 
-    .cobranza-header {
-        margin-bottom: 24px;
-    }
-
-    .cobranza-title {
-        font-size: 2rem !important;
-        font-weight: 700 !important;
-        color: #262626 !important;
-        margin-bottom: 8px !important;
-    }
-
-    .cobranza-subtitle {
-        color: #595959;
-        font-size: 1rem;
-    }
-
     /* ========================================
-       BARRA DE BÚSQUEDA
-       ======================================== */
+           BARRA DE BÚSQUEDA
+           ======================================== */
     .search-section {
         margin-bottom: 24px;
         background: #fff;
@@ -55,35 +39,9 @@
         border-radius: 8px !important;
     }
 
-    .stats-card {
-        text-align: center;
-        padding: 16px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border-radius: 12px;
-        color: white;
-    }
-
-    .stats-card-deuda {
-        background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
-    }
-
-    .stats-card-favor {
-        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-    }
-
-    .stats-number {
-        font-size: 1.75rem;
-        font-weight: 700;
-    }
-
-    .stats-label {
-        font-size: 0.85rem;
-        opacity: 0.9;
-    }
-
     /* ========================================
-       GRID DE CARDS
-       ======================================== */
+           GRID DE CARDS
+           ======================================== */
     .cards-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -91,8 +49,8 @@
     }
 
     /* ========================================
-       CARD DE SOCIO
-       ======================================== */
+           CARD DE SOCIO
+           ======================================== */
     .socio-card {
         border-radius: 16px !important;
         overflow: hidden;
@@ -101,10 +59,10 @@
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
     }
 
-    .socio-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important;
-    }
+        .socio-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important;
+        }
 
     .socio-card-deuda {
         border-left: 5px solid #f5222d !important;
@@ -179,10 +137,10 @@
         font-size: 0.9rem;
     }
 
-    .info-row i {
-        width: 20px;
-        color: #8c8c8c;
-    }
+        .info-row i {
+            width: 20px;
+            color: #8c8c8c;
+        }
 
     .card-actions {
         display: flex;
@@ -201,10 +159,10 @@
         height: 44px !important;
     }
 
-    .btn-pago:hover {
-        background: linear-gradient(135deg, #389e0d 0%, #237804 100%) !important;
-        transform: scale(1.02);
-    }
+        .btn-pago:hover {
+            background: linear-gradient(135deg, #389e0d 0%, #237804 100%) !important;
+            transform: scale(1.02);
+        }
 
     .btn-ubicacion {
         flex: 1;
@@ -215,14 +173,97 @@
         height: 44px !important;
     }
 
-    .btn-ubicacion:hover {
-        background: linear-gradient(135deg, #096dd9 0%, #0050b3 100%) !important;
-        transform: scale(1.02);
+        .btn-ubicacion:hover {
+            background: linear-gradient(135deg, #096dd9 0%, #0050b3 100%) !important;
+            transform: scale(1.02);
+        }
+
+    /* ========================================
+           SLIDE TO UNLOCK
+           ======================================== */
+    .slide-to-unlock-container {
+        position: relative;
+        width: 100%;
+        height: 56px;
+        background: linear-gradient(135deg, #e8e8e8 0%, #d9d9d9 100%);
+        border-radius: 28px;
+        overflow: hidden;
+        touch-action: pan-x;
+        user-select: none;
+    }
+
+    .slide-track {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .slide-text {
+        color: #8c8c8c;
+        font-weight: 600;
+        font-size: 0.9rem;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+    }
+
+    .slide-thumb {
+        position: absolute;
+        left: 4px;
+        top: 4px;
+        width: 48px;
+        height: 48px;
+        background: linear-gradient(135deg, #52c41a 0%, #389e0d 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.2rem;
+        cursor: grab;
+        transition: left 0.1s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        box-shadow: 0 2px 8px rgba(82, 196, 26, 0.4);
+        z-index: 2;
+    }
+
+        .slide-thumb:active {
+            cursor: grabbing;
+            transform: scale(1.05);
+            box-shadow: 0 4px 16px rgba(82, 196, 26, 0.6);
+        }
+
+        .slide-thumb.unlocked {
+            background: linear-gradient(135deg, #389e0d 0%, #237804 100%);
+        }
+
+    .slide-success-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 0;
+        background: linear-gradient(135deg, #52c41a 0%, #389e0d 100%);
+        border-radius: 28px;
+        transition: width 0.1s ease;
+        z-index: 1;
+    }
+
+    /* Desktop: mostrar botón normal */
+    .desktop-only {
+        display: flex;
+    }
+
+    .mobile-only {
+        display: none;
     }
 
     /* ========================================
-       MODAL DE PAGO
-       ======================================== */
+           MODAL DE PAGO
+           ======================================== */
     .modal-pago .ant-modal-content {
         border-radius: 16px;
         overflow: hidden;
@@ -272,12 +313,12 @@
         margin-bottom: 20px;
     }
 
-    .modal-form-item label {
-        font-weight: 600;
-        color: #434343;
-        display: block;
-        margin-bottom: 8px;
-    }
+        .modal-form-item label {
+            font-weight: 600;
+            color: #434343;
+            display: block;
+            margin-bottom: 8px;
+        }
 
     .modal-pago .ant-input,
     .modal-pago .ant-input-number,
@@ -299,8 +340,8 @@
     }
 
     /* ========================================
-       ESTADO VACÍO Y LOADING
-       ======================================== */
+           ESTADO VACÍO Y LOADING
+           ======================================== */
     .empty-state {
         text-align: center;
         padding: 60px 20px;
@@ -309,11 +350,11 @@
         margin-top: 24px;
     }
 
-    .empty-state i {
-        font-size: 64px;
-        color: #d9d9d9;
-        margin-bottom: 16px;
-    }
+        .empty-state i {
+            font-size: 64px;
+            color: #d9d9d9;
+            margin-bottom: 16px;
+        }
 
     .empty-state-title {
         font-size: 1.25rem;
@@ -333,15 +374,11 @@
     }
 
     /* ========================================
-       RESPONSIVE
-       ======================================== */
+           RESPONSIVE
+           ======================================== */
     @@media (max-width: 768px) {
         .cobranza-container {
             padding: 16px;
-        }
-
-        .cobranza-title {
-            font-size: 1.5rem !important;
         }
 
         .cards-grid {
@@ -351,9 +388,13 @@
         .card-actions {
             flex-direction: column;
         }
+        /* Móvil: mostrar slide, ocultar botón */
+        .desktop-only {
+            display: none !important;
+        }
 
-        .stats-card {
-            margin-bottom: 12px;
+        .mobile-only {
+            display: block !important;
         }
     }
 
@@ -370,50 +411,18 @@
 </style>
 
 <div class="cobranza-container" role="main">
-    @* ======================================== HEADER ======================================== *@
-    <div class="cobranza-header">
-        <Title Level="1" Class="cobranza-title">
-            <Icon Type="dollar" /> Gestión de Cobranza
-        </Title>
-        <Paragraph Class="cobranza-subtitle">
-            Administre los cobros en efectivo a domicilio de los socios
-        </Paragraph>
-    </div>
-
-    @* ======================================== BARRA DE BÚSQUEDA Y ESTADÍSTICAS ======================================== *@
+    @* ======================================== BARRA DE BÚSQUEDA ======================================== *@
     <div class="search-section">
-        <Row Gutter="(16, 16)">
-            <AntDesign.Col Xs="24" Md="12" Lg="8">
-                <Input Placeholder="Buscar por nombre, N° socio, documento o dirección..."
-                       @bind-Value="@TextoBusqueda"
-                       Class="search-input"
-                       Size="@InputSize.Large"
-                       AllowClear
-                       @oninput="OnBusquedaInput">
-                    <Prefix>
-                        <Icon Type="search" />
-                    </Prefix>
-                </Input>
-            </AntDesign.Col>
-            <AntDesign.Col Xs="24" Sm="8" Md="4" Lg="4">
-                <div class="stats-card">
-                    <div class="stats-number">@SociosFiltrados.Count</div>
-                    <div class="stats-label">Total Socios</div>
-                </div>
-            </AntDesign.Col>
-            <AntDesign.Col Xs="12" Sm="8" Md="4" Lg="4">
-                <div class="stats-card stats-card-deuda">
-                    <div class="stats-number">@SociosConDeuda</div>
-                    <div class="stats-label">Con Deuda</div>
-                </div>
-            </AntDesign.Col>
-            <AntDesign.Col Xs="12" Sm="8" Md="4" Lg="4">
-                <div class="stats-card stats-card-favor">
-                    <div class="stats-number">@SociosConSaldoAFavor</div>
-                    <div class="stats-label">Saldo a Favor</div>
-                </div>
-            </AntDesign.Col>
-        </Row>
+        <Input Placeholder="Buscar por nombre, N° socio, documento o dirección..."
+               @bind-Value="@TextoBusqueda"
+               Class="search-input"
+               Size="@InputSize.Large"
+               AllowClear
+               @oninput="OnBusquedaInput">
+        <Prefix>
+            <Icon Type="search" />
+        </Prefix>
+        </Input>
     </div>
 
     @* ======================================== CONTENIDO PRINCIPAL ======================================== *@
@@ -435,7 +444,7 @@
                 }
                 else
                 {
-                    <span>No hay socios registrados en el sistema</span>
+                    <span>No hay socios con forma de pago en efectivo registrados en el sistema</span>
                 }
             </div>
         </div>
@@ -447,8 +456,9 @@
             {
                 var cardClass = socio.Saldo < 0 ? "socio-card-deuda" : (socio.Saldo > 0 ? "socio-card-favor" : "socio-card-neutral");
                 var saldoClass = socio.Saldo < 0 ? "saldo-deuda" : (socio.Saldo > 0 ? "saldo-favor" : "saldo-neutral");
+                var socioId = socio.SocioId;
 
-                <Card Class="@($"socio-card {cardClass}")" Bordered="false" role="listitem">
+                <Card Class="@($"socio-card {cardClass}")" Bordered="false">
                     <div class="card-header">
                         <span class="socio-numero">
                             <Icon Type="idcard" /> N° @socio.NumeroSocio
@@ -474,17 +484,46 @@
                     </div>
 
                     <div class="card-actions">
-                        <Button Type="@ButtonType.Primary"
-                                Class="btn-pago"
-                                OnClick="@(() => AbrirModalPago(socio))"
-                                aria-label="@($"Registrar pago para {socio.NombreApellidoONombreEmpresa}")">
-                            <Icon Type="dollar" /> Registrar Pago
-                        </Button>
+                        @* Botón normal para desktop *@
+                        <div class="desktop-only" style="flex: 1;">
+                            <Button Type="@ButtonType.Primary"
+                                    Class="btn-pago"
+                                    Style="width: 100%;"
+                                    OnClick="@(() => AbrirModalPago(socio))"
+                                    AriaLabel="@($"Registrar pago para {socio.NombreApellidoONombreEmpresa}")">
+                                <Icon Type="dollar" /> Registrar Pago
+                            </Button>
+                        </div>
+
+                        @* Slide to unlock para móvil *@
+                        <div class="mobile-only" style="flex: 1;">
+                            <div class="slide-to-unlock-container"
+                                 id="slide-container-@socioId"
+                                 @ontouchstart="@(e => OnSlideStart(e, socio))"
+                                 @ontouchmove="@(e => OnSlideMove(e, socio))"
+                                 @ontouchend="@(e => OnSlideEnd(e, socio))"
+                                 @onmousedown="@(e => OnMouseSlideStart(e, socio))"
+                                 @onmousemove="@(e => OnMouseSlideMove(e, socio))"
+                                 @onmouseup="@(e => OnMouseSlideEnd(e, socio))"
+                                 @onmouseleave="@(e => OnMouseSlideEnd(e, socio))">
+                                <div class="slide-success-bg" style="width: @(GetSlideProgress(socioId))%;"></div>
+                                <div class="slide-track">
+                                    <span class="slide-text" style="opacity: @(1 - GetSlideProgress(socioId) / 100);">
+                                        <Icon Type="arrow-right" /> Deslizar para pagar
+                                    </span>
+                                </div>
+                                <div class="slide-thumb @(IsSlideUnlocked(socioId) ? "unlocked" : "")"
+                                     style="left: @(4 + GetSlideProgress(socioId) * 2.5)px;">
+                                    <Icon Type="dollar" />
+                                </div>
+                            </div>
+                        </div>
+
                         <Button Type="@ButtonType.Primary"
                                 Class="btn-ubicacion"
                                 OnClick="@(() => AbrirGoogleMaps(socio))"
                                 Disabled="@(socio.Latitud == 0 && socio.Longitud == 0)"
-                                aria-label="@($"Ver ubicación de {socio.NombreApellidoONombreEmpresa} en Google Maps")">
+                                AriaLabel="@($"Ver ubicación de {socio.NombreApellidoONombreEmpresa} en Google Maps")">
                             <Icon Type="environment" /> Ver Mapa
                         </Button>
                     </div>
@@ -569,15 +608,16 @@
     private bool GuardandoPago { get; set; } = false;
 
     private CobranzaViewModel? SocioSeleccionado { get; set; }
-    
+
     // Propiedades del modal de pago
     private double MontoAPagar { get; set; }
     private DateTime FechaCobro { get; set; } = DateTime.Now;
     private string? Observaciones { get; set; }
 
-    // Estadísticas
-    private int SociosConDeuda => SociosFiltrados.Count(s => s.Saldo < 0);
-    private int SociosConSaldoAFavor => SociosFiltrados.Count(s => s.Saldo > 0);
+    // Slide to unlock state
+    private Dictionary<int, double> SlideProgress { get; set; } = new();
+    private Dictionary<int, bool> SlideActive { get; set; } = new();
+    private Dictionary<int, double> SlideStartX { get; set; } = new();
 
     // ======================================== LIFECYCLE ========================================
 
@@ -610,15 +650,23 @@
                             : s.Nombre ?? "Sin nombre",
                         DocumentoORazonSocial = s.DocumentoOCUIT ?? "Sin documento",
                         Domicilio = s.Direccion ?? "Sin dirección",
-                        Saldo = CalcularSaldo(s), // Por ahora simulado, luego se puede conectar con pagos
+                        Saldo = CalcularSaldo(s),
                         Latitud = (decimal)s.Latitud,
                         Longitud = (decimal)s.Longitud,
                         Telefono = s.Telefono,
                         MontoCuota = (decimal)s.MontoCuota
                     })
-                    .OrderBy(s => s.Saldo) // Primero los que más deben
+                    .OrderBy(s => s.Saldo)
                     .ThenBy(s => s.NombreApellidoONombreEmpresa)
                     .ToList();
+
+                // Inicializar estado del slide para cada socio
+                foreach (var socio in CobranzaViewModels)
+                {
+                    SlideProgress[socio.SocioId] = 0;
+                    SlideActive[socio.SocioId] = false;
+                    SlideStartX[socio.SocioId] = 0;
+                }
 
                 AplicarFiltro();
             }
@@ -638,8 +686,6 @@
     private decimal CalcularSaldo(Socio socio)
     {
         // TODO: Implementar cálculo real basado en pagos y cuotas generadas
-        // Por ahora retorna un valor simulado basado en la cuota
-        // Positivo = saldo a favor, Negativo = debe
         var random = new Random(socio.Id);
         var mesesDeuda = random.Next(-3, 2);
         return (decimal)(mesesDeuda * socio.MontoCuota);
@@ -674,6 +720,118 @@
                 .OrderBy(s => s.Saldo)
                 .ThenBy(s => s.NombreApellidoONombreEmpresa)
                 .ToList();
+        }
+
+        StateHasChanged();
+    }
+
+    // ======================================== SLIDE TO UNLOCK ========================================
+
+    private double GetSlideProgress(int socioId)
+    {
+        return SlideProgress.TryGetValue(socioId, out var progress) ? progress : 0;
+    }
+
+    private bool IsSlideUnlocked(int socioId)
+    {
+        return GetSlideProgress(socioId) >= 95;
+    }
+
+    private void OnSlideStart(TouchEventArgs e, CobranzaViewModel socio)
+    {
+        if (e.Touches.Length > 0)
+        {
+            SlideActive[socio.SocioId] = true;
+            SlideStartX[socio.SocioId] = e.Touches[0].ClientX;
+        }
+    }
+
+    private void OnSlideMove(TouchEventArgs e, CobranzaViewModel socio)
+    {
+        if (!SlideActive.TryGetValue(socio.SocioId, out var active) || !active) return;
+        if (e.Touches.Length == 0) return;
+
+        var currentX = e.Touches[0].ClientX;
+        var startX = SlideStartX.TryGetValue(socio.SocioId, out var sx) ? sx : 0;
+        var deltaX = currentX - startX;
+
+        var maxSlide = 200;
+        var progress = Math.Max(0, Math.Min(100, (deltaX / maxSlide) * 100));
+
+        SlideProgress[socio.SocioId] = progress;
+        StateHasChanged();
+    }
+
+    private async Task OnSlideEnd(TouchEventArgs e, CobranzaViewModel socio)
+    {
+        if (!SlideActive.TryGetValue(socio.SocioId, out var active) || !active) return;
+
+        SlideActive[socio.SocioId] = false;
+
+        if (GetSlideProgress(socio.SocioId) >= 95)
+        {
+            // Desbloqueado - abrir modal
+            SlideProgress[socio.SocioId] = 100;
+            StateHasChanged();
+
+            await Task.Delay(200); // Pequeña animación
+            AbrirModalPago(socio);
+
+            // Reset
+            SlideProgress[socio.SocioId] = 0;
+        }
+        else
+        {
+            // No llegó al final - resetear
+            SlideProgress[socio.SocioId] = 0;
+        }
+
+        StateHasChanged();
+    }
+
+    // Mouse events para testing en desktop
+    private void OnMouseSlideStart(MouseEventArgs e, CobranzaViewModel socio)
+    {
+        SlideActive[socio.SocioId] = true;
+        SlideStartX[socio.SocioId] = e.ClientX;
+    }
+
+    private void OnMouseSlideMove(MouseEventArgs e, CobranzaViewModel socio)
+    {
+        if (!SlideActive.TryGetValue(socio.SocioId, out var active) || !active) return;
+
+        var startX = SlideStartX.TryGetValue(socio.SocioId, out var sx) ? sx : 0;
+        var deltaX = e.ClientX - startX;
+
+        var maxSlide = 200;
+        var progress = Math.Max(0, Math.Min(100, (deltaX / maxSlide) * 100));
+
+        SlideProgress[socio.SocioId] = progress;
+        StateHasChanged();
+    }
+
+    private async Task OnMouseSlideEnd(MouseEventArgs e, CobranzaViewModel socio)
+    {
+        if (!SlideActive.TryGetValue(socio.SocioId, out var active) || !active) return;
+
+        SlideActive[socio.SocioId] = false;
+
+        if (GetSlideProgress(socio.SocioId) >= 95)
+        {
+            // Desbloqueado - abrir modal
+            SlideProgress[socio.SocioId] = 100;
+            StateHasChanged();
+
+            await Task.Delay(200); // Pequeña animación
+            AbrirModalPago(socio);
+
+            // Reset
+            SlideProgress[socio.SocioId] = 0;
+        }
+        else
+        {
+            // No llegó al final - resetear
+            SlideProgress[socio.SocioId] = 0;
         }
 
         StateHasChanged();
@@ -726,7 +884,7 @@
             MessageService.Success($"Pago de ${MontoAPagar:N2} registrado correctamente para {SocioSeleccionado.NombreApellidoONombreEmpresa}");
 
             CerrarModalPago();
-            await CargarSocios(); // Recargar para actualizar saldos
+            await CargarSocios();
         }
         catch (Exception ex)
         {
