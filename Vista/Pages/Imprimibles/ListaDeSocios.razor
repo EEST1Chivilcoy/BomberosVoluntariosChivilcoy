@@ -36,7 +36,7 @@
 
         @@page {
             size: A4;
-            margin: 10mm;
+            margin: 0;
         }
 
         body {
@@ -47,6 +47,8 @@
             background: var(--white);
             -webkit-print-color-adjust: exact;
             print-color-adjust: exact;
+            margin: 0;
+            padding: 0;
         }
 
         .page-container {
@@ -63,8 +65,8 @@
             position: relative;
             page-break-after: always;
             page-break-inside: avoid;
-            min-height: 277mm; /* A4 height minus margins */
-            padding-bottom: 20px;
+            min-height: 297mm; /* A4 height */
+            padding: 10mm;
             display: flex;
             flex-direction: column;
         }
@@ -261,7 +263,7 @@
             padding: 8px 6px;
             vertical-align: middle;
             border-left: 1px solid var(--border-gray);
-            border-right: 1px solid var(--border-gray);
+            border-right: 1px solid var (--border-gray);
         }
 
         tbody tr:last-child td {
@@ -415,6 +417,13 @@
 
         /* Print Styles */
         @@media print {
+            html, body {
+                width: 210mm;
+                height: 297mm;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
             body {
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
@@ -423,11 +432,16 @@
             .page-container {
                 padding: 0;
                 max-width: none;
+                margin: 0;
             }
 
             .page {
-                min-height: auto;
+                min-height: 297mm;
+                height: 297mm;
+                padding: 10mm;
+                margin: 0;
                 page-break-after: always;
+                box-sizing: border-box;
             }
 
                 .page:last-child {
@@ -518,8 +532,8 @@
                                     </div>
                                 </div>
                                 <div class="header-info">
-                                    <p><strong>Fecha de emisión:</strong> @DateTime.Now.ToString("dd 'de' MMMM 'de' yyyy", new System.Globalization.CultureInfo("es-AR"))</p>
-                                    <p><strong>Hora:</strong> @DateTime.Now.ToString("HH:mm") hs</p>
+                                    <p><strong>Fecha de emisión:</strong> @FechaHoraArgentina.ToString("dd 'de' MMMM 'de' yyyy", new System.Globalization.CultureInfo("es-AR"))</p>
+                                    <p><strong>Hora:</strong> @FechaHoraArgentina.ToString("HH:mm") hs</p>
                                 </div>
                             </header>
 
@@ -558,7 +572,7 @@
                             <!-- Header compacto para páginas siguientes -->
                             <div class="header-compact">
                                 <h3>Bomberos Voluntarios de Chivilcoy - Listado de Socios</h3>
-                                <span class="page-info">@DateTime.Now.ToString("dd/MM/yyyy")</span>
+                                <span class="page-info">@FechaHoraArgentina.ToString("dd/MM/yyyy")</span>
                             </div>
                         }
 
@@ -633,7 +647,7 @@
                         @if (numeroPagina == totalPaginas)
                         {
                             <p class="document-number">
-                                Ref: SOC-@DateTime.Now.ToString("yyyyMMdd-HHmmss")
+                                Ref: SOC-@FechaHoraArgentina.ToString("yyyyMMdd-HHmmss")
                             </p>
                         }
                     </footer>
@@ -664,6 +678,7 @@
 
     private List<Socio>? Socios { get; set; }
     private bool IsLoading { get; set; } = true;
+    private DateTime FechaHoraArgentina { get; set; }
 
     // Aproximadamente 25 registros por página A4 considerando:
     // - Header completo in primera página (~80mm)
@@ -675,6 +690,27 @@
 
     protected override async Task OnInitializedAsync()
     {
+        // Obtener la hora de Argentina
+        try
+        {
+            var zonaArgentina = TimeZoneInfo.FindSystemTimeZoneById("America/Argentina/Buenos_Aires");
+            FechaHoraArgentina = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, zonaArgentina);
+        }
+        catch
+        {
+            // Fallback: intentar con el ID de Windows
+            try
+            {
+                var zonaArgentina = TimeZoneInfo.FindSystemTimeZoneById("Argentina Standard Time");
+                FechaHoraArgentina = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, zonaArgentina);
+            }
+            catch
+            {
+                // Si falla, usar UTC-3 manualmente
+                FechaHoraArgentina = DateTime.UtcNow.AddHours(-3);
+            }
+        }
+
         await CargarSocios();
     }
 
