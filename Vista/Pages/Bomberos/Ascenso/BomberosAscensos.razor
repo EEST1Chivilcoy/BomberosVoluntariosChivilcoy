@@ -7,6 +7,9 @@
 @inject IMessageService message
 @page "/fire-force/bomberos/ascenso"
 
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "administrador")]
+
 <style>
     .ascensos-abm {
         --ascensos-primary-color: #A63333;

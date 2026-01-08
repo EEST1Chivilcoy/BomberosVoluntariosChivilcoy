@@ -7,6 +7,9 @@
 @inject IMessageService MessageService
 @inject IParteVehiculoService ParteVehiculoService
 
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "administrador")]
+
 <style>
     .fuerzas-abm {
         --fuerzas-primary-color: #A63333;
@@ -257,14 +260,12 @@
 
     .modal-crear-fuerza-content {
         padding: 24px;
-        
     }
 
     .modal-crear-fuerza-form-item {
         margin-bottom: 20px;
         position: relative;
         padding-left: 10px;
-
     }
 
         .modal-crear-fuerza-form-item::before {
@@ -275,7 +276,6 @@
             height: 100%;
             width: 3px;
             border-radius: 5px;
-            
         }
 
         .modal-crear-fuerza-form-item .ant-form-item-label > label {
@@ -286,7 +286,6 @@
             gap: 8px;
             font-size: 14px;
             transition: color 0.3s ease;
-
         }
 
     .modal-crear-fuerza .ant-input:focus,
@@ -295,15 +294,14 @@
     .modal-crear-fuerza .ant-select-selector:hover,
     .modal-crear-fuerza .ant-picker:focus,
     .modal-crear-fuerza .ant-picker:hover,
-    .modal-crear-fuerza .ant-picker-input>input:focus,
-    .modal-crear-fuerza .ant-picker-input>input:hover,
+    .modal-crear-fuerza .ant-picker-input > input:focus,
+    .modal-crear-fuerza .ant-picker-input > input:hover,
     .modal-crear-fuerza .ant-input-number-input:focus,
     .modal-crear-fuerza .ant-input-number-input:hover,
     .modal-crear-fuerza .ant-textarea:focus,
     .modal-crear-fuerza .ant-textarea:hover {
         border-color: #FFD700 !important;
         box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
-
     }
 
 

@@ -11,6 +11,9 @@
 @inject IBomberoService BomberoService
 @inject IMessageService MessageService
 
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "administrador")]
+
 <style>
     .brigadas-abm {
         --brigadas-primary-color: #A63333;

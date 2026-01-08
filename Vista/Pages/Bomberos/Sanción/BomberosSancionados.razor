@@ -6,6 +6,9 @@
 @using Vista.Data.Models.Personas.Personal
 @using Vista.Data.Models.Personas.Personal.Componentes
 
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "administrador")]
+
 <style>
     .sancionados-abm {
         --sancionados-primary-color: #A63333;
@@ -272,8 +275,6 @@
     }
 
     .modal-crear-sancion .ant-modal-title {
-
-
         margin-left: 0px;
         color: #434343;
         display: flex;
@@ -510,8 +511,7 @@
 
 @if (_visibleCargar == true)
 {
-    <Modal
-        Title="Nueva Sanción"
+    <Modal Title="Nueva Sanción"
            Width="@("100%")"
            Style="max-width: 800px;"
            Footer="null"

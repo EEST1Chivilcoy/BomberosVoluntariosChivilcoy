@@ -4,6 +4,9 @@
 @using Data.Enums.Salidas
 @inject IJSRuntime JS
 
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "administrador")]
+
 <style>
 
     .salidas-abm {

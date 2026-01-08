@@ -1,6 +1,9 @@
 ﻿@page "/fire-force/Bomberos/Legajo"
 @inject NavigationManager NavigationManager
 
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "administrador")]
+
 <link rel="stylesheet" href="css/LegajoEstilos.css" />
 
 <div class="main-container">
@@ -85,7 +88,7 @@
             </Card>
 
 
-                <Card Bordered="false" class="services-card2">
+            <Card Bordered="false" class="services-card2">
                 <div class="header-servicios">
                     <div class="banner-container">
                         <div class="servicios-banner">

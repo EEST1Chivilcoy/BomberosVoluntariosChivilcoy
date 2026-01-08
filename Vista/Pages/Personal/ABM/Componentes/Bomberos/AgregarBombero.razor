@@ -15,7 +15,6 @@
 @using Microsoft.Graph
 @using AntDesign
 
-@attribute [Authorize]
 @page "/fire-force/personal/bombero/agregar"
 
 @*Servicios Utilizados*@
@@ -25,6 +24,9 @@
 @inject IMessageService message
 @inject IBomberoService BomberoService
 @inject IEntraIDService EntraIDService
+
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "administrador")]
 
 <style>
     /* Estilos generales */

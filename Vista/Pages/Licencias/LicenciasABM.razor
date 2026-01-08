@@ -12,6 +12,9 @@
 
 @page "/fire-force/licencias"
 
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "administrador")]
+
 <style>
     /* Variables CSS para colores principales - Prefijo para evitar conflictos */
     .licencias-abm {

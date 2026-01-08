@@ -25,6 +25,9 @@
 @inject IComisionDirectivaService ComisionDirectivaService
 @inject ICobradorService CobradorService
 
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "administrador")]
+
 <style>
     /* Variables CSS para colores principales - Prefijo para evitar conflictos */
     .personal-abm {

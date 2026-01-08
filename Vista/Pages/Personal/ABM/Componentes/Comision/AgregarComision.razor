@@ -15,7 +15,6 @@
 @using Microsoft.Graph
 @using AntDesign
 
-@attribute [Authorize]
 @page "/fire-force/personal/comisiondirectiva/agregar"
 
 @*Servicios Utilizados*@
@@ -26,6 +25,9 @@
 @inject IMessageService message
 @inject IEntraIDService EntraIDService
 @inject IComisionDirectivaService ComisionDirectivaService
+
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "administrador")]
 
 <style>
     /* Estilos generales */

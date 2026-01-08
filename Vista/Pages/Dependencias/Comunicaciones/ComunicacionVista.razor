@@ -17,6 +17,9 @@
 @*Direccion de la Pagina*@
 @page "/fire-force/Dependencias/Comunicacion"
 
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "administrador")]
+
 <style>
 
     .comunicaciones-abm {

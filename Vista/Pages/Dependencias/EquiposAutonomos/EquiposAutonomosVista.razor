@@ -18,8 +18,11 @@
 @inject IMessageService message
 @inject IEquipoAutonomoService EquipoAutonomoService
 
-@*Direccion de la Pagina*|*@
+@*Direccion de la Pagina*@
 @page "/fire-force/Dependencias/EquiposAutonomos"
+
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "administrador")]
 
 <style>
     .equipos-autonomos-abm {

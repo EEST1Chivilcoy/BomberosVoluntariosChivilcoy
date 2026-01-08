@@ -9,6 +9,9 @@
 @using Vista.Data.Models.Objetos
 @using Vista.Services
 
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "administrador")]
+
 <style>
     .licencias-abm {
         --abm-primary-color: #A63333;

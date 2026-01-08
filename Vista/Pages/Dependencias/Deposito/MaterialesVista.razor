@@ -6,6 +6,9 @@
 @inject IMessageService message
 @page "/fire-force/materialesvista"
 
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "administrador")]
+
 <style>
     .boton_p {
         background-color: #732D2D !important;
@@ -14,11 +17,11 @@
 </style>
 
 <Form Model="MaterialesVM"
-    LabelColSpan="8"
-    WrapperColSpan="16"
-    OnFinish="OnFinish"
-    OnFinishFailed="OnFinishFailed"
-    Style="width: 100%;height: 100%;">
+      LabelColSpan="8"
+      WrapperColSpan="16"
+      OnFinish="OnFinish"
+      OnFinishFailed="OnFinishFailed"
+      Style="width: 100%;height: 100%;">
     <FormItem Label="Fecha de alta">
         <DatePicker @bind-Value="MaterialesVM.FechaAlta" />
     </FormItem>
@@ -47,28 +50,28 @@
 
 @code {
     BomberosDbContext Context;
-	public class MaterialesViewModel
-	{
-		public DateTime FechaAlta { get; set; }
-		public string? Descripcion { get; set; }
-		public string? Codigo { get; set; }
-		public int Stock { get; set; }
-		public TipoRubro Rubro { get; set; }
-	}
+    public class MaterialesViewModel
+    {
+        public DateTime FechaAlta { get; set; }
+        public string? Descripcion { get; set; }
+        public string? Codigo { get; set; }
+        public int Stock { get; set; }
+        public TipoRubro Rubro { get; set; }
+    }
 
-	MaterialesViewModel MaterialesVM { get; set; } = new MaterialesViewModel();
+    MaterialesViewModel MaterialesVM { get; set; } = new MaterialesViewModel();
 
-	protected override async Task OnInitializedAsync()
-	{
-		await Init();
-	}
+    protected override async Task OnInitializedAsync()
+    {
+        await Init();
+    }
 
-	private async Task Init()
-	{
-		MaterialesVM = new();
+    private async Task Init()
+    {
+        MaterialesVM = new();
 
-		Context = DbFactory.CreateDbContext();
-	}
+        Context = DbFactory.CreateDbContext();
+    }
     private async void OnFinish(EditContext editContext)
     {
         try
@@ -76,14 +79,14 @@
 
 
             Material material1 = new()
-                {
-                    FechaAlta = MaterialesVM.FechaAlta,
-                    Descripcion = MaterialesVM.Descripcion,
-                    Codigo = MaterialesVM.Codigo,
-                    Stock = MaterialesVM.Stock,
-                    Rubro = MaterialesVM.Rubro,
-                    
-                };
+            {
+                FechaAlta = MaterialesVM.FechaAlta,
+                Descripcion = MaterialesVM.Descripcion,
+                Codigo = MaterialesVM.Codigo,
+                Stock = MaterialesVM.Stock,
+                Rubro = MaterialesVM.Rubro,
+
+            };
             Context.Materiales.Add(material1);
             await Context.SaveChangesAsync();
             await Init();

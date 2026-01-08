@@ -40,7 +40,11 @@ builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
     {
         builder.Configuration.Bind("AzureAd", options);
 
-        // CRÍTICO: Configuración para Azure Web Apps
+        // Esto es obligatorio para que funcionen los Roles de Aplicación.
+        // Le dice a .NET que busque el array "roles" en el token JSON.
+        options.TokenValidationParameters.RoleClaimType = "roles";
+
+        // CRÍTICO: Configuración para Azure Web Apps (Tu código existente)
         options.Events = new OpenIdConnectEvents
         {
             OnRemoteFailure = context =>

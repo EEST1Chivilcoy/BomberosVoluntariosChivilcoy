@@ -9,6 +9,9 @@
 @inject IFuerzaIntervinienteService FuerzaIntervinienteService
 @inject IMessageService MessageService
 
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "administrador")]
+
 <style>
     .fuerzas-abm {
         --fuerzas-primary-color: #A63333;
