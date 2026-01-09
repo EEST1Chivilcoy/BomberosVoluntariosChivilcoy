@@ -1,6 +1,6 @@
 ﻿namespace Vista.Data.Models.Socios.Componentes
 {
-    public abstract class Historial_Socio
+    public abstract class MovimientoSocio
     {
         /// <summary>
         /// Identificador único del historial.
@@ -8,9 +8,15 @@
         public int Id { get; set; }
 
         /// <summary>
-        /// Fecha en que se realizó el cambio registrado en el historial.
+        /// Fecha desde la cual el movimiento está vigente.
         /// </summary>
-        public DateTime FechaDeCambio { get; set; } = DateTime.Now;
+        public DateTime FechaDesde { get; set; } = DateTime.Now;
+
+        /// <summary>
+        /// Fecha hasta la cual el movimiento estuvo vigente.
+        /// Si es null, significa que el movimiento sigue vigente.
+        /// </summary>
+        public DateTime? FechaHasta { get; set; }
 
         /// <summary>
         /// Representa el identificador del socio asociado a este historial.

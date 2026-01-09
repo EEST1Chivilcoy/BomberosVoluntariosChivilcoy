@@ -43,6 +43,14 @@ namespace Vista.Data.Models.Socios
         public DateTime FechaIngreso { get; set; } = DateTime.Now;
 
         /// <summary>
+        /// Representa la fecha de ingreso del socio al nuevo sistema.
+        /// Ya habia socios antes de implementar el sistema.
+        /// Esta fecha es para calcular correctamente las cuotas y pagos.
+        /// </summary>
+        [Required(ErrorMessage = "La fecha de ingreso al nuevo sistema es obligatoria.")]
+        public DateTime FechaIngresoSistemaNuevo { get; set; } = DateTime.Now;
+
+        /// <summary>
         /// Representa el estado actual del socio. (Activo, Inactivo, Suspendido)
         /// </summary>
         [Required(ErrorMessage = "El estado del socio es obligatorio.")]
@@ -51,7 +59,7 @@ namespace Vista.Data.Models.Socios
         /// <summary>
         /// Representa la relación del con el historial del socio. (1 a n) (Componente)
         /// </summary>
-        //public List<Historial_Socio> Historial { get; set; } = new();
+        public List<MovimientoSocio> Historial { get; set; } = new();
 
         /// <summary>
         /// Representa el monto actual de la cuota del socio.
@@ -65,7 +73,7 @@ namespace Vista.Data.Models.Socios
         public FrecuenciaPago? FrecuenciaDePago { get; set; }
 
         /// <summary>
-        /// Representa la forma de pago del socio. (Por defecto es Efectivo) (Igual es algo que se va a borrar, solo incluido para la presentacion del proyecto) (Borrar Luego)
+        /// Representa la forma de pago del socio.
         /// </summary>
         [Required(ErrorMessage = "La forma de pago es obligatoria.")]
         public FormaDePago? FormaPago { get; set; }
@@ -140,6 +148,6 @@ namespace Vista.Data.Models.Socios
         /// Pagos realizados por este socio.
         /// Incluye pagos en efectivo y pagos electrónicos.
         /// </summary>
-        // public List<PagoSocio> Pagos { get; set; } = new();
+        public List<PagoSocio> Pagos { get; set; } = new();
     }
 }

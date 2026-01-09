@@ -1,0 +1,430 @@
+﻿@using Vista.Data.Enums.Socios
+@using Vista.Data.Enums.Discriminadores
+@using Vista.Data.Models.Socios
+
+@*Servicios Utilizados*@
+@using Vista.Services
+@inject NavigationManager navigationManager
+@inject ISocioService SocioService
+@inject IMessageService message
+
+<style>
+    /* Variables CSS para colores principales */
+    .detalle-socio {
+        --socio-primary-color: #A63333;
+        --socio-primary-dark: #732D2D;
+        --socio-success-color: #4CAF50;
+        --socio-warning-color: #F57F17;
+        --socio-warning-light: #FFF8E1;
+        --socio-gold-color: #FFD700;
+    }
+
+    .detalle-socio .detail-container {
+        padding: 16px;
+    }
+
+    .detalle-socio .detail-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 16px;
+        margin-bottom: 20px;
+    }
+
+    .detalle-socio .detail-item {
+        background: #f8f9fa;
+        padding: 14px;
+        border-radius: 8px;
+        border: 1px solid #e9ecef;
+        transition: all 0.3s ease;
+    }
+
+    .detalle-socio .detail-item:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+    }
+
+    .detalle-socio .detail-label {
+        font-weight: 700;
+        color: var(--socio-primary-color);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 6px;
+    }
+
+    .detalle-socio .detail-value {
+        font-size: 0.95rem;
+        color: #333;
+        word-break: break-word;
+    }
+
+    .detalle-socio .detail-full-width {
+        grid-column: 1 / -1;
+    }
+
+    .detalle-socio .section-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--socio-primary-color);
+        margin: 20px 0 12px 0;
+        padding-bottom: 8px;
+        border-bottom: 2px solid var(--socio-primary-color);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .detalle-socio .section-title:first-child {
+        margin-top: 0;
+    }
+
+    .detalle-socio .actions-container {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 24px;
+        padding-top: 16px;
+        border-top: 1px solid #f0f0f0;
+    }
+
+    .detalle-socio .pagos-button {
+        background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%) !important;
+        border: none !important;
+        color: white !important;
+        box-shadow: 0 4px 12px rgba(24, 144, 255, 0.3) !important;
+        font-weight: 600 !important;
+        border-radius: 8px !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+
+    .detalle-socio .pagos-button:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 20px rgba(24, 144, 255, 0.4) !important;
+    }
+
+    .detalle-socio .status-badge {
+        padding: 4px 10px;
+        border-radius: 16px;
+        font-weight: 600;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+    }
+
+    .detalle-socio .status-activo {
+        background: #E6F7E9;
+        color: #2E7D32;
+    }
+
+    .detalle-socio .status-inactivo {
+        background: #FFEBEE;
+        color: #C62828;
+    }
+
+    .detalle-socio .tipo-badge {
+        background: var(--socio-warning-light);
+        color: var(--socio-warning-color);
+    }
+
+    .detalle-socio .monto-tag {
+        background: #E6F7E9;
+        color: #2E7D32;
+        padding: 4px 10px;
+        border-radius: 4px;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .detalle-socio .loading-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 200px;
+    }
+</style>
+
+<div class="detalle-socio">
+    @if (isLoading)
+    {
+        <div class="loading-container">
+            <Spin Size="SpinSize.Large" Tip="Cargando información del socio..." />
+        </div>
+    }
+    else if (socioView != null)
+    {
+        <div class="detail-container">
+            @* Información General *@
+            <div class="section-title">
+                <Icon Type="user" /> Información General
+            </div>
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <div class="detail-label">🆔 N° Socio</div>
+                    <div class="detail-value">@(socioView.NroSocio ?? "No disponible")</div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">🏷️ Tipo</div>
+                    <div class="detail-value">
+                        <span class="status-badge tipo-badge">
+                            @(socioView is SocioPersonaViewModel ? "Persona" : "Empresa")
+                        </span>
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">👤 @(socioView is SocioPersonaViewModel ? "Nombre Completo" : "Razón Social")</div>
+                    <div class="detail-value">
+                        @if (socioView is SocioPersonaViewModel personaView)
+                        {
+                            @($"{personaView.Nombre} {personaView.Apellido}")
+                        }
+                        else
+                        {
+                            @(socioView.Nombre ?? "No disponible")
+                        }
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">@(socioView is SocioPersonaViewModel ? "📇 DNI" : "📇 CUIT")</div>
+                    <div class="detail-value">
+                        @if (socioView is SocioPersonaViewModel persona)
+                        {
+                            @(persona.Documento ?? "No disponible")
+                        }
+                        else if (socioView is SocioEmpresaViewModel empresa)
+                        {
+                            @(empresa.CUIT ?? "No disponible")
+                        }
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">📅 Fecha de Ingreso</div>
+                    <div class="detail-value">@(socioView.FechaIngreso ?? "No disponible")</div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">📊 Estado</div>
+                    <div class="detail-value">
+                        @{
+                            var estadoClass = socioView.Estado == "Activo" ? "status-activo" : "status-inactivo";
+                        }
+                        <span class="status-badge @estadoClass">
+                            @(socioView.Estado ?? "No disponible")
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            @* Ubicación *@
+            <div class="section-title">
+                <Icon Type="environment" /> Ubicación
+            </div>
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <div class="detail-label">🏠 Dirección</div>
+                    <div class="detail-value">@(socioView.Direccion ?? "No disponible")</div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">🏘️ Zona</div>
+                    <div class="detail-value">@(socioView.Zona ?? "No disponible")</div>
+                </div>
+            </div>
+
+            @* Información de Cuota *@
+            <div class="section-title">
+                <Icon Type="dollar" /> Información de Cuota
+            </div>
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <div class="detail-label">💰 Monto</div>
+                    <div class="detail-value">
+                        <span class="monto-tag">
+                            $@(socioView.CuotaValor?.ToString("N2") ?? "0.00")
+                        </span>
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">📆 Frecuencia de Pago</div>
+                    <div class="detail-value">@(socioView.FrecuenciaPago ?? "No disponible")</div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">💳 Forma de Pago</div>
+                    <div class="detail-value">@(socioView.FormaPago ?? "No disponible")</div>
+                </div>
+            </div>
+
+            @* Información de Contacto *@
+            <div class="section-title">
+                <Icon Type="phone" /> Información de Contacto
+            </div>
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <div class="detail-label">📞 Teléfono</div>
+                    <div class="detail-value">@(socioView.Telefono ?? "No disponible")</div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">📧 Email</div>
+                    <div class="detail-value">@(socioView.Email ?? "No disponible")</div>
+                </div>
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(socioView.Ocupacion))
+            {
+                <div class="section-title">
+                    <Icon Type="profile" /> Información Adicional
+                </div>
+                <div class="detail-grid">
+                    <div class="detail-item detail-full-width">
+                        <div class="detail-label">💼 Ocupación</div>
+                        <div class="detail-value">@socioView.Ocupacion</div>
+                    </div>
+                </div>
+            }
+
+            @* Botones de acción *@
+            <div class="actions-container">
+                <Button Type="ButtonType.Primary"
+                        Class="pagos-button"
+                        Size="ButtonSize.Large"
+                        OnClick="@VerPagos">
+                    <Icon Type="history" /> Ver Pagos
+                </Button>
+            </div>
+        </div>
+    }
+    else
+    {
+        <Result Status="ResultStatus.Error"
+                Title="Error"
+                SubTitle="No se pudo cargar la información del socio.">
+            <Extra>
+                <Button Type="@ButtonType.Primary" OnClick="Cancelar">
+                    Volver al listado
+                </Button>
+            </Extra>
+        </Result>
+    }
+</div>
+
+@code {
+    [Parameter] public required int SocioId { get; set; }
+    [Parameter] public required EventCallback OnFinishCallback { get; set; }
+
+    private SocioViewModel? socioView;
+    private bool isLoading = true;
+
+    public abstract class SocioViewModel
+    {
+        public string? NroSocio { get; set; }
+        public string? Nombre { get; set; }
+        public string? Direccion { get; set; }
+        public string? Zona { get; set; }
+        public string? FechaIngreso { get; set; }
+        public string? Ocupacion { get; set; }
+        public string? Telefono { get; set; }
+        public string? Email { get; set; }
+        public double? CuotaValor { get; set; }
+        public string? FrecuenciaPago { get; set; }
+        public string? FormaPago { get; set; }
+        public string? Estado { get; set; }
+    }
+
+    public class SocioPersonaViewModel : SocioViewModel
+    {
+        public string? Documento { get; set; }
+        public string? Apellido { get; set; }
+    }
+
+    public class SocioEmpresaViewModel : SocioViewModel
+    {
+        public string? CUIT { get; set; }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        isLoading = true;
+
+        try
+        {
+            var socio = await SocioService.ObtenerSocioPorIdAsync(SocioId);
+
+            if (socio == null)
+            {
+                throw new ArgumentNullException("El socio solicitado no existe o ha sido eliminado.");
+            }
+
+            MapToViewModel(socio);
+        }
+        catch (Exception ex)
+        {
+            await message.ErrorAsync($"Error: {ex.Message}");
+            await Cancelar();
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private async Task Cancelar()
+    {
+        await OnFinishCallback.InvokeAsync();
+    }
+
+    private void VerPagos()
+    {
+        // TODO: Configurar la URL de pagos del socio
+        var url = $"/fire-force/socios/{SocioId}/pagos"; // Configurar esta URL según tu estructura de rutas
+        navigationManager.NavigateTo(url);
+    }
+
+    private void MapToViewModel(Socio socio)
+    {
+        if (socio.Tipo == TipoSocio.Persona)
+        {
+            socioView = new SocioPersonaViewModel
+            {
+                NroSocio = socio.NroSocio.ToString(),
+                Nombre = socio.Nombre,
+                Apellido = socio.Apellido,
+                Documento = socio.DocumentoOCUIT,
+                Direccion = socio.Direccion,
+                Zona = socio.Zona.GetDisplayName(),
+                FechaIngreso = socio.FechaIngreso.ToString("dd/MM/yyyy"),
+                Ocupacion = socio.Ocupacion,
+                Telefono = socio.Telefono,
+                Email = socio.Email,
+                CuotaValor = socio.MontoCuota,
+                FrecuenciaPago = socio.FrecuenciaDePago.GetDisplayName(),
+                FormaPago = socio.FormaPago.GetDisplayName(),
+                Estado = socio.EstadoSocio.GetDisplayName()
+            };
+        }
+        else if (socio.Tipo == TipoSocio.Empresa)
+        {
+            socioView = new SocioEmpresaViewModel
+            {
+                NroSocio = socio.NroSocio.ToString(),
+                Nombre = socio.Nombre,
+                CUIT = socio.DocumentoOCUIT,
+                Direccion = socio.Direccion,
+                Zona = socio.Zona.GetDisplayName(),
+                FechaIngreso = socio.FechaIngreso.ToString("dd/MM/yyyy"),
+                Ocupacion = socio.Ocupacion,
+                Telefono = socio.Telefono,
+                Email = socio.Email,
+                CuotaValor = socio.MontoCuota,
+                FrecuenciaPago = socio.FrecuenciaDePago.GetDisplayName(),
+                FormaPago = socio.FormaPago.GetDisplayName(),
+                Estado = socio.EstadoSocio.GetDisplayName()
+            };
+        }
+    }
+}

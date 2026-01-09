@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Vista.Data;
 
@@ -11,9 +12,11 @@ using Vista.Data;
 namespace Vista.Data.Migrations
 {
     [DbContext(typeof(BomberosDbContext))]
-    partial class BomberosDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251229204525_FixesInPagos")]
+    partial class FixesInPagos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -892,10 +895,7 @@ namespace Vista.Data.Migrations
                         .HasMaxLength(34)
                         .HasColumnType("varchar(34)");
 
-                    b.Property<DateTime>("FechaDesde")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime?>("FechaHasta")
+                    b.Property<DateTime>("FechaDeCambio")
                         .HasColumnType("datetime(6)");
 
                     b.Property<int>("SocioId")
@@ -1449,13 +1449,13 @@ namespace Vista.Data.Migrations
                 {
                     b.HasBaseType("Vista.Data.Models.Socios.Componentes.MovimientoSocio");
 
-                    b.Property<int>("FormaDePago")
+                    b.Property<int>("FormaDePagoAnterior")
                         .HasColumnType("int");
 
-                    b.Property<int>("FrecuenciaDePago")
+                    b.Property<int>("FrecuenciaDePagoAnterior")
                         .HasColumnType("int");
 
-                    b.Property<double>("Monto")
+                    b.Property<double>("MontoAnterior")
                         .HasColumnType("double");
 
                     b.HasDiscriminator().HasValue("MovimientoCambioCuota");
@@ -1465,8 +1465,11 @@ namespace Vista.Data.Migrations
                 {
                     b.HasBaseType("Vista.Data.Models.Socios.Componentes.MovimientoSocio");
 
-                    b.Property<int>("Estado")
+                    b.Property<int>("EstadoAnterior")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("Fecha")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Motivo")
                         .HasColumnType("longtext");

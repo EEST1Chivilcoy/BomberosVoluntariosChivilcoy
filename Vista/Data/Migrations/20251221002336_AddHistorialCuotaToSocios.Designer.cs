@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Vista.Data;
 
@@ -11,9 +12,11 @@ using Vista.Data;
 namespace Vista.Data.Migrations
 {
     [DbContext(typeof(BomberosDbContext))]
-    partial class BomberosDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251221002336_AddHistorialCuotaToSocios")]
+    partial class AddHistorialCuotaToSocios
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -892,10 +895,7 @@ namespace Vista.Data.Migrations
                         .HasMaxLength(34)
                         .HasColumnType("varchar(34)");
 
-                    b.Property<DateTime>("FechaDesde")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime?>("FechaHasta")
+                    b.Property<DateTime>("FechaDeCambio")
                         .HasColumnType("datetime(6)");
 
                     b.Property<int>("SocioId")
@@ -908,51 +908,6 @@ namespace Vista.Data.Migrations
                     b.ToTable("HistorialSocios");
 
                     b.HasDiscriminator().HasValue("MovimientoSocio");
-
-                    b.UseTphMappingStrategy();
-                });
-
-            modelBuilder.Entity("Vista.Data.Models.Socios.Componentes.Pagos.PagoSocio", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("ConfirmadoPorPersonaId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Estado")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("FechaCobro")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime?>("FechaConfirmadoORechazado")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("FechaGeneradoPendiente")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<double>("Monto")
-                        .HasColumnType("double");
-
-                    b.Property<int>("SocioId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Tipo")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ConfirmadoPorPersonaId");
-
-                    b.HasIndex("SocioId");
-
-                    b.ToTable("PagoSocio");
-
-                    b.HasDiscriminator<int>("Tipo");
 
                     b.UseTphMappingStrategy();
                 });
@@ -984,9 +939,6 @@ namespace Vista.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("FechaIngreso")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("FechaIngresoSistemaNuevo")
                         .HasColumnType("datetime(6)");
 
                     b.Property<int>("FormaPago")
@@ -1449,13 +1401,13 @@ namespace Vista.Data.Migrations
                 {
                     b.HasBaseType("Vista.Data.Models.Socios.Componentes.MovimientoSocio");
 
-                    b.Property<int>("FormaDePago")
+                    b.Property<int>("FormaDePagoAnterior")
                         .HasColumnType("int");
 
-                    b.Property<int>("FrecuenciaDePago")
+                    b.Property<int>("FrecuenciaDePagoAnterior")
                         .HasColumnType("int");
 
-                    b.Property<double>("Monto")
+                    b.Property<double>("MontoAnterior")
                         .HasColumnType("double");
 
                     b.HasDiscriminator().HasValue("MovimientoCambioCuota");
@@ -1465,28 +1417,16 @@ namespace Vista.Data.Migrations
                 {
                     b.HasBaseType("Vista.Data.Models.Socios.Componentes.MovimientoSocio");
 
-                    b.Property<int>("Estado")
+                    b.Property<int>("EstadoAnterior")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("Fecha")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Motivo")
                         .HasColumnType("longtext");
 
                     b.HasDiscriminator().HasValue("MovimientoCambioEstado");
-                });
-
-            modelBuilder.Entity("Vista.Data.Models.Socios.Componentes.Pagos.PagoEfectivo", b =>
-                {
-                    b.HasBaseType("Vista.Data.Models.Socios.Componentes.Pagos.PagoSocio");
-
-                    b.Property<int?>("CobradorId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("FechaEntregaAComision")
-                        .HasColumnType("datetime(6)");
-
-                    b.HasIndex("CobradorId");
-
-                    b.HasDiscriminator().HasValue(1);
                 });
 
             modelBuilder.Entity("Vista.Data.Models.Salidas.Componentes.VehiculoAfectado", b =>
@@ -2327,25 +2267,8 @@ namespace Vista.Data.Migrations
                     b.HasOne("Vista.Data.Models.Socios.Socio", "Socio")
                         .WithMany("Historial")
                         .HasForeignKey("SocioId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Socio");
-                });
-
-            modelBuilder.Entity("Vista.Data.Models.Socios.Componentes.Pagos.PagoSocio", b =>
-                {
-                    b.HasOne("Vista.Data.Models.Personas.Personal.ComisionDirectiva", "ConfirmadoPor")
-                        .WithMany()
-                        .HasForeignKey("ConfirmadoPorPersonaId");
-
-                    b.HasOne("Vista.Data.Models.Socios.Socio", "Socio")
-                        .WithMany("Pagos")
-                        .HasForeignKey("SocioId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("ConfirmadoPor");
 
                     b.Navigation("Socio");
                 });
@@ -2392,15 +2315,6 @@ namespace Vista.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Vehiculo");
-                });
-
-            modelBuilder.Entity("Vista.Data.Models.Socios.Componentes.Pagos.PagoEfectivo", b =>
-                {
-                    b.HasOne("Vista.Data.Models.Personas.Personal.Cobrador", "Cobrador")
-                        .WithMany()
-                        .HasForeignKey("CobradorId");
-
-                    b.Navigation("Cobrador");
                 });
 
             modelBuilder.Entity("Vista.Data.Models.Salidas.Componentes.VehiculoAfectado", b =>
@@ -2507,8 +2421,6 @@ namespace Vista.Data.Migrations
             modelBuilder.Entity("Vista.Data.Models.Socios.Socio", b =>
                 {
                     b.Navigation("Historial");
-
-                    b.Navigation("Pagos");
                 });
 
             modelBuilder.Entity("Vista.Data.Models.Imagenes.Imagen_VehiculoSalida", b =>

@@ -46,9 +46,9 @@ namespace Vista.Data
 
         // Socios Assets
 
-        //public DbSet<Historial_Socio> HistorialesSocios { get; set; }
-        //public DbSet<HistorialCuota_Socio> HistorialCuotas { get; set; }
-        //public DbSet<HistorialEstado_Socio> HistorialEstados { get; set; }
+        public DbSet<MovimientoSocio> HistorialSocios { get; set; }
+        public DbSet<PagoSocio> PagoSocio { get; set; }
+        public DbSet<PagoEfectivo> PagosEfectivo { get; set; }
 
         // Dependencias (Departamentos)
 
@@ -175,11 +175,19 @@ namespace Vista.Data
                 .OnDelete(DeleteBehavior.Restrict);   // Esto evita borrado en cascada
 
             // Relación uno a muchos entre Socio y HistorialSocio
-            //modelBuilder.Entity<Historial_Socio>()
-            //    .HasOne(hs => hs.Socio)               // Un historial pertenece a un socio
-            //    .WithMany(s => s.Historial)         // Un socio tiene muchos movimientos en su historial
-            //    .HasForeignKey(hs => hs.SocioId)      // Clave foránea en HistorialSocio
-            //    .OnDelete(DeleteBehavior.Cascade);    // Borrado en cascada si se borra el socio
+            modelBuilder.Entity<MovimientoSocio>()
+                .HasOne(hs => hs.Socio)               // Un historial pertenece a un socio
+                .WithMany(s => s.Historial)         // Un socio tiene muchos movimientos en su historial
+                .HasForeignKey(hs => hs.SocioId)      // Clave foránea en HistorialSocio
+                .OnDelete(DeleteBehavior.Restrict); // Impide borrar el socio si tiene movimientos
+
+            // Relación uno a muchos entre Socio y PagoSocio
+
+            modelBuilder.Entity<PagoSocio>()
+                .HasOne(ps => ps.Socio)               // Un pago pertenece a un socio
+                .WithMany(s => s.Pagos)               // Un socio tiene muchos pagos
+                .HasForeignKey(ps => ps.SocioId)      // Clave foránea en PagoSocio
+                .OnDelete(DeleteBehavior.Restrict);    // Impide borrar el socio si tiene pagos
 
             // --- Configuración para FuerzaInterviniente_Salida ---
             modelBuilder.Entity<FuerzaInterviniente_Salida>(entity =>
@@ -320,9 +328,9 @@ namespace Vista.Data
                 .Property(s => s.TipoEmergencia)
                 .HasConversion<int>();
 
-            // modelBuilder.Entity<PagoSocio>()
-            // .Property(p => p.Tipo)
-            // .HasConversion<int>();
+            modelBuilder.Entity<PagoSocio>()
+            .Property(p => p.Tipo)
+            .HasConversion<int>();
 
             //Discriminacion (Pasada a ENUM)
 
@@ -342,7 +350,6 @@ namespace Vista.Data
                 .HasValue<Imagen_Personal>(TipoImagen.ImagenPersonal)
                 .HasValue<Imagen_VehiculoSalida>(TipoImagen.ImagenVehiculoSalida)
                 .HasValue<CertificadoMedico>(TipoImagen.ImagenCertificadoMedico);
-            //.HasValue<Comprobante>(TipoImagen.ImagenComprobanteBancario)
 
             modelBuilder.Entity<Salida>()
                 .HasDiscriminator(s => s.TipoEmergencia)
@@ -377,10 +384,9 @@ namespace Vista.Data
                 .HasValue<VehiculoAfectado>(TipoVehiculo.VehiculoAfectado)
                 .HasValue<Embarcacion>(TipoVehiculo.Embarcacion);
 
-            /* modelBuilder.Entity<PagoSocio>()
+            modelBuilder.Entity<PagoSocio>()
                 .HasDiscriminator(p => p.Tipo)
-                .HasValue<PagoTransferencia>(FormaDePago.Transferencia)
-                .HasValue<PagoEfectivo>(FormaDePago.Efectivo); */
+                .HasValue<PagoEfectivo>(TipoPagoSocio.Efectivo);
 
             // Configuracion de Realaciones al Borrarse
 
@@ -431,13 +437,6 @@ namespace Vista.Data
                 .Property(pv => pv.Tipo)
                 .HasConversion<int>();
 
-            // PagoTransferencia - Enum BancosConocidos
-
-            /*modelBuilder
-                .Entity<PagoTransferencia>()
-                .Property(pt => pt.BancoOrigen)
-                .HasConversion<int>(); */
-
             // Bombero - Enum EscalafonJerarquico (Grado)
 
             modelBuilder
@@ -480,6 +479,13 @@ namespace Vista.Data
                 .Property(c => c.Estado)
                 .HasConversion<int>();
 
+            // PagoSocio - Enum EstadoPago
+
+            modelBuilder
+                .Entity<PagoSocio>()
+                .Property(ps => ps.Estado)
+                .HasConversion<int>();
+
             // Socio - Enum EstadoSocio
 
             modelBuilder
@@ -506,29 +512,26 @@ namespace Vista.Data
                 .Property(s => s.FormaPago)
                 .HasConversion<int>();
 
-            // HistorialEstado_Socio - Enum TipoEstadoSocio
+            // MovimientoCambioCuota - Enum TipoEstadoSocio
 
-            //modelBuilder
-            //    .Entity<HistorialEstado_Socio>()
-            //    .Property(he => he.EstadoAnterior)
-            //    .HasConversion<int>();
+            modelBuilder
+                .Entity<MovimientoCambioEstado>()
+                .Property(he => he.Estado)
+                .HasConversion<int>();
 
-            //modelBuilder
-            //    .Entity<HistorialEstado_Socio>()
-            //    .Property(he => he.EstadoNuevo)
-            //    .HasConversion<int>();
+            // MovimientoCambioCuota - Enum FrecuenciaDePago
 
-            // HistorialCuota_Socio - Enum FrecuenciaDePago
+            modelBuilder
+                .Entity<MovimientoCambioCuota>()
+                .Property(hc => hc.FrecuenciaDePago)
+                .HasConversion<int>();
 
-            //modelBuilder
-            //    .Entity<HistorialCuota_Socio>()
-            //    .Property(hc => hc.FrecuenciaDePagoAnterior)
-            //    .HasConversion<int>();
+            // MovimientoCambioCuota - Enum FormaDePago
 
-            //modelBuilder
-            //    .Entity<HistorialCuota_Socio>()
-            //    .Property(hc => hc.FrecuenciaDePagoNueva)
-            //    .HasConversion<int>();
+            modelBuilder
+                .Entity<MovimientoCambioCuota>()
+                .Property(mc => mc.FormaDePago)
+                .HasConversion<int>();
 
             // Enum Conversiones a String (Texto)
 

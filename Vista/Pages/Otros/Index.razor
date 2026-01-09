@@ -5,8 +5,8 @@
 
 <style>
     /* ========================================
-                       VARIABLES Y CONFIGURACIÓN BASE
-                       ======================================== */
+                               VARIABLES Y CONFIGURACIÓN BASE
+                               ======================================== */
     :root {
         --primary-color: #1890ff;
         --text-primary: #262626;
@@ -15,7 +15,7 @@
         --bg-white: #ffffff;
         --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
         --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
-        --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.16);    
+        --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.16);
         --radius-sm: 8px;
         --radius-md: 12px;
         --radius-lg: 16px;
@@ -23,9 +23,9 @@
     }
 
     /* ========================================
-                       CONTENEDOR PRINCIPAL
-                       Dashboard container con fondo limpio
-                       ======================================== */
+                               CONTENEDOR PRINCIPAL
+                               Dashboard container con fondo limpio
+                               ======================================== */
     .dashboard-container {
         padding: 24px;
         background-color: var(--bg-light);
@@ -34,9 +34,9 @@
     }
 
     /* ========================================
-                       SECCIÓN DE BANNER / HERO
-                       Banner principal con overlay accesible
-                       ======================================== */
+                               SECCIÓN DE BANNER / HERO
+                               Banner principal con overlay accesible
+                               ======================================== */
     .banner-section {
         margin-bottom: 32px;
     }
@@ -99,9 +99,9 @@
     }
 
     /* ========================================
-                       TÍTULO DE SECCIÓN
-                       Mejora la organización visual
-                       ======================================== */
+                               TÍTULO DE SECCIÓN
+                               Mejora la organización visual
+                               ======================================== */
     .section-title {
         font-size: 1.75rem !important;
         font-weight: 600 !important;
@@ -113,18 +113,18 @@
     }
 
     /* ========================================
-                       GRID DE DASHBOARD
-                       Layout responsivo para las tarjetas
-                       ======================================== */
-.dashboard-grid {
-    row-gap: 32px !important; 
-}
+                               GRID DE DASHBOARD
+                               Layout responsivo para las tarjetas
+                               ======================================== */
+    .dashboard-grid {
+        row-gap: 32px !important;
+    }
 
 
     /* ========================================
-                       TARJETAS DE NAVEGACIÓN
-                       Cards modernos con mejor accesibilidad
-                       ======================================== */
+                               TARJETAS DE NAVEGACIÓN
+                               Cards modernos con mejor accesibilidad
+                               ======================================== */
     .dashboard-card {
         height: 300px;
         min-height: 425px;
@@ -174,9 +174,9 @@
         }
 
     /* ========================================
-                       ICONOS DE TARJETAS
-                       Iconos grandes y claros
-                       ======================================== */
+                               ICONOS DE TARJETAS
+                               Iconos grandes y claros
+                               ======================================== */
     .card-icon {
         font-size: 48px !important;
         margin-bottom: 16px;
@@ -191,9 +191,9 @@
     }
 
     /* ========================================
-                       TÍTULOS Y DESCRIPCIONES DE TARJETAS
-                       Tipografía clara y legible
-                       ======================================== */
+                               TÍTULOS Y DESCRIPCIONES DE TARJETAS
+                               Tipografía clara y legible
+                               ======================================== */
     .card-title {
         margin: 12px 0 8px 0 !important;
         font-size: 1.35rem !important;
@@ -211,9 +211,9 @@
     }
 
     /* ========================================
-                       TARJETAS CON MÚLTIPLES ACCIONES
-                       Para secciones con varios botones
-                       ======================================== */
+                               TARJETAS CON MÚLTIPLES ACCIONES
+                               Para secciones con varios botones
+                               ======================================== */
     .multi-action-card {
         padding: 28px 24px 24px 24px !important;
         justify-content: flex-start;
@@ -265,9 +265,9 @@
         }
 
     /* ========================================
-                       ESQUEMAS DE COLOR POR CATEGORÍA
-                       Colores accesibles con buen contraste
-                       ======================================== */
+                               ESQUEMAS DE COLOR POR CATEGORÍA
+                               Colores accesibles con buen contraste
+                               ======================================== */
 
     /* Legajo - Azul profesional */
     .legajo-card {
@@ -341,10 +341,22 @@
         --card-color-dark: #d46b08;
     }
 
+    /* Cobranza - Verde esmeralda recaudación */
+    .cobranza-card {
+        --card-color: #36cfc9;
+        --card-color-dark: #08979c;
+    }
+
+    /* Pagos - Azul índigo administración */
+    .pagos-card {
+        --card-color: #597ef7;
+        --card-color-dark: #2f54eb;
+    }
+
     /* ========================================
-                       ACCESIBILIDAD
-                       Skip link para navegación por teclado
-                       ======================================== */
+                               ACCESIBILIDAD
+                               Skip link para navegación por teclado
+                               ======================================== */
     .skip-link {
         position: absolute;
         top: -40px;
@@ -362,17 +374,17 @@
         }
 
     /* ========================================
-                       ESTADOS DE CARGA Y FEEDBACK
-                       ======================================== */
+                               ESTADOS DE CARGA Y FEEDBACK
+                               ======================================== */
     .loading-state {
         opacity: 0.6;
         pointer-events: none;
     }
 
     /* ========================================
-                       RESPONSIVE DESIGN
-                       Adaptación para móviles y tablets
-                       ======================================== */
+                               RESPONSIVE DESIGN
+                               Adaptación para móviles y tablets
+                               ======================================== */
     @@media (max-width: 992px) {
         .dashboard-container {
             padding: 16px;
@@ -469,8 +481,8 @@
     }
 
     /* ========================================
-                       MEJORAS DE IMPRESIÓN
-                       ======================================== */
+                               MEJORAS DE IMPRESIÓN
+                               ======================================== */
     @@media print {
         .dashboard-container {
             background: white;
@@ -762,7 +774,7 @@
                             <span>Equipos</span>
                         </Button>
                         <Button Type="ButtonType.Default"
-                                Class="action-button"   
+                                Class="action-button"
                                 OnClick="NavigateToPartesVehiculos"
                                 AriaLabel="Ir a Partes de Vehículos">
                             <i class="fa-solid fa-car-side" aria-hidden="true"></i>
@@ -808,6 +820,42 @@
                 </div>
             </AntDesign.Col>
 
+            <!-- COBRANZA: Gestión de cobros en efectivo -->
+            <AntDesign.Col Xs="24" Sm="12" Lg="8">
+                <div @onclick="NavigateToCobranza"
+                     @onkeypress="@((e) => HandleKeyPress(e, NavigateToCobranza))"
+                     role="button"
+                     tabindex="0"
+                     aria-label="Ir a Gestión de Cobranza"
+                     style="cursor: pointer; height: 100%;">
+                    <Card Class="dashboard-card cobranza-card" Hoverable>
+                        <i class="fa-solid fa-hand-holding-dollar card-icon" aria-hidden="true"></i>
+                        <Title Level="3" Class="card-title">COBRANZA</Title>
+                        <Paragraph Class="card-description">
+                            Gestione los cobros en efectivo a domicilio
+                        </Paragraph>
+                    </Card>
+                </div>
+            </AntDesign.Col>
+
+            <!-- PAGOS: Administración de pagos de socios -->
+            <AntDesign.Col Xs="24" Sm="12" Lg="8">
+                <div @onclick="NavigateToPagos"
+                     @onkeypress="@((e) => HandleKeyPress(e, NavigateToPagos))"
+                     role="button"
+                     tabindex="0"
+                     aria-label="Ir a Administración de Pagos"
+                     style="cursor: pointer; height: 100%;">
+                    <Card Class="dashboard-card pagos-card" Hoverable>
+                        <i class="fa-solid fa-file-invoice-dollar card-icon" aria-hidden="true"></i>
+                        <Title Level="3" Class="card-title">PAGOS</Title>
+                        <Paragraph Class="card-description">
+                            Administre los pagos y cuotas de socios
+                        </Paragraph>
+                    </Card>
+                </div>
+            </AntDesign.Col>
+
         </Row>
     </section>
 </div>
@@ -827,6 +875,8 @@
     private void NavigateToFirmas() => navigationManager.NavigateTo("/fire-force/incidentes-vehiculos");
     private void NavigateToCobradores() => navigationManager.NavigateTo("/fire-force/personal/cobradores");
     private void NavigateToSocios() => navigationManager.NavigateTo("/fire-force/socios");
+    private void NavigateToCobranza() => navigationManager.NavigateTo("/fire-force/socios/cobranza"); // Ajustar URL
+    private void NavigateToPagos() => navigationManager.NavigateTo("/fire-force/pagos"); // Ajustar URL
 
     // Ética
     private void NavigateToSancionados() => navigationManager.NavigateTo("/fire-force/bomberos/sancionados");
