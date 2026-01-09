@@ -254,7 +254,7 @@
             box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4) !important;
         }
 
-    /* Badge de notificaciones */
+
     .licencias-abm .notification-button {
         background: rgba(255, 255, 255, 0.2) !important;
         border: 1px solid rgba(255, 255, 255, 0.3) !important;
@@ -272,13 +272,23 @@
             background: rgba(255, 255, 255, 0.3) !important;
             transform: scale(1.1) !important;
         }
-    /* Tabla responsive */
+
     .licencias-abm .table-container {
         padding: 0 !important;
-        overflow: hidden !important;
+        overflow: auto !important;
+        max-height: calc(100vh - 300px) !important;
+        -ms-overflow-style: none;
+        scrollbar-width: none; 
     }
 
-    /* Estados de licencia */
+
+    .licencias-abm .table-container::-webkit-scrollbar {
+        width: 0px;
+        height: 0px;
+        display: none;
+    }
+
+
     .licencias-abm .status-badge {
         padding: 6px 12px !important;
         border-radius: 20px !important;
@@ -743,9 +753,9 @@
             </div>
 
             <div class="table-container">
-                <Table DataSource="LicenciasVM"
-                       PageSize="10"
-                       Responsive
+                  <Table DataSource="LicenciasVM"
+                      HidePagination="true"
+                      Responsive
                        TItem="LicenciaViewModel"
                        RowClassName="@(c => c.Data.EstadoLicencia.ToString())"
                        OnRow="@OnRowClick"
