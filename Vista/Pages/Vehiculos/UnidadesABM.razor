@@ -12,6 +12,9 @@
 
 @page "/fire-force/unidades/"
 
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Policy = "AdminOnly")]
+
 <div class="container unidades-abm">
 	<Content class="fade-in" Style="padding: 16px;">
 		<Card Bordered="false"

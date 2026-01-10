@@ -8,7 +8,7 @@
 @inject IParteVehiculoService ParteVehiculoService
 
 @using Microsoft.AspNetCore.Authorization
-@attribute [Authorize(Roles = "administrador")]
+@attribute [Authorize(Policy = "AdminOnly")]
 
 <style>
     .fuerzas-abm {

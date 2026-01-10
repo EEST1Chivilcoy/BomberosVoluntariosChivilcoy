@@ -2,7 +2,7 @@
 @inject NavigationManager NavigationManager
 
 @using Microsoft.AspNetCore.Authorization
-@attribute [Authorize(Roles = "administrador")]
+@attribute [Authorize(Policy = "AdminOnly")]
 
 <link rel="stylesheet" href="css/LegajoEstilos.css" />
 

@@ -13,6 +13,9 @@
 @inject IMessageService message
 @implements IDisposable
 
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "administrador,secretaria")]
+
 <style>
     /* Estilos generales */
     .container {

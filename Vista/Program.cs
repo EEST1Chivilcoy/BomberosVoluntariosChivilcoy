@@ -1,19 +1,20 @@
-using Vista.Data;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.EntityFrameworkCore;
-using Vista.Services;
-using Microsoft.AspNetCore.Localization;
-using System.Globalization;
 using AntDesign;
-using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.Identity.Web;
-using Microsoft.Identity.Web.UI;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Server.Circuits;
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.Identity.Web;
+using Microsoft.Identity.Web.UI;
+using System.Globalization;
+using System.Security.Claims;
+using Vista.Data;
+using Vista.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,7 +43,7 @@ builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
 
         // Esto es obligatorio para que funcionen los Roles de Aplicación.
         // Le dice a .NET que busque el array "roles" en el token JSON.
-        options.TokenValidationParameters.RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role";
+        options.TokenValidationParameters.RoleClaimType = ClaimTypes.Role;
 
         // Configuración de eventos
         options.Events = new OpenIdConnectEvents
@@ -98,6 +99,13 @@ builder.Services.AddControllersWithViews()
 builder.Services.AddAuthorization(options =>
 {
     options.FallbackPolicy = options.DefaultPolicy;
+
+    // Definir políticas personalizadas
+    options.AddPolicy("AdminOnly", policy =>
+        policy.RequireRole("administrador"));
+
+    options.AddPolicy("SecretariaOrAdmin", policy =>
+        policy.RequireRole("secretaria", "administrador"));
 });
 
 // Add services to the container.

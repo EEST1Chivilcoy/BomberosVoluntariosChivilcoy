@@ -8,7 +8,7 @@
 @page "/fire-force/bomberos/ascenso"
 
 @using Microsoft.AspNetCore.Authorization
-@attribute [Authorize(Roles = "administrador")]
+@attribute [Authorize(Policy = "AdminOnly")]
 
 <style>
     .ascensos-abm {

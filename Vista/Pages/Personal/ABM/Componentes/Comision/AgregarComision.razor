@@ -27,7 +27,7 @@
 @inject IComisionDirectivaService ComisionDirectivaService
 
 @using Microsoft.AspNetCore.Authorization
-@attribute [Authorize(Roles = "administrador")]
+@attribute [Authorize(Policy = "AdminOnly")]
 
 <style>
     /* Estilos generales */

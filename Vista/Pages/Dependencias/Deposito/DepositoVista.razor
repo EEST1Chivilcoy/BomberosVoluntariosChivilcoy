@@ -10,7 +10,7 @@
 @using Vista.Services
 
 @using Microsoft.AspNetCore.Authorization
-@attribute [Authorize(Roles = "administrador")]
+@attribute [Authorize(Policy = "AdminOnly")]
 
 <style>
     .licencias-abm {

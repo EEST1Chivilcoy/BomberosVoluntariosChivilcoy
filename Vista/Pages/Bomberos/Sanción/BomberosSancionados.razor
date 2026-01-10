@@ -7,7 +7,7 @@
 @using Vista.Data.Models.Personas.Personal.Componentes
 
 @using Microsoft.AspNetCore.Authorization
-@attribute [Authorize(Roles = "administrador")]
+@attribute [Authorize(Policy = "AdminOnly")]
 
 <style>
     .sancionados-abm {

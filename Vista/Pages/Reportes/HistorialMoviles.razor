@@ -11,6 +11,8 @@
 @using Vista.Data.ViewModels.Personal;
 @using Vista.Data.Models.Vehiculos.Flota;
 
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Policy = "AdminOnly")]
 
 <style>
 

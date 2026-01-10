@@ -12,7 +12,7 @@
 @inject IMessageService MessageService
 
 @using Microsoft.AspNetCore.Authorization
-@attribute [Authorize(Roles = "administrador")]
+@attribute [Authorize(Policy = "AdminOnly")]
 
 <style>
     /* ===========================

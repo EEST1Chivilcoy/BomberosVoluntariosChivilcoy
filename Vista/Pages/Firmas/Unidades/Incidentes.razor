@@ -6,9 +6,11 @@
 @* Servicios utilizados *@
 @using Vista.Services;
 
-
 @inject IMessageService MessageService
 @inject IBomberoService BomberoService
+
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Policy = "AdminOnly")]
 
 <style>
     .firmas-abm {
