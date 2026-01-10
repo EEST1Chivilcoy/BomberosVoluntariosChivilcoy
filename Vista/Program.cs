@@ -42,9 +42,9 @@ builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
 
         // Esto es obligatorio para que funcionen los Roles de Aplicación.
         // Le dice a .NET que busque el array "roles" en el token JSON.
-        options.TokenValidationParameters.RoleClaimType = "roles";
+        options.TokenValidationParameters.RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role";
 
-        // CRÍTICO: Configuración para Azure Web Apps (Tu código existente)
+        // Configuración de eventos
         options.Events = new OpenIdConnectEvents
         {
             OnRemoteFailure = context =>
@@ -57,12 +57,23 @@ builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
             {
                 Console.WriteLine($"Authentication failed: {context.Exception?.Message}");
                 return Task.CompletedTask;
+            },
+            OnTokenValidated = context =>
+            {
+                Console.WriteLine("=== TOKEN VALIDADO ===");
+                foreach (var claim in context.Principal.Claims)
+                {
+                    Console.WriteLine($"{claim.Type}: {claim.Value}");
+                }
+                Console.WriteLine("======================");
+                return Task.CompletedTask;
             }
         };
     })
     .EnableTokenAcquisitionToCallDownstreamApi(initialScopes)
     .AddMicrosoftGraph(builder.Configuration.GetSection("MicrosoftGraph"))
     .AddInMemoryTokenCaches();
+
 
 // Configuración de cookies para Azure Web Apps
 builder.Services.Configure<CookiePolicyOptions>(options =>
