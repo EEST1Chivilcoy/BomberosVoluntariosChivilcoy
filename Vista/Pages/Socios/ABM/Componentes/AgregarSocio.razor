@@ -471,6 +471,8 @@
                 await message.ErrorAsync("La API de búsqueda de direcciones no está disponible.");
                 throw new InvalidOperationException("La API no está disponible en este momento.");
             }
+
+            socioView.NroSocio = await SocioService.ObtenerProximoNroSocioAsync();
         }
         catch (Exception ex)
         {

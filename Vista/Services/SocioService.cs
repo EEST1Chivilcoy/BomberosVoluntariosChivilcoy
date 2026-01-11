@@ -14,6 +14,7 @@ namespace Vista.Services
         Task<List<Socio>?> ObtenerSociosAsync();
         Task<Socio?> ObtenerSocioPorIdAsync(int socioId, bool asNoTracking = true);
         Task EditarSocioAsync(Socio socio);
+        Task<int> ObtenerProximoNroSocioAsync();
     }
 
     public class SocioService : ISocioService
@@ -161,7 +162,7 @@ namespace Vista.Services
                 }
             }
 
-            // Validar que no exista otro Socio con el mismo documento o CUIT (si se cambió)
+            // Validar que no exista otro Socio with el mismo documento o CUIT (si se cambió)
             if (SocioAEditar.DocumentoOCUIT != socio.DocumentoOCUIT)
             {
                 bool documentoExistente = await _context.Socios
@@ -249,6 +250,15 @@ namespace Vista.Services
 
                 throw;
             }
+        }
+
+        public async Task<int> ObtenerProximoNroSocioAsync()
+        {
+            // Obtiene el máximo NroSocio actual, si no hay socios retorna 0
+            int maxNroSocio = await _context.Socios
+                .MaxAsync(s => (int?)s.NroSocio) ?? 0;
+
+            return maxNroSocio + 1;
         }
     }
 }
