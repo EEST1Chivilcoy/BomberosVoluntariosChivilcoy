@@ -24,16 +24,10 @@ namespace Vista.Data.Models.Socios.Componentes.Pagos
         public TipoPagoSocio Tipo { get; set; }
 
         /// <summary>
-        /// Fecha en que se generó el pago pendiente.
-        /// </summary>
-        [Required]
-        public DateTime FechaGeneradoPendiente { get; set; } = DateTime.Now;
-
-        /// <summary>
         /// Fecha en la que se va a cobrar el pago.
         /// </summary>
         [Required]
-        public DateTime FechaCobro { get; set; }
+        public DateTime Fecha { get; set; } = DateTime.Now;
 
         /// <summary>
         /// Fecha en que el pago fue confirmado o rechazado.
@@ -55,7 +49,7 @@ namespace Vista.Data.Models.Socios.Componentes.Pagos
         /// <summary>
         /// Estado del pago.
         /// </summary>
-        public EstadoPago Estado { get; set; } = EstadoPago.PendienteAPagar;
+        public EstadoPago Estado { get; set; } = EstadoPago.PendienteAConfirmar;
 
         /// <summary>
         /// Socio que realizó el pago.

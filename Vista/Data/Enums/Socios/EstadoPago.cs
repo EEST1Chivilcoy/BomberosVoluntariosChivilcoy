@@ -2,9 +2,8 @@
 {
     public enum EstadoPago
     {
-        PendienteAPagar = 1,
-        PendienteAConfirmar = 2,
-        Confirmado = 3,
-        Rechazado = 4
+        PendienteAConfirmar = 1,
+        Confirmado = 2,
+        Rechazado = 3
     }
 }
