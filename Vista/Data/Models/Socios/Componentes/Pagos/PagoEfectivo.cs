@@ -13,15 +13,14 @@ namespace Vista.Data.Models.Socios.Componentes.Pagos
     {
         /// <summary>
         /// Identificador del cobrador que recibió el efectivo del socio.
-        /// Este es quien realiza la primera validación (cobranza).
-        /// Null si el pago aún está pendiente de cobro.
         /// </summary>
-        public int? CobradorId { get; set; }
+        [Required(ErrorMessage = "El cobrador es obligatorio.")]
+        public int CobradorId { get; set; }
 
         /// <summary>
         /// Cobrador que recibió el efectivo del socio.
-        /// Null si el pago aún está pendiente de cobro.
         /// </summary>
+        [ForeignKey(nameof(CobradorId))]
         public Cobrador? Cobrador { get; set; }
 
         /// <summary>
@@ -29,5 +28,10 @@ namespace Vista.Data.Models.Socios.Componentes.Pagos
         /// Null si aún no se entregó.
         /// </summary>
         public DateTime? FechaEntregaAComision { get; set; }
+
+        /// <summary>
+        /// Observaciones adicionales sobre el pago en efectivo.
+        /// </summary>
+        public string? Observaciones { get; set; }
     }
 }

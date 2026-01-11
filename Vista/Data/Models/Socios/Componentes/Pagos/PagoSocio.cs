@@ -58,6 +58,9 @@ namespace Vista.Data.Models.Socios.Componentes.Pagos
 
         /// <summary>
         /// Miembro de la Comisión Directiva que confirmó el pago.
+        /// Se coloca como nullable para permitir pagos pendientes de confirmación.
+        /// o por que tambien puede que sea automatica la confirmacion y no haya nadie que lo confirme.
+        /// por ejemplo pagos con tarjeta.
         /// </summary>
         public ComisionDirectiva? ConfirmadoPor { get; set; }
     }

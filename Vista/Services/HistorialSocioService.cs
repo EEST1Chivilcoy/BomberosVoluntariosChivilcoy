@@ -39,6 +39,21 @@ namespace Vista.Services
         /// <param name="socioId">Identificador único del socio cuyo historial de estados se desea consultar.</param>
         /// <returns>Una lista de <see cref="MovimientoCambioEstado"/> con los cambios de estado registrados.</returns>
         Task<List<MovimientoCambioEstado>> ObtenerHistorialEstados(int socioId);
+
+        /// <summary>
+        /// Obtiene los períodos en los que el socio estuvo activo.
+        /// </summary>
+        /// <param name="socioId">Identificador único del socio.</param>
+        /// <returns>Lista de movimientos de estado donde el socio estuvo activo.</returns>
+        Task<List<MovimientoCambioEstado>> ObtenerPeriodosActivos(int socioId);
+
+        /// <summary>
+        /// Obtiene la cuota vigente para una fecha específica.
+        /// </summary>
+        /// <param name="socioId">Identificador único del socio.</param>
+        /// <param name="fecha">Fecha para la cual se desea obtener la cuota vigente.</param>
+        /// <returns>El movimiento de cuota vigente en esa fecha, o null si no existe.</returns>
+        Task<MovimientoCambioCuota?> ObtenerCuotaVigenteEnFecha(int socioId, DateTime fecha);
     }
 
     public class HistorialSocioService : IHistorialSocioService
@@ -74,6 +89,27 @@ namespace Vista.Services
                 .Where(h => h.SocioId == socioId)
                 .OrderBy(h => h.FechaDesde)
                 .ToListAsync();
+        }
+
+        public async Task<List<MovimientoCambioEstado>> ObtenerPeriodosActivos(int socioId)
+        {
+            return await _context.HistorialSocios
+                .OfType<MovimientoCambioEstado>()
+                .Where(h => h.SocioId == socioId && h.Estado == TipoEstadoSocio.Activo)
+                .OrderBy(h => h.FechaDesde)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        public async Task<MovimientoCambioCuota?> ObtenerCuotaVigenteEnFecha(int socioId, DateTime fecha)
+        {
+            return await _context.HistorialSocios
+                .OfType<MovimientoCambioCuota>()
+                .Where(h => h.SocioId == socioId 
+                    && h.FechaDesde <= fecha 
+                    && (h.FechaHasta == null || h.FechaHasta >= fecha))
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
         }
 
         public async Task CrearMovimientoSocio(int socioId, MovimientoSocio historial)

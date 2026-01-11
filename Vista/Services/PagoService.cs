@@ -1,4 +1,5 @@
 ﻿using Vista.Data;
+using Vista.Data.Enums.Socios;
 using Vista.Data.Models.Socios.Componentes.Pagos;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,6 +9,20 @@ namespace Vista.Services
     {
         Task AgregarPagoAsync(int SocioId, PagoSocio Pago);
         Task<List<PagoSocio>> ObtenerPagosPorSocioAsync(int SocioId);
+        
+        /// <summary>
+        /// Obtiene los pagos confirmados de un socio.
+        /// </summary>
+        /// <param name="socioId">Identificador único del socio.</param>
+        /// <returns>Lista de pagos confirmados del socio.</returns>
+        Task<List<PagoSocio>> ObtenerPagosConfirmadosPorSocioAsync(int socioId);
+        
+        /// <summary>
+        /// Calcula el total de pagos confirmados de un socio.
+        /// </summary>
+        /// <param name="socioId">Identificador único del socio.</param>
+        /// <returns>Suma total de los montos de pagos confirmados.</returns>
+        Task<decimal> ObtenerTotalPagosConfirmadosAsync(int socioId);
     }
 
     public class PagoService : IPagoService
@@ -32,6 +47,21 @@ namespace Vista.Services
                 .Where(p => p.SocioId == SocioId)
                 .AsNoTracking()
                 .ToListAsync();
+        }
+
+        public async Task<List<PagoSocio>> ObtenerPagosConfirmadosPorSocioAsync(int socioId)
+        {
+            return await _context.PagoSocio
+                .Where(p => p.SocioId == socioId && p.Estado == EstadoPago.Confirmado)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        public async Task<decimal> ObtenerTotalPagosConfirmadosAsync(int socioId)
+        {
+            return (decimal)await _context.PagoSocio
+                .Where(p => p.SocioId == socioId && p.Estado == EstadoPago.Confirmado)
+                .SumAsync(p => p.Monto);
         }
     }
 }
