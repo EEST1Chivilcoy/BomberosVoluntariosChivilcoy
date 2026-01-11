@@ -1,3 +1,5 @@
+using Vista.Data.Enums.Socios;
+
 namespace Vista.Pages.Socios.Cobranza
 {
     /// <summary>
@@ -15,5 +17,6 @@ namespace Vista.Pages.Socios.Cobranza
         public decimal Longitud { get; set; }
         public string? Telefono { get; set; }
         public decimal MontoCuota { get; set; }
+        public Zona? Zona { get; set; }
     }
 }

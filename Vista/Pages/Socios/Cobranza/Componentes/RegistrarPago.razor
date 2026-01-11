@@ -1,0 +1,133 @@
+@using Vista.Data.Models.Socios.Componentes.Pagos
+@using Vista.Data.Enums.Socios
+@using Vista.Pages.Socios.Cobranza
+
+@inject IMessageService MessageService
+
+<div class="registrar-pago-content">
+    @if (Socio != null)
+    {
+        <div class="registrar-pago-socio-info @GetSaldoInfoClass()">
+            <div class="registrar-pago-socio-nombre">
+                <Icon Type="user" /> @Socio.NombreApellidoONombreEmpresa
+            </div>
+            <div class="registrar-pago-socio-saldo @GetSaldoBadgeClass()">
+                Saldo: @(Socio.Saldo < 0 ? "Debe" : "A favor") $@Math.Abs(Socio.Saldo).ToString("N2")
+            </div>
+        </div>
+
+        <div class="registrar-pago-form-item">
+            <label><Icon Type="dollar" /> Monto a pagar</label>
+            <AntDesign.InputNumber TValue="double"
+                                   @bind-Value="@MontoAPagar"
+                                   Min="0.01"
+                                   Step="100"
+                                   Style="width: 100%;"
+                                   Placeholder="Ingrese el monto" />
+        </div>
+
+        <div class="registrar-pago-form-item">
+            <label><Icon Type="calendar" /> Fecha de cobro</label>
+            <DatePicker TValue="DateTime"
+                        @bind-Value="@FechaCobro"
+                        Style="width: 100%;"
+                        Format="dd/MM/yyyy" />
+        </div>
+
+        <div class="registrar-pago-form-item">
+            <label><Icon Type="edit" /> Observaciones (opcional)</label>
+            <TextArea @bind-Value="@Observaciones"
+                      Rows="3"
+                      MaxLength="500"
+                      ShowCount />
+        </div>
+
+        <div class="registrar-pago-footer">
+            <Button OnClick="@OnCancelar">
+                Cancelar
+            </Button>
+            <Button Type="@ButtonType.Primary"
+                    OnClick="@ConfirmarPago"
+                    Loading="@Guardando"
+                    Disabled="@(MontoAPagar <= 0)"
+                    Class="registrar-pago-btn-confirmar">
+                <Icon Type="check" /> Confirmar Pago
+            </Button>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public CobranzaViewModel? Socio { get; set; }
+
+    [Parameter]
+    public EventCallback OnCancel { get; set; }
+
+    [Parameter]
+    public EventCallback<PagoEfectivo> OnPagoConfirmado { get; set; }
+
+    private double MontoAPagar { get; set; }
+    private DateTime FechaCobro { get; set; } = DateTime.Now;
+    private string? Observaciones { get; set; }
+    private bool Guardando { get; set; } = false;
+
+    protected override void OnParametersSet()
+    {
+        if (Socio != null)
+        {
+            MontoAPagar = Socio.Saldo < 0 ? (double)Math.Abs(Socio.Saldo) : (double)Socio.MontoCuota;
+            FechaCobro = DateTime.Now;
+            Observaciones = string.Empty;
+        }
+    }
+
+    private string GetSaldoInfoClass()
+    {
+        if (Socio == null) return "";
+        return Socio.Saldo < 0 ? "socio-info-deuda" : (Socio.Saldo > 0 ? "socio-info-favor" : "socio-info-neutral");
+    }
+
+    private string GetSaldoBadgeClass()
+    {
+        if (Socio == null) return "";
+        return Socio.Saldo < 0 ? "saldo-deuda" : (Socio.Saldo > 0 ? "saldo-favor" : "saldo-neutral");
+    }
+
+    private async Task OnCancelar()
+    {
+        await OnCancel.InvokeAsync();
+    }
+
+    private async Task ConfirmarPago()
+    {
+        if (Socio == null || MontoAPagar <= 0)
+        {
+            MessageService.Warning("Por favor, ingrese un monto válido.");
+            return;
+        }
+
+        Guardando = true;
+        StateHasChanged();
+
+        try
+        {
+            var pago = new PagoEfectivo
+            {
+                SocioId = Socio.SocioId,
+                Monto = MontoAPagar,
+                FechaCobro = FechaCobro,
+                FechaGeneradoPendiente = DateTime.Now,
+                Estado = EstadoPago.PendienteAConfirmar,
+                Tipo = Data.Enums.Discriminadores.TipoPagoSocio.Efectivo
+            };
+
+            await OnPagoConfirmado.InvokeAsync(pago);
+        }
+        finally
+        {
+            Guardando = false;
+            StateHasChanged();
+        }
+    }
+}
