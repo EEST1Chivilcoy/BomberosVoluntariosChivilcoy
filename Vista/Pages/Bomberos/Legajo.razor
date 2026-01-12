@@ -41,12 +41,6 @@
                             <label class="label" for="handy-input">NÚMERO DE HANDY</label>
                             <Input Id="handy-input" Value="@("120")" Disabled aria-label="Número de handy" />
                         </div>
-
-                        <div class="info-block">
-                            <Button class="modal-footer" OnClick="CerrarSesion">
-                                Cerrar Sesion
-                            </Button>
-                        </div>
                     </div>
                 </Card>
             </div>
@@ -130,10 +124,4 @@
     private string mesAnterior = DateTime.Now.AddMonths(-1).ToString("MMMM", new System.Globalization.CultureInfo("es-ES")).ToUpper();
     private string mesActual = DateTime.Now.ToString("MMMM", new System.Globalization.CultureInfo("es-ES")).ToUpper();
     private string añoActual = DateTime.Now.Year.ToString();
-
-    private void CerrarSesion()
-    {
-        // Cierra sesión local sin cerrar la sesión de Microsoft Entra ID
-        NavigationManager.NavigateTo("MicrosoftIdentity/Account/SignOut?local=true", forceLoad: true);
-    }
 }
