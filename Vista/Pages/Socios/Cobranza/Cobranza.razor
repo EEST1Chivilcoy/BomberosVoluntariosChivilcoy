@@ -7,10 +7,12 @@
 @using Vista.Pages.Socios.Cobranza
 @using Vista.Pages.Socios.Cobranza.Componentes
 @using Vista.Shared
+@using Microsoft.EntityFrameworkCore
 
 @*Servicios utilizados*@
 @using Vista.Services
 @inject ISocioService SocioService
+@inject ISaldoSocioService SaldoSocioService
 @inject IPagoService PagoService
 @inject IMessageService MessageService
 @inject NavigationManager NavigationManager
@@ -21,8 +23,8 @@
 
 <style>
     /* ========================================
-           VARIABLES CSS - PALETA DEL SISTEMA
-           ======================================== */
+               VARIABLES CSS - PALETA DEL SISTEMA
+               ======================================== */
     :root {
         --cobranza-primary-color: #A63333;
         --cobranza-primary-dark: #732D2D;
@@ -40,8 +42,8 @@
     }
 
     /* ========================================
-           ESTILOS GENERALES DE LA PÁGINA
-           ======================================== */
+               ESTILOS GENERALES DE LA PÁGINA
+               ======================================== */
     .cobranza-container {
         padding: 12px;
         min-height: 100vh;
@@ -57,8 +59,8 @@
     }
 
     /* ========================================
-           HEADER SECTION
-           ======================================== */
+               HEADER SECTION
+               ======================================== */
     .header-section {
         background: linear-gradient(135deg, #A63333 0%, #732D2D 100%);
         color: white;
@@ -196,8 +198,8 @@
     }
 
     /* ========================================
-           FILTROS
-           ======================================== */
+               FILTROS
+               ======================================== */
     .filters-section {
         position: relative;
         z-index: 2;
@@ -252,8 +254,8 @@
         }
 
     /* ========================================
-           GRID DE CARDS
-           ======================================== */
+               GRID DE CARDS
+               ======================================== */
     .cards-container {
         padding: 20px;
     }
@@ -265,8 +267,8 @@
     }
 
     /* ========================================
-           CARD DE SOCIO
-           ======================================== */
+               CARD DE SOCIO
+               ======================================== */
     .socio-card {
         border-radius: 16px !important;
         overflow: hidden;
@@ -407,8 +409,8 @@
         }
 
     /* ========================================
-           SLIDE TO UNLOCK
-           ======================================== */
+               SLIDE TO UNLOCK
+               ======================================== */
     .slide-to-unlock-container {
         position: relative;
         width: 100%;
@@ -490,8 +492,8 @@
     }
 
     /* ========================================
-           ESTADO VACÍO Y LOADING
-           ======================================== */
+               ESTADO VACÍO Y LOADING
+               ======================================== */
     .empty-state {
         text-align: center;
         padding: 60px 20px;
@@ -524,8 +526,8 @@
     }
 
     /* ========================================
-           ANIMACIONES
-           ======================================== */
+               ANIMACIONES
+               ======================================== */
     .fade-in {
         animation: fadeIn 0.5s ease-in-out;
     }
@@ -543,8 +545,8 @@
     }
 
     /* ========================================
-           RESPONSIVE
-           ======================================== */
+               RESPONSIVE
+               ======================================== */
     @@media (max-width: 1199px) {
         .cobranza-container {
             padding: 8px;
@@ -1027,9 +1029,17 @@
 
             if (Socios != null)
             {
-                CobranzaViewModels = Socios
-                    .Where(s => s.FormaPago == FormaDePago.Efectivo) // Solo socios que pagan en efectivo
-                    .Select(s => new CobranzaViewModel
+                var socios = Socios
+                    .Where(s => s.FormaPago == FormaDePago.Efectivo)
+                    .ToList();
+
+                var cobranzaViewModels = new List<CobranzaViewModel>();
+
+                foreach (var s in socios)
+                {
+                    var saldo = await SaldoSocioService.CalcularSaldoActualAsync(s.Id);
+
+                    cobranzaViewModels.Add(new CobranzaViewModel
                     {
                         SocioId = s.Id,
                         NumeroSocio = s.NroSocio,
@@ -1038,13 +1048,16 @@
                             : s.Nombre ?? "Sin nombre",
                         DocumentoORazonSocial = s.DocumentoOCUIT ?? "Sin documento",
                         Domicilio = s.Direccion ?? "Sin dirección",
-                        Saldo = CalcularSaldo(s),
+                        Saldo = saldo,
                         Latitud = (decimal)s.Latitud,
                         Longitud = (decimal)s.Longitud,
                         Telefono = s.Telefono,
                         MontoCuota = (decimal)s.MontoCuota,
                         Zona = s.Zona
-                    })
+                    });
+                }
+
+                CobranzaViewModels = cobranzaViewModels
                     .OrderBy(s => s.Saldo)
                     .ThenBy(s => s.NombreApellidoONombreEmpresa)
                     .ToList();
@@ -1070,14 +1083,6 @@
             Cargando = false;
             StateHasChanged();
         }
-    }
-
-    private decimal CalcularSaldo(Socio socio)
-    {
-        // TODO: Implementar cálculo real basado en pagos y cuotas generadas
-        var random = new Random(socio.Id);
-        var mesesDeuda = random.Next(-3, 2);
-        return (decimal)(mesesDeuda * socio.MontoCuota);
     }
 
     // ======================================== BÚSQUEDA Y FILTRADO ========================================
