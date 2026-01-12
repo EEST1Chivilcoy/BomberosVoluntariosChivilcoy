@@ -7,27 +7,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Vista.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class MigracionInicial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterDatabase()
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Brigadas",
-                columns: table => new
-                {
-                    BrigadaId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    NombreBrigada = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Brigadas", x => x.BrigadaId);
-                })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
@@ -50,6 +35,32 @@ namespace Vista.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Comunicacion", x => x.ComunicacionId);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "EquiposAutonomos",
+                columns: table => new
+                {
+                    EquipoAutonomoId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    NroSerie = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    NroTubo = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Marca = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Modelo = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    TipoMaterial = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Estado = table.Column<int>(type: "int", nullable: false),
+                    UltimaFechaPruebaHidraulica = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    FechaVencimientoPruebaHidraulica = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EquiposAutonomos", x => x.EquipoAutonomoId);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -89,21 +100,152 @@ namespace Vista.Data.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Seguro",
+                name: "PartesVehiculo",
                 columns: table => new
                 {
-                    SeguroId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Tipo = table.Column<int>(type: "int", nullable: false),
-                    CompañiaAseguradora = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    NumeroDePoliza = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    FechaDeVencimineto = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                    Nombre = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Seguro", x => x.SeguroId);
+                    table.PrimaryKey("PK_PartesVehiculo", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Socios",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    NroSocio = table.Column<int>(type: "int", nullable: false),
+                    Tipo = table.Column<int>(type: "int", nullable: false),
+                    FechaIngreso = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    FechaIngresoSistemaNuevo = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    EstadoSocio = table.Column<int>(type: "int", nullable: false),
+                    MontoCuota = table.Column<double>(type: "double", nullable: false),
+                    FrecuenciaDePago = table.Column<int>(type: "int", nullable: false),
+                    FormaPago = table.Column<int>(type: "int", nullable: false),
+                    DocumentoOCUIT = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Nombre = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Apellido = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Direccion = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Latitud = table.Column<double>(type: "double", nullable: false),
+                    Longitud = table.Column<double>(type: "double", nullable: false),
+                    Zona = table.Column<int>(type: "int", nullable: false),
+                    Ocupacion = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Telefono = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Email = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Socios", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Persona",
+                columns: table => new
+                {
+                    PersonaId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Tipo = table.Column<int>(type: "int", nullable: false),
+                    Sexo = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Nombre = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Apellido = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Documento = table.Column<int>(type: "int", nullable: false),
+                    Residencia = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Direccion = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Edad = table.Column<int>(type: "int", nullable: false),
+                    EntraId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    UPN = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    GrupoSanguineo = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    FechaNacimiento = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LugarNacimiento = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    FechaAceptacion = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    NumeroLegajo = table.Column<int>(type: "int", nullable: true),
+                    Estado = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Observaciones = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Profesion = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    NivelEstudios = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    NumeroIoma = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Dotacion = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Grado = table.Column<int>(type: "int", nullable: true),
+                    Altura = table.Column<int>(type: "int", nullable: true),
+                    Peso = table.Column<int>(type: "int", nullable: true),
+                    Chofer = table.Column<bool>(type: "tinyint(1)", nullable: true),
+                    VencimientoRegistro = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    EquipoId = table.Column<int>(type: "int", nullable: true),
+                    Cobrador_Estado = table.Column<int>(type: "int", nullable: true),
+                    ZonasAsignadas = table.Column<int>(type: "int", nullable: true),
+                    ComisionDirectiva_Grado = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ComisionDirectiva_Estado = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Persona", x => x.PersonaId);
+                    table.ForeignKey(
+                        name: "FK_Persona_Comunicacion_EquipoId",
+                        column: x => x.EquipoId,
+                        principalTable: "Comunicacion",
+                        principalColumn: "ComunicacionId",
+                        onDelete: ReferentialAction.SetNull);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "HistorialSocios",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    FechaDesde = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    FechaHasta = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    SocioId = table.Column<int>(type: "int", nullable: false),
+                    Discriminator = table.Column<string>(type: "varchar(34)", maxLength: 34, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    FrecuenciaDePago = table.Column<int>(type: "int", nullable: true),
+                    FormaDePago = table.Column<int>(type: "int", nullable: true),
+                    Monto = table.Column<double>(type: "double", nullable: true),
+                    Estado = table.Column<int>(type: "int", nullable: true),
+                    Motivo = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HistorialSocios", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_HistorialSocios_Socios_SocioId",
+                        column: x => x.SocioId,
+                        principalTable: "Socios",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -127,6 +269,179 @@ namespace Vista.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AscensoBomberos", x => x.AscensoBomberoId);
+                    table.ForeignKey(
+                        name: "FK_AscensoBomberos_Persona_PersonaId",
+                        column: x => x.PersonaId,
+                        principalTable: "Persona",
+                        principalColumn: "PersonaId",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Brigadas",
+                columns: table => new
+                {
+                    BrigadaId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    NombreBrigada = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    EncargadoPersonaId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Brigadas", x => x.BrigadaId);
+                    table.ForeignKey(
+                        name: "FK_Brigadas_Persona_EncargadoPersonaId",
+                        column: x => x.EncargadoPersonaId,
+                        principalTable: "Persona",
+                        principalColumn: "PersonaId",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Contactos",
+                columns: table => new
+                {
+                    ContactoId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    TelefonoCel = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    TelefonoLaboral = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Email = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PersonalId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Contactos", x => x.ContactoId);
+                    table.ForeignKey(
+                        name: "FK_Contactos_Persona_PersonalId",
+                        column: x => x.PersonalId,
+                        principalTable: "Persona",
+                        principalColumn: "PersonaId",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Dependencias",
+                columns: table => new
+                {
+                    DependenciaId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    NombreDependencia = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    EncargadoPersonaId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Dependencias", x => x.DependenciaId);
+                    table.ForeignKey(
+                        name: "FK_Dependencias_Persona_EncargadoPersonaId",
+                        column: x => x.EncargadoPersonaId,
+                        principalTable: "Persona",
+                        principalColumn: "PersonaId",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Licencias",
+                columns: table => new
+                {
+                    LicenciaId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    TipoLicencia = table.Column<int>(type: "int", nullable: false),
+                    Descripcion = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Desde = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Hasta = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    EstadoLicencia = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    RazonRechazo = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PersonalId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Licencias", x => x.LicenciaId);
+                    table.ForeignKey(
+                        name: "FK_Licencias_Persona_PersonalId",
+                        column: x => x.PersonalId,
+                        principalTable: "Persona",
+                        principalColumn: "PersonaId",
+                        onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "PagoSocio",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Tipo = table.Column<int>(type: "int", nullable: false),
+                    Fecha = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    FechaConfirmadoORechazado = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    Monto = table.Column<double>(type: "double", nullable: false),
+                    SocioId = table.Column<int>(type: "int", nullable: false),
+                    Estado = table.Column<int>(type: "int", nullable: false),
+                    ConfirmadoPorPersonaId = table.Column<int>(type: "int", nullable: true),
+                    CobradorId = table.Column<int>(type: "int", nullable: true),
+                    FechaEntregaAComision = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    Observaciones = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PagoSocio", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PagoSocio_Persona_CobradorId",
+                        column: x => x.CobradorId,
+                        principalTable: "Persona",
+                        principalColumn: "PersonaId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PagoSocio_Persona_ConfirmadoPorPersonaId",
+                        column: x => x.ConfirmadoPorPersonaId,
+                        principalTable: "Persona",
+                        principalColumn: "PersonaId");
+                    table.ForeignKey(
+                        name: "FK_PagoSocio_Socios_SocioId",
+                        column: x => x.SocioId,
+                        principalTable: "Socios",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Sanciones",
+                columns: table => new
+                {
+                    SancionId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    FechaDesde = table.Column<DateOnly>(type: "date", nullable: false),
+                    FechaHasta = table.Column<DateOnly>(type: "date", nullable: false),
+                    PersonaId = table.Column<int>(type: "int", nullable: false),
+                    TipoSancion = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    SacionArea = table.Column<int>(type: "int", nullable: false),
+                    DescripcionSancion = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Sanciones", x => x.SancionId);
+                    table.ForeignKey(
+                        name: "FK_Sanciones_Persona_PersonaId",
+                        column: x => x.PersonaId,
+                        principalTable: "Persona",
+                        principalColumn: "PersonaId",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -146,6 +461,12 @@ namespace Vista.Data.Migrations
                         principalTable: "Brigadas",
                         principalColumn: "BrigadaId",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_bombero_brigada_Persona_PersonaId",
+                        column: x => x.PersonaId,
+                        principalTable: "Persona",
+                        principalColumn: "PersonaId",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -159,6 +480,52 @@ namespace Vista.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_bombero_dependencia", x => new { x.PersonaId, x.DependenciaId });
+                    table.ForeignKey(
+                        name: "FK_bombero_dependencia_Dependencias_DependenciaId",
+                        column: x => x.DependenciaId,
+                        principalTable: "Dependencias",
+                        principalColumn: "DependenciaId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_bombero_dependencia_Persona_PersonaId",
+                        column: x => x.PersonaId,
+                        principalTable: "Persona",
+                        principalColumn: "PersonaId",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Imagen",
+                columns: table => new
+                {
+                    ImagenId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Tipo = table.Column<int>(type: "int", nullable: false),
+                    NombreImagen = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DatosImagen = table.Column<byte[]>(type: "longblob", nullable: false),
+                    TipoImagen = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    LicenciaId = table.Column<int>(type: "int", nullable: true),
+                    PersonalId = table.Column<int>(type: "int", nullable: true),
+                    VehiculoId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Imagen", x => x.ImagenId);
+                    table.ForeignKey(
+                        name: "FK_Imagen_Licencias_LicenciaId",
+                        column: x => x.LicenciaId,
+                        principalTable: "Licencias",
+                        principalColumn: "LicenciaId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Imagen_Persona_PersonalId",
+                        column: x => x.PersonalId,
+                        principalTable: "Persona",
+                        principalColumn: "PersonaId",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -177,44 +544,40 @@ namespace Vista.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_BomberosSalida", x => x.BomberoSalidaId);
+                    table.ForeignKey(
+                        name: "FK_BomberosSalida_Persona_PersonaId",
+                        column: x => x.PersonaId,
+                        principalTable: "Persona",
+                        principalColumn: "PersonaId",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Contactos",
+                name: "Damnificados",
                 columns: table => new
                 {
-                    ContactoId = table.Column<int>(type: "int", nullable: false)
+                    Damnificado_SalidaId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    TelefonoCel = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
+                    Nombre = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    TelefonoLaboral = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
+                    Apellido = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    TelefonoFijo = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
+                    Sexo = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Email = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
+                    LugarNacimiento = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    PersonalId = table.Column<int>(type: "int", nullable: false)
+                    Documento = table.Column<int>(type: "int", nullable: true),
+                    Edad = table.Column<int>(type: "int", nullable: true),
+                    Estado = table.Column<int>(type: "int", nullable: true),
+                    FuerzaIntervinienteId = table.Column<int>(type: "int", nullable: true),
+                    Destino = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    SalidaId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Contactos", x => x.ContactoId);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Dependencias",
-                columns: table => new
-                {
-                    DependenciaId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    NombreDependencia = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    EncargadoPersonaId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Dependencias", x => x.DependenciaId);
+                    table.PrimaryKey("PK_Damnificados", x => x.Damnificado_SalidaId);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -240,141 +603,27 @@ namespace Vista.Data.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Firmas",
-                columns: table => new
-                {
-                    FirmaId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    FechaHora = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Detalle = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    PersonaId = table.Column<int>(type: "int", nullable: false),
-                    VehiculoId = table.Column<int>(type: "int", nullable: false),
-                    EmbarcacionVehiculoId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Firmas", x => x.FirmaId);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "fuerzaIntervinientes",
+                name: "fuerzaInterviniente_Salidas",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    SalidaId = table.Column<int>(type: "int", nullable: false),
-                    FuerzaId = table.Column<int>(type: "int", nullable: false),
-                    Encargado = table.Column<string>(type: "longtext", nullable: true)
+                    NumeroUnidad = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    VehiculoId = table.Column<int>(type: "int", nullable: false),
-                    DamnificadoPersonaId = table.Column<int>(type: "int", nullable: true),
-                    Destino = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    EncargadoApellidoyNombre = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    FuerzaIntervinienteId = table.Column<int>(type: "int", nullable: false),
+                    SalidaId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_fuerzaIntervinientes", x => x.Id);
+                    table.PrimaryKey("PK_fuerzaInterviniente_Salidas", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_fuerzaIntervinientes_Fuerzas_FuerzaId",
-                        column: x => x.FuerzaId,
+                        name: "FK_fuerzaInterviniente_Salidas_Fuerzas_FuerzaIntervinienteId",
+                        column: x => x.FuerzaIntervinienteId,
                         principalTable: "Fuerzas",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Imagen",
-                columns: table => new
-                {
-                    ImagenId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Tipo = table.Column<int>(type: "int", nullable: false),
-                    NombreImagen = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Base64Imagen = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    TipoImagen = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    PersonalId = table.Column<int>(type: "int", nullable: true),
-                    VehiculoId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Imagen", x => x.ImagenId);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Incidente",
-                columns: table => new
-                {
-                    IncidenteId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Fecha = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Observacion = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Tipo = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    PersonaId = table.Column<int>(type: "int", nullable: true),
-                    VehiculoId = table.Column<int>(type: "int", nullable: true),
-                    Discriminator = table.Column<string>(type: "varchar(21)", maxLength: 21, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    DependenciaId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Incidente", x => x.IncidenteId);
-                    table.ForeignKey(
-                        name: "FK_Incidente_Dependencias_DependenciaId",
-                        column: x => x.DependenciaId,
-                        principalTable: "Dependencias",
-                        principalColumn: "DependenciaId",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Licencias",
-                columns: table => new
-                {
-                    LicenciaId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    TipoLicencia = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Descripcion = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Desde = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Hasta = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    EstadoLicencia = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    PersonalId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Licencias", x => x.LicenciaId);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Limpiezas",
-                columns: table => new
-                {
-                    LimpiezaId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Fecha = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Incidente = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Descripcion = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    MovilId = table.Column<int>(type: "int", nullable: true),
-                    BomberosPersonaId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Limpiezas", x => x.LimpiezaId);
+                        onDelete: ReferentialAction.Restrict);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -406,6 +655,12 @@ namespace Vista.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MovilesSalida", x => x.Movil_SalidaId);
+                    table.ForeignKey(
+                        name: "FK_MovilesSalida_Persona_PersonaId",
+                        column: x => x.PersonaId,
+                        principalTable: "Persona",
+                        principalColumn: "PersonaId",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -423,7 +678,8 @@ namespace Vista.Data.Migrations
                     DestinoBomberoPersonaId = table.Column<int>(type: "int", nullable: true),
                     DestinoMovilVehiculoId = table.Column<int>(type: "int", nullable: true),
                     Cantidad = table.Column<int>(type: "int", nullable: false),
-                    MaterialesMaterialId = table.Column<int>(type: "int", nullable: true)
+                    MaterialesMaterialId = table.Column<int>(type: "int", nullable: true),
+                    esComisionDirectiva = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -433,91 +689,74 @@ namespace Vista.Data.Migrations
                         column: x => x.MaterialesMaterialId,
                         principalTable: "Materiales",
                         principalColumn: "MaterialId");
+                    table.ForeignKey(
+                        name: "FK_Movimientos_Persona_DestinoBomberoPersonaId",
+                        column: x => x.DestinoBomberoPersonaId,
+                        principalTable: "Persona",
+                        principalColumn: "PersonaId");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "NovedadBase",
+                name: "MovimientosEquiposAutonomos",
                 columns: table => new
                 {
-                    NovedadBaseId = table.Column<int>(type: "int", nullable: false)
+                    Movimiento_EquipoAutonomoId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Fecha = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    Observacion = table.Column<string>(type: "longtext", nullable: true)
+                    EquipoAutonomoId = table.Column<int>(type: "int", nullable: false),
+                    FechaMovimiento = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    EncargadoId = table.Column<int>(type: "int", nullable: false),
+                    EstadoAnterior = table.Column<int>(type: "int", nullable: false),
+                    EstadoNuevo = table.Column<int>(type: "int", nullable: false),
+                    AgenteAnterior = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    PersonalId = table.Column<int>(type: "int", nullable: true),
-                    Discriminator = table.Column<string>(type: "varchar(21)", maxLength: 21, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    VehiculoId = table.Column<int>(type: "int", nullable: true)
+                    VehiculoDestinoId = table.Column<int>(type: "int", nullable: true),
+                    DependenciaDestinoId = table.Column<int>(type: "int", nullable: true),
+                    OtroDestino = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_NovedadBase", x => x.NovedadBaseId);
+                    table.PrimaryKey("PK_MovimientosEquiposAutonomos", x => x.Movimiento_EquipoAutonomoId);
+                    table.ForeignKey(
+                        name: "FK_MovimientosEquiposAutonomos_Dependencias_DependenciaDestinoId",
+                        column: x => x.DependenciaDestinoId,
+                        principalTable: "Dependencias",
+                        principalColumn: "DependenciaId");
+                    table.ForeignKey(
+                        name: "FK_MovimientosEquiposAutonomos_EquiposAutonomos_EquipoAutonomoId",
+                        column: x => x.EquipoAutonomoId,
+                        principalTable: "EquiposAutonomos",
+                        principalColumn: "EquipoAutonomoId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MovimientosEquiposAutonomos_Persona_EncargadoId",
+                        column: x => x.EncargadoId,
+                        principalTable: "Persona",
+                        principalColumn: "PersonaId",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Persona",
+                name: "OcupantesVehiculos",
                 columns: table => new
                 {
-                    PersonaId = table.Column<int>(type: "int", nullable: false)
+                    OcupanteVehiculoId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Tipo = table.Column<int>(type: "int", nullable: false),
-                    Sexo = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Nombre = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Apellido = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Documento = table.Column<int>(type: "int", nullable: false),
-                    Residencia = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Direccion = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Edad = table.Column<int>(type: "int", nullable: false),
-                    SalidaId = table.Column<int>(type: "int", nullable: true),
-                    GrupoSanguineo = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    FechaNacimiento = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    LugarNacimiento = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Observaciones = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Profesion = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    NivelEstudios = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    NumeroIoma = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    FechaAceptacion = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    NumeroLegajo = table.Column<int>(type: "int", nullable: true),
-                    Estado = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Dotacion = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Grado = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Altura = table.Column<int>(type: "int", nullable: true),
-                    Peso = table.Column<int>(type: "int", nullable: true),
-                    Chofer = table.Column<bool>(type: "tinyint(1)", nullable: true),
-                    VencimientoRegistro = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    BrigadaId = table.Column<int>(type: "int", nullable: true),
-                    EquipoId = table.Column<int>(type: "int", nullable: true)
+                    VehiculoAfectadoId = table.Column<int>(type: "int", nullable: false),
+                    DamnificadoSalidaId = table.Column<int>(type: "int", nullable: false),
+                    Rol = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Persona", x => x.PersonaId);
+                    table.PrimaryKey("PK_OcupantesVehiculos", x => x.OcupanteVehiculoId);
                     table.ForeignKey(
-                        name: "FK_Persona_Brigadas_BrigadaId",
-                        column: x => x.BrigadaId,
-                        principalTable: "Brigadas",
-                        principalColumn: "BrigadaId");
-                    table.ForeignKey(
-                        name: "FK_Persona_Comunicacion_EquipoId",
-                        column: x => x.EquipoId,
-                        principalTable: "Comunicacion",
-                        principalColumn: "ComunicacionId",
-                        onDelete: ReferentialAction.SetNull);
+                        name: "FK_OcupantesVehiculos_Damnificados_DamnificadoSalidaId",
+                        column: x => x.DamnificadoSalidaId,
+                        principalTable: "Damnificados",
+                        principalColumn: "Damnificado_SalidaId",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -536,9 +775,8 @@ namespace Vista.Data.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Direccion = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Latitud = table.Column<double>(type: "double", nullable: false),
-                    Longitud = table.Column<double>(type: "double", nullable: false),
-                    CuartelRegion = table.Column<int>(type: "int", nullable: true),
+                    Latitud = table.Column<double>(type: "double", nullable: true),
+                    Longitud = table.Column<double>(type: "double", nullable: true),
                     PisoNumero = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Depto = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
@@ -572,7 +810,7 @@ namespace Vista.Data.Migrations
                     Superficie = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CantidadAfectadaFactorClimatico = table.Column<int>(type: "int", nullable: true),
-                    DeteccionAutomaticaId = table.Column<bool>(type: "tinyint(1)", nullable: true),
+                    DeteccionAutomatica = table.Column<bool>(type: "tinyint(1)", nullable: true),
                     Extintor = table.Column<bool>(type: "tinyint(1)", nullable: true),
                     Hidrante = table.Column<bool>(type: "tinyint(1)", nullable: true),
                     TipoEvacuacion = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
@@ -598,6 +836,7 @@ namespace Vista.Data.Migrations
                     CantidadPisos = table.Column<int>(type: "int", nullable: true),
                     PisoAfectado = table.Column<int>(type: "int", nullable: true),
                     CantidadAmbientes = table.Column<int>(type: "int", nullable: true),
+                    TipoAeronave = table.Column<int>(type: "int", nullable: true),
                     TipoLugar = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     IncendioEstablecimientoEducativo_TipoLugar = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
@@ -685,46 +924,26 @@ namespace Vista.Data.Migrations
                         principalTable: "Persona",
                         principalColumn: "PersonaId",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Salidas_Seguro_SeguroId",
-                        column: x => x.SeguroId,
-                        principalTable: "Seguro",
-                        principalColumn: "SeguroId");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Sanciones",
+                name: "Seguro",
                 columns: table => new
                 {
-                    SancionId = table.Column<int>(type: "int", nullable: false)
+                    SeguroId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    FechaDesde = table.Column<DateOnly>(type: "date", nullable: false),
-                    FechaHasta = table.Column<DateOnly>(type: "date", nullable: false),
-                    PersonaId = table.Column<int>(type: "int", nullable: false),
-                    TipoSancion = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
+                    Tipo = table.Column<int>(type: "int", nullable: false),
+                    CompañiaAseguradora = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    SacionArea = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
+                    NumeroDePoliza = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    EncargadoAreaId = table.Column<int>(type: "int", nullable: false),
-                    observaciones = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    FechaDeVencimineto = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    VehiculoId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Sanciones", x => x.SancionId);
-                    table.ForeignKey(
-                        name: "FK_Sanciones_Persona_EncargadoAreaId",
-                        column: x => x.EncargadoAreaId,
-                        principalTable: "Persona",
-                        principalColumn: "PersonaId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Sanciones_Persona_PersonaId",
-                        column: x => x.PersonaId,
-                        principalTable: "Persona",
-                        principalColumn: "PersonaId",
-                        onDelete: ReferentialAction.Cascade);
+                    table.PrimaryKey("PK_Seguro", x => x.SeguroId);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -740,31 +959,58 @@ namespace Vista.Data.Migrations
                     Modelo = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Año = table.Column<int>(type: "int", nullable: true),
-                    Patente = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
+                    Patente = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Tipo = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Color = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
                     SeguroId = table.Column<int>(type: "int", nullable: true),
-                    VehiculoAfectado_Airbag = table.Column<bool>(type: "tinyint(1)", nullable: true),
-                    SalidaId = table.Column<int>(type: "int", nullable: true),
+                    NombreYApellidoDuenio = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Color = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Airbag = table.Column<bool>(type: "tinyint(1)", nullable: true),
-                    DamnificadoId = table.Column<int>(type: "int", nullable: true),
+                    VehiculoAfectado_Observaciones = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    SeConoceConductor = table.Column<bool>(type: "tinyint(1)", nullable: true),
                     NumeroMovil = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     EncargadoId = table.Column<int>(type: "int", nullable: true),
                     Estado = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ImagenId = table.Column<int>(type: "int", nullable: true),
+                    Combustible = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    FechaUltimoService = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    FechaProximoService = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    Observaciones = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     NumeroMotor = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ModeloBomba = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     NumeroChasis = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    CantidadLitros = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
+                    CantidadLitros = table.Column<int>(type: "int", nullable: true),
+                    TipoAceite = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    MarcaAceite = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CantidadAceite = table.Column<int>(type: "int", nullable: true),
+                    ModeloFiltroAire = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    MedidasCubiertas = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    LibrasCubiertas = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    TensionCElectrico = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    TipoDireccion = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CajaVelocidades = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    MarcaBateria = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    FechaUltCambioBateria = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     Kilometraje = table.Column<int>(type: "int", nullable: true),
                     EquipoId = table.Column<int>(type: "int", nullable: true),
                     PersonalId = table.Column<int>(type: "int", nullable: true)
@@ -785,11 +1031,6 @@ namespace Vista.Data.Migrations
                         principalColumn: "ImagenId",
                         onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
-                        name: "FK_Vehiculo_Persona_DamnificadoId",
-                        column: x => x.DamnificadoId,
-                        principalTable: "Persona",
-                        principalColumn: "PersonaId");
-                    table.ForeignKey(
                         name: "FK_Vehiculo_Persona_EncargadoId",
                         column: x => x.EncargadoId,
                         principalTable: "Persona",
@@ -802,16 +1043,11 @@ namespace Vista.Data.Migrations
                         principalColumn: "PersonaId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Vehiculo_Salidas_SalidaId",
-                        column: x => x.SalidaId,
-                        principalTable: "Salidas",
-                        principalColumn: "SalidaId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_Vehiculo_Seguro_SeguroId",
                         column: x => x.SeguroId,
                         principalTable: "Seguro",
-                        principalColumn: "SeguroId");
+                        principalColumn: "SeguroId",
+                        onDelete: ReferentialAction.SetNull);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -846,6 +1082,11 @@ namespace Vista.Data.Migrations
                 column: "SalidaId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Brigadas_EncargadoPersonaId",
+                table: "Brigadas",
+                column: "EncargadoPersonaId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Brigadas_NombreBrigada",
                 table: "Brigadas",
                 column: "NombreBrigada",
@@ -864,6 +1105,16 @@ namespace Vista.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Damnificados_FuerzaIntervinienteId",
+                table: "Damnificados",
+                column: "FuerzaIntervinienteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Damnificados_SalidaId",
+                table: "Damnificados",
+                column: "SalidaId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Dependencias_EncargadoPersonaId",
                 table: "Dependencias",
                 column: "EncargadoPersonaId");
@@ -874,39 +1125,24 @@ namespace Vista.Data.Migrations
                 column: "SalidaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Firmas_EmbarcacionVehiculoId",
-                table: "Firmas",
-                column: "EmbarcacionVehiculoId");
+                name: "IX_fuerzaInterviniente_Salidas_FuerzaIntervinienteId",
+                table: "fuerzaInterviniente_Salidas",
+                column: "FuerzaIntervinienteId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Firmas_PersonaId",
-                table: "Firmas",
-                column: "PersonaId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Firmas_VehiculoId",
-                table: "Firmas",
-                column: "VehiculoId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_fuerzaIntervinientes_DamnificadoPersonaId",
-                table: "fuerzaIntervinientes",
-                column: "DamnificadoPersonaId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_fuerzaIntervinientes_FuerzaId",
-                table: "fuerzaIntervinientes",
-                column: "FuerzaId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_fuerzaIntervinientes_SalidaId",
-                table: "fuerzaIntervinientes",
+                name: "IX_fuerzaInterviniente_Salidas_SalidaId",
+                table: "fuerzaInterviniente_Salidas",
                 column: "SalidaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_fuerzaIntervinientes_VehiculoId",
-                table: "fuerzaIntervinientes",
-                column: "VehiculoId");
+                name: "IX_HistorialSocios_SocioId",
+                table: "HistorialSocios",
+                column: "SocioId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Imagen_LicenciaId",
+                table: "Imagen",
+                column: "LicenciaId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Imagen_PersonalId",
@@ -915,34 +1151,15 @@ namespace Vista.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Incidente_DependenciaId",
-                table: "Incidente",
-                column: "DependenciaId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Incidente_PersonaId",
-                table: "Incidente",
-                column: "PersonaId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Incidente_VehiculoId",
-                table: "Incidente",
-                column: "VehiculoId");
+                name: "IX_Imagen_VehiculoId",
+                table: "Imagen",
+                column: "VehiculoId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Licencias_PersonalId",
                 table: "Licencias",
                 column: "PersonalId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Limpiezas_BomberosPersonaId",
-                table: "Limpiezas",
-                column: "BomberosPersonaId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Limpiezas_MovilId",
-                table: "Limpiezas",
-                column: "MovilId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MovilesSalida_MovilId",
@@ -975,19 +1192,62 @@ namespace Vista.Data.Migrations
                 column: "MaterialesMaterialId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_NovedadBase_PersonalId",
-                table: "NovedadBase",
-                column: "PersonalId");
+                name: "IX_MovimientosEquiposAutonomos_DependenciaDestinoId",
+                table: "MovimientosEquiposAutonomos",
+                column: "DependenciaDestinoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_NovedadBase_VehiculoId",
-                table: "NovedadBase",
-                column: "VehiculoId");
+                name: "IX_MovimientosEquiposAutonomos_EncargadoId",
+                table: "MovimientosEquiposAutonomos",
+                column: "EncargadoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Persona_BrigadaId",
+                name: "IX_MovimientosEquiposAutonomos_EquipoAutonomoId",
+                table: "MovimientosEquiposAutonomos",
+                column: "EquipoAutonomoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MovimientosEquiposAutonomos_VehiculoDestinoId",
+                table: "MovimientosEquiposAutonomos",
+                column: "VehiculoDestinoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OcupantesVehiculos_DamnificadoSalidaId",
+                table: "OcupantesVehiculos",
+                column: "DamnificadoSalidaId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OcupantesVehiculos_VehiculoAfectadoId",
+                table: "OcupantesVehiculos",
+                column: "VehiculoAfectadoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PagoSocio_CobradorId",
+                table: "PagoSocio",
+                column: "CobradorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PagoSocio_ConfirmadoPorPersonaId",
+                table: "PagoSocio",
+                column: "ConfirmadoPorPersonaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PagoSocio_SocioId",
+                table: "PagoSocio",
+                column: "SocioId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PartesVehiculo_Nombre_Tipo",
+                table: "PartesVehiculo",
+                columns: new[] { "Nombre", "Tipo" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Persona_EntraId",
                 table: "Persona",
-                column: "BrigadaId");
+                column: "EntraId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Persona_EquipoId",
@@ -1000,11 +1260,6 @@ namespace Vista.Data.Migrations
                 table: "Persona",
                 column: "NumeroLegajo",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Persona_SalidaId",
-                table: "Persona",
-                column: "SalidaId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Salidas_EncargadoId",
@@ -1023,19 +1278,20 @@ namespace Vista.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Sanciones_EncargadoAreaId",
-                table: "Sanciones",
-                column: "EncargadoAreaId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Sanciones_PersonaId",
                 table: "Sanciones",
                 column: "PersonaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Vehiculo_DamnificadoId",
-                table: "Vehiculo",
-                column: "DamnificadoId");
+                name: "IX_Seguro_VehiculoId",
+                table: "Seguro",
+                column: "VehiculoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Socios_NroSocio",
+                table: "Socios",
+                column: "NroSocio",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Vehiculo_EncargadoId",
@@ -1066,55 +1322,10 @@ namespace Vista.Data.Migrations
                 column: "PersonalId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Vehiculo_SalidaId",
-                table: "Vehiculo",
-                column: "SalidaId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Vehiculo_SeguroId",
                 table: "Vehiculo",
                 column: "SeguroId",
                 unique: true);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_AscensoBomberos_Persona_PersonaId",
-                table: "AscensoBomberos",
-                column: "PersonaId",
-                principalTable: "Persona",
-                principalColumn: "PersonaId",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_bombero_brigada_Persona_PersonaId",
-                table: "bombero_brigada",
-                column: "PersonaId",
-                principalTable: "Persona",
-                principalColumn: "PersonaId",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_bombero_dependencia_Dependencias_DependenciaId",
-                table: "bombero_dependencia",
-                column: "DependenciaId",
-                principalTable: "Dependencias",
-                principalColumn: "DependenciaId",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_bombero_dependencia_Persona_PersonaId",
-                table: "bombero_dependencia",
-                column: "PersonaId",
-                principalTable: "Persona",
-                principalColumn: "PersonaId",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_BomberosSalida_Persona_PersonaId",
-                table: "BomberosSalida",
-                column: "PersonaId",
-                principalTable: "Persona",
-                principalColumn: "PersonaId",
-                onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_BomberosSalida_Salidas_SalidaId",
@@ -1132,20 +1343,20 @@ namespace Vista.Data.Migrations
                 principalColumn: "VehiculoId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Contactos_Persona_PersonalId",
-                table: "Contactos",
-                column: "PersonalId",
-                principalTable: "Persona",
-                principalColumn: "PersonaId",
+                name: "FK_Damnificados_Salidas_SalidaId",
+                table: "Damnificados",
+                column: "SalidaId",
+                principalTable: "Salidas",
+                principalColumn: "SalidaId",
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Dependencias_Persona_EncargadoPersonaId",
-                table: "Dependencias",
-                column: "EncargadoPersonaId",
-                principalTable: "Persona",
-                principalColumn: "PersonaId",
-                onDelete: ReferentialAction.Cascade);
+                name: "FK_Damnificados_fuerzaInterviniente_Salidas_FuerzaInterviniente~",
+                table: "Damnificados",
+                column: "FuerzaIntervinienteId",
+                principalTable: "fuerzaInterviniente_Salidas",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.SetNull);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_EmbarcacionesAfectadas_Salidas_SalidaId",
@@ -1156,103 +1367,11 @@ namespace Vista.Data.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Firmas_Persona_PersonaId",
-                table: "Firmas",
-                column: "PersonaId",
-                principalTable: "Persona",
-                principalColumn: "PersonaId",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Firmas_Vehiculo_EmbarcacionVehiculoId",
-                table: "Firmas",
-                column: "EmbarcacionVehiculoId",
-                principalTable: "Vehiculo",
-                principalColumn: "VehiculoId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Firmas_Vehiculo_VehiculoId",
-                table: "Firmas",
-                column: "VehiculoId",
-                principalTable: "Vehiculo",
-                principalColumn: "VehiculoId",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_fuerzaIntervinientes_Persona_DamnificadoPersonaId",
-                table: "fuerzaIntervinientes",
-                column: "DamnificadoPersonaId",
-                principalTable: "Persona",
-                principalColumn: "PersonaId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_fuerzaIntervinientes_Salidas_SalidaId",
-                table: "fuerzaIntervinientes",
+                name: "FK_fuerzaInterviniente_Salidas_Salidas_SalidaId",
+                table: "fuerzaInterviniente_Salidas",
                 column: "SalidaId",
                 principalTable: "Salidas",
                 principalColumn: "SalidaId",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_fuerzaIntervinientes_Vehiculo_VehiculoId",
-                table: "fuerzaIntervinientes",
-                column: "VehiculoId",
-                principalTable: "Vehiculo",
-                principalColumn: "VehiculoId",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Imagen_Persona_PersonalId",
-                table: "Imagen",
-                column: "PersonalId",
-                principalTable: "Persona",
-                principalColumn: "PersonaId",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Incidente_Persona_PersonaId",
-                table: "Incidente",
-                column: "PersonaId",
-                principalTable: "Persona",
-                principalColumn: "PersonaId",
-                onDelete: ReferentialAction.SetNull);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Incidente_Vehiculo_VehiculoId",
-                table: "Incidente",
-                column: "VehiculoId",
-                principalTable: "Vehiculo",
-                principalColumn: "VehiculoId",
-                onDelete: ReferentialAction.SetNull);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Licencias_Persona_PersonalId",
-                table: "Licencias",
-                column: "PersonalId",
-                principalTable: "Persona",
-                principalColumn: "PersonaId",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Limpiezas_Persona_BomberosPersonaId",
-                table: "Limpiezas",
-                column: "BomberosPersonaId",
-                principalTable: "Persona",
-                principalColumn: "PersonaId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Limpiezas_Vehiculo_MovilId",
-                table: "Limpiezas",
-                column: "MovilId",
-                principalTable: "Vehiculo",
-                principalColumn: "VehiculoId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_MovilesSalida_Persona_PersonaId",
-                table: "MovilesSalida",
-                column: "PersonaId",
-                principalTable: "Persona",
-                principalColumn: "PersonaId",
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
@@ -1272,13 +1391,6 @@ namespace Vista.Data.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Movimientos_Persona_DestinoBomberoPersonaId",
-                table: "Movimientos",
-                column: "DestinoBomberoPersonaId",
-                principalTable: "Persona",
-                principalColumn: "PersonaId");
-
-            migrationBuilder.AddForeignKey(
                 name: "FK_Movimientos_Vehiculo_DestinoMovilVehiculoId",
                 table: "Movimientos",
                 column: "DestinoMovilVehiculoId",
@@ -1286,39 +1398,58 @@ namespace Vista.Data.Migrations
                 principalColumn: "VehiculoId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_NovedadBase_Persona_PersonalId",
-                table: "NovedadBase",
-                column: "PersonalId",
-                principalTable: "Persona",
-                principalColumn: "PersonaId",
-                onDelete: ReferentialAction.SetNull);
+                name: "FK_MovimientosEquiposAutonomos_Vehiculo_VehiculoDestinoId",
+                table: "MovimientosEquiposAutonomos",
+                column: "VehiculoDestinoId",
+                principalTable: "Vehiculo",
+                principalColumn: "VehiculoId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_NovedadBase_Vehiculo_VehiculoId",
-                table: "NovedadBase",
+                name: "FK_OcupantesVehiculos_Vehiculo_VehiculoAfectadoId",
+                table: "OcupantesVehiculos",
+                column: "VehiculoAfectadoId",
+                principalTable: "Vehiculo",
+                principalColumn: "VehiculoId",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Salidas_Seguro_SeguroId",
+                table: "Salidas",
+                column: "SeguroId",
+                principalTable: "Seguro",
+                principalColumn: "SeguroId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Seguro_Vehiculo_VehiculoId",
+                table: "Seguro",
                 column: "VehiculoId",
                 principalTable: "Vehiculo",
                 principalColumn: "VehiculoId",
-                onDelete: ReferentialAction.SetNull);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Persona_Salidas_SalidaId",
-                table: "Persona",
-                column: "SalidaId",
-                principalTable: "Salidas",
-                principalColumn: "SalidaId");
+                onDelete: ReferentialAction.Cascade);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Salidas_Persona_EncargadoId",
-                table: "Salidas");
+                name: "FK_Imagen_Persona_PersonalId",
+                table: "Imagen");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Salidas_Persona_QuienLlenoId",
-                table: "Salidas");
+                name: "FK_Licencias_Persona_PersonalId",
+                table: "Licencias");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Vehiculo_Persona_EncargadoId",
+                table: "Vehiculo");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Vehiculo_Persona_PersonalId",
+                table: "Vehiculo");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Seguro_Vehiculo_VehiculoId",
+                table: "Seguro");
 
             migrationBuilder.DropTable(
                 name: "AscensoBomberos");
@@ -1339,19 +1470,7 @@ namespace Vista.Data.Migrations
                 name: "EmbarcacionesAfectadas");
 
             migrationBuilder.DropTable(
-                name: "Firmas");
-
-            migrationBuilder.DropTable(
-                name: "fuerzaIntervinientes");
-
-            migrationBuilder.DropTable(
-                name: "Incidente");
-
-            migrationBuilder.DropTable(
-                name: "Licencias");
-
-            migrationBuilder.DropTable(
-                name: "Limpiezas");
+                name: "HistorialSocios");
 
             migrationBuilder.DropTable(
                 name: "MovilesSalida");
@@ -1360,40 +1479,64 @@ namespace Vista.Data.Migrations
                 name: "Movimientos");
 
             migrationBuilder.DropTable(
-                name: "NovedadBase");
+                name: "MovimientosEquiposAutonomos");
+
+            migrationBuilder.DropTable(
+                name: "OcupantesVehiculos");
+
+            migrationBuilder.DropTable(
+                name: "PagoSocio");
+
+            migrationBuilder.DropTable(
+                name: "PartesVehiculo");
 
             migrationBuilder.DropTable(
                 name: "Sanciones");
 
             migrationBuilder.DropTable(
-                name: "Fuerzas");
-
-            migrationBuilder.DropTable(
-                name: "Dependencias");
+                name: "Brigadas");
 
             migrationBuilder.DropTable(
                 name: "Materiales");
 
             migrationBuilder.DropTable(
-                name: "Vehiculo");
+                name: "Dependencias");
 
             migrationBuilder.DropTable(
-                name: "Imagen");
+                name: "EquiposAutonomos");
 
             migrationBuilder.DropTable(
-                name: "Persona");
+                name: "Damnificados");
 
             migrationBuilder.DropTable(
-                name: "Brigadas");
+                name: "Socios");
 
             migrationBuilder.DropTable(
-                name: "Comunicacion");
+                name: "fuerzaInterviniente_Salidas");
+
+            migrationBuilder.DropTable(
+                name: "Fuerzas");
 
             migrationBuilder.DropTable(
                 name: "Salidas");
 
             migrationBuilder.DropTable(
+                name: "Persona");
+
+            migrationBuilder.DropTable(
+                name: "Vehiculo");
+
+            migrationBuilder.DropTable(
+                name: "Comunicacion");
+
+            migrationBuilder.DropTable(
+                name: "Imagen");
+
+            migrationBuilder.DropTable(
                 name: "Seguro");
+
+            migrationBuilder.DropTable(
+                name: "Licencias");
         }
     }
 }
