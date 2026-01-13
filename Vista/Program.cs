@@ -98,7 +98,8 @@ builder.Services.AddControllersWithViews()
 
 builder.Services.AddAuthorization(options =>
 {
-    options.FallbackPolicy = options.DefaultPolicy;
+    // Remover FallbackPolicy para permitir páginas públicas con [AllowAnonymous]
+    // options.FallbackPolicy = options.DefaultPolicy;
 
     // Definir políticas personalizadas
     options.AddPolicy("AdminOnly", policy =>

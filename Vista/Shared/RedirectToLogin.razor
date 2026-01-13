@@ -1,8 +1,11 @@
 @inject NavigationManager Navigation
 
 @code {
-    protected override void OnInitialized()
+    protected override void OnAfterRender(bool firstRender)
     {
-        Navigation.NavigateTo($"MicrosoftIdentity/Account/SignIn?redirectUri={Uri.EscapeDataString(Navigation.Uri)}", forceLoad: true);
+        if (firstRender)
+        {
+            Navigation.NavigateTo($"MicrosoftIdentity/Account/SignIn?redirectUri={Uri.EscapeDataString(Navigation.Uri)}", forceLoad: true);
+        }
     }
 }
