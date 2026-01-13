@@ -134,7 +134,7 @@ namespace Vista.Data.Models.Socios
         /// </summary>
         [StringLength(255, ErrorMessage = "El número de telefono no puede superar los 255 caracteres.")]
         [Phone(ErrorMessage = "El número de telefono no tiene un formato válido.")]
-        public string Telefono { get; set; } = string.Empty;
+        public string? Telefono { get; set; }
 
         /// <summary>
         /// Representa el correo electrónico del socio.

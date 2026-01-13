@@ -377,7 +377,6 @@
 
         // -- Datos de Contacto --
 
-        [Required(ErrorMessage = "El teléfono es obligatorio.")]
         [StringLength(255, ErrorMessage = "El teléfono no puede superar los 255 caracteres.")]
         [Phone(ErrorMessage = "El número de telefono no tiene un formato válido.")]
         public string? Telefono { get; set; }
