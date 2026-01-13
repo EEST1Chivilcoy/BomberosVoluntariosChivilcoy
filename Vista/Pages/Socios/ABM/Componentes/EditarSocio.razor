@@ -147,6 +147,22 @@
         overflow: hidden;
     }
 
+    .map-toggle-button {
+        background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%) !important;
+        border: none !important;
+        color: white !important;
+        box-shadow: 0 4px 12px rgba(24, 144, 255, 0.3) !important;
+        padding: 0 20px !important;
+        font-weight: 600 !important;
+        border-radius: 8px !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+
+        .map-toggle-button:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 20px rgba(24, 144, 255, 0.4) !important;
+        }
+
     @@media screen and (max-width: 768px) {
         .map-container {
             max-height: 300px;
@@ -245,14 +261,28 @@
                         @if (socioView.Latitud.HasValue && socioView.Longitud.HasValue)
                         {
                             <AntDesign.Row Gutter="16">
-                                <div class="map-container">
-                                    <iframe style="border:0; width: 100%; height: 100%;"
-                                            src="@GetGoogleMapsSatelliteUrl(socioView.Latitud.Value, socioView.Longitud.Value)"
-                                            frameborder="0"
-                                            allowfullscreen>
-                                    </iframe>
-                                </div>
+                                <AntDesign.Col Span="24">
+                                    <Button Type="@ButtonType.Primary"
+                                            OnClick="() => mostrarMapa = !mostrarMapa"
+                                            Icon="@(mostrarMapa ? "eye-invisible" : "eye")"
+                                            Class="map-toggle-button"
+                                            Style="margin-bottom: 12px;">
+                                        @(mostrarMapa ? "Ocultar Mapa" : "Mostrar Mapa")
+                                    </Button>
+                                </AntDesign.Col>
                             </AntDesign.Row>
+                            @if (mostrarMapa)
+                            {
+                                <AntDesign.Row Gutter="16">
+                                    <div class="map-container">
+                                        <iframe style="border:0; width: 100%; height: 100%;"
+                                                src="@GetGoogleMapsSatelliteUrl(socioView.Latitud.Value, socioView.Longitud.Value)"
+                                                frameborder="0"
+                                                allowfullscreen>
+                                        </iframe>
+                                    </div>
+                                </AntDesign.Row>
+                            }
                         }
 
                         <AntDesign.Row Gutter="16">
@@ -342,6 +372,7 @@
 
     private bool isLoading = false;
     private bool _loading = false; // Variable para controlar el estado de carga del select de direcciones
+    private bool mostrarMapa = false; // Variable para controlar la visibilidad del mapa
 
     private CancellationTokenSource? _searchCancellationTokenSource;
     private bool isApiAvailable;
