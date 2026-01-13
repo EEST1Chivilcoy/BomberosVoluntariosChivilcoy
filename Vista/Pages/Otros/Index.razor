@@ -502,7 +502,7 @@
 
     /* ========================================
                                                        BOTÓN CERRAR SESIÓN
-                                                       Botón grande y accesible para usuarios
+                                                       Diseño moderno inspirado en submit-section-firmas
                                                        ======================================== */
     .logout-section {
         margin-top: 48px;
@@ -511,52 +511,66 @@
         justify-content: center;
     }
 
-    .logout-button {
+    .logout-container {
+        background: linear-gradient(135deg, #ff4d4f 0%, #cf1322 100%);
+        border-radius: 12px;
+        padding: 2rem;
+        text-align: center;
         width: 100%;
         max-width: 600px;
-        height: 72px;
-        font-size: 1.5rem !important;
-        font-weight: 600 !important;
-        border-radius: var(--radius-md) !important;
-        background: linear-gradient(135deg, #ff4d4f 0%, #cf1322 100%) !important;
+        box-shadow: 0 8px 24px rgba(207, 19, 34, 0.3);
+    }
+
+    .logout-button {
+        background: white !important;
+        color: #cf1322 !important;
         border: none !important;
-        color: #ffffff !important;
-        box-shadow: var(--shadow-md) !important;
-        transition: var(--transition) !important;
-        display: flex !important;
+        font-weight: 600 !important;
+        padding: 0.75rem 3rem !important;
+        height: auto !important;
+        font-size: 1.1rem !important;
+        border-radius: 8px !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+        transition: all 0.3s ease !important;
+        display: inline-flex !important;
         align-items: center;
         justify-content: center;
-        gap: 16px;
+        gap: 0.5rem;
         cursor: pointer;
     }
 
         .logout-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 24px rgba(207, 19, 34, 0.4) !important;
-            background: linear-gradient(135deg, #ff7875 0%, #f5222d 100%) !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2) !important;
+            background: #fff5f5 !important;
         }
 
         .logout-button:focus {
-            outline: 4px solid #ff7875;
-            outline-offset: 3px;
+            outline: 3px solid rgba(255, 255, 255, 0.6);
+            outline-offset: 2px;
         }
 
         .logout-button:active {
-            transform: translateY(0);
+            transform: translateY(0) !important;
         }
 
         .logout-button i {
-            font-size: 1.75rem;
+            font-size: 1.2rem;
         }
 
     @@media (max-width: 768px) {
+        .logout-container {
+            padding: 1.5rem;
+            margin: 0 16px;
+        }
+
         .logout-button {
-            height: 64px;
-            font-size: 1.25rem !important;
+            padding: 0.6rem 2rem !important;
+            font-size: 1rem !important;
         }
 
             .logout-button i {
-                font-size: 1.5rem;
+                font-size: 1rem;
             }
     }
 
@@ -566,9 +580,13 @@
             margin-top: 32px;
         }
 
+        .logout-container {
+            padding: 1.25rem;
+        }
+
         .logout-button {
-            height: 60px;
-            font-size: 1.1rem !important;
+            padding: 0.5rem 1.5rem !important;
+            font-size: 0.95rem !important;
         }
     }
 </style>
@@ -991,15 +1009,18 @@
 
     <!-- ========================================
          SECCIÓN CERRAR SESIÓN
-         Botón grande y accesible para salir del sistema
+         Diseño moderno con gradiente rojo
          ======================================== -->
     <section class="logout-section" aria-label="Cerrar sesión">
-        <Button Class="logout-button"
-                OnClick="CerrarSesion"
-                AriaLabel="Cerrar sesión y salir del sistema">
-            <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>
-            CERRAR SESIÓN
-        </Button>
+        <div class="logout-container">
+            <Button Class="logout-button"
+                    OnClick="CerrarSesion"
+                    Size="ButtonSize.Large"
+                    AriaLabel="Cerrar sesión y salir del sistema">
+                <Icon Type="logout" Style="margin-right: 0.5rem;" />
+                Cerrar Sesión
+            </Button>
+        </div>
     </section>
 </div>
 
