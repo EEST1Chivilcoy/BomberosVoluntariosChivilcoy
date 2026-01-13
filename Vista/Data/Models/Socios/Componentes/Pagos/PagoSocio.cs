@@ -35,6 +35,11 @@ namespace Vista.Data.Models.Socios.Componentes.Pagos
         public DateTime? FechaConfirmadoORechazado { get; set; }
 
         /// <summary>
+        /// Razón del rechazo del pago, si fue rechazado.
+        /// </summary>
+        public string? RazonRechazo { get; set; }
+
+        /// <summary>
         /// Monto pagado.
         /// </summary>
         [Required]
