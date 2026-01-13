@@ -421,8 +421,6 @@
     public class SocioPersonaViewModel : SocioViewModel
     {
         // -- Datos Personales --
-
-        [Required(ErrorMessage = "El número de documento es obligatorio.")]
         [StringLength(8, MinimumLength = 7, ErrorMessage = "El documento debe tener entre 7 y 8 dígitos.")]
         [RegularExpression(@"^\d{7,8}$", ErrorMessage = "El documento debe contener solo números.")]
         public string? Documento { get; set; }
@@ -437,7 +435,6 @@
     public class SocioEmpresaViewModel : SocioViewModel
     {
         // -- Datos de la Empresa --
-        [Required(ErrorMessage = "El CUIT es obligatorio.")]
         [StringLength(11, MinimumLength = 11, ErrorMessage = "El CUIT debe tener exactamente 11 dígitos.")]
         [RegularExpression(@"^(20|23|24|27|30|33|34)\d{8}\d$", ErrorMessage = "El CUIT no tiene un formato válido.")]
         public string? CUIT { get; set; }
