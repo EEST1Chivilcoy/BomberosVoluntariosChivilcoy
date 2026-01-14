@@ -19,6 +19,7 @@
 @using Vista.Services
 @inject IMessageService message
 @inject ICobradorService CobradorService
+@inject IEntraIDService EntraIDService
 
 <style>
     /* Estilos generales */
@@ -180,6 +181,15 @@
                                     <Avatar Icon="@IconType.Outline.User" Size="@("10rem")" />
                                 }
                             </div>
+                            <div class="upload-actions">
+                                <Button Type="@ButtonType.Default" 
+                                        Icon="@IconType.Outline.Sync" 
+                                        OnClick="ActualizarDesdeEntraID"
+                                        Loading="@isUpdatingFromEntra"
+                                        Disabled="@(personalView.EntraID == Guid.Empty)">
+                                    Actualizar desde Entra ID
+                                </Button>
+                            </div>
                         </div>
                     </AntDesign.Col>
                     <AntDesign.Col Span="18">
@@ -330,10 +340,56 @@
 
     private CobradorViewModel? personalView = new();
     private bool isLoading = true;
+    private bool isUpdatingFromEntra = false;
 
     public async Task Cancelar()
     {
         await OnCancel.InvokeAsync();
+    }
+
+    private async Task ActualizarDesdeEntraID()
+    {
+        if (personalView?.EntraID == null || personalView.EntraID == Guid.Empty)
+        {
+            await message.WarningAsync("No se puede actualizar: el usuario no tiene un ID de Entra ID asociado.");
+            return;
+        }
+
+        isUpdatingFromEntra = true;
+        StateHasChanged();
+
+        try
+        {
+            var (personal, foto) = await EntraIDService.BuscarPorIDAsync(personalView.EntraID.ToString(), CancellationToken.None);
+
+            if (personal != null)
+            {
+                personalView.Nombre = personal.Nombre;
+                personalView.Apellido = personal.Apellido;
+                personalView.UPN = personal.UPN;
+
+                if (foto?.Datos != null && foto.Datos.Length > 0)
+                {
+                    var base64 = Convert.ToBase64String(foto.Datos);
+                    personalView.UrlImagen = $"data:{foto.Formato ?? "image/jpeg"};base64,{base64}";
+                }
+
+                await message.SuccessAsync("Datos actualizados desde Entra ID correctamente.");
+            }
+            else
+            {
+                await message.WarningAsync("No se encontró el usuario en Entra ID.");
+            }
+        }
+        catch (Exception ex)
+        {
+            await message.ErrorAsync($"Error al actualizar desde Entra ID: {ex.Message}");
+        }
+        finally
+        {
+            isUpdatingFromEntra = false;
+            StateHasChanged();
+        }
     }
 
     protected override async Task OnInitializedAsync()

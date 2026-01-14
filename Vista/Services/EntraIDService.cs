@@ -13,6 +13,7 @@ namespace Vista.Services
     public interface IEntraIDService
     {
         Task<(PersonalViewModel? personal, ImagenResultado? foto)> BuscarPorUPNAsync(string upn, CancellationToken token);
+        Task<(PersonalViewModel? personal, ImagenResultado? foto)> BuscarPorIDAsync(string id, CancellationToken token);
         Task<bool> CheckDisponibilidadAsync();
         Task<User> GetUserAsync();
         Task<string> GetUserIdAsync();
@@ -134,6 +135,89 @@ namespace Vista.Services
             }
         }
 
+        public async Task<(PersonalViewModel? personal, ImagenResultado? foto)> BuscarPorIDAsync(string id, CancellationToken token)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+                throw new ArgumentException("El ID no puede estar vacío.");
+
+            try
+            {
+                var graphClient = await CreateGraphClientAsync();
+
+                // Buscar usuario por ID
+                var user = await graphClient.Users[id]
+                    .Request()
+                    .Select(u => new
+                    {
+                        u.Id,
+                        u.GivenName,
+                        u.Surname,
+                        u.UserPrincipalName
+                    })
+                    .GetAsync(token);
+
+                if (user == null)
+                    return (null, null);
+
+                // Intentar obtener foto
+                byte[]? fotoBytes = null;
+                string? contentType = null;
+
+                try
+                {
+                    var photoMetadata = await graphClient.Users[id]
+                        .Photo
+                        .Request()
+                        .GetAsync(token);
+
+                    if (photoMetadata != null)
+                    {
+                        var photoStream = await graphClient.Users[id]
+                            .Photo
+                            .Content
+                            .Request()
+                            .GetAsync(token);
+
+                        using var ms = new MemoryStream();
+                        await photoStream.CopyToAsync(ms, token);
+
+                        // Ahora guardamos los bytes crudos, no en Base64
+                        fotoBytes = ms.ToArray();
+
+                        contentType = photoMetadata.AdditionalData?.ContainsKey("@odata.mediaContentType") == true
+                            ? photoMetadata.AdditionalData["@odata.mediaContentType"]?.ToString()
+                            : "image/jpeg";
+                    }
+                }
+                catch (ServiceException photoEx) when (photoEx.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    // No tiene foto, continuar
+                }
+
+                // Mapear al ViewModel
+                var personalView = new PersonalViewModel
+                {
+                    Nombre = user.GivenName ?? string.Empty,
+                    Apellido = user.Surname ?? string.Empty,
+                    EntraID = Guid.Parse(user.Id),
+                    UPN = user.UserPrincipalName ?? string.Empty
+                };
+
+                var foto = new ImagenResultado
+                {
+                    Datos = fotoBytes,
+                    Formato = contentType
+                };
+
+                return (personalView, foto);
+            }
+            catch (MicrosoftIdentityWebChallengeUserException ex)
+            {
+                _consentHandler.HandleException(ex);
+                throw;
+            }
+        }
+
         public async Task<bool> CheckDisponibilidadAsync()
         {
             var userPrincipal = _httpContextAccessor.HttpContext?.User;
@@ -199,7 +283,7 @@ namespace Vista.Services
             try
             {
                 var user = await GetUserAsync();
-                
+
                 if (user == null || string.IsNullOrEmpty(user.Id))
                     throw new InvalidOperationException("⚠️ No se pudo obtener el ID del usuario.");
 
