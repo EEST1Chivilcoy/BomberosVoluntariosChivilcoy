@@ -775,6 +775,95 @@
             background: #d9d9d9 !important;
             color: #8c8c8c !important;
         }
+
+    /* ========================================
+       MODAL DE SELECCIÓN DE DIRECCIÓN
+       ======================================== */
+    .modal-direccion .ant-modal-content {
+        border-radius: 16px !important;
+        overflow: hidden !important;
+        border: 2px solid #732D2D !important;
+    }
+
+    .modal-direccion .ant-modal-header {
+        background: linear-gradient(135deg, #A63333 0%, #732D2D 100%) !important;
+        padding: 20px 24px !important;
+        border-bottom: none !important;
+    }
+
+    .modal-direccion .ant-modal-title {
+        color: white !important;
+        font-weight: 600 !important;
+        font-size: 1.2rem !important;
+    }
+
+    .modal-direccion .ant-modal-close-x {
+        color: white !important;
+    }
+
+    .modal-direccion .ant-modal-close:hover {
+        background: rgba(255, 255, 255, 0.1) !important;
+    }
+
+    .modal-direccion .ant-modal-body {
+        padding: 24px !important;
+    }
+
+    .seleccionar-direccion-content {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .direccion-option {
+        border: 2px solid #e8e8e8 !important;
+        border-radius: 12px !important;
+        padding: 16px !important;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: #fafafa;
+    }
+
+    .direccion-option:hover {
+        border-color: var(--cobranza-primary-color) !important;
+        background: #fff5f5;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(166, 51, 51, 0.15);
+    }
+
+    .direccion-option-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 8px;
+    }
+
+    .direccion-option-label {
+        font-weight: 600;
+        color: var(--cobranza-primary-color);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .direccion-option-icon {
+        color: var(--cobranza-primary-color);
+        font-size: 1.2rem;
+    }
+
+    .direccion-option-text {
+        color: #262626;
+        font-size: 1rem;
+        line-height: 1.4;
+    }
+
+    .direccion-footer {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 8px;
+        padding-top: 16px;
+        border-top: 1px solid #f0f0f0;
+    }
 </style>
 
 <div class="cobranza-container fade-in" role="main">
@@ -878,23 +967,6 @@
                                 <Icon Type="file-text" /> @socio.DocumentoORazonSocial
                             </div>
 
-                            <div class="info-row" title="@socio.Domicilio">
-                                <i class="fa-solid fa-location-dot"></i>
-                                <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                                    @(socio.Domicilio?.Length > 40 ? socio.Domicilio.Substring(0, 40) + "..." : socio.Domicilio)
-                                </span>
-                            </div>
-
-                            @if (!string.IsNullOrWhiteSpace(socio.DomicilioSecundario))
-                            {
-                                <div class="info-row" title="@socio.DomicilioSecundario">
-                                    <i class="fa-solid fa-location-dot" style="color: #8c8c8c;"></i>
-                                    <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #8c8c8c;">
-                                        @(socio.DomicilioSecundario?.Length > 40 ? socio.DomicilioSecundario.Substring(0, 40) + "..." : socio.DomicilioSecundario)
-                                    </span>
-                                </div>
-                            }
-
                             @if (socio.Zona != null && socio.Zona != Zona.Ninguna)
                             {
                                 <div class="info-row">
@@ -966,6 +1038,43 @@
                        OnCancel="@CerrarModalPago"
                        OnPagoConfirmado="@OnPagoConfirmado" />
     </Modal>
+
+    @* ======================================== MODAL DE SELECCIÓN DE DIRECCIÓN ======================================== *@
+    <Modal @bind-Visible="@ModalDireccionVisible"
+           Title="@($"📍 Seleccionar Ubicación - {SocioParaMapa?.NombreApellidoONombreEmpresa}")"
+           Width="450"
+           Footer="null"
+           WrapClassName="modal-direccion"
+           DestroyOnClose
+           Centered>
+        <div class="seleccionar-direccion-content">
+            <div class="direccion-option" @onclick="@(() => SeleccionarDireccion(true))">
+                <div class="direccion-option-header">
+                    <i class="fa-solid fa-house direccion-option-icon"></i>
+                    <span class="direccion-option-label">Dirección Principal</span>
+                </div>
+                <div class="direccion-option-text">
+                    @SocioParaMapa?.Domicilio
+                </div>
+            </div>
+
+            <div class="direccion-option" @onclick="@(() => SeleccionarDireccion(false))">
+                <div class="direccion-option-header">
+                    <i class="fa-solid fa-building direccion-option-icon"></i>
+                    <span class="direccion-option-label">Dirección Secundaria</span>
+                </div>
+                <div class="direccion-option-text">
+                    @SocioParaMapa?.DomicilioSecundario
+                </div>
+            </div>
+
+            <div class="direccion-footer">
+                <Button OnClick="@CerrarModalDireccion">
+                    Cancelar
+                </Button>
+            </div>
+        </div>
+    </Modal>
 </div>
 
 @code {
@@ -978,8 +1087,10 @@
     private string TextoBusqueda { get; set; } = string.Empty;
     private bool Cargando { get; set; } = true;
     private bool ModalPagoVisible { get; set; } = false;
+    private bool ModalDireccionVisible { get; set; } = false;
 
     private CobranzaViewModel? SocioSeleccionado { get; set; }
+    private CobranzaViewModel? SocioParaMapa { get; set; }
 
     // Filtro de zona
     private Zona? ZonaSeleccionada { get; set; } = null;
@@ -1294,8 +1405,50 @@
             return;
         }
 
-        var url = $"https://www.google.com/maps/search/?api=1&query={socio.Latitud.ToString(System.Globalization.CultureInfo.InvariantCulture)},{socio.Longitud.ToString(System.Globalization.CultureInfo.InvariantCulture)}";
+        // Si tiene dirección secundaria con coordenadas, mostrar modal para elegir
+        if (!string.IsNullOrWhiteSpace(socio.DomicilioSecundario) && 
+            socio.LatitudSecundaria.HasValue && socio.LongitudSecundaria.HasValue &&
+            socio.LatitudSecundaria != 0 && socio.LongitudSecundaria != 0)
+        {
+            SocioParaMapa = socio;
+            ModalDireccionVisible = true;
+            return;
+        }
 
+        // Si solo tiene dirección principal, abrir directamente
+        await AbrirMapaConCoordenadas(socio.Latitud, socio.Longitud);
+    }
+
+    private void CerrarModalDireccion()
+    {
+        ModalDireccionVisible = false;
+        SocioParaMapa = null;
+    }
+
+    private async Task SeleccionarDireccion(bool principal)
+    {
+        if (SocioParaMapa == null) return;
+
+        decimal latitud, longitud;
+
+        if (principal)
+        {
+            latitud = SocioParaMapa.Latitud;
+            longitud = SocioParaMapa.Longitud;
+        }
+        else
+        {
+            latitud = SocioParaMapa.LatitudSecundaria ?? 0;
+            longitud = SocioParaMapa.LongitudSecundaria ?? 0;
+        }
+
+        CerrarModalDireccion();
+        await AbrirMapaConCoordenadas(latitud, longitud);
+    }
+
+    private async Task AbrirMapaConCoordenadas(decimal latitud, decimal longitud)
+    {
+        var url = $"https://www.google.com/maps/search/?api=1&query={latitud.ToString(System.Globalization.CultureInfo.InvariantCulture)},{longitud.ToString(System.Globalization.CultureInfo.InvariantCulture)}";
         await JSRuntime.InvokeVoidAsync("window.open", url, "_blank");
     }
 }
