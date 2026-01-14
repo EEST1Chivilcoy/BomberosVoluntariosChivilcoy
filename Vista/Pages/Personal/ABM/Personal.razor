@@ -752,6 +752,34 @@
 
     string? searchString;
 
+    // Método para remover acentos/diacríticos de una cadena
+    private static string RemoverAcentos(string texto)
+    {
+        if (string.IsNullOrEmpty(texto))
+            return texto;
+
+        var normalizado = texto.Normalize(System.Text.NormalizationForm.FormD);
+        var sb = new System.Text.StringBuilder();
+
+        foreach (var c in normalizado)
+        {
+            var categoria = System.Globalization.CharUnicodeInfo.GetUnicodeCategory(c);
+            if (categoria != System.Globalization.UnicodeCategory.NonSpacingMark)
+                sb.Append(c);
+        }
+
+        return sb.ToString().Normalize(System.Text.NormalizationForm.FormC);
+    }
+
+    // Método para comparar cadenas ignorando acentos y mayúsculas
+    private static bool ContieneIgnorandoAcentos(string texto, string busqueda)
+    {
+        if (string.IsNullOrEmpty(texto) || string.IsNullOrEmpty(busqueda))
+            return false;
+
+        return RemoverAcentos(texto).Contains(RemoverAcentos(busqueda), StringComparison.OrdinalIgnoreCase);
+    }
+
     // Referencia a la tabla
     ITable table;
 
@@ -957,9 +985,9 @@
         }
 
         bomberos = bomberos.Where(d =>
-        d.Nombre.Contains(value, StringComparison.OrdinalIgnoreCase) ||
-        Enum.GetName(typeof(EscalafonJerarquico), d.Grado).Contains(value, StringComparison.OrdinalIgnoreCase) ||
-        d.Apellido.Contains(value, StringComparison.OrdinalIgnoreCase))
+        ContieneIgnorandoAcentos(d.Nombre, value) ||
+        ContieneIgnorandoAcentos(Enum.GetName(typeof(EscalafonJerarquico), d.Grado), value) ||
+        ContieneIgnorandoAcentos(d.Apellido, value))
         .ToList();
         if (int.TryParse(value, out number))
         {
@@ -984,9 +1012,9 @@
         }
 
         comisionDirectiva = comisionDirectiva.Where(d =>
-        d.Nombre.Contains(value, StringComparison.OrdinalIgnoreCase) ||
-        Enum.GetName(typeof(EscalafonJerarquico), d.Grado).Contains(value, StringComparison.OrdinalIgnoreCase) ||
-        d.Apellido.Contains(value, StringComparison.OrdinalIgnoreCase))
+        ContieneIgnorandoAcentos(d.Nombre, value) ||
+        ContieneIgnorandoAcentos(Enum.GetName(typeof(EscalafonJerarquico), d.Grado), value) ||
+        ContieneIgnorandoAcentos(d.Apellido, value))
         .ToList();
         if (int.TryParse(value, out number))
         {
@@ -1011,8 +1039,8 @@
         }
 
         cobradores = cobradores.Where(d =>
-        d.Nombre.Contains(value, StringComparison.OrdinalIgnoreCase) ||
-        d.Apellido.Contains(value, StringComparison.OrdinalIgnoreCase))
+        ContieneIgnorandoAcentos(d.Nombre, value) ||
+        ContieneIgnorandoAcentos(d.Apellido, value))
         .ToList();
         if (int.TryParse(value, out number))
         {
