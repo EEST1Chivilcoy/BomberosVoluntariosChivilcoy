@@ -220,6 +220,9 @@ namespace Vista.Services
                 SocioAEditar.Direccion = socio.Direccion;
                 SocioAEditar.Latitud = socio.Latitud;
                 SocioAEditar.Longitud = socio.Longitud;
+                SocioAEditar.DireccionSecundaria = socio.DireccionSecundaria;
+                SocioAEditar.LatitudSecundaria = socio.LatitudSecundaria;
+                SocioAEditar.LongitudSecundaria = socio.LongitudSecundaria;
                 SocioAEditar.Zona = socio.Zona;
                 SocioAEditar.Ocupacion = socio.Ocupacion;
                 SocioAEditar.Telefono = socio.Telefono;

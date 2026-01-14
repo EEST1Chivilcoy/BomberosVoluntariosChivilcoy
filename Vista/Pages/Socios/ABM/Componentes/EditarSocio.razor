@@ -286,6 +286,54 @@
                         }
 
                         <AntDesign.Row Gutter="16">
+                            <AntDesign.Col Span="12">
+                                <FormItem Label="Dirección Secundaria">
+                                    <Select TItem="Direccion"
+                                            TItemValue="string"
+                                            DataSource="@direccionesSecundarias"
+                                            @bind-Value="@socioView.DireccionSecundaria"
+                                            Placeholder="Ingrese una dirección secundaria (opcional)"
+                                            LabelName="@nameof(Direccion.Descripcion)"
+                                            ValueName="@nameof(Direccion.Descripcion)"
+                                            OnSearch="OnSearchSecundaria"
+                                            SearchDebounceMilliseconds="350"
+                                            EnableSearch
+                                            AllowClear
+                                            Loading="@_loadingSecundaria"
+                                            OnSelectedItemChanged="OnStreetSecundariaSelected">
+                                    </Select>
+                                </FormItem>
+                            </AntDesign.Col>
+                        </AntDesign.Row>
+
+                        @if (socioView.LatitudSecundaria.HasValue && socioView.LongitudSecundaria.HasValue)
+                        {
+                            <AntDesign.Row Gutter="16">
+                                <AntDesign.Col Span="24">
+                                    <Button Type="@ButtonType.Primary"
+                                            OnClick="() => mostrarMapaSecundario = !mostrarMapaSecundario"
+                                            Icon="@(mostrarMapaSecundario ? "eye-invisible" : "eye")"
+                                            Class="map-toggle-button"
+                                            Style="margin-bottom: 12px;">
+                                        @(mostrarMapaSecundario ? "Ocultar Mapa Secundario" : "Mostrar Mapa Secundario")
+                                    </Button>
+                                </AntDesign.Col>
+                            </AntDesign.Row>
+                            @if (mostrarMapaSecundario)
+                            {
+                                <AntDesign.Row Gutter="16">
+                                    <div class="map-container">
+                                        <iframe style="border:0; width: 100%; height: 100%;"
+                                                src="@GetGoogleMapsSatelliteUrl(socioView.LatitudSecundaria.Value, socioView.LongitudSecundaria.Value)"
+                                                frameborder="0"
+                                                allowfullscreen>
+                                        </iframe>
+                                    </div>
+                                </AntDesign.Row>
+                            }
+                        }
+
+                        <AntDesign.Row Gutter="16">
                             <AntDesign.Col Span="24">
                                 <FormItem Label="Ocupación">
                                     <TextArea @bind-Value="@socioView.Ocupacion" Placeholder="Ingrese ocupación" Rows="2" MaxLength="255" />
@@ -369,12 +417,16 @@
 
     private SocioViewModel? socioView;
     private List<Direccion> direcciones = new();
+    private List<Direccion> direccionesSecundarias = new();
 
     private bool isLoading = false;
     private bool _loading = false; // Variable para controlar el estado de carga del select de direcciones
+    private bool _loadingSecundaria = false; // Variable para controlar el estado de carga del select de direcciones secundarias
     private bool mostrarMapa = false; // Variable para controlar la visibilidad del mapa
+    private bool mostrarMapaSecundario = false; // Variable para controlar la visibilidad del mapa secundario
 
     private CancellationTokenSource? _searchCancellationTokenSource;
+    private CancellationTokenSource? _searchSecundariaCancellationTokenSource;
     private bool isApiAvailable;
 
     public abstract class SocioViewModel
@@ -396,6 +448,11 @@
 
         [Required(ErrorMessage = "La longitud es obligatoria.")]
         public double? Longitud { get; set; }
+
+        // -- Dirección Secundaria --
+        public string? DireccionSecundaria { get; set; }
+        public double? LatitudSecundaria { get; set; }
+        public double? LongitudSecundaria { get; set; }
 
         [Required(ErrorMessage = "La zona es obligatoria.")]
         public Zona? Zona { get; set; }
@@ -501,6 +558,9 @@
                 Direccion = socioView.Direccion!,
                 Latitud = socioView.Latitud!.Value,
                 Longitud = socioView.Longitud!.Value,
+                DireccionSecundaria = socioView.DireccionSecundaria,
+                LatitudSecundaria = socioView.LatitudSecundaria,
+                LongitudSecundaria = socioView.LongitudSecundaria,
                 Zona = socioView.Zona!.Value,
                 FechaIngreso = socioView.FechaIngreso!.Value,
                 Ocupacion = socioView.Ocupacion,
@@ -548,10 +608,33 @@
         }
     }
 
+    private void OnStreetSecundariaSelected(Direccion selectedStreet)
+    {
+        if (selectedStreet != null)
+        {
+            socioView!.LatitudSecundaria = selectedStreet.Lat;
+            socioView!.LongitudSecundaria = selectedStreet.Lon;
+            StateHasChanged();
+        }
+        else
+        {
+            socioView!.DireccionSecundaria = null;
+            socioView.LatitudSecundaria = null;
+            socioView.LongitudSecundaria = null;
+            StateHasChanged();
+        }
+    }
+
     private void OnSearch(string value)
     {
         // Ejecutar la búsqueda en segundo plano sin bloquear la UI
         _ = PerformSearchAsync(value);
+    }
+
+    private void OnSearchSecundaria(string value)
+    {
+        // Ejecutar la búsqueda en segundo plano sin bloquear la UI
+        _ = PerformSearchSecundariaAsync(value);
     }
 
     private async Task PerformSearchAsync(string value)
@@ -613,6 +696,65 @@
         }
     }
 
+    private async Task PerformSearchSecundariaAsync(string value)
+    {
+        // Cancelar búsqueda anterior si existe
+        _searchSecundariaCancellationTokenSource?.Cancel();
+        _searchSecundariaCancellationTokenSource?.Dispose();
+        _searchSecundariaCancellationTokenSource = new CancellationTokenSource();
+        var cancellationToken = _searchSecundariaCancellationTokenSource.Token;
+
+        // Validar longitud mínima
+        if (string.IsNullOrWhiteSpace(value) || value.Length < 3)
+        {
+            direccionesSecundarias.Clear();
+            _loadingSecundaria = false;
+            await InvokeAsync(StateHasChanged);
+            return;
+        }
+
+        // Si la API no está disponible, no intentar buscar
+        if (!isApiAvailable)
+        {
+            await message.WarningAsync("La API de búsqueda de direcciones no está disponible.");
+            return;
+        }
+
+        _loadingSecundaria = true;
+        await InvokeAsync(StateHasChanged);
+
+        try
+        {
+            // Realizar la búsqueda
+            direccionesSecundarias = await GeorefService.GetSuggestionsAsync(value);
+
+            // Si la tarea fue cancelada, no actualizar
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return;
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // Búsqueda cancelada, no hacer nada
+            return;
+        }
+        catch (Exception ex)
+        {
+            // Solo mostrar el error si no fue cancelado
+            if (!cancellationToken.IsCancellationRequested)
+            {
+                Console.Error.WriteLine($"Error al buscar direcciones secundarias: {ex.Message}");
+                direccionesSecundarias.Clear();
+            }
+        }
+        finally
+        {
+            _loadingSecundaria = false;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
     private async Task Cancelar()
     {
         await OnFinishCallback.InvokeAsync();
@@ -638,6 +780,8 @@
     {
         _searchCancellationTokenSource?.Cancel();
         _searchCancellationTokenSource?.Dispose();
+        _searchSecundariaCancellationTokenSource?.Cancel();
+        _searchSecundariaCancellationTokenSource?.Dispose();
     }
 
     private void MapToViewModel(Socio socio)
@@ -653,6 +797,9 @@
                 Direccion = socio.Direccion,
                 Latitud = socio.Latitud,
                 Longitud = socio.Longitud,
+                DireccionSecundaria = socio.DireccionSecundaria,
+                LatitudSecundaria = socio.LatitudSecundaria,
+                LongitudSecundaria = socio.LongitudSecundaria,
                 Zona = socio.Zona,
                 FechaIngreso = socio.FechaIngreso,
                 Ocupacion = socio.Ocupacion,
@@ -673,6 +820,9 @@
                 Direccion = socio.Direccion,
                 Latitud = socio.Latitud,
                 Longitud = socio.Longitud,
+                DireccionSecundaria = socio.DireccionSecundaria,
+                LatitudSecundaria = socio.LatitudSecundaria,
+                LongitudSecundaria = socio.LongitudSecundaria,
                 Zona = socio.Zona,
                 FechaIngreso = socio.FechaIngreso,
                 Ocupacion = socio.Ocupacion,
@@ -694,6 +844,20 @@
                     Descripcion = socio.Direccion,
                     Lat = socio.Latitud,
                     Lon = socio.Longitud
+                }
+            };
+        }
+
+        // Agregar la dirección secundaria actual a la lista para que aparezca en el Select
+        if (!string.IsNullOrWhiteSpace(socio.DireccionSecundaria))
+        {
+            direccionesSecundarias = new List<Direccion>
+            {
+                new Direccion
+                {
+                    Descripcion = socio.DireccionSecundaria,
+                    Lat = socio.LatitudSecundaria ?? 0,
+                    Lon = socio.LongitudSecundaria ?? 0
                 }
             };
         }

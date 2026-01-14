@@ -885,6 +885,16 @@
                                 </span>
                             </div>
 
+                            @if (!string.IsNullOrWhiteSpace(socio.DomicilioSecundario))
+                            {
+                                <div class="info-row" title="@socio.DomicilioSecundario">
+                                    <i class="fa-solid fa-location-dot" style="color: #8c8c8c;"></i>
+                                    <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #8c8c8c;">
+                                        @(socio.DomicilioSecundario?.Length > 40 ? socio.DomicilioSecundario.Substring(0, 40) + "..." : socio.DomicilioSecundario)
+                                    </span>
+                                </div>
+                            }
+
                             @if (socio.Zona != null && socio.Zona != Zona.Ninguna)
                             {
                                 <div class="info-row">
@@ -1048,9 +1058,12 @@
                             : s.Nombre ?? "Sin nombre",
                         DocumentoORazonSocial = s.DocumentoOCUIT ?? "Sin documento",
                         Domicilio = s.Direccion ?? "Sin dirección",
+                        DomicilioSecundario = s.DireccionSecundaria,
                         Saldo = saldo,
                         Latitud = (decimal)s.Latitud,
                         Longitud = (decimal)s.Longitud,
+                        LatitudSecundaria = s.LatitudSecundaria.HasValue ? (decimal?)s.LatitudSecundaria.Value : null,
+                        LongitudSecundaria = s.LongitudSecundaria.HasValue ? (decimal?)s.LongitudSecundaria.Value : null,
                         Telefono = s.Telefono,
                         MontoCuota = (decimal)s.MontoCuota,
                         Zona = s.Zona

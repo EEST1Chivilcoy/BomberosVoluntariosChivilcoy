@@ -118,6 +118,21 @@ namespace Vista.Data.Models.Socios
         public double Longitud { get; set; }
 
         /// <summary>
+        /// Representa la dirección secundaria del socio.
+        /// </summary>
+        public string? DireccionSecundaria { get; set; }
+
+        /// <summary>
+        /// Representa la Latitud secundaria del socio. (Dirección GPS)
+        /// </summary>
+        public double? LatitudSecundaria { get; set; }
+
+        /// <summary>
+        /// Representa la Longitud secundaria del socio. (Dirección GPS)
+        /// </summary>
+        public double? LongitudSecundaria { get; set; }
+
+        /// <summary>
         /// Representa la zona del socio.
         /// </summary>
         [Required(ErrorMessage = "La zona del socio es obligatoria.")]
