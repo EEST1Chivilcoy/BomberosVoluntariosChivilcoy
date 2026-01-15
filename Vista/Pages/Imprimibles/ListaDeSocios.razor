@@ -3,6 +3,8 @@
 
 @page "/fire-force/socios/imprimibles/lista-de-socios"
 @page "/fire-force/socios/imprimibles/lista-de-socios/{ZonaParam:int}"
+@page "/fire-force/socios/imprimibles/lista-de-socios/inactivos/{IncluirInactivos:bool}"
+@page "/fire-force/socios/imprimibles/lista-de-socios/{ZonaParam:int}/inactivos/{IncluirInactivos:bool}"
 
 @using Vista.Services
 @using Vista.Data.Models.Socios
@@ -34,9 +36,18 @@
             --white: #FFFFFF;
         }
 
+        /* Soporte para A4 */
         @@page {
             size: A4;
             margin: 0;
+        }
+
+        /* Soporte para hoja Oficio/Legal */
+        @@media print {
+            @@page {
+                size: auto;
+                margin: 10mm;
+            }
         }
 
         body {
@@ -71,9 +82,17 @@
             flex-direction: column;
         }
 
-            .page:last-child {
-                page-break-after: auto;
+        /* Ajuste para hoja Oficio/Legal (355.6mm height) */
+        @@media print {
+            .page {
+                min-height: auto;
+                height: auto;
             }
+        }
+
+        .page:last-child {
+            page-break-after: auto;
+        }
 
         .page-content {
             flex: 1;
@@ -436,8 +455,8 @@
             }
 
             .page {
-                min-height: 297mm;
-                height: 297mm;
+                min-height: auto;
+                height: auto;
                 padding: 10mm;
                 margin: 0;
                 page-break-after: always;
@@ -553,10 +572,13 @@
                                     <span class="number">@Socios.Count(s => s.EstadoSocio == TipoEstadoSocio.Activo)</span>
                                     <span class="label">Activos</span>
                                 </div>
-                                <div class="summary-item">
-                                    <span class="number">@Socios.Count(s => s.EstadoSocio == TipoEstadoSocio.Inactivo)</span>
-                                    <span class="label">Inactivos</span>
-                                </div>
+                                @if (IncluirInactivos)
+                                {
+                                    <div class="summary-item">
+                                        <span class="number">@Socios.Count(s => s.EstadoSocio == TipoEstadoSocio.Inactivo)</span>
+                                        <span class="label">Inactivos</span>
+                                    </div>
+                                }
                                 <div class="summary-item">
                                     <span class="number">@Socios.Count(s => s.Tipo == Vista.Data.Enums.Discriminadores.TipoSocio.Persona)</span>
                                     <span class="label">Personas</span>
@@ -676,6 +698,9 @@
     [Parameter]
     public int? ZonaParam { get; set; }
 
+    [Parameter]
+    public bool IncluirInactivos { get; set; } = true;
+
     private List<Socio>? Socios { get; set; }
     private bool IsLoading { get; set; } = true;
     private DateTime FechaHoraArgentina { get; set; }
@@ -724,15 +749,22 @@
 
             if (todosSocios != null)
             {
+                var sociosFiltrados = todosSocios.AsEnumerable();
+
+                // Filtrar por zona si se especifica
                 if (ZonaParam.HasValue)
                 {
                     var zonaFiltro = (Zona)ZonaParam.Value;
-                    Socios = todosSocios.Where(s => s.Zona.HasValue && s.Zona.Value.HasFlag(zonaFiltro)).ToList();
+                    sociosFiltrados = sociosFiltrados.Where(s => s.Zona.HasValue && s.Zona.Value.HasFlag(zonaFiltro));
                 }
-                else
+
+                // Filtrar inactivos si no se deben incluir
+                if (!IncluirInactivos)
                 {
-                    Socios = todosSocios;
+                    sociosFiltrados = sociosFiltrados.Where(s => s.EstadoSocio != TipoEstadoSocio.Inactivo);
                 }
+
+                Socios = sociosFiltrados.ToList();
             }
             else
             {

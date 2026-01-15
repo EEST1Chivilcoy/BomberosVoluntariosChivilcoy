@@ -606,6 +606,16 @@
             </div>
         }
 
+        <div style="margin-top: 20px; padding: 16px; border: 2px solid #e8e8e8; border-radius: 12px; background: #fafafa;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <Switch @bind-Checked="incluirInactivosEnImpresion" />
+                <div>
+                    <h4 style="margin: 0; color: #333; font-weight: 600;">Incluir socios inactivos</h4>
+                    <p style="margin: 0; color: #666; font-size: 13px;">@(incluirInactivosEnImpresion ? "Se mostrarán todos los socios" : "Solo se mostrarán socios activos")</p>
+                </div>
+            </div>
+        </div>
+
         <div class="print-modal-actions">
             <Button OnClick="ClosePrintModal">
                 Cancelar
@@ -639,6 +649,9 @@
 
     // Zona seleccionada para imprimir
     Zona? selectedPrintZona = null;
+
+    // Opción para incluir inactivos en la impresión
+    bool incluirInactivosEnImpresion = true;
 
     // Filtros
     private string searchString = string.Empty;
@@ -701,6 +714,7 @@
     private void OpenPrintModal()
     {
         selectedPrintZona = null;
+        incluirInactivosEnImpresion = true;
         isModalPrintVisible = true;
     }
 
@@ -724,11 +738,11 @@
         string url;
         if (selectedPrintZona.HasValue)
         {
-            url = $"/fire-force/socios/imprimibles/lista-de-socios/{(int)selectedPrintZona.Value}";
+            url = $"/fire-force/socios/imprimibles/lista-de-socios/{(int)selectedPrintZona.Value}/inactivos/{incluirInactivosEnImpresion.ToString().ToLower()}";
         }
         else
         {
-            url = "/fire-force/socios/imprimibles/lista-de-socios";
+            url = $"/fire-force/socios/imprimibles/lista-de-socios/inactivos/{incluirInactivosEnImpresion.ToString().ToLower()}";
         }
 
         navigationManager.NavigateTo(url, forceLoad: true);
