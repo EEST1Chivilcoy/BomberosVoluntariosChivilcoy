@@ -802,7 +802,15 @@
         if (!zona.HasValue || zona.Value == Zona.Ninguna)
             return "-";
 
-        return ((int)zona.Value).ToString();
+        var zonas = new List<string>();
+
+        if (zona.Value.HasFlag(Zona.Zona1)) zonas.Add("1");
+        if (zona.Value.HasFlag(Zona.Zona2)) zonas.Add("2");
+        if (zona.Value.HasFlag(Zona.Zona3)) zonas.Add("3");
+        if (zona.Value.HasFlag(Zona.Zona4)) zonas.Add("4");
+        if (zona.Value.HasFlag(Zona.Zona5)) zonas.Add("5");
+
+        return zonas.Count > 0 ? string.Join(", ", zonas) : "-";
     }
 
     private string GetEstadoClass(TipoEstadoSocio? estado)
