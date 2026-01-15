@@ -99,6 +99,8 @@ namespace Vista.Data.Models.Socios
         /// </summary>
         public string? Apellido { get; set; } = string.Empty;
 
+        // --- Dirección Principal ---
+
         /// <summary>
         /// Representa la dirección del socio.
         /// </summary>
@@ -117,6 +119,8 @@ namespace Vista.Data.Models.Socios
         [Required]
         public double Longitud { get; set; }
 
+        // --- Dirección Secundaria ---
+
         /// <summary>
         /// Representa la dirección secundaria del socio.
         /// </summary>
@@ -131,6 +135,11 @@ namespace Vista.Data.Models.Socios
         /// Representa la Longitud secundaria del socio. (Dirección GPS)
         /// </summary>
         public double? LongitudSecundaria { get; set; }
+
+        /// <summary>
+        /// Representa una nota adicional para los cobradores.
+        /// </summary>
+        public string? NotaAdicional { get; set; }
 
         /// <summary>
         /// Representa la zona del socio.

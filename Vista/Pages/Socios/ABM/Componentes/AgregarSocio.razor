@@ -321,6 +321,11 @@
                                     </Select>
                                 </FormItem>
                             </AntDesign.Col>
+                            <AntDesign.Col Span="12">
+                            <FormItem Label="Nota Adicional">
+                                <TextArea @bind-Value="@socioView.NotaAdicional" Placeholder="Ingrese una nota adicional (opcional)" />
+                                </FormItem>
+                            </AntDesign.Col>
                         </AntDesign.Row>
 
                         @if (socioView.LatitudSecundaria.HasValue && socioView.LongitudSecundaria.HasValue)
@@ -353,7 +358,7 @@
                         <AntDesign.Row Gutter="16">
                             <AntDesign.Col Span="24">
                                 <FormItem Label="Ocupación">
-                                    <TextArea @bind-Value="@socioView.Ocupacion" Placeholder="Ingrese ocupación" Rows="2" MaxLength="255" />
+                                    <Input @bind-Value="@socioView.Ocupacion" Placeholder="Ingrese ocupación" />
                                 </FormItem>
                             </AntDesign.Col>
                         </AntDesign.Row>
@@ -483,6 +488,8 @@
         [StringLength(255, ErrorMessage = "La ocupación no puede superar los 255 caracteres.")]
         public string? Ocupacion { get; set; }
 
+        public string? NotaAdicional { get; set; }
+
         // -- Datos de Contacto --
 
         [StringLength(255, ErrorMessage = "El teléfono no puede superar los 255 caracteres.")]
@@ -588,6 +595,7 @@
                 DireccionSecundaria = socioView.DetalleDireccionSecundaria,
                 LatitudSecundaria = socioView.LatitudSecundaria,
                 LongitudSecundaria = socioView.LongitudSecundaria,
+                NotaAdicional = socioView.NotaAdicional,
                 Zona = socioView.Zona!.Value,
                 FechaIngreso = socioView.FechaIngreso!.Value,
                 Ocupacion = socioView.Ocupacion,

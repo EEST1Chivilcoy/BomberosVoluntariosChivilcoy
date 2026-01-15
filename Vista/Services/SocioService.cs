@@ -223,6 +223,7 @@ namespace Vista.Services
                 SocioAEditar.DireccionSecundaria = socio.DireccionSecundaria;
                 SocioAEditar.LatitudSecundaria = socio.LatitudSecundaria;
                 SocioAEditar.LongitudSecundaria = socio.LongitudSecundaria;
+                SocioAEditar.NotaAdicional = socio.NotaAdicional;
                 SocioAEditar.Zona = socio.Zona;
                 SocioAEditar.Ocupacion = socio.Ocupacion;
                 SocioAEditar.Telefono = socio.Telefono;

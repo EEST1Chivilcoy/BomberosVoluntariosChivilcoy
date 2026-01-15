@@ -283,16 +283,26 @@
                 </div>
             </div>
 
-            @if (!string.IsNullOrWhiteSpace(socioView.Ocupacion))
+            @if (!string.IsNullOrWhiteSpace(socioView.Ocupacion) || !string.IsNullOrWhiteSpace(socioView.NotaAdicional))
             {
                 <div class="section-title">
                     <Icon Type="profile" /> Información Adicional
                 </div>
                 <div class="detail-grid">
-                    <div class="detail-item detail-full-width">
-                        <div class="detail-label">💼 Ocupación</div>
-                        <div class="detail-value">@socioView.Ocupacion</div>
-                    </div>
+                    @if (!string.IsNullOrWhiteSpace(socioView.Ocupacion))
+                    {
+                        <div class="detail-item">
+                            <div class="detail-label">💼 Ocupación</div>
+                            <div class="detail-value">@socioView.Ocupacion</div>
+                        </div>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(socioView.NotaAdicional))
+                    {
+                        <div class="detail-item detail-full-width">
+                            <div class="detail-label">📝 Nota Adicional</div>
+                            <div class="detail-value">@socioView.NotaAdicional</div>
+                        </div>
+                    }
                 </div>
             }
 
@@ -334,6 +344,7 @@
         public string? Nombre { get; set; }
         public string? Direccion { get; set; }
         public string? DireccionSecundaria { get; set; }
+        public string? NotaAdicional { get; set; }
         public string? Zona { get; set; }
         public string? FechaIngreso { get; set; }
         public string? Ocupacion { get; set; }
@@ -406,6 +417,7 @@
                 Documento = socio.DocumentoOCUIT,
                 Direccion = socio.Direccion,
                 DireccionSecundaria = socio.DireccionSecundaria,
+                NotaAdicional = socio.NotaAdicional,
                 Zona = socio.Zona.GetDisplayName(),
                 FechaIngreso = socio.FechaIngreso.ToString("dd/MM/yyyy"),
                 Ocupacion = socio.Ocupacion,
@@ -426,6 +438,7 @@
                 CUIT = socio.DocumentoOCUIT,
                 Direccion = socio.Direccion,
                 DireccionSecundaria = socio.DireccionSecundaria,
+                NotaAdicional = socio.NotaAdicional,
                 Zona = socio.Zona.GetDisplayName(),
                 FechaIngreso = socio.FechaIngreso.ToString("dd/MM/yyyy"),
                 Ocupacion = socio.Ocupacion,
