@@ -530,6 +530,16 @@
             var sociosOrdenados = Socios.OrderBy(s => s.NroSocio).ToList();
             var totalPaginas = (int)Math.Ceiling(sociosOrdenados.Count / (double)RegistrosPorPagina);
 
+            // Calcular conteos una sola vez
+            var totalSocios = Socios.Count;
+            var sociosActivos = Socios.Count(s => s.EstadoSocio == TipoEstadoSocio.Activo);
+            var sociosInactivos = Socios.Count(s => s.EstadoSocio == TipoEstadoSocio.Inactivo);
+
+            // Si no se incluyen inactivos, filtrar Personas y Empresas solo por activos
+            var sociosParaConteo = IncluirInactivos ? Socios : Socios.Where(s => s.EstadoSocio != TipoEstadoSocio.Inactivo);
+            var sociosPersonas = sociosParaConteo.Count(s => s.Tipo == Vista.Data.Enums.Discriminadores.TipoSocio.Persona);
+            var sociosEmpresas = sociosParaConteo.Count(s => s.Tipo == Vista.Data.Enums.Discriminadores.TipoSocio.Empresa);
+
             @for (int pagina = 0; pagina < totalPaginas; pagina++)
             {
                 var sociosPagina = sociosOrdenados.Skip(pagina * RegistrosPorPagina).Take(RegistrosPorPagina).ToList();
@@ -565,26 +575,26 @@
                             <!-- Summary Section -->
                             <div class="summary-section">
                                 <div class="summary-item">
-                                    <span class="number">@Socios.Count</span>
-                                    <span class="label">Total Socios</span>
-                                </div>
-                                <div class="summary-item">
-                                    <span class="number">@Socios.Count(s => s.EstadoSocio == TipoEstadoSocio.Activo)</span>
-                                    <span class="label">Activos</span>
+                                    <span class="number">@(IncluirInactivos? totalSocios : sociosActivos)</span>
+                                    <span class="label">@(IncluirInactivos ? "Total Socios" : "Total Socios Activos")</span>
                                 </div>
                                 @if (IncluirInactivos)
                                 {
                                     <div class="summary-item">
-                                        <span class="number">@Socios.Count(s => s.EstadoSocio == TipoEstadoSocio.Inactivo)</span>
+                                        <span class="number">@sociosActivos</span>
+                                        <span class="label">Activos</span>
+                                    </div>
+                                    <div class="summary-item">
+                                        <span class="number">@sociosInactivos</span>
                                         <span class="label">Inactivos</span>
                                     </div>
                                 }
                                 <div class="summary-item">
-                                    <span class="number">@Socios.Count(s => s.Tipo == Vista.Data.Enums.Discriminadores.TipoSocio.Persona)</span>
+                                    <span class="number">@sociosPersonas</span>
                                     <span class="label">Personas</span>
                                 </div>
                                 <div class="summary-item">
-                                    <span class="number">@Socios.Count(s => s.Tipo == Vista.Data.Enums.Discriminadores.TipoSocio.Empresa)</span>
+                                    <span class="number">@sociosEmpresas</span>
                                     <span class="label">Empresas</span>
                                 </div>
                             </div>
