@@ -724,11 +724,11 @@
         string url;
         if (selectedPrintZona.HasValue)
         {
-            url = $"/fire-force/comision-directiva/imprimibles/lista-de-socios/{(int)selectedPrintZona.Value}";
+            url = $"/fire-force/socios/imprimibles/lista-de-socios/{(int)selectedPrintZona.Value}";
         }
         else
         {
-            url = "/fire-force/comision-directiva/imprimibles/lista-de-socios";
+            url = "/fire-force/socios/imprimibles/lista-de-socios";
         }
 
         navigationManager.NavigateTo(url, forceLoad: true);
