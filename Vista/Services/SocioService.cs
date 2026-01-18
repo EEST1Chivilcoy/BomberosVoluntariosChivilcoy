@@ -75,6 +75,7 @@ namespace Vista.Services
                     Monto = socio.MontoCuota,
                     FormaDePago = socio.FormaPago ?? Data.Enums.Socios.FormaDePago.Efectivo,
                     FrecuenciaDePago = socio.FrecuenciaDePago ?? Data.Enums.Socios.FrecuenciaPago.Mensual,
+                    Motivo = "Alta de socio en el sistema (Cuota)",
                     SocioId = socio.Id
                 };
 
@@ -86,7 +87,7 @@ namespace Vista.Services
                     FechaDesde = socio.FechaIngresoSistemaNuevo,
                     FechaHasta = null, // Vigente
                     Estado = socio.EstadoSocio ?? Data.Enums.Socios.TipoEstadoSocio.Activo,
-                    Motivo = "Alta de socio en el sistema",
+                    Motivo = "Alta de socio en el sistema (Estado)",
                     SocioId = socio.Id
                 };
 

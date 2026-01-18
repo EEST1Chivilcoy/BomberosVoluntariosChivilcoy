@@ -27,5 +27,10 @@
         /// Representa la relación del historial con el socio. (Muchos a 1) (Navegación inversa)
         /// </summary>
         public Socio Socio { get; set; } = null!;
+
+        /// <summary>
+        /// Razón o motivo del cambio registrado en este movimiento.
+        /// </summary>
+        public string? Motivo { get; set; }
     }
 }

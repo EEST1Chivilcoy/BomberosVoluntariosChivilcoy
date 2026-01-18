@@ -12,10 +12,5 @@ namespace Vista.Data.Models.Socios.Componentes
         /// Representa el estado del socio durante este período.
         /// </summary>
         public TipoEstadoSocio Estado { get; set; }
-
-        /// <summary>
-        /// Representa el motivo del cambio de estado del socio. (No es obligatorio)
-        /// </summary>
-        public string? Motivo { get; set; } = string.Empty;
     }
 }
