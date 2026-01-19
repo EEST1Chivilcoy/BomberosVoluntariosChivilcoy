@@ -218,6 +218,7 @@ namespace Vista.Services
                 SocioAEditar.Nombre = socio.Nombre;
                 SocioAEditar.Apellido = socio.Apellido;
                 SocioAEditar.DocumentoOCUIT = socio.DocumentoOCUIT;
+                SocioAEditar.FechaNacimiento = socio.FechaNacimiento;
                 SocioAEditar.Direccion = socio.Direccion;
                 SocioAEditar.Latitud = socio.Latitud;
                 SocioAEditar.Longitud = socio.Longitud;

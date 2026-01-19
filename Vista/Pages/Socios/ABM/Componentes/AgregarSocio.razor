@@ -227,20 +227,34 @@
 
 
                         <AntDesign.Row Gutter="16">
-                            <AntDesign.Col Span="8">
-                                @if (socioView is SocioPersonaViewModel personalView)
-                                {
+
+                            @if (socioView is SocioPersonaViewModel personalView)
+                            {
+                                <AntDesign.Col Span="8">
                                     <FormItem Label="DNI">
                                         <Input @bind-Value="@personalView.Documento" Placeholder="Ingrese el DNI" />
                                     </FormItem>
-                                }
-                                else if (socioView is SocioEmpresaViewModel empresaView)
-                                {
+                                </AntDesign.Col>
+
+                                <AntDesign.Col Span="8">
+                                    <FormItem Label="Fecha de Nacimiento">
+                                        <DatePicker @bind-Value="@personalView.FechaNacimiento"
+                                                    Picker="@DatePickerType.Date"
+                                                    Style="width: 100%;"
+                                                    Placeholder="@("Seleccione fecha")"
+                                                    AllowClear />
+                                    </FormItem>
+                                </AntDesign.Col>
+                            }
+                            else if (socioView is SocioEmpresaViewModel empresaView)
+                            {
+                                <AntDesign.Col Span="8">
                                     <FormItem Label="CUIT">
                                         <Input @bind-Value="@empresaView.CUIT" Placeholder="Ingrese el CUIT" />
                                     </FormItem>
-                                }
-                            </AntDesign.Col>
+                                </AntDesign.Col>
+                            }
+
                             <AntDesign.Col Span="8">
                                 <FormItem Label="Fecha de Ingreso">
                                     <DatePicker @bind-Value="@socioView.FechaIngreso"
@@ -322,8 +336,8 @@
                                 </FormItem>
                             </AntDesign.Col>
                             <AntDesign.Col Span="12">
-                            <FormItem Label="Nota Adicional">
-                                <TextArea @bind-Value="@socioView.NotaAdicional" Placeholder="Ingrese una nota adicional (opcional)" />
+                                <FormItem Label="Nota Adicional">
+                                    <TextArea @bind-Value="@socioView.NotaAdicional" Placeholder="Ingrese una nota adicional (opcional)" />
                                 </FormItem>
                             </AntDesign.Col>
                         </AntDesign.Row>
@@ -523,6 +537,8 @@
         [Required(ErrorMessage = "El apellido es obligatorio.")]
         [StringLength(255, ErrorMessage = "El apellido no puede superar los 255 caracteres.")]
         public string? Apellido { get; set; }
+
+        public DateTime? FechaNacimiento { get; set; }
     }
 
 
@@ -611,6 +627,7 @@
                 socio.Tipo = Data.Enums.Discriminadores.TipoSocio.Persona;
                 socio.DocumentoOCUIT = socioPersonaView.Documento!;
                 socio.Apellido = socioPersonaView.Apellido!;
+                socio.FechaNacimiento = socioPersonaView.FechaNacimiento;
             }
             else if (socioView is SocioEmpresaViewModel socioEmpresaView)
             {

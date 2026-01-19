@@ -99,6 +99,12 @@ namespace Vista.Data.Models.Socios
         /// </summary>
         public string? Apellido { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Representa la fecha de nacimiento del socio. No es Obligatorio
+        /// En caso de ser una empresa, puede estar vacio
+        /// </summary>
+        public DateTime? FechaNacimiento { get; set; }
+
         // --- Dirección Principal ---
 
         /// <summary>
