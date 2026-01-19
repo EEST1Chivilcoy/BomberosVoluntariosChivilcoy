@@ -39,8 +39,7 @@ namespace Vista.Data.Models.Socios
         /// <summary>
         /// Representa la fecha de ingreso del socio.
         /// </summary>
-        [Required(ErrorMessage = "La fecha de ingreso es obligatoria.")]
-        public DateTime FechaIngreso { get; set; } = DateTime.Now;
+        public DateTime? FechaIngreso { get; set; }
 
         /// <summary>
         /// Representa la fecha de ingreso del socio al nuevo sistema.
@@ -110,20 +109,17 @@ namespace Vista.Data.Models.Socios
         /// <summary>
         /// Representa la dirección del socio.
         /// </summary>
-        [Required(ErrorMessage = "la dirección del socio es obligatoria.")]
-        public string Direccion { get; set; } = string.Empty;
+        public string? Direccion { get; set; }
 
         /// <summary>
         /// Representa la Latitud del socio. (Dirección GPS)
         /// </summary>
-        [Required]
-        public double Latitud { get; set; }
+        public double? Latitud { get; set; }
 
         /// <summary>
         /// Representa la Longitud del socio. (Dirección GPS)
         /// </summary>
-        [Required]
-        public double Longitud { get; set; }
+        public double? Longitud { get; set; }
 
         // --- Dirección Secundaria ---
 

@@ -458,13 +458,10 @@
         [StringLength(255, ErrorMessage = "El nombre no puede superar los 255 caracteres.")]
         public string? Nombre { get; set; }
 
-        [Required(ErrorMessage = "La dirección es obligatoria.")]
         public string? Direccion { get; set; }
 
-        [Required(ErrorMessage = "La latitud es obligatoria.")]
         public double? Latitud { get; set; }
 
-        [Required(ErrorMessage = "La longitud es obligatoria.")]
         public double? Longitud { get; set; }
 
         // -- Dirección Secundaria --
@@ -475,8 +472,7 @@
         [Required(ErrorMessage = "La zona es obligatoria.")]
         public Zona? Zona { get; set; }
 
-        [Required(ErrorMessage = "La fecha de ingreso es obligatoria.")]
-        public DateTime? FechaIngreso { get; set; } = DateTime.Now;
+        public DateTime? FechaIngreso { get; set; }
 
         [StringLength(255, ErrorMessage = "La ocupación no puede superar los 255 caracteres.")]
         public string? Ocupacion { get; set; }
@@ -869,8 +865,8 @@
                 new Direccion
                 {
                     Descripcion = socio.Direccion,
-                    Lat = socio.Latitud,
-                    Lon = socio.Longitud
+                    Lat = socio.Latitud ?? 0,
+                    Lon = socio.Longitud ?? 0
                 }
             };
         }

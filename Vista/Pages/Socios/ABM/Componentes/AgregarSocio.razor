@@ -475,29 +475,28 @@
         [StringLength(255, ErrorMessage = "El nombre no puede superar los 255 caracteres.")]
         public string? Nombre { get; set; }
 
-        [Required(ErrorMessage = "La dirección es obligatoria.")]
         public Direccion? Direccion { get; set; }
 
-        [Required(ErrorMessage = "El detalle de la dirección es obligatorio.")]
         public string? DetalleDireccion { get; set; }
 
-        [Required(ErrorMessage = "La latitud es obligatoria.")]
         public double? Latitud { get; set; }
 
-        [Required(ErrorMessage = "La longitud es obligatoria.")]
         public double? Longitud { get; set; }
 
         // -- Dirección Secundaria --
+
         public Direccion? DireccionSecundaria { get; set; }
+
         public string? DetalleDireccionSecundaria { get; set; }
+
         public double? LatitudSecundaria { get; set; }
+
         public double? LongitudSecundaria { get; set; }
 
         [Required(ErrorMessage = "La zona es obligatoria.")]
         public Zona? Zona { get; set; }
 
-        [Required(ErrorMessage = "La fecha de ingreso es obligatoria.")]
-        public DateTime? FechaIngreso { get; set; } = DateTime.Now;
+        public DateTime? FechaIngreso { get; set; }
 
         [StringLength(255, ErrorMessage = "La ocupación no puede superar los 255 caracteres.")]
         public string? Ocupacion { get; set; }
