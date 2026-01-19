@@ -43,9 +43,9 @@ namespace Vista.Services
             // --- Paso B: Validaciones "Caras" (contra la BD) ---
             // (Se hacen antes de iniciar la transacción para no abrirla innecesariamente)
 
-            if (await _context.Socios.AnyAsync(s => s.NroSocio == socio.NroSocio))
+            while (await _context.Socios.AnyAsync(s => s.NroSocio == socio.NroSocio))
             {
-                throw new InvalidOperationException($"Ya existe un socio con el Nro de Socio '{socio.NroSocio}'.");
+                socio.NroSocio = await ObtenerProximoNroSocioAsync();
             }
 
             if (await _context.Socios.AnyAsync(s => s.DocumentoOCUIT == socio.DocumentoOCUIT))
