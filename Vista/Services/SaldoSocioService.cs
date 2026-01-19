@@ -79,53 +79,48 @@ namespace Vista.Services
             var totalCuotas = await CalcularTotalCuotasAdeudadasAsync(socioId);
             var totalPagos = await _pagoService.ObtenerTotalPagosConfirmadosAsync(socioId);
 
-            return totalCuotas - totalPagos;
+            Console.WriteLine($"DEBUG: Cuotas={totalCuotas}, Pagos={totalPagos}");
+
+            return totalPagos - totalCuotas;
         }
 
         public async Task<decimal> CalcularTotalCuotasAdeudadasAsync(int socioId)
         {
-            // Obtener los períodos donde el socio estuvo activo
             var periodosActivos = await _historialSocioService.ObtenerPeriodosActivos(socioId);
+            if (!periodosActivos.Any()) return 0;
 
-            if (periodosActivos.Count == 0)
-            {
-                return 0;
-            }
-
-            // Obtener el historial de cuotas
             var historialCuotas = await _historialSocioService.ObtenerHistorialCuotas(socioId);
-
-            if (historialCuotas.Count == 0)
-            {
-                return 0;
-            }
+            if (!historialCuotas.Any()) return 0;
 
             decimal totalCuotas = 0;
-            var fechaActual = DateTime.UtcNow;
 
-            // Para cada período activo, calcular las cuotas correspondientes
-            foreach (var periodoActivo in periodosActivos)
+            // Obtener la zona horaria de Argentina
+            TimeZoneInfo zonaArgentina = TimeZoneInfo.FindSystemTimeZoneById("Argentina Standard Time");
+
+            // Convertir la hora UTC actual a la hora de Argentina
+            DateTime hoy = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, zonaArgentina);
+
+            foreach (var periodo in periodosActivos)
             {
-                var fechaInicioPeriodo = periodoActivo.FechaDesde;
-                var fechaFinPeriodo = periodoActivo.FechaHasta ?? fechaActual;
+                var inicioP = periodo.FechaDesde;
+                var finP = periodo.FechaHasta ?? hoy;
 
-                // Obtener las cuotas que aplican durante este período activo
-                var cuotasEnPeriodo = historialCuotas
-                    .Where(c => c.FechaDesde <= fechaFinPeriodo && (c.FechaHasta == null || c.FechaHasta >= fechaInicioPeriodo))
-                    .ToList();
+                // Filtrar cuotas que caen dentro de este periodo de actividad
+                var cuotasAplicables = historialCuotas.Where(c =>
+                    c.FechaDesde <= finP &&
+                    (c.FechaHasta == null || c.FechaHasta >= inicioP));
 
-                foreach (var cuota in cuotasEnPeriodo)
+                foreach (var cuota in cuotasAplicables)
                 {
-                    // Calcular el rango efectivo donde ambos períodos se solapan
-                    var inicioEfectivo = fechaInicioPeriodo > cuota.FechaDesde ? fechaInicioPeriodo : cuota.FechaDesde;
-                    var finEfectivo = (cuota.FechaHasta ?? fechaActual) < fechaFinPeriodo 
-                        ? (cuota.FechaHasta ?? fechaActual) 
-                        : fechaFinPeriodo;
+                    // Determinar el rango real de deuda
+                    DateTime inicioDeuda = inicioP > cuota.FechaDesde ? inicioP : cuota.FechaDesde;
+                    DateTime finDeuda = (cuota.FechaHasta == null || cuota.FechaHasta > finP) ? finP : cuota.FechaHasta.Value;
 
-                    // Calcular cantidad de cuotas según la frecuencia de pago
-                    var cantidadCuotas = CalcularCantidadCuotas(inicioEfectivo, finEfectivo, cuota.FrecuenciaDePago);
-
-                    totalCuotas += cantidadCuotas * (decimal)cuota.Monto;
+                    if (inicioDeuda < finDeuda)
+                    {
+                        var cantidad = CalcularCantidadCuotas(inicioDeuda, finDeuda, cuota.FrecuenciaDePago);
+                        totalCuotas += cantidad * (decimal)cuota.Monto;
+                    }
                 }
             }
 

@@ -63,10 +63,18 @@ namespace Vista.Services
     public class PagoService : IPagoService
     {
         private readonly BomberosDbContext _context;
+        private readonly ISocioService _socioService;
+        private readonly ICobradorService _cobradorService;
 
-        public PagoService(BomberosDbContext context)
+        public PagoService(
+        BomberosDbContext context,
+        ISocioService socioService,
+        ICobradorService cobradorService)
         {
+            // Los asignas a los campos privados para poder usarlos en tus métodos
             _context = context;
+            _socioService = socioService;
+            _cobradorService = cobradorService;
         }
 
         public async Task AgregarPagoAsync(int SocioId, PagoSocio Pago)
@@ -94,13 +102,21 @@ namespace Vista.Services
             {
                 // --- Paso B: Validaciones "Caras" (base de datos) ---
 
-                var socioExistente = await _context.Socios
-                    .AsNoTracking()
-                    .AnyAsync(s => s.Id == SocioId);
+                var socioExistente = await _socioService.ObtenerSocioPorIdAsync(SocioId);
 
-                if (!socioExistente)
+                if (socioExistente == null)
                 {
                     throw new KeyNotFoundException($"No se encontró un socio con ID {SocioId}.");
+                }
+
+                if (Pago is PagoEfectivo pagoEfectivo)
+                {
+                    var cobradorExistente = await _cobradorService.ObtenerCobradorPorIdAsync(pagoEfectivo.CobradorId);
+
+                    if (cobradorExistente == null)
+                    {
+                        throw new KeyNotFoundException($"No se encontró un cobrador con ID {pagoEfectivo.CobradorId}.");
+                    }
                 }
 
                 // --- 3. Guardar el Pago ---
@@ -192,7 +208,7 @@ namespace Vista.Services
             pago.FechaConfirmadoORechazado = DateTime.UtcNow;
 
             // Si el estado es Rechazado, la razón es obligatoria y debe ser registrada.
-            if(estado == EstadoPago.Rechazado)
+            if (estado == EstadoPago.Rechazado)
             {
                 if (string.IsNullOrWhiteSpace(razon))
                 {
