@@ -72,7 +72,12 @@
                         <FormItem Label="Patente">
                             <Input @bind-Value="vehiculoView.Patente" Placeholder="Patente" ReadOnly="true" />
                         </FormItem>
-
+                        @if (vehiculo is Movil)
+                        {
+                            <FormItem Label="Kilometraje">
+                                <Input Placeholder="Km" @bind-Value="@vehiculoView.KmActuales" ReadOnly="true" />
+                            </FormItem>
+                        }
                         <FormItem Label="Observaciones" Class="full-width-4">
                             <Input @bind-Value="vehiculoView.Observaciones" Placeholder="Observaciones" Rows="3" ReadOnly="true" />
                         </FormItem>
@@ -215,6 +220,7 @@ else
         public string? TipoDireccion { get; set; }
         public string? MarcaBateria { get; set; }
         public string? FechaUltimoCambioBateria { get; set; }
+        public string? KmActuales { get; set; }
     }
 
     // Funciones - Carga de datos
@@ -267,6 +273,7 @@ else
                 vehiculoView.TipoDireccion = movil.TipoDireccion?.GetDisplayName(); // Es un enum no se usa ToString directamente, se toma el Display Name
                 vehiculoView.MarcaBateria = movil.MarcaBateria;
                 vehiculoView.FechaUltimoCambioBateria = movil.FechaUltCambioBateria?.ToString("dd/MM/yyyy") ?? "No registrado";
+                vehiculoView.KmActuales = movil.Kilometraje?.ToString() ?? "No registrado";
             }
         }
     }

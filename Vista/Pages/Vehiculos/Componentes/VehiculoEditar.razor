@@ -90,7 +90,12 @@
                     <FormItem Label="Patente">
                         <Input @bind-Value="vehiculoView.Patente" Placeholder="Patente" />
                     </FormItem>
-
+                    @if (!EsEmbarcacion)
+                    {
+                        <FormItem Label="Kilometraje">
+                            <Input Placeholder="Km" @bind-Value="@movilView.KmActuales" AllowClear />
+                        </FormItem>
+                    }
                     <FormItem Label="Observaciones" Class="full-width-4">
                         <TextArea @bind-Value="vehiculoView.Observaciones" Placeholder="Observaciones" Rows="3" />
                     </FormItem>
@@ -240,6 +245,7 @@
         public TipoDireccionUnidades? TipoDireccion { get; set; }
         public string? MarcaBateria { get; set; }
         public DateTime? FechaUltimoCambioBateria { get; set; }
+        public int? KmActuales { get; set; }
     }
 
     public class ImagenViewModel
@@ -288,6 +294,7 @@
                 movilView.TipoDireccion = movil.TipoDireccion;
                 movilView.MarcaBateria = movil.MarcaBateria;
                 movilView.FechaUltimoCambioBateria = movil.FechaUltCambioBateria;
+                movilView.KmActuales = movil.Kilometraje;
             }
 
             vehiculoView.Estado = vehiculo.Estado;
@@ -386,6 +393,7 @@
                     movil.TipoDireccion = movilView.TipoDireccion;
                     movil.MarcaBateria = movilView.MarcaBateria;
                     movil.FechaUltCambioBateria = movilView.FechaUltimoCambioBateria;
+                    movil.Kilometraje = movilView.KmActuales;
                     await VehiculoSalidaService.EditarVehiculo(movil, imagen);
                 }
                 else
