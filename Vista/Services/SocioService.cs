@@ -48,7 +48,7 @@ namespace Vista.Services
                 socio.NroSocio = await ObtenerProximoNroSocioAsync();
             }
 
-            if (await _context.Socios.AnyAsync(s => s.DocumentoOCUIT == socio.DocumentoOCUIT))
+            if (socio.DocumentoOCUIT != null && await _context.Socios.AnyAsync(s => s.DocumentoOCUIT == socio.DocumentoOCUIT))
             {
                 throw new InvalidOperationException($"Ya existe un socio con el Documento o CUIT '{socio.DocumentoOCUIT}'.");
             }
@@ -163,8 +163,8 @@ namespace Vista.Services
                 }
             }
 
-            // Validar que no exista otro Socio with el mismo documento o CUIT (si se cambió)
-            if (SocioAEditar.DocumentoOCUIT != socio.DocumentoOCUIT)
+            // Validar que no exista otro Socio con el mismo documento o CUIT (si se cambió)
+            if (socio.DocumentoOCUIT != null && SocioAEditar.DocumentoOCUIT != socio.DocumentoOCUIT)
             {
                 bool documentoExistente = await _context.Socios
                     .AnyAsync(s => s.DocumentoOCUIT == socio.DocumentoOCUIT && s.Id != socio.Id);
