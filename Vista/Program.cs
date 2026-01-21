@@ -151,7 +151,12 @@ builder.Services.AddScoped<IPagoService, PagoService>();
 builder.Services.AddScoped<ISaldoSocioService, SaldoSocioService>();
 builder.Services.AddScoped<IImagenService, ImagenService>();
 
-// Servicios HttpClient
+// Configuración de Nominatim (externalizada para poder cambiar de proveedor)
+builder.Services.Configure<NominatimSettings>(
+    builder.Configuration.GetSection(NominatimSettings.SectionName));
+
+// Servicios de Nominatim
+builder.Services.AddSingleton<INominatimCacheService, NominatimCacheService>();
 builder.Services.AddHttpClient<INominatimService, NominatimService>();
 
 // Configurar la localización
