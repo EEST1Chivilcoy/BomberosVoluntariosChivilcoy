@@ -104,22 +104,31 @@
     .ant-input,
     .ant-select:not(.ant-select-customize-input) .ant-select-selector,
     .ant-picker,
-    .ant-input-number {
+    .ant-input-number,
+    .ant-input-affix-wrapper {
         border-radius: 4px !important;
         border: 1px solid #d9d9d9 !important;
+    }
+
+    /* Remover borde del input cuando está dentro de affix-wrapper (AllowClear) */
+    .ant-input-affix-wrapper > .ant-input {
+        border: none !important;
+        box-shadow: none !important;
     }
 
         .ant-input:hover,
         .ant-select:not(.ant-select-customize-input) .ant-select-selector:hover,
         .ant-picker:hover,
-        .ant-input-number:hover {
+        .ant-input-number:hover,
+        .ant-input-affix-wrapper:hover {
             border-color: #c43a3a !important;
         }
 
         .ant-input:focus,
         .ant-select-focused:not(.ant-select-customize-input) .ant-select-selector,
         .ant-picker-focused,
-        .ant-input-number-focused {
+        .ant-input-number-focused,
+        .ant-input-affix-wrapper-focused {
             border-color: #c43a3a !important;
             box-shadow: 0 0 0 2px rgba(196, 58, 58, 0.2) !important;
         }
@@ -232,7 +241,7 @@
                             {
                                 <AntDesign.Col Span="8">
                                     <FormItem Label="DNI">
-                                        <Input @bind-Value="@personalView.Documento" Placeholder="Ingrese el DNI" />
+                                        <Input @bind-Value="@personalView.Documento" Placeholder="Ingrese el DNI" AllowClear="true" />
                                     </FormItem>
                                 </AntDesign.Col>
 
@@ -250,7 +259,7 @@
                             {
                                 <AntDesign.Col Span="8">
                                     <FormItem Label="CUIT">
-                                        <Input @bind-Value="@empresaView.CUIT" Placeholder="Ingrese el CUIT" />
+                                        <Input @bind-Value="@empresaView.CUIT" Placeholder="Ingrese el CUIT" AllowClear="true" />
                                     </FormItem>
                                 </AntDesign.Col>
                             }
@@ -279,7 +288,8 @@
                                             SearchDebounceMilliseconds="350"
                                             EnableSearch
                                             Loading="@_loading"
-                                            OnSelectedItemChanged="OnStreetSelected">
+                                            OnSelectedItemChanged="OnStreetSelected"
+                                            AllowClear="true">
                                     </Select>
                                 </FormItem>
                             </AntDesign.Col>
@@ -331,13 +341,14 @@
                                             EnableSearch
                                             AllowClear
                                             Loading="@_loadingSecundaria"
-                                            OnSelectedItemChanged="OnStreetSecundariaSelected">
+                                            OnSelectedItemChanged="OnStreetSecundariaSelected"
+                                            >
                                     </Select>
                                 </FormItem>
                             </AntDesign.Col>
                             <AntDesign.Col Span="12">
                                 <FormItem Label="Nota Adicional">
-                                    <TextArea @bind-Value="@socioView.NotaAdicional" Placeholder="Ingrese una nota adicional (opcional)" />
+                                    <TextArea @bind-Value="@socioView.NotaAdicional" Placeholder="Ingrese una nota adicional (opcional)" AllowClear="true" />
                                 </FormItem>
                             </AntDesign.Col>
                         </AntDesign.Row>
@@ -372,7 +383,7 @@
                         <AntDesign.Row Gutter="16">
                             <AntDesign.Col Span="24">
                                 <FormItem Label="Ocupación">
-                                    <Input @bind-Value="@socioView.Ocupacion" Placeholder="Ingrese ocupación" />
+                                    <Input @bind-Value="@socioView.Ocupacion" Placeholder="Ingrese ocupación" AllowClear="true" />
                                 </FormItem>
                             </AntDesign.Col>
                         </AntDesign.Row>
@@ -389,7 +400,7 @@
                 <AntDesign.Row Gutter="16">
                     <AntDesign.Col Span="8">
                         <FormItem Label="Frecuencia de Pago">
-                            <EnumSelect TEnum="FrecuenciaPago ?" @bind-Value="@socioView.FrecuenciaPago" AllowClear Placeholder="Ingrese la frecuencia de pago" />
+                            <EnumSelect TEnum="FrecuenciaPago ?" @bind-Value="@socioView.FrecuenciaPago" Placeholder="Ingrese la frecuencia de pago" />
                         </FormItem>
                     </AntDesign.Col>
                     <AntDesign.Col Span="8">
@@ -399,7 +410,7 @@
                     </AntDesign.Col>
                     <AntDesign.Col Span="8">
                         <FormItem Label="Forma de Pago">
-                            <EnumSelect TEnum="FormaDePago ?" @bind-Value="@socioView.FormaPago" Placeholder="Seleccione forma de pago" AllowClear />
+                            <EnumSelect TEnum="FormaDePago ?" @bind-Value="@socioView.FormaPago" Placeholder="Seleccione forma de pago" />
                         </FormItem>
                     </AntDesign.Col>
                 </AntDesign.Row>
@@ -411,12 +422,12 @@
                 <AntDesign.Row Gutter="16">
                     <AntDesign.Col Span="12">
                         <FormItem Label="Teléfono">
-                            <Input @bind-Value="@socioView.Telefono" Placeholder="Ingrese teléfono celular" />
+                            <Input @bind-Value="@socioView.Telefono" Placeholder="Ingrese teléfono celular" AllowClear="true" />
                         </FormItem>
                     </AntDesign.Col>
                     <AntDesign.Col Span="12">
                         <FormItem Label="Email">
-                            <Input @bind-Value="@socioView.Email" Placeholder="Ingrese correo electrónico" />
+                            <Input @bind-Value="@socioView.Email" Placeholder="Ingrese correo electrónico" AllowClear="true" />
                         </FormItem>
                     </AntDesign.Col>
                 </AntDesign.Row>
@@ -603,18 +614,18 @@
             Socio socio = new Socio()
             {
                 NroSocio = socioView!.NroSocio!.Value,
-                Nombre = socioView.Nombre!,
-                Direccion = socioView.DetalleDireccion!,
-                Latitud = socioView.Latitud!.Value,
-                Longitud = socioView.Longitud!.Value,
+                Nombre = socioView.Nombre,
+                Direccion = socioView.DetalleDireccion,
+                Latitud = socioView.Latitud,
+                Longitud = socioView.Longitud,
                 DireccionSecundaria = socioView.DetalleDireccionSecundaria,
                 LatitudSecundaria = socioView.LatitudSecundaria,
                 LongitudSecundaria = socioView.LongitudSecundaria,
                 NotaAdicional = socioView.NotaAdicional,
                 Zona = socioView.Zona!.Value,
-                FechaIngreso = socioView.FechaIngreso!.Value,
+                FechaIngreso = socioView.FechaIngreso,
                 Ocupacion = socioView.Ocupacion,
-                Telefono = socioView.Telefono!,
+                Telefono = socioView.Telefono,
                 Email = socioView.Email,
                 MontoCuota = socioView.CuotaValor!.Value,
                 FrecuenciaDePago = socioView.FrecuenciaPago!.Value,
@@ -624,14 +635,14 @@
             if (socioView is SocioPersonaViewModel socioPersonaView)
             {
                 socio.Tipo = Data.Enums.Discriminadores.TipoSocio.Persona;
-                socio.DocumentoOCUIT = socioPersonaView.Documento!;
-                socio.Apellido = socioPersonaView.Apellido!;
+                socio.DocumentoOCUIT = socioPersonaView.Documento;
+                socio.Apellido = socioPersonaView.Apellido;
                 socio.FechaNacimiento = socioPersonaView.FechaNacimiento;
             }
             else if (socioView is SocioEmpresaViewModel socioEmpresaView)
             {
                 socio.Tipo = Data.Enums.Discriminadores.TipoSocio.Empresa;
-                socio.DocumentoOCUIT = socioEmpresaView.CUIT!;
+                socio.DocumentoOCUIT = socioEmpresaView.CUIT;
             }
 
             // Creamos el socio

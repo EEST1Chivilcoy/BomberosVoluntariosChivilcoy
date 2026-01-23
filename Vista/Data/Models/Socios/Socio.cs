@@ -96,7 +96,7 @@ namespace Vista.Data.Models.Socios
         /// Representa el apellido de la persona.
         /// En caso de ser una empresa, puede estar vacío.
         /// </summary>
-        public string? Apellido { get; set; } = string.Empty;
+        public string? Apellido { get; set; }
 
         /// <summary>
         /// Representa la fecha de nacimiento del socio. No es Obligatorio
