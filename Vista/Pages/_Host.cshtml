@@ -5,36 +5,38 @@
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
 @{
-	Layout = "_Layout";
-	var path = string.Empty;
-	if (HttpContextAccessor.HttpContext != null)
-	{
-		path = HttpContextAccessor.HttpContext.Request.Path.Value ?? string.Empty;
-	}
+    Layout = "_Layout";
+    var path = string.Empty;
+    if (HttpContextAccessor.HttpContext != null)
+    {
+        path = HttpContextAccessor.HttpContext.Request.Path.Value ?? string.Empty;
+    }
 }
 
 <component type="typeof(App)" render-mode="ServerPrerendered" />
 <head>
-	<meta name="robots" content="noindex, nofollow">
-	@if (!path.Contains("/PlanillasIntervencion/Imprimir/"))
-	{
-		<link href="_content/AntDesign/css/ant-design-blazor.aliyun.css" rel="stylesheet" />
-		<script src="_content/AntDesign/js/ant-design-blazor.js"></script>
-		<script src="_content/AntDesign.Charts/g2plot.min.js"></script>
-		<script src="_content/AntDesign.Charts/ant-design-charts-blazor.js"></script>
-	}
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Fjalla+One&family=Patrick+Hand&display=swap" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Fjalla+One&family=Karla:wght@200&family=Patrick+Hand&display=swap" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&display=swap" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <meta name="robots" content="noindex, nofollow">
+    @if (!path.Contains("/PlanillasIntervencion/Imprimir/"))
+    {
+        <link href="_content/AntDesign/css/ant-design-blazor.aliyun.css" rel="stylesheet" />
+        <script src="_content/AntDesign/js/ant-design-blazor.js"></script>
+        <script src="_content/AntDesign.Charts/g2plot.min.js"></script>
+        <script src="_content/AntDesign.Charts/ant-design-charts-blazor.js"></script>
+    }
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Fjalla+One&family=Patrick+Hand&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Fjalla+One&family=Karla:wght@200&family=Patrick+Hand&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
 </head>
 
 <body>
-	@if (!path.Contains("/PlanillasIntervencion/Imprimir/"))
-	{
-		<script src="https://kit.fontawesome.com/272199268b.js" crossorigin="anonymous"></script>
-	}
-	<script src="js/BlazorDownloadFile.saveAsFile.js"></script>
+    @if (!path.Contains("/PlanillasIntervencion/Imprimir/"))
+    {
+        <script src="https://kit.fontawesome.com/272199268b.js" crossorigin="anonymous"></script>
+    }
+    <script src="js/BlazorDownloadFile.saveAsFile.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="js/pdfExport.js"></script>
 </body>

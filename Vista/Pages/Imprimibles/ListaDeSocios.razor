@@ -1,4 +1,4 @@
-ï»¿@*Layout Vacio*@
+@*Layout Vacio*@
 @layout EmptyLayout
 
 @page "/fire-force/socios/imprimibles/lista-de-socios"
@@ -10,699 +10,566 @@
 @using Vista.Data.Models.Socios
 @using Vista.Data.Enums.Socios
 @using System.ComponentModel.DataAnnotations
+@using Microsoft.JSInterop
 
 @inject ISocioService SocioService
+@inject IJSRuntime JSRuntime
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Socios - Bomberos Voluntarios de Chivilcoy</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+<PageTitle>Lista de Socios - Bomberos Voluntarios de Chivilcoy</PageTitle>
+
+<style>
+    :root {
+        --black: #000000;
+        --dark-gray: #1a1a1a;
+        --medium-gray: #4a4a4a;
+        --light-gray: #777777;
+        --border-gray: #333333;
+        --bg-light: #f5f5f5;
+        --white: #FFFFFF;
+    }
+
+    body {
+        font-family: 'Times New Roman', Times, Georgia, serif;
+        font-size: 11pt;
+        line-height: 1.4;
+        color: var(--black);
+        background: var(--white);
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        margin: 0;
+        padding: 0;
+    }
+
+    #pdf-content {
+        width: 190mm;
+        margin: 0 auto;
+        padding: 10px;
+        background: var(--white);
+    }
+
+    .header {
+        text-align: center;
+        padding-bottom: 15px;
+        border-bottom: 3px double var(--black);
+        margin-bottom: 15px;
+    }
+
+    .header-logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 25px;
+        margin-bottom: 10px;
+    }
+
+    .logo-icon {
+        width: 100px;
+        height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .logo-icon img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        filter: grayscale(100%);
+    }
+
+    .header-title h1 {
+        font-size: 26pt;
+        font-weight: 700;
+        color: var(--black);
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 8px;
+    }
+
+    .header-title h2 {
+        font-size: 14pt;
+        font-weight: 400;
+        color: var(--dark-gray);
+        font-style: italic;
+    }
+
+    .header-info {
+        margin-top: 15px;
+        font-size: 10pt;
+        color: var(--dark-gray);
+        display: flex;
+        justify-content: space-between;
+        border-top: 1px solid var(--border-gray);
+        padding-top: 10px;
+    }
+
+    .header-info p {
+        margin: 0;
+    }
+
+    .title-section {
+        background: var(--black);
+        color: var(--white);
+        padding: 15px 20px;
+        margin-bottom: 15px;
+        text-align: center;
+        border: 2px solid var(--black);
+    }
+
+    .title-section h3 {
+        font-size: 16pt;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        margin-bottom: 5px;
+    }
+
+    .title-section .subtitle {
+        font-size: 12pt;
+        font-weight: 400;
+        margin-top: 5px;
+    }
+
+    .summary-section {
+        display: flex;
+        justify-content: center;
+        gap: 0;
+        margin-bottom: 15px;
+        padding: 15px 10px;
+        border: 2px solid var(--black);
+        background: var(--bg-light);
+    }
+
+    .summary-item {
+        text-align: center;
+        padding: 5px 25px;
+        border-right: 1px solid var(--border-gray);
+        flex: 1;
+        max-width: 150px;
+    }
+
+    .summary-item:last-child {
+        border-right: none;
+    }
+
+    .summary-item .number {
+        font-size: 22pt;
+        font-weight: 700;
+        color: var(--black);
+        display: block;
+        line-height: 1.2;
+    }
+
+    .summary-item .label {
+        font-size: 8pt;
+        color: var(--dark-gray);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-top: 3px;
+        display: block;
+    }
+
+    .table-container {
+        margin-bottom: 15px;
+    }
+
+    .pdf-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 9pt;
+    }
+
+    .pdf-table thead {
+        background: var(--black);
+        color: var(--white);
+    }
+
+    .pdf-table th {
+        padding: 10px 6px;
+        text-align: left;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-size: 8pt;
+        border: 1px solid var(--black);
+    }
+
+    .pdf-table tbody tr {
+        border-bottom: 1px solid var(--border-gray);
+    }
+
+    .pdf-table tbody tr:nth-child(even) {
+        background-color: var(--bg-light);
+    }
+
+    .pdf-table td {
+        padding: 8px 6px;
+        vertical-align: middle;
+        border-left: 1px solid var(--border-gray);
+        border-right: 1px solid var(--border-gray);
+    }
+
+    .pdf-table tbody tr:last-child td {
+        border-bottom: 2px solid var(--black);
+    }
+
+    .socio-number {
+        font-weight: 700;
+        font-size: 10pt;
+    }
+
+    .socio-name {
+        font-weight: 600;
+    }
+
+    .socio-type {
+        display: inline-block;
+        padding: 2px 6px;
+        font-size: 7pt;
+        font-weight: 600;
+        text-transform: uppercase;
+        border: 1px solid var(--black);
+    }
+
+    .socio-type.persona {
+        background: var(--white);
+    }
+
+    .socio-type.empresa {
+        background: var(--bg-light);
+    }
+
+    .status-badge {
+        display: inline-block;
+        padding: 2px 8px;
+        font-size: 7pt;
+        font-weight: 700;
+        text-transform: uppercase;
+        border: 2px solid var(--black);
+    }
+
+    .status-badge.activo {
+        background: var(--white);
+    }
+
+    .status-badge.inactivo {
+        background: var(--black);
+        color: var(--white);
+    }
+
+    .status-badge.suspendido {
+        background: var(--bg-light);
+    }
+
+    .zona-number {
+        font-weight: 700;
+        font-size: 10pt;
+        text-align: center;
+        display: inline-block;
+        min-width: 25px;
+    }
+
+    .cuota-info {
+        font-weight: 700;
+        text-align: right;
+    }
+
+    .contact-info {
+        font-size: 8pt;
+    }
+
+    .pdf-footer {
+        margin-top: auto;
+        padding-top: 10px;
+        border-top: 3px double var(--black);
+    }
+
+    .footer-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        font-size: 9pt;
+        color: var(--dark-gray);
+    }
+
+    .footer-left {
+        text-align: left;
+    }
+
+    .footer-left p {
+        margin: 3px 0;
+    }
+
+    .footer-right {
+        text-align: right;
+    }
+
+    .document-number {
+        font-size: 8pt;
+        color: var(--light-gray);
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    .loading-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 300px;
+        gap: 20px;
+    }
+
+    .loading-spinner {
+        width: 50px;
+        height: 50px;
+        border: 4px solid var(--bg-light);
+        border-top-color: var(--black);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @@keyframes spin {
+        to {
+            transform: rotate(360deg);
         }
+    }
 
-        :root {
-            --black: #000000;
-            --dark-gray: #1a1a1a;
-            --medium-gray: #4a4a4a;
-            --light-gray: #777777;
-            --border-gray: #333333;
-            --bg-light: #f5f5f5;
-            --white: #FFFFFF;
+    .loading-text {
+        color: var(--dark-gray);
+        font-size: 12pt;
+    }
+
+    .no-data {
+        text-align: center;
+        padding: 50px 20px;
+        border: 2px solid var(--black);
+    }
+
+    .no-data h3 {
+        font-size: 14pt;
+        margin-bottom: 10px;
+    }
+
+    .no-data p {
+        color: var(--dark-gray);
+    }
+
+    @@media print {
+        .action-buttons {
+            display: none !important;
         }
-
-        /* Soporte para A4 */
-        @@page {
-            size: A4;
-            margin: 0;
-        }
-
-        /* Soporte para hoja Oficio/Legal */
-        @@media print {
-            @@page {
-                size: auto;
-                margin: 10mm;
-            }
-        }
-
-        body {
-            font-family: 'Times New Roman', Times, Georgia, serif;
-            font-size: 11pt;
-            line-height: 1.5;
-            color: var(--black);
-            background: var(--white);
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
-            margin: 0;
-            padding: 0;
-        }
-
-        .page-container {
-            max-width: 210mm;
-            margin: 0 auto;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            min-height: calc(100vh - 40px);
-        }
-
-        /* Page break styles */
-        .page {
-            position: relative;
-            page-break-after: always;
-            page-break-inside: avoid;
-            min-height: 297mm; /* A4 height */
-            padding: 10mm;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Ajuste para hoja Oficio/Legal (355.6mm height) */
-        @@media print {
-            .page {
-                min-height: auto;
-                height: auto;
-            }
-        }
-
-        .page:last-child {
-            page-break-after: auto;
-        }
-
-        .page-content {
-            flex: 1;
-        }
-
-        /* Header Formal */
-        .header {
-            text-align: center;
-            padding-bottom: 15px;
-            border-bottom: 3px double var(--black);
-            margin-bottom: 15px;
-        }
-
-        .header-logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 25px;
-            margin-bottom: 10px;
-        }
-
-        .logo-icon {
-            width: 100px;
-            height: 100px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-            .logo-icon img {
-                width: 100%;
-                height: 100%;
-                object-fit: contain;
-                filter: grayscale(100%);
-            }
-
-        .header-title h1 {
-            font-size: 26pt;
-            font-weight: 700;
-            color: var(--black);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 8px;
-        }
-
-        .header-title h2 {
-            font-size: 14pt;
-            font-weight: 400;
-            color: var(--dark-gray);
-            font-style: italic;
-        }
-
-        .header-info {
-            margin-top: 15px;
-            font-size: 10pt;
-            color: var(--dark-gray);
-            display: flex;
-            justify-content: space-between;
-            border-top: 1px solid var(--border-gray);
-            padding-top: 10px;
-        }
-
-            .header-info p {
-                margin: 0;
-            }
-
-        /* Header compacto para pÃ¡ginas siguientes */
-        .header-compact {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--black);
-            margin-bottom: 15px;
-        }
-
-            .header-compact h3 {
-                font-size: 12pt;
-                font-weight: 700;
-            }
-
-            .header-compact .page-info {
-                font-size: 10pt;
-                color: var(--dark-gray);
-            }
-
-        /* Title Section */
-        .title-section {
-            background: var(--black);
-            color: var(--white);
-            padding: 15px 20px;
-            margin-bottom: 15px;
-            text-align: center;
-            border: 2px solid var(--black);
-        }
-
-            .title-section h3 {
-                font-size: 16pt;
-                font-weight: 700;
-                letter-spacing: 1.5px;
-                text-transform: uppercase;
-                margin-bottom: 5px;
-            }
-
-            .title-section .subtitle {
-                font-size: 12pt;
-                font-weight: 400;
-                margin-top: 5px;
-            }
-
-        /* Summary Section */
-        .summary-section {
-            display: flex;
-            justify-content: center;
-            gap: 0;
-            margin-bottom: 15px;
-            padding: 15px 10px;
-            border: 2px solid var(--black);
-            background: var(--bg-light);
-        }
-
-        .summary-item {
-            text-align: center;
-            padding: 5px 25px;
-            border-right: 1px solid var(--border-gray);
-            flex: 1;
-            max-width: 150px;
-        }
-
-            .summary-item:last-child {
-                border-right: none;
-            }
-
-            .summary-item .number {
-                font-size: 22pt;
-                font-weight: 700;
-                color: var(--black);
-                display: block;
-                line-height: 1.2;
-            }
-
-            .summary-item .label {
-                font-size: 8pt;
-                color: var(--dark-gray);
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
-                margin-top: 3px;
-                display: block;
-            }
-
-        /* Table */
-        .table-container {
-            margin-bottom: 15px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 9pt;
-        }
-
-        thead {
-            background: var(--black);
-            color: var(--white);
-        }
-
-        th {
-            padding: 10px 6px;
-            text-align: left;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-size: 8pt;
-            border: 1px solid var(--black);
-        }
-
-        tbody tr {
-            border-bottom: 1px solid var(--border-gray);
-        }
-
-            tbody tr:nth-child(even) {
-                background-color: var(--bg-light);
-            }
-
-        td {
-            padding: 8px 6px;
-            vertical-align: middle;
-            border-left: 1px solid var(--border-gray);
-            border-right: 1px solid var (--border-gray);
-        }
-
-        tbody tr:last-child td {
-            border-bottom: 2px solid var(--black);
-        }
-
-        .socio-number {
-            font-weight: 700;
-            font-size: 10pt;
-        }
-
-        .socio-name {
-            font-weight: 600;
-        }
-
-        .socio-type {
-            display: inline-block;
-            padding: 2px 6px;
-            font-size: 7pt;
-            font-weight: 600;
-            text-transform: uppercase;
-            border: 1px solid var(--black);
-        }
-
-            .socio-type.persona {
-                background: var(--white);
-            }
-
-            .socio-type.empresa {
-                background: var(--bg-light);
-            }
-
-        .status-badge {
-            display: inline-block;
-            padding: 2px 8px;
-            font-size: 7pt;
-            font-weight: 700;
-            text-transform: uppercase;
-            border: 2px solid var(--black);
-        }
-
-            .status-badge.activo {
-                background: var(--white);
-            }
-
-            .status-badge.inactivo {
-                background: var(--black);
-                color: var(--white);
-            }
-
-            .status-badge.suspendido {
-                background: var(--bg-light);
-            }
-
-        .zona-number {
-            font-weight: 700;
-            font-size: 10pt;
-            text-align: center;
-            display: inline-block;
-            min-width: 25px;
-        }
-
-        .cuota-info {
-            font-weight: 700;
-            text-align: right;
-        }
-
-        .contact-info {
-            font-size: 8pt;
-        }
-
-        /* Footer */
-        .footer {
-            margin-top: auto;
-            padding-top: 10px;
-            border-top: 3px double var(--black);
-        }
-
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            font-size: 9pt;
-            color: var(--dark-gray);
-        }
-
-        .footer-left {
-            text-align: left;
-        }
-
-            .footer-left p {
-                margin: 3px 0;
-            }
-
-        .footer-right {
-            text-align: right;
-        }
-
-        .document-number {
-            font-size: 8pt;
-            color: var(--light-gray);
-            text-align: center;
-            margin-top: 10px;
-        }
-
-        /* Loading State */
-        .loading-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 300px;
-            gap: 20px;
-        }
-
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid var(--bg-light);
-            border-top-color: var(--black);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @@keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .loading-text {
-            color: var(--dark-gray);
-            font-size: 12pt;
-        }
-
-        /* No Data */
-        .no-data {
-            text-align: center;
-            padding: 50px 20px;
-            border: 2px solid var(--black);
-        }
-
-            .no-data h3 {
-                font-size: 14pt;
-                margin-bottom: 10px;
-            }
-
-            .no-data p {
-                color: var(--dark-gray);
-            }
-
-        /* Print Styles */
-        @@media print {
-            html, body {
-                width: 210mm;
-                height: 297mm;
-                margin: 0 !important;
-                padding: 0 !important;
-            }
-
-            body {
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-            }
-
-            .page-container {
-                padding: 0;
-                max-width: none;
-                margin: 0;
-            }
-
-            .page {
-                min-height: auto;
-                height: auto;
-                padding: 10mm;
-                margin: 0;
-                page-break-after: always;
-                box-sizing: border-box;
-            }
-
-                .page:last-child {
-                    page-break-after: auto;
-                }
-
-            .loading-container {
-                display: none;
-            }
-
-            .table-container {
-                box-shadow: none;
-            }
-
-            .no-print {
-                display: none !important;
-            }
-        }
-
-        /* Screen only button */
-        .print-button {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: var(--black);
-            color: var(--white);
-            border: none;
-            padding: 15px 25px;
-            font-size: 11pt;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            transition: transform 0.2s, box-shadow 0.2s;
-            z-index: 1000;
-        }
-
-            .print-button:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-            }
-
-        @@media print {
-            .print-button {
-                display: none !important;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="page-container">
-        @if (IsLoading)
-        {
-            <div class="loading-container">
-                <div class="loading-spinner"></div>
-                <p class="loading-text">Cargando lista de socios...</p>
+    }
+
+    .action-buttons {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        z-index: 1000;
+    }
+
+    .action-button {
+        background: var(--black);
+        color: var(--white);
+        border: none;
+        padding: 12px 20px;
+        font-size: 10pt;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        transition: transform 0.2s, box-shadow 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .action-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .action-button:disabled {
+        background: var(--medium-gray);
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .action-button.secondary {
+        background: var(--white);
+        color: var(--black);
+        border: 2px solid var(--black);
+    }
+</style>
+
+@if (IsLoading)
+{
+    <div class="loading-container">
+        <div class="loading-spinner"></div>
+        <p class="loading-text">Cargando lista de socios...</p>
+    </div>
+}
+else if (Socios == null || !Socios.Any())
+{
+    <div class="no-data">
+        <h3>No se encontraron socios</h3>
+        <p>@(ZonaParam.HasValue ? $"No hay socios registrados en la Zona {ZonaParam.Value}" : "No hay socios registrados en el sistema")</p>
+    </div>
+}
+else
+{
+    var sociosOrdenados = Socios.OrderBy(s => s.NroSocio).ToList();
+    var totalSocios = Socios.Count;
+    var sociosActivos = Socios.Count(s => s.EstadoSocio == TipoEstadoSocio.Activo);
+    var sociosInactivos = Socios.Count(s => s.EstadoSocio == TipoEstadoSocio.Inactivo);
+    var sociosParaConteo = IncluirInactivos ? Socios : Socios.Where(s => s.EstadoSocio != TipoEstadoSocio.Inactivo);
+    var sociosPersonas = sociosParaConteo.Count(s => s.Tipo == Vista.Data.Enums.Discriminadores.TipoSocio.Persona);
+    var sociosEmpresas = sociosParaConteo.Count(s => s.Tipo == Vista.Data.Enums.Discriminadores.TipoSocio.Empresa);
+
+    <div id="pdf-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-logo">
+                <div class="logo-icon">
+                    <img src="/Imagenes/Logo.svg" alt="Logo Bomberos Voluntarios de Chivilcoy" />
+                </div>
+                <div class="header-title">
+                    <h1>Bomberos Voluntarios de Chivilcoy</h1>
+                    <h2>Asociación Civil - Provincia de Buenos Aires</h2>
+                </div>
             </div>
-        }
-        else if (Socios == null || !Socios.Any())
-        {
-            <div class="no-data">
-                <h3>No se encontraron socios</h3>
-                <p>@(ZonaParam.HasValue ? $"No hay socios registrados en la Zona {ZonaParam.Value}" : "No hay socios registrados en el sistema")</p>
+            <div class="header-info">
+                <p><strong>Fecha de emisión:</strong> @FechaHoraArgentina.ToString("dd 'de' MMMM 'de' yyyy", new System.Globalization.CultureInfo("es-AR"))</p>
+                <p><strong>Hora:</strong> @FechaHoraArgentina.ToString("HH:mm") hs</p>
             </div>
-        }
-        else
-        {
-            var sociosOrdenados = Socios.OrderBy(s => s.NroSocio).ToList();
-            var totalPaginas = (int)Math.Ceiling(sociosOrdenados.Count / (double)RegistrosPorPagina);
+        </header>
 
-            // Calcular conteos una sola vez
-            var totalSocios = Socios.Count;
-            var sociosActivos = Socios.Count(s => s.EstadoSocio == TipoEstadoSocio.Activo);
-            var sociosInactivos = Socios.Count(s => s.EstadoSocio == TipoEstadoSocio.Inactivo);
+        <!-- Title -->
+        <div class="title-section">
+            <h3>Listado Oficial de Socios</h3>
+            <p class="subtitle">@(ZonaParam.HasValue ? $"Zona {ZonaParam.Value}" : "Todas las Zonas")</p>
+        </div>
 
-            // Si no se incluyen inactivos, filtrar Personas y Empresas solo por activos
-            var sociosParaConteo = IncluirInactivos ? Socios : Socios.Where(s => s.EstadoSocio != TipoEstadoSocio.Inactivo);
-            var sociosPersonas = sociosParaConteo.Count(s => s.Tipo == Vista.Data.Enums.Discriminadores.TipoSocio.Persona);
-            var sociosEmpresas = sociosParaConteo.Count(s => s.Tipo == Vista.Data.Enums.Discriminadores.TipoSocio.Empresa);
-
-            @for (int pagina = 0; pagina < totalPaginas; pagina++)
+        <!-- Summary Section -->
+        <div class="summary-section">
+            <div class="summary-item">
+                <span class="number">@(IncluirInactivos ? totalSocios : sociosActivos)</span>
+                <span class="label">@(IncluirInactivos ? "Total Socios" : "Total Socios Activos")</span>
+            </div>
+            @if (IncluirInactivos)
             {
-                var sociosPagina = sociosOrdenados.Skip(pagina * RegistrosPorPagina).Take(RegistrosPorPagina).ToList();
-                var numeroPagina = pagina + 1;
-
-                <div class="page">
-                    <div class="page-content">
-                        @if (pagina == 0)
-                        {
-                            <!-- Header completo para primera pÃ¡gina -->
-                            <header class="header">
-                                <div class="header-logo">
-                                    <div class="logo-icon">
-                                        <img src="/Imagenes/Logo.svg" alt="Logo Bomberos Voluntarios de Chivilcoy" />
-                                    </div>
-                                    <div class="header-title">
-                                        <h1>Bomberos Voluntarios de Chivilcoy</h1>
-                                        <h2>AsociaciÃ³n Civil - Provincia de Buenos Aires</h2>
-                                    </div>
-                                </div>
-                                <div class="header-info">
-                                    <p><strong>Fecha de emisiÃ³n:</strong> @FechaHoraArgentina.ToString("dd 'de' MMMM 'de' yyyy", new System.Globalization.CultureInfo("es-AR"))</p>
-                                    <p><strong>Hora:</strong> @FechaHoraArgentina.ToString("HH:mm") hs</p>
-                                </div>
-                            </header>
-
-                            <!-- Title -->
-                            <div class="title-section">
-                                <h3>Listado Oficial de Socios</h3>
-                                <p class="subtitle">@(ZonaParam.HasValue ? $"Zona {ZonaParam.Value}" : "Todas las Zonas")</p>
-                            </div>
-
-                            <!-- Summary Section -->
-                            <div class="summary-section">
-                                <div class="summary-item">
-                                    <span class="number">@(IncluirInactivos? totalSocios : sociosActivos)</span>
-                                    <span class="label">@(IncluirInactivos ? "Total Socios" : "Total Socios Activos")</span>
-                                </div>
-                                @if (IncluirInactivos)
-                                {
-                                    <div class="summary-item">
-                                        <span class="number">@sociosActivos</span>
-                                        <span class="label">Activos</span>
-                                    </div>
-                                    <div class="summary-item">
-                                        <span class="number">@sociosInactivos</span>
-                                        <span class="label">Inactivos</span>
-                                    </div>
-                                }
-                                <div class="summary-item">
-                                    <span class="number">@sociosPersonas</span>
-                                    <span class="label">Personas</span>
-                                </div>
-                                <div class="summary-item">
-                                    <span class="number">@sociosEmpresas</span>
-                                    <span class="label">Empresas</span>
-                                </div>
-                            </div>
-                        }
-                        else
-                        {
-                            <!-- Header compacto para pÃ¡ginas siguientes -->
-                            <div class="header-compact">
-                                <h3>Bomberos Voluntarios de Chivilcoy - Listado de Socios</h3>
-                                <span class="page-info">@FechaHoraArgentina.ToString("dd/MM/yyyy")</span>
-                            </div>
-                        }
-
-                        <!-- Table -->
-                        <div class="table-container">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>NÂ°</th>
-                                        <th>Nombre / RazÃ³n Social</th>
-                                        <th>DNI/CUIT</th>
-                                        <th>Tipo</th>
-                                        <th>Zona</th>
-                                        <th>TelÃ©fono</th>
-                                        <th>DirecciÃ³n</th>
-                                        <th>Cuota</th>
-                                        <th>Estado</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var socio in sociosPagina)
-                                    {
-                                        <tr>
-                                            <td><span class="socio-number">@socio.NroSocio</span></td>
-                                            <td>
-                                                <span class="socio-name">
-                                                    @if (socio.Tipo == Vista.Data.Enums.Discriminadores.TipoSocio.Persona)
-                                                    {
-                                                        @($"{socio.Apellido}, {socio.Nombre}")
-                                                    }
-                                                    else
-                                                    {
-                                                        @socio.Nombre
-                                                    }
-                                                </span>
-                                            </td>
-                                            <td>@socio.DocumentoOCUIT</td>
-                                            <td>
-                                                <span class="socio-type @(socio.Tipo == Vista.Data.Enums.Discriminadores.TipoSocio.Persona ? "persona" : "empresa")">
-                                                    @GetEnumDisplayName(socio.Tipo)
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <span class="zona-number">@GetZonaNumero(socio.Zona)</span>
-                                            </td>
-                                            <td class="contact-info">@socio.Telefono</td>
-                                            <td class="contact-info" title="@socio.Direccion">@TruncateText(socio.Direccion, 20)</td>
-                                            <td class="cuota-info">$@socio.MontoCuota.ToString("N0")</td>
-                                            <td>
-                                                <span class="status-badge @GetEstadoClass(socio.EstadoSocio)">
-                                                    @GetEnumDisplayName(socio.EstadoSocio)
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- Footer -->
-                    <footer class="footer">
-                        <div class="footer-content">
-                            <div class="footer-left">
-                                <p><strong>Bomberos Voluntarios de Chivilcoy</strong></p>
-                                <p>Documento confidencial - Uso interno</p>
-                            </div>
-                            <div class="footer-right">
-                                <p>PÃ¡gina @numeroPagina de @totalPaginas</p>
-                            </div>
-                        </div>
-                        @if (numeroPagina == totalPaginas)
-                        {
-                            <p class="document-number">
-                                Ref: SOC-@FechaHoraArgentina.ToString("yyyyMMdd-HHmmss")
-                            </p>
-                        }
-                    </footer>
+                <div class="summary-item">
+                    <span class="number">@sociosActivos</span>
+                    <span class="label">Activos</span>
+                </div>
+                <div class="summary-item">
+                    <span class="number">@sociosInactivos</span>
+                    <span class="label">Inactivos</span>
                 </div>
             }
-        }
+            <div class="summary-item">
+                <span class="number">@sociosPersonas</span>
+                <span class="label">Personas</span>
+            </div>
+            <div class="summary-item">
+                <span class="number">@sociosEmpresas</span>
+                <span class="label">Empresas</span>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-container">
+            <table class="pdf-table">
+                <thead>
+                    <tr>
+                        <th>N°</th>
+                        <th>Nombre / Razón Social</th>
+                        <th>DNI/CUIT</th>
+                        <th>Tipo</th>
+                        <th>Zona</th>
+                        <th>Teléfono</th>
+                        <th>Dirección</th>
+                        <th>Cuota</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var socio in sociosOrdenados)
+                    {
+                        <tr>
+                            <td><span class="socio-number">@socio.NroSocio</span></td>
+                            <td>
+                                <span class="socio-name">
+                                    @if (socio.Tipo == Vista.Data.Enums.Discriminadores.TipoSocio.Persona)
+                                    {
+                                        @($"{socio.Apellido}, {socio.Nombre}")
+                                    }
+                                    else
+                                    {
+                                        @socio.Nombre
+                                    }
+                                </span>
+                            </td>
+                            <td>@socio.DocumentoOCUIT</td>
+                            <td>
+                                <span class="socio-type @(socio.Tipo == Vista.Data.Enums.Discriminadores.TipoSocio.Persona ? "persona" : "empresa")">
+                                    @GetEnumDisplayName(socio.Tipo)
+                                </span>
+                            </td>
+                            <td>
+                                <span class="zona-number">@GetZonaNumero(socio.Zona)</span>
+                            </td>
+                            <td class="contact-info">@socio.Telefono</td>
+                            <td class="contact-info" title="@socio.Direccion">@TruncateText(socio.Direccion, 20)</td>
+                            <td class="cuota-info">$@socio.MontoCuota.ToString("N0")</td>
+                            <td>
+                                <span class="status-badge @GetEstadoClass(socio.EstadoSocio)">
+                                    @GetEnumDisplayName(socio.EstadoSocio)
+                                </span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Footer -->
+        <footer class="pdf-footer">
+            <div class="footer-content">
+                <div class="footer-left">
+                    <p><strong>Bomberos Voluntarios de Chivilcoy</strong></p>
+                    <p>Documento confidencial - Uso interno</p>
+                </div>
+                <div class="footer-right">
+                    <p>Total de registros: @sociosOrdenados.Count</p>
+                </div>
+            </div>
+            <p class="document-number">
+                Ref: SOC-@FechaHoraArgentina.ToString("yyyyMMdd-HHmmss")
+            </p>
+        </footer>
     </div>
 
-    <button class="print-button no-print" onclick="window.print()">
-        Imprimir Documento
-    </button>
-
-    <script>
-        // Auto-print when page loads
-        window.onload = function() {
-            // Small delay to ensure styles are applied
-            setTimeout(function() {
-                window.print();
-            }, 500);
-        };
-    </script>
-</body>
-</html>
+    <!-- Botones de acción -->
+    <div class="action-buttons">
+        <button class="action-button" @onclick="DescargarPdf" disabled="@IsGenerating">
+            @if (IsGenerating)
+            {
+                <span>Generando...</span>
+            }
+            else
+            {
+                <span>?? Descargar PDF</span>
+            }
+        </button>
+        <button class="action-button secondary" @onclick="VistaPrevia" disabled="@IsGenerating">
+            <span>??? Vista Previa</span>
+        </button>
+    </div>
+}
 
 @code {
     [Parameter]
@@ -713,19 +580,11 @@
 
     private List<Socio>? Socios { get; set; }
     private bool IsLoading { get; set; } = true;
+    private bool IsGenerating { get; set; } = false;
     private DateTime FechaHoraArgentina { get; set; }
-
-    // Aproximadamente 25 registros por pÃ¡gina A4 considerando:
-    // - Header completo in primera pÃ¡gina (~80mm)
-    // - Header compacto en siguientes (~25mm)
-    // - Cada fila de tabla (~8mm)
-    // - Footer (~30mm)
-    // - Margen de seguridad
-    private const int RegistrosPorPagina = 22;
 
     protected override async Task OnInitializedAsync()
     {
-        // Obtener la hora de Argentina
         try
         {
             var zonaArgentina = TimeZoneInfo.FindSystemTimeZoneById("America/Argentina/Buenos_Aires");
@@ -733,7 +592,6 @@
         }
         catch
         {
-            // Fallback: intentar con el ID de Windows
             try
             {
                 var zonaArgentina = TimeZoneInfo.FindSystemTimeZoneById("Argentina Standard Time");
@@ -741,7 +599,6 @@
             }
             catch
             {
-                // Si falla, usar UTC-3 manualmente
                 FechaHoraArgentina = DateTime.UtcNow.AddHours(-3);
             }
         }
@@ -761,14 +618,12 @@
             {
                 var sociosFiltrados = todosSocios.AsEnumerable();
 
-                // Filtrar por zona si se especifica
                 if (ZonaParam.HasValue)
                 {
                     var zonaFiltro = (Zona)ZonaParam.Value;
                     sociosFiltrados = sociosFiltrados.Where(s => s.Zona.HasValue && s.Zona.Value.HasFlag(zonaFiltro));
                 }
 
-                // Filtrar inactivos si no se deben incluir
                 if (!IncluirInactivos)
                 {
                     sociosFiltrados = sociosFiltrados.Where(s => s.EstadoSocio != TipoEstadoSocio.Inactivo);
@@ -788,6 +643,50 @@
         finally
         {
             IsLoading = false;
+        }
+    }
+
+    private async Task DescargarPdf()
+    {
+        IsGenerating = true;
+        StateHasChanged();
+
+        try
+        {
+            await Task.Delay(100); // Pequeño delay para asegurar que el UI se actualice
+            var nombreArchivo = $"ListaSocios_{FechaHoraArgentina:yyyyMMdd_HHmmss}.pdf";
+            await JSRuntime.InvokeVoidAsync("pdfExport.generatePdf", "pdf-content", nombreArchivo);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al generar PDF: {ex.Message}");
+        }
+        finally
+        {
+            IsGenerating = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task VistaPrevia()
+    {
+        IsGenerating = true;
+        StateHasChanged();
+
+        try
+        {
+            await Task.Delay(100);
+            var nombreArchivo = $"ListaSocios_{FechaHoraArgentina:yyyyMMdd_HHmmss}.pdf";
+            await JSRuntime.InvokeVoidAsync("pdfExport.generatePdfWithPreview", "pdf-content", nombreArchivo);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al generar vista previa: {ex.Message}");
+        }
+        finally
+        {
+            IsGenerating = false;
+            StateHasChanged();
         }
     }
 
