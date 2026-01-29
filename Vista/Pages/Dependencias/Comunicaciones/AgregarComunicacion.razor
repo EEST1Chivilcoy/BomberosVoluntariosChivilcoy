@@ -9,46 +9,38 @@
 @inject IDbContextFactory<BomberosDbContext> DbFactory
 
 <style>
-
-
-.modal-crear-licencia .ant-modal-content {
-    width: 800px !important;   
-    max-width: 90vw !important;
-
-}
-
-.modal-crear-licencia  {
-    padding-right: 200px !important;
-}
-
-.modal-crear-licencia .ant-modal-wrap {
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    
-}
-
-
-
-
-
-    .modal-crear-licencia .ant-btn-primary {
-        background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
-        border: none !important;
-        color: #fff !important;
-        font-weight: 600;
-        box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
-        margin-top: 0;
-        margin-bottom: 0;
-        padding: 0 20px !important;
-        border-radius: 8px !important;
-        transition: background 0.3s;
+    .modal-crear-licencia .ant-modal-content {
+        width: 800px !important;
+        max-width: 90vw !important;
     }
 
-    .modal-crear-licencia .ant-btn-primary:hover {
-        background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
-        color: #fff !important;
+    .modal-crear-licencia {
+        padding-right: 200px !important;
     }
+
+        .modal-crear-licencia .ant-modal-wrap {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+        }
+
+        .modal-crear-licencia .ant-btn-primary {
+            background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
+            border: none !important;
+            color: #fff !important;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
+            margin-top: 0;
+            margin-bottom: 0;
+            padding: 0 20px !important;
+            border-radius: 8px !important;
+            transition: background 0.3s;
+        }
+
+            .modal-crear-licencia .ant-btn-primary:hover {
+                background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
+                color: #fff !important;
+            }
 
     .boton-agregar {
         background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
@@ -61,30 +53,28 @@
         transition: background 0.3s;
     }
 
-    .boton-agregar:hover {
-        background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
-        color: #fff !important;
-    }
+        .boton-agregar:hover {
+            background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
+            color: #fff !important;
+        }
 
     @@media (max-width: 767px) {
         .modal-crear-licencia-content {
             padding: 16px;
         }
-        
+
         .modal-crear-licencia .ant-modal-content {
             width: 95vw !important;
             margin: 10px auto !important;
             top: 20px !important;
             transform: none !important;
         }
-        
+
         .modal-crear-licencia .ant-modal-wrap {
             align-items: flex-start !important;
             padding-top: 20px !important;
         }
-    }   
-
-    
+    }
 </style>
 
 <div class="modal-crear-licencia-content">
@@ -92,9 +82,9 @@
           Class="modal-crear-licencia-form"
           OnFinish="OnFinish"
           OnFinishFailed="OnFinishFailed">
-        
+
         <Row Class="modal-crear-licencia-row" Gutter="16">
-                  <AntDesign.Col Span="8">
+            <AntDesign.Col Span="8">
                 <FormItem Label="#️⃣ Num. Serie" Class="modal-crear-licencia-form-item">
                     <Input @bind-Value="@ComunicacionVM.NroSerie" />
                 </FormItem>
@@ -110,8 +100,6 @@
                 </FormItem>
             </AntDesign.Col>
         </Row>
-
-
 
         <Row Class="modal-crear-licencia-row" Gutter="16">
             <AntDesign.Col Span="12">
@@ -185,11 +173,11 @@
         }
 
         <div class="modal-crear-licencia-footer">
-                    <Button Class="boton-agregar" HtmlType="submit">
-                 Agregar Handie
+            <Button Class="boton-agregar" HtmlType="submit">
+                Agregar Handie
             </Button>
             <Button Style="border: 1px solid #d9d9d9; color: #666;" OnClick="@(() => OnFinishCallback.InvokeAsync())">
-                 Cancelar
+                Cancelar
             </Button>
         </div>
     </Form>
@@ -264,11 +252,11 @@
         foreach (Bombero b in bomberos)
         {
             BomberoViweModel bomberoVM = new()
-                {
-                    Nombre = b.Nombre,
-                    Apellido = b.Apellido,
-                    NumeroLegajo = b.NumeroLegajo
-                };
+            {
+                Nombre = b.Nombre,
+                Apellido = b.Apellido,
+                NumeroLegajo = b.NumeroLegajo
+            };
             BomberosVM.Add(bomberoVM);
         }
     }
@@ -280,11 +268,11 @@
         foreach (Movil m in moviles)
         {
             MovilViewModel movilVM = new()
-                {
-                    NumeroMovil = m.NumeroMovil,
-                    Patente = m.Patente,
-                    HandieMovil = m.HandieMovil
-                };
+            {
+                NumeroMovil = m.NumeroMovil,
+                Patente = m.Patente,
+                HandieMovil = m.HandieMovil
+            };
             MovilesViewModel.Add(movilVM);
         }
     }
@@ -302,40 +290,40 @@
             {
                 Bombero? bomberoSelec = await Context.Bomberos.SingleOrDefaultAsync(bom => bom.NumeroLegajo == ComunicacionVM.NroLegajo);
                 Comunicacion comunicacion = new()
-                    {
-                        NroEquipo = ComunicacionVM.NroEquipo,
-                        Modelo = ComunicacionVM.Modelo,
-                        Marca = ComunicacionVM.Marca,
-                        NroSerie = ComunicacionVM.NroSerie,
-                        Estado = ComunicacionVM.Estado,
-                        Bombero = bomberoSelec
-                    };
+                {
+                    NroEquipo = ComunicacionVM.NroEquipo,
+                    Modelo = ComunicacionVM.Modelo,
+                    Marca = ComunicacionVM.Marca,
+                    NroSerie = ComunicacionVM.NroSerie,
+                    Estado = ComunicacionVM.Estado,
+                    Bombero = bomberoSelec
+                };
                 Context.Comunicacion.Add(comunicacion);
             }
             else if (selectMovil)
             {
                 Movil? movilSelec = await Context.Moviles.SingleOrDefaultAsync(mov => mov.NumeroMovil == ComunicacionVM.NumeroMovil);
                 Comunicacion comunicacion = new()
-                    {
-                        NroEquipo = ComunicacionVM.NroEquipo,
-                        Modelo = ComunicacionVM.Modelo,
-                        Marca = ComunicacionVM.Marca,
-                        NroSerie = ComunicacionVM.NroSerie,
-                        Estado = ComunicacionVM.Estado,
-                        Movil = movilSelec
-                    };
+                {
+                    NroEquipo = ComunicacionVM.NroEquipo,
+                    Modelo = ComunicacionVM.Modelo,
+                    Marca = ComunicacionVM.Marca,
+                    NroSerie = ComunicacionVM.NroSerie,
+                    Estado = ComunicacionVM.Estado,
+                    Movil = movilSelec
+                };
                 Context.Comunicacion.Add(comunicacion);
             }
             else
             {
                 Comunicacion comunicacion = new()
-                    {
-                        NroEquipo = ComunicacionVM.NroEquipo,
-                        Modelo = ComunicacionVM.Modelo,
-                        Marca = ComunicacionVM.Marca,
-                        NroSerie = ComunicacionVM.NroSerie,
-                        Estado = ComunicacionVM.Estado
-                    };
+                {
+                    NroEquipo = ComunicacionVM.NroEquipo,
+                    Modelo = ComunicacionVM.Modelo,
+                    Marca = ComunicacionVM.Marca,
+                    NroSerie = ComunicacionVM.NroSerie,
+                    Estado = ComunicacionVM.Estado
+                };
                 Context.Comunicacion.Add(comunicacion);
             }
 
@@ -351,6 +339,8 @@
 
             await Context.SaveChangesAsync();
             await message.SuccessAsync("Handie agregado correctamente");
+            // Limpiar el formulario después de guardar
+            ComunicacionVM = new();
             await OnFinishCallback.InvokeAsync();
         }
         catch (Exception ex)
