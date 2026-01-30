@@ -505,7 +505,7 @@
                 <div class="filters-section">
                     <div class="actions-row">
                         <div class="search-container">
-                            <Search Placeholder="Buscar por marca" WrapperStyle="width: 500px;" AllowClear EnterButton="true" @bind-Value="searchString" OnChange="() => this.Search(new ChangeEventArgs { Value = searchString })" Size="InputSize.Large" />
+                            <Search Placeholder="Buscar por N° equipo, N° serie o apellido" WrapperStyle="width: 500px;" AllowClear EnterButton="true" @bind-Value="searchString" OnChange="() => this.Search(new ChangeEventArgs { Value = searchString })" Size="InputSize.Large" />
                         </div>
                         <div class="button-wrapper">
                             <Button OnClick="() => ShowModalAgregar()"
@@ -772,6 +772,7 @@
         public string? NombreYApellido { get { return Nombre + ", " + Apellido; } }
         public Comunicacion? Handie { get; set; }
     }
+
     public class MovilViewModel
     {
         public string NumeroMovil { get; set; }
@@ -785,18 +786,13 @@
     List<Comunicacion>? comunicaciones { get; set; } = new();
     List<Movil> moviles { get; set; } = new();
     List<Bombero> bomberos { get; set; } = new List<Bombero>();
-
     private ComunicacionViewModel ComunicacionVM { get; set; } = new();
-
     List<ComunicacionViewModel> ComunicacionesViewModel { get; set; } = new();
-
     private MovilViewModel MovilVM { get; set; } = new();
     List<MovilViewModel> MovilesViewModel { get; set; } = new();
-
     private BomberoViewModel BomberoVM { get; set; } = new();
     List<BomberoViewModel> BomberosViewModel { get; set; } = new();
     BomberosDbContext Context { get; set; }
-
     public ITable _table;
     int _pageIndex = 1;
     int _pageSize = 6;
@@ -804,11 +800,11 @@
     private string searchString = "";
     private List<ComunicacionViewModel>? filteredComunicaciones;
     private List<ComunicacionViewModel>? dataSource;
-
     private bool selectBombero = false;
     private bool selectMovil = false;
     string checkboxMovilLabel = "Elija el móvil";
     string checkboxBomberoLabel = "Elija el bombero";
+
     private void HandleCheckboxChange(bool value, string checkboxName)
     {
         if (checkboxName == "Elija el bombero" && value)
@@ -822,8 +818,6 @@
             selectMovil = true; // Activar el checkbox actual
         }
     }
-
-
 
     protected override async Task OnInitializedAsync()
     {
@@ -876,6 +870,7 @@
         }
 
     }
+
     public async Task CargarBomberoViewModel()
     {
         BomberosViewModel = new();
@@ -893,6 +888,7 @@
             BomberosViewModel.Add(bomberoVM);
         }
     }
+
     public async Task CargarMovilViewModel()
     {
         MovilesViewModel = new();
@@ -912,7 +908,8 @@
     void OnRowClick(RowData<ComunicacionViewModel> row)
     {
         ShowModalEditar(row.Data.NroEquipo);
-    }//Toma el valor del valor de la fila seleccionada
+    }
+
     private async Task HandleKeyDown(KeyboardEventArgs e)
     {
         if (e.Key == "Enter")
@@ -920,13 +917,16 @@
             this.Search(new ChangeEventArgs { Value = searchString }); // Call the search method when the Enter key is pressed
         }
     }
+
     private void Search(ChangeEventArgs e)
     {
         searchString = e.Value?.ToString()?.Trim()?.ToLower() ?? "";
         filteredComunicaciones = ComunicacionesViewModel?
             .Where(c =>
                 string.IsNullOrWhiteSpace(searchString) ||
-                (c.Marca?.ToLower() ?? "").Contains(searchString)
+                (c.NroEquipo?.ToLower() ?? "").Contains(searchString) ||
+                (c.NroSerie?.ToLower() ?? "").Contains(searchString) ||
+                (c.Apellido?.ToLower() ?? "").Contains(searchString)
             )
             .ToList();
     }
@@ -1135,6 +1135,4 @@
     {
         message.Error("Operación cancelada.");
     }
-
-
 }
