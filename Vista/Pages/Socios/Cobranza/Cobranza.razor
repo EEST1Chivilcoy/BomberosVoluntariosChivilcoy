@@ -857,12 +857,163 @@
         line-height: 1.4;
     }
 
+    .direccion-option.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        background: #f5f5f5;
+        border-color: #d9d9d9 !important;
+    }
+
+    .direccion-option.disabled:hover {
+        border-color: #d9d9d9 !important;
+        background: #f5f5f5;
+        transform: none;
+        box-shadow: none;
+    }
+
+    .direccion-option.disabled .direccion-option-label,
+    .direccion-option.disabled .direccion-option-icon {
+        color: #8c8c8c;
+    }
+
+    .direccion-option.disabled .direccion-option-text {
+        color: #bfbfbf;
+    }
+
+    .direccion-no-disponible {
+        font-style: italic;
+        color: #8c8c8c;
+    }
+
     .direccion-footer {
         display: flex;
         justify-content: flex-end;
         margin-top: 8px;
         padding-top: 16px;
         border-top: 1px solid #f0f0f0;
+    }
+
+    /* ========================================
+       MODAL POST-IT (NOTA ADICIONAL)
+       ======================================== */
+    .modal-postit .ant-modal-content {
+        background: transparent !important;
+        box-shadow: none !important;
+        border: none !important;
+    }
+
+    .modal-postit .ant-modal-header {
+        display: none !important;
+    }
+
+    .modal-postit .ant-modal-body {
+        padding: 0 !important;
+    }
+
+    .modal-postit .ant-modal-close {
+        display: none !important;
+    }
+
+    .postit-container {
+        position: relative;
+        max-width: 350px;
+        margin: 0 auto;
+    }
+
+    .postit-note {
+        background: linear-gradient(135deg, #FFEB3B 0%, #FDD835 50%, #FBC02D 100%);
+        padding: 24px 20px 20px 20px;
+        border-radius: 2px;
+        box-shadow: 
+            0 4px 6px rgba(0, 0, 0, 0.1),
+            0 10px 20px rgba(0, 0, 0, 0.15),
+            inset 0 -3px 0 rgba(0, 0, 0, 0.05);
+        transform: rotate(-2deg);
+        position: relative;
+        min-height: 150px;
+    }
+
+    .postit-note::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 20px;
+        background: rgba(255, 255, 255, 0.6);
+        border-radius: 0 0 3px 3px;
+        box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .postit-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 12px;
+        padding-bottom: 10px;
+        border-bottom: 2px dashed rgba(0, 0, 0, 0.15);
+    }
+
+    .postit-icon {
+        font-size: 1.3rem;
+        color: #5D4037;
+    }
+
+    .postit-title {
+        font-family: 'Patrick Hand', 'Caveat', cursive, sans-serif;
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #5D4037;
+        margin: 0;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .postit-content {
+        font-family: 'Patrick Hand', 'Caveat', cursive, sans-serif;
+        font-size: 1.15rem;
+        color: #4E342E;
+        line-height: 1.6;
+        word-wrap: break-word;
+        white-space: pre-wrap;
+    }
+
+    .postit-footer {
+        display: flex;
+        justify-content: center;
+        margin-top: 16px;
+        padding-top: 12px;
+    }
+
+    .postit-btn-cerrar {
+        background: rgba(93, 64, 55, 0.9) !important;
+        border: none !important;
+        color: #FFF8E1 !important;
+        font-weight: 600 !important;
+        border-radius: 20px !important;
+        padding: 6px 24px !important;
+        height: auto !important;
+        font-size: 0.9rem !important;
+        transition: all 0.3s ease !important;
+    }
+
+    .postit-btn-cerrar:hover {
+        background: rgba(62, 39, 35, 0.95) !important;
+        transform: scale(1.05);
+    }
+
+    /* Efecto de sombra al fondo */
+    .postit-shadow {
+        position: absolute;
+        bottom: -8px;
+        left: 10px;
+        right: 10px;
+        height: 15px;
+        background: rgba(0, 0, 0, 0.15);
+        filter: blur(8px);
+        border-radius: 50%;
+        z-index: -1;
     }
 </style>
 
@@ -1014,7 +1165,6 @@
                                 <Button Type="@ButtonType.Primary"
                                         Class="btn-ubicacion"
                                         OnClick="@(() => AbrirGoogleMaps(socio))"
-                                        Disabled="@(socio.Latitud == 0 && socio.Longitud == 0)"
                                         AriaLabel="@($"Ver ubicación de {socio.NombreApellidoONombreEmpresa} en Google Maps")">
                                     <Icon Type="environment" /> Ver Mapa
                                 </Button>
@@ -1048,23 +1198,66 @@
            DestroyOnClose
            Centered>
         <div class="seleccionar-direccion-content">
-            <div class="direccion-option" @onclick="@(() => SeleccionarDireccion(true))">
+            @{
+                var tieneDireccionPrincipal = TieneDireccionPrincipalDisponible();
+                var tieneDireccionSecundaria = TieneDireccionSecundariaDisponible();
+                var tieneNotaAdicional = TieneNotaAdicionalDisponible();
+            }
+
+            @* Dirección Principal *@
+            <div class="direccion-option @(tieneDireccionPrincipal ? "" : "disabled")" 
+                 @onclick="@(() => { if (tieneDireccionPrincipal) SeleccionarDireccion(DireccionTipo.Principal); })">
                 <div class="direccion-option-header">
                     <i class="fa-solid fa-house direccion-option-icon"></i>
                     <span class="direccion-option-label">Dirección Principal</span>
                 </div>
                 <div class="direccion-option-text">
-                    @SocioParaMapa?.Domicilio
+                    @if (tieneDireccionPrincipal)
+                    {
+                        @SocioParaMapa?.Domicilio
+                    }
+                    else
+                    {
+                        <span class="direccion-no-disponible">Sin coordenadas disponibles</span>
+                    }
                 </div>
             </div>
 
-            <div class="direccion-option" @onclick="@(() => SeleccionarDireccion(false))">
+            @* Dirección Secundaria *@
+            <div class="direccion-option @(tieneDireccionSecundaria ? "" : "disabled")" 
+                 @onclick="@(() => { if (tieneDireccionSecundaria) SeleccionarDireccion(DireccionTipo.Secundaria); })">
                 <div class="direccion-option-header">
                     <i class="fa-solid fa-building direccion-option-icon"></i>
                     <span class="direccion-option-label">Dirección Secundaria</span>
                 </div>
                 <div class="direccion-option-text">
-                    @SocioParaMapa?.DomicilioSecundario
+                    @if (tieneDireccionSecundaria)
+                    {
+                        @SocioParaMapa?.DomicilioSecundario
+                    }
+                    else
+                    {
+                        <span class="direccion-no-disponible">Sin coordenadas disponibles</span>
+                    }
+                </div>
+            </div>
+
+            @* Nota Adicional *@
+            <div class="direccion-option @(tieneNotaAdicional ? "" : "disabled")" 
+                 @onclick="@(() => { if (tieneNotaAdicional) MostrarNotaAdicional(); })">
+                <div class="direccion-option-header">
+                    <i class="fa-solid fa-sticky-note direccion-option-icon"></i>
+                    <span class="direccion-option-label">Nota Extra</span>
+                </div>
+                <div class="direccion-option-text">
+                    @if (tieneNotaAdicional)
+                    {
+                        @SocioParaMapa?.NotaAdicional
+                    }
+                    else
+                    {
+                        <span class="direccion-no-disponible">Sin nota adicional</span>
+                    }
                 </div>
             </div>
 
@@ -1073,6 +1266,33 @@
                     Cancelar
                 </Button>
             </div>
+        </div>
+    </Modal>
+
+    @* ======================================== MODAL POST-IT (NOTA ADICIONAL) ======================================== *@
+    <Modal @bind-Visible="@ModalNotaVisible"
+           Title=""
+           Width="400"
+           Footer="null"
+           WrapClassName="modal-postit"
+           DestroyOnClose
+           Centered>
+        <div class="postit-container">
+            <div class="postit-note">
+                <div class="postit-header">
+                    <i class="fa-solid fa-thumbtack postit-icon"></i>
+                    <h3 class="postit-title">📝 Nota</h3>
+                </div>
+                <div class="postit-content">
+                    @SocioParaMapa?.NotaAdicional
+                </div>
+                <div class="postit-footer">
+                    <Button Class="postit-btn-cerrar" OnClick="@CerrarModalNota">
+                        <Icon Type="check" /> Entendido
+                    </Button>
+                </div>
+            </div>
+            <div class="postit-shadow"></div>
         </div>
     </Modal>
 </div>
@@ -1088,6 +1308,7 @@
     private bool Cargando { get; set; } = true;
     private bool ModalPagoVisible { get; set; } = false;
     private bool ModalDireccionVisible { get; set; } = false;
+    private bool ModalNotaVisible { get; set; } = false;
 
     private CobranzaViewModel? SocioSeleccionado { get; set; }
     private CobranzaViewModel? SocioParaMapa { get; set; }
@@ -1171,10 +1392,11 @@
                         Domicilio = s.Direccion ?? "Sin dirección",
                         DomicilioSecundario = s.DireccionSecundaria,
                         Saldo = saldo,
-                        Latitud = (decimal)s.Latitud,
-                        Longitud = (decimal)s.Longitud,
+                        Latitud = s.Latitud.HasValue ? (decimal?)s.Latitud.Value : null,
+                        Longitud = s.Longitud.HasValue ? (decimal?)s.Longitud.Value : null,
                         LatitudSecundaria = s.LatitudSecundaria.HasValue ? (decimal?)s.LatitudSecundaria.Value : null,
                         LongitudSecundaria = s.LongitudSecundaria.HasValue ? (decimal?)s.LongitudSecundaria.Value : null,
+                        NotaAdicional = s.NotaAdicional,
                         Telefono = s.Telefono,
                         MontoCuota = (decimal)s.MontoCuota,
                         Zona = s.Zona
@@ -1397,44 +1619,58 @@
 
     // ======================================== GOOGLE MAPS ========================================
 
-    private async Task AbrirGoogleMaps(CobranzaViewModel socio)
+    private enum DireccionTipo
     {
-        if (socio.Latitud == 0 && socio.Longitud == 0)
-        {
-            MessageService.Warning("Este socio no tiene coordenadas de ubicación registradas.");
-            return;
-        }
+        Principal,
+        Secundaria
+    }
 
-        // Si tiene dirección secundaria con coordenadas, mostrar modal para elegir
-        if (!string.IsNullOrWhiteSpace(socio.DomicilioSecundario) && 
-            socio.LatitudSecundaria.HasValue && socio.LongitudSecundaria.HasValue &&
-            socio.LatitudSecundaria != 0 && socio.LongitudSecundaria != 0)
-        {
-            SocioParaMapa = socio;
-            ModalDireccionVisible = true;
-            return;
-        }
+    private void AbrirGoogleMaps(CobranzaViewModel socio)
+    {
+        SocioParaMapa = socio;
+        ModalDireccionVisible = true;
+    }
 
-        // Si solo tiene dirección principal, abrir directamente
-        await AbrirMapaConCoordenadas(socio.Latitud, socio.Longitud);
+    private bool TieneDireccionPrincipalDisponible()
+    {
+        return SocioParaMapa != null &&
+               SocioParaMapa.Latitud.HasValue && SocioParaMapa.Longitud.HasValue &&
+               SocioParaMapa.Latitud != 0 && SocioParaMapa.Longitud != 0;
+    }
+
+    private bool TieneDireccionSecundariaDisponible()
+    {
+        return SocioParaMapa != null &&
+               !string.IsNullOrWhiteSpace(SocioParaMapa.DomicilioSecundario) &&
+               SocioParaMapa.LatitudSecundaria.HasValue && SocioParaMapa.LongitudSecundaria.HasValue &&
+               SocioParaMapa.LatitudSecundaria != 0 && SocioParaMapa.LongitudSecundaria != 0;
+    }
+
+    private bool TieneNotaAdicionalDisponible()
+    {
+        return SocioParaMapa != null && !string.IsNullOrWhiteSpace(SocioParaMapa.NotaAdicional);
     }
 
     private void CerrarModalDireccion()
     {
         ModalDireccionVisible = false;
-        SocioParaMapa = null;
+        // Solo limpiar SocioParaMapa si no se va a mostrar el modal de nota
+        if (!ModalNotaVisible)
+        {
+            SocioParaMapa = null;
+        }
     }
 
-    private async Task SeleccionarDireccion(bool principal)
+    private async Task SeleccionarDireccion(DireccionTipo tipo)
     {
         if (SocioParaMapa == null) return;
 
         decimal latitud, longitud;
 
-        if (principal)
+        if (tipo == DireccionTipo.Principal)
         {
-            latitud = SocioParaMapa.Latitud;
-            longitud = SocioParaMapa.Longitud;
+            latitud = SocioParaMapa.Latitud ?? 0;
+            longitud = SocioParaMapa.Longitud ?? 0;
         }
         else
         {
@@ -1444,6 +1680,18 @@
 
         CerrarModalDireccion();
         await AbrirMapaConCoordenadas(latitud, longitud);
+    }
+
+    private void MostrarNotaAdicional()
+    {
+        if (SocioParaMapa == null || string.IsNullOrWhiteSpace(SocioParaMapa.NotaAdicional)) return;
+
+        ModalNotaVisible = true;
+    }
+
+    private void CerrarModalNota()
+    {
+        ModalNotaVisible = false;
     }
 
     private async Task AbrirMapaConCoordenadas(decimal latitud, decimal longitud)
