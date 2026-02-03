@@ -422,22 +422,6 @@
     int _pageSize = 10;
     int _total = 0;
 
-    //Importar a PDF
-    private async Task GenerarYMostrarPDF()
-    {
-        ExportarAPDF crear = new ExportarAPDF();
-        var datos = MovilesSalidas.Select(b => new
-        {
-            NumeroMovil = b.NumeroMovil,
-            Kilometraje = b.Kilometraje,
-            NumeroParte = b.NumeroParte,
-            Hrllegada = b.Hrllegada,
-            CargoCombustible = b.CargoCombustible
-        });
-        byte[] pdfBytes = crear.CrearPDF(datos);
-        await JSRuntime.InvokeVoidAsync("abrirPDF", Convert.ToBase64String(pdfBytes));
-    }
-
     //Importar a Excel
     private async Task GuardarEnExcel()
     {

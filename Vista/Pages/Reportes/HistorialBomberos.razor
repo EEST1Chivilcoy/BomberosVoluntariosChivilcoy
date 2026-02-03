@@ -396,24 +396,6 @@
     int _pageSize = 6;
     int _total = 0;
 
-    //Importar a PDF
-    private async Task GenerarYMostrarPDF()
-    {
-        ExportarAPDF crear = new ExportarAPDF();
-        var datos = BomberosVM.Select(b => new
-        {
-            b.NumeroLegajo.Value,
-            b.Nombre,
-            b.Apellido,
-            b.Grado,
-            TelefonoCel = b.TelefonoCel,
-            TelefonoLaboral = b.TelefonoLaboral,
-            Email = b.Email
-        });
-        byte[] pdfBytes = crear.CrearPDF(datos);
-        await JSRuntime.InvokeVoidAsync("abrirPDF", Convert.ToBase64String(pdfBytes));
-    }
-
     //Importar a Excel
     private async Task GuardarEnExcel()
     {
