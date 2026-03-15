@@ -32,7 +32,7 @@
 		<PackageReference Include="ClosedXML" Version="0.105.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.25" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.25" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.10" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.14" />
 		<PackageReference Include="Microsoft.Identity.Web" Version="4.5.0" />
 		<PackageReference Include="Microsoft.Identity.Web.MicrosoftGraph" Version="4.5.0" />
 		<PackageReference Include="Microsoft.Identity.Web.UI" Version="4.5.0" />
@@ -42,13 +42,13 @@
 		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.25" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.25" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.25" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.10" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.10">
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.14" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.14">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
-		<PackageReference Include="System.Text.Json" Version="9.0.10" />
+		<PackageReference Include="System.Text.Json" Version="9.0.14" />
 	</ItemGroup>
 	<ItemGroup>
 		<Compile Update="Properties\Resources.Designer.cs">
