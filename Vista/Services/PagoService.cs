@@ -20,14 +20,29 @@ namespace Vista.Services
         /// Obtiene de manera asincrónica la lista de pagos de socios filtrados por su estado.
         /// </summary>
         /// <param name="estado">Estado del pago (por ejemplo: pendiente, aprobado, rechazado) que se desea consultar.</param>
+        /// <param name="incluirSocio">
+        /// Indica si se debe incluir la entidad relacionada <c>Socio</c> en la consulta.
+        /// Por defecto es <c>false</c>, lo que significa que no se cargará la información
+        /// del socio asociado a cada pago. Si se establece en <c>true</c>, se utilizará
+        /// <c>Include(p => p.Socio)</c> para traer los datos relacionados.
+        /// </param>
         /// <returns>Una tarea que representa la operación asincrónica y contiene la lista de pagos de socios con el estado especificado.</returns>
-        Task<List<PagoSocio>> ObtenerPagosPorEstadoAsync(EstadoPago estado);
+        Task<List<PagoSocio>> ObtenerPagosPorEstadoAsync(
+             EstadoPago estado,
+             bool incluirSocio = false);
 
         /// <summary>
         /// Obtiene de manera asincrónica todos los pagos de socios registrados en el sistema.
         /// </summary>
+        /// <param name="incluirSocio">
+        /// Indica si se debe incluir la entidad relacionada <c>Socio</c> en la consulta.
+        /// Por defecto es <c>false</c>, lo que significa que no se cargará la información
+        /// del socio asociado a cada pago. Si se establece en <c>true</c>, se utilizará
+        /// <c>Include(p => p.Socio)</c> para traer los datos relacionados.
+        /// </param>
         /// <returns>Una tarea que representa la operación asincrónica y contiene la lista completa de pagos de socios.</returns>
-        Task<List<PagoSocio>> ObtenerTodosLosPagosAsync();
+        Task<List<PagoSocio>> ObtenerTodosLosPagosAsync(
+    bool incluirSocio = false);
 
         /// <summary>
         /// Obtiene todos los pagos asociados a un socio específico.
@@ -194,19 +209,30 @@ namespace Vista.Services
             return pagos;
         }
 
-        public async Task<List<PagoSocio>> ObtenerPagosPorEstadoAsync(EstadoPago estado)
+        public async Task<List<PagoSocio>> ObtenerPagosPorEstadoAsync(
+            EstadoPago estado,
+            bool incluirSocio = false)
         {
-            return await _context.PagoSocio
+            var query = _context.PagoSocio
                 .Where(p => p.Estado == estado)
-                .AsNoTracking()
-                .ToListAsync();
+                .AsNoTracking();
+
+            if (incluirSocio)
+                query = query.Include(p => p.Socio);
+
+            return await query.ToListAsync();
         }
 
-        public async Task<List<PagoSocio>> ObtenerTodosLosPagosAsync()
+        public async Task<List<PagoSocio>> ObtenerTodosLosPagosAsync(
+            bool incluirSocio = false)
         {
-            return await _context.PagoSocio
-                .AsNoTracking()
-                .ToListAsync();
+            var query = _context.PagoSocio
+                .AsNoTracking();
+
+            if (incluirSocio)
+                query = query.Include(p => p.Socio);
+
+            return await query.ToListAsync();
         }
 
         public async Task CambiarEstadoPago(int pagoId, EstadoPago estado, string? razon)
