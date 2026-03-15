@@ -51,6 +51,13 @@ namespace Vista.Services
         Task<decimal> ObtenerTotalPagosConfirmadosAsync(int socioId);
 
         /// <summary>
+        /// Calcula el total de pagos confirmados para múltiples socios de forma masiva.
+        /// </summary>
+        /// <param name="socioIds">Lista de identificadores de socios.</param>
+        /// <returns>Diccionario con el socioId como clave y el total de pagos como valor.</returns>
+        Task<Dictionary<int, decimal>> ObtenerTotalPagosConfirmadosMasivoAsync(List<int> socioIds);
+
+        /// <summary>
         /// Cambia de manera asincrónica el estado de un pago específico en el sistema.
         /// </summary>
         /// <param name="pagoId">Identificador único del pago cuyo estado se desea modificar.</param>
@@ -173,6 +180,18 @@ namespace Vista.Services
             return (decimal)await _context.PagoSocio
                 .Where(p => p.SocioId == socioId && p.Estado == EstadoPago.Confirmado)
                 .SumAsync(p => p.Monto);
+        }
+
+        public async Task<Dictionary<int, decimal>> ObtenerTotalPagosConfirmadosMasivoAsync(List<int> socioIds)
+        {
+            var pagos = await _context.PagoSocio
+                .Where(p => socioIds.Contains(p.SocioId) && p.Estado == EstadoPago.Confirmado)
+                .GroupBy(p => p.SocioId)
+                .Select(g => new { SocioId = g.Key, Total = g.Sum(p => (decimal)p.Monto) })
+                .AsNoTracking()
+                .ToDictionaryAsync(x => x.SocioId, x => x.Total);
+
+            return pagos;
         }
 
         public async Task<List<PagoSocio>> ObtenerPagosPorEstadoAsync(EstadoPago estado)

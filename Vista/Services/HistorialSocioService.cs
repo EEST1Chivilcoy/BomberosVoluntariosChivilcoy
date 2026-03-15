@@ -48,12 +48,22 @@ namespace Vista.Services
         Task<List<MovimientoCambioEstado>> ObtenerPeriodosActivos(int socioId);
 
         /// <summary>
+        /// Obtiene los períodos en los que múltiples socios estuvieron activos, de forma masiva.
+        /// </summary>
+        Task<Dictionary<int, List<MovimientoCambioEstado>>> ObtenerPeriodosActivosMasivo(List<int> socioIds);
+
+        /// <summary>
         /// Obtiene la cuota vigente para una fecha específica.
         /// </summary>
         /// <param name="socioId">Identificador único del socio.</param>
         /// <param name="fecha">Fecha para la cual se desea obtener la cuota vigente.</param>
         /// <returns>El movimiento de cuota vigente en esa fecha, o null si no existe.</returns>
         Task<MovimientoCambioCuota?> ObtenerCuotaVigenteEnFecha(int socioId, DateTime fecha);
+
+        /// <summary>
+        /// Obtiene el historial de cuotas de manera masiva.
+        /// </summary>
+        Task<Dictionary<int, List<MovimientoCambioCuota>>> ObtenerHistorialCuotasMasivo(List<int> socioIds);
     }
 
     public class HistorialSocioService : IHistorialSocioService
@@ -99,6 +109,34 @@ namespace Vista.Services
                 .OrderBy(h => h.FechaDesde)
                 .AsNoTracking()
                 .ToListAsync();
+        }
+
+        public async Task<Dictionary<int, List<MovimientoCambioEstado>>> ObtenerPeriodosActivosMasivo(List<int> socioIds)
+        {
+            var movimientos = await _context.HistorialSocios
+                .OfType<MovimientoCambioEstado>()
+                .Where(h => socioIds.Contains(h.SocioId) && h.Estado == TipoEstadoSocio.Activo)
+                .OrderBy(h => h.FechaDesde)
+                .AsNoTracking()
+                .ToListAsync();
+
+            return movimientos
+                .GroupBy(h => h.SocioId)
+                .ToDictionary(g => g.Key, g => g.ToList());
+        }
+
+        public async Task<Dictionary<int, List<MovimientoCambioCuota>>> ObtenerHistorialCuotasMasivo(List<int> socioIds)
+        {
+            var cuotas = await _context.HistorialSocios
+                .OfType<MovimientoCambioCuota>()
+                .Where(h => socioIds.Contains(h.SocioId))
+                .OrderBy(h => h.FechaDesde)
+                .AsNoTracking()
+                .ToListAsync();
+
+            return cuotas
+                .GroupBy(h => h.SocioId)
+                .ToDictionary(g => g.Key, g => g.ToList());
         }
 
         public async Task<MovimientoCambioCuota?> ObtenerCuotaVigenteEnFecha(int socioId, DateTime fecha)

@@ -14,6 +14,11 @@ namespace Vista.Services
         Task<decimal> CalcularSaldoActualAsync(int socioId);
 
         /// <summary>
+        /// Calcula el saldo actual para múltiples socios minimizando las consultas a la base de datos.
+        /// </summary>
+        Task<Dictionary<int, decimal>> CalcularSaldosMasivoAsync(List<int> socioIds);
+
+        /// <summary>
         /// Calcula el total de cuotas que el socio debe desde su ingreso al sistema.
         /// Solo considera los períodos donde el socio estuvo activo.
         /// </summary>
@@ -82,6 +87,55 @@ namespace Vista.Services
             Console.WriteLine($"DEBUG: Cuotas={totalCuotas}, Pagos={totalPagos}");
 
             return totalPagos - totalCuotas;
+        }
+
+        public async Task<Dictionary<int, decimal>> CalcularSaldosMasivoAsync(List<int> socioIds)
+        {
+            var saldos = new Dictionary<int, decimal>();
+            if (socioIds == null || !socioIds.Any()) return saldos;
+
+            var periodosActivosMasivo = await _historialSocioService.ObtenerPeriodosActivosMasivo(socioIds);
+            var historialCuotasMasivo = await _historialSocioService.ObtenerHistorialCuotasMasivo(socioIds);
+            var pagosMasivos = await _pagoService.ObtenerTotalPagosConfirmadosMasivoAsync(socioIds);
+
+            TimeZoneInfo zonaArgentina = TimeZoneInfo.FindSystemTimeZoneById("Argentina Standard Time");
+            DateTime hoy = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, zonaArgentina);
+
+            foreach (var socioId in socioIds)
+            {
+                decimal totalCuotas = 0;
+
+                if (periodosActivosMasivo.TryGetValue(socioId, out var periodosActivos) && 
+                    historialCuotasMasivo.TryGetValue(socioId, out var historialCuotas))
+                {
+                    foreach (var periodo in periodosActivos)
+                    {
+                        var inicioP = periodo.FechaDesde;
+                        var finP = periodo.FechaHasta ?? hoy;
+
+                        var cuotasAplicables = historialCuotas.Where(c =>
+                            c.FechaDesde <= finP &&
+                            (c.FechaHasta == null || c.FechaHasta >= inicioP));
+
+                        foreach (var cuota in cuotasAplicables)
+                        {
+                            DateTime inicioDeuda = inicioP > cuota.FechaDesde ? inicioP : cuota.FechaDesde;
+                            DateTime finDeuda = (cuota.FechaHasta == null || cuota.FechaHasta > finP) ? finP : cuota.FechaHasta.Value;
+
+                            if (inicioDeuda < finDeuda)
+                            {
+                                var cantidad = CalcularCantidadCuotas(inicioDeuda, finDeuda, cuota.FrecuenciaDePago);
+                                totalCuotas += cantidad * (decimal)cuota.Monto;
+                            }
+                        }
+                    }
+                }
+
+                decimal totalPagos = pagosMasivos.GetValueOrDefault(socioId, 0m);
+                saldos[socioId] = totalPagos - totalCuotas;
+            }
+
+            return saldos;
         }
 
         public async Task<decimal> CalcularTotalCuotasAdeudadasAsync(int socioId)

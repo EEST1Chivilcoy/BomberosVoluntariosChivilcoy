@@ -1365,21 +1365,28 @@
         Cargando = true;
         StateHasChanged();
 
+        // Ceder el control al hilo de la UI para asegurar que el spinner se renderice
+        await Task.Delay(10); 
+
         try
         {
             Socios = await SocioService.ObtenerSociosAsync();
 
             if (Socios != null)
             {
-                var socios = Socios
+                var sociosFiltradosBase = Socios
                     .Where(s => s.FormaPago == FormaDePago.Efectivo)
                     .ToList();
 
+                // Extraemos los IDs para consultar todo de manera masiva (y evitar el problema de N+1)
+                var socioIds = sociosFiltradosBase.Select(s => s.Id).ToList();
+                var saldos = await SaldoSocioService.CalcularSaldosMasivoAsync(socioIds);
+
                 var cobranzaViewModels = new List<CobranzaViewModel>();
 
-                foreach (var s in socios)
+                foreach (var s in sociosFiltradosBase)
                 {
-                    var saldo = await SaldoSocioService.CalcularSaldoActualAsync(s.Id);
+                    var saldo = saldos.GetValueOrDefault(s.Id, 0m);
 
                     cobranzaViewModels.Add(new CobranzaViewModel
                     {
