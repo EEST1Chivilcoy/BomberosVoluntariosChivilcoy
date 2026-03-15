@@ -1,7 +1,7 @@
 ﻿@using Vista.Data.Models.Socios.Componentes.Pagos
+@using Vista.Data.ViewModels.Socios
 @using Vista.Data.Models.Socios
 @using Vista.Data.Enums.Socios
-@using Vista.Data.Mappers
 
 @*Servicios utilizados*@
 @using Vista.Services
@@ -428,15 +428,15 @@
 
                     <ColumnDefinitions Context="pago">
                         <PropertyColumn Title="👤 Socio"
-                        Property="c => c.Socio != null ? $\"{c.Socio.Nombre} {c.Socio.Apellido}\" : string.Empty"
+                        Property="c => c.NombreSocio"
                         Width="200px"
                         Fixed="ColumnFixPlacement.Left">
                             <Template>
                                 <div style="font-weight: 600; color: #333;">
-                                    @(pago.Socio != null ? $"{pago.Socio.Nombre} {pago.Socio.Apellido}" : "Sin Socio")
+                                    @pago.NombreSocio
                                 </div>
                                 <div style="font-size: 0.8rem; color: #666;">
-                                    Nro Socio: @(pago.Socio?.NroSocio ?? 0)
+                                    Nro Socio: @pago.NumeroSocio
                                 </div>
                             </Template>
                         </PropertyColumn>
@@ -536,14 +536,14 @@ WrapClassName="modal-rechazar-pago">
                     <AntDesign.Col Xs="24" Sm="12" Md="8">
                         <div class="pago-info-item">
                             <span class="pago-info-label">👤 Socio</span>
-                            <div class="pago-info-value">@(_pagoParaRechazar.Socio != null ? $"{_pagoParaRechazar.Socio.Nombre} {_pagoParaRechazar.Socio.Apellido}" : "-")</div>
+                            <div class="pago-info-value">@_pagoParaRechazar.NombreSocio</div>
                         </div>
                     </AntDesign.Col>
 
                     <AntDesign.Col Xs="12" Sm="12" Md="8">
                         <div class="pago-info-item">
                             <span class="pago-info-label">📋 Nro Socio</span>
-                            <div class="pago-info-value">@(_pagoParaRechazar.Socio?.NroSocio ?? 0)</div>
+                            <div class="pago-info-value">@_pagoParaRechazar.NumeroSocio</div>
                         </div>
                     </AntDesign.Col>
 
@@ -606,11 +606,11 @@ WrapClassName="modal-rechazar-pago">
 @code {
     [Parameter, EditorRequired] public EventCallback OnCompleted { get; set; }
 
-    private List<PagoSocio> PagosPendientes = new();
+    private List<PagoViewModel> PagosPendientes = new();
 
     private bool _loading = false;
     private bool _modalRechazoVisible = false;
-    private PagoSocio? _pagoParaRechazar;
+    private PagoViewModel? _pagoParaRechazar;
     private bool _procesandoRechazo = false;
 
     protected override async Task OnInitializedAsync()
@@ -625,8 +625,11 @@ WrapClassName="modal-rechazar-pago">
 
         try
         {
-            var pagos = await PagoService.ObtenerPagosPorEstadoAsync(EstadoPago.PendienteAConfirmar, true);
-            PagosPendientes = pagos.OrderBy(p => p.Fecha).ToList();
+            var pagos = await PagoService.ObtenerPagosPorEstadoAsync(EstadoPago.PendienteAConfirmar);
+            PagosPendientes = pagos
+                .OrderBy(p => p.Fecha)
+                .Select(MapToViewModel)
+                .ToList();
         }
         catch (Exception ex)
         {
@@ -654,7 +657,7 @@ WrapClassName="modal-rechazar-pago">
         }
     }
 
-    private void MostrarModalRechazo(PagoSocio pago)
+    private void MostrarModalRechazo(PagoViewModel pago)
     {
         _pagoParaRechazar = pago;
         _pagoParaRechazar.RazonRechazo = ""; // Limpiar motivo previo si hubiese
@@ -697,4 +700,26 @@ WrapClassName="modal-rechazar-pago">
             StateHasChanged();
         }
     }
-}
+
+    private static PagoViewModel MapToViewModel(PagoSocio pago)
+    {
+        return new PagoViewModel
+        {
+            Id = pago.Id,
+            SocioId = pago.SocioId,
+            NombreSocio = pago.Socio is null ? "Sin Socio" : $"{pago.Socio.Nombre} {pago.Socio.Apellido}".Trim(),
+            NumeroSocio = pago.Socio?.NroSocio ?? 0,
+            Fecha = pago.Fecha,
+            FechaConfirmadoORechazado = pago.FechaConfirmadoORechazado,
+            RazonRechazo = pago.RazonRechazo,
+            Monto = pago.Monto,
+            Tipo = pago.Tipo,
+            Estado = pago.Estado,
+            CobradorId = pago is PagoEfectivo pe ? pe.CobradorId : 0,
+            NombreCobrador = pago is PagoEfectivo pe2 && pe2.Cobrador is not null
+                ? $"{pe2.Cobrador.Nombre} {pe2.Cobrador.Apellido}".Trim()
+                : null,
+            Observaciones = pago is PagoEfectivo pe3 ? pe3.Observaciones : null
+        };
+    }
+}}

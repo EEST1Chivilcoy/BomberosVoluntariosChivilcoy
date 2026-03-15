@@ -6,6 +6,7 @@
 @using Vista.Data.Enums.Socios
 @using Vista.Data.Enums.Discriminadores
 @using Vista.Data.Mappers
+@using Vista.Data.ViewModels.Socios
 
 @*Servicios utilizados*@
 @using Vista.Services;
@@ -404,7 +405,7 @@
                   <Table DataSource="PagosFiltrados"
                       HidePagination="false"
                       Responsive
-                       TItem="PagoSocio"
+                       TItem="PagoViewModel"
                        RowClassName="@(c => c.Data.Estado.ToString())"
                        OnRow="@OnRowClick"
                        Loading="@_loading"
@@ -412,16 +413,16 @@
 
                     <ColumnDefinitions Context="pago">
                         <PropertyColumn Title="👤 Socio"
-                                        Property="c => c.Socio != null ? $\"{c.Socio.Nombre} {c.Socio.Apellido}\" : \"\""
+                                        Property="c => c.NombreSocio"
                                         Sortable
                                         Width="250px"
                                         Fixed="ColumnFixPlacement.Left">
                             <Template>
                                 <div style="font-weight: 600; color: #333;">
-                                    @(pago.Socio != null ? $"{pago.Socio.Nombre} {pago.Socio.Apellido}" : "Sin Socio")
+                                    @pago.NombreSocio
                                 </div>
                                 <div style="font-size: 0.8rem; color: #666;">
-                                    Nro Socio: @(pago.Socio?.NroSocio ?? 0)
+                                    Nro Socio: @pago.NumeroSocio
                                 </div>
                             </Template>
                         </PropertyColumn>
@@ -493,7 +494,7 @@
        DestroyOnClose
        WrapClassName="modal-crear-pago">
     <div class="modal-crear-pago-content">
-        <Form Model="this" Layout="FormLayout.Vertical" OnFinish="AddPago" Loading="isLoadingComponent">
+        <Form Model="nuevoPago" Layout="FormLayout.Vertical" OnFinish="AddPago" Loading="isLoadingComponent">
 
             <Row Gutter="16">
                 <AntDesign.Col Span="12">
@@ -501,7 +502,7 @@
                         <Select TItem="Socio"
                                 TItemValue="int"
                                 DataSource="@SociosList"
-                                @bind-Value="@nuevoSocioId"
+                                @bind-Value="@nuevoPago.SocioId"
                                 LabelName="@nameof(Socio.Nombre)"
                                 ValueName="@nameof(Socio.Id)"
                                 Placeholder="Seleccione el socio"
@@ -520,9 +521,9 @@
                         <Select TItem="Cobrador"
                                 TItemValue="int"
                                 DataSource="@CobradoresList"
-                                @bind-Value="@nuevoCobradorId"
+                                @bind-Value="@nuevoPago.CobradorId"
                                 LabelName="@nameof(Cobrador.Nombre)"
-                                ValueName="@nameof(Cobrador.Id)"
+                                ValueName="@nameof(Cobrador.PersonaId)"
                                 Placeholder="Seleccione el cobrador"
                                 AllowClear
                                 EnableSearch
@@ -538,7 +539,7 @@
             <Row Gutter="16">
                 <AntDesign.Col Span="12">
                     <FormItem Label="💵 Monto" Required>
-                         <AntDesign.InputNumber @bind-Value="@nuevoMonto"
+                         <AntDesign.InputNumber @bind-Value="@nuevoPago.Monto"
                                                Min="1"
                                                Size="InputSize.Large"
                                                Style="width: 100%;" />
@@ -548,7 +549,7 @@
                 <AntDesign.Col Span="12">
                     <FormItem Label="📅 Fecha del Pago" Required>
                         <DatePicker TValue="DateTime"
-                                    @bind-Value="@nuevaFecha"
+                                    @bind-Value="@nuevoPago.Fecha"
                                     Placeholder="@("Seleccione fecha")"
                                     Size="InputSize.Large"
                                     Style="width: 100%;" />
@@ -557,7 +558,7 @@
             </Row>
 
             <FormItem Label="📝 Observaciones (Opcional)">
-                <TextArea @bind-Value="@nuevasObservaciones"
+                <TextArea @bind-Value="@nuevoPago.Observaciones"
                           Placeholder="Notas sobre el pago..."
                           Rows="3" />
             </FormItem>
@@ -573,7 +574,7 @@
 
 @* Modal de detalle *@
 <Modal @bind-Visible="_modalDetalleVisible"
-       Title="@($"📋 Detalle de Pago - {pagoSeleccionado?.Socio?.Nombre} {pagoSeleccionado?.Socio?.Apellido}")"
+       Title="@($"📋 Detalle de Pago - {pagoSeleccionado?.NombreSocio}")"
        Footer="null"
        Width="@("90%")"
        Style="max-width: 800px;">
@@ -584,12 +585,12 @@
                 <div class="detail-grid">
                     <div class="detail-item">
                         <div class="detail-label">👤 Socio</div>
-                        <div class="detail-value">@(pagoSeleccionado.Socio != null ? $"{pagoSeleccionado.Socio.Nombre} {pagoSeleccionado.Socio.Apellido}" : "N/A")</div>
+                        <div class="detail-value">@pagoSeleccionado.NombreSocio</div>
                     </div>
 
                     <div class="detail-item">
                         <div class="detail-label">📋 Nro Socio</div>
-                        <div class="detail-value">@(pagoSeleccionado.Socio?.NroSocio ?? 0)</div>
+                        <div class="detail-value">@pagoSeleccionado.NumeroSocio</div>
                     </div>
 
                     <div class="detail-item">
@@ -628,20 +629,20 @@
                         </div>
                     </div>
 
-                    @if (pagoSeleccionado is PagoEfectivo pe)
+                    @if (!string.IsNullOrWhiteSpace(pagoSeleccionado.NombreCobrador))
                     {
                         <div class="detail-item">
                             <div class="detail-label">👤 Cobrador</div>
-                            <div class="detail-value">@(pe.Cobrador != null ? $"{pe.Cobrador.Nombre} {pe.Cobrador.Apellido}" : "N/A (Id: " + pe.CobradorId + ")")</div>
+                            <div class="detail-value">@pagoSeleccionado.NombreCobrador</div>
                         </div>
-                        
-                        @if (!string.IsNullOrWhiteSpace(pe.Observaciones))
-                        {
-                            <div class="detail-item detail-description">
-                                <div class="detail-label">📝 Observaciones</div>
-                                <div class="detail-value">@pe.Observaciones</div>
-                            </div>
-                        }
+                    }
+                    
+                    @if (!string.IsNullOrWhiteSpace(pagoSeleccionado.Observaciones))
+                    {
+                        <div class="detail-item detail-description">
+                            <div class="detail-label">📝 Observaciones</div>
+                            <div class="detail-value">@pagoSeleccionado.Observaciones</div>
+                        </div>
                     }
 
                     @if (pagoSeleccionado.Estado == EstadoPago.Rechazado)
@@ -674,8 +675,8 @@
     private bool isLoadingComponent = false;
 
     // Listas
-    List<PagoSocio> PagosOriginales = new();
-    List<PagoSocio> PagosFiltrados = new();
+    List<PagoViewModel> PagosOriginales = new();
+    List<PagoViewModel> PagosFiltrados = new();
     List<Socio> SociosList = new();
     List<Cobrador> CobradoresList = new();
 
@@ -684,16 +685,16 @@
     // Modal forms
     private bool _modalAñadirVisible = false;
     private bool _modalDetalleVisible = false;
-    private PagoSocio? pagoSeleccionado;
+    private PagoViewModel? pagoSeleccionado;
 
-    // Campos formulario nuevo pago en efectivo
-    private int nuevoSocioId;
-    private int nuevoCobradorId;
-    private double nuevoMonto = 0;
-    private DateTime nuevaFecha = DateTime.Today;
-    private string nuevasObservaciones = "";
+    private PagoViewModel nuevoPago = new()
+    {
+        Fecha = DateTime.Today,
+        Tipo = TipoPagoSocio.Efectivo,
+        Estado = EstadoPago.PendienteAConfirmar
+    };
 
-    private Dictionary<string, object> OnRowClick(RowData<PagoSocio> rowData)
+    private Dictionary<string, object> OnRowClick(RowData<PagoViewModel> rowData)
     {
         return new Dictionary<string, object>
         {
@@ -701,18 +702,8 @@
         };
     }
 
-    private async Task MostrarDetallePago(PagoSocio pago)
+    private void MostrarDetallePago(PagoViewModel pago)
     {
-        // Refrescar para traer el cobrador incluido si es efectivo, ya que ObtenerTodos() podría no haberlo incluido profundamente
-        try 
-        {
-            if (pago is PagoEfectivo pe && pe.Cobrador == null && pe.CobradorId > 0)
-            {
-                pe.Cobrador = await CobradorService.ObtenerCobradorPorIdAsync(pe.CobradorId, true, false);
-            }
-        }
-        catch {} // Ignorar si falla al cargar un dato extra específico
-        
         pagoSeleccionado = pago;
         _modalDetalleVisible = true;
     }
@@ -729,7 +720,8 @@
 
         try
         {
-            PagosOriginales = await PagoService.ObtenerTodosLosPagosAsync();
+            var pagos = await PagoService.ObtenerTodosLosPagosAsync();
+            PagosOriginales = pagos.Select(MapToViewModel).ToList();
             SociosList = await SocioService.ObtenerSociosAsync() ?? new List<Socio>();
             CobradoresList = (await CobradorService.ObtenerTodosLosCobradoresAsync()).ToList();
 
@@ -746,15 +738,14 @@
         }
     }
 
-    private List<PagoSocio> FiltrarPagos()
+    private List<PagoViewModel> FiltrarPagos()
     {
         var filtered = PagosOriginales
             .Where(p => (FechaBuscarI == default || p.Fecha.Date >= FechaBuscarI.Date) &&
                         (FechaBuscarF == default || p.Fecha.Date <= FechaBuscarF.Date) &&
                         (string.IsNullOrWhiteSpace(Busqueda) ||
-                            (p.Socio != null && p.Socio.Nombre != null && p.Socio.Nombre.Contains(Busqueda, StringComparison.OrdinalIgnoreCase)) ||
-                            (p.Socio != null && p.Socio.Apellido != null && p.Socio.Apellido.Contains(Busqueda, StringComparison.OrdinalIgnoreCase)) ||
-                            (p.Socio?.NroSocio.ToString().Contains(Busqueda) ?? false)))
+                            p.NombreSocio.Contains(Busqueda, StringComparison.OrdinalIgnoreCase) ||
+                            p.NumeroSocio.ToString().Contains(Busqueda)))
             .OrderByDescending(p => p.Fecha)
             .ToList();
 
@@ -765,7 +756,7 @@
     {
         isLoadingComponent = true;
 
-        if (nuevoSocioId <= 0 || nuevoMonto <= 0 || nuevoCobradorId <= 0)
+        if (nuevoPago.SocioId <= 0 || nuevoPago.Monto <= 0 || nuevoPago.CobradorId <= 0)
         {
             await MessageService.ErrorAsync("⚠️ Por favor, complete todos los campos obligatorios.");
             isLoadingComponent = false;
@@ -776,24 +767,25 @@
         {
             var nuevopago = new PagoEfectivo
             {
-                SocioId = nuevoSocioId,
-                CobradorId = nuevoCobradorId,
-                Monto = nuevoMonto,
-                Fecha = nuevaFecha,
+                SocioId = nuevoPago.SocioId,
+                CobradorId = nuevoPago.CobradorId,
+                Monto = nuevoPago.Monto,
+                Fecha = nuevoPago.Fecha,
                 Estado = EstadoPago.PendienteAConfirmar,
                 Tipo = TipoPagoSocio.Efectivo,
-                Observaciones = nuevasObservaciones
+                Observaciones = nuevoPago.Observaciones
             };
 
-            await PagoService.AgregarPagoAsync(nuevoSocioId, nuevopago);
+            await PagoService.AgregarPagoAsync(nuevoPago.SocioId, nuevopago);
             await MessageService.SuccessAsync("✅ Pago registrado exitosamente y enviado para confirmación.");
             
             _modalAñadirVisible = false;
-            nuevoSocioId = 0;
-            nuevoCobradorId = 0;
-            nuevoMonto = 0;
-            nuevaFecha = DateTime.Today;
-            nuevasObservaciones = "";
+            nuevoPago = new PagoViewModel
+            {
+                Fecha = DateTime.Today,
+                Tipo = TipoPagoSocio.Efectivo,
+                Estado = EstadoPago.PendienteAConfirmar
+            };
 
             await Init();
         }
@@ -805,5 +797,27 @@
         {
             isLoadingComponent = false;
         }
+    }
+
+    private static PagoViewModel MapToViewModel(PagoSocio pago)
+    {
+        return new PagoViewModel
+        {
+            Id = pago.Id,
+            SocioId = pago.SocioId,
+            NombreSocio = pago.Socio is null ? "Sin Socio" : $"{pago.Socio.Nombre} {pago.Socio.Apellido}".Trim(),
+            NumeroSocio = pago.Socio?.NroSocio ?? 0,
+            Fecha = pago.Fecha,
+            FechaConfirmadoORechazado = pago.FechaConfirmadoORechazado,
+            RazonRechazo = pago.RazonRechazo,
+            Monto = pago.Monto,
+            Tipo = pago.Tipo,
+            Estado = pago.Estado,
+            CobradorId = pago is PagoEfectivo pe ? pe.CobradorId : 0,
+            NombreCobrador = pago is PagoEfectivo pe2 && pe2.Cobrador is not null
+                ? $"{pe2.Cobrador.Nombre} {pe2.Cobrador.Apellido}".Trim()
+                : null,
+            Observaciones = pago is PagoEfectivo pe3 ? pe3.Observaciones : null
+        };
     }
 }
