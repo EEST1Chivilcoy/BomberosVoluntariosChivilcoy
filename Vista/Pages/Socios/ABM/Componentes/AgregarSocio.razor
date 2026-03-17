@@ -285,7 +285,7 @@
                                             Placeholder="Ingrese una direccion o coordenadas"
                                             LabelName="@nameof(Direccion.Descripcion)"
                                             OnSearch="OnSearch"
-                                            SearchDebounceMilliseconds="350"
+                                            SearchDebounceMilliseconds="2000"
                                             EnableSearch
                                             Loading="@_loading"
                                             OnSelectedItemChanged="OnStreetSelected"
@@ -337,7 +337,7 @@
                                             Placeholder="Ingrese una dirección secundaria (opcional)"
                                             LabelName="@nameof(Direccion.Descripcion)"
                                             OnSearch="OnSearchSecundaria"
-                                            SearchDebounceMilliseconds="350"
+                                            SearchDebounceMilliseconds="2000"
                                             EnableSearch
                                             AllowClear
                                             Loading="@_loadingSecundaria"

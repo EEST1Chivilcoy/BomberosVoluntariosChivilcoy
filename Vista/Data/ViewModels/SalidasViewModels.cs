@@ -131,13 +131,11 @@ namespace Vista.Data.ViewModels
         /// <summary>
         /// Latitud de la ubicación del incidente o lugar de la salida.
         /// </summary>
-        [Required]
         public double? Latitud { get; set; }
 
         /// <summary>
         /// Longitud de la ubicación del incidente o lugar de la salida.
         /// </summary>
-        [Required]
         public double? Longitud { get; set; }
 
         // Datos por si es en un edificio. (Opcional) (Apartamento, Piso, etc.)
@@ -165,7 +163,6 @@ namespace Vista.Data.ViewModels
         /// Tipo de zona donde ocurrió el incidente.
         /// Puede ser Urbana, Rural.
         /// </summary>
-        [Required]
         public TipoZona? TipoZona { get; set; }
 
         // --- Sección de Datos del Solicitante ---
