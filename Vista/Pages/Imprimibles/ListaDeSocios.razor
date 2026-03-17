@@ -490,7 +490,7 @@ else
                         <th>DNI/CUIT</th>
                         <th>Tipo</th>
                         <th>Zona</th>
-                        <th>Teléfono</th>
+                        <th>Frecuencia de Pago</th>
                         <th>Dirección</th>
                         <th>Cuota</th>
                         <th>Estado</th>
@@ -522,7 +522,7 @@ else
                             <td>
                                 <span class="zona-number">@GetZonaNumero(socio.Zona)</span>
                             </td>
-                            <td class="contact-info">@socio.Telefono</td>
+                            <td class="contact-info">@GetEnumDisplayName(socio.FrecuenciaDePago)</td>
                             <td class="contact-info" title="@socio.Direccion">@TruncateText(socio.Direccion, 20)</td>
                             <td class="cuota-info">$@socio.MontoCuota.ToString("N0")</td>
                             <td>
