@@ -169,9 +169,15 @@ namespace Vista.Services
                 throw new ArgumentException($"No existe un socio con Id {socioId}.", nameof(socioId));
             }
 
-            // --- 2. Inicio de la Transacción ---
-            // Esta será la transacción "principal" que controlará todo.
-            await using var transaction = await _context.Database.BeginTransactionAsync();
+            // --- 2. Inicio/Reutilización de la Transacción ---
+            // Si ya existe una transacción activa en el DbContext, se reutiliza.
+            // Si no existe, este método crea y controla su propia transacción.
+            var transactionActual = _context.Database.CurrentTransaction;
+            var manejaTransaccionLocal = transactionActual == null;
+            await using var transaccionLocal = manejaTransaccionLocal
+                ? await _context.Database.BeginTransactionAsync()
+                : null;
+            var transaction = transactionActual ?? transaccionLocal;
 
             try
             {
@@ -187,19 +193,24 @@ namespace Vista.Services
                 await _context.HistorialSocios.AddAsync(historial);
                 await _context.SaveChangesAsync();
 
-                // --- Paso D: Confirmar la Transacción ---
-                await transaction.CommitAsync();
+                // --- Paso D: Confirmar la Transacción (solo si fue creada aquí) ---
+                if (manejaTransaccionLocal)
+                {
+                    await transaction!.CommitAsync();
+                }
             }
             catch (Exception ex)
             {
                 // --- Manejo de Error ---
-                // Si CUALQUIER operación falla (el primer SaveChanges,
-                // la lógica del service, o el segundo SaveChanges dentro del service),
-                // revertimos TODA la operación.
-                await transaction.RollbackAsync();
+                // Si esta clase creó la transacción, también la revierte.
+                // Si la transacción venía de fuera, el rollback lo maneja el caller.
+                if (manejaTransaccionLocal)
+                {
+                    await transaction!.RollbackAsync();
 
-                // Limpiar el contexto para evitar conflictos futuros
-                _context.ChangeTracker.Clear();
+                    // Limpiar el contexto para evitar conflictos futuros
+                    _context.ChangeTracker.Clear();
+                }
 
                 // Lanza una excepción genérica o la 'ex' original
                 // para que la capa superior sepa que algo falló.

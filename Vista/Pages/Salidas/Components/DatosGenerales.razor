@@ -112,14 +112,14 @@
                                 Placeholder="Ingrese una direccion o coordenadas"
                                 LabelName="@nameof(Direccion.Descripcion)"
                                 OnSearch="OnSearch"
-                                SearchDebounceMilliseconds="350"
+                                SearchDebounceMilliseconds="2000"
                                 EnableSearch
                                 Loading="@_loading"
                                 OnSelectedItemChanged="OnStreetSelected">
                         </Select>
                     </FormItem>
                     <FormItem Label="Tipo Zona">
-                        <EnumSelect TEnum="TipoZona ?" @bind-Value="@Model.TipoZona" />
+                        <EnumSelect TEnum="TipoZona?" @bind-Value="@Model.TipoZona" />
                     </FormItem>
                 </AntDesign.Col>
 
@@ -288,8 +288,19 @@
         if (selectedStreet != null)
         {
             Model.Direccion = selectedStreet.Descripcion;
-            Model.Latitud = selectedStreet.Lat;
-            Model.Longitud = selectedStreet.Lon;
+
+            if (selectedStreet.Lat == 0 && selectedStreet.Lon == 0)
+            {
+                // Ingreso manual: no tiene coordenadas
+                Model.Latitud = null;
+                Model.Longitud = null;
+            }
+            else
+            {
+                Model.Latitud = selectedStreet.Lat;
+                Model.Longitud = selectedStreet.Lon;
+            }
+
             StateHasChanged();
         }
     }
@@ -337,6 +348,14 @@
             {
                 return;
             }
+
+            // Agregar la opción de ingreso manual como última opción
+            direcciones.Add(new Direccion
+            {
+                Descripcion = value,
+                Lat = 0,
+                Lon = 0
+            });
         }
         catch (OperationCanceledException)
         {
