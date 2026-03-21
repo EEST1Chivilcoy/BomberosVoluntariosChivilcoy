@@ -10,6 +10,7 @@
 @using Vista.Data.Models.Socios
 @using Vista.Data.Enums.Socios
 @using System.ComponentModel.DataAnnotations
+@using System.Text.RegularExpressions
 @using Microsoft.JSInterop
 
 @inject ISocioService SocioService
@@ -421,14 +422,6 @@ else if (Socios == null || !Socios.Any())
 }
 else
 {
-    var sociosOrdenados = Socios.OrderBy(s => s.NroSocio).ToList();
-    var totalSocios = Socios.Count;
-    var sociosActivos = Socios.Count(s => s.EstadoSocio == TipoEstadoSocio.Activo);
-    var sociosInactivos = Socios.Count(s => s.EstadoSocio == TipoEstadoSocio.Inactivo);
-    var sociosParaConteo = IncluirInactivos ? Socios : Socios.Where(s => s.EstadoSocio != TipoEstadoSocio.Inactivo);
-    var sociosPersonas = sociosParaConteo.Count(s => s.Tipo == Vista.Data.Enums.Discriminadores.TipoSocio.Persona);
-    var sociosEmpresas = sociosParaConteo.Count(s => s.Tipo == Vista.Data.Enums.Discriminadores.TipoSocio.Empresa);
-
     <div id="pdf-content">
         <!-- Header -->
         <header class="header">
@@ -456,26 +449,26 @@ else
         <!-- Summary Section -->
         <div class="summary-section">
             <div class="summary-item">
-                <span class="number">@(IncluirInactivos ? totalSocios : sociosActivos)</span>
+                <span class="number">@(IncluirInactivos ? TotalSocios : SociosActivos)</span>
                 <span class="label">@(IncluirInactivos ? "Total Socios" : "Total Socios Activos")</span>
             </div>
             @if (IncluirInactivos)
             {
                 <div class="summary-item">
-                    <span class="number">@sociosActivos</span>
+                    <span class="number">@SociosActivos</span>
                     <span class="label">Activos</span>
                 </div>
                 <div class="summary-item">
-                    <span class="number">@sociosInactivos</span>
+                    <span class="number">@SociosInactivos</span>
                     <span class="label">Inactivos</span>
                 </div>
             }
             <div class="summary-item">
-                <span class="number">@sociosPersonas</span>
+                <span class="number">@SociosPersonas</span>
                 <span class="label">Personas</span>
             </div>
             <div class="summary-item">
-                <span class="number">@sociosEmpresas</span>
+                <span class="number">@SociosEmpresas</span>
                 <span class="label">Empresas</span>
             </div>
         </div>
@@ -491,43 +484,36 @@ else
                         <th>Tipo</th>
                         <th>Zona</th>
                         <th>Frecuencia de Pago</th>
-                        <th>Dirección</th>
+                        <th>Dirección principal</th>
+                        <th>Teléfono</th>
                         <th>Cuota</th>
                         <th>Estado</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var socio in sociosOrdenados)
+                    @foreach (var socio in SociosOrdenados)
                     {
                         <tr>
                             <td><span class="socio-number">@socio.NroSocio</span></td>
                             <td>
-                                <span class="socio-name">
-                                    @if (socio.Tipo == Vista.Data.Enums.Discriminadores.TipoSocio.Persona)
-                                    {
-                                        @($"{socio.Apellido}, {socio.Nombre}")
-                                    }
-                                    else
-                                    {
-                                        @socio.Nombre
-                                    }
-                                </span>
+                                <span class="socio-name">@socio.NombreOMRazonSocial</span>
                             </td>
                             <td>@socio.DocumentoOCUIT</td>
                             <td>
-                                <span class="socio-type @(socio.Tipo == Vista.Data.Enums.Discriminadores.TipoSocio.Persona ? "persona" : "empresa")">
-                                    @GetEnumDisplayName(socio.Tipo)
+                                <span class="socio-type @socio.TipoCssClass">
+                                    @socio.TipoTexto
                                 </span>
                             </td>
                             <td>
-                                <span class="zona-number">@GetZonaNumero(socio.Zona)</span>
+                                <span class="zona-number">@socio.ZonaTexto</span>
                             </td>
-                            <td class="contact-info">@GetEnumDisplayName(socio.FrecuenciaDePago)</td>
-                            <td class="contact-info" title="@socio.Direccion">@TruncateText(socio.Direccion, 20)</td>
-                            <td class="cuota-info">$@socio.MontoCuota.ToString("N0")</td>
+                            <td class="contact-info">@socio.FrecuenciaPagoTexto</td>
+                            <td class="contact-info" title="@socio.DireccionCompleta">@socio.DireccionTexto</td>
+                            <td class="contact-info" title="@socio.TelefonosTooltip">@socio.TelefonoPrincipal</td>
+                            <td class="cuota-info">@socio.MontoCuotaTexto</td>
                             <td>
-                                <span class="status-badge @GetEstadoClass(socio.EstadoSocio)">
-                                    @GetEnumDisplayName(socio.EstadoSocio)
+                                <span class="status-badge @socio.EstadoCssClass">
+                                    @socio.EstadoTexto
                                 </span>
                             </td>
                         </tr>
@@ -544,7 +530,7 @@ else
                     <p>Documento confidencial - Uso interno</p>
                 </div>
                 <div class="footer-right">
-                    <p>Total de registros: @sociosOrdenados.Count</p>
+                    <p>Total de registros: @SociosOrdenados.Count</p>
                 </div>
             </div>
             <p class="document-number">
@@ -579,9 +565,33 @@ else
     public bool IncluirInactivos { get; set; } = true;
 
     private List<Socio>? Socios { get; set; }
+    private List<SocioFilaImprimible> SociosOrdenados { get; set; } = new();
     private bool IsLoading { get; set; } = true;
     private bool IsGenerating { get; set; } = false;
     private DateTime FechaHoraArgentina { get; set; }
+    private int TotalSocios { get; set; }
+    private int SociosActivos { get; set; }
+    private int SociosInactivos { get; set; }
+    private int SociosPersonas { get; set; }
+    private int SociosEmpresas { get; set; }
+
+    private sealed class SocioFilaImprimible
+    {
+        public int NroSocio { get; set; }
+        public string NombreOMRazonSocial { get; set; } = "-";
+        public string DocumentoOCUIT { get; set; } = "Sin DNI/CUIT";
+        public string TipoCssClass { get; set; } = "empresa";
+        public string TipoTexto { get; set; } = "-";
+        public string ZonaTexto { get; set; } = "-";
+        public string FrecuenciaPagoTexto { get; set; } = "-";
+        public string DireccionTexto { get; set; } = "-";
+        public string DireccionCompleta { get; set; } = "Sin dirección";
+        public string TelefonoPrincipal { get; set; } = "Sin teléfono";
+        public string TelefonosTooltip { get; set; } = "Sin teléfonos registrados";
+        public string MontoCuotaTexto { get; set; } = "$0";
+        public string EstadoCssClass { get; set; } = string.Empty;
+        public string EstadoTexto { get; set; } = "-";
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -630,15 +640,18 @@ else
                 }
 
                 Socios = sociosFiltrados.ToList();
+                PrepararDatosImpresion();
             }
             else
             {
                 Socios = new List<Socio>();
+                PrepararDatosImpresion();
             }
         }
         catch (Exception)
         {
             Socios = new List<Socio>();
+            PrepararDatosImpresion();
         }
         finally
         {
@@ -648,14 +661,15 @@ else
 
     private async Task DescargarPdf()
     {
+        if (IsGenerating)
+            return;
+
         IsGenerating = true;
-        StateHasChanged();
 
         try
         {
-            await Task.Delay(100); // Pequeño delay para asegurar que el UI se actualice
             var nombreArchivo = $"ListaSocios_{FechaHoraArgentina:yyyyMMdd_HHmmss}.pdf";
-            await JSRuntime.InvokeVoidAsync("pdfExport.generatePdf", "pdf-content", nombreArchivo);
+            await JSRuntime.InvokeVoidAsync("pdfExport.generatePdfFast", "pdf-content", nombreArchivo);
         }
         catch (Exception ex)
         {
@@ -664,20 +678,20 @@ else
         finally
         {
             IsGenerating = false;
-            StateHasChanged();
         }
     }
 
     private async Task VistaPrevia()
     {
+        if (IsGenerating)
+            return;
+
         IsGenerating = true;
-        StateHasChanged();
 
         try
         {
-            await Task.Delay(100);
             var nombreArchivo = $"ListaSocios_{FechaHoraArgentina:yyyyMMdd_HHmmss}.pdf";
-            await JSRuntime.InvokeVoidAsync("pdfExport.generatePdfWithPreview", "pdf-content", nombreArchivo);
+            await JSRuntime.InvokeVoidAsync("pdfExport.generatePdfPreviewFast", "pdf-content", nombreArchivo);
         }
         catch (Exception ex)
         {
@@ -686,8 +700,57 @@ else
         finally
         {
             IsGenerating = false;
-            StateHasChanged();
         }
+    }
+
+    private void PrepararDatosImpresion()
+    {
+        var socios = Socios ?? new List<Socio>();
+
+        TotalSocios = socios.Count;
+        SociosActivos = socios.Count(s => s.EstadoSocio == TipoEstadoSocio.Activo);
+        SociosInactivos = socios.Count(s => s.EstadoSocio == TipoEstadoSocio.Inactivo);
+
+        var sociosParaConteo = IncluirInactivos ? socios : socios.Where(s => s.EstadoSocio != TipoEstadoSocio.Inactivo);
+        SociosPersonas = sociosParaConteo.Count(s => s.Tipo == Vista.Data.Enums.Discriminadores.TipoSocio.Persona);
+        SociosEmpresas = sociosParaConteo.Count(s => s.Tipo == Vista.Data.Enums.Discriminadores.TipoSocio.Empresa);
+
+        SociosOrdenados = socios
+            .OrderBy(s => s.NroSocio)
+            .Select(s => new SocioFilaImprimible
+            {
+                NroSocio = s.NroSocio,
+                NombreOMRazonSocial = GetNombreSocio(s),
+                DocumentoOCUIT = string.IsNullOrWhiteSpace(s.DocumentoOCUIT) ? "Sin DNI/CUIT" : s.DocumentoOCUIT,
+                TipoCssClass = s.Tipo == Vista.Data.Enums.Discriminadores.TipoSocio.Persona ? "persona" : "empresa",
+                TipoTexto = GetEnumDisplayName(s.Tipo),
+                ZonaTexto = GetZonaNumero(s.Zona),
+                FrecuenciaPagoTexto = GetEnumDisplayName(s.FrecuenciaDePago),
+                DireccionTexto = TruncateText(s.Direccion, 20),
+                DireccionCompleta = string.IsNullOrWhiteSpace(s.Direccion) ? "Sin dirección" : s.Direccion,
+                TelefonoPrincipal = GetTelefonoPrincipal(s.Telefono),
+                TelefonosTooltip = GetTelefonosTooltip(s.Telefono),
+                MontoCuotaTexto = $"${s.MontoCuota:N0}",
+                EstadoCssClass = GetEstadoClass(s.EstadoSocio),
+                EstadoTexto = GetEnumDisplayName(s.EstadoSocio)
+            })
+            .ToList();
+    }
+
+    private string GetNombreSocio(Socio socio)
+    {
+        if (socio.Tipo == Vista.Data.Enums.Discriminadores.TipoSocio.Persona)
+        {
+            var apellido = string.IsNullOrWhiteSpace(socio.Apellido) ? string.Empty : socio.Apellido.Trim();
+            var nombre = string.IsNullOrWhiteSpace(socio.Nombre) ? string.Empty : socio.Nombre.Trim();
+
+            if (!string.IsNullOrWhiteSpace(apellido) && !string.IsNullOrWhiteSpace(nombre))
+                return $"{apellido}, {nombre}";
+
+            return string.IsNullOrWhiteSpace(apellido) ? (string.IsNullOrWhiteSpace(nombre) ? "-" : nombre) : apellido;
+        }
+
+        return string.IsNullOrWhiteSpace(socio.Nombre) ? "-" : socio.Nombre;
     }
 
     private string GetEnumDisplayName<TEnum>(TEnum? enumValue) where TEnum : struct, Enum
@@ -737,5 +800,75 @@ else
     {
         if (string.IsNullOrEmpty(text)) return "-";
         return text.Length <= maxLength ? text : text.Substring(0, maxLength) + "...";
+    }
+
+    private string GetTelefonoPrincipal(string? telefono)
+    {
+        var telefonos = ObtenerTelefonosOrdenados(telefono);
+        return telefonos.FirstOrDefault() ?? "Sin teléfono";
+    }
+
+    private string GetTelefonosTooltip(string? telefono)
+    {
+        var telefonos = ObtenerTelefonosOrdenados(telefono);
+        return telefonos.Count > 0 ? string.Join(" | ", telefonos) : "Sin teléfonos registrados";
+    }
+
+    private List<string> ObtenerTelefonosOrdenados(string? telefono)
+    {
+        if (string.IsNullOrWhiteSpace(telefono))
+            return new List<string>();
+
+        var partes = telefono
+            .Replace("\r", "")
+            .Replace("\n", ";")
+            .Split(new[] { ';', ',', '|', '/' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Where(p => !string.IsNullOrWhiteSpace(p))
+            .ToList();
+
+        if (partes.Count == 0)
+            return new List<string>();
+
+        var telefonos = partes
+            .Select((valor, indice) => new
+            {
+                Valor = LimpiarTelefono(valor),
+                Prioridad = ObtenerPrioridadTelefono(valor),
+                IndiceOriginal = indice
+            })
+            .Where(x => !string.IsNullOrWhiteSpace(x.Valor))
+            .OrderBy(x => x.Prioridad)
+            .ThenBy(x => x.IndiceOriginal)
+            .Select(x => x.Valor)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+        return telefonos;
+    }
+
+    private static int ObtenerPrioridadTelefono(string valor)
+    {
+        var texto = valor.ToLowerInvariant();
+
+        if (texto.Contains("principal")) return 0;
+        if (texto.Contains("cel") || texto.Contains("móvil") || texto.Contains("movil") || texto.Contains("whatsapp")) return 1;
+        if (texto.Contains("fijo")) return 2;
+        if (texto.Contains("secundario") || texto.Contains("alternativo") || texto.Contains("otro")) return 4;
+
+        return 3;
+    }
+
+    private static string LimpiarTelefono(string valor)
+    {
+        var limpio = valor.Trim();
+        var indiceSeparador = limpio.IndexOf(':');
+
+        if (indiceSeparador >= 0 && indiceSeparador < limpio.Length - 1)
+        {
+            limpio = limpio[(indiceSeparador + 1)..].Trim();
+        }
+
+        limpio = Regex.Replace(limpio, @"\s+", " ");
+        return limpio;
     }
 }
