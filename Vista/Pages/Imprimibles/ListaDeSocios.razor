@@ -42,9 +42,11 @@
     }
 
     #pdf-content {
-        width: 190mm;
+        width: 100%;
+        max-width: 277mm;
         margin: 0 auto;
-        padding: 10px;
+        padding: 8px;
+        box-sizing: border-box;
         background: var(--white);
     }
 
@@ -178,8 +180,20 @@
     .pdf-table {
         width: 100%;
         border-collapse: collapse;
-        font-size: 9pt;
+        table-layout: fixed;
+        font-size: 8.3pt;
     }
+
+    .pdf-table col.col-nro { width: 6%; }
+    .pdf-table col.col-nombre { width: 18%; }
+    .pdf-table col.col-doc { width: 10%; }
+    .pdf-table col.col-tipo { width: 8%; }
+    .pdf-table col.col-zona { width: 4.5%; }
+    .pdf-table col.col-frecuencia { width: 10%; }
+    .pdf-table col.col-direccion { width: 21%; }
+    .pdf-table col.col-telefono { width: 8.5%; }
+    .pdf-table col.col-cuota { width: 6%; }
+    .pdf-table col.col-estado { width: 8%; }
 
     .pdf-table thead {
         background: var(--black);
@@ -190,9 +204,10 @@
         padding: 10px 6px;
         text-align: left;
         font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        font-size: 8pt;
+        text-transform: none;
+        letter-spacing: 0;
+        font-size: 7.8pt;
+        line-height: 1.2;
         border: 1px solid var(--black);
     }
 
@@ -209,6 +224,21 @@
         vertical-align: middle;
         border-left: 1px solid var(--border-gray);
         border-right: 1px solid var(--border-gray);
+        overflow-wrap: break-word;
+        word-break: normal;
+    }
+
+    .cell-nowrap {
+        white-space: nowrap;
+    }
+
+    .cell-wrap {
+        white-space: normal;
+        line-height: 1.25;
+    }
+
+    .cell-center {
+        text-align: center;
     }
 
     .pdf-table tbody tr:last-child td {
@@ -217,7 +247,11 @@
 
     .socio-number {
         font-weight: 700;
-        font-size: 10pt;
+        font-size: 8.6pt;
+        font-variant-numeric: tabular-nums;
+        display: inline-block;
+        min-width: 4ch;
+        text-align: center;
     }
 
     .socio-name {
@@ -226,10 +260,10 @@
 
     .socio-type {
         display: inline-block;
-        padding: 2px 6px;
-        font-size: 7pt;
+        padding: 1px 4px;
+        font-size: 6.8pt;
         font-weight: 600;
-        text-transform: uppercase;
+        text-transform: none;
         border: 1px solid var(--black);
     }
 
@@ -243,10 +277,10 @@
 
     .status-badge {
         display: inline-block;
-        padding: 2px 8px;
-        font-size: 7pt;
+        padding: 1px 6px;
+        font-size: 6.8pt;
         font-weight: 700;
-        text-transform: uppercase;
+        text-transform: none;
         border: 2px solid var(--black);
     }
 
@@ -265,10 +299,9 @@
 
     .zona-number {
         font-weight: 700;
-        font-size: 10pt;
+        font-size: 8.5pt;
         text-align: center;
-        display: inline-block;
-        min-width: 25px;
+        display: inline;
     }
 
     .cuota-info {
@@ -358,6 +391,27 @@
     }
 
     @@media print {
+        @@page {
+            size: A4 landscape;
+            margin: 8mm;
+        }
+
+        #pdf-content {
+            width: 100%;
+            max-width: 100%;
+            padding: 0;
+        }
+
+        .pdf-table th {
+            padding: 7px 4px;
+            font-size: 7.2pt;
+        }
+
+        .pdf-table td {
+            padding: 5px 4px;
+            font-size: 7.5pt;
+        }
+
         .action-buttons {
             display: none !important;
         }
@@ -476,42 +530,54 @@ else
         <!-- Table -->
         <div class="table-container">
             <table class="pdf-table">
+                <colgroup>
+                    <col class="col-nro" />
+                    <col class="col-nombre" />
+                    <col class="col-doc" />
+                    <col class="col-tipo" />
+                    <col class="col-zona" />
+                    <col class="col-frecuencia" />
+                    <col class="col-direccion" />
+                    <col class="col-telefono" />
+                    <col class="col-cuota" />
+                    <col class="col-estado" />
+                </colgroup>
                 <thead>
                     <tr>
-                        <th>N°</th>
-                        <th>Nombre / Razón Social</th>
-                        <th>DNI/CUIT</th>
-                        <th>Tipo</th>
-                        <th>Zona</th>
-                        <th>Frecuencia de Pago</th>
-                        <th>Dirección principal</th>
-                        <th>Teléfono</th>
-                        <th>Cuota</th>
-                        <th>Estado</th>
+                        <th class="cell-nowrap cell-center">N°</th>
+                        <th class="cell-wrap">Nombre / Razón Social</th>
+                        <th class="cell-nowrap">DNI/CUIT</th>
+                        <th class="cell-nowrap cell-center">Tipo</th>
+                        <th class="cell-nowrap cell-center">Zona</th>
+                        <th class="cell-wrap">Frecuencia de Pago</th>
+                        <th class="cell-wrap">Dirección principal</th>
+                        <th class="cell-wrap">Teléfono</th>
+                        <th class="cell-nowrap">Cuota</th>
+                        <th class="cell-nowrap cell-center">Estado</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var socio in SociosOrdenados)
                     {
                         <tr>
-                            <td><span class="socio-number">@socio.NroSocio</span></td>
-                            <td>
+                            <td class="cell-nowrap cell-center"><span class="socio-number">@socio.NroSocio</span></td>
+                            <td class="cell-wrap">
                                 <span class="socio-name">@socio.NombreOMRazonSocial</span>
                             </td>
-                            <td>@socio.DocumentoOCUIT</td>
-                            <td>
+                            <td class="cell-nowrap">@socio.DocumentoOCUIT</td>
+                            <td class="cell-nowrap cell-center">
                                 <span class="socio-type @socio.TipoCssClass">
                                     @socio.TipoTexto
                                 </span>
                             </td>
-                            <td>
+                            <td class="cell-nowrap cell-center">
                                 <span class="zona-number">@socio.ZonaTexto</span>
                             </td>
-                            <td class="contact-info">@socio.FrecuenciaPagoTexto</td>
-                            <td class="contact-info" title="@socio.DireccionCompleta">@socio.DireccionTexto</td>
-                            <td class="contact-info" title="@socio.TelefonosTooltip">@socio.TelefonoPrincipal</td>
-                            <td class="cuota-info">@socio.MontoCuotaTexto</td>
-                            <td>
+                            <td class="contact-info cell-wrap">@socio.FrecuenciaPagoTexto</td>
+                            <td class="contact-info cell-wrap" title="@socio.DireccionCompleta">@socio.DireccionTexto</td>
+                            <td class="contact-info cell-wrap" title="@socio.TelefonosTooltip">@socio.TelefonoPrincipal</td>
+                            <td class="cuota-info cell-nowrap">@socio.MontoCuotaTexto</td>
+                            <td class="cell-nowrap cell-center">
                                 <span class="status-badge @socio.EstadoCssClass">
                                     @socio.EstadoTexto
                                 </span>
@@ -669,7 +735,7 @@ else
         try
         {
             var nombreArchivo = $"ListaSocios_{FechaHoraArgentina:yyyyMMdd_HHmmss}.pdf";
-            await JSRuntime.InvokeVoidAsync("pdfExport.generatePdfFast", "pdf-content", nombreArchivo);
+            await JSRuntime.InvokeVoidAsync("pdfExport.generatePdfFast", "pdf-content", nombreArchivo, "landscape");
         }
         catch (Exception ex)
         {
@@ -691,7 +757,7 @@ else
         try
         {
             var nombreArchivo = $"ListaSocios_{FechaHoraArgentina:yyyyMMdd_HHmmss}.pdf";
-            await JSRuntime.InvokeVoidAsync("pdfExport.generatePdfPreviewFast", "pdf-content", nombreArchivo);
+            await JSRuntime.InvokeVoidAsync("pdfExport.generatePdfPreviewFast", "pdf-content", nombreArchivo, "landscape");
         }
         catch (Exception ex)
         {
@@ -726,7 +792,7 @@ else
                 TipoTexto = GetEnumDisplayName(s.Tipo),
                 ZonaTexto = GetZonaNumero(s.Zona),
                 FrecuenciaPagoTexto = GetEnumDisplayName(s.FrecuenciaDePago),
-                DireccionTexto = TruncateText(s.Direccion, 20),
+                DireccionTexto = string.IsNullOrWhiteSpace(s.Direccion) ? "-" : s.Direccion.Trim(),
                 DireccionCompleta = string.IsNullOrWhiteSpace(s.Direccion) ? "Sin dirección" : s.Direccion,
                 TelefonoPrincipal = GetTelefonoPrincipal(s.Telefono),
                 TelefonosTooltip = GetTelefonosTooltip(s.Telefono),

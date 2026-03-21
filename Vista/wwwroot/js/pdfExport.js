@@ -1,6 +1,6 @@
 // Módulo para exportar HTML a PDF usando html2pdf.js
 window.pdfExport = {
-    generatePdfFast: async function (elementId, fileName) {
+    generatePdfFast: async function (elementId, fileName, orientation) {
         const element = document.getElementById(elementId);
         if (!element) {
             console.error('Elemento no encontrado:', elementId);
@@ -15,6 +15,7 @@ window.pdfExport = {
             }
 
             const title = fileName || 'documento.pdf';
+            const pageOrientation = orientation === 'landscape' ? 'landscape' : 'portrait';
             const styles = Array.from(document.querySelectorAll('style, link[rel="stylesheet"]'))
                 .map(style => style.outerHTML)
                 .join('');
@@ -26,7 +27,7 @@ window.pdfExport = {
                     <title>${title}</title>
                     ${styles}
                     <style>
-                        @page { size: A4; margin: 10mm; }
+                        @page { size: A4 ${pageOrientation}; margin: 8mm; }
                         body { margin: 0; }
                     </style>
                 </head>
@@ -49,7 +50,7 @@ window.pdfExport = {
         }
     },
 
-    generatePdfPreviewFast: async function (elementId, fileName) {
+    generatePdfPreviewFast: async function (elementId, fileName, orientation) {
         const element = document.getElementById(elementId);
         if (!element) {
             console.error('Elemento no encontrado:', elementId);
@@ -64,6 +65,7 @@ window.pdfExport = {
             }
 
             const title = fileName || 'documento.pdf';
+            const pageOrientation = orientation === 'landscape' ? 'landscape' : 'portrait';
             const styles = Array.from(document.querySelectorAll('style, link[rel="stylesheet"]'))
                 .map(style => style.outerHTML)
                 .join('');
@@ -75,7 +77,7 @@ window.pdfExport = {
                     <title>${title}</title>
                     ${styles}
                     <style>
-                        @page { size: A4; margin: 10mm; }
+                        @page { size: A4 ${pageOrientation}; margin: 8mm; }
                         body { margin: 0; background: #f0f0f0; }
                         #pdf-content { margin-top: 10px; margin-bottom: 20px; }
                     </style>
@@ -135,12 +137,14 @@ window.pdfExport = {
         }
     },
 
-    generatePdfWithPreview: async function (elementId, fileName) {
+    generatePdfWithPreview: async function (elementId, fileName, orientation) {
         const element = document.getElementById(elementId);
         if (!element) {
             console.error('Elemento no encontrado:', elementId);
             return false;
         }
+
+        const pageOrientation = orientation === 'landscape' ? 'landscape' : 'portrait';
 
         const options = {
             margin: [10, 10, 15, 10], // top, left, bottom, right
@@ -157,7 +161,7 @@ window.pdfExport = {
             jsPDF: {
                 unit: 'mm',
                 format: 'a4',
-                orientation: 'portrait'
+                orientation: pageOrientation
             },
             pagebreak: {
                 mode: ['css', 'legacy'],
