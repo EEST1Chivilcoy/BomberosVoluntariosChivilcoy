@@ -283,11 +283,11 @@ else
     private sealed class FilaCobranzaImprimible
     {
         public int NroSocio { get; set; }
-        public string NombreCompleto { get; set; } = "-";
-        public string Telefono { get; set; } = "Sin teléfono";
-        public string DireccionPrincipal { get; set; } = "-";
-        public string DireccionSecundaria { get; set; } = "-";
-        public string NotaCobrador { get; set; } = "-";
+        public string NombreCompleto { get; set; } = string.Empty;
+        public string Telefono { get; set; } = string.Empty;
+        public string DireccionPrincipal { get; set; } = string.Empty;
+        public string DireccionSecundaria { get; set; } = string.Empty;
+        public string NotaCobrador { get; set; } = string.Empty;
         public string[] CeldasMes { get; set; } = new string[12];
     }
 
@@ -339,10 +339,10 @@ else
                 {
                     NroSocio = socio.NroSocio,
                     NombreCompleto = ObtenerNombreSocio(socio),
-                    Telefono = LimpiarTexto(socio.Telefono, "Sin teléfono"),
-                    DireccionPrincipal = LimpiarTexto(socio.Direccion, "-"),
-                    DireccionSecundaria = LimpiarTexto(socio.DireccionSecundaria, "-"),
-                    NotaCobrador = LimpiarTexto(socio.NotaAdicional, "-")
+                    Telefono = LimpiarTexto(socio.Telefono),
+                    DireccionPrincipal = LimpiarTexto(socio.Direccion),
+                    DireccionSecundaria = LimpiarTexto(socio.DireccionSecundaria),
+                    NotaCobrador = LimpiarTexto(socio.NotaAdicional)
                 };
 
                 for (var mes = 1; mes <= 12; mes++)
@@ -423,16 +423,16 @@ else
             }
 
             return string.IsNullOrWhiteSpace(apellido)
-                ? (string.IsNullOrWhiteSpace(nombre) ? "-" : nombre)
+                ? (string.IsNullOrWhiteSpace(nombre) ? string.Empty : nombre)
                 : apellido;
         }
 
-        return string.IsNullOrWhiteSpace(socio.Nombre) ? "-" : socio.Nombre.Trim();
+        return string.IsNullOrWhiteSpace(socio.Nombre) ? string.Empty : socio.Nombre.Trim();
     }
 
-    private static string LimpiarTexto(string? valor, string porDefecto)
+    private static string LimpiarTexto(string? valor)
     {
-        return string.IsNullOrWhiteSpace(valor) ? porDefecto : valor.Trim();
+        return string.IsNullOrWhiteSpace(valor) ? string.Empty : valor.Trim();
     }
 
     private static Zona ConvertirZonaParametro(int zonaParam)
