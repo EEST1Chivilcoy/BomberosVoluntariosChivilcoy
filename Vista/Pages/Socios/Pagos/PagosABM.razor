@@ -14,6 +14,7 @@
 @inject ISocioService SocioService
 @inject ICobradorService CobradorService
 @inject IMessageService MessageService
+@inject NavigationManager navigationManager
 
 @page "/fire-force/socios/pagos"
 
@@ -36,102 +37,102 @@
         --abm-gold-color: #FFD700;
     }
 
-    .pagos-abm .licenses-container {
-        padding: 12px !important;
-        min-height: 100vh !important;
-    }
+        .pagos-abm .licenses-container {
+            padding: 12px !important;
+            min-height: 100vh !important;
+        }
 
-    .pagos-abm .main-card {
-        background: rgba(255, 255, 255, 0.95) !important;
-        backdrop-filter: blur(10px) !important;
-        border-radius: 16px !important;
-        box-shadow: 0 8px 32px rgba(166, 51, 51, 0.1), 0 4px 16px rgba(0, 0, 0, 0.05) !important;
-        border: 1px solid rgba(255, 255, 255, 0.2) !important;
-        overflow: hidden !important;
-    }
+        .pagos-abm .main-card {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(10px) !important;
+            border-radius: 16px !important;
+            box-shadow: 0 8px 32px rgba(166, 51, 51, 0.1), 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            overflow: hidden !important;
+        }
 
-    .pagos-abm .header-section {
-        background: linear-gradient(135deg, #A63333 0%, #732D2D 100%) !important;
-        color: white !important;
-        padding: 28px !important;
-        position: relative !important;
-        overflow: hidden !important;
-    }
+        .pagos-abm .header-section {
+            background: linear-gradient(135deg, #A63333 0%, #732D2D 100%) !important;
+            color: white !important;
+            padding: 28px !important;
+            position: relative !important;
+            overflow: hidden !important;
+        }
 
-    .pagos-abm .header-section::before {
-        content: '';
-        display: none;
-    }
+            .pagos-abm .header-section::before {
+                content: '';
+                display: none;
+            }
 
-    .pagos-abm .header-section .lava-bubbles {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-        z-index: 1;
-        overflow: hidden;
-    }
+            .pagos-abm .header-section .lava-bubbles {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                z-index: 1;
+                overflow: hidden;
+            }
 
-    .pagos-abm .header-section .lava-bubble {
-        position: absolute;
-        border-radius: 50%;
-        opacity: 0.45;
-        background: radial-gradient(circle at 60% 40%, #FFD54F 0%, #F9A825 80%, transparent 100%);
-        animation: lava-bubble-move 8s linear infinite;
-        filter: blur(1.5px);
-        mix-blend-mode: lighten;
-    }
+            .pagos-abm .header-section .lava-bubble {
+                position: absolute;
+                border-radius: 50%;
+                opacity: 0.45;
+                background: radial-gradient(circle at 60% 40%, #FFD54F 0%, #F9A825 80%, transparent 100%);
+                animation: lava-bubble-move 8s linear infinite;
+                filter: blur(1.5px);
+                mix-blend-mode: lighten;
+            }
 
-    .pagos-abm .header-section .lava-bubble.b1 {
-        left: 10%;
-        width: 60px;
-        height: 60px;
-        bottom: -70px;
-        animation-delay: 0s;
-        animation-duration: 7.5s;
-    }
+                .pagos-abm .header-section .lava-bubble.b1 {
+                    left: 10%;
+                    width: 60px;
+                    height: 60px;
+                    bottom: -70px;
+                    animation-delay: 0s;
+                    animation-duration: 7.5s;
+                }
 
-    .pagos-abm .header-section .lava-bubble.b2 {
-        left: 35%;
-        width: 90px;
-        height: 90px;
-        bottom: -100px;
-        animation-delay: 2s;
-        animation-duration: 9s;
-        background: radial-gradient(circle at 60% 40%, #FFEB3B 0%, #FFD54F 80%, transparent 100%);
-    }
+                .pagos-abm .header-section .lava-bubble.b2 {
+                    left: 35%;
+                    width: 90px;
+                    height: 90px;
+                    bottom: -100px;
+                    animation-delay: 2s;
+                    animation-duration: 9s;
+                    background: radial-gradient(circle at 60% 40%, #FFEB3B 0%, #FFD54F 80%, transparent 100%);
+                }
 
-    .pagos-abm .header-section .lava-bubble.b3 {
-        left: 65%;
-        width: 50px;
-        height: 50px;
-        bottom: -60px;
-        animation-delay: 1.5s;
-        animation-duration: 6.5s;
-        background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #FFD54F 80%, transparent 100%);
-    }
+                .pagos-abm .header-section .lava-bubble.b3 {
+                    left: 65%;
+                    width: 50px;
+                    height: 50px;
+                    bottom: -60px;
+                    animation-delay: 1.5s;
+                    animation-duration: 6.5s;
+                    background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #FFD54F 80%, transparent 100%);
+                }
 
-    .pagos-abm .header-section .lava-bubble.b4 {
-        left: 80%;
-        width: 70px;
-        height: 70px;
-        bottom: -80px;
-        animation-delay: 3.2s;
-        animation-duration: 8.5s;
-        background: radial-gradient(circle at 60% 40%, #F9A825 0%, #FFD54F 80%, transparent 100%);
-    }
+                .pagos-abm .header-section .lava-bubble.b4 {
+                    left: 80%;
+                    width: 70px;
+                    height: 70px;
+                    bottom: -80px;
+                    animation-delay: 3.2s;
+                    animation-duration: 8.5s;
+                    background: radial-gradient(circle at 60% 40%, #F9A825 0%, #FFD54F 80%, transparent 100%);
+                }
 
-    .pagos-abm .header-section .lava-bubble.b5 {
-        left: 55%;
-        width: 40px;
-        height: 40px;
-        bottom: -50px;
-        animation-delay: 5s;
-        animation-duration: 7.2s;
-        background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #F9A825 80%, transparent 100%);
-    }
+                .pagos-abm .header-section .lava-bubble.b5 {
+                    left: 55%;
+                    width: 40px;
+                    height: 40px;
+                    bottom: -50px;
+                    animation-delay: 5s;
+                    animation-duration: 7.2s;
+                    background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #F9A825 80%, transparent 100%);
+                }
 
     @@keyframes lava-bubble-move {
         0% {
@@ -251,10 +252,10 @@
         padding: 0 20px !important;
     }
 
-    .pagos-abm .add-button:hover {
-        transform: translateY(-2px) !important;
-        box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4) !important;
-    }
+        .pagos-abm .add-button:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4) !important;
+        }
 
     .pagos-abm .print-button {
         background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%) !important;
@@ -264,10 +265,10 @@
         padding: 0 20px !important;
     }
 
-    .pagos-abm .print-button:hover {
-        transform: translateY(-2px) !important;
-        box-shadow: 0 6px 20px rgba(24, 144, 255, 0.4) !important;
-    }
+        .pagos-abm .print-button:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 20px rgba(24, 144, 255, 0.4) !important;
+        }
 
     .pagos-abm .notification-button {
         background: rgba(255, 255, 255, 0.2) !important;
@@ -282,10 +283,10 @@
         transition: all 0.3s ease !important;
     }
 
-    .pagos-abm .notification-button:hover {
-        background: rgba(255, 255, 255, 0.3) !important;
-        transform: scale(1.1) !important;
-    }
+        .pagos-abm .notification-button:hover {
+            background: rgba(255, 255, 255, 0.3) !important;
+            transform: scale(1.1) !important;
+        }
 
     .pagos-abm .table-container {
         padding: 0 !important;
@@ -295,11 +296,11 @@
         scrollbar-width: none;
     }
 
-    .pagos-abm .table-container::-webkit-scrollbar {
-        width: 0px;
-        height: 0px;
-        display: none;
-    }
+        .pagos-abm .table-container::-webkit-scrollbar {
+            width: 0px;
+            height: 0px;
+            display: none;
+        }
 
     .pagos-abm .status-badge {
         padding: 6px 12px !important;
@@ -357,10 +358,10 @@
         padding: 16px !important;
     }
 
-    .pagos-abm :deep(.ant-table-thead > tr > th):hover {
-        background: #ececec9d !important;
-        color: #fff !important;
-    }
+        .pagos-abm :deep(.ant-table-thead > tr > th):hover {
+            background: #ececec9d !important;
+            color: #fff !important;
+        }
 
     .pagos-abm :deep(.ant-table-cell) {
         padding: 16px !important;
@@ -407,10 +408,10 @@
         transition: all 0.3s ease !important;
     }
 
-    .pagos-abm .detail-item:hover {
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
-        transform: translateY(-2px) !important;
-    }
+        .pagos-abm .detail-item:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+            transform: translateY(-2px) !important;
+        }
 
     .pagos-abm .detail-label {
         font-weight: 700 !important;
@@ -431,10 +432,10 @@
         grid-column: 1 / -1 !important;
     }
 
-    .pagos-abm .detail-description .detail-value {
-        min-height: 60px !important;
-        line-height: 1.5 !important;
-    }
+        .pagos-abm .detail-description .detail-value {
+            min-height: 60px !important;
+            line-height: 1.5 !important;
+        }
 
     .pagos-abm .loading-spinner {
         display: flex !important;
@@ -594,31 +595,31 @@
         padding-left: 10px;
     }
 
-    .modal-crear-pago-form-item::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        height: 100%;
-        width: 3px;
-        border-radius: 5px;
-    }
+        .modal-crear-pago-form-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            border-radius: 5px;
+        }
 
-    .modal-crear-pago-form-item .ant-form-item-label > label,
-    .modal-crear-pago-form-full-width .ant-form-item-label > label {
-        font-weight: 600;
-        color: #434343;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 14px;
-        transition: color 0.3s ease;
-    }
+        .modal-crear-pago-form-item .ant-form-item-label > label,
+        .modal-crear-pago-form-full-width .ant-form-item-label > label {
+            font-weight: 600;
+            color: #434343;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
 
-    .modal-crear-pago-form-item .ant-form-item-label > label:hover,
-    .modal-crear-pago-form-full-width .ant-form-item-label > label:hover {
-        color: #A63333;
-    }
+            .modal-crear-pago-form-item .ant-form-item-label > label:hover,
+            .modal-crear-pago-form-full-width .ant-form-item-label > label:hover {
+                color: #A63333;
+            }
 
     .modal-crear-pago .ant-input:focus,
     .modal-crear-pago .ant-input:hover,
@@ -667,10 +668,10 @@
         padding: 0 20px !important;
     }
 
-    .modal-crear-pago .ant-btn-primary:hover {
-        background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
-        color: #fff !important;
-    }
+        .modal-crear-pago .ant-btn-primary:hover {
+            background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
+            color: #fff !important;
+        }
 
     .modal-imprimir-pago .ant-modal-content {
         border-radius: 14px;
@@ -749,6 +750,64 @@
         line-height: 1.3;
         white-space: normal;
     }
+
+    .print-modal-option {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px;
+        border: 2px solid #e8e8e8;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-bottom: 12px;
+    }
+
+        .print-modal-option:hover {
+            border-color: #A63333;
+            background-color: #fff5f5;
+        }
+
+        .print-modal-option.selected {
+            border-color: #A63333;
+            background-color: #fff5f5;
+        }
+
+        .print-modal-option .option-icon {
+            font-size: 28px;
+            color: #A63333;
+        }
+
+        .print-modal-option .option-text h4 {
+            margin: 0 0 4px 0;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .print-modal-option .option-text p {
+            margin: 0;
+            color: #666;
+            font-size: 13px;
+        }
+
+    .print-modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 24px;
+        padding-top: 16px;
+        border-top: 1px solid #f0f0f0;
+    }
+
+    .print-confirm-button {
+        background: linear-gradient(135deg, #A63333 0%, #732D2D 100%) !important;
+        border: none !important;
+        color: white !important;
+    }
+
+        .print-confirm-button:hover {
+            background: linear-gradient(135deg, #732D2D 0%, #5a2323 100%) !important;
+        }
 
     @@media (max-width: 767px) {
         .modal-imprimir-options {
@@ -843,9 +902,9 @@
             </div>
 
             <div class="table-container">
-                  <Table DataSource="PagosFiltrados"
-                      HidePagination="false"
-                      Responsive
+                <Table DataSource="PagosFiltrados"
+                       HidePagination="false"
+                       Responsive
                        TItem="PagoViewModel"
                        RowClassName="@(c => c.Data.Estado.ToString())"
                        OnRow="@OnRowClick"
@@ -950,9 +1009,9 @@
                                 AllowClear
                                 EnableSearch
                                 Size="InputSize.Large">
-                                <ItemTemplate Context="socioCtx">
-                                    <span>@socioCtx.Nombre @socioCtx.Apellido - (Nº @socioCtx.NroSocio)</span>
-                                </ItemTemplate>
+                            <ItemTemplate Context="socioCtx">
+                                <span>@socioCtx.Nombre @socioCtx.Apellido - (Nº @socioCtx.NroSocio)</span>
+                            </ItemTemplate>
                         </Select>
                     </FormItem>
                 </AntDesign.Col>
@@ -969,9 +1028,9 @@
                                 AllowClear
                                 EnableSearch
                                 Size="InputSize.Large">
-                                <ItemTemplate Context="cobCtx">
-                                    <span>@cobCtx.Nombre @cobCtx.Apellido</span>
-                                </ItemTemplate>
+                            <ItemTemplate Context="cobCtx">
+                                <span>@cobCtx.Nombre @cobCtx.Apellido</span>
+                            </ItemTemplate>
                         </Select>
                     </FormItem>
                 </AntDesign.Col>
@@ -980,7 +1039,7 @@
             <Row Gutter="16">
                 <AntDesign.Col Span="12">
                     <FormItem Label="💵 Monto" Required>
-                         <AntDesign.InputNumber @bind-Value="@nuevoPago.Monto"
+                        <AntDesign.InputNumber @bind-Value="@nuevoPago.Monto"
                                                Min="1"
                                                Size="InputSize.Large"
                                                Style="width: 100%;" />
@@ -1041,6 +1100,48 @@
     </div>
 </Modal>
 
+<Modal Title="Imprimir Lista de Cobranza"
+       Footer="null"
+       Centered="@true"
+       OnCancel="@(() => _modalParametrosCobranzaVisible = false)"
+       Visible="@_modalParametrosCobranzaVisible"
+       Width="500">
+    <div style="padding: 16px;">
+        <h4 style="text-align: center; margin-bottom: 24px; color: #A63333; font-weight: 600;">
+            <Icon Type="printer" style="margin-right: 8px;" />
+            Seleccione Zona y Año
+        </h4>
+
+        <div style="margin-bottom: 20px;">
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <label style="font-weight: 600; color: #333;">Año de Cobranza</label>
+                <AntDesign.InputNumber @bind-Value="selectedAnio" Min="2000" Max="2100" Style="width: 100%; height: 40px; font-size: 16px; border-radius: 8px;" />
+            </div>
+        </div>
+
+        @foreach (var zona in GetZonasDisponibles())
+        {
+            <div class="print-modal-option @(selectedPrintZona == zona ? "selected" : "")"
+                 @onclick="() => SelectPrintZona(zona)">
+                <Icon Type="environment" Class="option-icon" />
+                <div class="option-text">
+                    <h4>@zona.GetDisplayName()</h4>
+                    <p>Imprimir solo pagos de esta zona</p>
+                </div>
+            </div>
+        }
+
+        <div class="print-modal-actions">
+            <Button OnClick="@(() => _modalParametrosCobranzaVisible = false)">
+                Cancelar
+            </Button>
+            <Button Type="ButtonType.Primary" Class="print-confirm-button" OnClick="ConfirmPrintCobranza">
+                <Icon Type="printer" /> Imprimir
+            </Button>
+        </div>
+    </div>
+</Modal>
+
 @* Modal de detalle *@
 <Modal @bind-Visible="_modalDetalleVisible"
        Title="@($"📋 Detalle de Pago - {pagoSeleccionado?.NombreSocio}")"
@@ -1065,9 +1166,9 @@
                     <div class="detail-item">
                         <div class="detail-label">💵 Monto</div>
                         <div class="detail-value">
-                             <Tag Color="TagColor.Processing" Style="font-size: 1rem; padding: 4px 12px;">
-                                 @pagoSeleccionado.Monto.ToString("C2")
-                             </Tag>
+                            <Tag Color="TagColor.Processing" Style="font-size: 1rem; padding: 4px 12px;">
+                                @pagoSeleccionado.Monto.ToString("C2")
+                            </Tag>
                         </div>
                     </div>
 
@@ -1154,6 +1255,9 @@
     // Modal forms
     private bool _modalAñadirVisible = false;
     private bool _modalImprimirVisible = false;
+    private bool _modalParametrosCobranzaVisible = false;
+    private Zona? selectedPrintZona = null;
+    private int selectedAnio = DateTime.Now.Year;
     private bool _modalDetalleVisible = false;
     private PagoViewModel? pagoSeleccionado;
 
@@ -1275,10 +1379,29 @@
         _modalImprimirVisible = false;
     }
 
-    private async Task ImprimirListaCobranza()
+    private void ImprimirListaCobranza()
     {
-        await MessageService.SuccessAsync("🖨️ Imprimir Lista Cobranza ejecutado.");
         _modalImprimirVisible = false;
+        _modalParametrosCobranzaVisible = true;
+    }
+
+    private IEnumerable<Zona> GetZonasDisponibles()
+    {
+        return new[] { Zona.Zona1, Zona.Zona2, Zona.Zona3, Zona.Zona4, Zona.Zona5 };
+    }
+
+    private void SelectPrintZona(Zona? zona)
+    {
+        selectedPrintZona = zona;
+    }
+
+    private void ConfirmPrintCobranza()
+    {
+        int zonaParam = selectedPrintZona.HasValue ? (int)selectedPrintZona.Value : (int)Zona.Ninguna;
+        string url = $"/fire-force/socios/imprimibles/lista-cobranza-anual/{selectedAnio}/{zonaParam}";
+
+        navigationManager.NavigateTo(url, forceLoad: true);
+        _modalParametrosCobranzaVisible = false;
     }
 
     private static PagoViewModel MapToViewModel(PagoSocio pago)
