@@ -59,6 +59,20 @@ namespace Vista.Services
         Task<List<PagoSocio>> ObtenerPagosConfirmadosPorSocioAsync(int socioId);
 
         /// <summary>
+        /// Obtiene los pagos de socios filtrados por año y zona.
+        /// </summary>
+        /// <param name="anio">Año a filtrar.</param>
+        /// <param name="zona">Zona a filtrar.</param>
+        /// <param name="soloConfirmados">Indica si se deben incluir solo pagos confirmados.</param>
+        /// <param name="incluirSocio">Indica si se debe incluir la navegación al socio.</param>
+        /// <returns>Lista de pagos que cumplen el filtro.</returns>
+        Task<List<PagoSocio>> ObtenerPagosPorAnioYZonaAsync(
+            int anio,
+            Zona zona,
+            bool soloConfirmados = true,
+            bool incluirSocio = true);
+
+        /// <summary>
         /// Calcula el total de pagos confirmados de un socio.
         /// </summary>
         /// <param name="socioId">Identificador único del socio.</param>
@@ -186,6 +200,39 @@ namespace Vista.Services
         {
             return await _context.PagoSocio
                 .Where(p => p.SocioId == socioId && p.Estado == EstadoPago.Confirmado)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        public async Task<List<PagoSocio>> ObtenerPagosPorAnioYZonaAsync(
+            int anio,
+            Zona zona,
+            bool soloConfirmados = true,
+            bool incluirSocio = true)
+        {
+            if (zona == Zona.Ninguna)
+            {
+                return new List<PagoSocio>();
+            }
+
+            var inicio = new DateTime(anio, 1, 1);
+            var fin = inicio.AddYears(1);
+
+            var query = _context.PagoSocio
+                .Where(p => p.Fecha >= inicio && p.Fecha < fin)
+                .Where(p => p.Socio.Zona.HasValue && p.Socio.Zona.Value.HasFlag(zona));
+
+            if (soloConfirmados)
+            {
+                query = query.Where(p => p.Estado == EstadoPago.Confirmado);
+            }
+
+            if (incluirSocio)
+            {
+                query = query.Include(p => p.Socio);
+            }
+
+            return await query
                 .AsNoTracking()
                 .ToListAsync();
         }
