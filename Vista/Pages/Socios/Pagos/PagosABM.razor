@@ -18,7 +18,7 @@
 @page "/fire-force/socios/pagos"
 
 @using Microsoft.AspNetCore.Authorization
-@attribute [Authorize(Policy = "AdminOnly")]
+@attribute [Authorize(Policy = "SecretariaOrAdmin")]
 
 <style>
     /* Variables CSS para colores principales - Prefijo para evitar conflictos */
