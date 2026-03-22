@@ -6,13 +6,9 @@
 @using Vista.Data.Enums.Discriminadores
 @using Vista.Data.Enums.Socios
 @using Vista.Data.Models.Socios
-@using Vista.Data.Models.Socios.Componentes
 @using Microsoft.JSInterop
-@using System.Globalization
 
 @inject ISocioService SocioService
-@inject IPagoService PagoService
-@inject IHistorialSocioService HistorialSocioService
 @inject IJSRuntime JSRuntime
 
 <PageTitle>Lista de Cobranza Anual - Bomberos Voluntarios de Chivilcoy</PageTitle>
@@ -107,6 +103,12 @@
 
     .cell-center {
         text-align: center;
+    }
+
+    .casilla-cell {
+        font-size: 9pt;
+        font-weight: 700;
+        line-height: 1;
     }
 
     .cell-right {
@@ -217,9 +219,10 @@ else
                     <col style="width:12%;" />
                     <col style="width:12%;" />
                     <col style="width:10%;" />
+                    <col style="width:8%;" />
                     @for (int i = 0; i < 12; i++)
                     {
-                        <col style="width:2.65%;" />
+                        <col style="width:2.45%;" />
                     }
                 </colgroup>
                 <thead>
@@ -230,6 +233,7 @@ else
                         <th>Dirección principal</th>
                         <th>Dirección secundaria</th>
                         <th>Nota cobrador</th>
+                        <th>Frecuencia pago</th>
                         @for (int mes = 1; mes <= 12; mes++)
                         {
                             <th>@AbreviarMes(mes)</th>
@@ -246,9 +250,10 @@ else
                             <td>@fila.DireccionPrincipal</td>
                             <td>@fila.DireccionSecundaria</td>
                             <td>@fila.NotaCobrador</td>
+                            <td class="cell-center">@fila.FrecuenciaPago</td>
                             @for (int mes = 1; mes <= 12; mes++)
                             {
-                                <td class="cell-center">@fila.CeldasMes[mes - 1]</td>
+                                <td class="cell-center casilla-cell">@fila.CeldasMes[mes - 1]</td>
                             }
                         </tr>
                     }
@@ -288,6 +293,7 @@ else
         public string DireccionPrincipal { get; set; } = string.Empty;
         public string DireccionSecundaria { get; set; } = string.Empty;
         public string NotaCobrador { get; set; } = string.Empty;
+        public string FrecuenciaPago { get; set; } = string.Empty;
         public string[] CeldasMes { get; set; } = new string[12];
     }
 
@@ -314,23 +320,6 @@ else
                     .OrderBy(s => s.NroSocio)
                     .ToList();
 
-            var pagosAnioZona = await PagoService.ObtenerPagosPorAnioYZonaAsync(
-                anio: Anio,
-                zona: zonaFiltro,
-                soloConfirmados: true,
-                incluirSocio: false);
-
-            var pagosPorSocioYMes = pagosAnioZona
-                .GroupBy(p => (p.SocioId, Mes: p.Fecha.Month))
-                .ToDictionary(g => g.Key, g => g.Sum(x => (decimal)x.Monto));
-
-            var socioIds = sociosZona.Select(s => s.Id).ToList();
-            var historialCuotasMasivo = socioIds.Count == 0
-                ? new Dictionary<int, List<MovimientoCambioCuota>>()
-                : await HistorialSocioService.ObtenerHistorialCuotasMasivo(socioIds);
-
-            var cuotasVigentesPorSocioYMes = ConstruirCuotasVigentesPorSocioYMes(historialCuotasMasivo);
-
             Filas = new List<FilaCobranzaImprimible>(sociosZona.Count);
 
             foreach (var socio in sociosZona)
@@ -342,14 +331,13 @@ else
                     Telefono = LimpiarTexto(socio.Telefono),
                     DireccionPrincipal = LimpiarTexto(socio.Direccion),
                     DireccionSecundaria = LimpiarTexto(socio.DireccionSecundaria),
-                    NotaCobrador = LimpiarTexto(socio.NotaAdicional)
+                    NotaCobrador = LimpiarTexto(socio.NotaAdicional),
+                    FrecuenciaPago = ObtenerFrecuenciaPagoTexto(socio.FrecuenciaDePago)
                 };
 
                 for (var mes = 1; mes <= 12; mes++)
                 {
-                    var montoPagado = pagosPorSocioYMes.GetValueOrDefault((socio.Id, mes), 0m);
-                    var cuotaVigente = cuotasVigentesPorSocioYMes.GetValueOrDefault((socio.Id, mes), 0m);
-                    fila.CeldasMes[mes - 1] = ResolverValorCasilla(montoPagado, cuotaVigente);
+                    fila.CeldasMes[mes - 1] = DebeMostrarCasilla(socio.FrecuenciaDePago, mes) ? "☐" : string.Empty;
                 }
 
                 Filas.Add(fila);
@@ -365,49 +353,28 @@ else
         }
     }
 
-    private Dictionary<(int SocioId, int Mes), decimal> ConstruirCuotasVigentesPorSocioYMes(
-        Dictionary<int, List<MovimientoCambioCuota>> historialCuotasMasivo)
+    private static string ObtenerFrecuenciaPagoTexto(FrecuenciaPago? frecuenciaPago)
     {
-        var resultado = new Dictionary<(int SocioId, int Mes), decimal>();
-
-        foreach (var (socioId, historialCuotas) in historialCuotasMasivo)
+        return frecuenciaPago switch
         {
-            var cuotasOrdenadas = historialCuotas
-                .OrderBy(c => c.FechaDesde)
-                .ToList();
-
-            for (var mes = 1; mes <= 12; mes++)
-            {
-                var fechaMes = new DateTime(Anio, mes, 1);
-                var cuotaVigente = cuotasOrdenadas.FirstOrDefault(c =>
-                    c.FechaDesde <= fechaMes &&
-                    (!c.FechaHasta.HasValue || c.FechaHasta.Value >= fechaMes));
-
-                resultado[(socioId, mes)] = cuotaVigente is null ? 0m : (decimal)cuotaVigente.Monto;
-            }
-        }
-
-        return resultado;
+            FrecuenciaPago.Mensual => "Mensual",
+            FrecuenciaPago.Trimestral => "Trimestral",
+            FrecuenciaPago.Semestral => "Semestral",
+            FrecuenciaPago.Anual => "Anual",
+            _ => string.Empty
+        };
     }
 
-    private static string ResolverValorCasilla(decimal montoPagado, decimal cuotaVigente)
+    private static bool DebeMostrarCasilla(FrecuenciaPago? frecuenciaPago, int mes)
     {
-        if (montoPagado <= 0)
+        return frecuenciaPago switch
         {
-            return string.Empty;
-        }
-
-        if (cuotaVigente > 0m && Math.Abs(montoPagado - cuotaVigente) < 0.01m)
-        {
-            return "X";
-        }
-
-        return FormatearMontoCasilla(montoPagado);
-    }
-
-    private static string FormatearMontoCasilla(decimal monto)
-    {
-        return monto.ToString("0.##", CultureInfo.InvariantCulture);
+            FrecuenciaPago.Mensual => true,
+            FrecuenciaPago.Trimestral => mes is 1 or 4 or 7 or 10,
+            FrecuenciaPago.Semestral => mes is 1 or 7,
+            FrecuenciaPago.Anual => mes == 1,
+            _ => false
+        };
     }
 
     private static string ObtenerNombreSocio(Socio socio)
