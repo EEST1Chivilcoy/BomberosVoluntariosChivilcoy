@@ -1072,6 +1072,53 @@
     </div>
 </Modal>
 
+<Modal Title="Imprimir Bonos de Socios"
+       Footer="null"
+       Centered="@true"
+       OnCancel="@(() => _modalParametrosBonosVisible = false)"
+       Visible="@_modalParametrosBonosVisible"
+       Width="500">
+    <div style="padding: 16px;">
+        <h4 style="text-align: center; margin-bottom: 24px; color: #A63333; font-weight: 600;">
+            <Icon Type="file-text" style="margin-right: 8px;" />
+            Seleccione Zona, Mes y Año
+        </h4>
+
+        <div style="margin-bottom: 20px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <label style="font-weight: 600; color: #333;">Mes</label>
+                <AntDesign.InputNumber @bind-Value="selectedBonosMes" Min="1" Max="12" Style="width: 100%; height: 40px; font-size: 16px; border-radius: 8px;" />
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <label style="font-weight: 600; color: #333;">Año</label>
+                <AntDesign.InputNumber @bind-Value="selectedBonosAnio" Min="2000" Max="2100" Style="width: 100%; height: 40px; font-size: 16px; border-radius: 8px;" />
+            </div>
+        </div>
+
+        @foreach (var zona in GetZonasDisponibles())
+        {
+            <div class="print-modal-option @(selectedBonosZona == zona ? "selected" : "")"
+                 @onclick="() => SelectBonosZona(zona)">
+                <Icon Type="environment" Class="option-icon" />
+                <div class="option-text">
+                    <h4>@zona.GetDisplayName()</h4>
+                    <p>Imprimir bonos solo de esta zona</p>
+                </div>
+            </div>
+        }
+
+        <div class="print-modal-actions">
+            <Button OnClick="@(() => _modalParametrosBonosVisible = false)">
+                Cancelar
+            </Button>
+            <Button Type="ButtonType.Primary" Class="print-confirm-button" OnClick="ConfirmPrintBonos">
+                <Icon Type="printer" /> Imprimir
+            </Button>
+        </div>
+    </div>
+</Modal>
+
 <Modal @bind-Visible="_modalImprimirVisible"
        Title="Imprimir"
        Width="@("100%")"
@@ -1256,8 +1303,12 @@
     private bool _modalAñadirVisible = false;
     private bool _modalImprimirVisible = false;
     private bool _modalParametrosCobranzaVisible = false;
+    private bool _modalParametrosBonosVisible = false;
     private Zona? selectedPrintZona = null;
     private int selectedAnio = DateTime.Now.Year;
+    private Zona? selectedBonosZona = null;
+    private int selectedBonosMes = DateTime.Now.Month;
+    private int selectedBonosAnio = DateTime.Now.Year;
     private bool _modalDetalleVisible = false;
     private PagoViewModel? pagoSeleccionado;
 
@@ -1375,8 +1426,9 @@
 
     private async Task ImprimirBonos()
     {
-        await MessageService.SuccessAsync("🖨️ Imprimir Bonos ejecutado.");
+        _modalParametrosBonosVisible = true;
         _modalImprimirVisible = false;
+        await Task.CompletedTask;
     }
 
     private void ImprimirListaCobranza()
@@ -1395,6 +1447,11 @@
         selectedPrintZona = zona;
     }
 
+    private void SelectBonosZona(Zona? zona)
+    {
+        selectedBonosZona = zona;
+    }
+
     private void ConfirmPrintCobranza()
     {
         int zonaParam = selectedPrintZona.HasValue ? (int)selectedPrintZona.Value : (int)Zona.Ninguna;
@@ -1402,6 +1459,15 @@
 
         navigationManager.NavigateTo(url, forceLoad: true);
         _modalParametrosCobranzaVisible = false;
+    }
+
+    private void ConfirmPrintBonos()
+    {
+        int zonaParam = selectedBonosZona.HasValue ? (int)selectedBonosZona.Value : (int)Zona.Ninguna;
+        string url = $"/fire-force/socios/imprimibles/bonos/{zonaParam}/{selectedBonosMes}/{selectedBonosAnio}";
+
+        navigationManager.NavigateTo(url, forceLoad: true);
+        _modalParametrosBonosVisible = false;
     }
 
     private static PagoViewModel MapToViewModel(PagoSocio pago)
