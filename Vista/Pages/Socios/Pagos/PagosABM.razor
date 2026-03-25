@@ -1467,7 +1467,7 @@
 
     private void ConfirmPrintCobranza()
     {
-        int zonaParam = selectedPrintZona.HasValue ? (int)selectedPrintZona.Value : (int)Zona.Ninguna;
+        int zonaParam = ObtenerNumeroZona(selectedPrintZona);
         string url = $"/fire-force/socios/imprimibles/lista-cobranza-anual/{selectedAnio}/{zonaParam}";
 
         navigationManager.NavigateTo(url, forceLoad: true);
