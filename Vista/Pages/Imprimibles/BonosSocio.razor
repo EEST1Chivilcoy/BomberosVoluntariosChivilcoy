@@ -397,7 +397,7 @@ else
                 {
                     NroSocio = s.NroSocio,
                     NombreSocio = ObtenerNombreSocio(s),
-                    Direccion = LimpiarTexto(s.Direccion, "Sin dirección"),
+                    Direccion = ObtenerDireccionParaBono(s),
                     ZonaTexto = ObtenerZonaTexto(s.Zona ?? Zona.Ninguna),
                     FrecuenciaPagoTexto = ObtenerFrecuenciaPagoTexto(s.FrecuenciaDePago),
                     MontoCuotaTexto = $"${s.MontoCuota:N0}"
@@ -458,9 +458,24 @@ else
         return string.IsNullOrWhiteSpace(socio.Nombre) ? "-" : socio.Nombre.Trim();
     }
 
-    private static string LimpiarTexto(string? valor, string valorPorDefecto)
+    private static string ObtenerDireccionParaBono(Socio socio)
     {
-        return string.IsNullOrWhiteSpace(valor) ? valorPorDefecto : valor.Trim();
+        if (!string.IsNullOrWhiteSpace(socio.Direccion))
+        {
+            return socio.Direccion.Trim();
+        }
+
+        if (!string.IsNullOrWhiteSpace(socio.DireccionSecundaria))
+        {
+            return socio.DireccionSecundaria.Trim();
+        }
+
+        if (!string.IsNullOrWhiteSpace(socio.NotaAdicional))
+        {
+            return $"Nota: {socio.NotaAdicional.Trim()}";
+        }
+
+        return "Sin dirección";
     }
 
     private static Zona ConvertirZonaParametro(int zonaParam)
