@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using Vista.Data;
-using Vista.Data.Models.Grupos.Brigadas;
-using Vista.Data.Models.Personas.Personal;
+using FireForce.Core.Data;
+using FireForce.Core.Data.Models.Grupos.Brigadas;
+using FireForce.Core.Data.Models.Personas.Personal;
 
-namespace Vista.Services
+namespace FireForce.Core.Services
 {
     public interface IBrigadaService
     {

@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
-using Vista.Data;
-using Vista.Data.Enums;
-using Vista.Data.Models.Personas.Personal;
-using Vista.Data.Models.Personas.Personal.Componentes;
-using Vista.Data.Models.Imagenes;
-using Vista.Helpers;
+using FireForce.Core.Data;
+using FireForce.Core.Data.Enums;
+using FireForce.Core.Data.Models.Personas.Personal;
+using FireForce.Core.Data.Models.Personas.Personal.Componentes;
+using FireForce.Core.Data.Models.Imagenes;
+using FireForce.Core.Helpers;
 
-namespace Vista.Services
+namespace FireForce.Core.Services
 {
     public interface IBomberoService
     {

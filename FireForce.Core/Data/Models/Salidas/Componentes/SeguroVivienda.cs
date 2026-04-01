@@ -1,6 +1,6 @@
-﻿using Vista.Data.Models.Salidas.Planillas;
+﻿using FireForce.Core.Data.Models.Salidas.Planillas;
 
-namespace Vista.Data.Models.Salidas.Componentes
+namespace FireForce.Core.Data.Models.Salidas.Componentes
 {
     public class SeguroVivienda : Seguro
     {

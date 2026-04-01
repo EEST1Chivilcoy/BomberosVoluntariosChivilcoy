@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Vista.Data.Enums;
+using FireForce.Core.Data.Enums;
 
-namespace Vista.Data.Models.Salidas.Planillas.Servicios
+namespace FireForce.Core.Data.Models.Salidas.Planillas.Servicios
 {
     public class ServicioEspecialCapacitacion : ServicioEspecial
     {

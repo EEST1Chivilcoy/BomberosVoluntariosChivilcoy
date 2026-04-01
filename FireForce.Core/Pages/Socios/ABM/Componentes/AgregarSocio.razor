@@ -1,12 +1,12 @@
-﻿@using Vista.Data.Enums.Socios
-@using Vista.Data.Enums.Discriminadores
-@using Vista.Data.Models.Socios
-@using Vista.DTOs.Nominatim
+﻿@using FireForce.Core.Data.Enums.Socios
+@using FireForce.Core.Data.Enums.Discriminadores
+@using FireForce.Core.Data.Models.Socios
+@using FireForce.Core.DTOs.Nominatim
 
 @page "/fire-force/socios/crear/{TipoSocio}"
 
 @*Servicios Utilizados*@
-@using Vista.Services
+@using FireForce.Core.Services
 @inject NavigationManager navigationManager
 @inject INominatimService GeorefService
 @inject ISocioService SocioService

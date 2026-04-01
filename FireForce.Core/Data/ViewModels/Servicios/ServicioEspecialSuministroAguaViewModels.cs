@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Vista.Data.ViewModels.Servicios
+namespace FireForce.Core.Data.ViewModels.Servicios
 {
     public class ServicioEspecialSuministroAguaViewModels : ServicioEspecialViewModel
     {

@@ -1,8 +1,8 @@
-﻿using Vista.Data.Models.Salidas.Componentes;
+﻿using FireForce.Core.Data.Models.Salidas.Componentes;
 using System.ComponentModel.DataAnnotations.Schema;
-using Vista.Data.Models.Personas.Personal;
+using FireForce.Core.Data.Models.Personas.Personal;
 
-namespace Vista.Data.Models.Vehiculos
+namespace FireForce.Core.Data.Models.Vehiculos
 {
     public class Vehiculo_Personal : Vehiculo
     {

@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Vista.Data;
-using Vista.Data.Enums;
-using Vista.Data.Models.Grupos.Dependencias;
-using Vista.Data.Models.Grupos.Dependencias.EquiposAutonomos;
-using Vista.Data.Models.Personas.Personal;
-using Vista.Data.Models.Vehiculos;
-using Vista.Data.Models.Vehiculos.Flota;
+using FireForce.Core.Data;
+using FireForce.Core.Data.Enums;
+using FireForce.Core.Data.Models.Grupos.Dependencias;
+using FireForce.Core.Data.Models.Grupos.Dependencias.EquiposAutonomos;
+using FireForce.Core.Data.Models.Personas.Personal;
+using FireForce.Core.Data.Models.Vehiculos;
+using FireForce.Core.Data.Models.Vehiculos.Flota;
 
-namespace Vista.Services
+namespace FireForce.Core.Services
 {
     public interface IMovimientoEquipoAutonomoService
     {

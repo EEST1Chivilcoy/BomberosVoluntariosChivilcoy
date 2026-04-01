@@ -1,6 +1,6 @@
-﻿using Vista.Data.Models.Salidas.Componentes;
+﻿using FireForce.Core.Data.Models.Salidas.Componentes;
 
-namespace Vista.Data.Models.Salidas.Planillas.Incendios
+namespace FireForce.Core.Data.Models.Salidas.Planillas.Incendios
 {
     public class IncendioMaquinaAgricola : Incendio
     {

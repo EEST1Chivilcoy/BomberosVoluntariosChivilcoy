@@ -7,7 +7,7 @@ using AntDesign;
 using AntDesign.Core.Extensions;
 using ClosedXML.Excel;
 
-namespace Vista.Pages.Reportes
+namespace FireForce.Core.Pages.Reportes
 {
     public class CrearExcel
     {

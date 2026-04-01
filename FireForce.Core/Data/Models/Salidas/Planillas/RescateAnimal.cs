@@ -1,6 +1,6 @@
-﻿using Vista.Data.Enums;
+﻿using FireForce.Core.Data.Enums;
 
-namespace Vista.Data.Models.Salidas.Planillas
+namespace FireForce.Core.Data.Models.Salidas.Planillas
 {
     public class RescateAnimal : Rescate
     {

@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Vista.Data;
+using FireForce.Core.Data;
 
 #nullable disable
 
-namespace Vista.Data.Migrations
+namespace FireForce.Core.Data.Migrations
 {
     [DbContext(typeof(BomberosDbContext))]
     [Migration("20260115212413_AddNotaAdicionalToSocios")]
@@ -25,7 +25,7 @@ namespace Vista.Data.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
-            modelBuilder.Entity("Vista.Data.Models.Grupos.Brigadas.Bombero_Brigada", b =>
+            modelBuilder.Entity("Core.Data.Models.Grupos.Brigadas.Bombero_Brigada", b =>
                 {
                     b.Property<int>("PersonaId")
                         .HasColumnType("int");
@@ -40,7 +40,7 @@ namespace Vista.Data.Migrations
                     b.ToTable("bombero_brigada");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Grupos.Brigadas.Brigada", b =>
+            modelBuilder.Entity("Core.Data.Models.Grupos.Brigadas.Brigada", b =>
                 {
                     b.Property<int>("BrigadaId")
                         .ValueGeneratedOnAdd()
@@ -66,7 +66,7 @@ namespace Vista.Data.Migrations
                     b.ToTable("Brigadas");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Grupos.Dependencias.Bombero_Dependencia", b =>
+            modelBuilder.Entity("Core.Data.Models.Grupos.Dependencias.Bombero_Dependencia", b =>
                 {
                     b.Property<int>("PersonaId")
                         .HasColumnType("int");
@@ -81,7 +81,7 @@ namespace Vista.Data.Migrations
                     b.ToTable("bombero_dependencia");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Grupos.Dependencias.Comunicaciones.Comunicacion", b =>
+            modelBuilder.Entity("Core.Data.Models.Grupos.Dependencias.Comunicaciones.Comunicacion", b =>
                 {
                     b.Property<int>("ComunicacionId")
                         .ValueGeneratedOnAdd()
@@ -115,7 +115,7 @@ namespace Vista.Data.Migrations
                     b.ToTable("Comunicacion");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Grupos.Dependencias.Dependencia", b =>
+            modelBuilder.Entity("Core.Data.Models.Grupos.Dependencias.Dependencia", b =>
                 {
                     b.Property<int>("DependenciaId")
                         .ValueGeneratedOnAdd()
@@ -138,7 +138,7 @@ namespace Vista.Data.Migrations
                     b.ToTable("Dependencias");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Grupos.Dependencias.EquiposAutonomos.EquipoAutonomo", b =>
+            modelBuilder.Entity("Core.Data.Models.Grupos.Dependencias.EquiposAutonomos.EquipoAutonomo", b =>
                 {
                     b.Property<int>("EquipoAutonomoId")
                         .ValueGeneratedOnAdd()
@@ -176,7 +176,7 @@ namespace Vista.Data.Migrations
                     b.ToTable("EquiposAutonomos");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Grupos.Dependencias.EquiposAutonomos.Movimiento_EquipoAutonomo", b =>
+            modelBuilder.Entity("Core.Data.Models.Grupos.Dependencias.EquiposAutonomos.Movimiento_EquipoAutonomo", b =>
                 {
                     b.Property<int>("Movimiento_EquipoAutonomoId")
                         .ValueGeneratedOnAdd()
@@ -224,7 +224,7 @@ namespace Vista.Data.Migrations
                     b.ToTable("MovimientosEquiposAutonomos");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Grupos.FuerzasIntervinientes.FuerzaInterviniente", b =>
+            modelBuilder.Entity("Core.Data.Models.Grupos.FuerzasIntervinientes.FuerzaInterviniente", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -240,7 +240,7 @@ namespace Vista.Data.Migrations
                     b.ToTable("Fuerzas");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Imagenes.Imagen", b =>
+            modelBuilder.Entity("Core.Data.Models.Imagenes.Imagen", b =>
                 {
                     b.Property<int>("ImagenId")
                         .ValueGeneratedOnAdd()
@@ -274,7 +274,7 @@ namespace Vista.Data.Migrations
                     b.UseTphMappingStrategy();
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Objetos.Componentes.MovimientoMaterial", b =>
+            modelBuilder.Entity("Core.Data.Models.Objetos.Componentes.MovimientoMaterial", b =>
                 {
                     b.Property<int>("MovimientoMaterialId")
                         .ValueGeneratedOnAdd()
@@ -319,7 +319,7 @@ namespace Vista.Data.Migrations
                     b.ToTable("Movimientos");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Objetos.Material", b =>
+            modelBuilder.Entity("Core.Data.Models.Objetos.Material", b =>
                 {
                     b.Property<int>("MaterialId")
                         .ValueGeneratedOnAdd()
@@ -350,7 +350,7 @@ namespace Vista.Data.Migrations
                     b.ToTable("Materiales");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Otros.Partes.ParteVehiculo", b =>
+            modelBuilder.Entity("Core.Data.Models.Otros.Partes.ParteVehiculo", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -373,7 +373,7 @@ namespace Vista.Data.Migrations
                     b.ToTable("PartesVehiculo");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Personas.Damnificado_Salida", b =>
+            modelBuilder.Entity("Core.Data.Models.Personas.Damnificado_Salida", b =>
                 {
                     b.Property<int>("Damnificado_SalidaId")
                         .ValueGeneratedOnAdd()
@@ -423,7 +423,7 @@ namespace Vista.Data.Migrations
                     b.ToTable("Damnificados");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Personas.Persona", b =>
+            modelBuilder.Entity("Core.Data.Models.Personas.Persona", b =>
                 {
                     b.Property<int>("PersonaId")
                         .ValueGeneratedOnAdd()
@@ -472,7 +472,7 @@ namespace Vista.Data.Migrations
                     b.UseTphMappingStrategy();
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Personas.Personal.Componentes.AscensoBombero", b =>
+            modelBuilder.Entity("Core.Data.Models.Personas.Personal.Componentes.AscensoBombero", b =>
                 {
                     b.Property<int>("AscensoBomberoId")
                         .ValueGeneratedOnAdd()
@@ -513,7 +513,7 @@ namespace Vista.Data.Migrations
                     b.ToTable("AscensoBomberos");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Personas.Personal.Componentes.Contacto", b =>
+            modelBuilder.Entity("Core.Data.Models.Personas.Personal.Componentes.Contacto", b =>
                 {
                     b.Property<int>("ContactoId")
                         .ValueGeneratedOnAdd()
@@ -544,7 +544,7 @@ namespace Vista.Data.Migrations
                     b.ToTable("Contactos");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Personas.Personal.Componentes.Licencia", b =>
+            modelBuilder.Entity("Core.Data.Models.Personas.Personal.Componentes.Licencia", b =>
                 {
                     b.Property<int>("LicenciaId")
                         .ValueGeneratedOnAdd()
@@ -582,7 +582,7 @@ namespace Vista.Data.Migrations
                     b.ToTable("Licencias");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Personas.Personal.Componentes.Sancion", b =>
+            modelBuilder.Entity("Core.Data.Models.Personas.Personal.Componentes.Sancion", b =>
                 {
                     b.Property<int>("SancionId")
                         .ValueGeneratedOnAdd()
@@ -617,7 +617,7 @@ namespace Vista.Data.Migrations
                     b.ToTable("Sanciones");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Componentes.BomberoSalida", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Componentes.BomberoSalida", b =>
                 {
                     b.Property<int>("BomberoSalidaId")
                         .ValueGeneratedOnAdd()
@@ -650,7 +650,7 @@ namespace Vista.Data.Migrations
                     b.ToTable("BomberosSalida");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Componentes.FuerzaInterviniente_Salida", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Componentes.FuerzaInterviniente_Salida", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -681,7 +681,7 @@ namespace Vista.Data.Migrations
                     b.ToTable("fuerzaInterviniente_Salidas");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Componentes.Movil_Salida", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Componentes.Movil_Salida", b =>
                 {
                     b.Property<int>("Movil_SalidaId")
                         .ValueGeneratedOnAdd()
@@ -738,7 +738,7 @@ namespace Vista.Data.Migrations
                     b.ToTable("MovilesSalida");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Componentes.OcupanteVehiculo", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Componentes.OcupanteVehiculo", b =>
                 {
                     b.Property<int>("OcupanteVehiculoId")
                         .ValueGeneratedOnAdd()
@@ -765,7 +765,7 @@ namespace Vista.Data.Migrations
                     b.ToTable("OcupantesVehiculos");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Componentes.Seguro", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Componentes.Seguro", b =>
                 {
                     b.Property<int>("SeguroId")
                         .ValueGeneratedOnAdd()
@@ -788,7 +788,7 @@ namespace Vista.Data.Migrations
                     b.UseTphMappingStrategy();
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Planillas.Salida", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Planillas.Salida", b =>
                 {
                     b.Property<int>("SalidaId")
                         .ValueGeneratedOnAdd()
@@ -882,7 +882,7 @@ namespace Vista.Data.Migrations
                     b.UseTphMappingStrategy();
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Socios.Componentes.MovimientoSocio", b =>
+            modelBuilder.Entity("Core.Data.Models.Socios.Componentes.MovimientoSocio", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -915,7 +915,7 @@ namespace Vista.Data.Migrations
                     b.UseTphMappingStrategy();
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Socios.Componentes.Pagos.PagoSocio", b =>
+            modelBuilder.Entity("Core.Data.Models.Socios.Componentes.Pagos.PagoSocio", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -960,7 +960,7 @@ namespace Vista.Data.Migrations
                     b.UseTphMappingStrategy();
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Socios.Socio", b =>
+            modelBuilder.Entity("Core.Data.Models.Socios.Socio", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1047,7 +1047,7 @@ namespace Vista.Data.Migrations
                     b.ToTable("Socios");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Vehiculos.Flota.EmbarcacionAfectada", b =>
+            modelBuilder.Entity("Core.Data.Models.Vehiculos.Flota.EmbarcacionAfectada", b =>
                 {
                     b.Property<int>("EmbarcacionAfectadaId")
                         .ValueGeneratedOnAdd()
@@ -1084,7 +1084,7 @@ namespace Vista.Data.Migrations
                     b.ToTable("EmbarcacionesAfectadas");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Vehiculos.Vehiculo", b =>
+            modelBuilder.Entity("Core.Data.Models.Vehiculos.Vehiculo", b =>
                 {
                     b.Property<int>("VehiculoId")
                         .ValueGeneratedOnAdd()
@@ -1123,9 +1123,9 @@ namespace Vista.Data.Migrations
                     b.UseTphMappingStrategy();
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Imagenes.CertificadoMedico", b =>
+            modelBuilder.Entity("Core.Data.Models.Imagenes.CertificadoMedico", b =>
                 {
-                    b.HasBaseType("Vista.Data.Models.Imagenes.Imagen");
+                    b.HasBaseType("Core.Data.Models.Imagenes.Imagen");
 
                     b.Property<int>("LicenciaId")
                         .HasColumnType("int");
@@ -1135,9 +1135,9 @@ namespace Vista.Data.Migrations
                     b.HasDiscriminator().HasValue(3);
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Imagenes.Imagen_Personal", b =>
+            modelBuilder.Entity("Core.Data.Models.Imagenes.Imagen_Personal", b =>
                 {
-                    b.HasBaseType("Vista.Data.Models.Imagenes.Imagen");
+                    b.HasBaseType("Core.Data.Models.Imagenes.Imagen");
 
                     b.Property<int>("PersonalId")
                         .HasColumnType("int");
@@ -1148,9 +1148,9 @@ namespace Vista.Data.Migrations
                     b.HasDiscriminator().HasValue(1);
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Imagenes.Imagen_VehiculoSalida", b =>
+            modelBuilder.Entity("Core.Data.Models.Imagenes.Imagen_VehiculoSalida", b =>
                 {
-                    b.HasBaseType("Vista.Data.Models.Imagenes.Imagen");
+                    b.HasBaseType("Core.Data.Models.Imagenes.Imagen");
 
                     b.Property<int>("VehiculoId")
                         .HasColumnType("int");
@@ -1161,9 +1161,9 @@ namespace Vista.Data.Migrations
                     b.HasDiscriminator().HasValue(2);
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Personas.Personal.Personal", b =>
+            modelBuilder.Entity("Core.Data.Models.Personas.Personal.Personal", b =>
                 {
-                    b.HasBaseType("Vista.Data.Models.Personas.Persona");
+                    b.HasBaseType("Core.Data.Models.Personas.Persona");
 
                     b.Property<Guid>("EntraId")
                         .HasColumnType("char(36)");
@@ -1191,9 +1191,9 @@ namespace Vista.Data.Migrations
                         .IsUnique();
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Componentes.SeguroVehiculo", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Componentes.SeguroVehiculo", b =>
                 {
-                    b.HasBaseType("Vista.Data.Models.Salidas.Componentes.Seguro");
+                    b.HasBaseType("Core.Data.Models.Salidas.Componentes.Seguro");
 
                     b.Property<DateTime?>("FechaDeVencimineto")
                         .HasColumnType("datetime(6)");
@@ -1209,16 +1209,16 @@ namespace Vista.Data.Migrations
                     b.HasDiscriminator().HasValue(2);
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Componentes.SeguroVivienda", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Componentes.SeguroVivienda", b =>
                 {
-                    b.HasBaseType("Vista.Data.Models.Salidas.Componentes.Seguro");
+                    b.HasBaseType("Core.Data.Models.Salidas.Componentes.Seguro");
 
                     b.HasDiscriminator().HasValue(1);
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Planillas.Accidente", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Planillas.Accidente", b =>
                 {
-                    b.HasBaseType("Vista.Data.Models.Salidas.Planillas.Salida");
+                    b.HasBaseType("Core.Data.Models.Salidas.Planillas.Salida");
 
                     b.Property<string>("CondicionesClimaticas")
                         .IsRequired()
@@ -1243,9 +1243,9 @@ namespace Vista.Data.Migrations
                     b.HasDiscriminator().HasValue(1);
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Planillas.FactorClimatico", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Planillas.FactorClimatico", b =>
                 {
-                    b.HasBaseType("Vista.Data.Models.Salidas.Planillas.Salida");
+                    b.HasBaseType("Core.Data.Models.Salidas.Planillas.Salida");
 
                     b.Property<int>("CantidadAfectadaFactorClimatico")
                         .HasColumnType("int");
@@ -1277,9 +1277,9 @@ namespace Vista.Data.Migrations
                     b.HasDiscriminator().HasValue(2);
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Planillas.Incendios.Incendio", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Planillas.Incendios.Incendio", b =>
                 {
-                    b.HasBaseType("Vista.Data.Models.Salidas.Planillas.Salida");
+                    b.HasBaseType("Core.Data.Models.Salidas.Planillas.Salida");
 
                     b.Property<int?>("CantidadAmbientes")
                         .HasColumnType("int");
@@ -1345,9 +1345,9 @@ namespace Vista.Data.Migrations
                     b.HasDiscriminator().HasValue(15);
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Planillas.MaterialPeligroso", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Planillas.MaterialPeligroso", b =>
                 {
-                    b.HasBaseType("Vista.Data.Models.Salidas.Planillas.Salida");
+                    b.HasBaseType("Core.Data.Models.Salidas.Planillas.Salida");
 
                     b.Property<int>("CantidadAfectadaMaterialPeligroso")
                         .HasColumnType("int");
@@ -1414,9 +1414,9 @@ namespace Vista.Data.Migrations
                     b.HasDiscriminator().HasValue(3);
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Planillas.RescateAnimal", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Planillas.RescateAnimal", b =>
                 {
-                    b.HasBaseType("Vista.Data.Models.Salidas.Planillas.Salida");
+                    b.HasBaseType("Core.Data.Models.Salidas.Planillas.Salida");
 
                     b.Property<string>("LugarRescateAnimal")
                         .IsRequired()
@@ -1431,9 +1431,9 @@ namespace Vista.Data.Migrations
                     b.HasDiscriminator().HasValue(5);
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Planillas.RescatePersona", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Planillas.RescatePersona", b =>
                 {
-                    b.HasBaseType("Vista.Data.Models.Salidas.Planillas.Salida");
+                    b.HasBaseType("Core.Data.Models.Salidas.Planillas.Salida");
 
                     b.Property<string>("LugarRescatePersona")
                         .IsRequired()
@@ -1448,9 +1448,9 @@ namespace Vista.Data.Migrations
                     b.HasDiscriminator().HasValue(6);
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Planillas.Servicios.ServicioEspecial", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Planillas.Servicios.ServicioEspecial", b =>
                 {
-                    b.HasBaseType("Vista.Data.Models.Salidas.Planillas.Salida");
+                    b.HasBaseType("Core.Data.Models.Salidas.Planillas.Salida");
 
                     b.Property<string>("TipoOrganizacion")
                         .IsRequired()
@@ -1458,9 +1458,9 @@ namespace Vista.Data.Migrations
                         .HasColumnType("varchar(255)");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Socios.Componentes.MovimientoCambioCuota", b =>
+            modelBuilder.Entity("Core.Data.Models.Socios.Componentes.MovimientoCambioCuota", b =>
                 {
-                    b.HasBaseType("Vista.Data.Models.Socios.Componentes.MovimientoSocio");
+                    b.HasBaseType("Core.Data.Models.Socios.Componentes.MovimientoSocio");
 
                     b.Property<int>("FormaDePago")
                         .HasColumnType("int");
@@ -1474,9 +1474,9 @@ namespace Vista.Data.Migrations
                     b.HasDiscriminator().HasValue("MovimientoCambioCuota");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Socios.Componentes.MovimientoCambioEstado", b =>
+            modelBuilder.Entity("Core.Data.Models.Socios.Componentes.MovimientoCambioEstado", b =>
                 {
-                    b.HasBaseType("Vista.Data.Models.Socios.Componentes.MovimientoSocio");
+                    b.HasBaseType("Core.Data.Models.Socios.Componentes.MovimientoSocio");
 
                     b.Property<int>("Estado")
                         .HasColumnType("int");
@@ -1487,9 +1487,9 @@ namespace Vista.Data.Migrations
                     b.HasDiscriminator().HasValue("MovimientoCambioEstado");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Socios.Componentes.Pagos.PagoEfectivo", b =>
+            modelBuilder.Entity("Core.Data.Models.Socios.Componentes.Pagos.PagoEfectivo", b =>
                 {
-                    b.HasBaseType("Vista.Data.Models.Socios.Componentes.Pagos.PagoSocio");
+                    b.HasBaseType("Core.Data.Models.Socios.Componentes.Pagos.PagoSocio");
 
                     b.Property<int>("CobradorId")
                         .HasColumnType("int");
@@ -1505,9 +1505,9 @@ namespace Vista.Data.Migrations
                     b.HasDiscriminator().HasValue(1);
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Componentes.VehiculoAfectado", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Componentes.VehiculoAfectado", b =>
                 {
-                    b.HasBaseType("Vista.Data.Models.Vehiculos.Vehiculo");
+                    b.HasBaseType("Core.Data.Models.Vehiculos.Vehiculo");
 
                     b.Property<bool>("Airbag")
                         .HasColumnType("tinyint(1)");
@@ -1541,9 +1541,9 @@ namespace Vista.Data.Migrations
                     b.HasDiscriminator().HasValue(6);
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Vehiculos.Flota.VehiculoSalida", b =>
+            modelBuilder.Entity("Core.Data.Models.Vehiculos.Flota.VehiculoSalida", b =>
                 {
-                    b.HasBaseType("Vista.Data.Models.Vehiculos.Vehiculo");
+                    b.HasBaseType("Core.Data.Models.Vehiculos.Vehiculo");
 
                     b.Property<string>("Combustible")
                         .HasMaxLength(255)
@@ -1580,9 +1580,9 @@ namespace Vista.Data.Migrations
                         .IsUnique();
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Vehiculos.Vehiculo_Personal", b =>
+            modelBuilder.Entity("Core.Data.Models.Vehiculos.Vehiculo_Personal", b =>
                 {
-                    b.HasBaseType("Vista.Data.Models.Vehiculos.Vehiculo");
+                    b.HasBaseType("Core.Data.Models.Vehiculos.Vehiculo");
 
                     b.Property<int>("PersonalId")
                         .HasColumnType("int");
@@ -1592,9 +1592,9 @@ namespace Vista.Data.Migrations
                     b.HasDiscriminator().HasValue(4);
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Personas.Personal.Bombero", b =>
+            modelBuilder.Entity("Core.Data.Models.Personas.Personal.Bombero", b =>
                 {
-                    b.HasBaseType("Vista.Data.Models.Personas.Personal.Personal");
+                    b.HasBaseType("Core.Data.Models.Personas.Personal.Personal");
 
                     b.Property<int?>("Altura")
                         .HasColumnType("int");
@@ -1651,9 +1651,9 @@ namespace Vista.Data.Migrations
                     b.HasDiscriminator().HasValue(1);
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Personas.Personal.Cobrador", b =>
+            modelBuilder.Entity("Core.Data.Models.Personas.Personal.Cobrador", b =>
                 {
-                    b.HasBaseType("Vista.Data.Models.Personas.Personal.Personal");
+                    b.HasBaseType("Core.Data.Models.Personas.Personal.Personal");
 
                     b.Property<int>("Estado")
                         .HasColumnType("int");
@@ -1670,9 +1670,9 @@ namespace Vista.Data.Migrations
                     b.HasDiscriminator().HasValue(3);
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Personas.Personal.ComisionDirectiva", b =>
+            modelBuilder.Entity("Core.Data.Models.Personas.Personal.ComisionDirectiva", b =>
                 {
-                    b.HasBaseType("Vista.Data.Models.Personas.Personal.Personal");
+                    b.HasBaseType("Core.Data.Models.Personas.Personal.Personal");
 
                     b.Property<string>("Estado")
                         .IsRequired()
@@ -1696,9 +1696,9 @@ namespace Vista.Data.Migrations
                     b.HasDiscriminator().HasValue(2);
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Planillas.Incendios.IncendioAeronaves", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Planillas.Incendios.IncendioAeronaves", b =>
                 {
-                    b.HasBaseType("Vista.Data.Models.Salidas.Planillas.Incendios.Incendio");
+                    b.HasBaseType("Core.Data.Models.Salidas.Planillas.Incendios.Incendio");
 
                     b.Property<int>("TipoAeronave")
                         .HasColumnType("int");
@@ -1706,9 +1706,9 @@ namespace Vista.Data.Migrations
                     b.HasDiscriminator().HasValue(17);
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Planillas.Incendios.IncendioComercio", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Planillas.Incendios.IncendioComercio", b =>
                 {
-                    b.HasBaseType("Vista.Data.Models.Salidas.Planillas.Incendios.Incendio");
+                    b.HasBaseType("Core.Data.Models.Salidas.Planillas.Incendios.Incendio");
 
                     b.Property<string>("TipoLugar")
                         .IsRequired()
@@ -1718,9 +1718,9 @@ namespace Vista.Data.Migrations
                     b.HasDiscriminator().HasValue(7);
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Planillas.Incendios.IncendioEstablecimientoEducativo", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Planillas.Incendios.IncendioEstablecimientoEducativo", b =>
                 {
-                    b.HasBaseType("Vista.Data.Models.Salidas.Planillas.Incendios.Incendio");
+                    b.HasBaseType("Core.Data.Models.Salidas.Planillas.Incendios.Incendio");
 
                     b.Property<string>("TipoLugar")
                         .IsRequired()
@@ -1736,9 +1736,9 @@ namespace Vista.Data.Migrations
                     b.HasDiscriminator().HasValue(8);
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Planillas.Incendios.IncendioEstablecimientoPublico", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Planillas.Incendios.IncendioEstablecimientoPublico", b =>
                 {
-                    b.HasBaseType("Vista.Data.Models.Salidas.Planillas.Incendios.Incendio");
+                    b.HasBaseType("Core.Data.Models.Salidas.Planillas.Incendios.Incendio");
 
                     b.Property<string>("TipoLugar")
                         .IsRequired()
@@ -1754,9 +1754,9 @@ namespace Vista.Data.Migrations
                     b.HasDiscriminator().HasValue(9);
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Planillas.Incendios.IncendioForestal", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Planillas.Incendios.IncendioForestal", b =>
                 {
-                    b.HasBaseType("Vista.Data.Models.Salidas.Planillas.Incendios.Incendio");
+                    b.HasBaseType("Core.Data.Models.Salidas.Planillas.Incendios.Incendio");
 
                     b.Property<string>("TipoLugar")
                         .IsRequired()
@@ -1772,9 +1772,9 @@ namespace Vista.Data.Migrations
                     b.HasDiscriminator().HasValue(10);
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Planillas.Incendios.IncendioHospitalesYClinicas", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Planillas.Incendios.IncendioHospitalesYClinicas", b =>
                 {
-                    b.HasBaseType("Vista.Data.Models.Salidas.Planillas.Incendios.Incendio");
+                    b.HasBaseType("Core.Data.Models.Salidas.Planillas.Incendios.Incendio");
 
                     b.Property<string>("TipoLugar")
                         .IsRequired()
@@ -1790,9 +1790,9 @@ namespace Vista.Data.Migrations
                     b.HasDiscriminator().HasValue(11);
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Planillas.Incendios.IncendioIndustria", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Planillas.Incendios.IncendioIndustria", b =>
                 {
-                    b.HasBaseType("Vista.Data.Models.Salidas.Planillas.Incendios.Incendio");
+                    b.HasBaseType("Core.Data.Models.Salidas.Planillas.Incendios.Incendio");
 
                     b.Property<string>("TipoLugar")
                         .IsRequired()
@@ -1808,9 +1808,9 @@ namespace Vista.Data.Migrations
                     b.HasDiscriminator().HasValue(12);
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Planillas.Incendios.IncendioVivienda", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Planillas.Incendios.IncendioVivienda", b =>
                 {
-                    b.HasBaseType("Vista.Data.Models.Salidas.Planillas.Incendios.Incendio");
+                    b.HasBaseType("Core.Data.Models.Salidas.Planillas.Incendios.Incendio");
 
                     b.Property<string>("TipoLugar")
                         .IsRequired()
@@ -1826,9 +1826,9 @@ namespace Vista.Data.Migrations
                     b.HasDiscriminator().HasValue(13);
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Planillas.ServicioEspecialColaboraciónFuerzasSeguridad", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Planillas.ServicioEspecialColaboraciónFuerzasSeguridad", b =>
                 {
-                    b.HasBaseType("Vista.Data.Models.Salidas.Planillas.Servicios.ServicioEspecial");
+                    b.HasBaseType("Core.Data.Models.Salidas.Planillas.Servicios.ServicioEspecial");
 
                     b.Property<string>("DetallesColaboFuerzasSeguridad")
                         .HasMaxLength(255)
@@ -1837,9 +1837,9 @@ namespace Vista.Data.Migrations
                     b.HasDiscriminator().HasValue(23);
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Planillas.Servicios.ServicioEspecialCapacitacion", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Planillas.Servicios.ServicioEspecialCapacitacion", b =>
                 {
-                    b.HasBaseType("Vista.Data.Models.Salidas.Planillas.Servicios.ServicioEspecial");
+                    b.HasBaseType("Core.Data.Models.Salidas.Planillas.Servicios.ServicioEspecial");
 
                     b.Property<DateTime>("DiaHora")
                         .HasColumnType("datetime(6)");
@@ -1863,9 +1863,9 @@ namespace Vista.Data.Migrations
                     b.HasDiscriminator().HasValue(18);
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Planillas.Servicios.ServicioEspecialColocaciónDriza", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Planillas.Servicios.ServicioEspecialColocaciónDriza", b =>
                 {
-                    b.HasBaseType("Vista.Data.Models.Salidas.Planillas.Servicios.ServicioEspecial");
+                    b.HasBaseType("Core.Data.Models.Salidas.Planillas.Servicios.ServicioEspecial");
 
                     b.Property<string>("Detalles")
                         .HasMaxLength(255)
@@ -1893,9 +1893,9 @@ namespace Vista.Data.Migrations
                     b.HasDiscriminator().HasValue(19);
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Planillas.Servicios.ServicioEspecialFalsaAlarma", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Planillas.Servicios.ServicioEspecialFalsaAlarma", b =>
                 {
-                    b.HasBaseType("Vista.Data.Models.Salidas.Planillas.Servicios.ServicioEspecial");
+                    b.HasBaseType("Core.Data.Models.Salidas.Planillas.Servicios.ServicioEspecial");
 
                     b.Property<string>("Detalles")
                         .IsRequired()
@@ -1911,9 +1911,9 @@ namespace Vista.Data.Migrations
                     b.HasDiscriminator().HasValue(21);
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Planillas.Servicios.ServicioEspecialPrevencion", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Planillas.Servicios.ServicioEspecialPrevencion", b =>
                 {
-                    b.HasBaseType("Vista.Data.Models.Salidas.Planillas.Servicios.ServicioEspecial");
+                    b.HasBaseType("Core.Data.Models.Salidas.Planillas.Servicios.ServicioEspecial");
 
                     b.Property<string>("TipoPrevencion")
                         .IsRequired()
@@ -1923,9 +1923,9 @@ namespace Vista.Data.Migrations
                     b.HasDiscriminator().HasValue(14);
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Planillas.Servicios.ServicioEspecialRepresentacion", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Planillas.Servicios.ServicioEspecialRepresentacion", b =>
                 {
-                    b.HasBaseType("Vista.Data.Models.Salidas.Planillas.Servicios.ServicioEspecial");
+                    b.HasBaseType("Core.Data.Models.Salidas.Planillas.Servicios.ServicioEspecial");
 
                     b.Property<string>("TipoRepresentacion")
                         .IsRequired()
@@ -1935,9 +1935,9 @@ namespace Vista.Data.Migrations
                     b.HasDiscriminator().HasValue(4);
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Planillas.Servicios.ServicioEspecialRetiradoDeObito", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Planillas.Servicios.ServicioEspecialRetiradoDeObito", b =>
                 {
-                    b.HasBaseType("Vista.Data.Models.Salidas.Planillas.Servicios.ServicioEspecial");
+                    b.HasBaseType("Core.Data.Models.Salidas.Planillas.Servicios.ServicioEspecial");
 
                     b.Property<string>("DetallesObito")
                         .IsRequired()
@@ -1947,9 +1947,9 @@ namespace Vista.Data.Migrations
                     b.HasDiscriminator().HasValue(22);
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Planillas.Servicios.ServicioEspecialSuministroAgua", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Planillas.Servicios.ServicioEspecialSuministroAgua", b =>
                 {
-                    b.HasBaseType("Vista.Data.Models.Salidas.Planillas.Servicios.ServicioEspecial");
+                    b.HasBaseType("Core.Data.Models.Salidas.Planillas.Servicios.ServicioEspecial");
 
                     b.Property<string>("DetallesSuministroAgua")
                         .HasMaxLength(255)
@@ -1963,9 +1963,9 @@ namespace Vista.Data.Migrations
                     b.HasDiscriminator().HasValue(20);
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Vehiculos.Flota.Embarcacion", b =>
+            modelBuilder.Entity("Core.Data.Models.Vehiculos.Flota.Embarcacion", b =>
                 {
-                    b.HasBaseType("Vista.Data.Models.Vehiculos.Flota.VehiculoSalida");
+                    b.HasBaseType("Core.Data.Models.Vehiculos.Flota.VehiculoSalida");
 
                     b.HasIndex("NumeroMovil")
                         .IsUnique();
@@ -1973,9 +1973,9 @@ namespace Vista.Data.Migrations
                     b.HasDiscriminator().HasValue(7);
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Vehiculos.Flota.Movil", b =>
+            modelBuilder.Entity("Core.Data.Models.Vehiculos.Flota.Movil", b =>
                 {
-                    b.HasBaseType("Vista.Data.Models.Vehiculos.Flota.VehiculoSalida");
+                    b.HasBaseType("Core.Data.Models.Vehiculos.Flota.VehiculoSalida");
 
                     b.Property<string>("CajaVelocidades")
                         .HasMaxLength(255)
@@ -2049,15 +2049,15 @@ namespace Vista.Data.Migrations
                     b.HasDiscriminator().HasValue(5);
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Grupos.Brigadas.Bombero_Brigada", b =>
+            modelBuilder.Entity("Core.Data.Models.Grupos.Brigadas.Bombero_Brigada", b =>
                 {
-                    b.HasOne("Vista.Data.Models.Grupos.Brigadas.Brigada", "Brigada")
+                    b.HasOne("Core.Data.Models.Grupos.Brigadas.Brigada", "Brigada")
                         .WithMany("Bomberos")
                         .HasForeignKey("BrigadaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Vista.Data.Models.Personas.Personal.Bombero", "Bombero")
+                    b.HasOne("Core.Data.Models.Personas.Personal.Bombero", "Bombero")
                         .WithMany("Brigadas")
                         .HasForeignKey("PersonaId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2068,9 +2068,9 @@ namespace Vista.Data.Migrations
                     b.Navigation("Brigada");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Grupos.Brigadas.Brigada", b =>
+            modelBuilder.Entity("Core.Data.Models.Grupos.Brigadas.Brigada", b =>
                 {
-                    b.HasOne("Vista.Data.Models.Personas.Personal.Bombero", "Encargado")
+                    b.HasOne("Core.Data.Models.Personas.Personal.Bombero", "Encargado")
                         .WithMany()
                         .HasForeignKey("EncargadoPersonaId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2079,15 +2079,15 @@ namespace Vista.Data.Migrations
                     b.Navigation("Encargado");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Grupos.Dependencias.Bombero_Dependencia", b =>
+            modelBuilder.Entity("Core.Data.Models.Grupos.Dependencias.Bombero_Dependencia", b =>
                 {
-                    b.HasOne("Vista.Data.Models.Grupos.Dependencias.Dependencia", "Dependencia")
+                    b.HasOne("Core.Data.Models.Grupos.Dependencias.Dependencia", "Dependencia")
                         .WithMany("Bomberos")
                         .HasForeignKey("DependenciaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Vista.Data.Models.Personas.Personal.Bombero", "Bombero")
+                    b.HasOne("Core.Data.Models.Personas.Personal.Bombero", "Bombero")
                         .WithMany("Dependencias")
                         .HasForeignKey("PersonaId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2098,9 +2098,9 @@ namespace Vista.Data.Migrations
                     b.Navigation("Dependencia");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Grupos.Dependencias.Dependencia", b =>
+            modelBuilder.Entity("Core.Data.Models.Grupos.Dependencias.Dependencia", b =>
                 {
-                    b.HasOne("Vista.Data.Models.Personas.Personal.Bombero", "Encargado")
+                    b.HasOne("Core.Data.Models.Personas.Personal.Bombero", "Encargado")
                         .WithMany()
                         .HasForeignKey("EncargadoPersonaId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2109,25 +2109,25 @@ namespace Vista.Data.Migrations
                     b.Navigation("Encargado");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Grupos.Dependencias.EquiposAutonomos.Movimiento_EquipoAutonomo", b =>
+            modelBuilder.Entity("Core.Data.Models.Grupos.Dependencias.EquiposAutonomos.Movimiento_EquipoAutonomo", b =>
                 {
-                    b.HasOne("Vista.Data.Models.Grupos.Dependencias.Dependencia", "DependenciaDestino")
+                    b.HasOne("Core.Data.Models.Grupos.Dependencias.Dependencia", "DependenciaDestino")
                         .WithMany()
                         .HasForeignKey("DependenciaDestinoId");
 
-                    b.HasOne("Vista.Data.Models.Personas.Personal.Bombero", "Encargado")
+                    b.HasOne("Core.Data.Models.Personas.Personal.Bombero", "Encargado")
                         .WithMany()
                         .HasForeignKey("EncargadoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Vista.Data.Models.Grupos.Dependencias.EquiposAutonomos.EquipoAutonomo", "EquipoAutonomo")
+                    b.HasOne("Core.Data.Models.Grupos.Dependencias.EquiposAutonomos.EquipoAutonomo", "EquipoAutonomo")
                         .WithMany("Movimientos")
                         .HasForeignKey("EquipoAutonomoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Vista.Data.Models.Vehiculos.Flota.VehiculoSalida", "VehiculoDestino")
+                    b.HasOne("Core.Data.Models.Vehiculos.Flota.VehiculoSalida", "VehiculoDestino")
                         .WithMany()
                         .HasForeignKey("VehiculoDestinoId");
 
@@ -2140,17 +2140,17 @@ namespace Vista.Data.Migrations
                     b.Navigation("VehiculoDestino");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Objetos.Componentes.MovimientoMaterial", b =>
+            modelBuilder.Entity("Core.Data.Models.Objetos.Componentes.MovimientoMaterial", b =>
                 {
-                    b.HasOne("Vista.Data.Models.Personas.Personal.Bombero", "DestinoBombero")
+                    b.HasOne("Core.Data.Models.Personas.Personal.Bombero", "DestinoBombero")
                         .WithMany("DestinoMaterial")
                         .HasForeignKey("DestinoBomberoPersonaId");
 
-                    b.HasOne("Vista.Data.Models.Vehiculos.Flota.Movil", "DestinoMovil")
+                    b.HasOne("Core.Data.Models.Vehiculos.Flota.Movil", "DestinoMovil")
                         .WithMany()
                         .HasForeignKey("DestinoMovilVehiculoId");
 
-                    b.HasOne("Vista.Data.Models.Objetos.Material", "Materiales")
+                    b.HasOne("Core.Data.Models.Objetos.Material", "Materiales")
                         .WithMany()
                         .HasForeignKey("MaterialesMaterialId");
 
@@ -2161,14 +2161,14 @@ namespace Vista.Data.Migrations
                     b.Navigation("Materiales");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Personas.Damnificado_Salida", b =>
+            modelBuilder.Entity("Core.Data.Models.Personas.Damnificado_Salida", b =>
                 {
-                    b.HasOne("Vista.Data.Models.Salidas.Componentes.FuerzaInterviniente_Salida", "FuerzaInterviniente")
+                    b.HasOne("Core.Data.Models.Salidas.Componentes.FuerzaInterviniente_Salida", "FuerzaInterviniente")
                         .WithMany("Damnificados")
                         .HasForeignKey("FuerzaIntervinienteId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("Vista.Data.Models.Salidas.Planillas.Salida", "Salida")
+                    b.HasOne("Core.Data.Models.Salidas.Planillas.Salida", "Salida")
                         .WithMany("Damnificados")
                         .HasForeignKey("SalidaId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2179,9 +2179,9 @@ namespace Vista.Data.Migrations
                     b.Navigation("Salida");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Personas.Personal.Componentes.AscensoBombero", b =>
+            modelBuilder.Entity("Core.Data.Models.Personas.Personal.Componentes.AscensoBombero", b =>
                 {
-                    b.HasOne("Vista.Data.Models.Personas.Personal.Bombero", "PersonalAfectado")
+                    b.HasOne("Core.Data.Models.Personas.Personal.Bombero", "PersonalAfectado")
                         .WithMany("Ascensos")
                         .HasForeignKey("PersonaId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2190,20 +2190,20 @@ namespace Vista.Data.Migrations
                     b.Navigation("PersonalAfectado");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Personas.Personal.Componentes.Contacto", b =>
+            modelBuilder.Entity("Core.Data.Models.Personas.Personal.Componentes.Contacto", b =>
                 {
-                    b.HasOne("Vista.Data.Models.Personas.Personal.Personal", "Persona")
+                    b.HasOne("Core.Data.Models.Personas.Personal.Personal", "Persona")
                         .WithOne("Contacto")
-                        .HasForeignKey("Vista.Data.Models.Personas.Personal.Componentes.Contacto", "PersonalId")
+                        .HasForeignKey("Core.Data.Models.Personas.Personal.Componentes.Contacto", "PersonalId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Persona");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Personas.Personal.Componentes.Licencia", b =>
+            modelBuilder.Entity("Core.Data.Models.Personas.Personal.Componentes.Licencia", b =>
                 {
-                    b.HasOne("Vista.Data.Models.Personas.Personal.Bombero", "BomberoAfectado")
+                    b.HasOne("Core.Data.Models.Personas.Personal.Bombero", "BomberoAfectado")
                         .WithMany("Licencias")
                         .HasForeignKey("PersonalId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -2212,9 +2212,9 @@ namespace Vista.Data.Migrations
                     b.Navigation("BomberoAfectado");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Personas.Personal.Componentes.Sancion", b =>
+            modelBuilder.Entity("Core.Data.Models.Personas.Personal.Componentes.Sancion", b =>
                 {
-                    b.HasOne("Vista.Data.Models.Personas.Personal.Bombero", "PersonalSancionado")
+                    b.HasOne("Core.Data.Models.Personas.Personal.Bombero", "PersonalSancionado")
                         .WithMany("SancionesRecibidas")
                         .HasForeignKey("PersonaId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2223,19 +2223,19 @@ namespace Vista.Data.Migrations
                     b.Navigation("PersonalSancionado");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Componentes.BomberoSalida", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Componentes.BomberoSalida", b =>
                 {
-                    b.HasOne("Vista.Data.Models.Vehiculos.Flota.Movil", "MovilAsignado")
+                    b.HasOne("Core.Data.Models.Vehiculos.Flota.Movil", "MovilAsignado")
                         .WithMany()
                         .HasForeignKey("MovilId");
 
-                    b.HasOne("Vista.Data.Models.Personas.Personal.Bombero", "Bombero")
+                    b.HasOne("Core.Data.Models.Personas.Personal.Bombero", "Bombero")
                         .WithMany("Salidas")
                         .HasForeignKey("PersonaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Vista.Data.Models.Salidas.Planillas.Salida", "Salida")
+                    b.HasOne("Core.Data.Models.Salidas.Planillas.Salida", "Salida")
                         .WithMany("CuerpoParticipante")
                         .HasForeignKey("SalidaId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2248,15 +2248,15 @@ namespace Vista.Data.Migrations
                     b.Navigation("Salida");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Componentes.FuerzaInterviniente_Salida", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Componentes.FuerzaInterviniente_Salida", b =>
                 {
-                    b.HasOne("Vista.Data.Models.Grupos.FuerzasIntervinientes.FuerzaInterviniente", "Fuerzainterviniente")
+                    b.HasOne("Core.Data.Models.Grupos.FuerzasIntervinientes.FuerzaInterviniente", "Fuerzainterviniente")
                         .WithMany()
                         .HasForeignKey("FuerzaIntervinienteId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Vista.Data.Models.Salidas.Planillas.Salida", "Salida")
+                    b.HasOne("Core.Data.Models.Salidas.Planillas.Salida", "Salida")
                         .WithMany("FuerzasIntervinientes")
                         .HasForeignKey("SalidaId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2267,21 +2267,21 @@ namespace Vista.Data.Migrations
                     b.Navigation("Salida");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Componentes.Movil_Salida", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Componentes.Movil_Salida", b =>
                 {
-                    b.HasOne("Vista.Data.Models.Vehiculos.Flota.Movil", "Movil")
+                    b.HasOne("Core.Data.Models.Vehiculos.Flota.Movil", "Movil")
                         .WithMany("Salidas")
                         .HasForeignKey("MovilId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Vista.Data.Models.Personas.Personal.Bombero", "Chofer")
+                    b.HasOne("Core.Data.Models.Personas.Personal.Bombero", "Chofer")
                         .WithMany()
                         .HasForeignKey("PersonaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Vista.Data.Models.Salidas.Planillas.Salida", "Salida")
+                    b.HasOne("Core.Data.Models.Salidas.Planillas.Salida", "Salida")
                         .WithMany("Moviles")
                         .HasForeignKey("SalidaId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2294,15 +2294,15 @@ namespace Vista.Data.Migrations
                     b.Navigation("Salida");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Componentes.OcupanteVehiculo", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Componentes.OcupanteVehiculo", b =>
                 {
-                    b.HasOne("Vista.Data.Models.Personas.Damnificado_Salida", "Damnificado")
+                    b.HasOne("Core.Data.Models.Personas.Damnificado_Salida", "Damnificado")
                         .WithOne("OcupanteInfo")
-                        .HasForeignKey("Vista.Data.Models.Salidas.Componentes.OcupanteVehiculo", "DamnificadoSalidaId")
+                        .HasForeignKey("Core.Data.Models.Salidas.Componentes.OcupanteVehiculo", "DamnificadoSalidaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Vista.Data.Models.Salidas.Componentes.VehiculoAfectado", "VehiculoAfectado")
+                    b.HasOne("Core.Data.Models.Salidas.Componentes.VehiculoAfectado", "VehiculoAfectado")
                         .WithMany("Ocupantes")
                         .HasForeignKey("VehiculoAfectadoId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2313,23 +2313,23 @@ namespace Vista.Data.Migrations
                     b.Navigation("VehiculoAfectado");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Planillas.Salida", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Planillas.Salida", b =>
                 {
-                    b.HasOne("Vista.Data.Models.Personas.Personal.Bombero", "Encargado")
+                    b.HasOne("Core.Data.Models.Personas.Personal.Bombero", "Encargado")
                         .WithMany()
                         .HasForeignKey("EncargadoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Vista.Data.Models.Personas.Personal.Bombero", "QuienLleno")
+                    b.HasOne("Core.Data.Models.Personas.Personal.Bombero", "QuienLleno")
                         .WithMany()
                         .HasForeignKey("QuienLlenoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Vista.Data.Models.Salidas.Componentes.SeguroVivienda", "Seguro")
+                    b.HasOne("Core.Data.Models.Salidas.Componentes.SeguroVivienda", "Seguro")
                         .WithOne("Salida")
-                        .HasForeignKey("Vista.Data.Models.Salidas.Planillas.Salida", "SeguroId");
+                        .HasForeignKey("Core.Data.Models.Salidas.Planillas.Salida", "SeguroId");
 
                     b.Navigation("Encargado");
 
@@ -2338,9 +2338,9 @@ namespace Vista.Data.Migrations
                     b.Navigation("Seguro");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Socios.Componentes.MovimientoSocio", b =>
+            modelBuilder.Entity("Core.Data.Models.Socios.Componentes.MovimientoSocio", b =>
                 {
-                    b.HasOne("Vista.Data.Models.Socios.Socio", "Socio")
+                    b.HasOne("Core.Data.Models.Socios.Socio", "Socio")
                         .WithMany("Historial")
                         .HasForeignKey("SocioId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -2349,13 +2349,13 @@ namespace Vista.Data.Migrations
                     b.Navigation("Socio");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Socios.Componentes.Pagos.PagoSocio", b =>
+            modelBuilder.Entity("Core.Data.Models.Socios.Componentes.Pagos.PagoSocio", b =>
                 {
-                    b.HasOne("Vista.Data.Models.Personas.Personal.ComisionDirectiva", "ConfirmadoPor")
+                    b.HasOne("Core.Data.Models.Personas.Personal.ComisionDirectiva", "ConfirmadoPor")
                         .WithMany()
                         .HasForeignKey("ConfirmadoPorPersonaId");
 
-                    b.HasOne("Vista.Data.Models.Socios.Socio", "Socio")
+                    b.HasOne("Core.Data.Models.Socios.Socio", "Socio")
                         .WithMany("Pagos")
                         .HasForeignKey("SocioId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -2366,9 +2366,9 @@ namespace Vista.Data.Migrations
                     b.Navigation("Socio");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Vehiculos.Flota.EmbarcacionAfectada", b =>
+            modelBuilder.Entity("Core.Data.Models.Vehiculos.Flota.EmbarcacionAfectada", b =>
                 {
-                    b.HasOne("Vista.Data.Models.Salidas.Planillas.Incendios.Incendio", "Incendio")
+                    b.HasOne("Core.Data.Models.Salidas.Planillas.Incendios.Incendio", "Incendio")
                         .WithMany()
                         .HasForeignKey("SalidaId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2377,9 +2377,9 @@ namespace Vista.Data.Migrations
                     b.Navigation("Incendio");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Imagenes.CertificadoMedico", b =>
+            modelBuilder.Entity("Core.Data.Models.Imagenes.CertificadoMedico", b =>
                 {
-                    b.HasOne("Vista.Data.Models.Personas.Personal.Componentes.Licencia", "Licencia")
+                    b.HasOne("Core.Data.Models.Personas.Personal.Componentes.Licencia", "Licencia")
                         .WithMany()
                         .HasForeignKey("LicenciaId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2388,20 +2388,20 @@ namespace Vista.Data.Migrations
                     b.Navigation("Licencia");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Imagenes.Imagen_Personal", b =>
+            modelBuilder.Entity("Core.Data.Models.Imagenes.Imagen_Personal", b =>
                 {
-                    b.HasOne("Vista.Data.Models.Personas.Personal.Personal", "Personal")
+                    b.HasOne("Core.Data.Models.Personas.Personal.Personal", "Personal")
                         .WithOne("Imagen")
-                        .HasForeignKey("Vista.Data.Models.Imagenes.Imagen_Personal", "PersonalId")
+                        .HasForeignKey("Core.Data.Models.Imagenes.Imagen_Personal", "PersonalId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Personal");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Componentes.SeguroVehiculo", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Componentes.SeguroVehiculo", b =>
                 {
-                    b.HasOne("Vista.Data.Models.Salidas.Componentes.VehiculoAfectado", "Vehiculo")
+                    b.HasOne("Core.Data.Models.Salidas.Componentes.VehiculoAfectado", "Vehiculo")
                         .WithMany()
                         .HasForeignKey("VehiculoId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2410,9 +2410,9 @@ namespace Vista.Data.Migrations
                     b.Navigation("Vehiculo");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Socios.Componentes.Pagos.PagoEfectivo", b =>
+            modelBuilder.Entity("Core.Data.Models.Socios.Componentes.Pagos.PagoEfectivo", b =>
                 {
-                    b.HasOne("Vista.Data.Models.Personas.Personal.Cobrador", "Cobrador")
+                    b.HasOne("Core.Data.Models.Personas.Personal.Cobrador", "Cobrador")
                         .WithMany()
                         .HasForeignKey("CobradorId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2421,26 +2421,26 @@ namespace Vista.Data.Migrations
                     b.Navigation("Cobrador");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Componentes.VehiculoAfectado", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Componentes.VehiculoAfectado", b =>
                 {
-                    b.HasOne("Vista.Data.Models.Salidas.Componentes.SeguroVehiculo", "Seguro")
+                    b.HasOne("Core.Data.Models.Salidas.Componentes.SeguroVehiculo", "Seguro")
                         .WithOne()
-                        .HasForeignKey("Vista.Data.Models.Salidas.Componentes.VehiculoAfectado", "SeguroId")
+                        .HasForeignKey("Core.Data.Models.Salidas.Componentes.VehiculoAfectado", "SeguroId")
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Seguro");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Vehiculos.Flota.VehiculoSalida", b =>
+            modelBuilder.Entity("Core.Data.Models.Vehiculos.Flota.VehiculoSalida", b =>
                 {
-                    b.HasOne("Vista.Data.Models.Personas.Personal.Bombero", "Encargado")
+                    b.HasOne("Core.Data.Models.Personas.Personal.Bombero", "Encargado")
                         .WithMany("VehiculosEncargado")
                         .HasForeignKey("EncargadoId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("Vista.Data.Models.Imagenes.Imagen_VehiculoSalida", "Imagen")
+                    b.HasOne("Core.Data.Models.Imagenes.Imagen_VehiculoSalida", "Imagen")
                         .WithOne("Vehiculo")
-                        .HasForeignKey("Vista.Data.Models.Vehiculos.Flota.VehiculoSalida", "ImagenId")
+                        .HasForeignKey("Core.Data.Models.Vehiculos.Flota.VehiculoSalida", "ImagenId")
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Encargado");
@@ -2448,9 +2448,9 @@ namespace Vista.Data.Migrations
                     b.Navigation("Imagen");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Vehiculos.Vehiculo_Personal", b =>
+            modelBuilder.Entity("Core.Data.Models.Vehiculos.Vehiculo_Personal", b =>
                 {
-                    b.HasOne("Vista.Data.Models.Personas.Personal.Personal", "Personal")
+                    b.HasOne("Core.Data.Models.Personas.Personal.Personal", "Personal")
                         .WithMany("VehiculosPersonales")
                         .HasForeignKey("PersonalId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2459,59 +2459,59 @@ namespace Vista.Data.Migrations
                     b.Navigation("Personal");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Personas.Personal.Bombero", b =>
+            modelBuilder.Entity("Core.Data.Models.Personas.Personal.Bombero", b =>
                 {
-                    b.HasOne("Vista.Data.Models.Grupos.Dependencias.Comunicaciones.Comunicacion", "Handie")
+                    b.HasOne("Core.Data.Models.Grupos.Dependencias.Comunicaciones.Comunicacion", "Handie")
                         .WithOne("Bombero")
-                        .HasForeignKey("Vista.Data.Models.Personas.Personal.Bombero", "EquipoId")
+                        .HasForeignKey("Core.Data.Models.Personas.Personal.Bombero", "EquipoId")
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Handie");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Vehiculos.Flota.Movil", b =>
+            modelBuilder.Entity("Core.Data.Models.Vehiculos.Flota.Movil", b =>
                 {
-                    b.HasOne("Vista.Data.Models.Grupos.Dependencias.Comunicaciones.Comunicacion", "HandieMovil")
+                    b.HasOne("Core.Data.Models.Grupos.Dependencias.Comunicaciones.Comunicacion", "HandieMovil")
                         .WithOne("Movil")
-                        .HasForeignKey("Vista.Data.Models.Vehiculos.Flota.Movil", "EquipoId")
+                        .HasForeignKey("Core.Data.Models.Vehiculos.Flota.Movil", "EquipoId")
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("HandieMovil");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Grupos.Brigadas.Brigada", b =>
+            modelBuilder.Entity("Core.Data.Models.Grupos.Brigadas.Brigada", b =>
                 {
                     b.Navigation("Bomberos");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Grupos.Dependencias.Comunicaciones.Comunicacion", b =>
+            modelBuilder.Entity("Core.Data.Models.Grupos.Dependencias.Comunicaciones.Comunicacion", b =>
                 {
                     b.Navigation("Bombero");
 
                     b.Navigation("Movil");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Grupos.Dependencias.Dependencia", b =>
+            modelBuilder.Entity("Core.Data.Models.Grupos.Dependencias.Dependencia", b =>
                 {
                     b.Navigation("Bomberos");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Grupos.Dependencias.EquiposAutonomos.EquipoAutonomo", b =>
+            modelBuilder.Entity("Core.Data.Models.Grupos.Dependencias.EquiposAutonomos.EquipoAutonomo", b =>
                 {
                     b.Navigation("Movimientos");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Personas.Damnificado_Salida", b =>
+            modelBuilder.Entity("Core.Data.Models.Personas.Damnificado_Salida", b =>
                 {
                     b.Navigation("OcupanteInfo");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Componentes.FuerzaInterviniente_Salida", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Componentes.FuerzaInterviniente_Salida", b =>
                 {
                     b.Navigation("Damnificados");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Planillas.Salida", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Planillas.Salida", b =>
                 {
                     b.Navigation("CuerpoParticipante");
 
@@ -2522,20 +2522,20 @@ namespace Vista.Data.Migrations
                     b.Navigation("Moviles");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Socios.Socio", b =>
+            modelBuilder.Entity("Core.Data.Models.Socios.Socio", b =>
                 {
                     b.Navigation("Historial");
 
                     b.Navigation("Pagos");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Imagenes.Imagen_VehiculoSalida", b =>
+            modelBuilder.Entity("Core.Data.Models.Imagenes.Imagen_VehiculoSalida", b =>
                 {
                     b.Navigation("Vehiculo")
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Personas.Personal.Personal", b =>
+            modelBuilder.Entity("Core.Data.Models.Personas.Personal.Personal", b =>
                 {
                     b.Navigation("Contacto");
 
@@ -2544,18 +2544,18 @@ namespace Vista.Data.Migrations
                     b.Navigation("VehiculosPersonales");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Componentes.SeguroVivienda", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Componentes.SeguroVivienda", b =>
                 {
                     b.Navigation("Salida")
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Salidas.Componentes.VehiculoAfectado", b =>
+            modelBuilder.Entity("Core.Data.Models.Salidas.Componentes.VehiculoAfectado", b =>
                 {
                     b.Navigation("Ocupantes");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Personas.Personal.Bombero", b =>
+            modelBuilder.Entity("Core.Data.Models.Personas.Personal.Bombero", b =>
                 {
                     b.Navigation("Ascensos");
 
@@ -2574,7 +2574,7 @@ namespace Vista.Data.Migrations
                     b.Navigation("VehiculosEncargado");
                 });
 
-            modelBuilder.Entity("Vista.Data.Models.Vehiculos.Flota.Movil", b =>
+            modelBuilder.Entity("Core.Data.Models.Vehiculos.Flota.Movil", b =>
                 {
                     b.Navigation("Salidas");
                 });

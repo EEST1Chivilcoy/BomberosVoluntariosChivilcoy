@@ -1,4 +1,4 @@
-﻿namespace Vista.DTOs.Nominatim
+﻿namespace FireForce.Core.DTOs.Nominatim
 {
     public class NominatimResponse
     {

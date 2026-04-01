@@ -1,9 +1,9 @@
-﻿using Vista.Data;
-using Vista.Data.Models.Grupos.Dependencias.EquiposAutonomos;
+﻿using FireForce.Core.Data;
+using FireForce.Core.Data.Models.Grupos.Dependencias.EquiposAutonomos;
 using Microsoft.EntityFrameworkCore;
-using Vista.Data.Enums;
+using FireForce.Core.Data.Enums;
 
-namespace Vista.Services
+namespace FireForce.Core.Services
 {
     public interface IEquipoAutonomoService
     {

@@ -1,8 +1,8 @@
-﻿using Vista.Data.Enums;
+﻿using FireForce.Core.Data.Enums;
 using System.ComponentModel.DataAnnotations;
-using Vista.Data.Enums.Discriminadores;
+using FireForce.Core.Data.Enums.Discriminadores;
 
-namespace Vista.Data.Models.Personas
+namespace FireForce.Core.Data.Models.Personas
 {
     /// <summary>
     /// Clase base abstracta que representa a una persona.  

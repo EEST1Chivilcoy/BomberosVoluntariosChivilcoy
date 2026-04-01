@@ -3,8 +3,8 @@
 @inject IDbContextFactory<BomberosDbContext> DbFactory
 @inject IMessageService message
 @page "/fire-force/bomberos/sancionados"
-@using Vista.Data.Models.Personas.Personal
-@using Vista.Data.Models.Personas.Personal.Componentes
+@using FireForce.Core.Data.Models.Personas.Personal
+@using FireForce.Core.Data.Models.Personas.Personal.Componentes
 
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize(Policy = "AdminOnly")]

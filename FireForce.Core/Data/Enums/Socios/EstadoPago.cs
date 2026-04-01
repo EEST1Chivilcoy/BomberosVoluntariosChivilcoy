@@ -1,4 +1,4 @@
-﻿namespace Vista.Data.Enums.Socios
+﻿namespace FireForce.Core.Data.Enums.Socios
 {
     public enum EstadoPago
     {

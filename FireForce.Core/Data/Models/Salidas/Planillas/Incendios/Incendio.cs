@@ -1,8 +1,8 @@
-﻿using Vista.Data.Enums;
-using Vista.Data.Models.Salidas.Componentes;
+﻿using FireForce.Core.Data.Enums;
+using FireForce.Core.Data.Models.Salidas.Componentes;
 using System.ComponentModel.DataAnnotations;
 
-namespace Vista.Data.Models.Salidas.Planillas.Incendios
+namespace FireForce.Core.Data.Models.Salidas.Planillas.Incendios
 {
     public class Incendio : Salida
     {

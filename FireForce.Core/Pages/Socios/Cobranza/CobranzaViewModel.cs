@@ -1,6 +1,6 @@
-using Vista.Data.Enums.Socios;
+using FireForce.Core.Data.Enums.Socios;
 
-namespace Vista.Pages.Socios.Cobranza
+namespace FireForce.Core.Pages.Socios.Cobranza
 {
     /// <summary>
     /// ViewModel para la página de cobranza de socios.

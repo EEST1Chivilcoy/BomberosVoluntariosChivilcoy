@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Vista.Data.Enums;
+using FireForce.Core.Data.Enums;
 
-namespace Vista.Data.ViewModels.Incendios
+namespace FireForce.Core.Data.ViewModels.Incendios
 {
     public class IncendioEstablecimientoPublicoViewModels : IncendioViewModels
     {

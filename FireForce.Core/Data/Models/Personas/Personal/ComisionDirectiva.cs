@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Vista.Data.Enums.Personal.ComisionDirectiva;
+using FireForce.Core.Data.Enums.Personal.ComisionDirectiva;
 
-namespace Vista.Data.Models.Personas.Personal
+namespace FireForce.Core.Data.Models.Personas.Personal
 {
     /// <summary>
     /// Representa a un miembro de la Comisión Directiva de la Asociación de Bomberos Voluntarios.

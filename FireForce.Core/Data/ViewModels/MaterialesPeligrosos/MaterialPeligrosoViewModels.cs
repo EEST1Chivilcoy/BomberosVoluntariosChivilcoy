@@ -1,8 +1,8 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.ComponentModel.DataAnnotations;
-using Vista.Data.Enums;
+using FireForce.Core.Data.Enums;
 
-namespace Vista.Data.ViewModels.MaterialesPeligrosos
+namespace FireForce.Core.Data.ViewModels.MaterialesPeligrosos
 {
     public class MaterialPeligrosoViewModels : SalidasViewModels
     {

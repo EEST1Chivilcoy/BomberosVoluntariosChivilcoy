@@ -1,7 +1,7 @@
 ﻿/*using System.ComponentModel.DataAnnotations;
-using Vista.Data.Models.Socios.Componentes.Pagos;
+using FireForce.Core.Data.Models.Socios.Componentes.Pagos;
 
-namespace Vista.Data.Models.Imagenes
+namespace FireForce.Core.Data.Models.Imagenes
 {
     /// <summary>
     /// Representa un comprobante de pago asociado a una pago de un socio, realizado por transferencia bancaria.

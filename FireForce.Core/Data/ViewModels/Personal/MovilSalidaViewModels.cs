@@ -1,7 +1,7 @@
-﻿using Vista.Data.Models.Personas.Personal;
-using Vista.Data.Models.Vehiculos.Flota;
+﻿using FireForce.Core.Data.Models.Personas.Personal;
+using FireForce.Core.Data.Models.Vehiculos.Flota;
 
-namespace Vista.Data.ViewModels.Personal
+namespace FireForce.Core.Data.ViewModels.Personal
 {
     public class MovilSalidaViewModels
     {

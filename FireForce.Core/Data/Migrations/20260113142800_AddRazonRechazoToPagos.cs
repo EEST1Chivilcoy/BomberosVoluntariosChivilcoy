@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace Vista.Data.Migrations
+namespace FireForce.Core.Data.Migrations
 {
     /// <inheritdoc />
     public partial class AddRazonRechazoToPagos : Migration

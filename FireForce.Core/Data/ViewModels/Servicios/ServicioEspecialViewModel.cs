@@ -1,6 +1,6 @@
-﻿using Vista.Data.Enums.Salidas;
+﻿using FireForce.Core.Data.Enums.Salidas;
 
-namespace Vista.Data.ViewModels.Servicios
+namespace FireForce.Core.Data.ViewModels.Servicios
 {
     public class ServicioEspecialViewModel : SalidasViewModels
     {

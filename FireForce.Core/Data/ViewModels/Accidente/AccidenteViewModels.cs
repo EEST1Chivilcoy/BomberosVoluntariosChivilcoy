@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Vista.Data.Enums;
-using Vista.Data.Models.Salidas.Componentes;
-using Vista.Data.ViewModels.Personal;
+using FireForce.Core.Data.Enums;
+using FireForce.Core.Data.Models.Salidas.Componentes;
+using FireForce.Core.Data.ViewModels.Personal;
 
-namespace Vista.Data.ViewModels.Accidente
+namespace FireForce.Core.Data.ViewModels.Accidente
 {
     public class AccidenteViewModels : SalidasViewModels
     {

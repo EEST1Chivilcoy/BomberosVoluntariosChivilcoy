@@ -1,7 +1,7 @@
-﻿using Vista.Data.Enums;
+﻿using FireForce.Core.Data.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace Vista.Data.Models.Salidas.Planillas
+namespace FireForce.Core.Data.Models.Salidas.Planillas
 {
     public class MaterialPeligroso : Salida
     {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Vista.Helpers
+namespace FireForce.Core.Helpers
 {
     public static class ValidationHelper
     {

@@ -1,9 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Vista.Data.Models.Personas.Personal;
-using Vista.Data.Models.Socios;
+using FireForce.Core.Data.Models.Personas.Personal;
+using FireForce.Core.Data.Models.Socios;
 
-namespace Vista.Data.Models.Socios.Componentes.Pagos
+namespace FireForce.Core.Data.Models.Socios.Componentes.Pagos
 {
     /// <summary>
     /// Pago realizado en efectivo por un socio.

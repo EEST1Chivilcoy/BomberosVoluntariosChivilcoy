@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using Vista.Data.Enums;
-using Vista.Data.Models.Grupos.FuerzasIntervinientes;
-using Vista.Data.Models.Personas;
+using FireForce.Core.Data.Enums;
+using FireForce.Core.Data.Models.Grupos.FuerzasIntervinientes;
+using FireForce.Core.Data.Models.Personas;
 
-namespace Vista.Data.Models.Salidas.Componentes
+namespace FireForce.Core.Data.Models.Salidas.Componentes
 {
     public class OcupanteVehiculo
     {

@@ -1,11 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Vista.Data.Enums.Discriminadores;
-using Vista.Data.Enums.Socios;
-using Vista.Data.Models.Personas.Personal;
-using Vista.Data.Models.Socios;
+using FireForce.Core.Data.Enums.Discriminadores;
+using FireForce.Core.Data.Enums.Socios;
+using FireForce.Core.Data.Models.Personas.Personal;
+using FireForce.Core.Data.Models.Socios;
 
-namespace Vista.Data.Models.Socios.Componentes.Pagos
+namespace FireForce.Core.Data.Models.Socios.Componentes.Pagos
 {
     /// <summary>
     /// Pago abstracto realizado por un socio.

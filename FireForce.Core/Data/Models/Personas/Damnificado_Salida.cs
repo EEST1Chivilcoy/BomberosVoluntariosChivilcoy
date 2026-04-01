@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Vista.Data.Enums;
-using Vista.Data.Models.Grupos.FuerzasIntervinientes;
-using Vista.Data.Models.Salidas.Componentes;
-using Vista.Data.Models.Salidas.Planillas;
+using FireForce.Core.Data.Enums;
+using FireForce.Core.Data.Models.Grupos.FuerzasIntervinientes;
+using FireForce.Core.Data.Models.Salidas.Componentes;
+using FireForce.Core.Data.Models.Salidas.Planillas;
 
-namespace Vista.Data.Models.Personas
+namespace FireForce.Core.Data.Models.Personas
 {
     /// <summary>
     /// Representa a un damnificado.  

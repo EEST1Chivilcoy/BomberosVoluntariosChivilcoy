@@ -1,8 +1,8 @@
-﻿using Vista.Data.Enums;
+﻿using FireForce.Core.Data.Enums;
 using System.ComponentModel.DataAnnotations.Schema;
-using Vista.Data.Models.Personas.Personal;
+using FireForce.Core.Data.Models.Personas.Personal;
 
-namespace Vista.Data.Models.Grupos.Dependencias
+namespace FireForce.Core.Data.Models.Grupos.Dependencias
 {
     public class Bombero_Dependencia
     {

@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Vista.Data.Enums;
-using Vista.Data.Models.Personas.Personal;
-using Vista.Data.Models.Salidas.Componentes;
-using Vista.Data.Models.Salidas.Planillas;
-using Vista.Data.Models.Vehiculos.Flota;
+using FireForce.Core.Data.Enums;
+using FireForce.Core.Data.Models.Personas.Personal;
+using FireForce.Core.Data.Models.Salidas.Componentes;
+using FireForce.Core.Data.Models.Salidas.Planillas;
+using FireForce.Core.Data.Models.Vehiculos.Flota;
 
-namespace Vista.Data.ViewModels.Personal
+namespace FireForce.Core.Data.ViewModels.Personal
 {
     public class ComunicacionViewModel
     {

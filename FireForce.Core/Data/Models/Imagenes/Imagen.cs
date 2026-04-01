@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Vista.Data.Enums.Discriminadores;
+using FireForce.Core.Data.Enums.Discriminadores;
 
-namespace Vista.Data.Models.Imagenes
+namespace FireForce.Core.Data.Models.Imagenes
 {
     /// <summary>
     /// Representa una imagen en el sistema.

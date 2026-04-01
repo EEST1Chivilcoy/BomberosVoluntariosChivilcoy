@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Vista.Data.Enums;
-using Vista.Data.Models.Grupos.FuerzasIntervinientes;
-using Vista.Data.Models.Vehiculos.Flota;
+using FireForce.Core.Data.Enums;
+using FireForce.Core.Data.Models.Grupos.FuerzasIntervinientes;
+using FireForce.Core.Data.Models.Vehiculos.Flota;
 
-namespace Vista.Data.Models.Grupos.Dependencias.EquiposAutonomos
+namespace FireForce.Core.Data.Models.Grupos.Dependencias.EquiposAutonomos
 {
     /// <summary>
     /// Representa un equipo autónomo utilizado por una dependencia o vehículo de salida.

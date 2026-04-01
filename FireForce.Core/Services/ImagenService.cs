@@ -1,13 +1,13 @@
 ﻿using AntDesign;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
-using Vista.Data;
-using Vista.Data.Models.Imagenes;
-using Vista.Data.Models.Personas.Personal;
-using Vista.DTOs;
-using Vista.Helpers;
+using FireForce.Core.Data;
+using FireForce.Core.Data.Models.Imagenes;
+using FireForce.Core.Data.Models.Personas.Personal;
+using FireForce.Core.DTOs;
+using FireForce.Core.Helpers;
 
-namespace Vista.Services
+namespace FireForce.Core.Services
 {
     public interface IImagenService
     {

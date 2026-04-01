@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
 VisualStudioVersion = 18.0.11201.2
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vista", "Vista\Vista.csproj", "{3F1C6B66-C06A-45EC-AE72-965E6FD879FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FireForce.Core", "FireForce.Core\FireForce.Core.csproj", "{3F1C6B66-C06A-45EC-AE72-965E6FD879FF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

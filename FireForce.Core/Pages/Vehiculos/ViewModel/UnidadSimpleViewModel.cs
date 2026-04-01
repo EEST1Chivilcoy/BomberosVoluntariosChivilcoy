@@ -1,6 +1,6 @@
-﻿using Vista.Data.Enums;
+﻿using FireForce.Core.Data.Enums;
 
-namespace Vista.Pages.Vehiculos.ViewModel
+namespace FireForce.Core.Pages.Vehiculos.ViewModel
 {
     public class UnidadSimpleViewModel
     {

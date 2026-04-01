@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Vista.Data.Enums;
-using Vista.Data.Models.Grupos.Brigadas;
+using FireForce.Core.Data.Enums;
+using FireForce.Core.Data.Models.Grupos.Brigadas;
 
-namespace Vista.Data.ViewModels.Personal
+namespace FireForce.Core.Data.ViewModels.Personal
 {
     public class BomberoViweModel : PersonalViewModel
     {

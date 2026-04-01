@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Vista.Data.Models.Salidas.Planillas.Incendios;
+using FireForce.Core.Data.Models.Salidas.Planillas.Incendios;
 
-namespace Vista.Data.Models.Vehiculos.Flota
+namespace FireForce.Core.Data.Models.Vehiculos.Flota
 {
     public class EmbarcacionAfectada
     {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Vista.Data.Enums.Personal.ComisionDirectiva
+namespace FireForce.Core.Data.Enums.Personal.ComisionDirectiva
 {
     public enum EstadoComisionDirectiva
     {

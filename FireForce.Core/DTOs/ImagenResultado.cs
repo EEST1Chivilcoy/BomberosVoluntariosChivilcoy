@@ -1,4 +1,4 @@
-﻿namespace Vista.DTOs
+﻿namespace FireForce.Core.DTOs
 {
     /// <summary>
     /// DTO para representar el resultado de una imagen.

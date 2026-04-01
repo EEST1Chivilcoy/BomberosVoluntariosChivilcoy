@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Vista.Data.Models.Salidas.Planillas.Servicios
+namespace FireForce.Core.Data.Models.Salidas.Planillas.Servicios
 {
     public class ServicioEspecialRetiradoDeObito : ServicioEspecial
     {

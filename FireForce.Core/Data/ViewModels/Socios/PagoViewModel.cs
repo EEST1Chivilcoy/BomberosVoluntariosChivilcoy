@@ -1,7 +1,7 @@
-using Vista.Data.Enums.Discriminadores;
-using Vista.Data.Enums.Socios;
+using FireForce.Core.Data.Enums.Discriminadores;
+using FireForce.Core.Data.Enums.Socios;
 
-namespace Vista.Data.ViewModels.Socios
+namespace FireForce.Core.Data.ViewModels.Socios
 {
     public class PagoViewModel
     {

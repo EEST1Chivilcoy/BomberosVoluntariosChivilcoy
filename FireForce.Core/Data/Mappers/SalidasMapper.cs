@@ -1,24 +1,24 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Vista.Data.Models.Personas.Personal;
-using Vista.Data.Models.Salidas.Planillas;
-using Vista.Data.Models.Salidas.Componentes;
-using Vista.Data.ViewModels;
-using Vista.Data.Models.Grupos.FuerzasIntervinientes;
-using Vista.Data.ViewModels.Personal;
-using Vista.Data.ViewModels.Rescates;
-using Vista.Data.Models.Personas;
-using Vista.Data.ViewModels.Incendios;
-using Vista.Data.ViewModels.FactorClimatico;
-using Vista.Data.ViewModels.Accidente;
-using Vista.Data.ViewModels.MaterialesPeligrosos;
-using Vista.Data.Models.Salidas.Planillas.Servicios;
-using Vista.Data.Models.Salidas.Planillas.Incendios;
-using Vista.Data.ViewModels.Servicios;
-using Vista.Data.Enums.Salidas;
+using FireForce.Core.Data.Models.Personas.Personal;
+using FireForce.Core.Data.Models.Salidas.Planillas;
+using FireForce.Core.Data.Models.Salidas.Componentes;
+using FireForce.Core.Data.ViewModels;
+using FireForce.Core.Data.Models.Grupos.FuerzasIntervinientes;
+using FireForce.Core.Data.ViewModels.Personal;
+using FireForce.Core.Data.ViewModels.Rescates;
+using FireForce.Core.Data.Models.Personas;
+using FireForce.Core.Data.ViewModels.Incendios;
+using FireForce.Core.Data.ViewModels.FactorClimatico;
+using FireForce.Core.Data.ViewModels.Accidente;
+using FireForce.Core.Data.ViewModels.MaterialesPeligrosos;
+using FireForce.Core.Data.Models.Salidas.Planillas.Servicios;
+using FireForce.Core.Data.Models.Salidas.Planillas.Incendios;
+using FireForce.Core.Data.ViewModels.Servicios;
+using FireForce.Core.Data.Enums.Salidas;
 
-namespace Vista.Data.Mappers
+namespace FireForce.Core.Data.Mappers
 {
     public static class SalidasMapper
     {

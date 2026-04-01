@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Vista.Data.Enums;
-using Vista.Data.Models.Personas.Personal;
+using FireForce.Core.Data.Enums;
+using FireForce.Core.Data.Models.Personas.Personal;
 
-namespace Vista.Data.Models.Personas.Personal.Componentes
+namespace FireForce.Core.Data.Models.Personas.Personal.Componentes
 {
     /// <summary>
     /// Representa una sanción impuesta a un bombero.   

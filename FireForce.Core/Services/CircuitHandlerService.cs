@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components.Server.Circuits;
 
-namespace Vista.Services
+namespace FireForce.Core.Services
 {
     public class CircuitHandlerService : CircuitHandler
     {

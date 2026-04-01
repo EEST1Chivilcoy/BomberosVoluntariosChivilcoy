@@ -1,4 +1,4 @@
-﻿namespace Vista.Data.Enums
+﻿namespace FireForce.Core.Data.Enums
 {
     /// <summary>
     /// Enumeración que representa los posibles estados de un incidente.

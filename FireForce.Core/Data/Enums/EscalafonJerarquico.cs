@@ -1,4 +1,4 @@
-﻿namespace Vista.Data.Enums;
+﻿namespace FireForce.Core.Data.Enums;
 using System.ComponentModel.DataAnnotations;
 
 public enum EscalafonJerarquico

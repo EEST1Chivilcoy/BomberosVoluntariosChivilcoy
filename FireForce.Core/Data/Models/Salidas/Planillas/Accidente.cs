@@ -1,10 +1,10 @@
-﻿using Vista.Data.Enums;
-using Vista.Data.Models.Salidas.Componentes;
+﻿using FireForce.Core.Data.Enums;
+using FireForce.Core.Data.Models.Salidas.Componentes;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
-using Vista.Data.ViewModels.Personal;
+using FireForce.Core.Data.ViewModels.Personal;
 
-namespace Vista.Data.Models.Salidas.Planillas
+namespace FireForce.Core.Data.Models.Salidas.Planillas
 {
     public class Accidente : Salida
     {

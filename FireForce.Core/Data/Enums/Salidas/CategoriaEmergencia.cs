@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Vista.Data.Enums.Salidas
+namespace FireForce.Core.Data.Enums.Salidas
 {
     /// <summary>
     /// Categoría de Emergencia

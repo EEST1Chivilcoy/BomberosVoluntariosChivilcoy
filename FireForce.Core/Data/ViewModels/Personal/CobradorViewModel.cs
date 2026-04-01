@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Vista.Data.Enums.Personal.Cobrador;
-using Vista.Data.Enums.Socios;
-using Vista.Shared;
+using FireForce.Core.Data.Enums.Personal.Cobrador;
+using FireForce.Core.Data.Enums.Socios;
+using FireForce.Core.Shared;
 
-namespace Vista.Data.ViewModels.Personal
+namespace FireForce.Core.Data.ViewModels.Personal
 {
     /// <summary>
     /// ViewModel para representar un cobrador.

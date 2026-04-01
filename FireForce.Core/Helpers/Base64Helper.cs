@@ -1,4 +1,4 @@
-﻿namespace Vista.Helpers
+﻿namespace FireForce.Core.Helpers
 {
     public static class Base64Helper
     {

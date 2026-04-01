@@ -1,18 +1,18 @@
-﻿using Vista.Data.Enums;
-using Vista.Data.Models.Salidas.Componentes;
-using Vista.Data.Models.Salidas.Planillas;
+﻿using FireForce.Core.Data.Enums;
+using FireForce.Core.Data.Models.Salidas.Componentes;
+using FireForce.Core.Data.Models.Salidas.Planillas;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Vista.Data.Models.Grupos.Dependencias;
-using Vista.Data.Models.Grupos.Brigadas;
-using Vista.Data.Models.Imagenes;
-using Vista.Data.Models.Grupos.Dependencias.Comunicaciones;
-using Vista.Data.Models.Personas.Personal.Componentes;
-using Vista.Data.Models.Vehiculos.Flota;
-using Vista.Data.Models.Objetos.Componentes;
+using FireForce.Core.Data.Models.Grupos.Dependencias;
+using FireForce.Core.Data.Models.Grupos.Brigadas;
+using FireForce.Core.Data.Models.Imagenes;
+using FireForce.Core.Data.Models.Grupos.Dependencias.Comunicaciones;
+using FireForce.Core.Data.Models.Personas.Personal.Componentes;
+using FireForce.Core.Data.Models.Vehiculos.Flota;
+using FireForce.Core.Data.Models.Objetos.Componentes;
 
-namespace Vista.Data.Models.Personas.Personal
+namespace FireForce.Core.Data.Models.Personas.Personal
 {
     /// <summary>
     /// Representa a un bombero, heredando las características del personal.

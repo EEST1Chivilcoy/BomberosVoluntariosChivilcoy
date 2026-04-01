@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Vista.Data.Enums.Discriminadores;
+using FireForce.Core.Data.Enums.Discriminadores;
 
-namespace Vista.Data.Models.Otros.Partes
+namespace FireForce.Core.Data.Models.Otros.Partes
 {
     /// <summary>
     /// Representa una parte del vehículo.

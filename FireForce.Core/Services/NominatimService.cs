@@ -2,11 +2,11 @@
 using Microsoft.Extensions.Options;
 using Microsoft.JSInterop;
 using System.Net.Http.Json;
-using Vista.Data.Mappers;
-using Vista.DTOs.Nominatim;
-using Vista.DTOs.Nominatim.Raw;
+using FireForce.Core.Data.Mappers;
+using FireForce.Core.DTOs.Nominatim;
+using FireForce.Core.DTOs.Nominatim.Raw;
 
-namespace Vista.Services;
+namespace FireForce.Core.Services;
 
 /// <summary>
 /// Interfaz para el servicio que interactúa con la API de Nominatim.

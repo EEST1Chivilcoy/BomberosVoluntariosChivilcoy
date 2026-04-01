@@ -1,4 +1,4 @@
-namespace Vista.Services;
+namespace FireForce.Core.Services;
 
 /// <summary>
 /// Configuración para el servicio de Nominatim.

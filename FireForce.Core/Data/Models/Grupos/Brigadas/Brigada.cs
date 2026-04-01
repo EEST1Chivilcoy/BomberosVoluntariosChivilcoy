@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Vista.Data.Models.Personas.Personal;
+using FireForce.Core.Data.Models.Personas.Personal;
 
-namespace Vista.Data.Models.Grupos.Brigadas
+namespace FireForce.Core.Data.Models.Grupos.Brigadas
 {
     /// <summary>
     /// Clase que representa una brigada de bomberos.

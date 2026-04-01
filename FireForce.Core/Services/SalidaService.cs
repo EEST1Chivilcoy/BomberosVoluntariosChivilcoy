@@ -5,18 +5,18 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
-using Vista.Data;
-using Vista.Data.Enums;
-using Vista.Data.Models.Personas.Personal;
-using Vista.Data.Models.Salidas.Componentes;
-using Vista.Data.Models.Salidas.Planillas;
-using Vista.Data.Models.Vehiculos.Flota;
-using Vista.Data.ViewModels.Personal;
-using Vista.Data.Models.Personas;
-using Vista.Data.Models.Grupos.FuerzasIntervinientes;
-using Vista.Helpers;
+using FireForce.Core.Data;
+using FireForce.Core.Data.Enums;
+using FireForce.Core.Data.Models.Personas.Personal;
+using FireForce.Core.Data.Models.Salidas.Componentes;
+using FireForce.Core.Data.Models.Salidas.Planillas;
+using FireForce.Core.Data.Models.Vehiculos.Flota;
+using FireForce.Core.Data.ViewModels.Personal;
+using FireForce.Core.Data.Models.Personas;
+using FireForce.Core.Data.Models.Grupos.FuerzasIntervinientes;
+using FireForce.Core.Helpers;
 
-namespace Vista.Services
+namespace FireForce.Core.Services
 {
     public interface ISalidaService
     {

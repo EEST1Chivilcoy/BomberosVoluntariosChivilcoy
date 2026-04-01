@@ -2,13 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.ComponentModel.DataAnnotations;
-using Vista.Data;
-using Vista.Data.Enums;
-using Vista.Data.Models.Grupos.Dependencias.EquiposAutonomos;
-using Vista.Data.Models.Objetos;
-using Vista.Data.Models.Objetos.Componentes;
+using FireForce.Core.Data;
+using FireForce.Core.Data.Enums;
+using FireForce.Core.Data.Models.Grupos.Dependencias.EquiposAutonomos;
+using FireForce.Core.Data.Models.Objetos;
+using FireForce.Core.Data.Models.Objetos.Componentes;
 
-namespace Vista.Services
+namespace FireForce.Core.Services
 {
     public interface IDepositoService
     {

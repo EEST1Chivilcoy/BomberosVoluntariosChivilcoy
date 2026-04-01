@@ -6,9 +6,9 @@
 @page "/fire-force/socios/imprimibles/lista-de-socios/inactivos/{IncluirInactivos:bool}"
 @page "/fire-force/socios/imprimibles/lista-de-socios/{ZonaParam:int}/inactivos/{IncluirInactivos:bool}"
 
-@using Vista.Services
-@using Vista.Data.Models.Socios
-@using Vista.Data.Enums.Socios
+@using FireForce.Core.Services
+@using FireForce.Core.Data.Models.Socios
+@using FireForce.Core.Data.Enums.Socios
 @using System.ComponentModel.DataAnnotations
 @using System.Text.RegularExpressions
 @using Microsoft.JSInterop
@@ -778,8 +778,8 @@ else
         SociosInactivos = socios.Count(s => s.EstadoSocio == TipoEstadoSocio.Inactivo);
 
         var sociosParaConteo = IncluirInactivos ? socios : socios.Where(s => s.EstadoSocio != TipoEstadoSocio.Inactivo);
-        SociosPersonas = sociosParaConteo.Count(s => s.Tipo == Vista.Data.Enums.Discriminadores.TipoSocio.Persona);
-        SociosEmpresas = sociosParaConteo.Count(s => s.Tipo == Vista.Data.Enums.Discriminadores.TipoSocio.Empresa);
+        SociosPersonas = sociosParaConteo.Count(s => s.Tipo == Core.Data.Enums.Discriminadores.TipoSocio.Persona);
+        SociosEmpresas = sociosParaConteo.Count(s => s.Tipo == Core.Data.Enums.Discriminadores.TipoSocio.Empresa);
 
         SociosOrdenados = socios
             .OrderBy(s => s.NroSocio)
@@ -788,7 +788,7 @@ else
                 NroSocio = s.NroSocio,
                 NombreOMRazonSocial = GetNombreSocio(s),
                 DocumentoOCUIT = string.IsNullOrWhiteSpace(s.DocumentoOCUIT) ? "Sin DNI/CUIT" : s.DocumentoOCUIT,
-                TipoCssClass = s.Tipo == Vista.Data.Enums.Discriminadores.TipoSocio.Persona ? "persona" : "empresa",
+                TipoCssClass = s.Tipo == Core.Data.Enums.Discriminadores.TipoSocio.Persona ? "persona" : "empresa",
                 TipoTexto = GetEnumDisplayName(s.Tipo),
                 ZonaTexto = GetZonaNumero(s.Zona),
                 FrecuenciaPagoTexto = GetEnumDisplayName(s.FrecuenciaDePago),
@@ -805,7 +805,7 @@ else
 
     private string GetNombreSocio(Socio socio)
     {
-        if (socio.Tipo == Vista.Data.Enums.Discriminadores.TipoSocio.Persona)
+        if (socio.Tipo == Core.Data.Enums.Discriminadores.TipoSocio.Persona)
         {
             var apellido = string.IsNullOrWhiteSpace(socio.Apellido) ? string.Empty : socio.Apellido.Trim();
             var nombre = string.IsNullOrWhiteSpace(socio.Nombre) ? string.Empty : socio.Nombre.Trim();

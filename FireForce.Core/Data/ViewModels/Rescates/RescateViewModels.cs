@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Vista.Data.ViewModels.Rescates
+namespace FireForce.Core.Data.ViewModels.Rescates
 {
     public class RescateViewModels: SalidasViewModels
     {

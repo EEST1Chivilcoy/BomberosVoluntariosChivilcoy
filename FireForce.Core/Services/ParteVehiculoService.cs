@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Vista.Data;
-using Vista.Data.Models.Otros.Partes;
-using Vista.Helpers;
+using FireForce.Core.Data;
+using FireForce.Core.Data.Models.Otros.Partes;
+using FireForce.Core.Helpers;
 
-namespace Vista.Services
+namespace FireForce.Core.Services
 {
     public interface IParteVehiculoService
     {

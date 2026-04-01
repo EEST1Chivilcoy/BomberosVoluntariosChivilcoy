@@ -1,6 +1,6 @@
-﻿using Vista.Data.Enums;
+﻿using FireForce.Core.Data.Enums;
 
-namespace Vista.Data.Models.Salidas.Planillas.Incendios
+namespace FireForce.Core.Data.Models.Salidas.Planillas.Incendios
 {
     public class IncendioComercio : Incendio
     {

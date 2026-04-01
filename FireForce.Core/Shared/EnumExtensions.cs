@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
-namespace Vista.Shared
+namespace FireForce.Core.Shared
 {
     public static class EnumExtensions
     {

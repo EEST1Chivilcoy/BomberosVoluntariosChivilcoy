@@ -1,9 +1,9 @@
 ﻿using System.Globalization;
 using System.Text.Json;
-using Vista.DTOs.Nominatim;
-using Vista.DTOs.Nominatim.Raw;
+using FireForce.Core.DTOs.Nominatim;
+using FireForce.Core.DTOs.Nominatim.Raw;
 
-namespace Vista.Data.Mappers
+namespace FireForce.Core.Data.Mappers
 {
     public static class NominatimMapper
     {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Vista.Data;
+using FireForce.Core.Data;
 
-namespace Vista.Services
+namespace FireForce.Core.Services
 {
     public class InitData : IHostedService
     {

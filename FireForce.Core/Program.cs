@@ -13,8 +13,8 @@ using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
 using System.Globalization;
 using System.Security.Claims;
-using Vista.Data;
-using Vista.Services;
+using FireForce.Core.Data;
+using FireForce.Core.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

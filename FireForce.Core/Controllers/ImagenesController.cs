@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Vista.Services;
+using FireForce.Core.Services;
 
-namespace Vista.Controllers
+namespace FireForce.Core.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

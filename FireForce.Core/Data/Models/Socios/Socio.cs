@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Vista.Data.Enums;
-using Vista.Data.Enums.Discriminadores;
-using Vista.Data.Enums.Socios;
-using Vista.Data.Models.Socios.Componentes;
-using Vista.Data.Models.Socios.Componentes.Pagos;
+using FireForce.Core.Data.Enums;
+using FireForce.Core.Data.Enums.Discriminadores;
+using FireForce.Core.Data.Enums.Socios;
+using FireForce.Core.Data.Models.Socios.Componentes;
+using FireForce.Core.Data.Models.Socios.Componentes.Pagos;
 
-namespace Vista.Data.Models.Socios
+namespace FireForce.Core.Data.Models.Socios
 {
     /// <summary>
     /// Representa un socio en el sistema.

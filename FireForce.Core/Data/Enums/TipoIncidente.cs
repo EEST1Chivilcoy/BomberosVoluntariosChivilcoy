@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-namespace Vista.Data.Enums
+namespace FireForce.Core.Data.Enums
 {
     public enum TipoIncidente
     {

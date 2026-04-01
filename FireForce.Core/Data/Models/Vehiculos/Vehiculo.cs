@@ -1,8 +1,8 @@
-﻿using Vista.Data.Models.Salidas.Componentes;
+﻿using FireForce.Core.Data.Models.Salidas.Componentes;
 using System.ComponentModel.DataAnnotations;
-using Vista.Data.Enums.Discriminadores;
+using FireForce.Core.Data.Enums.Discriminadores;
 
-namespace Vista.Data.Models.Vehiculos
+namespace FireForce.Core.Data.Models.Vehiculos
 {
     /// <summary>
     /// Clase abstracta que representa un vehículo.

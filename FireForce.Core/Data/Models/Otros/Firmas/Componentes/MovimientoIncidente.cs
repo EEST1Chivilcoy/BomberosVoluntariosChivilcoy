@@ -1,6 +1,6 @@
-﻿using Vista.Data.Models.Personas.Personal;
+﻿using FireForce.Core.Data.Models.Personas.Personal;
 
-namespace Vista.Data.Models.Otros.Firmas.Componentes
+namespace FireForce.Core.Data.Models.Otros.Firmas.Componentes
 {
     public class MovimientoIncidente
     {

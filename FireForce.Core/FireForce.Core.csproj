@@ -6,27 +6,6 @@
 		<UserSecretsId>f08ce748-0a84-44c1-8c1e-cca58d1deceb</UserSecretsId>
 	</PropertyGroup>
 	<ItemGroup>
-		<Compile Remove="Areas\**" />
-		<Compile Remove="Data\ViewModels\APIResponse\**" />
-		<Compile Remove="Data\ViewModel\**" />
-		<Compile Remove="wwwroot\Moviles\**" />
-		<Content Remove="Areas\**" />
-		<Content Remove="Data\ViewModels\APIResponse\**" />
-		<Content Remove="Data\ViewModel\**" />
-		<Content Remove="wwwroot\Moviles\**" />
-		<EmbeddedResource Remove="Areas\**" />
-		<EmbeddedResource Remove="Data\ViewModels\APIResponse\**" />
-		<EmbeddedResource Remove="Data\ViewModel\**" />
-		<EmbeddedResource Remove="wwwroot\Moviles\**" />
-		<None Remove="Areas\**" />
-		<None Remove="Data\ViewModels\APIResponse\**" />
-		<None Remove="Data\ViewModel\**" />
-		<None Remove="wwwroot\Moviles\**" />
-	</ItemGroup>
-	<ItemGroup>
-		<Compile Remove="Data\Models\Salidas\Componentes\VehículoInterviniente.cs" />
-	</ItemGroup>
-	<ItemGroup>
 		<PackageReference Include="AntDesign" Version="1.6.0" />
 		<PackageReference Include="AntDesign.Charts" Version="0.9.0" />
 		<PackageReference Include="ClosedXML" Version="0.105.0" />
@@ -68,9 +47,5 @@
 			<Generator>ResXFileCodeGenerator</Generator>
 			<LastGenOutput>Resources.Designer.cs</LastGenOutput>
 		</EmbeddedResource>
-	</ItemGroup>
-	<ItemGroup>
-		<Folder Include="Data\Models\Vehiculos\Flota\Componentes\" />
-		<Folder Include="Pages\Firmas\Departamentos\" />
 	</ItemGroup>
 </Project>

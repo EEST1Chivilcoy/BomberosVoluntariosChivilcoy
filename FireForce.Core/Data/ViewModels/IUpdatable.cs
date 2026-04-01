@@ -1,4 +1,4 @@
-namespace Vista.Data.ViewModels
+namespace FireForce.Core.Data.ViewModels
 {
     /// <summary>
     /// Define la capacidad de actualizar las propiedades desde otro objeto del mismo tipo.

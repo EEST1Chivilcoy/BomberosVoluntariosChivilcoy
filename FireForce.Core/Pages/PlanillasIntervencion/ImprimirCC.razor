@@ -8,10 +8,10 @@
 @using System
 @using System.Globalization
 @using System.Text.RegularExpressions
-@using Vista.Data.Models.Vehiculos.Flota
-@using Vista.Data.Models.Personas
-@using Vista.Data.Models.Personas.Personal
-@using Vista.Data.Models.Personas.Personal.Componentes
+@using FireForce.Core.Data.Models.Vehiculos.Flota
+@using FireForce.Core.Data.Models.Personas
+@using FireForce.Core.Data.Models.Personas.Personal
+@using FireForce.Core.Data.Models.Personas.Personal.Componentes
 
 @*Servicios Utilizados*@
 @inject IDbContextFactory<BomberosDbContext> DbFactory
@@ -19,9 +19,9 @@
 @inject IJSRuntime JSRuntime
 
 @*Componentes Utilizados - HTML Puro*@
-@using Vista.Components
-@using Vista.Components.PlanillaSalida
-@using Vista.Data.Models.Salidas.Planillas.Incendios
+@using FireForce.Core.Components
+@using FireForce.Core.Components.PlanillaSalida
+@using FireForce.Core.Data.Models.Salidas.Planillas.Incendios
 
 <!DOCTYPE html>
 <html lang="es-ES">

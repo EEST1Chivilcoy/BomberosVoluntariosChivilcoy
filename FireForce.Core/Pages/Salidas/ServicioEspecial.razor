@@ -1,11 +1,11 @@
 @page "/fire-force/salidas/servicio-especial/{TipoServicioEspecial:int}"
 @page "/fire-force/salidas/servicio-especial/{TipoServicioEspecial:int}/{AnioSalida:int}/{NumeroSalida:int}"
-@using Vista.Data.ViewModels.Personal;
-@using Vista.Data.ViewModels.Servicios;
-@using Vista.Data.Enums.Salidas;
+@using FireForce.Core.Data.ViewModels.Personal;
+@using FireForce.Core.Data.ViewModels.Servicios;
+@using FireForce.Core.Data.Enums.Salidas;
 
 @*Servicios Utilizados*@
-@using Vista.Services
+@using FireForce.Core.Services
 @inject ISalidaService SalidaService
 @inject IBomberoService BomberoService
 @inject IVehiculoSalidaService VehiculoSalidaService
@@ -14,8 +14,8 @@
 @inject NavigationManager navigationManager
 
 @*Componentes Generales*@
-@using Vista.Data.Models.Salidas.Componentes;
-@using Vista.Data.Models.Salidas.Planillas.Servicios;
+@using FireForce.Core.Data.Models.Salidas.Componentes;
+@using FireForce.Core.Data.Models.Salidas.Planillas.Servicios;
 @code {
     private string activeTab = "1";
 

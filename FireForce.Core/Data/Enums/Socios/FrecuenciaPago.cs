@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Vista.Data.Enums.Socios
+namespace FireForce.Core.Data.Enums.Socios
 {
     /// <summary>
     /// Representa las diferentes frecuencias de pago disponibles para los socios.

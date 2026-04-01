@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Vista.Data.Enums;
+using FireForce.Core.Data.Enums;
 
-namespace Vista.Data.Models.Objetos
+namespace FireForce.Core.Data.Models.Objetos
 {
     public class Material
     {

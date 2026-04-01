@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Caching.Memory;
-using Vista.DTOs.Nominatim;
+using FireForce.Core.DTOs.Nominatim;
 
-namespace Vista.Services;
+namespace FireForce.Core.Services;
 
 /// <summary>
 /// Servicio de caché para almacenar resultados de Nominatim.

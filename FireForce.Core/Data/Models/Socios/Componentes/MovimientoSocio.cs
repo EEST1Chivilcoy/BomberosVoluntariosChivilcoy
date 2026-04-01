@@ -1,4 +1,4 @@
-﻿namespace Vista.Data.Models.Socios.Componentes
+﻿namespace FireForce.Core.Data.Models.Socios.Componentes
 {
     public abstract class MovimientoSocio
     {

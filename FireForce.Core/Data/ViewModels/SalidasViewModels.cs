@@ -1,15 +1,15 @@
-﻿using Vista.Data.Enums;
-using Vista.Data.Models.Salidas.Componentes;
+﻿using FireForce.Core.Data.Enums;
+using FireForce.Core.Data.Models.Salidas.Componentes;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Vista.Data.Enums.Salidas;
-using Vista.Data.Enums.Discriminadores;
-using Vista.Data.Models.Personas;
-using Vista.DTOs.Nominatim;
-using Vista.Data.Models.Grupos.FuerzasIntervinientes;
-using Vista.Data.ViewModels.Personal;
+using FireForce.Core.Data.Enums.Salidas;
+using FireForce.Core.Data.Enums.Discriminadores;
+using FireForce.Core.Data.Models.Personas;
+using FireForce.Core.DTOs.Nominatim;
+using FireForce.Core.Data.Models.Grupos.FuerzasIntervinientes;
+using FireForce.Core.Data.ViewModels.Personal;
 
-namespace Vista.Data.ViewModels
+namespace FireForce.Core.Data.ViewModels
 {
     /// <summary>
     /// ViewModel base para todas las salidas.

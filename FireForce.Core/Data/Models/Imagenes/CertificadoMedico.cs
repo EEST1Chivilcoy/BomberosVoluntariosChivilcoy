@@ -1,9 +1,9 @@
 ﻿using DocumentFormat.OpenXml.Wordprocessing;
 using System.ComponentModel.DataAnnotations;
-using Vista.Data.Models.Personas.Personal.Componentes;
-using Vista.Pages;
+using FireForce.Core.Data.Models.Personas.Personal.Componentes;
+using FireForce.Core.Pages;
 
-namespace Vista.Data.Models.Imagenes
+namespace FireForce.Core.Data.Models.Imagenes
 {
     /// <summary>
     /// Representa un certificado médico asociado a una licencia médica.

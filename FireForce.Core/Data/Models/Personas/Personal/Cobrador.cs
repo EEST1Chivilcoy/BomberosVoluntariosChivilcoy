@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Vista.Data.Enums.Personal.Cobrador;
-using Vista.Data.Enums.Socios;
+using FireForce.Core.Data.Enums.Personal.Cobrador;
+using FireForce.Core.Data.Enums.Socios;
 
-namespace Vista.Data.Models.Personas.Personal
+namespace FireForce.Core.Data.Models.Personas.Personal
 {
     public class Cobrador : Personal
     {

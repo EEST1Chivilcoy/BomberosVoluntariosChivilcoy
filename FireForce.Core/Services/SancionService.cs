@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Vista.Data;
-using Vista.Data.Models.Personas.Personal.Componentes;
+using FireForce.Core.Data;
+using FireForce.Core.Data.Models.Personas.Personal.Componentes;
 
-namespace Vista.Services
+namespace FireForce.Core.Services
 {
     public interface ISancionService
     {

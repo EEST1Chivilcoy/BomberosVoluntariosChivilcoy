@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Vista.Data.ViewModels.Personal
+namespace FireForce.Core.Data.ViewModels.Personal
 {
     public class VehiculoDamnificadoViewModel : IEditableViewModel<VehiculoDamnificadoViewModel>
     {

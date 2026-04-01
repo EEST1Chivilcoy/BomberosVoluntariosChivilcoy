@@ -1,6 +1,6 @@
-﻿using Vista.Data.Models.Grupos.Dependencias;
+﻿using FireForce.Core.Data.Models.Grupos.Dependencias;
 
-namespace Vista.Data.Models.Otros.Firmas
+namespace FireForce.Core.Data.Models.Otros.Firmas
 {
     public class IncidenteDependencia : IncidenteBase
     {

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Vista.Data.ViewModels
+namespace FireForce.Core.Data.ViewModels
 {
     /// <summary>
     /// ViewModel para representar información de un departamento o unidad en un edificio.

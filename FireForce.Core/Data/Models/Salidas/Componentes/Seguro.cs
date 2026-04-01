@@ -1,8 +1,8 @@
-﻿using Vista.Data.Models.Salidas.Planillas;
+﻿using FireForce.Core.Data.Models.Salidas.Planillas;
 using System.ComponentModel.DataAnnotations;
-using Vista.Data.Enums.Discriminadores;
+using FireForce.Core.Data.Enums.Discriminadores;
 
-namespace Vista.Data.Models.Salidas.Componentes
+namespace FireForce.Core.Data.Models.Salidas.Componentes
 {
     public abstract class Seguro
     {

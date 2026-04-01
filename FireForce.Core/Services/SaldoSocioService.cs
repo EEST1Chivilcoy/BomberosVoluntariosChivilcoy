@@ -1,7 +1,7 @@
-﻿using Vista.Data.Enums.Socios;
-using Vista.Data.Models.Socios.Componentes;
+﻿using FireForce.Core.Data.Enums.Socios;
+using FireForce.Core.Data.Models.Socios.Componentes;
 
-namespace Vista.Services
+namespace FireForce.Core.Services
 {
     public interface ISaldoSocioService
     {

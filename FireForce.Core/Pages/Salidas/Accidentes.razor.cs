@@ -1,20 +1,20 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using Vista.Data.Models.Personas.Personal;
-using Vista.Data.Models.Salidas.Planillas;
-using Vista.Services;
+using FireForce.Core.Data.Models.Personas.Personal;
+using FireForce.Core.Data.Models.Salidas.Planillas;
+using FireForce.Core.Services;
 using AntDesign;
-using Vista.Data.Models.Vehiculos.Flota;
-using Vista.Data.Mappers;
-using Vista.Data.Enums.Discriminadores;
-using Vista.Data.Enums.Salidas;
+using FireForce.Core.Data.Models.Vehiculos.Flota;
+using FireForce.Core.Data.Mappers;
+using FireForce.Core.Data.Enums.Discriminadores;
+using FireForce.Core.Data.Enums.Salidas;
 using System.Threading.Tasks;
-using Vista.Data.ViewModels.Personal;
-using Vista.Data.Enums;
-using Vista.Data.ViewModels;
-using Vista.Data.ViewModels.Accidente;
+using FireForce.Core.Data.ViewModels.Personal;
+using FireForce.Core.Data.Enums;
+using FireForce.Core.Data.ViewModels;
+using FireForce.Core.Data.ViewModels.Accidente;
 
-namespace Vista.Pages.Salidas
+namespace FireForce.Core.Pages.Salidas
 {
     public partial class Accidentes
     {
@@ -122,7 +122,7 @@ namespace Vista.Pages.Salidas
                 if (salidaAEditar != null)
                 {
                     var todasLasFuerzas = await FuerzaIntervinienteService.ObtenerTodasLasFuerzasAsync();
-                    var fuerzasVM = todasLasFuerzas.Select(f => new Vista.Data.ViewModels.Personal.SimpleFuerzaViewModel { Id = f.Id, Nombre = f.NombreFuerza }).ToList();
+                    var fuerzasVM = todasLasFuerzas.Select(f => new Core.Data.ViewModels.Personal.SimpleFuerzaViewModel { Id = f.Id, Nombre = f.NombreFuerza }).ToList();
 
                     AccidenteViewModel = (AccidenteViewModels)salidaAEditar.ToViewModel(fuerzasVM);
                 }
@@ -138,7 +138,7 @@ namespace Vista.Pages.Salidas
 
             // Modo crear (se inicializa arriba, aquí se setean los valores por defecto)
             AccidenteViewModel.TipoEmergencia = TipoDeEmergencia.Accidente;
-            AccidenteViewModel.Tipo = (Vista.Data.Enums.TipoAccidente)TipoAccidente;
+            AccidenteViewModel.Tipo = (Core.Data.Enums.TipoAccidente)TipoAccidente;
             if (AnioSalida.HasValue && AnioSalida.Value > 0)
                 AccidenteViewModel.AnioNumeroParte = AnioSalida.Value;
             else

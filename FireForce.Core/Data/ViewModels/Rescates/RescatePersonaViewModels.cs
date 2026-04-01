@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Vista.Data.Enums;
+using FireForce.Core.Data.Enums;
 
-namespace Vista.Data.ViewModels.Rescates
+namespace FireForce.Core.Data.ViewModels.Rescates
 {
     public class RescatePersonaViewModels : RescateViewModels
     {

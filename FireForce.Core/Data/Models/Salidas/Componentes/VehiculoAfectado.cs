@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Vista.Data.Models.Personas;
-using Vista.Data.Models.Vehiculos;
+using FireForce.Core.Data.Models.Personas;
+using FireForce.Core.Data.Models.Vehiculos;
 
-namespace Vista.Data.Models.Salidas.Componentes
+namespace FireForce.Core.Data.Models.Salidas.Componentes
 {
     public class VehiculoAfectado  : Vehiculo
     {

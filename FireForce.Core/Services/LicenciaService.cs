@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using Vista.Data;
-using Vista.Data.Models.Personas.Personal.Componentes;
-using Vista.Data.Enums;
-using Vista.Data.Models.Grupos.Dependencias.EquiposAutonomos;
+using FireForce.Core.Data;
+using FireForce.Core.Data.Models.Personas.Personal.Componentes;
+using FireForce.Core.Data.Enums;
+using FireForce.Core.Data.Models.Grupos.Dependencias.EquiposAutonomos;
 
-namespace Vista.Services
+namespace FireForce.Core.Services
 {
     public interface ILicenciaService
     {

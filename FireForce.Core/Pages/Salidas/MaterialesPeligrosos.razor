@@ -1,12 +1,12 @@
 @page "/fire-force/salidas/materiales-peligrosos"
 @page "/fire-force/salidas/materiales-peligrosos/{AnioSalida:int}/{NumeroSalida:int}"
-@using Vista.Data.ViewModels.Personal;
-@using Vista.Data.ViewModels.MaterialesPeligrosos;
-@using Vista.Data.Enums.Salidas;
-@using Vista.Data.Enums.Discriminadores;
+@using FireForce.Core.Data.ViewModels.Personal;
+@using FireForce.Core.Data.ViewModels.MaterialesPeligrosos;
+@using FireForce.Core.Data.Enums.Salidas;
+@using FireForce.Core.Data.Enums.Discriminadores;
 
 @*Servicios Utilizados*@
-@using Vista.Services
+@using FireForce.Core.Services
 @inject ISalidaService SalidaService
 @inject IBomberoService BomberoService
 @inject IVehiculoSalidaService VehiculoSalidaService
@@ -16,9 +16,9 @@
 @inject NavigationManager navigationManager
 
 @*Componentes Generales*@
-@using Vista.Data.Models.Salidas.Componentes;
+@using FireForce.Core.Data.Models.Salidas.Componentes;
 @* Componentes de Materiales Peligrosos *@
-@using Vista.Data.Models.Salidas.Planillas;
+@using FireForce.Core.Data.Models.Salidas.Planillas;
 
 @code {
     private string activeTab = "1";

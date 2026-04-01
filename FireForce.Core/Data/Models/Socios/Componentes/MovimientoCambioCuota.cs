@@ -1,6 +1,6 @@
-﻿using Vista.Data.Enums.Socios;
+﻿using FireForce.Core.Data.Enums.Socios;
 
-namespace Vista.Data.Models.Socios.Componentes
+namespace FireForce.Core.Data.Models.Socios.Componentes
 {
     /// <summary>
     /// Representa un período de cuota de un socio.

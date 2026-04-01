@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using Vista.Data.Models.Grupos.FuerzasIntervinientes;
-using Vista.Data.Models.Personas;
-using Vista.Data.Models.Salidas.Planillas;
+using FireForce.Core.Data.Models.Grupos.FuerzasIntervinientes;
+using FireForce.Core.Data.Models.Personas;
+using FireForce.Core.Data.Models.Salidas.Planillas;
 
-namespace Vista.Data.Models.Salidas.Componentes
+namespace FireForce.Core.Data.Models.Salidas.Componentes
 {
     /// <summary>
     /// Clase que representa la fuerza interviniente en una salida.

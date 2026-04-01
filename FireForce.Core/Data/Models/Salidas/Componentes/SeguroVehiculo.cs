@@ -1,6 +1,6 @@
-﻿using Vista.Data.Models.Vehiculos;
+﻿using FireForce.Core.Data.Models.Vehiculos;
 
-namespace Vista.Data.Models.Salidas.Componentes
+namespace FireForce.Core.Data.Models.Salidas.Componentes
 {
     public class SeguroVehiculo : Seguro
     {

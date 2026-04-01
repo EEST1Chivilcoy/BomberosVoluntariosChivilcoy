@@ -4,17 +4,17 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.ComponentModel.DataAnnotations;
-using Vista.Data;
-using Vista.Data.Enums;
-using Vista.Data.Enums.Personal.ComisionDirectiva;
-using Vista.Data.Models.Grupos.Brigadas;
-using Vista.Data.Models.Imagenes;
-using Vista.Data.Models.Personas.Personal;
-using Vista.Data.Models.Personas.Personal.Componentes;
-using Vista.Data.ViewModels.Personal;
-using Vista.Helpers;
+using FireForce.Core.Data;
+using FireForce.Core.Data.Enums;
+using FireForce.Core.Data.Enums.Personal.ComisionDirectiva;
+using FireForce.Core.Data.Models.Grupos.Brigadas;
+using FireForce.Core.Data.Models.Imagenes;
+using FireForce.Core.Data.Models.Personas.Personal;
+using FireForce.Core.Data.Models.Personas.Personal.Componentes;
+using FireForce.Core.Data.ViewModels.Personal;
+using FireForce.Core.Helpers;
 
-namespace Vista.Services
+namespace FireForce.Core.Services
 {
     public interface ICobradorService
     {

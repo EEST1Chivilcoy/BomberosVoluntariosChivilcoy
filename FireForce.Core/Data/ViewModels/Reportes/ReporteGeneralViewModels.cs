@@ -1,5 +1,5 @@
 ﻿
-namespace Vista.Data.ViewModels.Reportes
+namespace FireForce.Core.Data.ViewModels.Reportes
 {
     public class ReporteGeneralViewModels
     {

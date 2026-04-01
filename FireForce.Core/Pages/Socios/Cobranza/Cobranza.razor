@@ -1,16 +1,16 @@
 ﻿@page "/fire-force/socios/cobranza"
 
-@using Vista.Data.Models.Socios
-@using Vista.Data.Models.Socios.Componentes.Pagos
-@using Vista.Data.Enums.Socios
-@using Vista.Data.Enums.Discriminadores
-@using Vista.Pages.Socios.Cobranza
-@using Vista.Pages.Socios.Cobranza.Componentes
-@using Vista.Shared
+@using FireForce.Core.Data.Models.Socios
+@using FireForce.Core.Data.Models.Socios.Componentes.Pagos
+@using FireForce.Core.Data.Enums.Socios
+@using FireForce.Core.Data.Enums.Discriminadores
+@using FireForce.Core.Pages.Socios.Cobranza
+@using FireForce.Core.Pages.Socios.Cobranza.Componentes
+@using FireForce.Core.Shared
 @using Microsoft.EntityFrameworkCore
 
 @*Servicios utilizados*@
-@using Vista.Services
+@using FireForce.Core.Services
 @inject ISocioService SocioService
 @inject ISaldoSocioService SaldoSocioService
 @inject IPagoService PagoService

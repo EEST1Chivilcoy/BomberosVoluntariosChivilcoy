@@ -1,15 +1,15 @@
 ﻿@using AntDesign.TableModels
-@using Vista.Pages.Socios.Pagos.Componentes
-@using Vista.Data.Models.Socios.Componentes.Pagos
-@using Vista.Data.Models.Socios
-@using Vista.Data.Models.Personas.Personal
-@using Vista.Data.Enums.Socios
-@using Vista.Data.Enums.Discriminadores
-@using Vista.Data.Mappers
-@using Vista.Data.ViewModels.Socios
+@using FireForce.Core.Pages.Socios.Pagos.Componentes
+@using FireForce.Core.Data.Models.Socios.Componentes.Pagos
+@using FireForce.Core.Data.Models.Socios
+@using FireForce.Core.Data.Models.Personas.Personal
+@using FireForce.Core.Data.Enums.Socios
+@using FireForce.Core.Data.Enums.Discriminadores
+@using FireForce.Core.Data.Mappers
+@using FireForce.Core.Data.ViewModels.Socios
 
 @*Servicios utilizados*@
-@using Vista.Services;
+@using FireForce.Core.Services;
 @inject IPagoService PagoService
 @inject ISocioService SocioService
 @inject ICobradorService CobradorService

@@ -5,10 +5,10 @@ using Microsoft.Identity.Client;
 using Microsoft.Identity.Web;
 using System.Net.Http.Headers;
 using System.Security.Claims;
-using Vista.Data.ViewModels.Personal;
-using Vista.DTOs;
+using FireForce.Core.Data.ViewModels.Personal;
+using FireForce.Core.DTOs;
 
-namespace Vista.Services
+namespace FireForce.Core.Services
 {
     public interface IEntraIDService
     {
