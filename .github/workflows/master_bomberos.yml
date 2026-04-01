@@ -9,7 +9,7 @@ on:
 
 env:
   DOTNET_VERSION: "8.0.x"
-  PROJECT_PATH: "Vista/Vista.csproj"
+  PROJECT_PATH: "FireForce.Core/FireForce.Core.csproj"
   PUBLISH_PATH: "./publish"
 
 jobs:
