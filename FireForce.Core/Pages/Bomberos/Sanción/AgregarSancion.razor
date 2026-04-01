@@ -1,0 +1,271 @@
+﻿@using FireForce.Core.Data.Models.Personas.Personal
+@using FireForce.Core.Data.Models.Personas.Personal.Componentes
+@implements IDisposable
+@inject IDbContextFactory<BomberosDbContext> DbFactory
+@inject IMessageService message
+@using FireForce.Core.Services
+@inject IBomberoService BomberoService
+
+
+<style>
+.modal-crear-sancion .ant-modal-content {
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        border: 2px solid #732D2D;
+        margin-top: -50px;
+        margin-bottom: 0px;
+    }
+
+    .modal-crear-sancion .ant-modal-title {
+        color: white !important;
+    }
+
+    .modal-crear-sancion .ant-modal-header {
+            background-color: #A63333;
+            padding: 16px 24px;
+
+    }
+    .modal-crear-sancion-content {
+        padding: 24px;
+    }
+    .modal-crear-sancion-form-item {
+        margin-bottom: 20px;
+        position: relative;
+        padding-left: 10px;
+    }
+    .modal-crear-sancion-form-item .ant-form-item-label > label,
+    .modal-crear-sancion-form-full-width .ant-form-item-label > label {
+        font-weight: 600;
+        color: #434343;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        transition: color 0.3s ease;
+    }
+    .modal-crear-sancion-form-item .ant-form-item-label > label:hover,
+    .modal-crear-sancion-form-full-width .ant-form-item-label > label:hover {
+        color: #A63333;
+    }
+    .modal-crear-sancion .ant-input:focus,
+    .modal-crear-sancion .ant-input:hover,
+    .modal-crear-sancion .ant-select-selector:focus,
+    .modal-crear-sancion .ant-select-selector:hover,
+    .modal-crear-sancion .ant-picker:focus,
+    .modal-crear-sancion .ant-picker:hover,
+    .modal-crear-sancion .ant-picker-input > input:focus,
+    .modal-crear-sancion .ant-picker-input > input:hover,
+    .modal-crear-sancion .ant-input-number-input:focus,
+    .modal-crear-sancion .ant-input-number-input:hover,
+    .modal-crear-sancion .ant-textarea:focus,
+    .modal-crear-sancion .ant-textarea:hover {
+        border-color: #FFD700 !important;
+        box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
+    }
+    .modal-crear-sancion .ant-picker,
+    .modal-crear-sancion .ant-input,
+    .modal-crear-sancion .ant-select-selector,
+    .modal-crear-sancion .ant-input-number,
+    .modal-crear-sancion .ant-textarea {
+        border-radius: 8px !important;
+        border: 1px solid #d9d9d9 !important;
+        background: #fff !important;
+        color: #434343 !important;
+        transition: all 0.3s ease !important;
+    }
+    .modal-crear-sancion-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 18px;
+        margin-bottom: 0px;
+    }
+    .modal-crear-sancion .ant-btn-primary {
+        background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
+        border: none !important;
+        color: #fff !important;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
+        margin-top:  0;
+        margin-bottom: 0;
+        padding: 0 20px !important;
+    }
+    .modal-crear-sa .ant-btn-primary:hover {
+        background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
+        color: #fff !important;
+    }
+</style>
+
+<Form Model="SancionVM"
+      Layout="FormLayout.Vertical"
+      Class="modal-crear-sancion-form"
+      OnFinish="OnFinish"
+      OnFinishFailed="OnFinishFailed">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <Row Class="modal-crear-sancion-row" Gutter="24">
+        <AntDesign.Col Span="12">
+            <FormItem Label="📅 Fecha Desde" Required Class="modal-crear-sancion-form-item">
+                <DatePicker AllowClear="false" @bind-Value="SancionVM.FechaDesde" Size="InputSize.Large" />
+            </FormItem>
+        </AntDesign.Col>
+        <AntDesign.Col Span="12">
+            @if (SancionVM.TipoSancion == TipoSancion.Sancion)
+            {
+                <FormItem Label="📅 Fecha Hasta" Required Class="modal-crear-sancion-form-item">
+                    <DatePicker AllowClear="false" @bind-Value="SancionVM.FechaHasta" Size="InputSize.Large" />
+                </FormItem>
+            }
+        </AntDesign.Col>
+    </Row>
+
+
+    <Row Class="modal-crear-sancion-row" Gutter="24">
+        <AntDesign.Col Span="12">
+            <FormItem Label="👤 Personal Sancionado" Required Class="modal-crear-sancion-form-item">
+                <Select TItem="BomberoViweModel"
+                        TItemValue="int"
+                        DataSource="@ListabomberosVM"
+                        @bind-Value="@SancionVM.NumeroLegajoSancionado"
+                        LabelName="@nameof(BomberoViweModel.NombreYApellido)"
+                        ValueName="@nameof(BomberoViweModel.NumeroLegajo)"
+                        Placeholder="Selecione el bombero"
+                        DefaultActiveFirstOption="false"
+                        AllowClear="true"
+                        EnableSearch
+                        Size="InputSize.Large">
+                </Select>
+            </FormItem>
+        </AntDesign.Col>
+        <AntDesign.Col Span="12">
+            <FormItem Label="📋 Numero Legajo" Class="modal-crear-sancion-form-item">
+                <AntDesign.InputNumber @bind-Value="SancionVM.NumeroLegajoSancionado" Disabled Size="InputSize.Large" />
+            </FormItem>
+        </AntDesign.Col>
+    </Row>
+
+    <Row Class="modal-crear-sancion-row" Gutter="24">
+        <AntDesign.Col Span="12">
+            <FormItem Label="🏷️ Tipo Sancion" Required Class="modal-crear-sancion-form-item">
+                <EnumSelect TEnum="TipoSancion" @bind-Value="@SancionVM.TipoSancion" Size="InputSize.Large" />
+            </FormItem>
+        </AntDesign.Col>
+        <AntDesign.Col Span="12">
+            <FormItem Label="🗂️ Área Sancion" Required Class="modal-crear-sancion-form-item">
+                <EnumSelect TEnum="AreaSancion" @bind-Value="@SancionVM.SancionArea" Size="InputSize.Large" />
+            </FormItem>
+        </AntDesign.Col>
+    </Row>
+
+    <Row Class="modal-crear-sancion-row" Gutter="38">
+        <AntDesign.Col Span="24">
+            <FormItem Label="📝 Observación" Class="modal-crear-sancion-form-item">
+                <TextArea @bind-Value="SancionVM.Observaciones" Size="InputSize.Large" Rows="4" />
+            </FormItem>
+        </AntDesign.Col>
+    </Row>
+    <div class="modal-crear-sancion-footer">
+        <Button Type="ButtonType.Primary" HtmlType="submit">
+            Cargar Sancion
+        </Button>
+        <Button OnClick="@(() => OnClose.InvokeAsync())">
+            Cancelar
+        </Button>
+    </div>
+</Form>
+
+@code {
+	[Parameter] public EventCallback OnClose { get; set; }
+	BomberosDbContext Context;
+	public SancionViewModel SancionVM = new();
+	List<BomberoViweModel> ListabomberosVM = new();
+
+	//View Model
+	public class SancionViewModel
+	{
+		public DateOnly FechaDesde { get; set; } = DateOnly.FromDateTime(DateTime.Now);
+		public DateOnly FechaHasta { get; set; } = DateOnly.FromDateTime(DateTime.Now);
+		public Bombero PersonalSancionado { get; set; }
+		public int NumeroLegajoSancionado { get; set; }
+        [Required]
+		public TipoSancion TipoSancion { get; set; }
+        [Required]
+		public AreaSancion SancionArea { get; set; }
+		public Bombero EncargadoArea { get; set; }
+		public int NumeroLegajoEncargado { get; set; }
+		public string Observaciones { get; set; }
+	}
+
+	// OnFinish
+	private async void OnFinish(EditContext editContext)
+	{
+		try
+		{
+			Bombero? BomberoSancionado = await Context.Bomberos.Where(b => b.NumeroLegajo == SancionVM.NumeroLegajoSancionado).SingleOrDefaultAsync();
+
+			Sancion nuevaSancion = new()
+				{
+					FechaDesde = SancionVM.FechaDesde,
+					FechaHasta = SancionVM.FechaHasta,
+					PersonalSancionado = BomberoSancionado,
+					TipoSancion = SancionVM.TipoSancion,
+					SacionArea = SancionVM.SancionArea,
+					DescripcionSancion = SancionVM.Observaciones
+				};
+
+			await BomberoService.SancionarBombero(nuevaSancion);
+			await Init();
+			await OnClose.InvokeAsync();
+			StateHasChanged();
+			await message.SuccessAsync("La sanción fue cargada con éxito.");
+		}
+		catch (Exception e)
+		{
+			await Init();
+			StateHasChanged();
+			if (e.InnerException != null)
+				await message.ErrorAsync(e.InnerException.Message, 5);
+			else
+				await message.ErrorAsync(e.Message, 5);
+		}
+	}
+
+	private void OnFinishFailed(EditContext editContext)
+	{
+		Console.WriteLine($"Failed:{JsonSerializer.Serialize(SancionVM)}");
+	}
+
+	// Init y Carga de datos
+	private async Task CargarBombero()
+	{
+		ListabomberosVM = new();
+		var bomberos = await Context.Bomberos.OrderBy(b => b.Nombre).ToArrayAsync();
+		foreach (Bombero b in bomberos)
+		{
+			BomberoViweModel bom = new()
+				{
+					Nombre = b.Nombre,
+					Apellido = b.Apellido,
+					NumeroLegajo = b.NumeroLegajo
+				};
+			ListabomberosVM.Add(bom);
+		}
+	}
+
+	protected override async Task OnInitializedAsync()
+	{
+		await Init();
+	}
+
+	private async Task Init()
+	{
+		SancionVM = new();
+		Context = DbFactory.CreateDbContext();
+		await CargarBombero();
+	}
+
+	public void Dispose()
+	{
+		Context?.Dispose();
+	}
+}

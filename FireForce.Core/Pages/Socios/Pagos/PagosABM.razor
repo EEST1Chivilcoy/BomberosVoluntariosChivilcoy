@@ -1,0 +1,1507 @@
+﻿@using AntDesign.TableModels
+@using FireForce.Core.Pages.Socios.Pagos.Componentes
+@using FireForce.Core.Data.Models.Socios.Componentes.Pagos
+@using FireForce.Core.Data.Models.Socios
+@using FireForce.Core.Data.Models.Personas.Personal
+@using FireForce.Core.Data.Enums.Socios
+@using FireForce.Core.Data.Enums.Discriminadores
+@using FireForce.Core.Data.Mappers
+@using FireForce.Core.Data.ViewModels.Socios
+
+@*Servicios utilizados*@
+@using FireForce.Core.Services;
+@inject IPagoService PagoService
+@inject ISocioService SocioService
+@inject ICobradorService CobradorService
+@inject IMessageService MessageService
+@inject NavigationManager navigationManager
+
+@page "/fire-force/socios/pagos"
+
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Policy = "SecretariaOrAdmin")]
+
+<style>
+    /* Variables CSS para colores principales - Prefijo para evitar conflictos */
+    .pagos-abm {
+        --abm-primary-color: #A63333;
+        --abm-primary-dark: #732D2D;
+        --abm-success-color: #4CAF50;
+        --abm-success-dark: #438E46;
+        --abm-warning-color: #F57F17;
+        --abm-warning-light: #FFF8E1;
+        --abm-error-color: #C62828;
+        --abm-error-light: #FFEBEE;
+        --abm-approved-color: #2E7D32;
+        --abm-approved-light: #E6F7E9;
+        --abm-gold-color: #FFD700;
+    }
+
+        .pagos-abm .licenses-container {
+            padding: 12px !important;
+            min-height: 100vh !important;
+        }
+
+        .pagos-abm .main-card {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(10px) !important;
+            border-radius: 16px !important;
+            box-shadow: 0 8px 32px rgba(166, 51, 51, 0.1), 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            overflow: hidden !important;
+        }
+
+        .pagos-abm .header-section {
+            background: linear-gradient(135deg, #A63333 0%, #732D2D 100%) !important;
+            color: white !important;
+            padding: 28px !important;
+            position: relative !important;
+            overflow: hidden !important;
+        }
+
+            .pagos-abm .header-section::before {
+                content: '';
+                display: none;
+            }
+
+            .pagos-abm .header-section .lava-bubbles {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                z-index: 1;
+                overflow: hidden;
+            }
+
+            .pagos-abm .header-section .lava-bubble {
+                position: absolute;
+                border-radius: 50%;
+                opacity: 0.45;
+                background: radial-gradient(circle at 60% 40%, #FFD54F 0%, #F9A825 80%, transparent 100%);
+                animation: lava-bubble-move 8s linear infinite;
+                filter: blur(1.5px);
+                mix-blend-mode: lighten;
+            }
+
+                .pagos-abm .header-section .lava-bubble.b1 {
+                    left: 10%;
+                    width: 60px;
+                    height: 60px;
+                    bottom: -70px;
+                    animation-delay: 0s;
+                    animation-duration: 7.5s;
+                }
+
+                .pagos-abm .header-section .lava-bubble.b2 {
+                    left: 35%;
+                    width: 90px;
+                    height: 90px;
+                    bottom: -100px;
+                    animation-delay: 2s;
+                    animation-duration: 9s;
+                    background: radial-gradient(circle at 60% 40%, #FFEB3B 0%, #FFD54F 80%, transparent 100%);
+                }
+
+                .pagos-abm .header-section .lava-bubble.b3 {
+                    left: 65%;
+                    width: 50px;
+                    height: 50px;
+                    bottom: -60px;
+                    animation-delay: 1.5s;
+                    animation-duration: 6.5s;
+                    background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #FFD54F 80%, transparent 100%);
+                }
+
+                .pagos-abm .header-section .lava-bubble.b4 {
+                    left: 80%;
+                    width: 70px;
+                    height: 70px;
+                    bottom: -80px;
+                    animation-delay: 3.2s;
+                    animation-duration: 8.5s;
+                    background: radial-gradient(circle at 60% 40%, #F9A825 0%, #FFD54F 80%, transparent 100%);
+                }
+
+                .pagos-abm .header-section .lava-bubble.b5 {
+                    left: 55%;
+                    width: 40px;
+                    height: 40px;
+                    bottom: -50px;
+                    animation-delay: 5s;
+                    animation-duration: 7.2s;
+                    background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #F9A825 80%, transparent 100%);
+                }
+
+    @@keyframes lava-bubble-move {
+        0% {
+            transform: translateY(0) scale(1) rotate(0deg);
+            opacity: 0.45;
+        }
+
+        60% {
+            opacity: 0.7;
+            filter: blur(2.5px);
+        }
+
+        80% {
+            transform: translateY(-220px) scale(1.15) rotate(10deg);
+            opacity: 0.6;
+        }
+
+        100% {
+            transform: translateY(-320px) scale(0.95) rotate(-8deg);
+            opacity: 0;
+        }
+    }
+
+    .pagos-abm .main-title {
+        font-family: 'Poppins', 'Fjalla One', sans-serif !important;
+        font-size: 2.2rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 1px !important;
+        margin: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 12px !important;
+        animation: text-glow 2.5s ease-in-out infinite alternate !important;
+        position: relative !important;
+        z-index: 2 !important;
+    }
+
+    .pagos-abm .title-icon {
+        color: #FFD54F !important;
+        font-size: 2rem !important;
+        filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25)) !important;
+    }
+
+    @@keyframes text-glow {
+        0%, 100% {
+            text-shadow: 0 0 5px #F9A825, 0 0 10px #FFD54F;
+        }
+
+        50% {
+            text-shadow: 0 0 12px #F9A825, 0 0 22px #FFD54F;
+        }
+    }
+
+    .pagos-abm .title-container {
+        position: relative !important;
+        z-index: 2 !important;
+        margin-bottom: 20px !important;
+    }
+
+    .pagos-abm .filters-section {
+        position: relative !important;
+        z-index: 2 !important;
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+    }
+
+    .pagos-abm .filter-row {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
+        gap: 16px !important;
+        align-items: end !important;
+    }
+
+    .pagos-abm .filter-group {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 8px !important;
+    }
+
+    .pagos-abm .filter-label {
+        font-weight: 600 !important;
+        color: rgba(255, 255, 255, 0.9) !important;
+        font-size: 0.9rem !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+    }
+
+    .pagos-abm .actions-row {
+        display: grid !important;
+        grid-template-columns: 1fr auto auto auto !important;
+        gap: 16px !important;
+        align-items: center !important;
+    }
+
+    .pagos-abm .search-container {
+        min-width: 0 !important;
+    }
+
+    .pagos-abm .modern-button {
+        height: 40px !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        position: relative !important;
+        overflow: hidden !important;
+    }
+
+    .pagos-abm .add-button {
+        background: linear-gradient(135deg, var(--abm-success-color) 0%, var(--abm-success-dark) 100%) !important;
+        border: none !important;
+        color: white !important;
+        box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3) !important;
+        padding: 0 20px !important;
+    }
+
+        .pagos-abm .add-button:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4) !important;
+        }
+
+    .pagos-abm .print-button {
+        background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%) !important;
+        border: none !important;
+        color: white !important;
+        box-shadow: 0 4px 12px rgba(24, 144, 255, 0.3) !important;
+        padding: 0 20px !important;
+    }
+
+        .pagos-abm .print-button:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 20px rgba(24, 144, 255, 0.4) !important;
+        }
+
+    .pagos-abm .notification-button {
+        background: rgba(255, 255, 255, 0.2) !important;
+        border: 1px solid rgba(255, 255, 255, 0.3) !important;
+        color: white !important;
+        width: 40px !important;
+        height: 40px !important;
+        border-radius: 50% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        transition: all 0.3s ease !important;
+    }
+
+        .pagos-abm .notification-button:hover {
+            background: rgba(255, 255, 255, 0.3) !important;
+            transform: scale(1.1) !important;
+        }
+
+    .pagos-abm .table-container {
+        padding: 0 !important;
+        overflow: auto !important;
+        max-height: calc(100vh - 300px) !important;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+        .pagos-abm .table-container::-webkit-scrollbar {
+            width: 0px;
+            height: 0px;
+            display: none;
+        }
+
+    .pagos-abm .status-badge {
+        padding: 6px 12px !important;
+        border-radius: 20px !important;
+        font-weight: 600 !important;
+        text-align: center !important;
+        font-size: 0.85rem !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+    }
+
+    .pagos-abm .status-approved {
+        background: var(--abm-approved-light) !important;
+        color: var(--abm-approved-color) !important;
+    }
+
+    .pagos-abm .status-pending {
+        background: var(--abm-warning-light) !important;
+        color: var(--abm-warning-color) !important;
+    }
+
+    .pagos-abm .status-rejected {
+        background: var(--abm-error-light) !important;
+        color: var(--abm-error-color) !important;
+    }
+
+    .pagos-abm :deep(.ant-table-tbody > tr.Confirmado > td) {
+        background-color: rgba(46, 125, 50, 0.02) !important;
+        border-left: 3px solid var(--abm-approved-color) !important;
+    }
+
+    .pagos-abm :deep(.ant-table-tbody > tr.PendienteAConfirmar > td) {
+        background-color: rgba(245, 127, 23, 0.02) !important;
+        border-left: 3px solid var(--abm-warning-color) !important;
+    }
+
+    .pagos-abm :deep(.ant-table-tbody > tr.Rechazado > td),
+    .pagos-abm :deep(.ant-table-tbody > tr.Rechazada > td) {
+        background-color: rgba(198, 40, 40, 0.02) !important;
+        border-left: 3px solid var(--abm-error-color) !important;
+    }
+
+    .pagos-abm :deep(.ant-table-tbody > tr:hover > td) {
+        background-color: rgba(166, 51, 51, 0.05) !important;
+        cursor: pointer !important;
+        transform: translateX(4px) !important;
+        transition: all 0.2s ease !important;
+    }
+
+    .pagos-abm :deep(.ant-table-thead > tr > th) {
+        background: #A63333 !important;
+        color: #fff !important;
+        font-weight: 600 !important;
+        border: none !important;
+        padding: 16px !important;
+    }
+
+        .pagos-abm :deep(.ant-table-thead > tr > th):hover {
+            background: #ececec9d !important;
+            color: #fff !important;
+        }
+
+    .pagos-abm :deep(.ant-table-cell) {
+        padding: 16px !important;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+    }
+
+    .pagos-abm :deep(.ant-table) {
+        border-radius: 0 !important;
+    }
+
+    .pagos-abm .modal-content {
+        max-height: 80vh !important;
+        overflow-y: auto !important;
+    }
+
+    .pagos-abm .form-grid {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+    }
+
+    .pagos-abm .form-row {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 16px !important;
+    }
+
+    .pagos-abm .form-full-width {
+        grid-column: 1 / -1 !important;
+    }
+
+    .pagos-abm .detail-grid {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) !important;
+        gap: 20px !important;
+        margin-bottom: 24px !important;
+    }
+
+    .pagos-abm .detail-item {
+        background: #f8f9fa !important;
+        padding: 16px !important;
+        border-radius: 8px !important;
+        border: 1px solid #e9ecef !important;
+        transition: all 0.3s ease !important;
+    }
+
+        .pagos-abm .detail-item:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+            transform: translateY(-2px) !important;
+        }
+
+    .pagos-abm .detail-label {
+        font-weight: 700 !important;
+        color: var(--abm-primary-color) !important;
+        font-size: 0.8rem !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+        margin-bottom: 8px !important;
+    }
+
+    .pagos-abm .detail-value {
+        font-size: 1rem !important;
+        color: #333 !important;
+        word-break: break-word !important;
+    }
+
+    .pagos-abm .detail-description {
+        grid-column: 1 / -1 !important;
+    }
+
+        .pagos-abm .detail-description .detail-value {
+            min-height: 60px !important;
+            line-height: 1.5 !important;
+        }
+
+    .pagos-abm .loading-spinner {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        padding: 40px !important;
+        font-size: 1.2rem !important;
+        color: var(--abm-primary-color) !important;
+    }
+
+    .pagos-abm .fade-in {
+        animation: abm-fadeIn 0.5s ease-in-out !important;
+    }
+
+    @@keyframes abm-fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .pagos-abm .ant-table-thead > tr > th {
+        background: #A63333 !important;
+        color: #fff !important;
+        font-weight: 600 !important;
+        border: none !important;
+        padding: 16px !important;
+    }
+
+    .pagos-abm :deep(.ant-picker),
+    .pagos-abm :deep(.ant-select-selector),
+    .pagos-abm :deep(.ant-input) {
+        border-radius: 8px !important;
+        border: 1px solid rgba(255, 255, 255, 0.3) !important;
+        background: rgba(255, 255, 255, 0.1) !important;
+        color: white !important;
+        transition: all 0.3s ease !important;
+    }
+
+    .pagos-abm :deep(.ant-picker:hover),
+    .pagos-abm :deep(.ant-select-selector:hover),
+    .pagos-abm :deep(.ant-input:hover) {
+        background: rgba(255, 255, 255, 0.2) !important;
+        border-color: rgba(255, 255, 255, 0.5) !important;
+    }
+
+    .pagos-abm :deep(.ant-picker-input > input),
+    .pagos-abm :deep(.ant-select-selection-item),
+    .pagos-abm :deep(.ant-input::placeholder) {
+        color: white !important;
+    }
+
+    @@media (max-width: 1199px) {
+        .pagos-abm .licenses-container {
+            padding: 8px !important;
+        }
+
+        .pagos-abm .header-section {
+            padding: 20px !important;
+        }
+
+        .pagos-abm .main-title {
+            font-size: 2rem !important;
+            flex-direction: column !important;
+            text-align: center !important;
+            gap: 8px !important;
+        }
+
+        .pagos-abm .filter-row {
+            grid-template-columns: 1fr !important;
+        }
+
+        .pagos-abm .actions-row {
+            grid-template-columns: 1fr !important;
+            gap: 12px !important;
+        }
+
+        .pagos-abm .form-row {
+            grid-template-columns: 1fr !important;
+        }
+
+        .pagos-abm .detail-grid {
+            grid-template-columns: 1fr !important;
+        }
+    }
+
+    @@media (max-width: 767px) {
+        .pagos-abm .licenses-container {
+            padding: 4px !important;
+        }
+
+        .pagos-abm .header-section {
+            padding: 16px !important;
+        }
+
+        .pagos-abm .main-title {
+            font-size: 1.8rem !important;
+            letter-spacing: 2px !important;
+        }
+
+        .pagos-abm :deep(.ant-table-cell:nth-child(3)),
+        .pagos-abm :deep(.ant-table-cell:nth-child(4)) {
+            display: none !important;
+        }
+    }
+
+    @@media (max-width: 575px) {
+        .pagos-abm .main-title {
+            font-size: 1.5rem !important;
+        }
+
+        .pagos-abm .modern-button {
+            height: 36px !important;
+            padding: 0 12px !important;
+        }
+
+        .pagos-abm :deep(.ant-table-cell:nth-child(n+4)) {
+            display: none !important;
+        }
+
+        .pagos-abm :deep(.ant-table-cell:nth-child(1)),
+        .pagos-abm :deep(.ant-table-cell:nth-child(2)),
+        .pagos-abm :deep(.ant-table-cell:nth-child(5)) {
+            display: table-cell !important;
+        }
+    }
+
+    .modal-crear-pago .ant-modal-content {
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        border: 2px solid #732D2D;
+        margin-top: -50px;
+        margin-bottom: 0px;
+    }
+
+    .modal-crear-pago .ant-modal-title {
+        color: white !important;
+    }
+
+    .modal-crear-pago .ant-modal-header {
+        background-color: #A63333;
+        padding: 16px 24px;
+    }
+
+    .modal-crear-pago-content {
+        padding: 24px;
+    }
+
+    .modal-crear-pago-form-item {
+        margin-bottom: 20px;
+        position: relative;
+        padding-left: 10px;
+    }
+
+        .modal-crear-pago-form-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            border-radius: 5px;
+        }
+
+        .modal-crear-pago-form-item .ant-form-item-label > label,
+        .modal-crear-pago-form-full-width .ant-form-item-label > label {
+            font-weight: 600;
+            color: #434343;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+            .modal-crear-pago-form-item .ant-form-item-label > label:hover,
+            .modal-crear-pago-form-full-width .ant-form-item-label > label:hover {
+                color: #A63333;
+            }
+
+    .modal-crear-pago .ant-input:focus,
+    .modal-crear-pago .ant-input:hover,
+    .modal-crear-pago .ant-select-selector:focus,
+    .modal-crear-pago .ant-select-selector:hover,
+    .modal-crear-pago .ant-picker:focus,
+    .modal-crear-pago .ant-picker:hover,
+    .modal-crear-pago .ant-picker-input > input:focus,
+    .modal-crear-pago .ant-picker-input > input:hover,
+    .modal-crear-pago .ant-input-number-input:focus,
+    .modal-crear-pago .ant-input-number-input:hover,
+    .modal-crear-pago .ant-textarea:focus,
+    .modal-crear-pago .ant-textarea:hover {
+        border-color: #FFD700 !important;
+        box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
+    }
+
+    .modal-crear-pago .ant-picker,
+    .modal-crear-pago .ant-input,
+    .modal-crear-pago .ant-select-selector,
+    .modal-crear-pago .ant-input-number,
+    .modal-crear-pago .ant-textarea {
+        border-radius: 8px !important;
+        border: 1px solid #d9d9d9 !important;
+        background: #fff !important;
+        color: #434343 !important;
+        transition: all 0.3s ease !important;
+    }
+
+    .modal-crear-pago .modal-crear-pago-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 18px;
+        margin-bottom: 0px;
+    }
+
+    .modal-crear-pago .ant-btn-primary {
+        background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
+        border: none !important;
+        color: #fff !important;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
+        margin-top: 0;
+        margin-bottom: 0;
+        padding: 0 20px !important;
+    }
+
+        .modal-crear-pago .ant-btn-primary:hover {
+            background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
+            color: #fff !important;
+        }
+
+    .modal-imprimir-pago .ant-modal-content {
+        border-radius: 14px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+        border: 2px solid #732D2D;
+    }
+
+    .modal-imprimir-pago .ant-modal-title {
+        color: white !important;
+        font-weight: 700;
+    }
+
+    .modal-imprimir-pago .ant-modal-header {
+        background-color: #A63333;
+        padding: 16px 24px;
+    }
+
+    .modal-imprimir-content {
+        padding: 22px;
+    }
+
+    .modal-imprimir-subtitle {
+        text-align: center;
+        margin: 0 0 18px 0;
+        color: #732D2D;
+        font-weight: 600;
+        font-size: 1rem;
+    }
+
+    .modal-imprimir-options {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 16px;
+        width: 100%;
+    }
+
+    .modal-imprimir-option {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-height: 180px !important;
+        height: auto !important;
+        border-radius: 12px !important;
+        border: 2px solid #e8e8e8 !important;
+        background: #fff !important;
+        color: #333 !important;
+        padding: 18px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 10px !important;
+        text-align: center !important;
+        transition: all 0.25s ease !important;
+        white-space: normal !important;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+
+    .modal-imprimir-option-icon {
+        font-size: 2rem;
+        color: #A63333;
+    }
+
+    .modal-imprimir-option-title {
+        margin: 0;
+        font-weight: 700;
+        color: #333;
+        font-size: 1rem;
+        white-space: normal;
+    }
+
+    .modal-imprimir-option-description {
+        margin: 0;
+        color: #666;
+        font-size: 0.85rem;
+        line-height: 1.3;
+        white-space: normal;
+    }
+
+    .print-modal-option {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px;
+        border: 2px solid #e8e8e8;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-bottom: 12px;
+    }
+
+        .print-modal-option:hover {
+            border-color: #A63333;
+            background-color: #fff5f5;
+        }
+
+        .print-modal-option.selected {
+            border-color: #A63333;
+            background-color: #fff5f5;
+        }
+
+        .print-modal-option .option-icon {
+            font-size: 28px;
+            color: #A63333;
+        }
+
+        .print-modal-option .option-text h4 {
+            margin: 0 0 4px 0;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .print-modal-option .option-text p {
+            margin: 0;
+            color: #666;
+            font-size: 13px;
+        }
+
+    .print-modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 24px;
+        padding-top: 16px;
+        border-top: 1px solid #f0f0f0;
+    }
+
+    .print-confirm-button {
+        background: linear-gradient(135deg, #A63333 0%, #732D2D 100%) !important;
+        border: none !important;
+        color: white !important;
+    }
+
+        .print-confirm-button:hover {
+            background: linear-gradient(135deg, #732D2D 0%, #5a2323 100%) !important;
+        }
+
+    @@media (max-width: 767px) {
+        .modal-imprimir-options {
+            grid-template-columns: 1fr;
+        }
+
+        .modal-imprimir-content {
+            padding: 16px;
+        }
+    }
+</style>
+
+<div class="pagos-abm">
+    <div class="licenses-container fade-in">
+        <Card Class="main-card">
+            <div class="header-section">
+                <div class="lava-bubbles">
+                    <div class="lava-bubble b1"></div>
+                    <div class="lava-bubble b2"></div>
+                    <div class="lava-bubble b3"></div>
+                    <div class="lava-bubble b4"></div>
+                    <div class="lava-bubble b5"></div>
+                </div>
+                <div class="title-container">
+                    <h1 class="main-title">
+                        <Icon Type="dollar" Class="title-icon" />
+                        PAGOS
+                    </h1>
+                </div>
+                <div class="filters-section">
+                    <div class="filter-row">
+                        <div class="filter-group">
+                            <label class="filter-label">📅 Fecha Desde</label>
+                            <DatePicker TValue="DateTime"
+                                        DefaultValue="@DateTime.Now.AddDays(-30)"
+                                        @bind-Value="@FechaBuscarI"
+                                        Size="InputSize.Large"
+                                        Placeholder="@("Seleccionar fecha")" />
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">📅 Fecha Hasta</label>
+                            <DatePicker TValue="DateTime"
+                                        DefaultValue="@DateTime.Now.AddDays(30)"
+                                        @bind-Value="@FechaBuscarF"
+                                        Size="InputSize.Large"
+                                        Placeholder="@("Seleccionar fecha")" />
+                        </div>
+                    </div>
+
+                    <div class="actions-row">
+                        <div class="search-container">
+                            <Search Placeholder="🔍 Buscar por nombre de socio o nro..."
+                                    AllowClear
+                                    EnterButton="true"
+                                    Size="InputSize.Large"
+                                    OnSearch="@(() => PagosFiltrados = FiltrarPagos())"
+                                    @bind-Value="Busqueda" />
+                        </div>
+
+                        <Button Class="modern-button add-button"
+                                OnClick="@(() => _modalAñadirVisible = true)"
+                                Icon="plus"
+                                Size="ButtonSize.Large">
+                            Nuevo Pago
+                        </Button>
+
+                        <Button Class="modern-button print-button"
+                                OnClick="@(() => _modalImprimirVisible = true)"
+                                Icon="printer"
+                                Size="ButtonSize.Large">
+                            Imprimir
+                        </Button>
+
+                        <Dropdown Trigger="@(new Trigger[] { Trigger.Click })"
+                                  Placement="Placement.BottomRight"
+                                  Arrow>
+                            <Overlay>
+                                <div style="min-width: 520px; max-width: 90vw;">
+                                    <PagosAprobar OnCompleted="@Init" />
+                                </div>
+                            </Overlay>
+                            <ChildContent>
+                                <Badge Count="@PagosPendientesAprobacion" ShowZero="false">
+                                    <Button Class="notification-button" Shape="ButtonShape.Circle" Size="ButtonSize.Large">
+                                        <Icon Type="bell" />
+                                    </Button>
+                                </Badge>
+                            </ChildContent>
+                        </Dropdown>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <Table DataSource="PagosFiltrados"
+                       HidePagination="false"
+                       Responsive
+                       TItem="PagoViewModel"
+                       RowClassName="@(c => c.Data.Estado.ToString())"
+                       OnRow="@OnRowClick"
+                       Loading="@_loading"
+                       ScrollX="800px">
+
+                    <ColumnDefinitions Context="pago">
+                        <PropertyColumn Title="👤 Socio"
+                                        Property="c => c.NombreSocio"
+                                        Sortable
+                                        Width="250px"
+                                        Fixed="ColumnFixPlacement.Left">
+                            <Template>
+                                <div style="font-weight: 600; color: #333;">
+                                    @pago.NombreSocio
+                                </div>
+                                <div style="font-size: 0.8rem; color: #666;">
+                                    Nro Socio: @pago.NumeroSocio
+                                </div>
+                            </Template>
+                        </PropertyColumn>
+
+                        <PropertyColumn Title="📅 Fecha"
+                                        Property="c => c.Fecha"
+                                        Format="dd/MM/yyyy"
+                                        Sortable
+                                        DefaultSortOrder="SortDirection.Descending"
+                                        Width="120px" />
+
+                        <PropertyColumn Title="💵 Monto"
+                                        Property="c => c.Monto"
+                                        Sortable
+                                        Width="120px">
+                            <Template>
+                                <Tag Color="TagColor.Processing" Style="font-size: 0.95rem; font-weight: 600;">
+                                    @pago.Monto.ToString("C2")
+                                </Tag>
+                            </Template>
+                        </PropertyColumn>
+
+                        <PropertyColumn Title="🏷️ Tipo"
+                                        Property="c => c.Tipo.ToString()"
+                                        Sortable
+                                        Width="150px" />
+
+                        <PropertyColumn Title="📊 Estado"
+                                        Property="c => c.Estado"
+                                        Sortable
+                                        Width="150px"
+                                        Fixed="ColumnFixPlacement.Right">
+                            <Template>
+                                @{
+                                    string statusClass = pago.Estado switch
+                                    {
+                                        EstadoPago.Rechazado => "status-rejected",
+                                        EstadoPago.Confirmado => "status-approved",
+                                        _ => "status-pending"
+                                    };
+                                    string icon = pago.Estado switch
+                                    {
+                                        EstadoPago.Rechazado => "close-circle",
+                                        EstadoPago.Confirmado => "check-circle",
+                                        _ => "clock-circle"
+                                    };
+                                }
+                                <Space>
+                                    <Icon Type="@icon" />
+                                    <span class="status-badge @statusClass">
+                                        @pago.Estado.ToString()
+                                    </span>
+                                </Space>
+                            </Template>
+                        </PropertyColumn>
+                    </ColumnDefinitions>
+                </Table>
+            </div>
+        </Card>
+    </div>
+</div>
+
+@* Modal para añadir pago *@
+<Modal @bind-Visible="_modalAñadirVisible"
+       Title="Nuevo Pago en Efectivo"
+       Width="@("100%")"
+       Style="max-width: 700px;"
+       Footer="null"
+       DestroyOnClose
+       WrapClassName="modal-crear-pago">
+    <div class="modal-crear-pago-content">
+        <Form Model="nuevoPago" Layout="FormLayout.Vertical" OnFinish="AddPago" Loading="isLoadingComponent">
+
+            <Row Gutter="16">
+                <AntDesign.Col Span="12">
+                    <FormItem Label="👤 Socio" Required>
+                        <Select TItem="Socio"
+                                TItemValue="int"
+                                DataSource="@SociosList"
+                                @bind-Value="@nuevoPago.SocioId"
+                                LabelName="@nameof(Socio.Nombre)"
+                                ValueName="@nameof(Socio.Id)"
+                                Placeholder="Seleccione el socio"
+                                AllowClear
+                                EnableSearch
+                                Size="InputSize.Large">
+                            <ItemTemplate Context="socioCtx">
+                                <span>@socioCtx.Nombre @socioCtx.Apellido - (Nº @socioCtx.NroSocio)</span>
+                            </ItemTemplate>
+                        </Select>
+                    </FormItem>
+                </AntDesign.Col>
+
+                <AntDesign.Col Span="12">
+                    <FormItem Label="👤 Cobrador" Required>
+                        <Select TItem="Cobrador"
+                                TItemValue="int"
+                                DataSource="@CobradoresList"
+                                @bind-Value="@nuevoPago.CobradorId"
+                                LabelName="@nameof(Cobrador.Nombre)"
+                                ValueName="@nameof(Cobrador.PersonaId)"
+                                Placeholder="Seleccione el cobrador"
+                                AllowClear
+                                EnableSearch
+                                Size="InputSize.Large">
+                            <ItemTemplate Context="cobCtx">
+                                <span>@cobCtx.Nombre @cobCtx.Apellido</span>
+                            </ItemTemplate>
+                        </Select>
+                    </FormItem>
+                </AntDesign.Col>
+            </Row>
+
+            <Row Gutter="16">
+                <AntDesign.Col Span="12">
+                    <FormItem Label="💵 Monto" Required>
+                        <AntDesign.InputNumber @bind-Value="@nuevoPago.Monto"
+                                               Min="1"
+                                               Size="InputSize.Large"
+                                               Style="width: 100%;" />
+                    </FormItem>
+                </AntDesign.Col>
+
+                <AntDesign.Col Span="12">
+                    <FormItem Label="📅 Fecha del Pago" Required>
+                        <DatePicker TValue="DateTime"
+                                    @bind-Value="@nuevoPago.Fecha"
+                                    Placeholder="@("Seleccione fecha")"
+                                    Size="InputSize.Large"
+                                    Style="width: 100%;" />
+                    </FormItem>
+                </AntDesign.Col>
+            </Row>
+
+            <FormItem Label="📝 Observaciones (Opcional)">
+                <TextArea @bind-Value="@nuevoPago.Observaciones"
+                          Placeholder="Notas sobre el pago..."
+                          Rows="3" />
+            </FormItem>
+
+            <div style="display: flex; justify-content: flex-end; margin-top: 20px;">
+                <Button Type="@ButtonType.Primary" HtmlType="submit" Size="ButtonSize.Large">
+                    Registrar Pago
+                </Button>
+            </div>
+        </Form>
+    </div>
+</Modal>
+
+<Modal Title="Imprimir Bonos de Socios"
+       Footer="null"
+       Centered="@true"
+       OnCancel="@(() => _modalParametrosBonosVisible = false)"
+       Visible="@_modalParametrosBonosVisible"
+       Width="500">
+    <div style="padding: 16px;">
+        <h4 style="text-align: center; margin-bottom: 24px; color: #A63333; font-weight: 600;">
+            <Icon Type="file-text" style="margin-right: 8px;" />
+            Seleccione Zona, Mes y Año
+        </h4>
+
+        <div style="margin-bottom: 20px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <label style="font-weight: 600; color: #333;">Mes</label>
+                <AntDesign.InputNumber @bind-Value="selectedBonosMes" Min="1" Max="12" Style="width: 100%; height: 40px; font-size: 16px; border-radius: 8px;" />
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <label style="font-weight: 600; color: #333;">Año</label>
+                <AntDesign.InputNumber @bind-Value="selectedBonosAnio" Min="2000" Max="2100" Style="width: 100%; height: 40px; font-size: 16px; border-radius: 8px;" />
+            </div>
+        </div>
+
+        @foreach (var zona in GetZonasDisponibles())
+        {
+            <div class="print-modal-option @(selectedBonosZona == zona ? "selected" : "")"
+                 @onclick="() => SelectBonosZona(zona)">
+                <Icon Type="environment" Class="option-icon" />
+                <div class="option-text">
+                    <h4>@zona.GetDisplayName()</h4>
+                    <p>Imprimir bonos solo de esta zona</p>
+                </div>
+            </div>
+        }
+
+        <div class="print-modal-actions">
+            <Button OnClick="@(() => _modalParametrosBonosVisible = false)">
+                Cancelar
+            </Button>
+            <Button Type="ButtonType.Primary" Class="print-confirm-button" OnClick="ConfirmPrintBonos">
+                <Icon Type="printer" /> Imprimir
+            </Button>
+        </div>
+    </div>
+</Modal>
+
+<Modal @bind-Visible="_modalImprimirVisible"
+       Title="Imprimir"
+       Width="@("100%")"
+       Style="max-width: 680px;"
+       Footer="null"
+       DestroyOnClose
+       WrapClassName="modal-imprimir-pago">
+    <div class="modal-imprimir-content">
+        <p class="modal-imprimir-subtitle">Seleccione qué desea imprimir</p>
+
+        <div class="modal-imprimir-options">
+            <Button Class="modal-imprimir-option"
+                    OnClick="ImprimirBonos">
+                <Icon Type="file-text" Class="modal-imprimir-option-icon" />
+                <p class="modal-imprimir-option-title">Imprimir Bonos</p>
+                <p class="modal-imprimir-option-description">Genera la impresión de bonos para su control y distribución.</p>
+            </Button>
+
+            <Button Class="modal-imprimir-option"
+                    OnClick="ImprimirListaCobranza">
+                <Icon Type="unordered-list" Class="modal-imprimir-option-icon" />
+                <p class="modal-imprimir-option-title">Imprimir Lista Cobranza</p>
+                <p class="modal-imprimir-option-description">Imprime el listado de cobranza para trabajo en campo.</p>
+            </Button>
+        </div>
+    </div>
+</Modal>
+
+<Modal Title="Imprimir Lista de Cobranza"
+       Footer="null"
+       Centered="@true"
+       OnCancel="@(() => _modalParametrosCobranzaVisible = false)"
+       Visible="@_modalParametrosCobranzaVisible"
+       Width="500">
+    <div style="padding: 16px;">
+        <h4 style="text-align: center; margin-bottom: 24px; color: #A63333; font-weight: 600;">
+            <Icon Type="printer" style="margin-right: 8px;" />
+            Seleccione Zona y Año
+        </h4>
+
+        <div style="margin-bottom: 20px;">
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <label style="font-weight: 600; color: #333;">Año de Cobranza</label>
+                <AntDesign.InputNumber @bind-Value="selectedAnio" Min="2000" Max="2100" Style="width: 100%; height: 40px; font-size: 16px; border-radius: 8px;" />
+            </div>
+        </div>
+
+        @foreach (var zona in GetZonasDisponibles())
+        {
+            <div class="print-modal-option @(selectedPrintZona == zona ? "selected" : "")"
+                 @onclick="() => SelectPrintZona(zona)">
+                <Icon Type="environment" Class="option-icon" />
+                <div class="option-text">
+                    <h4>@zona.GetDisplayName()</h4>
+                    <p>Imprimir solo pagos de esta zona</p>
+                </div>
+            </div>
+        }
+
+        <div class="print-modal-actions">
+            <Button OnClick="@(() => _modalParametrosCobranzaVisible = false)">
+                Cancelar
+            </Button>
+            <Button Type="ButtonType.Primary" Class="print-confirm-button" OnClick="ConfirmPrintCobranza">
+                <Icon Type="printer" /> Imprimir
+            </Button>
+        </div>
+    </div>
+</Modal>
+
+@* Modal de detalle *@
+<Modal @bind-Visible="_modalDetalleVisible"
+       Title="@($"📋 Detalle de Pago - {pagoSeleccionado?.NombreSocio}")"
+       Footer="null"
+       Width="@("90%")"
+       Style="max-width: 800px;">
+    @if (pagoSeleccionado != null)
+    {
+        <div class="pagos-abm">
+            <div class="modal-content">
+                <div class="detail-grid">
+                    <div class="detail-item">
+                        <div class="detail-label">👤 Socio</div>
+                        <div class="detail-value">@pagoSeleccionado.NombreSocio</div>
+                    </div>
+
+                    <div class="detail-item">
+                        <div class="detail-label">📋 Nro Socio</div>
+                        <div class="detail-value">@pagoSeleccionado.NumeroSocio</div>
+                    </div>
+
+                    <div class="detail-item">
+                        <div class="detail-label">💵 Monto</div>
+                        <div class="detail-value">
+                            <Tag Color="TagColor.Processing" Style="font-size: 1rem; padding: 4px 12px;">
+                                @pagoSeleccionado.Monto.ToString("C2")
+                            </Tag>
+                        </div>
+                    </div>
+
+                    <div class="detail-item">
+                        <div class="detail-label">📅 Fecha de Pago</div>
+                        <div class="detail-value">@pagoSeleccionado.Fecha.ToString("dd MMMM yyyy")</div>
+                    </div>
+
+                    <div class="detail-item">
+                        <div class="detail-label">🏷️ Tipo</div>
+                        <div class="detail-value">@pagoSeleccionado.Tipo.ToString()</div>
+                    </div>
+
+                    <div class="detail-item">
+                        <div class="detail-label">📊 Estado</div>
+                        <div class="detail-value">
+                            @{
+                                string statusClass = pagoSeleccionado.Estado switch
+                                {
+                                    EstadoPago.Rechazado => "status-rejected",
+                                    EstadoPago.Confirmado => "status-approved",
+                                    _ => "status-pending"
+                                };
+                            }
+                            <span class="status-badge @statusClass">
+                                @pagoSeleccionado.Estado.ToString()
+                            </span>
+                        </div>
+                    </div>
+
+                    @if (!string.IsNullOrWhiteSpace(pagoSeleccionado.NombreCobrador))
+                    {
+                        <div class="detail-item">
+                            <div class="detail-label">👤 Cobrador</div>
+                            <div class="detail-value">@pagoSeleccionado.NombreCobrador</div>
+                        </div>
+                    }
+                    
+                    @if (!string.IsNullOrWhiteSpace(pagoSeleccionado.Observaciones))
+                    {
+                        <div class="detail-item detail-description">
+                            <div class="detail-label">📝 Observaciones</div>
+                            <div class="detail-value">@pagoSeleccionado.Observaciones</div>
+                        </div>
+                    }
+
+                    @if (pagoSeleccionado.Estado == EstadoPago.Rechazado)
+                    {
+                        <div class="detail-item detail-description" style="border-color: var(--abm-error-color);">
+                            <div class="detail-label" style="color: var(--abm-error-color);">❌ Razón de Rechazo</div>
+                            <div class="detail-value">@(string.IsNullOrEmpty(pagoSeleccionado.RazonRechazo) ? "No especificada" : pagoSeleccionado.RazonRechazo)</div>
+                        </div>
+                    }
+                </div>
+
+                <div style="display: flex; justify-content: center; margin-top: 24px;">
+                    <Button Type="ButtonType.Primary"
+                            Size="ButtonSize.Large"
+                            OnClick="@(() => _modalDetalleVisible = false)">
+                        Cerrar
+                    </Button>
+                </div>
+            </div>
+        </div>
+    }
+</Modal>
+
+@code {
+    // Variables de búsqueda
+    DateTime FechaBuscarI = DateTime.Now.AddDays(-30);
+    DateTime FechaBuscarF = DateTime.Now.AddDays(30);
+    string? Busqueda;
+    bool _loading = false;
+    private bool isLoadingComponent = false;
+
+    // Listas
+    List<PagoViewModel> PagosOriginales = new();
+    List<PagoViewModel> PagosFiltrados = new();
+    List<Socio> SociosList = new();
+    List<Cobrador> CobradoresList = new();
+
+    int PagosPendientesAprobacion => PagosOriginales.Count(p => p.Estado == EstadoPago.PendienteAConfirmar);
+
+    // Modal forms
+    private bool _modalAñadirVisible = false;
+    private bool _modalImprimirVisible = false;
+    private bool _modalParametrosCobranzaVisible = false;
+    private bool _modalParametrosBonosVisible = false;
+    private Zona? selectedPrintZona = null;
+    private int selectedAnio = DateTime.Now.Year;
+    private Zona? selectedBonosZona = null;
+    private int selectedBonosMes = DateTime.Now.Month;
+    private int selectedBonosAnio = DateTime.Now.Year;
+    private bool _modalDetalleVisible = false;
+    private PagoViewModel? pagoSeleccionado;
+
+    private PagoViewModel nuevoPago = new()
+    {
+        Fecha = DateTime.Today,
+        Tipo = TipoPagoSocio.Efectivo,
+        Estado = EstadoPago.PendienteAConfirmar
+    };
+
+    private Dictionary<string, object> OnRowClick(RowData<PagoViewModel> rowData)
+    {
+        return new Dictionary<string, object>
+        {
+            ["onclick"] = Microsoft.AspNetCore.Components.EventCallback.Factory.Create<Microsoft.AspNetCore.Components.Web.MouseEventArgs>(this, () => MostrarDetallePago(rowData.Data))
+        };
+    }
+
+    private void MostrarDetallePago(PagoViewModel pago)
+    {
+        pagoSeleccionado = pago;
+        _modalDetalleVisible = true;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Init();
+    }
+
+    private async Task Init()
+    {
+        _loading = true;
+        StateHasChanged();
+
+        try
+        {
+            var pagos = await PagoService.ObtenerTodosLosPagosAsync();
+            PagosOriginales = pagos.Select(MapToViewModel).ToList();
+            SociosList = await SocioService.ObtenerSociosAsync() ?? new List<Socio>();
+            CobradoresList = (await CobradorService.ObtenerTodosLosCobradoresAsync()).ToList();
+
+            PagosFiltrados = FiltrarPagos();
+        }
+        catch (Exception ex)
+        {
+            await MessageService.ErrorAsync($"❌ Error al cargar los datos: {ex.Message}");
+        }
+        finally
+        {
+            _loading = false;
+            StateHasChanged();
+        }
+    }
+
+    private List<PagoViewModel> FiltrarPagos()
+    {
+        var filtered = PagosOriginales
+            .Where(p => (FechaBuscarI == default || p.Fecha.Date >= FechaBuscarI.Date) &&
+                        (FechaBuscarF == default || p.Fecha.Date <= FechaBuscarF.Date) &&
+                        (string.IsNullOrWhiteSpace(Busqueda) ||
+                            p.NombreSocio.Contains(Busqueda, StringComparison.OrdinalIgnoreCase) ||
+                            p.NumeroSocio.ToString().Contains(Busqueda)))
+            .OrderByDescending(p => p.Fecha)
+            .ToList();
+
+        return filtered;
+    }
+
+    private async Task AddPago()
+    {
+        isLoadingComponent = true;
+
+        if (nuevoPago.SocioId <= 0 || nuevoPago.Monto <= 0 || nuevoPago.CobradorId <= 0)
+        {
+            await MessageService.ErrorAsync("⚠️ Por favor, complete todos los campos obligatorios.");
+            isLoadingComponent = false;
+            return;
+        }
+
+        try
+        {
+            var nuevopago = new PagoEfectivo
+            {
+                SocioId = nuevoPago.SocioId,
+                CobradorId = nuevoPago.CobradorId,
+                Monto = nuevoPago.Monto,
+                Fecha = nuevoPago.Fecha,
+                Estado = EstadoPago.PendienteAConfirmar,
+                Tipo = TipoPagoSocio.Efectivo,
+                Observaciones = nuevoPago.Observaciones
+            };
+
+            await PagoService.AgregarPagoAsync(nuevoPago.SocioId, nuevopago);
+            await MessageService.SuccessAsync("✅ Pago registrado exitosamente y enviado para confirmación.");
+            
+            _modalAñadirVisible = false;
+            nuevoPago = new PagoViewModel
+            {
+                Fecha = DateTime.Today,
+                Tipo = TipoPagoSocio.Efectivo,
+                Estado = EstadoPago.PendienteAConfirmar
+            };
+
+            await Init();
+        }
+        catch (Exception ex)
+        {
+            await MessageService.ErrorAsync($"❌ Error al registrar el pago: {ex.Message}");
+        }
+        finally
+        {
+            isLoadingComponent = false;
+        }
+    }
+
+    private async Task ImprimirBonos()
+    {
+        _modalParametrosBonosVisible = true;
+        _modalImprimirVisible = false;
+        await Task.CompletedTask;
+    }
+
+    private void ImprimirListaCobranza()
+    {
+        _modalImprimirVisible = false;
+        _modalParametrosCobranzaVisible = true;
+    }
+
+    private IEnumerable<Zona> GetZonasDisponibles()
+    {
+        return new[] { Zona.Zona1, Zona.Zona2, Zona.Zona3, Zona.Zona4, Zona.Zona5 };
+    }
+
+    private void SelectPrintZona(Zona? zona)
+    {
+        selectedPrintZona = zona;
+    }
+
+    private void SelectBonosZona(Zona? zona)
+    {
+        selectedBonosZona = zona;
+    }
+
+    private static int ObtenerNumeroZona(Zona? zona)
+    {
+        return zona switch
+        {
+            Zona.Zona1 => 1,
+            Zona.Zona2 => 2,
+            Zona.Zona3 => 3,
+            Zona.Zona4 => 4,
+            Zona.Zona5 => 5,
+            _ => 0
+        };
+    }
+
+    private void ConfirmPrintCobranza()
+    {
+        int zonaParam = ObtenerNumeroZona(selectedPrintZona);
+        string url = $"/fire-force/socios/imprimibles/lista-cobranza-anual/{selectedAnio}/{zonaParam}";
+
+        navigationManager.NavigateTo(url, forceLoad: true);
+        _modalParametrosCobranzaVisible = false;
+    }
+
+    private void ConfirmPrintBonos()
+    {
+        int zonaParam = ObtenerNumeroZona(selectedBonosZona);
+        string url = $"/fire-force/socios/imprimibles/bonos/{zonaParam}/{selectedBonosMes}/{selectedBonosAnio}";
+
+        navigationManager.NavigateTo(url, forceLoad: true);
+        _modalParametrosBonosVisible = false;
+    }
+
+    private static PagoViewModel MapToViewModel(PagoSocio pago)
+    {
+        return new PagoViewModel
+        {
+            Id = pago.Id,
+            SocioId = pago.SocioId,
+            NombreSocio = pago.Socio is null ? "Sin Socio" : $"{pago.Socio.Nombre} {pago.Socio.Apellido}".Trim(),
+            NumeroSocio = pago.Socio?.NroSocio ?? 0,
+            Fecha = pago.Fecha,
+            FechaConfirmadoORechazado = pago.FechaConfirmadoORechazado,
+            RazonRechazo = pago.RazonRechazo,
+            Monto = pago.Monto,
+            Tipo = pago.Tipo,
+            Estado = pago.Estado,
+            CobradorId = pago is PagoEfectivo pe ? pe.CobradorId : 0,
+            NombreCobrador = pago is PagoEfectivo pe2 && pe2.Cobrador is not null
+                ? $"{pe2.Cobrador.Nombre} {pe2.Cobrador.Apellido}".Trim()
+                : null,
+            Observaciones = pago is PagoEfectivo pe3 ? pe3.Observaciones : null
+        };
+    }
+}

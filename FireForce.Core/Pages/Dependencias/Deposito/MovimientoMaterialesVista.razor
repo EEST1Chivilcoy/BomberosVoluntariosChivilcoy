@@ -1,0 +1,615 @@
+﻿@implements IDisposable
+
+@using System.ComponentModel.DataAnnotations
+@using FireForce.Core.Services
+@using FireForce.Core.Data.Models.Vehiculos.Flota
+@using FireForce.Core.Data.Models.Personas.Personal
+@using FireForce.Core.Data.Models.Personas.Personal.Componentes
+@using FireForce.Core.Data.Models.Objetos
+@using FireForce.Core.Data.Models.Objetos.Componentes
+@using AntDesign.TableModels
+
+
+@*Servicios Utilizados*@
+@inject IDepositoService DepositoService
+@inject NavigationManager navigationManager
+@inject IDbContextFactory<BomberosDbContext> DbFactory
+@inject IMessageService message
+
+<style>
+    .movimientos-abm {
+        font-family: 'Poppins', sans-serif !important;
+        --primary-color: #f0f2f5;
+        --primary-dark: #d9d9d9;
+        --secondary-color: #2F54EB;
+        --success-color: #52C41A;
+        --success-dark: #449E17;
+        --background-card: #FFFFFF;
+        --background-body: #FFFFFF;
+        --text-color: #262626;
+        --border-color: #D9D9D9;
+        --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .ant-modal-content {
+        border: 2px solid #A63333 !important;
+        border-radius: 8px !important;
+        overflow: hidden !important;
+    }
+
+    .ant-modal-header {
+        background-color: #A63333 !important;
+        border-radius: 8px 8px 0 0 !important;
+        border-bottom: none !important;
+    }
+
+        .ant-modal-header .ant-modal-title {
+            color: white !important;
+        }
+
+    .ant-modal-close {
+        color: white !important;
+    }
+
+
+
+    .movimientos-abm .form-buttons-container {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 24px;
+    }
+
+    .movimientos-abm .primary-button {
+        background-color: var(--secondary-color);
+        border: none;
+        color: white;
+        box-shadow: 0 2px 8px rgba(47, 84, 235, 0.3);
+        height: 32px;
+        font-weight: 500;
+        border-radius: 6px;
+        padding: 0 15px;
+    }
+
+    .movimientos-abm .secondary-button {
+        background-color: #6c757d;
+        border: none;
+        color: white;
+        box-shadow: none;
+        height: 32px;
+        font-weight: 500;
+        border-radius: 6px;
+        padding: 0 15px;
+    }
+
+    .movimientos-abm .cancel-button-white {
+        background-color: white !important;
+        color: black !important;
+        font-weight: 500 !important;
+        border: 1px solid #d9d9d9;
+        box-shadow: none;
+        height: 32px;
+        border-radius: 6px;
+        padding: 0 15px;
+    }
+
+    .movimientos-abm .save-button {
+        background: #4CAF50;
+        border: none;
+        color: white;
+        box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+        font-weight: 600;
+        height: 32px;
+        border-radius: 6px;
+        padding: 0 15px;
+    }
+
+    .movimientos-abm .section-separator {
+        border: none;
+        border-top: 1px dashed var(--border-color);
+        margin: 24px 0;
+    }
+
+    .ant-select:not(.ant-select-customize-input) .ant-select-selector {
+        border-radius: 6px !important;
+        height: 40px !important;
+    }
+
+    .ant-input:focus, .ant-input:hover,
+    .ant-input-number:focus, .ant-input-number:hover,
+    .ant-select-selector:focus, .ant-select-selector:hover {
+        border-color: #FFC107 !important;
+        box-shadow: 0 0 0 2px rgba(255, 193, 7, 0.2) !important;
+    }
+
+    .movimientos-abm .table-container {
+        margin-top: 20px;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .movimientos-abm .ant-table-wrapper {
+        border-radius: 8px;
+    }
+
+    .movimientos-abm .ant-table-thead > tr > th {
+        background-color: #fafafa !important;
+        font-weight: bold;
+    }
+
+    .movimientos-abm .ant-table-tbody > tr:nth-child(even) > td {
+        background-color: #f8f8f8 !important;
+    }
+
+    .ant-modal .ant-btn-primary {
+        background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
+        border: none !important;
+        color: #fff !important;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
+        margin-top: 0;
+        margin-bottom: 0;
+        padding: 0 20px !important;
+    }
+
+    .modal-crear-licencia .ant-btn-primary:hover {
+        background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
+        color: #fff !important;
+    }
+
+</style>
+
+<div class="movimientos-abm">
+    <div class="modal-content">
+
+        <div style="text-align: right; margin-bottom: 20px;">
+            <Button Type="@ButtonType.Primary" OnClick="OpenFormModal" Class="primary-button">
+                <Icon Type="plus-circle" Theme="IconThemeType.Outline" /> Nuevo Movimiento
+            </Button>
+        </div>
+
+        <Form Model="MovimientoVM"
+              Layout="FormLayout.Vertical"
+              Style="width: 100%;height: 100%;">
+
+            <div class="form-row" style="align-items: flex-end; margin-top: 20px;">
+                <FormItem>
+                    <Select @bind-value="@FiltrarDestino" TItemValue="string" TItem="string">
+                        <SelectOptions>
+                            <SelectOption Value="@("Sin asignar")" Label="Sin asignar" />
+                            <SelectOption Value="@("Bombero")" Label="Bombero" />
+                            <SelectOption Value="@("Movil")" Label="Movil" />
+                            <SelectOption Value="@("Material")" Label="Material" />
+                        </SelectOptions>
+                    </Select>
+                </FormItem>
+
+                @if (FiltrarDestino == "Bombero")
+                {
+                    <FormItem Label="Bombero">
+                        <Select TItem="BomberoViewModel" TItemValue="int" DataSource="@bomberoTodos" @bind-Value="@FiltrarBombero"
+                                LabelName="@nameof(BomberoViewModel.NombreYApellido)" ValueName="@nameof(BomberoViewModel.PersonaId)"
+                                Placeholder="Selecione el bombero" DefaultActiveFirstOption="false" AllowClear="true" EnableSearch />
+                    </FormItem>
+                }
+                else if (FiltrarDestino == "Movil")
+                {
+                    <FormItem Label="Movil">
+                        <Select TItem="MovilViewModel" TItemValue="int" DataSource="@MovilTodos" @bind-Value="@FiltrarMovil"
+                                LabelName="@nameof(MovilViewModel.NumeroMovil)" ValueName="@nameof(MovilViewModel.VehiculoId)"
+                                Placeholder="Selecione el movil" DefaultActiveFirstOption="false" AllowClear="true" EnableSearch />
+                    </FormItem>
+                }
+                else if (FiltrarDestino == "Material")
+                {
+                    <FormItem Label="Material">
+                        <Select TItem="MaterialVM" TItemValue="int" DataSource="@MaterialesVM" @bind-Value="@FiltrarMaterial"
+                                LabelName="@nameof(MaterialVM.Descripcion)" ValueName="@nameof(MaterialVM.MaterialId)"
+                                Placeholder="Seleccione el material" DefaultActiveFirstOption="false" AllowClear="true" EnableSearch />
+                    </FormItem>
+                }
+
+                <Button OnClick="CargarMovimientos" Class="primary-button" Style="margin-bottom: 24px;">
+                    <Icon Type="search" Theme="IconThemeType.Outline" /> Filtrar
+                </Button>
+            </div>
+        </Form>
+
+        <div class="table-container">
+            <Table DataSource="ListasMoviminetosVista" Bordered Responsive PageSize="5" Size="TableSize.Small">
+                <ColumnDefinitions Context="muestra">
+                    <PropertyColumn Property="c => c.TipoMovimiento" Title="Tipo de Movimiento"
+                                    SortDirections="new[] { SortDirection.Descending }"
+                                    Filters="DiscriminadorFilter"
+                                    OnFilter="((value, name) => Enum.GetName(typeof(TipoMovimiento), name).StartsWith(Enum.GetName(typeof(TipoMovimiento), value)))">
+                    </PropertyColumn>
+                    <PropertyColumn Property="c => c.MaterialAsignado.Descripcion" Title="Material" Sortable></PropertyColumn>
+                    <PropertyColumn Property="c => c.Cantidad" Title="Cantidad" Sortable />
+                    <PropertyColumn Property="c => c.BomberoOMovil" Title="Bombero/Móvil" Sortable></PropertyColumn>
+                    <PropertyColumn Property="c => c.FechaIngreso" Title="Fecha de Ingreso" Format="dd/MM/yyyy" Sortable></PropertyColumn>
+                </ColumnDefinitions>
+            </Table>
+        </div>
+
+        <Modal Visible="@isModalVisible"
+               Title="Cargar Movimiento"
+               Width=@("100%")
+               Style="max-width: 800px;"
+               Footer="null"
+               DestroyOnClose
+               WrapClassName="modal-crear-movimiento"
+               OnCancel="HandleModalClose">
+            <div class="modal-crear-movimiento-content">
+                <Form Model="MovimientoVM"
+                      Class="modal-crear-movimiento-form"
+                      Layout="FormLayout.Vertical"
+                      OnFinish="OnFinish"
+                      OnFinishFailed="OnFinishFailed">
+                    <Row Gutter="16">
+                        <AntDesign.Col Span="12">
+                            <div class="modal-crear-movimiento-form-item">
+                                <FormItem Label="🏷️ Rubro" Required>
+                                    <EnumSelect TEnum="@TipoMovimiento" @bind-Value="@MovimientoVM.TipoMovimiento" />
+                                </FormItem>
+                            </div>
+                        </AntDesign.Col>
+                        <AntDesign.Col Span="12">
+                            <div class="modal-crear-movimiento-form-item">
+                                <FormItem Label="🔢 Cantidad" Required>
+                                    <AntDesign.InputNumber @bind-Value="MovimientoVM.Cantidad" />
+                                </FormItem>
+                            </div>
+                        </AntDesign.Col>
+                    </Row>
+                    <Row Gutter="16">
+                        <AntDesign.Col Span="24">
+                            <div class="modal-crear-movimiento-form-item">
+                                <FormItem Label="🧱 Material otorgado" Required>
+                                    <Select TItem="MaterialVM" TItemValue="int" DataSource="@MaterialesVM" @bind-Value="@MovimientoVM.MaterialId"
+                                            LabelName="@nameof(MaterialVM.Descripcion)" ValueName="@nameof(MaterialVM.MaterialId)"
+                                            Placeholder="Seleccione el material" DefaultActiveFirstOption="false" AllowClear="true" EnableSearch />
+                                </FormItem>
+                            </div>
+                        </AntDesign.Col>
+                    </Row>
+                    <Row Gutter="16">
+                        <AntDesign.Col Span="24">
+                            <div class="modal-crear-movimiento-form-item">
+                                <FormItem WrapperColSpan="24" LabelColSpan="4">
+                                    <CheckboxGroup Style="display: flex; gap: 20px;" @bind-Value="@_value" TValue="string" OnChange="OnChange">
+                                        <Checkbox Label="Bombero" @bind-Value="@chIsBombero">Bombero</Checkbox>
+                                        <Checkbox Label="Movil" @bind-Value="@chIsMovil">Móvil</Checkbox>
+                                        <Checkbox Label="Comisión Diretiva" @bind-Value="@MovimientoVM.esComisionDirectiva">Comisión Directiva</Checkbox>"
+                                    </CheckboxGroup>
+                                </FormItem>
+                            </div>
+                        </AntDesign.Col>
+                    </Row>
+                    <Row Gutter="16">
+                        @if (chIsBombero)
+                        {
+                            <AntDesign.Col Span="12">
+                                <div class="modal-crear-movimiento-form-item">
+                                    <FormItem Label="Bombero asignado">
+                                        <Select TItem="BomberoViewModel" TItemValue="int?" DataSource="@bomberoTodos" @bind-Value="@MovimientoVM.BomberoAsignado"
+                                                LabelName="@nameof(BomberoViewModel.NombreYApellido)" ValueName="@nameof(BomberoViewModel.NumeroLegajo)"
+                                                Placeholder="Seleccione el bombero" DefaultActiveFirstOption="false" AllowClear="true" EnableSearch />
+                                    </FormItem>
+                                </div>
+                            </AntDesign.Col>
+                        }
+                        @if (chIsMovil)
+                        {
+                            <AntDesign.Col Span="12">
+                                <div class="modal-crear-movimiento-form-item">
+                                    <FormItem Label="Móvil asignado">
+                                        <Select TItem="MovilViewModel" TItemValue="string" DataSource="@MovilTodos" @bind-Value="@MovimientoVM.MovilAsignado"
+                                                LabelName="@nameof(MovilViewModel.NumeroMovil)" ValueName="@nameof(MovilViewModel.NumeroMovil)"
+                                                Placeholder="Seleccione el móvil" DefaultActiveFirstOption="false" AllowClear="true" EnableSearch />
+                                    </FormItem>
+                                </div>
+                            </AntDesign.Col>
+                        }
+                    </Row>
+                    <Row Gutter="24">
+                        <AntDesign.Col Span="24">
+                            <div class="modal-crear-movimiento-form-full-width">
+                                <FormItem Label="🧾 Observaciones">
+                                    <TextArea @bind-Value="MovimientoVM.Observaciones"
+                                              Placeholder="Ingrese una descripción detallada de la licencia"
+                                              Rows="4" />
+                                </FormItem>
+                            </div>
+                        </AntDesign.Col>
+                    </Row>
+                    <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;" class="modal-crear-movimiento-footer">
+                        <Button Class="ant-btn-primary" HtmlType="submit">
+                            Guardar
+                        </Button>
+                        <Button Type="ButtonType.Default" OnClick="HandleModalClose">
+                            Cancelar
+                        </Button>
+                    </div>
+                </Form>
+            </div>
+        </Modal>
+
+        <hr class="section-separator" />
+    </div>
+</div>
+@code {
+    BomberosDbContext Context { get; set; }
+    bool chIsBombero;
+    bool chIsMovil;
+    bool isModalVisible = false;
+
+    private void OpenFormModal()
+    {
+        isModalVisible = true;
+        MovimientoVM = new();
+    }
+
+    private void HandleModalClose()
+    {
+        isModalVisible = false;
+    }
+
+    public class MovilViewModel
+    {
+        public int VehiculoId { get; set; }
+        public string NumeroMovil { get; set; }
+    }
+
+    public class BomberoViewModel
+    {
+        public int PersonaId { get; set; }
+        public string NombreYApellido { get; set; }
+        public int NumeroLegajo { get; set; }
+    }
+    public class MaterialVM
+    {
+        public int MaterialId { get; set; }
+        [Required]
+        public DateTime FechaAlta { get; set; }
+        public string? Descripcion { get; set; }
+        public string? Codigo { get; set; }
+        public int Stock { get; set; }
+        public TipoRubro Rubro { get; set; }
+
+    }
+    public class MovimientoMaterialesViewModel
+    {
+        public DateTime FechaIngreso { get; set; }
+        public TipoMovimiento TipoMovimiento { get; set; }
+        public int Cantidad { get; set; }
+        public int MaterialId { get; set; }
+        public int? BomberoAsignado { get; set; }
+        public string? MovilAsignado { get; set; }
+        public bool esComisionDirectiva { get; set; }
+        public string Observaciones { get; set; }
+    }
+
+    public class TodosMovimientosviewModel
+    {
+        public DateTime FechaIngreso { get; set; }
+        public TipoMovimiento TipoMovimiento { get; set; }
+        public int Cantidad { get; set; }
+        public Bombero? BomberoAsignado { get; set; }
+        public Movil? MovilAsignado { get; set; }
+        public bool esComisionDirectiva { get; set; }
+
+        public string BomberoOMovil
+        {
+            get
+            {
+                if (BomberoAsignado != null)
+                {
+                    return BomberoAsignado.Nombre + "," + BomberoAsignado.Apellido;
+                }
+                else if (MovilAsignado != null)
+                {
+                    return MovilAsignado.NumeroMovil;
+                }
+                else if (esComisionDirectiva)
+                {
+                    return "Comisión Directiva";
+                }
+                else
+                {
+                    return "No asignado";
+                }
+            }
+        }
+        public Material? MaterialAsignado { get; set; }
+    }
+
+    MovimientoMaterialesViewModel MovimientoVM = new();
+    List<MaterialVM> MaterialesVM = new();
+    List<BomberoViewModel> bomberoTodos = new();
+    List<MovilViewModel> MovilTodos = new();
+    List<MovimientoMaterialesViewModel> ListasMoviminetos = new();
+    List<TodosMovimientosviewModel> ListasMoviminetosVista = new();
+    private TableFilter<TipoMovimiento>[] DiscriminadorFilter;
+    private string[] _value = new string[] { };
+    protected override async Task OnInitializedAsync()
+    {
+        await Init();
+        DiscriminadorFilter = new TableFilter<TipoMovimiento>[Enum.GetValues(typeof(TipoMovimiento)).Length];
+        int i = 0;
+        foreach (TipoMovimiento value in Enum.GetValues(typeof(TipoMovimiento)))
+        {
+            DiscriminadorFilter[i] = new() { Text = Enum.GetName(typeof(TipoMovimiento), value), Value = value };
+            i++;
+        }
+    }
+
+    private async Task Init()
+    {
+        MovimientoVM = new();
+        Context = DbFactory.CreateDbContext();
+
+        await CargarMaterial();
+        await CargarBomberos();
+        await CargarMovil();
+        await CargarMovimientos();
+
+    }
+    private async void OnFinish(EditContext editContext)
+    {
+        try
+        {
+            var BomberoDestino = MovimientoVM.BomberoAsignado.HasValue ? await Context.Bomberos.SingleOrDefaultAsync(b => b.NumeroLegajo == MovimientoVM.BomberoAsignado) : null;
+            var MovilDestino = !string.IsNullOrEmpty(MovimientoVM.MovilAsignado) ? await Context.Moviles.SingleOrDefaultAsync(m => m.NumeroMovil == MovimientoVM.MovilAsignado) : null;
+            var MaterialAsignado = await Context.Materiales.SingleOrDefaultAsync(ma => ma.MaterialId == MovimientoVM.MaterialId);
+
+            if (MaterialAsignado == null)
+            {
+                await message.ErrorAsync("No se encontró el material asignado.");
+                return;
+            }
+
+            MovimientoMaterial movimiento = new()
+            {
+                TipoMovimiento = MovimientoVM.TipoMovimiento,
+                DestinoBombero = BomberoDestino,
+                DestinoMovil = MovilDestino,
+                Cantidad = MovimientoVM.Cantidad,
+                Observaciones = MovimientoVM.Observaciones,
+                esComisionDirectiva = MovimientoVM.esComisionDirectiva,
+                FechaIngreso = DateTime.Now,
+                Materiales = MaterialAsignado
+            };
+
+            if (MovimientoVM.TipoMovimiento != TipoMovimiento.Entrada && MaterialAsignado.Stock - MovimientoVM.Cantidad < 0)
+            {
+                message.Error("Stock insuficiente");
+                return;
+            }
+
+            await DepositoService.CargarMovimiento(movimiento);
+            await Init();
+            HandleModalClose();
+            StateHasChanged();
+            await message.SuccessAsync("Movimiento cargado");
+        }
+        catch (Exception e)
+        {
+            await Init();
+            StateHasChanged();
+            if (e.InnerException != null)
+                await message.ErrorAsync(e.InnerException.Message, 5);
+            else
+                await message.ErrorAsync(e.Message, 5);
+        }
+    }
+    private async Task CargarBomberos()
+    {
+        bomberoTodos = new();
+        var bom = await Context.Bomberos.ToListAsync();
+        foreach (var item in bom)
+        {
+            BomberoViewModel b = new()
+            {
+                PersonaId = item.PersonaId,
+                NombreYApellido = item.Nombre + ' ' + item.Apellido,
+                NumeroLegajo = item.NumeroLegajo
+            };
+            bomberoTodos.Add(b);
+        }
+    }
+    private async Task CargarMovil()
+    {
+        MovilTodos = new();
+        var movil = await Context.Moviles.ToListAsync();
+        foreach (var item in movil)
+        {
+            MovilViewModel m = new()
+            {
+                VehiculoId = item.VehiculoId,
+                NumeroMovil = item.NumeroMovil
+            };
+            MovilTodos.Add(m);
+        }
+    }
+    private async Task CargarMaterial()
+    {
+        MaterialesVM.Clear();
+        var Materiales = await Context.Materiales.ToArrayAsync();
+        foreach (var m in Materiales)
+        {
+            MaterialVM materialVM = new()
+            {
+                MaterialId = m.MaterialId,
+                Codigo = m.Codigo,
+                Stock = m.Stock,
+                Rubro = m.Rubro,
+                Descripcion = m.Descripcion,
+                FechaAlta = m.FechaAlta
+            };
+            MaterialesVM.Add(materialVM);
+            await Context.SaveChangesAsync();
+            StateHasChanged();
+        }
+    }
+
+    string FiltrarDestino = "Sin asignar";
+    int FiltrarBombero = 0;
+    int FiltrarMovil = 0;
+    int FiltrarMaterial = 0;
+
+    private async Task CargarMovimientos()
+    {
+        ListasMoviminetosVista = new();
+
+        List<MovimientoMaterial> Movimientos = Context.Movimientos.Include(b => b.DestinoBombero).Include(ma => ma.Materiales).Include(m => m.DestinoMovil).ToList();
+
+        if (FiltrarDestino != "Sin asignar")
+        {
+            if (FiltrarDestino == "Bombero")
+            {
+                Movimientos = Movimientos.Where(b => b.DestinoBombero?.PersonaId == FiltrarBombero).ToList();
+            }
+            else if (FiltrarDestino == "Movil")
+            {
+                Movimientos = Movimientos.Where(b => b.DestinoMovil?.VehiculoId == FiltrarMovil).ToList();
+            }
+            else if (FiltrarDestino == "Material")
+            {
+                Movimientos = Movimientos.Where(b => b.Materiales?.MaterialId == FiltrarMaterial).ToList();
+            }
+        }
+
+        foreach (var m in Movimientos)
+        {
+            TodosMovimientosviewModel mov = new()
+            {
+                FechaIngreso = m.FechaIngreso,
+                TipoMovimiento = m.TipoMovimiento,
+                MaterialAsignado = m.Materiales,
+                BomberoAsignado = m.DestinoBombero,
+                MovilAsignado = m.DestinoMovil,
+                Cantidad = m.Cantidad,
+                esComisionDirectiva = m.esComisionDirectiva,
+            };
+
+            ListasMoviminetosVista.Add(mov);
+        }
+    }
+
+    private void OnFinishFailed(EditContext editContext)
+    {
+        Console.WriteLine($"Failed:{JsonSerializer.Serialize(MovimientoVM)}");
+    }
+
+    void OnChange(string[] checkedValues)
+    {
+        Console.WriteLine($"checked = {JsonSerializer.Serialize(checkedValues)}");
+    }
+
+
+    public void Dispose()
+    {
+        Context?.Dispose();
+    }
+}

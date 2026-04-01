@@ -1,0 +1,42 @@
+﻿@using FireForce.Core.Data.ViewModels
+@using AntDesign
+
+<Form Model="Model">
+    @if (!EsObligatorio)
+    {
+        <FormItem Label="¿El lugar tiene seguro?">
+            <Switch @bind-Checked="@TieneSeguro" Style="width: 10px!important;" />
+        </FormItem>
+    }
+
+    @if (EsObligatorio || TieneSeguro)
+    {
+        <FormItem Label="Compañía aseguradora del establecimiento">
+            <Input @bind-Value="@Model.CompaniaAseguradora" />
+        </FormItem>
+
+        <FormItem Label="Número de póliza">
+            <Input @bind-Value="@Model.NumeroPoliza" />
+        </FormItem>
+
+        <FormItem Label="Fecha de Vencimiento">
+            <DatePicker TValue="DateTime?" ShowTime="true" @bind-Value="@Model.FechaVencimineto" />
+        </FormItem>
+    }
+</Form>
+
+@code {
+    [Parameter] public SalidasViewModels Model { get; set; }
+    [Parameter] public bool EsObligatorio { get; set; } = false;
+
+    private bool TieneSeguro { get; set; }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        // Si cualquiera de los campos de seguro tiene un valor, prende el switch
+        TieneSeguro = !string.IsNullOrEmpty(Model.CompaniaAseguradora) ||
+                      !string.IsNullOrEmpty(Model.NumeroPoliza) ||
+                      Model.FechaVencimineto.HasValue;
+    }
+}

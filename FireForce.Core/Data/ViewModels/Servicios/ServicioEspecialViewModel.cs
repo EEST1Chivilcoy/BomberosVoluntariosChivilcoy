@@ -1,0 +1,12 @@
+﻿using FireForce.Core.Data.Enums.Salidas;
+
+namespace FireForce.Core.Data.ViewModels.Servicios
+{
+    public class ServicioEspecialViewModel : SalidasViewModels
+    {
+        /// <summary>
+        /// Tipo de Servicio Especial
+        /// </summary>
+        public ServicioEspecialTipo Tipo { get; set; }
+    }
+}

@@ -1,0 +1,1709 @@
+﻿@page "/fire-force/socios/cobranza"
+
+@using FireForce.Core.Data.Models.Socios
+@using FireForce.Core.Data.Models.Socios.Componentes.Pagos
+@using FireForce.Core.Data.Enums.Socios
+@using FireForce.Core.Data.Enums.Discriminadores
+@using FireForce.Core.Pages.Socios.Cobranza
+@using FireForce.Core.Pages.Socios.Cobranza.Componentes
+@using FireForce.Core.Shared
+@using Microsoft.EntityFrameworkCore
+
+@*Servicios utilizados*@
+@using FireForce.Core.Services
+@inject ISocioService SocioService
+@inject ISaldoSocioService SaldoSocioService
+@inject IPagoService PagoService
+@inject IMessageService MessageService
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Policy = "AdminOnly")]
+
+<style>
+    /* ========================================
+               VARIABLES CSS - PALETA DEL SISTEMA
+               ======================================== */
+    :root {
+        --cobranza-primary-color: #A63333;
+        --cobranza-primary-dark: #732D2D;
+        --cobranza-success-color: #4CAF50;
+        --cobranza-success-dark: #438E46;
+        --cobranza-warning-color: #F57F17;
+        --cobranza-warning-light: #FFF8E1;
+        --cobranza-error-color: #C62828;
+        --cobranza-error-light: #FFEBEE;
+        --cobranza-approved-color: #2E7D32;
+        --cobranza-approved-light: #E6F7E9;
+        --cobranza-gold-color: #FFD700;
+        --cobranza-neutral-color: #1890ff;
+        --cobranza-neutral-light: #e6f7ff;
+    }
+
+    /* ========================================
+               ESTILOS GENERALES DE LA PÁGINA
+               ======================================== */
+    .cobranza-container {
+        padding: 12px;
+        min-height: 100vh;
+    }
+
+    .main-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        box-shadow: 0 8px 32px rgba(166, 51, 51, 0.1), 0 4px 16px rgba(0, 0, 0, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        overflow: hidden;
+    }
+
+    /* ========================================
+               HEADER SECTION
+               ======================================== */
+    .header-section {
+        background: linear-gradient(135deg, #A63333 0%, #732D2D 100%);
+        color: white;
+        padding: 28px;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .header-section .lava-bubbles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .header-section .lava-bubble {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.45;
+            background: radial-gradient(circle at 60% 40%, #FFD54F 0%, #F9A825 80%, transparent 100%);
+            animation: lava-bubble-move 8s linear infinite;
+            filter: blur(1.5px);
+            mix-blend-mode: lighten;
+        }
+
+            .header-section .lava-bubble.b1 {
+                left: 10%;
+                width: 60px;
+                height: 60px;
+                bottom: -70px;
+                animation-delay: 0s;
+                animation-duration: 7.5s;
+            }
+
+            .header-section .lava-bubble.b2 {
+                left: 35%;
+                width: 90px;
+                height: 90px;
+                bottom: -100px;
+                animation-delay: 2s;
+                animation-duration: 9s;
+                background: radial-gradient(circle at 60% 40%, #FFEB3B 0%, #FFD54F 80%, transparent 100%);
+            }
+
+            .header-section .lava-bubble.b3 {
+                left: 65%;
+                width: 50px;
+                height: 50px;
+                bottom: -60px;
+                animation-delay: 1.5s;
+                animation-duration: 6.5s;
+                background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #FFD54F 80%, transparent 100%);
+            }
+
+            .header-section .lava-bubble.b4 {
+                left: 80%;
+                width: 70px;
+                height: 70px;
+                bottom: -80px;
+                animation-delay: 3.2s;
+                animation-duration: 8.5s;
+                background: radial-gradient(circle at 60% 40%, #F9A825 0%, #FFD54F 80%, transparent 100%);
+            }
+
+            .header-section .lava-bubble.b5 {
+                left: 55%;
+                width: 40px;
+                height: 40px;
+                bottom: -50px;
+                animation-delay: 5s;
+                animation-duration: 7.2s;
+                background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #F9A825 80%, transparent 100%);
+            }
+
+    @@keyframes lava-bubble-move {
+        0% {
+            transform: translateY(0) scale(1) rotate(0deg);
+            opacity: 0.45;
+        }
+
+        60% {
+            opacity: 0.7;
+            filter: blur(2.5px);
+        }
+
+        80% {
+            transform: translateY(-220px) scale(1.15) rotate(10deg);
+            opacity: 0.6;
+        }
+
+        100% {
+            transform: translateY(-320px) scale(0.95) rotate(-8deg);
+            opacity: 0;
+        }
+    }
+
+    .main-title {
+        font-family: 'Poppins', 'Fjalla One', sans-serif;
+        font-size: 2.2rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        animation: text-glow 2.5s ease-in-out infinite alternate;
+        position: relative;
+        z-index: 2;
+    }
+
+    .title-icon {
+        color: #FFD54F;
+        font-size: 2rem;
+        filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25));
+    }
+
+    @@keyframes text-glow {
+        0%, 100% {
+            text-shadow: 0 0 5px #F9A825, 0 0 10px #FFD54F;
+        }
+
+        50% {
+            text-shadow: 0 0 12px #F9A825, 0 0 22px #FFD54F;
+        }
+    }
+
+    .title-container {
+        position: relative;
+        z-index: 2;
+        margin-bottom: 20px;
+    }
+
+    /* ========================================
+               FILTROS
+               ======================================== */
+    .filters-section {
+        position: relative;
+        z-index: 2;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .filter-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        align-items: end;
+    }
+
+    .filter-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .filter-label {
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .cobranza-container .header-section .ant-picker,
+    .cobranza-container .header-section .ant-select-selector,
+    .cobranza-container .header-section .ant-input {
+        border-radius: 8px !important;
+        border: 1px solid rgba(255, 255, 255, 0.3) !important;
+        background: rgba(255, 255, 255, 0.1) !important;
+        color: white !important;
+        transition: all 0.3s ease !important;
+    }
+
+        .cobranza-container .header-section .ant-picker:hover,
+        .cobranza-container .header-section .ant-select-selector:hover,
+        .cobranza-container .header-section .ant-input:hover {
+            background: rgba(255, 255, 255, 0.2) !important;
+            border-color: rgba(255, 255, 255, 0.5) !important;
+        }
+
+        .cobranza-container .header-section .ant-picker-input > input,
+        .cobranza-container .header-section .ant-select-selection-item,
+        .cobranza-container .header-section .ant-select-selection-placeholder,
+        .cobranza-container .header-section .ant-input::placeholder {
+            color: white !important;
+        }
+
+    /* ========================================
+               GRID DE CARDS
+               ======================================== */
+    .cards-container {
+        padding: 20px;
+    }
+
+    .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 20px;
+    }
+
+    /* ========================================
+               CARD DE SOCIO
+               ======================================== */
+    .socio-card {
+        border-radius: 16px !important;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        border: none !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+    }
+
+        .socio-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(166, 51, 51, 0.15) !important;
+        }
+
+    .socio-card-deuda {
+        border-left: 5px solid var(--cobranza-error-color) !important;
+    }
+
+    .socio-card-favor {
+        border-left: 5px solid var(--cobranza-success-color) !important;
+    }
+
+    .socio-card-neutral {
+        border-left: 5px solid var(--cobranza-neutral-color) !important;
+    }
+
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 16px;
+    }
+
+    .socio-numero {
+        background: linear-gradient(135deg, var(--cobranza-primary-color) 0%, var(--cobranza-primary-dark) 100%);
+        color: white;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.85rem;
+    }
+
+    .saldo-badge {
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-weight: 700;
+        font-size: 1rem;
+    }
+
+    .saldo-deuda {
+        background-color: var(--cobranza-error-light);
+        color: var(--cobranza-error-color);
+    }
+
+    .saldo-favor {
+        background-color: var(--cobranza-approved-light);
+        color: var(--cobranza-approved-color);
+    }
+
+    .saldo-neutral {
+        background-color: var(--cobranza-neutral-light);
+        color: var(--cobranza-neutral-color);
+    }
+
+    .socio-nombre {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #262626;
+        margin-bottom: 4px;
+        line-height: 1.3;
+    }
+
+    .socio-documento {
+        color: #8c8c8c;
+        font-size: 0.9rem;
+        margin-bottom: 12px;
+    }
+
+    .info-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 8px;
+        color: #595959;
+        font-size: 0.9rem;
+    }
+
+        .info-row i {
+            width: 20px;
+            color: var(--cobranza-primary-color);
+        }
+
+    .zona-badge {
+        display: inline-block;
+        background: linear-gradient(135deg, var(--cobranza-primary-color) 0%, var(--cobranza-primary-dark) 100%);
+        color: white;
+        padding: 2px 10px;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+    .card-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 16px;
+        padding-top: 16px;
+        border-top: 1px solid #f0f0f0;
+    }
+
+    .btn-pago {
+        flex: 1;
+        background: linear-gradient(135deg, var(--cobranza-success-color) 0%, var(--cobranza-success-dark) 100%) !important;
+        border: none !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        height: 44px !important;
+        color: white !important;
+    }
+
+        .btn-pago:hover {
+            background: linear-gradient(135deg, var(--cobranza-success-dark) 0%, #2E7D32 100%) !important;
+            transform: scale(1.02);
+        }
+
+    .btn-ubicacion {
+        flex: 1;
+        background: linear-gradient(135deg, var(--cobranza-primary-color) 0%, var(--cobranza-primary-dark) 100%) !important;
+        border: none !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        height: 44px !important;
+        color: white !important;
+    }
+
+        .btn-ubicacion:hover {
+            background: linear-gradient(135deg, var(--cobranza-primary-dark) 0%, #5a2424 100%) !important;
+            transform: scale(1.02);
+        }
+
+    /* ========================================
+               SLIDE TO UNLOCK
+               ======================================== */
+    .slide-to-unlock-container {
+        position: relative;
+        width: 100%;
+        height: 56px;
+        background: linear-gradient(135deg, #e8e8e8 0%, #d9d9d9 100%);
+        border-radius: 28px;
+        overflow: hidden;
+        touch-action: pan-x;
+        user-select: none;
+    }
+
+    .slide-track {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .slide-text {
+        color: #8c8c8c;
+        font-weight: 600;
+        font-size: 0.9rem;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+    }
+
+    .slide-thumb {
+        position: absolute;
+        left: 4px;
+        top: 4px;
+        width: 48px;
+        height: 48px;
+        background: linear-gradient(135deg, var(--cobranza-success-color) 0%, var(--cobranza-success-dark) 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.2rem;
+        cursor: grab;
+        transition: left 0.1s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        box-shadow: 0 2px 8px rgba(76, 175, 80, 0.4);
+        z-index: 2;
+    }
+
+        .slide-thumb:active {
+            cursor: grabbing;
+            transform: scale(1.05);
+            box-shadow: 0 4px 16px rgba(76, 175, 80, 0.6);
+        }
+
+        .slide-thumb.unlocked {
+            background: linear-gradient(135deg, var(--cobranza-success-dark) 0%, #2E7D32 100%);
+        }
+
+    .slide-success-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 0;
+        background: linear-gradient(135deg, var(--cobranza-success-color) 0%, var(--cobranza-success-dark) 100%);
+        border-radius: 28px;
+        transition: width 0.1s ease;
+        z-index: 1;
+    }
+
+    /* Desktop: mostrar botón normal */
+    .desktop-only {
+        display: flex;
+    }
+
+    .mobile-only {
+        display: none;
+    }
+
+    /* ========================================
+               ESTADO VACÍO Y LOADING
+               ======================================== */
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        background: #fff;
+        border-radius: 16px;
+        margin: 20px;
+    }
+
+        .empty-state i {
+            font-size: 64px;
+            color: var(--cobranza-primary-color);
+            margin-bottom: 16px;
+        }
+
+    .empty-state-title {
+        font-size: 1.25rem;
+        color: #262626;
+        margin-bottom: 8px;
+    }
+
+    .empty-state-description {
+        color: #8c8c8c;
+    }
+
+    .loading-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 400px;
+    }
+
+    /* ========================================
+               ANIMACIONES
+               ======================================== */
+    .fade-in {
+        animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* ========================================
+               RESPONSIVE
+               ======================================== */
+    @@media (max-width: 1199px) {
+        .cobranza-container {
+            padding: 8px;
+        }
+
+        .header-section {
+            padding: 20px;
+        }
+
+        .main-title {
+            font-size: 2rem;
+            flex-direction: column;
+            text-align: center;
+            gap: 8px;
+        }
+
+        .filter-row {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .cobranza-container {
+            padding: 4px;
+        }
+
+        .header-section {
+            padding: 16px;
+        }
+
+        .main-title {
+            font-size: 1.8rem;
+        }
+
+        .cards-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .card-actions {
+            flex-direction: column;
+        }
+        /* Móvil: mostrar slide, ocultar botón */
+        .desktop-only {
+            display: none !important;
+        }
+
+        .mobile-only {
+            display: block !important;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .card-header {
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .main-title {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+
+@* ========================================
+   ESTILOS GLOBALES PARA EL MODAL DE PAGO
+   (Se renderiza fuera del componente)
+   ======================================== *@
+<style>
+    /* Modal de Pago - Estilos del contenedor */
+    .modal-pago .ant-modal-content {
+        border-radius: 16px !important;
+        overflow: hidden !important;
+        border: 2px solid #732D2D !important;
+    }
+
+    .modal-pago .ant-modal-header {
+        background: linear-gradient(135deg, #A63333 0%, #732D2D 100%) !important;
+        padding: 20px 24px !important;
+        border-bottom: none !important;
+    }
+
+    .modal-pago .ant-modal-title {
+        color: white !important;
+        font-weight: 600 !important;
+        font-size: 1.2rem !important;
+    }
+
+    .modal-pago .ant-modal-close-x {
+        color: white !important;
+    }
+
+    .modal-pago .ant-modal-close:hover {
+        background: rgba(255, 255, 255, 0.1) !important;
+    }
+
+    .modal-pago .ant-modal-body {
+        padding: 0 !important;
+    }
+
+    /* Contenido del formulario de pago */
+    .registrar-pago-content {
+        padding: 24px !important;
+    }
+
+    /* Info del socio */
+    .registrar-pago-socio-info {
+        border-radius: 12px !important;
+        padding: 16px !important;
+        margin-bottom: 20px !important;
+        border: 1px solid !important;
+    }
+
+        .registrar-pago-socio-info.socio-info-deuda {
+            background: #FFEBEE !important;
+            border-color: #C62828 !important;
+        }
+
+        .registrar-pago-socio-info.socio-info-favor {
+            background: #E6F7E9 !important;
+            border-color: #4CAF50 !important;
+        }
+
+        .registrar-pago-socio-info.socio-info-neutral {
+            background: #e6f7ff !important;
+            border-color: #1890ff !important;
+        }
+
+    .registrar-pago-socio-nombre {
+        font-size: 1.1rem !important;
+        font-weight: 600 !important;
+        color: #262626 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+    }
+
+    .registrar-pago-socio-saldo {
+        font-size: 1.5rem !important;
+        font-weight: 700 !important;
+        margin-top: 8px !important;
+        display: inline-block !important;
+        padding: 4px 12px !important;
+        border-radius: 8px !important;
+    }
+
+        .registrar-pago-socio-saldo.saldo-deuda {
+            background-color: #FFEBEE !important;
+            color: #C62828 !important;
+        }
+
+        .registrar-pago-socio-saldo.saldo-favor {
+            background-color: #E6F7E9 !important;
+            color: #2E7D32 !important;
+        }
+
+        .registrar-pago-socio-saldo.saldo-neutral {
+            background-color: #e6f7ff !important;
+            color: #1890ff !important;
+        }
+
+    /* Formulario */
+    .registrar-pago-form-item {
+        margin-bottom: 20px !important;
+    }
+
+        .registrar-pago-form-item label {
+            font-weight: 600 !important;
+            color: #434343 !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            margin-bottom: 8px !important;
+        }
+
+    .modal-pago .ant-input,
+    .modal-pago .ant-input-number,
+    .modal-pago .ant-picker {
+        border-radius: 8px !important;
+        height: 44px !important;
+    }
+
+    .modal-pago .ant-input-number {
+        width: 100% !important;
+    }
+
+        .modal-pago .ant-input:focus,
+        .modal-pago .ant-input:hover,
+        .modal-pago .ant-input-number:focus,
+        .modal-pago .ant-input-number:hover,
+        .modal-pago .ant-picker:focus,
+        .modal-pago .ant-picker:hover,
+        .modal-pago .ant-input-number-focused {
+            border-color: #FFD700 !important;
+            box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
+        }
+
+    .modal-pago .ant-input-textarea-show-count::after {
+        color: #8c8c8c !important;
+    }
+
+    /* Footer del formulario */
+    .registrar-pago-footer {
+        display: flex !important;
+        justify-content: flex-end !important;
+        gap: 12px !important;
+        padding-top: 16px !important;
+        border-top: 1px solid #f0f0f0 !important;
+    }
+
+    .registrar-pago-btn-confirmar {
+        background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
+        border: none !important;
+        color: white !important;
+        font-weight: 600 !important;
+        border-radius: 8px !important;
+        height: 40px !important;
+        padding: 0 20px !important;
+    }
+
+        .registrar-pago-btn-confirmar:hover {
+            background: linear-gradient(135deg, #438E46 0%, #2E7D32 100%) !important;
+        }
+
+        .registrar-pago-btn-confirmar:disabled,
+        .registrar-pago-btn-confirmar[disabled] {
+            background: #d9d9d9 !important;
+            color: #8c8c8c !important;
+        }
+
+    /* ========================================
+       MODAL DE SELECCIÓN DE DIRECCIÓN
+       ======================================== */
+    .modal-direccion .ant-modal-content {
+        border-radius: 16px !important;
+        overflow: hidden !important;
+        border: 2px solid #732D2D !important;
+    }
+
+    .modal-direccion .ant-modal-header {
+        background: linear-gradient(135deg, #A63333 0%, #732D2D 100%) !important;
+        padding: 20px 24px !important;
+        border-bottom: none !important;
+    }
+
+    .modal-direccion .ant-modal-title {
+        color: white !important;
+        font-weight: 600 !important;
+        font-size: 1.2rem !important;
+    }
+
+    .modal-direccion .ant-modal-close-x {
+        color: white !important;
+    }
+
+    .modal-direccion .ant-modal-close:hover {
+        background: rgba(255, 255, 255, 0.1) !important;
+    }
+
+    .modal-direccion .ant-modal-body {
+        padding: 24px !important;
+    }
+
+    .seleccionar-direccion-content {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .direccion-option {
+        border: 2px solid #e8e8e8 !important;
+        border-radius: 12px !important;
+        padding: 16px !important;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: #fafafa;
+    }
+
+    .direccion-option:hover {
+        border-color: var(--cobranza-primary-color) !important;
+        background: #fff5f5;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(166, 51, 51, 0.15);
+    }
+
+    .direccion-option-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 8px;
+    }
+
+    .direccion-option-label {
+        font-weight: 600;
+        color: var(--cobranza-primary-color);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .direccion-option-icon {
+        color: var(--cobranza-primary-color);
+        font-size: 1.2rem;
+    }
+
+    .direccion-option-text {
+        color: #262626;
+        font-size: 1rem;
+        line-height: 1.4;
+    }
+
+    .direccion-option.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        background: #f5f5f5;
+        border-color: #d9d9d9 !important;
+    }
+
+    .direccion-option.disabled:hover {
+        border-color: #d9d9d9 !important;
+        background: #f5f5f5;
+        transform: none;
+        box-shadow: none;
+    }
+
+    .direccion-option.disabled .direccion-option-label,
+    .direccion-option.disabled .direccion-option-icon {
+        color: #8c8c8c;
+    }
+
+    .direccion-option.disabled .direccion-option-text {
+        color: #bfbfbf;
+    }
+
+    .direccion-no-disponible {
+        font-style: italic;
+        color: #8c8c8c;
+    }
+
+    .direccion-footer {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 8px;
+        padding-top: 16px;
+        border-top: 1px solid #f0f0f0;
+    }
+
+    /* ========================================
+       MODAL POST-IT (NOTA ADICIONAL)
+       ======================================== */
+    .modal-postit .ant-modal-content {
+        background: transparent !important;
+        box-shadow: none !important;
+        border: none !important;
+    }
+
+    .modal-postit .ant-modal-header {
+        display: none !important;
+    }
+
+    .modal-postit .ant-modal-body {
+        padding: 0 !important;
+    }
+
+    .modal-postit .ant-modal-close {
+        display: none !important;
+    }
+
+    .postit-container {
+        position: relative;
+        max-width: 350px;
+        margin: 0 auto;
+    }
+
+    .postit-note {
+        background: linear-gradient(135deg, #FFEB3B 0%, #FDD835 50%, #FBC02D 100%);
+        padding: 24px 20px 20px 20px;
+        border-radius: 2px;
+        box-shadow: 
+            0 4px 6px rgba(0, 0, 0, 0.1),
+            0 10px 20px rgba(0, 0, 0, 0.15),
+            inset 0 -3px 0 rgba(0, 0, 0, 0.05);
+        transform: rotate(-2deg);
+        position: relative;
+        min-height: 150px;
+    }
+
+    .postit-note::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 20px;
+        background: rgba(255, 255, 255, 0.6);
+        border-radius: 0 0 3px 3px;
+        box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .postit-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 12px;
+        padding-bottom: 10px;
+        border-bottom: 2px dashed rgba(0, 0, 0, 0.15);
+    }
+
+    .postit-icon {
+        font-size: 1.3rem;
+        color: #5D4037;
+    }
+
+    .postit-title {
+        font-family: 'Patrick Hand', 'Caveat', cursive, sans-serif;
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #5D4037;
+        margin: 0;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .postit-content {
+        font-family: 'Patrick Hand', 'Caveat', cursive, sans-serif;
+        font-size: 1.15rem;
+        color: #4E342E;
+        line-height: 1.6;
+        word-wrap: break-word;
+        white-space: pre-wrap;
+    }
+
+    .postit-footer {
+        display: flex;
+        justify-content: center;
+        margin-top: 16px;
+        padding-top: 12px;
+    }
+
+    .postit-btn-cerrar {
+        background: rgba(93, 64, 55, 0.9) !important;
+        border: none !important;
+        color: #FFF8E1 !important;
+        font-weight: 600 !important;
+        border-radius: 20px !important;
+        padding: 6px 24px !important;
+        height: auto !important;
+        font-size: 0.9rem !important;
+        transition: all 0.3s ease !important;
+    }
+
+    .postit-btn-cerrar:hover {
+        background: rgba(62, 39, 35, 0.95) !important;
+        transform: scale(1.05);
+    }
+
+    /* Efecto de sombra al fondo */
+    .postit-shadow {
+        position: absolute;
+        bottom: -8px;
+        left: 10px;
+        right: 10px;
+        height: 15px;
+        background: rgba(0, 0, 0, 0.15);
+        filter: blur(8px);
+        border-radius: 50%;
+        z-index: -1;
+    }
+</style>
+
+<div class="cobranza-container fade-in" role="main">
+    <Card Class="main-card">
+        @* ======================================== HEADER SECTION ======================================== *@
+        <div class="header-section">
+            <div class="lava-bubbles">
+                <div class="lava-bubble b1"></div>
+                <div class="lava-bubble b2"></div>
+                <div class="lava-bubble b3"></div>
+                <div class="lava-bubble b4"></div>
+                <div class="lava-bubble b5"></div>
+            </div>
+
+            <div class="title-container">
+                <h1 class="main-title">
+                    <Icon Type="dollar" Class="title-icon" />
+                    COBRANZA
+                </h1>
+            </div>
+
+            <div class="filters-section">
+                <div class="filter-row">
+                    <div class="filter-group" style="flex: 2;">
+                        <label class="filter-label">🔍 Buscar</label>
+                        <Search Placeholder="Buscar por nombre, N° socio, documento o dirección..."
+                                @bind-Value="@TextoBusqueda"
+                                Size="InputSize.Large"
+                                AllowClear
+                                EnterButton="true"
+                                OnSearch="@(() => AplicarFiltro())"
+                                @oninput="OnBusquedaInput" />
+                    </div>
+
+                    <div class="filter-group">
+                        <label class="filter-label">📍 Zona</label>
+                        <Select TItem="ZonaFiltroItem"
+                                TItemValue="Zona ?"
+                                DataSource="@ZonasFiltro"
+                                @bind-Value="@ZonaSeleccionada"
+                                LabelName="@nameof(ZonaFiltroItem.Nombre)"
+                                ValueName="@nameof(ZonaFiltroItem.Valor)"
+                                Placeholder="Todas las zonas"
+                                AllowClear
+                                OnSelectedItemChanged="@OnZonaChanged"
+                                Size="InputSize.Large" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @* ======================================== CONTENIDO PRINCIPAL ======================================== *@
+        @if (Cargando)
+        {
+            <div class="loading-container">
+                <Spin Size="@SpinSize.Large" Tip="Cargando socios..." />
+            </div>
+        }
+        else if (SociosFiltrados == null || !SociosFiltrados.Any())
+        {
+            <div class="empty-state">
+                <i class="fa-solid fa-users-slash"></i>
+                <div class="empty-state-title">No se encontraron socios</div>
+                <div class="empty-state-description">
+                    @if (!string.IsNullOrWhiteSpace(TextoBusqueda) || ZonaSeleccionada != null)
+                    {
+                        <span>No hay resultados para los filtros aplicados</span>
+                    }
+                    else
+                    {
+                        <span>No hay socios con forma de pago en efectivo registrados en el sistema</span>
+                    }
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="cards-container">
+                <div class="cards-grid" role="list" aria-label="Lista de socios para cobranza">
+                    @foreach (var socio in SociosFiltrados)
+                    {
+                        var cardClass = socio.Saldo < 0 ? "socio-card-deuda" : (socio.Saldo > 0 ? "socio-card-favor" : "socio-card-neutral");
+                        var saldoClass = socio.Saldo < 0 ? "saldo-deuda" : (socio.Saldo > 0 ? "saldo-favor" : "saldo-neutral");
+                        var socioId = socio.SocioId;
+
+                        <Card Class="@($"socio-card {cardClass}")" Bordered="false">
+                            <div class="card-header">
+                                <span class="socio-numero">
+                                    <Icon Type="idcard" /> N° @socio.NumeroSocio
+                                </span>
+                                <span class="@($"saldo-badge {saldoClass}")">
+                                    @(socio.Saldo < 0 ? "Debe" : (socio.Saldo > 0 ? "A favor" : "Al día"))
+                                    $@Math.Abs(socio.Saldo).ToString("N2")
+                                </span>
+                            </div>
+
+                            <div class="socio-nombre" title="@socio.NombreApellidoONombreEmpresa">
+                                @socio.NombreApellidoONombreEmpresa
+                            </div>
+                            <div class="socio-documento">
+                                <Icon Type="file-text" /> @socio.DocumentoORazonSocial
+                            </div>
+
+                            @if (socio.Zona != null && socio.Zona != Zona.Ninguna)
+                            {
+                                <div class="info-row">
+                                    <i class="fa-solid fa-map-marker-alt"></i>
+                                    <span class="zona-badge">@socio.Zona.GetDisplayName()</span>
+                                </div>
+                            }
+
+                            <div class="card-actions">
+                                @* Botón normal para desktop *@
+                                <div class="desktop-only" style="flex: 1;">
+                                    <Button Type="@ButtonType.Primary"
+                                            Class="btn-pago"
+                                            Style="width: 100%;"
+                                            OnClick="@(() => AbrirModalPago(socio))"
+                                            AriaLabel="@($"Registrar pago para {socio.NombreApellidoONombreEmpresa}")">
+                                        <Icon Type="dollar" /> Registrar Pago
+                                    </Button>
+                                </div>
+
+                                @* Slide to unlock para móvil *@
+                                <div class="mobile-only" style="flex: 1;">
+                                    <div class="slide-to-unlock-container"
+                                         id="slide-container-@socioId"
+                                         @ontouchstart="@(e => OnSlideStart(e, socio))"
+                                         @ontouchmove="@(e => OnSlideMove(e, socio))"
+                                         @ontouchend="@(e => OnSlideEnd(e, socio))"
+                                         @onmousedown="@(e => OnMouseSlideStart(e, socio))"
+                                         @onmousemove="@(e => OnMouseSlideMove(e, socio))"
+                                         @onmouseup="@(e => OnMouseSlideEnd(e, socio))"
+                                         @onmouseleave="@(e => OnMouseSlideEnd(e, socio))">
+                                        <div class="slide-success-bg" style="width: @(GetSlideProgress(socioId))%;"></div>
+                                        <div class="slide-track">
+                                            <span class="slide-text" style="opacity: @(1 - GetSlideProgress(socioId) / 100);">
+                                                <Icon Type="arrow-right" /> Deslizar para pagar
+                                            </span>
+                                        </div>
+                                        <div class="slide-thumb @(IsSlideUnlocked(socioId) ? "unlocked" : "")"
+                                             style="left: @(4 + GetSlideProgress(socioId) * 2.5)px;">
+                                            <Icon Type="dollar" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <Button Type="@ButtonType.Primary"
+                                        Class="btn-ubicacion"
+                                        OnClick="@(() => AbrirGoogleMaps(socio))"
+                                        AriaLabel="@($"Ver ubicación de {socio.NombreApellidoONombreEmpresa} en Google Maps")">
+                                    <Icon Type="environment" /> Ver Mapa
+                                </Button>
+                            </div>
+                        </Card>
+                    }
+                </div>
+            </div>
+        }
+    </Card>
+
+    @* ======================================== MODAL DE PAGO ======================================== *@
+    <Modal @bind-Visible="@ModalPagoVisible"
+           Title="@($"💵 Registrar Pago - N° {SocioSeleccionado?.NumeroSocio}")"
+           Width="500"
+           Footer="null"
+           WrapClassName="modal-pago"
+           DestroyOnClose
+           Centered>
+        <RegistrarPago Socio="@SocioSeleccionado"
+                       OnCancel="@CerrarModalPago"
+                       OnPagoConfirmado="@OnPagoConfirmado" />
+    </Modal>
+
+    @* ======================================== MODAL DE SELECCIÓN DE DIRECCIÓN ======================================== *@
+    <Modal @bind-Visible="@ModalDireccionVisible"
+           Title="@($"📍 Seleccionar Ubicación - {SocioParaMapa?.NombreApellidoONombreEmpresa}")"
+           Width="450"
+           Footer="null"
+           WrapClassName="modal-direccion"
+           DestroyOnClose
+           Centered>
+        <div class="seleccionar-direccion-content">
+            @{
+                var tieneDireccionPrincipal = TieneDireccionPrincipalDisponible();
+                var tieneDireccionSecundaria = TieneDireccionSecundariaDisponible();
+                var tieneNotaAdicional = TieneNotaAdicionalDisponible();
+            }
+
+            @* Dirección Principal *@
+            <div class="direccion-option @(tieneDireccionPrincipal ? "" : "disabled")" 
+                 @onclick="@(() => { if (tieneDireccionPrincipal) SeleccionarDireccion(DireccionTipo.Principal); })">
+                <div class="direccion-option-header">
+                    <i class="fa-solid fa-house direccion-option-icon"></i>
+                    <span class="direccion-option-label">Dirección Principal</span>
+                </div>
+                <div class="direccion-option-text">
+                    @if (tieneDireccionPrincipal)
+                    {
+                        @SocioParaMapa?.Domicilio
+                    }
+                    else
+                    {
+                        <span class="direccion-no-disponible">Sin coordenadas disponibles</span>
+                    }
+                </div>
+            </div>
+
+            @* Dirección Secundaria *@
+            <div class="direccion-option @(tieneDireccionSecundaria ? "" : "disabled")" 
+                 @onclick="@(() => { if (tieneDireccionSecundaria) SeleccionarDireccion(DireccionTipo.Secundaria); })">
+                <div class="direccion-option-header">
+                    <i class="fa-solid fa-building direccion-option-icon"></i>
+                    <span class="direccion-option-label">Dirección Secundaria</span>
+                </div>
+                <div class="direccion-option-text">
+                    @if (tieneDireccionSecundaria)
+                    {
+                        @SocioParaMapa?.DomicilioSecundario
+                    }
+                    else
+                    {
+                        <span class="direccion-no-disponible">Sin coordenadas disponibles</span>
+                    }
+                </div>
+            </div>
+
+            @* Nota Adicional *@
+            <div class="direccion-option @(tieneNotaAdicional ? "" : "disabled")" 
+                 @onclick="@(() => { if (tieneNotaAdicional) MostrarNotaAdicional(); })">
+                <div class="direccion-option-header">
+                    <i class="fa-solid fa-sticky-note direccion-option-icon"></i>
+                    <span class="direccion-option-label">Nota Extra</span>
+                </div>
+                <div class="direccion-option-text">
+                    @if (tieneNotaAdicional)
+                    {
+                        @SocioParaMapa?.NotaAdicional
+                    }
+                    else
+                    {
+                        <span class="direccion-no-disponible">Sin nota adicional</span>
+                    }
+                </div>
+            </div>
+
+            <div class="direccion-footer">
+                <Button OnClick="@CerrarModalDireccion">
+                    Cancelar
+                </Button>
+            </div>
+        </div>
+    </Modal>
+
+    @* ======================================== MODAL POST-IT (NOTA ADICIONAL) ======================================== *@
+    <Modal @bind-Visible="@ModalNotaVisible"
+           Title=""
+           Width="400"
+           Footer="null"
+           WrapClassName="modal-postit"
+           DestroyOnClose
+           Centered>
+        <div class="postit-container">
+            <div class="postit-note">
+                <div class="postit-header">
+                    <i class="fa-solid fa-thumbtack postit-icon"></i>
+                    <h3 class="postit-title">📝 Nota</h3>
+                </div>
+                <div class="postit-content">
+                    @SocioParaMapa?.NotaAdicional
+                </div>
+                <div class="postit-footer">
+                    <Button Class="postit-btn-cerrar" OnClick="@CerrarModalNota">
+                        <Icon Type="check" /> Entendido
+                    </Button>
+                </div>
+            </div>
+            <div class="postit-shadow"></div>
+        </div>
+    </Modal>
+</div>
+
+@code {
+    // ======================================== PROPIEDADES ========================================
+
+    private List<Socio>? Socios { get; set; } = new();
+    private List<CobranzaViewModel> CobranzaViewModels { get; set; } = new();
+    private List<CobranzaViewModel> SociosFiltrados { get; set; } = new();
+
+    private string TextoBusqueda { get; set; } = string.Empty;
+    private bool Cargando { get; set; } = true;
+    private bool ModalPagoVisible { get; set; } = false;
+    private bool ModalDireccionVisible { get; set; } = false;
+    private bool ModalNotaVisible { get; set; } = false;
+
+    private CobranzaViewModel? SocioSeleccionado { get; set; }
+    private CobranzaViewModel? SocioParaMapa { get; set; }
+
+    // Filtro de zona
+    private Zona? ZonaSeleccionada { get; set; } = null;
+    private List<ZonaFiltroItem> ZonasFiltro { get; set; } = new();
+
+    // Slide to unlock state
+    private Dictionary<int, double> SlideProgress { get; set; } = new();
+    private Dictionary<int, bool> SlideActive { get; set; } = new();
+    private Dictionary<int, double> SlideStartX { get; set; } = new();
+
+    // ======================================== CLASES AUXILIARES ========================================
+
+    public class ZonaFiltroItem
+    {
+        public string Nombre { get; set; } = string.Empty;
+        public Zona? Valor { get; set; }
+    }
+
+    // ======================================== LIFECYCLE ========================================
+
+    protected override async Task OnInitializedAsync()
+    {
+        InicializarFiltroZonas();
+        await CargarSocios();
+    }
+
+    // ======================================== MÉTODOS DE CARGA ========================================
+
+    private void InicializarFiltroZonas()
+    {
+        ZonasFiltro = new List<ZonaFiltroItem>
+        {
+            new ZonaFiltroItem { Nombre = "Todas las zonas", Valor = null }
+        };
+
+        foreach (Zona zona in Enum.GetValues(typeof(Zona)))
+        {
+            if (zona != Zona.Ninguna)
+            {
+                ZonasFiltro.Add(new ZonaFiltroItem
+                {
+                    Nombre = zona.GetDisplayName(),
+                    Valor = zona
+                });
+            }
+        }
+    }
+
+    private async Task CargarSocios()
+    {
+        Cargando = true;
+        StateHasChanged();
+
+        // Ceder el control al hilo de la UI para asegurar que el spinner se renderice
+        await Task.Delay(10); 
+
+        try
+        {
+            Socios = await SocioService.ObtenerSociosAsync();
+
+            if (Socios != null)
+            {
+                var sociosFiltradosBase = Socios
+                    .Where(s => s.FormaPago == FormaDePago.Efectivo)
+                    .ToList();
+
+                // Extraemos los IDs para consultar todo de manera masiva (y evitar el problema de N+1)
+                var socioIds = sociosFiltradosBase.Select(s => s.Id).ToList();
+                var saldos = await SaldoSocioService.CalcularSaldosMasivoAsync(socioIds);
+
+                var cobranzaViewModels = new List<CobranzaViewModel>();
+
+                foreach (var s in sociosFiltradosBase)
+                {
+                    var saldo = saldos.GetValueOrDefault(s.Id, 0m);
+
+                    cobranzaViewModels.Add(new CobranzaViewModel
+                    {
+                        SocioId = s.Id,
+                        NumeroSocio = s.NroSocio,
+                        NombreApellidoONombreEmpresa = s.Tipo == TipoSocio.Persona
+                            ? $"{s.Apellido}, {s.Nombre}"
+                            : s.Nombre ?? "Sin nombre",
+                        DocumentoORazonSocial = s.DocumentoOCUIT ?? "Sin documento",
+                        Domicilio = s.Direccion ?? "Sin dirección",
+                        DomicilioSecundario = s.DireccionSecundaria,
+                        Saldo = saldo,
+                        Latitud = s.Latitud.HasValue ? (decimal?)s.Latitud.Value : null,
+                        Longitud = s.Longitud.HasValue ? (decimal?)s.Longitud.Value : null,
+                        LatitudSecundaria = s.LatitudSecundaria.HasValue ? (decimal?)s.LatitudSecundaria.Value : null,
+                        LongitudSecundaria = s.LongitudSecundaria.HasValue ? (decimal?)s.LongitudSecundaria.Value : null,
+                        NotaAdicional = s.NotaAdicional,
+                        Telefono = s.Telefono,
+                        MontoCuota = (decimal)s.MontoCuota,
+                        Zona = s.Zona
+                    });
+                }
+
+                CobranzaViewModels = cobranzaViewModels
+                    .OrderBy(s => s.Saldo)
+                    .ThenBy(s => s.NombreApellidoONombreEmpresa)
+                    .ToList();
+
+                // Inicializar estado del slide para cada socio
+                foreach (var socio in CobranzaViewModels)
+                {
+                    SlideProgress[socio.SocioId] = 0;
+                    SlideActive[socio.SocioId] = false;
+                    SlideStartX[socio.SocioId] = 0;
+                }
+
+                AplicarFiltro();
+            }
+        }
+        catch (Exception ex)
+        {
+            await MessageService.ErrorAsync($"Error al cargar los socios: {ex.Message}");
+            Console.WriteLine($"Error al cargar los socios: {ex.Message}");
+        }
+        finally
+        {
+            Cargando = false;
+            StateHasChanged();
+        }
+    }
+
+    // ======================================== BÚSQUEDA Y FILTRADO ========================================
+
+    private void OnBusquedaInput(ChangeEventArgs e)
+    {
+        TextoBusqueda = e.Value?.ToString() ?? string.Empty;
+        AplicarFiltro();
+    }
+
+    private void OnZonaChanged(ZonaFiltroItem? item)
+    {
+        ZonaSeleccionada = item?.Valor;
+        AplicarFiltro();
+    }
+
+    private void AplicarFiltro()
+    {
+        var query = CobranzaViewModels.AsEnumerable();
+
+        // Filtro por texto
+        if (!string.IsNullOrWhiteSpace(TextoBusqueda))
+        {
+            var busqueda = TextoBusqueda.ToLower().Trim();
+            query = query.Where(s =>
+                (s.NombreApellidoONombreEmpresa?.ToLower().Contains(busqueda) ?? false) ||
+                s.NumeroSocio.ToString().Contains(busqueda) ||
+                (s.DocumentoORazonSocial?.ToLower().Contains(busqueda) ?? false) ||
+                (s.Domicilio?.ToLower().Contains(busqueda) ?? false));
+        }
+
+        // Filtro por zona
+        if (ZonaSeleccionada != null)
+        {
+            query = query.Where(s => s.Zona == ZonaSeleccionada);
+        }
+
+        SociosFiltrados = query
+            .OrderBy(s => s.Saldo)
+            .ThenBy(s => s.NombreApellidoONombreEmpresa)
+            .ToList();
+
+        StateHasChanged();
+    }
+
+    // ======================================== SLIDE TO UNLOCK ========================================
+
+    private double GetSlideProgress(int socioId)
+    {
+        return SlideProgress.TryGetValue(socioId, out var progress) ? progress : 0;
+    }
+
+    private bool IsSlideUnlocked(int socioId)
+    {
+        return GetSlideProgress(socioId) >= 95;
+    }
+
+    private void OnSlideStart(TouchEventArgs e, CobranzaViewModel socio)
+    {
+        if (e.Touches.Length > 0)
+        {
+            SlideActive[socio.SocioId] = true;
+            SlideStartX[socio.SocioId] = e.Touches[0].ClientX;
+        }
+    }
+
+    private void OnSlideMove(TouchEventArgs e, CobranzaViewModel socio)
+    {
+        if (!SlideActive.TryGetValue(socio.SocioId, out var active) || !active) return;
+        if (e.Touches.Length == 0) return;
+
+        var currentX = e.Touches[0].ClientX;
+        var startX = SlideStartX.TryGetValue(socio.SocioId, out var sx) ? sx : 0;
+        var deltaX = currentX - startX;
+
+        var maxSlide = 200;
+        var progress = Math.Max(0, Math.Min(100, (deltaX / maxSlide) * 100));
+
+        SlideProgress[socio.SocioId] = progress;
+        StateHasChanged();
+    }
+
+    private async Task OnSlideEnd(TouchEventArgs e, CobranzaViewModel socio)
+    {
+        if (!SlideActive.TryGetValue(socio.SocioId, out var active) || !active) return;
+
+        SlideActive[socio.SocioId] = false;
+
+        if (GetSlideProgress(socio.SocioId) >= 95)
+        {
+            // Desbloqueado - abrir modal
+            SlideProgress[socio.SocioId] = 100;
+            StateHasChanged();
+
+            await Task.Delay(200); // Pequeña animación
+            AbrirModalPago(socio);
+
+            // Reset
+            SlideProgress[socio.SocioId] = 0;
+        }
+        else
+        {
+            // No llegó al final - resetear
+            SlideProgress[socio.SocioId] = 0;
+        }
+
+        StateHasChanged();
+    }
+
+    // Mouse events para testing en desktop
+    private void OnMouseSlideStart(MouseEventArgs e, CobranzaViewModel socio)
+    {
+        SlideActive[socio.SocioId] = true;
+        SlideStartX[socio.SocioId] = e.ClientX;
+    }
+
+    private void OnMouseSlideMove(MouseEventArgs e, CobranzaViewModel socio)
+    {
+        if (!SlideActive.TryGetValue(socio.SocioId, out var active) || !active) return;
+
+        var startX = SlideStartX.TryGetValue(socio.SocioId, out var sx) ? sx : 0;
+        var deltaX = e.ClientX - startX;
+
+        var maxSlide = 200;
+        var progress = Math.Max(0, Math.Min(100, (deltaX / maxSlide) * 100));
+
+        SlideProgress[socio.SocioId] = progress;
+        StateHasChanged();
+    }
+
+    private async Task OnMouseSlideEnd(MouseEventArgs e, CobranzaViewModel socio)
+    {
+        if (!SlideActive.TryGetValue(socio.SocioId, out var active) || !active) return;
+
+        SlideActive[socio.SocioId] = false;
+
+        if (GetSlideProgress(socio.SocioId) >= 95)
+        {
+            // Desbloqueado - abrir modal
+            SlideProgress[socio.SocioId] = 100;
+            StateHasChanged();
+
+            await Task.Delay(200); // Pequeña animación
+            AbrirModalPago(socio);
+
+            // Reset
+            SlideProgress[socio.SocioId] = 0;
+        }
+        else
+        {
+            // No llegó al final - resetear
+            SlideProgress[socio.SocioId] = 0;
+        }
+
+        StateHasChanged();
+    }
+
+    // ======================================== MODAL DE PAGO ========================================
+
+    private void AbrirModalPago(CobranzaViewModel socio)
+    {
+        SocioSeleccionado = socio;
+        ModalPagoVisible = true;
+    }
+
+    private void CerrarModalPago()
+    {
+        ModalPagoVisible = false;
+        SocioSeleccionado = null;
+    }
+
+    private async Task OnPagoConfirmado(PagoEfectivo pago)
+    {
+        try
+        {
+            await PagoService.AgregarPagoAsync(pago.SocioId, pago);
+
+            await MessageService.SuccessAsync($"Pago de ${pago.Monto:N2} registrado correctamente para {SocioSeleccionado?.NombreApellidoONombreEmpresa}");
+
+            CerrarModalPago();
+            await CargarSocios();
+        }
+        catch (Exception ex)
+        {
+            await MessageService.ErrorAsync($"Error al registrar el pago: {ex.Message}");
+        }
+    }
+
+    // ======================================== GOOGLE MAPS ========================================
+
+    private enum DireccionTipo
+    {
+        Principal,
+        Secundaria
+    }
+
+    private void AbrirGoogleMaps(CobranzaViewModel socio)
+    {
+        SocioParaMapa = socio;
+        ModalDireccionVisible = true;
+    }
+
+    private bool TieneDireccionPrincipalDisponible()
+    {
+        return SocioParaMapa != null &&
+               SocioParaMapa.Latitud.HasValue && SocioParaMapa.Longitud.HasValue &&
+               SocioParaMapa.Latitud != 0 && SocioParaMapa.Longitud != 0;
+    }
+
+    private bool TieneDireccionSecundariaDisponible()
+    {
+        return SocioParaMapa != null &&
+               !string.IsNullOrWhiteSpace(SocioParaMapa.DomicilioSecundario) &&
+               SocioParaMapa.LatitudSecundaria.HasValue && SocioParaMapa.LongitudSecundaria.HasValue &&
+               SocioParaMapa.LatitudSecundaria != 0 && SocioParaMapa.LongitudSecundaria != 0;
+    }
+
+    private bool TieneNotaAdicionalDisponible()
+    {
+        return SocioParaMapa != null && !string.IsNullOrWhiteSpace(SocioParaMapa.NotaAdicional);
+    }
+
+    private void CerrarModalDireccion()
+    {
+        ModalDireccionVisible = false;
+        // Solo limpiar SocioParaMapa si no se va a mostrar el modal de nota
+        if (!ModalNotaVisible)
+        {
+            SocioParaMapa = null;
+        }
+    }
+
+    private async Task SeleccionarDireccion(DireccionTipo tipo)
+    {
+        if (SocioParaMapa == null) return;
+
+        decimal latitud, longitud;
+
+        if (tipo == DireccionTipo.Principal)
+        {
+            latitud = SocioParaMapa.Latitud ?? 0;
+            longitud = SocioParaMapa.Longitud ?? 0;
+        }
+        else
+        {
+            latitud = SocioParaMapa.LatitudSecundaria ?? 0;
+            longitud = SocioParaMapa.LongitudSecundaria ?? 0;
+        }
+
+        CerrarModalDireccion();
+        await AbrirMapaConCoordenadas(latitud, longitud);
+    }
+
+    private void MostrarNotaAdicional()
+    {
+        if (SocioParaMapa == null || string.IsNullOrWhiteSpace(SocioParaMapa.NotaAdicional)) return;
+
+        ModalNotaVisible = true;
+    }
+
+    private void CerrarModalNota()
+    {
+        ModalNotaVisible = false;
+    }
+
+    private async Task AbrirMapaConCoordenadas(decimal latitud, decimal longitud)
+    {
+        var url = $"https://www.google.com/maps/search/?api=1&query={latitud.ToString(System.Globalization.CultureInfo.InvariantCulture)},{longitud.ToString(System.Globalization.CultureInfo.InvariantCulture)}";
+        await JSRuntime.InvokeVoidAsync("window.open", url, "_blank");
+    }
+}

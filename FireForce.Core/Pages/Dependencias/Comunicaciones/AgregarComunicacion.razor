@@ -1,0 +1,366 @@
+﻿@using FireForce.Core.Data.Models.Grupos.Dependencias.Comunicaciones
+@using FireForce.Core.Data.Models.Vehiculos.Flota
+@using FireForce.Core.Data.Models.Personas.Personal
+@using FireForce.Core.Data.Models.Personas.Personal.Componentes
+
+@implements IDisposable
+@inject IMessageService message
+@inject NavigationManager navigationManager
+@inject IDbContextFactory<BomberosDbContext> DbFactory
+
+<style>
+    .modal-crear-licencia .ant-modal-content {
+        width: 800px !important;
+        max-width: 90vw !important;
+    }
+
+    .modal-crear-licencia {
+        padding-right: 200px !important;
+    }
+
+        .modal-crear-licencia .ant-modal-wrap {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+        }
+
+        .modal-crear-licencia .ant-btn-primary {
+            background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
+            border: none !important;
+            color: #fff !important;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
+            margin-top: 0;
+            margin-bottom: 0;
+            padding: 0 20px !important;
+            border-radius: 8px !important;
+            transition: background 0.3s;
+        }
+
+            .modal-crear-licencia .ant-btn-primary:hover {
+                background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
+                color: #fff !important;
+            }
+
+    .boton-agregar {
+        background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
+        border: none !important;
+        color: #fff !important;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
+        padding: 0 20px !important;
+        border-radius: 8px !important;
+        transition: background 0.3s;
+    }
+
+        .boton-agregar:hover {
+            background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
+            color: #fff !important;
+        }
+
+    @@media (max-width: 767px) {
+        .modal-crear-licencia-content {
+            padding: 16px;
+        }
+
+        .modal-crear-licencia .ant-modal-content {
+            width: 95vw !important;
+            margin: 10px auto !important;
+            top: 20px !important;
+            transform: none !important;
+        }
+
+        .modal-crear-licencia .ant-modal-wrap {
+            align-items: flex-start !important;
+            padding-top: 20px !important;
+        }
+    }
+</style>
+
+<div class="modal-crear-licencia-content">
+    <Form Model="@ComunicacionVM"
+          Class="modal-crear-licencia-form"
+          OnFinish="OnFinish"
+          OnFinishFailed="OnFinishFailed">
+
+        <Row Class="modal-crear-licencia-row" Gutter="16">
+            <AntDesign.Col Span="8">
+                <FormItem Label="#️⃣ Num. Serie" Class="modal-crear-licencia-form-item">
+                    <Input @bind-Value="@ComunicacionVM.NroSerie" />
+                </FormItem>
+            </AntDesign.Col>
+            <AntDesign.Col Span="8">
+                <FormItem Label="⚙️ Num. Equipo" Class="modal-crear-licencia-form-item">
+                    <Input @bind-Value="@ComunicacionVM.NroEquipo" />
+                </FormItem>
+            </AntDesign.Col>
+            <AntDesign.Col Span="8">
+                <FormItem Label="🏷️ Modelo" Class="modal-crear-licencia-form-item">
+                    <Input @bind-Value="@ComunicacionVM.Modelo" />
+                </FormItem>
+            </AntDesign.Col>
+        </Row>
+
+        <Row Class="modal-crear-licencia-row" Gutter="16">
+            <AntDesign.Col Span="12">
+                <FormItem Label="🅜 Marca" Class="modal-crear-licencia-form-item">
+                    <Input @bind-Value="@ComunicacionVM.Marca" />
+                </FormItem>
+            </AntDesign.Col>
+            <AntDesign.Col Span="12">
+                <FormItem Label="📌Estado" Class="modal-crear-licencia-form-item">
+                    <EnumSelect TEnum="TipoEstadoHandie" @bind-Value="@ComunicacionVM.Estado" />
+                </FormItem>
+            </AntDesign.Col>
+        </Row>
+
+        @if (ComunicacionVM.Estado == TipoEstadoHandie.Activo)
+        {
+            <Row Class="modal-crear-licencia-row" Gutter="16">
+                <AntDesign.Col Span="24">
+                    <FormItem Label="Asignación" Class="modal-crear-licencia-form-item">
+                        <div style="display: flex; gap: 24px; align-items: center;">
+                            <Checkbox @bind-Checked="@selectBombero" OnChange="() => HandleCheckboxChange(true, checkboxBomberoLabel)">
+                                <Icon Type="user" /> Asignar a Bombero
+                            </Checkbox>
+                            <Checkbox @bind-Checked="@selectMovil" OnChange="() => HandleCheckboxChange(true, checkboxMovilLabel)">
+                                <Icon Type="car" /> Asignar a Móvil
+                            </Checkbox>
+                        </div>
+                    </FormItem>
+                </AntDesign.Col>
+            </Row>
+
+            @if (selectBombero)
+            {
+                <Row Class="modal-crear-licencia-row" Gutter="16">
+                    <AntDesign.Col Span="24">
+                        <FormItem Label="Bombero Asignado" Class="modal-crear-licencia-form-item">
+                            <Select TItem="BomberoViweModel"
+                                    TItemValue="int?"
+                                    DataSource="@BomberosVM"
+                                    @bind-Value="@ComunicacionVM.NroLegajo"
+                                    LabelName="@nameof(BomberoViweModel.NombreYApellido)"
+                                    ValueName="@nameof(BomberoViweModel.NumeroLegajo)"
+                                    Placeholder="Seleccione a un bombero"
+                                    EnableSearch
+                                    AllowClear="true">
+                            </Select>
+                        </FormItem>
+                    </AntDesign.Col>
+                </Row>
+            }
+
+            @if (selectMovil)
+            {
+                <Row Class="modal-crear-licencia-row" Gutter="16">
+                    <AntDesign.Col Span="24">
+                        <FormItem Label="Móvil Asignado" Class="modal-crear-licencia-form-item">
+                            <Select TItem="MovilViewModel"
+                                    TItemValue="string"
+                                    DataSource="@MovilesViewModel"
+                                    @bind-Value="@ComunicacionVM.NumeroMovil"
+                                    LabelName="@nameof(MovilViewModel.NumeroMovil)"
+                                    ValueName="@nameof(MovilViewModel.NumeroMovil)"
+                                    Placeholder="Seleccione un móvil"
+                                    EnableSearch
+                                    AllowClear="true">
+                            </Select>
+                        </FormItem>
+                    </AntDesign.Col>
+                </Row>
+            }
+        }
+
+        <div class="modal-crear-licencia-footer">
+            <Button Class="boton-agregar" HtmlType="submit">
+                Agregar Handie
+            </Button>
+            <Button Style="border: 1px solid #d9d9d9; color: #666;" OnClick="@(() => OnFinishCallback.InvokeAsync())">
+                Cancelar
+            </Button>
+        </div>
+    </Form>
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback OnFinishCallback { get; set; }
+
+    private class ComunicacionViewModel
+    {
+        [Required, StringLength(255)]
+        public string NroEquipo { get; set; }
+        public string? Modelo { get; set; }
+        public string? Marca { get; set; }
+        public string? NroSerie { get; set; }
+        public TipoEstadoHandie Estado { get; set; }
+        public int? NroLegajo { get; set; }
+        public Movil? Movil { get; set; }
+        public string? NumeroMovil = " ";
+    }
+
+    public class MovilViewModel
+    {
+        public string Patente { get; set; }
+        public string NumeroMovil { get; set; }
+        public Comunicacion? HandieMovil { get; set; }
+    }
+
+    BomberosDbContext Context { get; set; }
+
+    ComunicacionViewModel ComunicacionVM { get; set; } = new();
+    List<BomberoViweModel> BomberosVM { get; set; } = new();
+    List<MovilViewModel> MovilesViewModel { get; set; } = new();
+    private bool selectBombero = false;
+    private bool selectMovil = false;
+    string checkboxMovilLabel = "Elija el móvil";
+    string checkboxBomberoLabel = "Elija el bombero";
+
+    private void HandleCheckboxChange(bool value, string checkboxName)
+    {
+        if (checkboxName == "Elija el bombero" && value)
+        {
+            selectMovil = false; // Desactivar el otro checkbox
+            selectBombero = true; // Activar el checkbox actual
+        }
+        else if (checkboxName == "Elija el móvil" && value)
+        {
+            selectBombero = false; // Desactivar el otro checkbox
+            selectMovil = true; // Activar el checkbox actual
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Init();
+    }
+
+    private async Task Init()
+    {
+        ComunicacionVM = new();
+        Context = DbFactory.CreateDbContext();
+        await CargarBomberosView();
+        await CargarMovilViewModel();
+    }
+
+    public async Task CargarBomberosView()
+    {
+        BomberosVM = new();
+        var bomberos = await Context.Bomberos.Where(b => b.EquipoId == null).ToArrayAsync();
+
+        foreach (Bombero b in bomberos)
+        {
+            BomberoViweModel bomberoVM = new()
+            {
+                Nombre = b.Nombre,
+                Apellido = b.Apellido,
+                NumeroLegajo = b.NumeroLegajo
+            };
+            BomberosVM.Add(bomberoVM);
+        }
+    }
+    public async Task CargarMovilViewModel()
+    {
+        MovilesViewModel = new();
+        var moviles = await Context.Moviles.Where(b => b.EquipoId == null).ToArrayAsync();
+
+        foreach (Movil m in moviles)
+        {
+            MovilViewModel movilVM = new()
+            {
+                NumeroMovil = m.NumeroMovil,
+                Patente = m.Patente,
+                HandieMovil = m.HandieMovil
+            };
+            MovilesViewModel.Add(movilVM);
+        }
+    }
+    public async Task OnFinish(EditContext editContext)
+    {
+        try
+        {
+            if (await Context.Comunicacion.SingleOrDefaultAsync(c => c.NroEquipo == ComunicacionVM.NroEquipo) != null)
+            {
+                await message.ErrorAsync("Número de equipo repetido");
+                return;
+            }
+
+            if (selectBombero)
+            {
+                Bombero? bomberoSelec = await Context.Bomberos.SingleOrDefaultAsync(bom => bom.NumeroLegajo == ComunicacionVM.NroLegajo);
+                Comunicacion comunicacion = new()
+                {
+                    NroEquipo = ComunicacionVM.NroEquipo,
+                    Modelo = ComunicacionVM.Modelo,
+                    Marca = ComunicacionVM.Marca,
+                    NroSerie = ComunicacionVM.NroSerie,
+                    Estado = ComunicacionVM.Estado,
+                    Bombero = bomberoSelec
+                };
+                Context.Comunicacion.Add(comunicacion);
+            }
+            else if (selectMovil)
+            {
+                Movil? movilSelec = await Context.Moviles.SingleOrDefaultAsync(mov => mov.NumeroMovil == ComunicacionVM.NumeroMovil);
+                Comunicacion comunicacion = new()
+                {
+                    NroEquipo = ComunicacionVM.NroEquipo,
+                    Modelo = ComunicacionVM.Modelo,
+                    Marca = ComunicacionVM.Marca,
+                    NroSerie = ComunicacionVM.NroSerie,
+                    Estado = ComunicacionVM.Estado,
+                    Movil = movilSelec
+                };
+                Context.Comunicacion.Add(comunicacion);
+            }
+            else
+            {
+                Comunicacion comunicacion = new()
+                {
+                    NroEquipo = ComunicacionVM.NroEquipo,
+                    Modelo = ComunicacionVM.Modelo,
+                    Marca = ComunicacionVM.Marca,
+                    NroSerie = ComunicacionVM.NroSerie,
+                    Estado = ComunicacionVM.Estado
+                };
+                Context.Comunicacion.Add(comunicacion);
+            }
+
+            // Limpiar el valor no seleccionado
+            if (selectBombero)
+            {
+                ComunicacionVM.NumeroMovil = null;
+            }
+            else if (selectMovil)
+            {
+                ComunicacionVM.NroLegajo = null;
+            }
+
+            await Context.SaveChangesAsync();
+            await message.SuccessAsync("Handie agregado correctamente");
+            // Limpiar el formulario después de guardar
+            ComunicacionVM = new();
+            await OnFinishCallback.InvokeAsync();
+        }
+        catch (Exception ex)
+        {
+            await Init();
+            StateHasChanged();
+            if (ex.InnerException != null)
+                await message.ErrorAsync(ex.InnerException.Message, 5);
+            else
+                await message.ErrorAsync(ex.Message, 5);
+        }
+    }
+
+    private void OnFinishFailed(EditContext editContext)
+    {
+        Console.WriteLine($"Failed:{JsonSerializer.Serialize(ComunicacionVM)}");
+    }
+
+    public void Dispose()
+    {
+        Context?.Dispose();
+    }
+}

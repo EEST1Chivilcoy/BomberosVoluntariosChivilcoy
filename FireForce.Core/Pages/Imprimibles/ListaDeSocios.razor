@@ -1,0 +1,940 @@
+@*Layout Vacio*@
+@layout EmptyLayout
+
+@page "/fire-force/socios/imprimibles/lista-de-socios"
+@page "/fire-force/socios/imprimibles/lista-de-socios/{ZonaParam:int}"
+@page "/fire-force/socios/imprimibles/lista-de-socios/inactivos/{IncluirInactivos:bool}"
+@page "/fire-force/socios/imprimibles/lista-de-socios/{ZonaParam:int}/inactivos/{IncluirInactivos:bool}"
+
+@using FireForce.Core.Services
+@using FireForce.Core.Data.Models.Socios
+@using FireForce.Core.Data.Enums.Socios
+@using System.ComponentModel.DataAnnotations
+@using System.Text.RegularExpressions
+@using Microsoft.JSInterop
+
+@inject ISocioService SocioService
+@inject IJSRuntime JSRuntime
+
+<PageTitle>Lista de Socios - Bomberos Voluntarios de Chivilcoy</PageTitle>
+
+<style>
+    :root {
+        --black: #000000;
+        --dark-gray: #1a1a1a;
+        --medium-gray: #4a4a4a;
+        --light-gray: #777777;
+        --border-gray: #333333;
+        --bg-light: #f5f5f5;
+        --white: #FFFFFF;
+    }
+
+    body {
+        font-family: 'Times New Roman', Times, Georgia, serif;
+        font-size: 11pt;
+        line-height: 1.4;
+        color: var(--black);
+        background: var(--white);
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        margin: 0;
+        padding: 0;
+    }
+
+    #pdf-content {
+        width: 100%;
+        max-width: 277mm;
+        margin: 0 auto;
+        padding: 8px;
+        box-sizing: border-box;
+        background: var(--white);
+    }
+
+    .header {
+        text-align: center;
+        padding-bottom: 15px;
+        border-bottom: 3px double var(--black);
+        margin-bottom: 15px;
+    }
+
+    .header-logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 25px;
+        margin-bottom: 10px;
+    }
+
+    .logo-icon {
+        width: 100px;
+        height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .logo-icon img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        filter: grayscale(100%);
+    }
+
+    .header-title h1 {
+        font-size: 26pt;
+        font-weight: 700;
+        color: var(--black);
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 8px;
+    }
+
+    .header-title h2 {
+        font-size: 14pt;
+        font-weight: 400;
+        color: var(--dark-gray);
+        font-style: italic;
+    }
+
+    .header-info {
+        margin-top: 15px;
+        font-size: 10pt;
+        color: var(--dark-gray);
+        display: flex;
+        justify-content: space-between;
+        border-top: 1px solid var(--border-gray);
+        padding-top: 10px;
+    }
+
+    .header-info p {
+        margin: 0;
+    }
+
+    .title-section {
+        background: var(--black);
+        color: var(--white);
+        padding: 15px 20px;
+        margin-bottom: 15px;
+        text-align: center;
+        border: 2px solid var(--black);
+    }
+
+    .title-section h3 {
+        font-size: 16pt;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        margin-bottom: 5px;
+    }
+
+    .title-section .subtitle {
+        font-size: 12pt;
+        font-weight: 400;
+        margin-top: 5px;
+    }
+
+    .summary-section {
+        display: flex;
+        justify-content: center;
+        gap: 0;
+        margin-bottom: 15px;
+        padding: 15px 10px;
+        border: 2px solid var(--black);
+        background: var(--bg-light);
+    }
+
+    .summary-item {
+        text-align: center;
+        padding: 5px 25px;
+        border-right: 1px solid var(--border-gray);
+        flex: 1;
+        max-width: 150px;
+    }
+
+    .summary-item:last-child {
+        border-right: none;
+    }
+
+    .summary-item .number {
+        font-size: 22pt;
+        font-weight: 700;
+        color: var(--black);
+        display: block;
+        line-height: 1.2;
+    }
+
+    .summary-item .label {
+        font-size: 8pt;
+        color: var(--dark-gray);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-top: 3px;
+        display: block;
+    }
+
+    .table-container {
+        margin-bottom: 15px;
+    }
+
+    .pdf-table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+        font-size: 8.3pt;
+    }
+
+    .pdf-table col.col-nro { width: 6%; }
+    .pdf-table col.col-nombre { width: 18%; }
+    .pdf-table col.col-doc { width: 10%; }
+    .pdf-table col.col-tipo { width: 8%; }
+    .pdf-table col.col-zona { width: 4.5%; }
+    .pdf-table col.col-frecuencia { width: 10%; }
+    .pdf-table col.col-direccion { width: 21%; }
+    .pdf-table col.col-telefono { width: 8.5%; }
+    .pdf-table col.col-cuota { width: 6%; }
+    .pdf-table col.col-estado { width: 8%; }
+
+    .pdf-table thead {
+        background: var(--black);
+        color: var(--white);
+    }
+
+    .pdf-table th {
+        padding: 10px 6px;
+        text-align: left;
+        font-weight: 700;
+        text-transform: none;
+        letter-spacing: 0;
+        font-size: 7.8pt;
+        line-height: 1.2;
+        border: 1px solid var(--black);
+    }
+
+    .pdf-table tbody tr {
+        border-bottom: 1px solid var(--border-gray);
+    }
+
+    .pdf-table tbody tr:nth-child(even) {
+        background-color: var(--bg-light);
+    }
+
+    .pdf-table td {
+        padding: 8px 6px;
+        vertical-align: middle;
+        border-left: 1px solid var(--border-gray);
+        border-right: 1px solid var(--border-gray);
+        overflow-wrap: break-word;
+        word-break: normal;
+    }
+
+    .cell-nowrap {
+        white-space: nowrap;
+    }
+
+    .cell-wrap {
+        white-space: normal;
+        line-height: 1.25;
+    }
+
+    .cell-center {
+        text-align: center;
+    }
+
+    .pdf-table tbody tr:last-child td {
+        border-bottom: 2px solid var(--black);
+    }
+
+    .socio-number {
+        font-weight: 700;
+        font-size: 8.6pt;
+        font-variant-numeric: tabular-nums;
+        display: inline-block;
+        min-width: 4ch;
+        text-align: center;
+    }
+
+    .socio-name {
+        font-weight: 600;
+    }
+
+    .socio-type {
+        display: inline-block;
+        padding: 1px 4px;
+        font-size: 6.8pt;
+        font-weight: 600;
+        text-transform: none;
+        border: 1px solid var(--black);
+    }
+
+    .socio-type.persona {
+        background: var(--white);
+    }
+
+    .socio-type.empresa {
+        background: var(--bg-light);
+    }
+
+    .status-badge {
+        display: inline-block;
+        padding: 1px 6px;
+        font-size: 6.8pt;
+        font-weight: 700;
+        text-transform: none;
+        border: 2px solid var(--black);
+    }
+
+    .status-badge.activo {
+        background: var(--white);
+    }
+
+    .status-badge.inactivo {
+        background: var(--black);
+        color: var(--white);
+    }
+
+    .status-badge.suspendido {
+        background: var(--bg-light);
+    }
+
+    .zona-number {
+        font-weight: 700;
+        font-size: 8.5pt;
+        text-align: center;
+        display: inline;
+    }
+
+    .cuota-info {
+        font-weight: 700;
+        text-align: right;
+    }
+
+    .contact-info {
+        font-size: 8pt;
+    }
+
+    .pdf-footer {
+        margin-top: auto;
+        padding-top: 10px;
+        border-top: 3px double var(--black);
+    }
+
+    .footer-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        font-size: 9pt;
+        color: var(--dark-gray);
+    }
+
+    .footer-left {
+        text-align: left;
+    }
+
+    .footer-left p {
+        margin: 3px 0;
+    }
+
+    .footer-right {
+        text-align: right;
+    }
+
+    .document-number {
+        font-size: 8pt;
+        color: var(--light-gray);
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    .loading-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 300px;
+        gap: 20px;
+    }
+
+    .loading-spinner {
+        width: 50px;
+        height: 50px;
+        border: 4px solid var(--bg-light);
+        border-top-color: var(--black);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @@keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .loading-text {
+        color: var(--dark-gray);
+        font-size: 12pt;
+    }
+
+    .no-data {
+        text-align: center;
+        padding: 50px 20px;
+        border: 2px solid var(--black);
+    }
+
+    .no-data h3 {
+        font-size: 14pt;
+        margin-bottom: 10px;
+    }
+
+    .no-data p {
+        color: var(--dark-gray);
+    }
+
+    @@media print {
+        @@page {
+            size: A4 landscape;
+            margin: 8mm;
+        }
+
+        #pdf-content {
+            width: 100%;
+            max-width: 100%;
+            padding: 0;
+        }
+
+        .pdf-table th {
+            padding: 7px 4px;
+            font-size: 7.2pt;
+        }
+
+        .pdf-table td {
+            padding: 5px 4px;
+            font-size: 7.5pt;
+        }
+
+        .action-buttons {
+            display: none !important;
+        }
+    }
+
+    .action-buttons {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        z-index: 1000;
+    }
+
+    .action-button {
+        background: var(--black);
+        color: var(--white);
+        border: none;
+        padding: 12px 20px;
+        font-size: 10pt;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        transition: transform 0.2s, box-shadow 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .action-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .action-button:disabled {
+        background: var(--medium-gray);
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .action-button.secondary {
+        background: var(--white);
+        color: var(--black);
+        border: 2px solid var(--black);
+    }
+</style>
+
+@if (IsLoading)
+{
+    <div class="loading-container">
+        <div class="loading-spinner"></div>
+        <p class="loading-text">Cargando lista de socios...</p>
+    </div>
+}
+else if (Socios == null || !Socios.Any())
+{
+    <div class="no-data">
+        <h3>No se encontraron socios</h3>
+        <p>@(ZonaParam.HasValue ? $"No hay socios registrados en la Zona {ZonaParam.Value}" : "No hay socios registrados en el sistema")</p>
+    </div>
+}
+else
+{
+    <div id="pdf-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-logo">
+                <div class="logo-icon">
+                    <img src="/Imagenes/Logo.svg" alt="Logo Bomberos Voluntarios de Chivilcoy" />
+                </div>
+                <div class="header-title">
+                    <h1>Bomberos Voluntarios de Chivilcoy</h1>
+                    <h2>Asociación Civil - Provincia de Buenos Aires</h2>
+                </div>
+            </div>
+            <div class="header-info">
+                <p><strong>Fecha de emisión:</strong> @FechaHoraArgentina.ToString("dd 'de' MMMM 'de' yyyy", new System.Globalization.CultureInfo("es-AR"))</p>
+                <p><strong>Hora:</strong> @FechaHoraArgentina.ToString("HH:mm") hs</p>
+            </div>
+        </header>
+
+        <!-- Title -->
+        <div class="title-section">
+            <h3>Listado Oficial de Socios</h3>
+            <p class="subtitle">@(ZonaParam.HasValue ? $"Zona {ZonaParam.Value}" : "Todas las Zonas")</p>
+        </div>
+
+        <!-- Summary Section -->
+        <div class="summary-section">
+            <div class="summary-item">
+                <span class="number">@(IncluirInactivos ? TotalSocios : SociosActivos)</span>
+                <span class="label">@(IncluirInactivos ? "Total Socios" : "Total Socios Activos")</span>
+            </div>
+            @if (IncluirInactivos)
+            {
+                <div class="summary-item">
+                    <span class="number">@SociosActivos</span>
+                    <span class="label">Activos</span>
+                </div>
+                <div class="summary-item">
+                    <span class="number">@SociosInactivos</span>
+                    <span class="label">Inactivos</span>
+                </div>
+            }
+            <div class="summary-item">
+                <span class="number">@SociosPersonas</span>
+                <span class="label">Personas</span>
+            </div>
+            <div class="summary-item">
+                <span class="number">@SociosEmpresas</span>
+                <span class="label">Empresas</span>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-container">
+            <table class="pdf-table">
+                <colgroup>
+                    <col class="col-nro" />
+                    <col class="col-nombre" />
+                    <col class="col-doc" />
+                    <col class="col-tipo" />
+                    <col class="col-zona" />
+                    <col class="col-frecuencia" />
+                    <col class="col-direccion" />
+                    <col class="col-telefono" />
+                    <col class="col-cuota" />
+                    <col class="col-estado" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="cell-nowrap cell-center">N°</th>
+                        <th class="cell-wrap">Nombre / Razón Social</th>
+                        <th class="cell-nowrap">DNI/CUIT</th>
+                        <th class="cell-nowrap cell-center">Tipo</th>
+                        <th class="cell-nowrap cell-center">Zona</th>
+                        <th class="cell-wrap">Frecuencia de Pago</th>
+                        <th class="cell-wrap">Dirección principal</th>
+                        <th class="cell-wrap">Teléfono</th>
+                        <th class="cell-nowrap">Cuota</th>
+                        <th class="cell-nowrap cell-center">Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var socio in SociosOrdenados)
+                    {
+                        <tr>
+                            <td class="cell-nowrap cell-center"><span class="socio-number">@socio.NroSocio</span></td>
+                            <td class="cell-wrap">
+                                <span class="socio-name">@socio.NombreOMRazonSocial</span>
+                            </td>
+                            <td class="cell-nowrap">@socio.DocumentoOCUIT</td>
+                            <td class="cell-nowrap cell-center">
+                                <span class="socio-type @socio.TipoCssClass">
+                                    @socio.TipoTexto
+                                </span>
+                            </td>
+                            <td class="cell-nowrap cell-center">
+                                <span class="zona-number">@socio.ZonaTexto</span>
+                            </td>
+                            <td class="contact-info cell-wrap">@socio.FrecuenciaPagoTexto</td>
+                            <td class="contact-info cell-wrap" title="@socio.DireccionCompleta">@socio.DireccionTexto</td>
+                            <td class="contact-info cell-wrap" title="@socio.TelefonosTooltip">@socio.TelefonoPrincipal</td>
+                            <td class="cuota-info cell-nowrap">@socio.MontoCuotaTexto</td>
+                            <td class="cell-nowrap cell-center">
+                                <span class="status-badge @socio.EstadoCssClass">
+                                    @socio.EstadoTexto
+                                </span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Footer -->
+        <footer class="pdf-footer">
+            <div class="footer-content">
+                <div class="footer-left">
+                    <p><strong>Bomberos Voluntarios de Chivilcoy</strong></p>
+                    <p>Documento confidencial - Uso interno</p>
+                </div>
+                <div class="footer-right">
+                    <p>Total de registros: @SociosOrdenados.Count</p>
+                </div>
+            </div>
+            <p class="document-number">
+                Ref: SOC-@FechaHoraArgentina.ToString("yyyyMMdd-HHmmss")
+            </p>
+        </footer>
+    </div>
+
+    <!-- Botones de acción -->
+    <div class="action-buttons">
+        <button class="action-button" @onclick="DescargarPdf" disabled="@IsGenerating">
+            @if (IsGenerating)
+            {
+                <span>Generando...</span>
+            }
+            else
+            {
+                <span>?? Descargar PDF</span>
+            }
+        </button>
+        <button class="action-button secondary" @onclick="VistaPrevia" disabled="@IsGenerating">
+            <span>??? Vista Previa</span>
+        </button>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public int? ZonaParam { get; set; }
+
+    [Parameter]
+    public bool IncluirInactivos { get; set; } = true;
+
+    private List<Socio>? Socios { get; set; }
+    private List<SocioFilaImprimible> SociosOrdenados { get; set; } = new();
+    private bool IsLoading { get; set; } = true;
+    private bool IsGenerating { get; set; } = false;
+    private DateTime FechaHoraArgentina { get; set; }
+    private int TotalSocios { get; set; }
+    private int SociosActivos { get; set; }
+    private int SociosInactivos { get; set; }
+    private int SociosPersonas { get; set; }
+    private int SociosEmpresas { get; set; }
+
+    private sealed class SocioFilaImprimible
+    {
+        public int NroSocio { get; set; }
+        public string NombreOMRazonSocial { get; set; } = "-";
+        public string DocumentoOCUIT { get; set; } = "Sin DNI/CUIT";
+        public string TipoCssClass { get; set; } = "empresa";
+        public string TipoTexto { get; set; } = "-";
+        public string ZonaTexto { get; set; } = "-";
+        public string FrecuenciaPagoTexto { get; set; } = "-";
+        public string DireccionTexto { get; set; } = "-";
+        public string DireccionCompleta { get; set; } = "Sin dirección";
+        public string TelefonoPrincipal { get; set; } = "Sin teléfono";
+        public string TelefonosTooltip { get; set; } = "Sin teléfonos registrados";
+        public string MontoCuotaTexto { get; set; } = "$0";
+        public string EstadoCssClass { get; set; } = string.Empty;
+        public string EstadoTexto { get; set; } = "-";
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var zonaArgentina = TimeZoneInfo.FindSystemTimeZoneById("America/Argentina/Buenos_Aires");
+            FechaHoraArgentina = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, zonaArgentina);
+        }
+        catch
+        {
+            try
+            {
+                var zonaArgentina = TimeZoneInfo.FindSystemTimeZoneById("Argentina Standard Time");
+                FechaHoraArgentina = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, zonaArgentina);
+            }
+            catch
+            {
+                FechaHoraArgentina = DateTime.UtcNow.AddHours(-3);
+            }
+        }
+
+        await CargarSocios();
+    }
+
+    private async Task CargarSocios()
+    {
+        IsLoading = true;
+
+        try
+        {
+            var todosSocios = await SocioService.ObtenerSociosAsync();
+
+            if (todosSocios != null)
+            {
+                var sociosFiltrados = todosSocios.AsEnumerable();
+
+                if (ZonaParam.HasValue)
+                {
+                    var zonaFiltro = (Zona)ZonaParam.Value;
+                    sociosFiltrados = sociosFiltrados.Where(s => s.Zona.HasValue && s.Zona.Value.HasFlag(zonaFiltro));
+                }
+
+                if (!IncluirInactivos)
+                {
+                    sociosFiltrados = sociosFiltrados.Where(s => s.EstadoSocio != TipoEstadoSocio.Inactivo);
+                }
+
+                Socios = sociosFiltrados.ToList();
+                PrepararDatosImpresion();
+            }
+            else
+            {
+                Socios = new List<Socio>();
+                PrepararDatosImpresion();
+            }
+        }
+        catch (Exception)
+        {
+            Socios = new List<Socio>();
+            PrepararDatosImpresion();
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+    private async Task DescargarPdf()
+    {
+        if (IsGenerating)
+            return;
+
+        IsGenerating = true;
+
+        try
+        {
+            var nombreArchivo = $"ListaSocios_{FechaHoraArgentina:yyyyMMdd_HHmmss}.pdf";
+            await JSRuntime.InvokeVoidAsync("pdfExport.generatePdfFast", "pdf-content", nombreArchivo, "landscape");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al generar PDF: {ex.Message}");
+        }
+        finally
+        {
+            IsGenerating = false;
+        }
+    }
+
+    private async Task VistaPrevia()
+    {
+        if (IsGenerating)
+            return;
+
+        IsGenerating = true;
+
+        try
+        {
+            var nombreArchivo = $"ListaSocios_{FechaHoraArgentina:yyyyMMdd_HHmmss}.pdf";
+            await JSRuntime.InvokeVoidAsync("pdfExport.generatePdfPreviewFast", "pdf-content", nombreArchivo, "landscape");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al generar vista previa: {ex.Message}");
+        }
+        finally
+        {
+            IsGenerating = false;
+        }
+    }
+
+    private void PrepararDatosImpresion()
+    {
+        var socios = Socios ?? new List<Socio>();
+
+        TotalSocios = socios.Count;
+        SociosActivos = socios.Count(s => s.EstadoSocio == TipoEstadoSocio.Activo);
+        SociosInactivos = socios.Count(s => s.EstadoSocio == TipoEstadoSocio.Inactivo);
+
+        var sociosParaConteo = IncluirInactivos ? socios : socios.Where(s => s.EstadoSocio != TipoEstadoSocio.Inactivo);
+        SociosPersonas = sociosParaConteo.Count(s => s.Tipo == Core.Data.Enums.Discriminadores.TipoSocio.Persona);
+        SociosEmpresas = sociosParaConteo.Count(s => s.Tipo == Core.Data.Enums.Discriminadores.TipoSocio.Empresa);
+
+        SociosOrdenados = socios
+            .OrderBy(s => s.NroSocio)
+            .Select(s => new SocioFilaImprimible
+            {
+                NroSocio = s.NroSocio,
+                NombreOMRazonSocial = GetNombreSocio(s),
+                DocumentoOCUIT = string.IsNullOrWhiteSpace(s.DocumentoOCUIT) ? "Sin DNI/CUIT" : s.DocumentoOCUIT,
+                TipoCssClass = s.Tipo == Core.Data.Enums.Discriminadores.TipoSocio.Persona ? "persona" : "empresa",
+                TipoTexto = GetEnumDisplayName(s.Tipo),
+                ZonaTexto = GetZonaNumero(s.Zona),
+                FrecuenciaPagoTexto = GetEnumDisplayName(s.FrecuenciaDePago),
+                DireccionTexto = string.IsNullOrWhiteSpace(s.Direccion) ? "-" : s.Direccion.Trim(),
+                DireccionCompleta = string.IsNullOrWhiteSpace(s.Direccion) ? "Sin dirección" : s.Direccion,
+                TelefonoPrincipal = GetTelefonoPrincipal(s.Telefono),
+                TelefonosTooltip = GetTelefonosTooltip(s.Telefono),
+                MontoCuotaTexto = $"${s.MontoCuota:N0}",
+                EstadoCssClass = GetEstadoClass(s.EstadoSocio),
+                EstadoTexto = GetEnumDisplayName(s.EstadoSocio)
+            })
+            .ToList();
+    }
+
+    private string GetNombreSocio(Socio socio)
+    {
+        if (socio.Tipo == Core.Data.Enums.Discriminadores.TipoSocio.Persona)
+        {
+            var apellido = string.IsNullOrWhiteSpace(socio.Apellido) ? string.Empty : socio.Apellido.Trim();
+            var nombre = string.IsNullOrWhiteSpace(socio.Nombre) ? string.Empty : socio.Nombre.Trim();
+
+            if (!string.IsNullOrWhiteSpace(apellido) && !string.IsNullOrWhiteSpace(nombre))
+                return $"{apellido}, {nombre}";
+
+            return string.IsNullOrWhiteSpace(apellido) ? (string.IsNullOrWhiteSpace(nombre) ? "-" : nombre) : apellido;
+        }
+
+        return string.IsNullOrWhiteSpace(socio.Nombre) ? "-" : socio.Nombre;
+    }
+
+    private string GetEnumDisplayName<TEnum>(TEnum? enumValue) where TEnum : struct, Enum
+    {
+        if (!enumValue.HasValue) return "-";
+
+        var memberInfo = typeof(TEnum).GetMember(enumValue.Value.ToString()).FirstOrDefault();
+        if (memberInfo != null)
+        {
+            var displayAttribute = memberInfo.GetCustomAttributes(typeof(DisplayAttribute), false).FirstOrDefault() as DisplayAttribute;
+            if (displayAttribute != null)
+            {
+                return displayAttribute.Name ?? enumValue.Value.ToString();
+            }
+        }
+        return enumValue.Value.ToString();
+    }
+
+    private string GetZonaNumero(Zona? zona)
+    {
+        if (!zona.HasValue || zona.Value == Zona.Ninguna)
+            return "-";
+
+        var zonas = new List<string>();
+
+        if (zona.Value.HasFlag(Zona.Zona1)) zonas.Add("1");
+        if (zona.Value.HasFlag(Zona.Zona2)) zonas.Add("2");
+        if (zona.Value.HasFlag(Zona.Zona3)) zonas.Add("3");
+        if (zona.Value.HasFlag(Zona.Zona4)) zonas.Add("4");
+        if (zona.Value.HasFlag(Zona.Zona5)) zonas.Add("5");
+
+        return zonas.Count > 0 ? string.Join(", ", zonas) : "-";
+    }
+
+    private string GetEstadoClass(TipoEstadoSocio? estado)
+    {
+        return estado switch
+        {
+            TipoEstadoSocio.Activo => "activo",
+            TipoEstadoSocio.Inactivo => "inactivo",
+            TipoEstadoSocio.Suspendido => "suspendido",
+            _ => ""
+        };
+    }
+
+    private string TruncateText(string? text, int maxLength)
+    {
+        if (string.IsNullOrEmpty(text)) return "-";
+        return text.Length <= maxLength ? text : text.Substring(0, maxLength) + "...";
+    }
+
+    private string GetTelefonoPrincipal(string? telefono)
+    {
+        var telefonos = ObtenerTelefonosOrdenados(telefono);
+        return telefonos.FirstOrDefault() ?? "Sin teléfono";
+    }
+
+    private string GetTelefonosTooltip(string? telefono)
+    {
+        var telefonos = ObtenerTelefonosOrdenados(telefono);
+        return telefonos.Count > 0 ? string.Join(" | ", telefonos) : "Sin teléfonos registrados";
+    }
+
+    private List<string> ObtenerTelefonosOrdenados(string? telefono)
+    {
+        if (string.IsNullOrWhiteSpace(telefono))
+            return new List<string>();
+
+        var partes = telefono
+            .Replace("\r", "")
+            .Replace("\n", ";")
+            .Split(new[] { ';', ',', '|', '/' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Where(p => !string.IsNullOrWhiteSpace(p))
+            .ToList();
+
+        if (partes.Count == 0)
+            return new List<string>();
+
+        var telefonos = partes
+            .Select((valor, indice) => new
+            {
+                Valor = LimpiarTelefono(valor),
+                Prioridad = ObtenerPrioridadTelefono(valor),
+                IndiceOriginal = indice
+            })
+            .Where(x => !string.IsNullOrWhiteSpace(x.Valor))
+            .OrderBy(x => x.Prioridad)
+            .ThenBy(x => x.IndiceOriginal)
+            .Select(x => x.Valor)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+        return telefonos;
+    }
+
+    private static int ObtenerPrioridadTelefono(string valor)
+    {
+        var texto = valor.ToLowerInvariant();
+
+        if (texto.Contains("principal")) return 0;
+        if (texto.Contains("cel") || texto.Contains("móvil") || texto.Contains("movil") || texto.Contains("whatsapp")) return 1;
+        if (texto.Contains("fijo")) return 2;
+        if (texto.Contains("secundario") || texto.Contains("alternativo") || texto.Contains("otro")) return 4;
+
+        return 3;
+    }
+
+    private static string LimpiarTelefono(string valor)
+    {
+        var limpio = valor.Trim();
+        var indiceSeparador = limpio.IndexOf(':');
+
+        if (indiceSeparador >= 0 && indiceSeparador < limpio.Length - 1)
+        {
+            limpio = limpio[(indiceSeparador + 1)..].Trim();
+        }
+
+        limpio = Regex.Replace(limpio, @"\s+", " ");
+        return limpio;
+    }
+}
