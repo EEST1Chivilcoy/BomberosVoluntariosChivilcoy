@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FireForce.Core", "FireForce
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FireForce.Data", "FireForce.Data\FireForce.Data.csproj", "{E4A5D98B-C513-4704-99E9-0759259B43AF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FireForce.Shared", "FireForce.Shared\FireForce.Shared.csproj", "{98724D2A-BE81-4A9F-B8EF-5B8CEC81CBBC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{E4A5D98B-C513-4704-99E9-0759259B43AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E4A5D98B-C513-4704-99E9-0759259B43AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E4A5D98B-C513-4704-99E9-0759259B43AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98724D2A-BE81-4A9F-B8EF-5B8CEC81CBBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98724D2A-BE81-4A9F-B8EF-5B8CEC81CBBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98724D2A-BE81-4A9F-B8EF-5B8CEC81CBBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98724D2A-BE81-4A9F-B8EF-5B8CEC81CBBC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

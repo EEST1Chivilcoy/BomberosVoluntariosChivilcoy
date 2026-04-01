@@ -10,20 +10,16 @@
 		<PackageReference Include="ClosedXML" Version="0.105.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.25" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.25" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.14" />
 		<PackageReference Include="Microsoft.Identity.Web" Version="4.6.0" />
 		<PackageReference Include="Microsoft.Identity.Web.MicrosoftGraph" Version="4.6.0" />
 		<PackageReference Include="Microsoft.Identity.Web.UI" Version="4.6.0" />
 		<PackageReference Include="MQTTnet" Version="5.1.0.1559" />
-		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Components" Version="8.0.25" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.Forms" Version="8.0.25" />
-		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.25" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.14" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.14">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
 		<PackageReference Include="System.Formats.Asn1" Version="8.0.2" />		
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\FireForce.Data\FireForce.Data.csproj" />
+	  <ProjectReference Include="..\FireForce.Shared\FireForce.Shared.csproj" />
 	</ItemGroup>
 </Project>

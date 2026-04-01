@@ -1,7 +1,5 @@
-﻿using DocumentFormat.OpenXml.Wordprocessing;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using FireForce.Core.Data.Models.Personas.Personal.Componentes;
-using FireForce.Core.Pages;
 
 namespace FireForce.Core.Data.Models.Imagenes
 {
