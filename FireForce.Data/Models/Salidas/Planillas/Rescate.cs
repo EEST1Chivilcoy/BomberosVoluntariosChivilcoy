@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FireForce.Core.Data.Models.Salidas.Planillas
+namespace FireForce.Data.Models.Salidas.Planillas
 {
     public abstract class Rescate : Salida
     {

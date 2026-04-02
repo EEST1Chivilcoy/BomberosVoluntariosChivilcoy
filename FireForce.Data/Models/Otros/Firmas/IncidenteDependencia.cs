@@ -1,6 +1,6 @@
-﻿using FireForce.Core.Data.Models.Grupos.Dependencias;
+﻿using FireForce.Data.Models.Grupos.Dependencias;
 
-namespace FireForce.Core.Data.Models.Otros.Firmas
+namespace FireForce.Data.Models.Otros.Firmas
 {
     public class IncidenteDependencia : IncidenteBase
     {

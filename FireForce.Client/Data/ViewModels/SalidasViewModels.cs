@@ -1,10 +1,10 @@
-﻿using FireForce.Core.Data.Enums;
-using FireForce.Core.Data.Models.Salidas.Componentes;
-using System.ComponentModel.DataAnnotations;
-using FireForce.Core.Data.Enums.Salidas;
-using FireForce.Core.Data.Enums.Discriminadores;
+﻿using System.ComponentModel.DataAnnotations;
 using FireForce.Client.Data.ViewModels.Personal;
 using FireForce.Shared.DTOs.Nominatim;
+using FireForce.Shared.Enums.Salidas;
+using FireForce.Shared.Enums.Discriminadores;
+using FireForce.Shared.Enums;
+using FireForce.Data.Models.Salidas.Componentes;
 
 namespace FireForce.Client.Data.ViewModels
 {

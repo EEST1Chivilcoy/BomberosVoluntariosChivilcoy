@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using FireForce.Core.Data.Models.Personas.Personal;
-using FireForce.Core.Data.Models.Salidas.Planillas;
-using FireForce.Core.Data.Models.Vehiculos.Flota;
-using FireForce.Core.Data.Enums.Discriminadores;
-using FireForce.Core.Data.Enums;
 using FireForce.Client.Data.ViewModels.Accidente;
 using FireForce.Client.Data.ViewModels.Personal;
 using FireForce.Client.Data.Mappers;
+using FireForce.Shared.Enums;
+using FireForce.Shared.Enums.Discriminadores;
+using FireForce.Data.Models.Personas.Personal;
+using FireForce.Data.Models.Vehiculos.Flota;
+using FireForce.Data.Models.Salidas.Planillas;
 
 namespace FireForce.Client.Pages.Salidas
 {

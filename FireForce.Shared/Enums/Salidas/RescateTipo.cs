@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FireForce.Core.Data.Enums.Salidas
+namespace FireForce.Shared.Enums.Salidas
 {
     /// <summary>
     /// Tipos de Rescate

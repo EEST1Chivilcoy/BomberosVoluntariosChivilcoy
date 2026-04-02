@@ -1,7 +1,7 @@
-﻿using FireForce.Core.Data;
-using FireForce.Core.Data.Models.Imagenes;
-using FireForce.Client.Helpers;
+﻿using FireForce.Client.Helpers;
 using FireForce.Shared.DTOs;
+using FireForce.Data.Models.Imagenes;
+using FireForce.Data;
 
 namespace FireForce.Client.Services
 {

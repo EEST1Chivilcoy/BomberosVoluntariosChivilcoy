@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using FireForce.Core.Data;
-using FireForce.Core.Data.Enums.Personal.ComisionDirectiva;
-using FireForce.Core.Data.Models.Imagenes;
-using FireForce.Core.Data.Models.Personas.Personal;
-using FireForce.Core.Data.Models.Personas.Personal.Componentes;
+using FireForce.Data.Models.Personas.Personal.Componentes;
 using FireForce.Client.Helpers;
+using FireForce.Shared.Enums.Personal.ComisionDirectiva;
+using FireForce.Data.Models.Imagenes;
+using FireForce.Data.Models.Personas.Personal;
+using FireForce.Data;
 
 namespace FireForce.Client.Services
 {

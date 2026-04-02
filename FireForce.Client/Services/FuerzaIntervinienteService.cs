@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using FireForce.Core.Data;
-using FireForce.Core.Data.Models.Grupos.FuerzasIntervinientes;
+using FireForce.Data.Models.Grupos.FuerzasIntervinientes;
+using FireForce.Data;
 
 namespace FireForce.Client.Services
 {

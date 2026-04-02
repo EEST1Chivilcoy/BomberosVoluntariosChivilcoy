@@ -1,14 +1,10 @@
-﻿using FireForce.Core.Data.Enums;
-using FireForce.Core.Data.Models.Salidas.Componentes;
-using FireForce.Core.Data.Models.Salidas.Planillas;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Runtime.InteropServices;
-using FireForce.Core.Data.Models.Personas.Personal;
-using FireForce.Core.Data.Models.Vehiculos.Flota;
+using FireForce.Shared.Enums;
+using FireForce.Data.Models.Personas.Personal;
+using FireForce.Data.Models.Vehiculos.Flota;
 
-namespace FireForce.Core.Data.Models.Grupos.Dependencias.Comunicaciones
+namespace FireForce.Data.Models.Grupos.Dependencias.Comunicaciones
 {
     [Index(nameof(NroEquipo), IsUnique = true)]
     public class Comunicacion

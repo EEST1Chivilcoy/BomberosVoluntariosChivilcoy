@@ -1,4 +1,4 @@
-﻿namespace FireForce.Core.Data.Models.Socios.Componentes
+﻿namespace FireForce.Data.Models.Socios.Componentes
 {
     public abstract class MovimientoSocio
     {

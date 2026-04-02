@@ -1,6 +1,6 @@
-﻿using FireForce.Core.Data.Enums;
+﻿using FireForce.Shared.Enums;
 
-namespace FireForce.Core.Data.Models.Salidas.Planillas.Servicios
+namespace FireForce.Data.Models.Salidas.Planillas.Servicios
 {
     public class ServicioEspecialPrevencion : ServicioEspecial
     {

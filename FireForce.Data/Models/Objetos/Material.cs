@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using FireForce.Core.Data.Enums;
+using FireForce.Shared.Enums;
 
-namespace FireForce.Core.Data.Models.Objetos
+namespace FireForce.Data.Models.Objetos
 {
     public class Material
     {

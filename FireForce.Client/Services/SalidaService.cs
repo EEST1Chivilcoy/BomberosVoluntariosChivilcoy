@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using FireForce.Core.Data;
-using FireForce.Core.Data.Models.Personas.Personal;
-using FireForce.Core.Data.Models.Salidas.Componentes;
-using FireForce.Core.Data.Models.Salidas.Planillas;
 
 using FireForce.Client.Helpers;
+using FireForce.Data.Models.Personas.Personal;
+using FireForce.Data.Models.Salidas.Componentes;
+using FireForce.Data.Models.Salidas.Planillas;
+using FireForce.Data;
 
 namespace FireForce.Client.Services
 {

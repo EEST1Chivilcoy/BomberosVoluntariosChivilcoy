@@ -1,4 +1,4 @@
-﻿using FireForce.Core.Data.Enums.Salidas;
+﻿using FireForce.Shared.Enums.Salidas;
 
 namespace FireForce.Client.Data.ViewModels.Servicios
 {

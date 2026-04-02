@@ -1,8 +1,8 @@
-﻿using FireForce.Core.Data;
-using FireForce.Core.Data.Enums.Socios;
-using FireForce.Core.Data.Models.Socios.Componentes.Pagos;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using FireForce.Client.Helpers;
+using FireForce.Shared.Enums.Socios;
+using FireForce.Data.Models.Socios.Componentes.Pagos;
+using FireForce.Data;
 
 namespace FireForce.Client.Services
 {

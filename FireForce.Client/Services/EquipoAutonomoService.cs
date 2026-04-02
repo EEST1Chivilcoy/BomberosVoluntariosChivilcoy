@@ -1,7 +1,7 @@
-﻿using FireForce.Core.Data;
-using FireForce.Core.Data.Models.Grupos.Dependencias.EquiposAutonomos;
-using Microsoft.EntityFrameworkCore;
-using FireForce.Core.Data.Enums;
+﻿using Microsoft.EntityFrameworkCore;
+using FireForce.Shared.Enums;
+using FireForce.Data.Models.Grupos.Dependencias.EquiposAutonomos;
+using FireForce.Data;
 
 namespace FireForce.Client.Services
 {

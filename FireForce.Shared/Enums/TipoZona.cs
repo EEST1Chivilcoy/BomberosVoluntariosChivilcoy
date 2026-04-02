@@ -1,4 +1,4 @@
-﻿namespace FireForce.Core.Data.Enums
+﻿namespace FireForce.Shared.Enums
 {
     public enum TipoZona
     {

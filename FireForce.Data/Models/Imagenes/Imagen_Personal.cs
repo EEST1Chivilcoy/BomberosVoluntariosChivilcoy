@@ -1,8 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using FireForce.Core.Data.Models.Personas.Personal;
+using FireForce.Data.Models.Personas.Personal;
 
-namespace FireForce.Core.Data.Models.Imagenes
+namespace FireForce.Data.Models.Imagenes
 {
     /// <summary>
     /// Representa la imagen de perfil asociada a un miembro del personal.

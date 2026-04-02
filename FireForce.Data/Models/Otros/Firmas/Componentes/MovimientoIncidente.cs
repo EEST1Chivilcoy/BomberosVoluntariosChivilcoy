@@ -1,6 +1,6 @@
-﻿using FireForce.Core.Data.Models.Personas.Personal;
+﻿using FireForce.Data.Models.Personas.Personal;
 
-namespace FireForce.Core.Data.Models.Otros.Firmas.Componentes
+namespace FireForce.Data.Models.Otros.Firmas.Componentes
 {
     public class MovimientoIncidente
     {

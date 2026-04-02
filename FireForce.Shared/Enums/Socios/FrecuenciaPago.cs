@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FireForce.Core.Data.Enums.Socios
+namespace FireForce.Shared.Enums.Socios
 {
     /// <summary>
     /// Representa las diferentes frecuencias de pago disponibles para los socios.

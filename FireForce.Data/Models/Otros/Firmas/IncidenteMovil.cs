@@ -1,6 +1,6 @@
-﻿using FireForce.Core.Data.Models.Vehiculos.Flota;
+﻿using FireForce.Data.Models.Vehiculos.Flota;
 
-namespace FireForce.Core.Data.Models.Otros.Firmas
+namespace FireForce.Data.Models.Otros.Firmas
 {
 
     public class IncidenteMovil : IncidenteBase

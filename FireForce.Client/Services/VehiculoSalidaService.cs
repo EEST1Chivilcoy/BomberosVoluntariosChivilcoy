@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using FireForce.Core.Data;
-using FireForce.Core.Data.Enums;
-using FireForce.Core.Data.Models.Imagenes;
-using FireForce.Core.Data.Models.Vehiculos.Flota;
 using FireForce.Client.Helpers;
+using FireForce.Shared.Enums;
+using FireForce.Data.Models.Imagenes;
+using FireForce.Data.Models.Vehiculos.Flota;
+using FireForce.Data;
 
 namespace FireForce.Client.Services
 {

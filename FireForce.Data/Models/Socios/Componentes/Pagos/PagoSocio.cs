@@ -1,11 +1,9 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using FireForce.Core.Data.Enums.Discriminadores;
-using FireForce.Core.Data.Enums.Socios;
-using FireForce.Core.Data.Models.Personas.Personal;
-using FireForce.Core.Data.Models.Socios;
+using FireForce.Data.Models.Personas.Personal;
+using FireForce.Shared.Enums.Discriminadores;
+using FireForce.Shared.Enums.Socios;
 
-namespace FireForce.Core.Data.Models.Socios.Componentes.Pagos
+namespace FireForce.Data.Models.Socios.Componentes.Pagos
 {
     /// <summary>
     /// Pago abstracto realizado por un socio.

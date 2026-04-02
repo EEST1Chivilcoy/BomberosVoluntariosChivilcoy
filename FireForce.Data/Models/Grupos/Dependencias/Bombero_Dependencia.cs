@@ -1,8 +1,7 @@
-﻿using FireForce.Core.Data.Enums;
-using System.ComponentModel.DataAnnotations.Schema;
-using FireForce.Core.Data.Models.Personas.Personal;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using FireForce.Data.Models.Personas.Personal;
 
-namespace FireForce.Core.Data.Models.Grupos.Dependencias
+namespace FireForce.Data.Models.Grupos.Dependencias
 {
     public class Bombero_Dependencia
     {

@@ -1,5 +1,5 @@
-using FireForce.Core.Data.Enums.Discriminadores;
-using FireForce.Core.Data.Enums.Socios;
+using FireForce.Shared.Enums.Discriminadores;
+using FireForce.Shared.Enums.Socios;
 
 namespace FireForce.Client.Data.ViewModels.Socios
 {

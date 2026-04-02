@@ -1,9 +1,8 @@
-﻿using FireForce.Core.Data.Enums;
-using FireForce.Core.Data.Models.Objetos;
-using FireForce.Core.Data.Models.Personas.Personal;
-using FireForce.Core.Data.Models.Vehiculos.Flota;
+﻿using FireForce.Data.Models.Personas.Personal;
+using FireForce.Data.Models.Vehiculos.Flota;
+using FireForce.Shared.Enums;
 
-namespace FireForce.Core.Data.Models.Objetos.Componentes
+namespace FireForce.Data.Models.Objetos.Componentes
 {
     public class MovimientoMaterial
     {

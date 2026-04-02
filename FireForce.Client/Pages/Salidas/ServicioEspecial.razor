@@ -2,7 +2,7 @@
 @page "/fire-force/salidas/servicio-especial/{TipoServicioEspecial:int}/{AnioSalida:int}/{NumeroSalida:int}"
 @using FireForce.Client.Data.ViewModels.Personal;
 @using FireForce.Client.Data.ViewModels.Servicios;
-@using FireForce.Core.Data.Enums.Salidas;
+@using FireForce.Shared.Enums.Salidas;
 
 @*Servicios Utilizados*@
 @using FireForce.Client.Services
@@ -14,8 +14,8 @@
 @inject NavigationManager navigationManager
 
 @*Componentes Generales*@
-@using FireForce.Core.Data.Models.Salidas.Componentes;
-@using FireForce.Core.Data.Models.Salidas.Planillas.Servicios;
+@using FireForce.Data.Models.Salidas.Componentes;
+@using FireForce.Data.Models.Salidas.Planillas.Servicios;
 @code {
     private string activeTab = "1";
 

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FireForce.Core.Data.Enums.Socios
+namespace FireForce.Shared.Enums.Socios
 {
     /// <summary>
     /// Representa las diferentes formas de pago disponibles para las transacciones.

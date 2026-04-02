@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FireForce.Core.Data.Enums.Discriminadores
+namespace FireForce.Shared.Enums.Discriminadores
 {
     /// <summary>
     /// Categoría de parte de vehículo.

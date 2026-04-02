@@ -1,13 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using FireForce.Core.Data.Enums;
-using FireForce.Core.Data.Enums.Discriminadores;
-using FireForce.Core.Data.Enums.Socios;
-using FireForce.Core.Data.Models.Socios.Componentes;
-using FireForce.Core.Data.Models.Socios.Componentes.Pagos;
+using FireForce.Shared.Enums.Socios;
+using FireForce.Shared.Enums.Discriminadores;
+using FireForce.Data.Models.Socios.Componentes.Pagos;
+using FireForce.Data.Models.Socios.Componentes;
 
-namespace FireForce.Core.Data.Models.Socios
+namespace FireForce.Data.Models.Socios
 {
     /// <summary>
     /// Representa un socio en el sistema.

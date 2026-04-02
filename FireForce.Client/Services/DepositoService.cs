@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using FireForce.Core.Data;
-using FireForce.Core.Data.Enums;
-using FireForce.Core.Data.Models.Objetos;
-using FireForce.Core.Data.Models.Objetos.Componentes;
+using FireForce.Shared.Enums;
+using FireForce.Data.Models.Objetos.Componentes;
+using FireForce.Data.Models.Objetos;
+using FireForce.Data;
 
 namespace FireForce.Client.Services
 {

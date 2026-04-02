@@ -1,4 +1,4 @@
-using FireForce.Core.Data.Enums.Socios;
+using FireForce.Shared.Enums.Socios;
 
 namespace FireForce.Client.Pages.Socios.Cobranza
 {

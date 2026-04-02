@@ -1,6 +1,6 @@
-﻿using FireForce.Core.Data.Enums;
-using FireForce.Core.Data.Models.Personas.Personal;
-using FireForce.Core.Data.Models.Vehiculos.Flota;
+﻿using FireForce.Data.Models.Personas.Personal;
+using FireForce.Data.Models.Vehiculos.Flota;
+using FireForce.Shared.Enums;
 
 namespace FireForce.Client.Data.ViewModels.Personal
 {

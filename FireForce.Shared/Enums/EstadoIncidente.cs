@@ -1,4 +1,4 @@
-﻿namespace FireForce.Core.Data.Enums
+﻿namespace FireForce.Shared.Enums
 {
     /// <summary>
     /// Enumeración que representa los posibles estados de un incidente.

@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
-using FireForce.Core.Data.Models.Vehiculos.Flota;
+using FireForce.Data.Models.Vehiculos.Flota;
 
-namespace FireForce.Core.Data.Models.Imagenes
+namespace FireForce.Data.Models.Imagenes
 {
     /// <summary>
     /// Representa una imagen asociada a un vehículo de la flota.

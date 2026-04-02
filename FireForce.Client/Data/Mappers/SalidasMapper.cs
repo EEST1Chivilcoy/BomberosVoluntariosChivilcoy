@@ -1,10 +1,5 @@
-using FireForce.Core.Data.Models.Personas.Personal;
-using FireForce.Core.Data.Models.Salidas.Planillas;
-using FireForce.Core.Data.Models.Salidas.Componentes;
-using FireForce.Core.Data.Models.Grupos.FuerzasIntervinientes;
-using FireForce.Core.Data.Models.Salidas.Planillas.Servicios;
-using FireForce.Core.Data.Models.Salidas.Planillas.Incendios;
-using FireForce.Core.Data.Enums.Salidas;
+using FireForce.Data.Models.Personas.Personal;
+using FireForce.Data.Models.Grupos.FuerzasIntervinientes;
 using FireForce.Client.Data.ViewModels.Accidente;
 using FireForce.Client.Data.ViewModels.Incendios;
 using FireForce.Client.Data.ViewModels;
@@ -13,6 +8,11 @@ using FireForce.Client.Data.ViewModels.FactorClimatico;
 using FireForce.Client.Data.ViewModels.MaterialesPeligrosos;
 using FireForce.Client.Data.ViewModels.Personal;
 using FireForce.Client.Data.ViewModels.Rescates;
+using FireForce.Shared.Enums.Salidas;
+using FireForce.Data.Models.Salidas.Planillas.Servicios;
+using FireForce.Data.Models.Salidas.Planillas;
+using FireForce.Data.Models.Salidas.Planillas.Incendios;
+using FireForce.Data.Models.Salidas.Componentes;
 
 namespace FireForce.Client.Data.Mappers
 {

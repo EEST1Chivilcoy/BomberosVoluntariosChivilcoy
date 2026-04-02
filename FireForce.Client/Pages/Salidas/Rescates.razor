@@ -2,7 +2,7 @@
 @page "/fire-force/salidas/rescate/{TipoRescate:int}/{AnioSalida:int}/{NumeroSalida:int}"
 @using FireForce.Client.Data.ViewModels.Personal;
 @using FireForce.Client.Data.ViewModels.Rescates;
-@using FireForce.Core.Data.Enums.Salidas;
+@using FireForce.Shared.Enums.Salidas;
 
 @*Servicios Utilizados*@
 @using FireForce.Client.Services;
@@ -15,7 +15,7 @@
 @inject NavigationManager navigationManager
 
 @*Componentes Generales*@
-@using FireForce.Core.Data.Models.Salidas.Componentes;
+@using FireForce.Data.Models.Salidas.Componentes;
 
 @code {
     private string activeTab = "1";

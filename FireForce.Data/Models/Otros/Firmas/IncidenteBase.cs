@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using FireForce.Core.Data.Enums;
-using FireForce.Core.Data.Models.Grupos.Dependencias;
-using FireForce.Core.Data.Models.Personas.Personal;
+using FireForce.Data.Models.Grupos.Dependencias;
+using FireForce.Data.Models.Personas.Personal;
+using FireForce.Shared.Enums;
 
-namespace FireForce.Core.Data.Models.Otros.Firmas
+namespace FireForce.Data.Models.Otros.Firmas
 {
     public abstract class IncidenteBase
     {

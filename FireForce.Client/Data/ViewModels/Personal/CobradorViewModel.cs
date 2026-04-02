@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using FireForce.Core.Data.Enums.Personal.Cobrador;
-using FireForce.Core.Data.Enums.Socios;
+using FireForce.Shared.Enums.Personal.Cobrador;
+using FireForce.Shared.Enums.Socios;
 using FireForce.Shared.Extensions;
 using FireForce.Shared.ViewModels.Personal;
 

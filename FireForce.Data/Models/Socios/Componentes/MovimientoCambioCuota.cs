@@ -1,6 +1,6 @@
-﻿using FireForce.Core.Data.Enums.Socios;
+﻿using FireForce.Shared.Enums.Socios;
 
-namespace FireForce.Core.Data.Models.Socios.Componentes
+namespace FireForce.Data.Models.Socios.Componentes
 {
     /// <summary>
     /// Representa un período de cuota de un socio.

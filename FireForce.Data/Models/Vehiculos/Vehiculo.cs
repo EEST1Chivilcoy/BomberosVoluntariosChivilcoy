@@ -1,8 +1,7 @@
-﻿using FireForce.Core.Data.Models.Salidas.Componentes;
-using System.ComponentModel.DataAnnotations;
-using FireForce.Core.Data.Enums.Discriminadores;
+﻿using System.ComponentModel.DataAnnotations;
+using FireForce.Shared.Enums.Discriminadores;
 
-namespace FireForce.Core.Data.Models.Vehiculos
+namespace FireForce.Data.Models.Vehiculos
 {
     /// <summary>
     /// Clase abstracta que representa un vehículo.

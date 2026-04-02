@@ -1,4 +1,4 @@
-﻿namespace FireForce.Core.Data.Enums.Discriminadores
+﻿namespace FireForce.Shared.Enums.Discriminadores
 {
     public enum TipoPagoSocio
     {

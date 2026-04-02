@@ -1,11 +1,10 @@
-﻿using FireForce.Core.Data.Enums;
-using FireForce.Core.Data.Models.Salidas.Planillas;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Security.Permissions;
-using FireForce.Core.Data.Models.Personas.Personal;
-using FireForce.Core.Data.Models.Vehiculos.Flota;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using FireForce.Shared.Enums;
+using FireForce.Data.Models.Personas.Personal;
+using FireForce.Data.Models.Salidas.Planillas;
+using FireForce.Data.Models.Vehiculos.Flota;
 
-namespace FireForce.Core.Data.Models.Salidas.Componentes
+namespace FireForce.Data.Models.Salidas.Componentes
 {
     public class BomberoSalida
     {

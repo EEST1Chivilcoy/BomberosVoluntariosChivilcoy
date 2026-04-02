@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using FireForce.Core.Data;
-using FireForce.Core.Data.Models.Grupos.Dependencias;
-using FireForce.Core.Data.Models.Personas.Personal;
+using FireForce.Data.Models.Grupos.Dependencias;
+using FireForce.Data.Models.Personas.Personal;
+using FireForce.Data;
 
 namespace FireForce.Client.Services
 {

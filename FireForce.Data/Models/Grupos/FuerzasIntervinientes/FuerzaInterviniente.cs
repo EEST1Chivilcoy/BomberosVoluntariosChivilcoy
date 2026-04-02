@@ -1,4 +1,4 @@
-﻿namespace FireForce.Core.Data.Models.Grupos.FuerzasIntervinientes
+﻿namespace FireForce.Data.Models.Grupos.FuerzasIntervinientes
 {
     public class FuerzaInterviniente
     {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using FireForce.Core.Data;
-using FireForce.Core.Data.Models.Otros.Partes;
 using FireForce.Client.Helpers;
+using FireForce.Data.Models.Otros.Partes;
+using FireForce.Data;
 
 namespace FireForce.Client.Services
 {

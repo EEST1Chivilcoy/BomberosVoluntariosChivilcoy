@@ -1,4 +1,4 @@
-﻿using FireForce.Core.Data.Enums;
+﻿using FireForce.Shared.Enums;
 
 namespace FireForce.Client.Data.ViewModels.Rescates
 {

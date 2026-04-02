@@ -1,8 +1,8 @@
 ﻿@using System.Reflection
-@using FireForce.Core.Data.Models.Personas.Personal
-@using FireForce.Core.Data.Models.Personas.Personal.Componentes
-@using FireForce.Core.Data.Models.Imagenes
-@using FireForce.Core.Data.Models.Vehiculos.Flota
+@using FireForce.Data.Models.Personas.Personal
+@using FireForce.Data.Models.Personas.Personal.Componentes
+@using FireForce.Data.Models.Imagenes
+@using FireForce.Data.Models.Vehiculos.Flota
 @using FireForce.Client.Data.Mappers
 
 @*Servicios utilizados*@
@@ -371,7 +371,7 @@
                     Encargado = EncargadoNew != null ? EncargadoNew : vehiculo?.Encargado,
                     NumeroMovil = vehiculoView.NumeroMovil,
                     Estado = vehiculoView.Estado,
-                    Discriminador = Core.Data.Enums.Discriminadores.TipoVehiculo.Embarcacion,
+                    Discriminador = FireForce.Shared.Enums.Discriminadores.TipoVehiculo.Embarcacion,
                 };
 
                 if (EsEmbarcacion == false)
@@ -384,7 +384,7 @@
                     movil.TipoAceite = movilView.TipoAceite;
                     movil.MarcaAceite = movilView.MarcaAceite;
                     movil.CantidadAceite = movilView.CantidadAceite;
-                    movil.Discriminador = Core.Data.Enums.Discriminadores.TipoVehiculo.Movil;
+                    movil.Discriminador = FireForce.Shared.Enums.Discriminadores.TipoVehiculo.Movil;
                     movil.ModeloFiltroAire = movilView.ModeloFiltroAire;
                     movil.MedidasCubiertas = movilView.MedidasCubiertas;
                     movil.LibrasCubiertas = movilView.LibrasCubiertas;

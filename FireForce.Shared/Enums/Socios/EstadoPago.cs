@@ -1,4 +1,4 @@
-﻿namespace FireForce.Core.Data.Enums.Socios
+﻿namespace FireForce.Shared.Enums.Socios
 {
     public enum EstadoPago
     {

@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using FireForce.Core.Data.Enums;
+using FireForce.Shared.Enums;
 using FireForce.Shared.ViewModels.Personal;
 
 namespace FireForce.Client.Data.ViewModels.Personal

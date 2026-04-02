@@ -8,10 +8,10 @@ using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
 using System.Globalization;
 using System.Security.Claims;
-using FireForce.Core.Data;
 using FireForce.Core.Services;
 using FireForce.Client.Services;
 using FireForce.Shared.Services;
+using FireForce.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using FireForce.Core.Data;
-using FireForce.Core.Data.Models.Personas.Personal.Componentes;
+using FireForce.Data.Models.Personas.Personal.Componentes;
+using FireForce.Data;
 
 namespace FireForce.Client.Services
 {

@@ -1,11 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using FireForce.Core.Data.Enums;
-using FireForce.Core.Data.Models.Grupos.FuerzasIntervinientes;
-using FireForce.Core.Data.Models.Personas.Personal;
-using FireForce.Core.Data.Models.Vehiculos.Flota;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using FireForce.Data.Models.Personas.Personal;
+using FireForce.Data.Models.Vehiculos.Flota;
+using FireForce.Shared.Enums;
 
-namespace FireForce.Core.Data.Models.Grupos.Dependencias.EquiposAutonomos
+namespace FireForce.Data.Models.Grupos.Dependencias.EquiposAutonomos
 {
     /// <summary>
     /// Representa un registro de movimiento de un equipo autónomo, incluyendo cambios de estado y fechas de movimiento.

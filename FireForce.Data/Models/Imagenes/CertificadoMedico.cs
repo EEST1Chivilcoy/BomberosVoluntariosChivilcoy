@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using FireForce.Core.Data.Models.Personas.Personal.Componentes;
+using FireForce.Data.Models.Personas.Personal.Componentes;
 
-namespace FireForce.Core.Data.Models.Imagenes
+namespace FireForce.Data.Models.Imagenes
 {
     /// <summary>
     /// Representa un certificado médico asociado a una licencia médica.

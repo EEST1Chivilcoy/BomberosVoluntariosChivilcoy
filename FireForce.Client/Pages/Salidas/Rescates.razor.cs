@@ -1,15 +1,15 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using System.Text.Json;
-using FireForce.Core.Data.Models.Personas.Personal;
-using FireForce.Core.Data.Models.Salidas.Planillas;
-using FireForce.Core.Data.Models.Vehiculos.Flota;
-using FireForce.Core.Data.Enums.Salidas;
-using FireForce.Core.Data.Enums;
 using FireForce.Client.Data.ViewModels;
 using FireForce.Client.Data.ViewModels.Personal;
 using FireForce.Client.Data.Mappers;
 using FireForce.Client.Data.ViewModels.Rescates;
+using FireForce.Shared.Enums.Salidas;
+using FireForce.Shared.Enums;
+using FireForce.Data.Models.Personas.Personal;
+using FireForce.Data.Models.Vehiculos.Flota;
+using FireForce.Data.Models.Salidas.Planillas;
 
 namespace FireForce.Client.Pages.Salidas
 {
