@@ -1,15 +1,12 @@
 ﻿using FireForce.Core.Data.Enums;
 using FireForce.Core.Data.Models.Salidas.Componentes;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using FireForce.Core.Data.Enums.Salidas;
 using FireForce.Core.Data.Enums.Discriminadores;
-using FireForce.Core.Data.Models.Personas;
-using FireForce.Core.DTOs.Nominatim;
-using FireForce.Core.Data.Models.Grupos.FuerzasIntervinientes;
-using FireForce.Core.Data.ViewModels.Personal;
+using FireForce.Client.Data.ViewModels.Personal;
+using FireForce.Shared.DTOs.Nominatim;
 
-namespace FireForce.Core.Data.ViewModels
+namespace FireForce.Client.Data.ViewModels
 {
     /// <summary>
     /// ViewModel base para todas las salidas.

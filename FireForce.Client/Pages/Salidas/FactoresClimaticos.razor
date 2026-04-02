@@ -1,11 +1,11 @@
 @page "/fire-force/salidas/factores-climaticos/{TipoFactorClimatico:int}"
 @page "/fire-force/salidas/factores-climaticos/{TipoFactorClimatico:int}/{AnioSalida:int}/{NumeroSalida:int}"
-@using FireForce.Core.Data.ViewModels.Personal;
-@using FireForce.Core.Data.ViewModels.FactorClimatico;
+@using FireForce.Client.Data.ViewModels.Personal;
+@using FireForce.Client.Data.ViewModels.FactorClimatico;
 @using FireForce.Core.Data.Enums.Salidas;
 
 @*Servicios Utilizados*@
-@using FireForce.Core.Services
+@using FireForce.Client.Services
 @inject ISalidaService SalidaService
 @inject IBomberoService BomberoService
 @inject IVehiculoSalidaService VehiculoSalidaService

@@ -1,7 +1,7 @@
 using FireForce.Core.Data.Enums.Discriminadores;
 using FireForce.Core.Data.Enums.Socios;
 
-namespace FireForce.Core.Data.ViewModels.Socios
+namespace FireForce.Client.Data.ViewModels.Socios
 {
     public class PagoViewModel
     {

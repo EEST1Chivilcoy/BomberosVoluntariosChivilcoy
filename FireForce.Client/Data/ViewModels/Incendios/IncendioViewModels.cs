@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using FireForce.Core.Data.Enums;
 
-namespace FireForce.Core.Data.ViewModels.Incendios;
-using FireForce.Core.Data.Models.Salidas.Componentes;
+namespace FireForce.Client.Data.ViewModels.Incendios;
+
 public class IncendioViewModels : SalidasViewModels
 {
     // --- Propiedades específicas para incendios ---

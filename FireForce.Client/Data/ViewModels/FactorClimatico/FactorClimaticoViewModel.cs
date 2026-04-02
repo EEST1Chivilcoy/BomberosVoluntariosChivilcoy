@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using FireForce.Core.Data.Enums;
 
-namespace FireForce.Core.Data.ViewModels.FactorClimatico
+namespace FireForce.Client.Data.ViewModels.FactorClimatico
 {
     public class FactorClimaticoViewModel : SalidasViewModels
     {

@@ -3,7 +3,7 @@ using FireForce.Core.Data.Models.Grupos.Dependencias.EquiposAutonomos;
 using Microsoft.EntityFrameworkCore;
 using FireForce.Core.Data.Enums;
 
-namespace FireForce.Core.Services
+namespace FireForce.Client.Services
 {
     public interface IEquipoAutonomoService
     {

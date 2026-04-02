@@ -1,24 +1,20 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using FireForce.Core.Data.Models.Personas.Personal;
 using FireForce.Core.Data.Models.Salidas.Planillas;
 using FireForce.Core.Data.Models.Salidas.Componentes;
-using FireForce.Core.Data.ViewModels;
 using FireForce.Core.Data.Models.Grupos.FuerzasIntervinientes;
-using FireForce.Core.Data.ViewModels.Personal;
-using FireForce.Core.Data.ViewModels.Rescates;
-using FireForce.Core.Data.Models.Personas;
-using FireForce.Core.Data.ViewModels.Incendios;
-using FireForce.Core.Data.ViewModels.FactorClimatico;
-using FireForce.Core.Data.ViewModels.Accidente;
-using FireForce.Core.Data.ViewModels.MaterialesPeligrosos;
 using FireForce.Core.Data.Models.Salidas.Planillas.Servicios;
 using FireForce.Core.Data.Models.Salidas.Planillas.Incendios;
-using FireForce.Core.Data.ViewModels.Servicios;
 using FireForce.Core.Data.Enums.Salidas;
+using FireForce.Client.Data.ViewModels.Accidente;
+using FireForce.Client.Data.ViewModels.Incendios;
+using FireForce.Client.Data.ViewModels;
+using FireForce.Client.Data.ViewModels.Servicios;
+using FireForce.Client.Data.ViewModels.FactorClimatico;
+using FireForce.Client.Data.ViewModels.MaterialesPeligrosos;
+using FireForce.Client.Data.ViewModels.Personal;
+using FireForce.Client.Data.ViewModels.Rescates;
 
-namespace FireForce.Core.Data.Mappers
+namespace FireForce.Client.Data.Mappers
 {
     public static class SalidasMapper
     {

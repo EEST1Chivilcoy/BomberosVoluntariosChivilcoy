@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace FireForce.Core.DTOs.Nominatim.Raw
+namespace FireForce.Shared.DTOs.Nominatim.Raw
 {
     public class NominatimRaw
     {

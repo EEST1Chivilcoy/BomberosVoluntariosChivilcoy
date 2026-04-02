@@ -1,12 +1,11 @@
-﻿using DocumentFormat.OpenXml.Drawing;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using FireForce.Core.Data;
-using FireForce.Core.Data.Models.Personas.Personal;
 using FireForce.Core.Data.Models.Socios;
 using FireForce.Core.Data.Models.Socios.Componentes;
-using FireForce.Core.Helpers;
+using FireForce.Client.Helpers;
+using FireForce.Core.Data.Enums.Socios;
 
-namespace FireForce.Core.Services
+namespace FireForce.Client.Services
 {
     public interface ISocioService
     {
@@ -73,8 +72,8 @@ namespace FireForce.Core.Services
                     FechaDesde = socio.FechaIngresoSistemaNuevo,
                     FechaHasta = null, // Vigente
                     Monto = socio.MontoCuota,
-                    FormaDePago = socio.FormaPago ?? Data.Enums.Socios.FormaDePago.Efectivo,
-                    FrecuenciaDePago = socio.FrecuenciaDePago ?? Data.Enums.Socios.FrecuenciaPago.Mensual,
+                    FormaDePago = socio.FormaPago ?? FormaDePago.Efectivo,
+                    FrecuenciaDePago = socio.FrecuenciaDePago ?? FrecuenciaPago.Mensual,
                     Motivo = "Alta de socio en el sistema (Cuota)",
                     SocioId = socio.Id
                 };
@@ -86,7 +85,7 @@ namespace FireForce.Core.Services
                 {
                     FechaDesde = socio.FechaIngresoSistemaNuevo,
                     FechaHasta = null, // Vigente
-                    Estado = socio.EstadoSocio ?? Data.Enums.Socios.TipoEstadoSocio.Activo,
+                    Estado = socio.EstadoSocio ?? TipoEstadoSocio.Activo,
                     Motivo = "Alta de socio en el sistema (Estado)",
                     SocioId = socio.Id
                 };
@@ -192,8 +191,8 @@ namespace FireForce.Core.Services
                     var movimientoCuota = new MovimientoCambioCuota
                     {
                         Monto = socio.MontoCuota,
-                        FormaDePago = socio.FormaPago ?? Data.Enums.Socios.FormaDePago.Efectivo,
-                        FrecuenciaDePago = socio.FrecuenciaDePago ?? Data.Enums.Socios.FrecuenciaPago.Mensual,
+                        FormaDePago = socio.FormaPago ?? FormaDePago.Efectivo,
+                        FrecuenciaDePago = socio.FrecuenciaDePago ?? FrecuenciaPago.Mensual,
                     };
 
                     await _historialSocioService.CrearMovimientoSocio(socioId: socio.Id, movimientoCuota);
@@ -206,7 +205,7 @@ namespace FireForce.Core.Services
                     // El servicio de historial se encargará de cerrar el movimiento anterior
                     var movimientoEstado = new MovimientoCambioEstado
                     {
-                        Estado = socio.EstadoSocio ?? Data.Enums.Socios.TipoEstadoSocio.Activo,
+                        Estado = socio.EstadoSocio ?? TipoEstadoSocio.Activo,
                         Motivo = $"Cambio de estado de {SocioAEditar.EstadoSocio} a {socio.EstadoSocio}",
                     };
 

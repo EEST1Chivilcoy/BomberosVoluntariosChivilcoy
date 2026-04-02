@@ -1,4 +1,4 @@
-namespace FireForce.Core.Data.ViewModels
+namespace FireForce.Client.Data.ViewModels
 {
     /// <summary>
     /// Combina las capacidades de clonación y actualización para ViewModels editables.

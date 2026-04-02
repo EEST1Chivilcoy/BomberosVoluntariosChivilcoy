@@ -1,6 +1,6 @@
 ﻿using FireForce.Core.Data.Enums;
 
-namespace FireForce.Core.Pages.Vehiculos.ViewModel
+namespace FireForce.Client.Pages.Vehiculos.ViewModel
 {
     public class UnidadSimpleViewModel
     {

@@ -1,7 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using FireForce.Core.Data.Enums.Personal.ComisionDirectiva;
+using FireForce.Shared.ViewModels.Personal;
 
-namespace FireForce.Core.Data.ViewModels.Personal
+namespace FireForce.Client.Data.ViewModels.Personal
 {
     /// <summary>
     /// ViewModel para representar a un miembro de la Comisión Directiva de la Asociación de Bomberos Voluntarios de Chivilcoy.

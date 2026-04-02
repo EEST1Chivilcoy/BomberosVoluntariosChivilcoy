@@ -1,4 +1,4 @@
-﻿namespace FireForce.Core.DTOs.Nominatim
+﻿namespace FireForce.Shared.DTOs.Nominatim
 {
     public class NominatimResponse
     {

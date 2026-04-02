@@ -1,5 +1,5 @@
 using Microsoft.Extensions.Caching.Memory;
-using FireForce.Core.DTOs.Nominatim;
+using FireForce.Shared.DTOs.Nominatim;
 
 namespace FireForce.Core.Services;
 

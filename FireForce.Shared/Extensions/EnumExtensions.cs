@@ -1,8 +1,7 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
-namespace FireForce.Core.Shared
+namespace FireForce.Shared.Extensions
 {
     public static class EnumExtensions
     {

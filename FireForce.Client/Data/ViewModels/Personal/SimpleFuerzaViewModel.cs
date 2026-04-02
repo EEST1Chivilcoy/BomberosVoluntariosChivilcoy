@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FireForce.Core.Data.ViewModels.Personal
+namespace FireForce.Client.Data.ViewModels.Personal
 {
     /// <summary>
     /// ViewModel simple para representar una fuerza interviniente con solo Id y Nombre.

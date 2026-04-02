@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace FireForce.Core.Data.ViewModels.Servicios
+﻿namespace FireForce.Client.Data.ViewModels.Servicios
 {
     public class ServicioEspecialFalsaAlarmaViewModel : ServicioEspecialViewModel
     {

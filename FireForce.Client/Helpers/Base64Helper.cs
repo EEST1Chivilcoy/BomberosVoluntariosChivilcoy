@@ -1,4 +1,4 @@
-﻿namespace FireForce.Core.Helpers
+﻿namespace FireForce.Client.Helpers
 {
     public static class Base64Helper
     {

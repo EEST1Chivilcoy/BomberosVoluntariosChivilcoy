@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using FireForce.Core.Data.Enums;
 
-namespace FireForce.Core.Data.ViewModels.MaterialesPeligrosos
+namespace FireForce.Client.Data.ViewModels.MaterialesPeligrosos
 {
     public class MaterialPeligrosoViewModels : SalidasViewModels
     {

@@ -1,13 +1,9 @@
-﻿using AntDesign;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
-using FireForce.Core.Data;
+﻿using FireForce.Core.Data;
 using FireForce.Core.Data.Models.Imagenes;
-using FireForce.Core.Data.Models.Personas.Personal;
-using FireForce.Core.DTOs;
-using FireForce.Core.Helpers;
+using FireForce.Client.Helpers;
+using FireForce.Shared.DTOs;
 
-namespace FireForce.Core.Services
+namespace FireForce.Client.Services
 {
     public interface IImagenService
     {

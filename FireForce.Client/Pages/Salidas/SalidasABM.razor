@@ -1,7 +1,7 @@
 ﻿@page "/fire-force/Salidas"
-@using Data.Enums.Discriminadores
+@using FireForce.Core.Data.Enums.Discriminadores
 @using System.Globalization;
-@using Data.Enums.Salidas
+@using FireForce.Core.Data.Enums.Salidas
 @inject IJSRuntime JS
 
 @using Microsoft.AspNetCore.Authorization
@@ -415,7 +415,7 @@
 </style>
 
 @*Servicios Utilizados*@
-@using FireForce.Core.Services
+@using FireForce.Client.Services
 @inject ISalidaService SalidaService
 @inject IMessageService MessageService
 @inject NavigationManager NavigationManager

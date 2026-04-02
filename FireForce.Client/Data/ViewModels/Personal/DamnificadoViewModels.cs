@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using FireForce.Core.Data.Enums;
 
-namespace FireForce.Core.Data.ViewModels.Personal
+namespace FireForce.Client.Data.ViewModels.Personal
 {
     public class DamnificadoViewModel : IEditableViewModel<DamnificadoViewModel>
     {

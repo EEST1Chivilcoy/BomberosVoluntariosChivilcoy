@@ -1,6 +1,6 @@
 ﻿using FireForce.Core.Data.Enums.Salidas;
 
-namespace FireForce.Core.Data.ViewModels.Servicios
+namespace FireForce.Client.Data.ViewModels.Servicios
 {
     public class ServicioEspecialViewModel : SalidasViewModels
     {

@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using FireForce.Core.Data;
 using FireForce.Core.Data.Models.Otros.Partes;
-using FireForce.Core.Helpers;
+using FireForce.Client.Helpers;
 
-namespace FireForce.Core.Services
+namespace FireForce.Client.Services
 {
     public interface IParteVehiculoService
     {

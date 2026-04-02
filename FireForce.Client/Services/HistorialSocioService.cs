@@ -1,14 +1,10 @@
-﻿using AntDesign;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using FireForce.Core.Data;
 using FireForce.Core.Data.Enums.Socios;
-using FireForce.Core.Data.Models.Imagenes;
-using FireForce.Core.Data.Models.Personas.Personal;
-using FireForce.Core.Data.Models.Socios;
 using FireForce.Core.Data.Models.Socios.Componentes;
-using FireForce.Core.Helpers;
+using FireForce.Client.Helpers;
 
-namespace FireForce.Core.Services
+namespace FireForce.Client.Services
 {
     public interface IHistorialSocioService
     {

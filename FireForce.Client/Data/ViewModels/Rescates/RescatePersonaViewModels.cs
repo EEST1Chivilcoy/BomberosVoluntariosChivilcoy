@@ -1,7 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-using FireForce.Core.Data.Enums;
+﻿using FireForce.Core.Data.Enums;
 
-namespace FireForce.Core.Data.ViewModels.Rescates
+namespace FireForce.Client.Data.ViewModels.Rescates
 {
     public class RescatePersonaViewModels : RescateViewModels
     {

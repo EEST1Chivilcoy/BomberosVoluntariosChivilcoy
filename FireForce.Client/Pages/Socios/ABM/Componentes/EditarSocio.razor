@@ -1,10 +1,11 @@
 ﻿@using FireForce.Core.Data.Enums.Socios
 @using FireForce.Core.Data.Enums.Discriminadores
 @using FireForce.Core.Data.Models.Socios
-@using FireForce.Core.DTOs.Nominatim
+@using FireForce.Shared.DTOs.Nominatim
 
 @*Servicios Utilizados*@
-@using FireForce.Core.Services
+@using FireForce.Client.Services
+@using FireForce.Shared.Services
 @inject NavigationManager navigationManager
 @inject INominatimService GeorefService
 @inject ISocioService SocioService
@@ -602,14 +603,14 @@
 
             if (socioView is SocioPersonaViewModel socioPersonaView)
             {
-                socio.Tipo = Data.Enums.Discriminadores.TipoSocio.Persona;
+                socio.Tipo = Core.Data.Enums.Discriminadores.TipoSocio.Persona;
                 socio.DocumentoOCUIT = socioPersonaView.Documento;
                 socio.Apellido = socioPersonaView.Apellido;
                 socio.FechaNacimiento = socioPersonaView.FechaNacimiento;
             }
             else if (socioView is SocioEmpresaViewModel socioEmpresaView)
             {
-                socio.Tipo = Data.Enums.Discriminadores.TipoSocio.Empresa;
+                socio.Tipo = Core.Data.Enums.Discriminadores.TipoSocio.Empresa;
                 socio.DocumentoOCUIT = socioEmpresaView.CUIT;
             }
 

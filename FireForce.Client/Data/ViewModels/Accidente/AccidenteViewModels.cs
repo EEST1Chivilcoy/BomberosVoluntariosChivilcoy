@@ -1,9 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using FireForce.Core.Data.Enums;
-using FireForce.Core.Data.Models.Salidas.Componentes;
-using FireForce.Core.Data.ViewModels.Personal;
 
-namespace FireForce.Core.Data.ViewModels.Accidente
+namespace FireForce.Client.Data.ViewModels.Accidente
 {
     public class AccidenteViewModels : SalidasViewModels
     {

@@ -1,7 +1,6 @@
 ﻿using FireForce.Core.Data.Enums.Socios;
-using FireForce.Core.Data.Models.Socios.Componentes;
 
-namespace FireForce.Core.Services
+namespace FireForce.Client.Services
 {
     public interface ISaldoSocioService
     {

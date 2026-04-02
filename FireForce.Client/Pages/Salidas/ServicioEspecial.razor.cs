@@ -2,19 +2,16 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using FireForce.Core.Data.Models.Personas.Personal;
 using FireForce.Core.Data.Models.Salidas.Planillas;
-using FireForce.Core.Services;
-using AntDesign;
 using FireForce.Core.Data.Models.Vehiculos.Flota;
-using FireForce.Core.Data.Mappers;
 using FireForce.Core.Data.Enums.Salidas;
 using FireForce.Core.Data.Enums;
-using FireForce.Core.Data.ViewModels;
-using FireForce.Core.Data.ViewModels.Servicios;
-using FireForce.Core.Data.Models.Salidas.Planillas.Servicios;
 using FireForce.Core.Data.Enums.Discriminadores;
-using FireForce.Core.Data.ViewModels.Personal;
+using FireForce.Client.Data.ViewModels;
+using FireForce.Client.Data.ViewModels.Personal;
+using FireForce.Client.Data.Mappers;
+using FireForce.Client.Data.ViewModels.Servicios;
 
-namespace FireForce.Core.Pages.Salidas
+namespace FireForce.Client.Pages.Salidas
 {
     public partial class ServicioEspecial
     {
@@ -62,7 +59,7 @@ namespace FireForce.Core.Pages.Salidas
                 if (salidaAEditar != null)
                 {
                     var todasLasFuerzas = await FuerzaIntervinienteService.ObtenerTodasLasFuerzasAsync();
-                    var fuerzasVM = todasLasFuerzas.Select(f => new Core.Data.ViewModels.Personal.SimpleFuerzaViewModel { Id = f.Id, Nombre = f.NombreFuerza }).ToList();
+                    var fuerzasVM = todasLasFuerzas.Select(f => new SimpleFuerzaViewModel { Id = f.Id, Nombre = f.NombreFuerza }).ToList();
 
                     ServicioEspecialViewModel = salidaAEditar.ToViewModel(fuerzasVM);
                 }

@@ -1,11 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
 using FireForce.Core.Data;
-using FireForce.Core.Data.Models.Grupos.Dependencias;
 using FireForce.Core.Data.Models.Grupos.FuerzasIntervinientes;
-using FireForce.Core.Data.Models.Personas.Personal;
 
-namespace FireForce.Core.Services
+namespace FireForce.Client.Services
 {
     public interface IFuerzaIntervinienteService
     {

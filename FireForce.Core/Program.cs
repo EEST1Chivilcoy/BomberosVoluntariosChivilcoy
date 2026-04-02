@@ -1,12 +1,7 @@
 using AntDesign;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Server.Circuits;
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Localization;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.Identity.Web;
@@ -15,6 +10,8 @@ using System.Globalization;
 using System.Security.Claims;
 using FireForce.Core.Data;
 using FireForce.Core.Services;
+using FireForce.Client.Services;
+using FireForce.Shared.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

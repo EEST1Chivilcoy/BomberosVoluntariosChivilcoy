@@ -1,20 +1,11 @@
-﻿using AntDesign;
-using DocumentFormat.OpenXml.InkML;
-using Microsoft.AspNetCore.Components;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
 using FireForce.Core.Data;
-using FireForce.Core.Data.Enums;
-using FireForce.Core.Data.Enums.Personal.ComisionDirectiva;
-using FireForce.Core.Data.Models.Grupos.Brigadas;
 using FireForce.Core.Data.Models.Imagenes;
 using FireForce.Core.Data.Models.Personas.Personal;
 using FireForce.Core.Data.Models.Personas.Personal.Componentes;
-using FireForce.Core.Data.ViewModels.Personal;
-using FireForce.Core.Helpers;
+using FireForce.Client.Helpers;
 
-namespace FireForce.Core.Services
+namespace FireForce.Client.Services
 {
     public interface ICobradorService
     {

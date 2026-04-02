@@ -1,5 +1,4 @@
-﻿
-namespace FireForce.Core.Data.ViewModels.Reportes
+﻿namespace FireForce.Client.Data.ViewModels.Reportes
 {
     public class ReporteGeneralViewModels
     {

@@ -2,7 +2,7 @@
 using FireForce.Core.Data;
 using FireForce.Core.Data.Models.Personas.Personal.Componentes;
 
-namespace FireForce.Core.Services
+namespace FireForce.Client.Services
 {
     public interface ISancionService
     {

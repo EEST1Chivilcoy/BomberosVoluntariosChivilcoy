@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using AntDesign;
-using AntDesign.Core.Extensions;
+﻿using System.Reflection;
 using ClosedXML.Excel;
 
-namespace FireForce.Core.Pages.Reportes
+namespace FireForce.Client.Helpers
 {
     public class CrearExcel
     {
-
         public byte[] ExportarEnExcel<T>(IEnumerable<T> data) where T : class
         {
             using (var workbook = new XLWorkbook())

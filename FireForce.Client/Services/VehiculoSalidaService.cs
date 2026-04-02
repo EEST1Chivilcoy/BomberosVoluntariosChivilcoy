@@ -1,14 +1,11 @@
-﻿using DocumentFormat.OpenXml.Office2010.Excel;
-using DocumentFormat.OpenXml.Office2016.Drawing.Command;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using FireForce.Core.Data;
 using FireForce.Core.Data.Enums;
 using FireForce.Core.Data.Models.Imagenes;
-using FireForce.Core.Data.Models.Personas.Personal;
 using FireForce.Core.Data.Models.Vehiculos.Flota;
-using FireForce.Core.Helpers;
+using FireForce.Client.Helpers;
 
-namespace FireForce.Core.Services
+namespace FireForce.Client.Services
 {
     public interface IVehiculoSalidaService
     {

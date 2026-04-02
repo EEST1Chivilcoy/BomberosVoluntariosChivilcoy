@@ -2,19 +2,14 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using FireForce.Core.Data.Models.Personas.Personal;
 using FireForce.Core.Data.Models.Salidas.Planillas;
-using FireForce.Core.Services;
-using AntDesign;
 using FireForce.Core.Data.Models.Vehiculos.Flota;
-using FireForce.Core.Data.Mappers;
-using FireForce.Core.Data.Enums.Salidas;
-using System.Threading.Tasks;
-using FireForce.Core.Data.ViewModels.Personal;
 using FireForce.Core.Data.Enums;
 using FireForce.Core.Data.Enums.Discriminadores;
-using FireForce.Core.Data.ViewModels;
-using FireForce.Core.Data.ViewModels.MaterialesPeligrosos;
+using FireForce.Client.Data.ViewModels.MaterialesPeligrosos;
+using FireForce.Client.Data.ViewModels.Personal;
+using FireForce.Client.Data.Mappers;
 
-namespace FireForce.Core.Pages.Salidas
+namespace FireForce.Client.Pages.Salidas
 {
     public partial class MaterialesPeligrosos
     {

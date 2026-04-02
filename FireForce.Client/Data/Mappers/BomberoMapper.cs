@@ -1,8 +1,7 @@
-﻿using FireForce.Core.Data.Models.Personas.Personal;
-using FireForce.Core.Data.ViewModels.Personal;
-using System.Linq;
+﻿using FireForce.Client.Data.ViewModels.Personal;
+using FireForce.Core.Data.Models.Personas.Personal;
 
-namespace FireForce.Core.Data.Mappers
+namespace FireForce.Client.Data.Mappers
 {
     public static class BomberoMapper
     {

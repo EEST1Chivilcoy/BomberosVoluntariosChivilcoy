@@ -1,6 +1,6 @@
 @using FireForce.Core.Data.Models.Socios.Componentes.Pagos
 @using FireForce.Core.Data.Enums.Socios
-@using FireForce.Core.Pages.Socios.Cobranza
+@using FireForce.Client.Pages.Socios.Cobranza
 
 @inject IMessageService MessageService
 
@@ -118,7 +118,7 @@
                 Monto = MontoAPagar,
                 Fecha = FechaCobro,
                 Estado = EstadoPago.PendienteAConfirmar,
-                Tipo = Data.Enums.Discriminadores.TipoPagoSocio.Efectivo
+                Tipo = Core.Data.Enums.Discriminadores.TipoPagoSocio.Efectivo
             };
 
             await OnPagoConfirmado.InvokeAsync(pago);

@@ -1,13 +1,14 @@
-﻿@using Microsoft.AspNetCore.Components.Forms
+﻿@using FireForce.Shared.Services
+@using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components
 @using System.ComponentModel.DataAnnotations
 @using System.Text.Json
-@using FireForce.Core.Data.Mappers
+@using FireForce.Client.Data.Mappers
 @using System.ComponentModel
 @using FireForce.Core.Data.Models.Personas.Personal
 @using FireForce.Core.Data.Models.Personas.Personal.Componentes
 @using FireForce.Core.Data.Models.Imagenes
-@using FireForce.Core.Data.ViewModels.Personal
+@using FireForce.Client.Data.ViewModels.Personal
 @using FireForce.Core.Data.Enums.Personal.ComisionDirectiva
 @using FireForce.Core.Data.Enums.Personal.Cobrador
 @using FireForce.Core.Data.Enums.Socios
@@ -18,7 +19,7 @@
 @page "/fire-force/personal/bombero/agregar"
 
 @*Servicios Utilizados*@
-@using FireForce.Core.Services
+@using FireForce.Client.Services
 @inject NavigationManager navigationManager
 @inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
 @inject IMessageService message

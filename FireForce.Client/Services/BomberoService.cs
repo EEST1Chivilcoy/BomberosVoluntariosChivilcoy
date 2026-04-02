@@ -1,13 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
 using FireForce.Core.Data;
 using FireForce.Core.Data.Enums;
 using FireForce.Core.Data.Models.Personas.Personal;
 using FireForce.Core.Data.Models.Personas.Personal.Componentes;
 using FireForce.Core.Data.Models.Imagenes;
-using FireForce.Core.Helpers;
+using FireForce.Client.Helpers;
 
-namespace FireForce.Core.Services
+namespace FireForce.Client.Services
 {
     public interface IBomberoService
     {

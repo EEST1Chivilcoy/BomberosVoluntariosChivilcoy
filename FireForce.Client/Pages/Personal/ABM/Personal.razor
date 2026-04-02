@@ -9,15 +9,15 @@
 @using FireForce.Core.Data.Enums.Personal.Cobrador
 @using FireForce.Core.Data.Models.Personas.Personal
 @using FireForce.Core.Data.Models.Personas.Personal.Componentes
-@using FireForce.Core.Pages.Personal.ABM.Componentes.Bomberos
-@using FireForce.Core.Pages.Personal.ABM.Componentes.Comision
-@using FireForce.Core.Pages.Personal.ABM.Componentes.Cobradores
-@using FireForce.Core.Pages.Personal.ABM.Componentes
-@using FireForce.Core.Data.Mappers
+@using FireForce.Client.Pages.Personal.ABM.Componentes.Bomberos
+@using FireForce.Client.Pages.Personal.ABM.Componentes.Comision
+@using FireForce.Client.Pages.Personal.ABM.Componentes.Cobradores
+@using FireForce.Client.Pages.Personal.ABM.Componentes
+@using FireForce.Client.Data.Mappers
 
 @*Servicios utilizados*@
 
-@using FireForce.Core.Services
+@using FireForce.Client.Services
 @inject IMessageService message
 @inject NavigationManager navigationManager
 
@@ -734,15 +734,15 @@
     {
         @if (TipoPersonal.ToLower() == "comisiondirectiva")
         {
-            <DetallePersonal @key="@($"detalle-comision-{PersonalId}")" PersonalId="@PersonalId" Tipo="Data.Enums.Discriminadores.TipoPersonal.ComisionDirectiva" OnFinishCallback="CloseModals" />
+            <DetallePersonal @key="@($"detalle-comision-{PersonalId}")" PersonalId="@PersonalId" Tipo="Core.Data.Enums.Discriminadores.TipoPersonal.ComisionDirectiva" OnFinishCallback="CloseModals" />
         }
         else if (TipoPersonal.ToLower() == "bomberos")
         {
-            <DetallePersonal @key="@($"detalle-bombero-{PersonalId}")" PersonalId="@PersonalId" Tipo="Data.Enums.Discriminadores.TipoPersonal.Bombero" OnFinishCallback="CloseModals" />
+            <DetallePersonal @key="@($"detalle-bombero-{PersonalId}")" PersonalId="@PersonalId" Tipo="Core.Data.Enums.Discriminadores.TipoPersonal.Bombero" OnFinishCallback="CloseModals" />
         }
         else if (TipoPersonal.ToLower() == "cobradores")
         {
-            <DetallePersonal @key="@($"detalle-cobrador-{PersonalId}")" PersonalId="@PersonalId" Tipo="Data.Enums.Discriminadores.TipoPersonal.Cobrador" OnFinishCallback="CloseModals" />
+            <DetallePersonal @key="@($"detalle-cobrador-{PersonalId}")" PersonalId="@PersonalId" Tipo="Core.Data.Enums.Discriminadores.TipoPersonal.Cobrador" OnFinishCallback="CloseModals" />
         }
     }
 </Modal>

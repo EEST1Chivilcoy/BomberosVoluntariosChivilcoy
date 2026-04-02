@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace FireForce.Core.Data.ViewModels.Rescates
+﻿namespace FireForce.Client.Data.ViewModels.Rescates
 {
     public class RescateViewModels: SalidasViewModels
     {

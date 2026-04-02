@@ -1,22 +1,13 @@
-﻿using DocumentFormat.OpenXml.InkML;
-using DocumentFormat.OpenXml.Presentation;
-using Microsoft.AspNetCore.Components;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using FireForce.Core.Data;
-using FireForce.Core.Data.Enums;
 using FireForce.Core.Data.Models.Personas.Personal;
 using FireForce.Core.Data.Models.Salidas.Componentes;
 using FireForce.Core.Data.Models.Salidas.Planillas;
-using FireForce.Core.Data.Models.Vehiculos.Flota;
-using FireForce.Core.Data.ViewModels.Personal;
-using FireForce.Core.Data.Models.Personas;
-using FireForce.Core.Data.Models.Grupos.FuerzasIntervinientes;
-using FireForce.Core.Helpers;
 
-namespace FireForce.Core.Services
+using FireForce.Client.Helpers;
+
+namespace FireForce.Client.Services
 {
     public interface ISalidaService
     {

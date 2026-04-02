@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FireForce.Core.Helpers
+namespace FireForce.Client.Helpers
 {
     public static class ValidationHelper
     {

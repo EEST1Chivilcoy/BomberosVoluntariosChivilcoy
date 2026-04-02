@@ -1,12 +1,12 @@
 @page "/fire-force/salidas/incendio/{TipoIncendio:int}"
 @page "/fire-force/salidas/incendio/{TipoIncendio:int}/{AnioSalida:int}/{NumeroSalida:int}"
-@using FireForce.Core.Data.ViewModels.Personal;
-@using FireForce.Core.Data.ViewModels.Rescates;
+@using FireForce.Client.Data.ViewModels.Personal;
+@using FireForce.Client.Data.ViewModels.Rescates;
 @using FireForce.Core.Data.Enums.Salidas;
 @using FireForce.Core.Data.Enums.Discriminadores;
 
 @*Servicios Utilizados*@
-@using FireForce.Core.Services
+@using FireForce.Client.Services
 @inject ISalidaService SalidaService
 @inject IBomberoService BomberoService
 @inject IVehiculoSalidaService VehiculoSalidaService

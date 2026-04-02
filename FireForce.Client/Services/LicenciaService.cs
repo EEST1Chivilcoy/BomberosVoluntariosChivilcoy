@@ -1,11 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
 using FireForce.Core.Data;
 using FireForce.Core.Data.Models.Personas.Personal.Componentes;
 using FireForce.Core.Data.Enums;
-using FireForce.Core.Data.Models.Grupos.Dependencias.EquiposAutonomos;
 
-namespace FireForce.Core.Services
+namespace FireForce.Client.Services
 {
     public interface ILicenciaService
     {

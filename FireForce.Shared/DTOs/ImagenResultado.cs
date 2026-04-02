@@ -1,4 +1,4 @@
-﻿namespace FireForce.Core.DTOs
+﻿namespace FireForce.Shared.DTOs
 {
     /// <summary>
     /// DTO para representar el resultado de una imagen.

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using FireForce.Core.Data.Enums;
 
-namespace FireForce.Core.Data.ViewModels.Personal
+namespace FireForce.Shared.ViewModels.Personal
 {
     /// <summary>
     /// ViewModel que representa la información básica de una persona que es parte del personal de los Bomberos Voluntarios de Chivilcoy.

@@ -8,7 +8,7 @@
 @using System.ComponentModel
 @using AntDesign.TableModels
 @using System.Text.Json;
-@using FireForce.Core.Pages.Bomberos;
+@using FireForce.Client.Pages.Bomberos;
 @using FireForce.Core.Data.Models.Grupos.Brigadas;
 @using FireForce.Core.Data.Models.Personas.Personal
 @using FireForce.Core.Data.Models.Personas.Personal.Componentes
@@ -390,7 +390,7 @@
     static DateTime hasta = DateTime.Now;
     static DateTime desde = hasta.AddMonths(-1);
 
-    List<Core.Data.ViewModels.Personal.BomberoViweModel>? BomberosVM = new();
+    List<BomberoViweModel>? BomberosVM = new();
 
     int _pageIndex = 1;
     int _pageSize = 6;
@@ -421,7 +421,7 @@
         foreach (var a in bomberos)
         {
             var contacto = await Context.Contactos.Where(c => c.PersonalId == a.PersonaId).SingleOrDefaultAsync();
-            Core.Data.ViewModels.Personal.BomberoViweModel Bm = new()
+            BomberoViweModel Bm = new()
             {
                 NumeroLegajo = a.NumeroLegajo,
                 Nombre = a.Nombre,

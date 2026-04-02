@@ -1,7 +1,4 @@
-﻿using FireForce.Core.Data.Models.Personas.Personal;
-using FireForce.Core.Data.Models.Vehiculos.Flota;
-
-namespace FireForce.Core.Data.ViewModels.Personal
+﻿namespace FireForce.Client.Data.ViewModels.Personal
 {
     public class MovilSalidaViewModels
     {
