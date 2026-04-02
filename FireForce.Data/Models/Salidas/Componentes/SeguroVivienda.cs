@@ -1,6 +1,6 @@
-﻿using FireForce.Core.Data.Models.Salidas.Planillas;
+﻿using FireForce.Data.Models.Salidas.Planillas;
 
-namespace FireForce.Core.Data.Models.Salidas.Componentes
+namespace FireForce.Data.Models.Salidas.Componentes
 {
     public class SeguroVivienda : Seguro
     {

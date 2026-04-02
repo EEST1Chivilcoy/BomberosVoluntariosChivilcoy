@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace FireForce.Core.Data.Enums.Personal.Cobrador
+namespace FireForce.Shared.Enums.Personal.Cobrador
 {
     /// <summary>
     /// Representa los posibles estados de un cobrador.

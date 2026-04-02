@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using FireForce.Core.Data.Models.Personas.Personal;
 
-namespace FireForce.Core.Data.Models.Personas.Personal.Componentes
+namespace FireForce.Data.Models.Personas.Personal.Componentes
 {
     /// <summary>
     /// Representa los datos de contacto de una persona.

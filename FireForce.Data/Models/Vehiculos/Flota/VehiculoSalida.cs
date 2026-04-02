@@ -1,12 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using FireForce.Core.Data.Enums;
-using FireForce.Core.Data.Models.Imagenes;
-using FireForce.Core.Data.Models.Vehiculos;
-using FireForce.Core.Data.Models.Personas.Personal;
-using FireForce.Core.Data.Models.Personas.Personal.Componentes;
+using FireForce.Shared.Enums;
+using FireForce.Data.Models.Imagenes;
+using FireForce.Data.Models.Personas.Personal;
 
-namespace FireForce.Core.Data.Models.Vehiculos.Flota
+namespace FireForce.Data.Models.Vehiculos.Flota
 {
     public abstract class VehiculoSalida : Vehiculo
     {

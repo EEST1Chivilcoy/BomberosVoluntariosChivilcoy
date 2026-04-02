@@ -1,0 +1,157 @@
+﻿@using FireForce.Data.Models.Vehiculos.Flota
+@using FireForce.Client.Pages.Vehiculos.Componentes
+@using FireForce.Client.Pages.Vehiculos.ViewModel
+@using System.Text.RegularExpressions;
+
+<link rel="stylesheet" href="css/Unidades.css" />
+
+@*Servicios utilizados*@
+@using FireForce.Client.Services
+@inject NavigationManager navigationManager
+@inject IVehiculoSalidaService VehiculoSalidaService
+
+@page "/fire-force/unidades/"
+
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Policy = "AdminOnly")]
+
+<div class="container unidades-abm">
+	<Content class="fade-in" Style="padding: 16px;">
+		<Card Bordered="false"
+			  Style="width: 100%; border-radius: 16px; box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.1); background: #ffffff;">
+			<div class="header-section">
+				<div class="lava-bubbles">
+					<div class="lava-bubble b1"></div>
+					<div class="lava-bubble b2"></div>
+					<div class="lava-bubble b3"></div>
+					<div class="lava-bubble b4"></div>
+					<div class="lava-bubble b5"></div>
+				</div>
+				<div style="display: flex; justify-content: space-between; align-items: center;">
+					<div class="title-container">
+						<h2 class="main-title">
+							<Icon Type="Car" Class="title-icon" /> UNIDADES
+						</h2>
+					</div>
+					<div class="header-actions">
+						<Button Class="modern-button add-button"
+								OnClick="@(() => AgregarVisible = true)">
+							<Icon Type="plus" />Nueva Unidad
+						</Button>
+
+						<div>
+							<EnumSelect TEnum="TipoEstadoMovil"
+										OnSelectedItemChanged="CambioEstado"
+										@bind-Value="@Estado"
+										Size="InputSize.Large"
+										Class="estado-movil-select">
+							</EnumSelect>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div style="margin-top: 24px;">
+				@if (vehiculos is not null)
+				{
+					<div class="vehicles-grid">
+						@foreach (var m in vehiculos)
+						{
+							<VehiculosCarta Vehiculo="m" OnChange="Init" />
+						}
+					</div>
+				}
+				else
+				{
+					<div class="loading-container">
+						<Spin Size="SpinSize.Large" Indicator="@LoadingIcon" />
+					</div>
+				}
+			</div>
+		</Card>
+	</Content>
+
+	<Modal Title=''
+		   Visible="@AgregarVisible"
+		   OnCancel="@(() => AgregarVisible = false)"
+		   Footer="null"
+		   WrapClassName="fullscreen-modal" Style="max-width: unset; width: 100%; top: 0;">
+		<VehiculoAgregar OnClose="CloseVehiculo" />
+	</Modal>
+</div>
+
+@code {
+	RenderFragment LoadingIcon => @<Icon Type="loading" Theme="IconThemeType.Outline" Style="font-size: 24px; color: rgb(62, 24, 24);" Spin />;
+	bool AgregarVisible { get; set; }
+
+	private TipoEstadoMovil Estado = TipoEstadoMovil.Activo;
+	private List<UnidadSimpleViewModel> vehiculos = new();
+
+	private async void CloseVehiculo()
+	{
+		AgregarVisible = false;
+		await Init();
+		StateHasChanged();
+	}
+
+	protected override async Task OnInitializedAsync()
+	{
+		await Init();
+	}
+
+	private async Task CambioEstado()
+	{
+		await Init();
+	}
+
+	private async Task Init()
+	{
+		List<VehiculoSalida> flota = new();
+
+		flota = await VehiculoSalidaService.ObtenerVehiculosSalidasPorEstadoAsync(Estado);
+
+		if (flota != null && flota.Any())
+		{
+			vehiculos = OrdenarVehiculos(MapearVehiculos(flota));
+		}
+		else
+		{
+			vehiculos = new List<UnidadSimpleViewModel>();
+		}
+	}
+
+	private List<UnidadSimpleViewModel> MapearVehiculos(List<VehiculoSalida> vehiculos)
+	{
+		return vehiculos.Select(v => new UnidadSimpleViewModel
+		{
+			Id = v.VehiculoId,
+			NumeroMovil = v.NumeroMovil ?? "-",
+			Estado = v.Estado,
+
+			// Mapeo de Imagen (si existe)
+			ImageUrl = v.Imagen != null ? $"/api/imagenes/{v.Imagen.ImagenId}" : null
+		}).ToList();
+	}
+
+
+	private List<UnidadSimpleViewModel> OrdenarVehiculos(List<UnidadSimpleViewModel> lista)
+	{
+		return lista
+			.OrderBy(v => EsSoloNumero(v.NumeroMovil) ? 0 : 1) // Prioriza los que son solo números
+			.ThenBy(v => ExtraerNumero(v.NumeroMovil))         // Ordena por el número extraído
+			.ToList();
+	}
+
+	private bool EsSoloNumero(string texto)
+	{
+		return Regex.IsMatch(texto, @"^\d+$");
+	}
+
+	private int ExtraerNumero(string texto)
+	{
+		var match = Regex.Match(texto, @"\d+");
+		return match.Success ? int.Parse(match.Value) : int.MaxValue;
+	}
+}

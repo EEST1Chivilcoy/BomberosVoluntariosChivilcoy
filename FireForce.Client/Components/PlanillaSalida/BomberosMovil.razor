@@ -1,0 +1,65 @@
+﻿@using FireForce.Client.Data.ViewModels.Personal;
+@using FireForce.Data.Models.Vehiculos.Flota;
+
+@foreach (var MovilSalio in MovilesQueSalieron)
+{
+    <p style="padding-top: .4em;">
+        <strong>Bomberos que arribaron en el movil: @MovilSalio.Movil.NumeroMovil</strong>
+    </p>
+    <div>
+        @{
+            int BMcount = 0;
+        }
+        <p>
+        @foreach (var BomberoSalida in BomberosSalidas.Where(bs => bs.MovilAsignado?.VehiculoId == MovilSalio.Movil.VehiculoId))
+        {
+            if (BMcount > 0 && BMcount % 3 == 0)
+            {
+                @: </p><p>
+            }
+
+            <span>- [@BomberoSalida.Grado] @BomberoSalida.Bombero.Apellido, @BomberoSalida.Bombero.Nombre</span>
+
+            if (BMcount % 3 != 2)
+            {
+                @: - 
+            }
+
+            BMcount++;
+        }
+        </p>
+    </div>
+}
+
+<p style="padding-top: .4em;">
+    <strong>Bomberos que asistieron al cuartel:</strong>
+</p>
+<div>
+    @{
+        int BCcount = 0;
+    }
+    <p>
+    @foreach (var BomberoSalida in BomberosSalidas.Where(bs => bs.MovilAsignado?.VehiculoId == null))
+    {
+        if (BCcount > 0 && BCcount % 3 == 0)
+        {
+            @: </p><p>
+        }
+
+        <span>- [@BomberoSalida.Grado] @BomberoSalida.Bombero.Apellido, @BomberoSalida.Bombero.Nombre</span>
+
+        if (BCcount % 3 != 2)
+        {
+            @: - 
+        }
+
+        BCcount++;
+    }
+    </p>
+</div>
+
+
+@code {
+    [Parameter] public List<Movil_Salida>? MovilesQueSalieron { get; set; }
+    [Parameter] public List<BomberoSalida>? BomberosSalidas { get; set; }
+}

@@ -1,0 +1,41 @@
+﻿@using FireForce.Client.Data.ViewModels.Personal;
+@using FireForce.Data.Models.Vehiculos.Flota;
+
+<style>
+
+    table {
+        border-collapse: collapse; /* Asegura que los bordes se colapsen juntos */
+    }
+
+    th, td {
+        border: 1px solid black; /* Define un borde sólido de 1px */
+        padding: 8px; /* Añade algo de espacio dentro de las celdas */
+        text-align: left; /* Alinea el texto a la izquierda */
+    }
+
+
+</style>
+
+<table>
+    <thead>
+        <tr>
+            <th>MOVIL</th>
+            <th>KM LLEGADA</th>
+            <th>CHOFER</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var Movil in movilesSalida)
+        {
+            <tr>
+                <td>@Movil.Movil.NumeroMovil</td>
+                <td>@Movil.KmLlegada</td>
+                <td>@($"{Movil.Chofer.Apellido}, {Movil.Chofer.Nombre}")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    [Parameter] public List<Movil_Salida> movilesSalida { get; set; }
+}

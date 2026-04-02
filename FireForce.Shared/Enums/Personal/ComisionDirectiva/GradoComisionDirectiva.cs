@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FireForce.Core.Data.Enums.Personal.ComisionDirectiva
+namespace FireForce.Shared.Enums.Personal.ComisionDirectiva
 {
     public enum GradoComisionDirectiva
     {

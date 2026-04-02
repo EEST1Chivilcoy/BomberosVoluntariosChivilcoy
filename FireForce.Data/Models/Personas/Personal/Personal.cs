@@ -1,12 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using FireForce.Core.Data.Enums;
-using FireForce.Core.Data.Models.Imagenes;
-using FireForce.Core.Data.Models.Personas;
-using FireForce.Core.Data.Models.Personas.Personal.Componentes;
-using FireForce.Core.Data.Models.Vehiculos;
+using FireForce.Data.Models.Imagenes;
+using FireForce.Data.Models.Personas.Personal.Componentes;
+using FireForce.Data.Models.Vehiculos;
+using FireForce.Shared.Enums;
 
-namespace FireForce.Core.Data.Models.Personas.Personal
+namespace FireForce.Data.Models.Personas.Personal
 {
     /// <summary>
     /// Clase abstracta que representa a una persona que es parte del personal de la institución.

@@ -1,15 +1,12 @@
-﻿using FireForce.Core.Data.Enums;
-using FireForce.Core.Data.Models.Salidas.Componentes;
-using FireForce.Core.Data.Models.Grupos;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Runtime.CompilerServices;
-using FireForce.Core.Data.Enums.Salidas;
-using FireForce.Core.Data.Enums.Discriminadores;
-using FireForce.Core.Data.Models.Personas;
-using FireForce.Core.Data.Models.Personas.Personal;
+using FireForce.Shared.Enums.Discriminadores;
+using FireForce.Shared.Enums;
+using FireForce.Data.Models.Personas;
+using FireForce.Data.Models.Salidas.Componentes;
+using FireForce.Data.Models.Personas.Personal;
 
-namespace FireForce.Core.Data.Models.Salidas.Planillas
+namespace FireForce.Data.Models.Salidas.Planillas
 {
 
     public abstract class Salida

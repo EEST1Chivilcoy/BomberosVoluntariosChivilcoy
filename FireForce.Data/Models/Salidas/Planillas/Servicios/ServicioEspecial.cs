@@ -1,8 +1,6 @@
-﻿using FireForce.Core.Data.Enums;
-using FireForce.Core.Data.Models.Salidas.Componentes;
-using System.ComponentModel.DataAnnotations;
+﻿using FireForce.Shared.Enums;
 
-namespace FireForce.Core.Data.Models.Salidas.Planillas.Servicios
+namespace FireForce.Data.Models.Salidas.Planillas.Servicios
 {
     public abstract class ServicioEspecial : Salida
     {

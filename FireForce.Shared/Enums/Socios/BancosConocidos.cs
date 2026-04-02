@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FireForce.Core.Data.Enums.Socios
+namespace FireForce.Shared.Enums.Socios
 {
     /// <summary>
     /// Representa los bancos argentinos conocidos / más usados para pagos electrónicos.

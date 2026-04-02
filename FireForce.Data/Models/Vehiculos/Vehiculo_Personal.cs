@@ -1,8 +1,7 @@
-﻿using FireForce.Core.Data.Models.Salidas.Componentes;
-using System.ComponentModel.DataAnnotations.Schema;
-using FireForce.Core.Data.Models.Personas.Personal;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using FireForce.Data.Models.Personas.Personal;
 
-namespace FireForce.Core.Data.Models.Vehiculos
+namespace FireForce.Data.Models.Vehiculos
 {
     public class Vehiculo_Personal : Vehiculo
     {

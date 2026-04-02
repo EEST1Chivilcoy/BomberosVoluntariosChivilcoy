@@ -1,0 +1,419 @@
+﻿@implements IDisposable
+@using System.ComponentModel.DataAnnotations
+@using FireForce.Data.Models.Personas.Personal
+@using FireForce.Data.Models.Personas.Personal.Componentes
+@using FireForce.Client.Services
+
+@inject IBomberoService BomberoService
+@inject NavigationManager navigationManager
+@inject IDbContextFactory<BomberosDbContext> DbFactory
+@inject IMessageService message
+<style>
+    .modal-crear-ascenso .ant-modal-content {
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        border: 2px solid #732D2D;
+        margin-top: -50px;
+        margin-bottom: 0px;
+    }
+
+    .modal-crear-ascenso .ant-modal-title {
+        color: white !important;
+    }
+
+    .modal-crear-ascenso .ant-modal-header {
+            background-color: #A63333;
+            padding: 16px 24px;
+
+    }
+    .modal-crear-ascenso-content {
+        padding: 24px;
+    }
+    .modal-crear-ascenso-form-item {
+        margin-bottom: 20px;
+        position: relative;
+        padding-left: 10px;
+    }
+    .modal-crear-ascenso-form-item .ant-form-item-label > label,
+    .modal-crear-ascenso-form-full-width .ant-form-item-label > label {
+        font-weight: 600;
+        color: #434343;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        transition: color 0.3s ease;
+    }
+    .modal-crear-ascenso-form-item .ant-form-item-label > label:hover,
+    .modal-crear-ascenso-form-full-width .ant-form-item-label > label:hover {
+        color: #A63333;
+    }
+    .modal-crear-ascenso .ant-input:focus,
+    .modal-crear-ascenso .ant-input:hover,
+    .modal-crear-ascenso .ant-select-selector:focus,
+    .modal-crear-ascenso .ant-select-selector:hover,
+    .modal-crear-ascenso .ant-picker:focus,
+    .modal-crear-ascenso .ant-picker:hover,
+    .modal-crear-ascenso .ant-picker-input > input:focus,
+    .modal-crear-ascenso .ant-picker-input > input:hover,
+    .modal-crear-ascenso .ant-input-number-input:focus,
+    .modal-crear-ascenso .ant-input-number-input:hover,
+    .modal-crear-ascenso .ant-textarea:focus,
+    .modal-crear-ascenso .ant-textarea:hover {
+        border-color: #FFD700 !important;
+        box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
+    }
+    .modal-crear-ascenso .ant-picker,
+    .modal-crear-ascenso .ant-input,
+    .modal-crear-ascenso .ant-select-selector,
+    .modal-crear-ascenso .ant-input-number,
+    .modal-crear-ascenso .ant-textarea {
+        border-radius: 8px !important;
+        border: 1px solid #d9d9d9 !important;
+        background: #fff !important;
+        color: #434343 !important;
+        transition: all 0.3s ease !important;
+    }
+    .modal-crear-ascenso-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 18px;
+        margin-bottom: 0px;
+    }
+    .modal-crear-ascenso .ant-btn-primary {
+        background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
+        border: none !important;
+        color: #fff !important;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
+        margin-top:  0;
+        margin-bottom: 0;
+        padding: 0 20px !important;
+    }
+    .modal-crear-ascenso .ant-btn-primary:hover {
+        background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
+        color: #fff !important;
+    }
+    .grado-error {
+        color: #ff4d4f;
+        font-size: 12px;
+        margin-top: 4px;
+    }
+</style>
+
+<Modal Visible="@Visible"
+       Title="Nuevo Ascenso"
+       Width=@("100%")
+       Style="max-width: 800px;"
+       Footer="null"
+       DestroyOnClose
+       WrapClassName="modal-crear-ascenso"
+       OnCancel="@(() => OnClose.InvokeAsync())">
+    <div class="modal-crear-ascenso-content">
+        <Form Model="AscensoVM"
+              Layout="FormLayout.Vertical"
+              Class="modal-crear-ascenso-form"
+              OnFinish="OnFinish"
+              OnFinishFailed="OnFinishFailed">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <Row Class="modal-crear-ascenso-row" Gutter="16">
+                <AntDesign.Col Span="12">
+                    <FormItem Label="👤 Personal Afectado" Required Class="modal-crear-ascenso-form-item">
+                        <Select TItem="BomberoViweModel"
+                                TItemValue="int"
+                                DataSource="@BomberoTodos"
+                                @bind-Value="@Bombero"
+                                LabelName="@nameof(BomberoViweModel.NombreYApellido)"
+                                ValueName="@nameof(BomberoViweModel.NumeroLegajo)"
+                                Placeholder="Seleccione Bombero Encargado"
+                                DefaultActiveFirstOption="false"
+                                OnSelectedItemChanged="HandleChange"
+                                EnableSearch />
+                    </FormItem>
+                </AntDesign.Col>
+                <AntDesign.Col Span="12">
+                    <FormItem Label="📅 Fecha de Ascenso" Required Class="modal-crear-ascenso-form-item">
+                        <DatePicker TValue="DateTime" DefaultValue="DateTime.Now" @bind-Value="AscensoVM.FechaAscenso" />
+                    </FormItem>
+                </AntDesign.Col>
+            </Row>
+            <AntDesign.Col Span="24" Class="modal-crear-ascenso-form-full-width">
+                <FormItem Label="📝 Descripción" Class="modal-crear-ascenso-form-item">
+                    <TextArea @bind-Value="AscensoVM.Descripcion" 
+                              Rows="4"
+                              ShowCounts
+                              MaxLength="500"/>
+                </FormItem>
+            </AntDesign.Col>
+            <Row Class="modal-crear-ascenso-row" Gutter="16">
+                <AntDesign.Col Span="12">
+                    <FormItem Label="🎖️ Grado anterior" Class="modal-crear-ascenso-form-item">
+                        <Input Value="@AscensoVM.GradoAntiguo.GetDisplayName()" ReadOnly />
+                    </FormItem>
+                </AntDesign.Col>
+                <AntDesign.Col Span="12">
+                    <FormItem Label="🎖️ Grado ascenso" Required Class="modal-crear-ascenso-form-item">
+                        <Select TItem="EscalafonJerarquico"
+                                TItemValue="EscalafonJerarquico"
+                                DataSource="@GradosDisponiblesParaAscenso"
+                                @bind-Value="@AscensoVM.GradoAscenso"
+                                Placeholder="Seleccione grado de ascenso"
+                                DefaultActiveFirstOption="false"
+                                Disabled="@(AscensoVM.GradoAntiguo == EscalafonJerarquico.Jefe)"
+                                OnSelectedItemChanged="@OnGradoAscensoChange">
+                            <LabelTemplate Context="item">
+                                @item.GetDisplayName()
+                            </LabelTemplate>
+                            <ItemTemplate Context="item">
+                                @item.GetDisplayName()
+                            </ItemTemplate>
+                        </Select>
+                        @if (AscensoVM.GradoAntiguo == EscalafonJerarquico.Jefe)
+                        {
+                            <div class="grado-error">Ya se encuentra en el grado máximo</div>
+                        }
+                        @if (!string.IsNullOrEmpty(gradoAscensoError))
+                        {
+                            <div class="grado-error">@gradoAscensoError</div>
+                        }
+                    </FormItem>
+                </AntDesign.Col>
+            </Row>
+            <Row Class="modal-crear-ascenso-row" Gutter="16">
+                <AntDesign.Col Span="12">
+                    <FormItem Label="📚 Número de libro" Required Class="modal-crear-ascenso-form-item">
+                        <Input @bind-Value="AscensoVM.NumeroLibro" />
+                        <ValidationMessage For="() => AscensoVM.NumeroLibro" />
+                    </FormItem>
+                </AntDesign.Col>
+                <AntDesign.Col Span="12">
+                    <FormItem Label="📄 Número de acta" Required Class="modal-crear-ascenso-form-item">
+                        <Input @bind-Value="AscensoVM.NumeroActa" />
+                        <ValidationMessage For="() => AscensoVM.NumeroActa" />
+                    </FormItem>
+                </AntDesign.Col>
+            </Row>
+            <div class="modal-crear-ascenso-footer">
+                <Button Class="boton_p ant-btn-primary" HtmlType="submit">
+                    Ascender Bombero
+                </Button>
+                <Button Type="ButtonType.Default" OnClick="@(() => OnClose.InvokeAsync())">
+                    Cancelar
+                </Button>
+            </div>
+        </Form>
+    </div>
+</Modal>
+
+
+
+
+@code {
+    [Parameter] public EventCallback OnClose { get; set; }
+    [Parameter] public bool Visible { get; set; }
+    List<BomberoViweModel> BomberoTodos = new List<BomberoViweModel>();
+    public Bombero[]? bomberos;
+    public int Bombero { get; set; }
+    BomberosDbContext Context { get; set; }
+    AscensoViewModel AscensoVM { get; set; } = new AscensoViewModel();
+    private string gradoAscensoError = string.Empty;
+
+    // Computed property para obtener grados disponibles para ascenso
+    private List<EscalafonJerarquico> GradosDisponiblesParaAscenso
+    {
+        get
+        {
+            if (AscensoVM.GradoAntiguo == EscalafonJerarquico.Jefe)
+            {
+                return new List<EscalafonJerarquico>();
+            }
+
+            // Retorna solo los grados con valor numérico menor (mayor jerarquía)
+            return Enum.GetValues<EscalafonJerarquico>()
+                .Where(g => (int)g < (int)AscensoVM.GradoAntiguo)
+                .OrderBy(g => (int)g)
+                .ToList();
+        }
+    }
+
+    private void OnGradoAscensoChange(EscalafonJerarquico gradoSeleccionado)
+    {
+        ValidateGradoAscenso();
+    }
+
+    private void ValidateGradoAscenso()
+    {
+        gradoAscensoError = string.Empty;
+
+        if (AscensoVM.GradoAscenso == default(EscalafonJerarquico))
+        {
+            return;
+        }
+
+        // Validar que el nuevo grado sea superior (menor valor numérico)
+        if ((int)AscensoVM.GradoAscenso >= (int)AscensoVM.GradoAntiguo)
+        {
+            gradoAscensoError = "El grado de ascenso debe ser superior al grado actual";
+            AscensoVM.GradoAscenso = default(EscalafonJerarquico);
+        }
+
+        StateHasChanged();
+    }
+
+    private async void HandleChange()
+    {
+        Bombero bombero = Context.Bomberos.Where(b => b.NumeroLegajo == Bombero).SingleOrDefault();
+        if (bombero != null)
+        {
+            AscensoVM.GradoAntiguo = bombero.Grado;
+            AscensoVM.GradoAscenso = default(EscalafonJerarquico); // Reset grado ascenso
+            gradoAscensoError = string.Empty;
+            StateHasChanged();
+        }
+    }
+
+    // View Model with validation
+
+    public class AscensoViewModel : IValidatableObject
+    {
+        public Bombero PersonalAfectado { get; set; }
+
+        [Required(ErrorMessage = "La fecha de ascenso es obligatoria.")]
+        public DateTime FechaAscenso { get; set; }
+
+        public string Descripcion { get; set; }
+
+        public EscalafonJerarquico GradoAntiguo { get; set; }
+
+        public EscalafonJerarquico GradoAscenso { get; set; }
+
+        [Range(1, int.MaxValue, ErrorMessage = "El número de libro debe ser mayor que 0.")]
+        public int NumeroLibro { get; set; }
+
+        [Range(1, int.MaxValue, ErrorMessage = "El número de acta debe ser mayor que 0.")]
+        public int NumeroActa { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            // Validar que GradoAscenso sea superior (menor valor numérico) a GradoAntiguo
+            if (GradoAscenso != default(EscalafonJerarquico) && (int)GradoAscenso >= (int)GradoAntiguo)
+            {
+                yield return new ValidationResult(
+                    "El grado de ascenso debe ser superior al grado actual.",
+                    new[] { nameof(GradoAscenso) }
+                );
+            }
+
+            // Validar que no se intente ascender si ya está en el grado máximo
+            if (GradoAntiguo == EscalafonJerarquico.Jefe)
+            {
+                yield return new ValidationResult(
+                    "El bombero ya se encuentra en el grado máximo (Jefe).",
+                    new[] { nameof(GradoAntiguo) }
+                );
+            }
+        }
+    }
+
+
+    // OnFinish
+
+    private async void OnFinish(EditContext editContext)
+    {
+        try
+        {
+            // Validación adicional antes de guardar
+            if ((int)AscensoVM.GradoAscenso >= (int)AscensoVM.GradoAntiguo)
+            {
+                await message.ErrorAsync("El grado de ascenso debe ser superior al grado actual");
+                return;
+            }
+
+            if (AscensoVM.GradoAntiguo == EscalafonJerarquico.Jefe)
+            {
+                await message.ErrorAsync("El bombero ya se encuentra en el grado máximo");
+                return;
+            }
+
+            Bombero? BomberoAfectado = await Context.Bomberos.Where(b => b.NumeroLegajo == Bombero).SingleOrDefaultAsync();
+            
+            if (BomberoAfectado == null)
+            {
+                await message.ErrorAsync("No se encontró el bombero seleccionado");
+                return;
+            }
+
+            AscensoBombero ascenso = new()
+                {
+                    FechaAscenso = DateOnly.FromDateTime(AscensoVM.FechaAscenso),
+                    Descripcion = AscensoVM.Descripcion,
+                    GradoAntiguo = AscensoVM.GradoAntiguo,
+                    GradoAscenso = AscensoVM.GradoAscenso,
+                    PersonalAfectado = BomberoAfectado,
+                    NumeroActa = AscensoVM.NumeroActa,
+                    NumeroLibero = AscensoVM.NumeroLibro
+                };
+            
+            await BomberoService.AscenderBombero(ascenso);
+            await Init();
+            await OnClose.InvokeAsync();
+            StateHasChanged();
+            await message.SuccessAsync("Bombero Ascendido");
+        }
+        catch (Exception e)
+        {
+            await Init();
+            StateHasChanged();
+            if (e.InnerException != null)
+                await message.ErrorAsync(e.InnerException.Message, 5);
+            else
+                await message.ErrorAsync(e.Message, 5);
+
+        }
+    }
+    
+    private void OnFinishFailed(EditContext editContext)
+    {
+        Console.WriteLine($"Failed:{JsonSerializer.Serialize(AscensoVM)}");
+    }
+
+    // Init y Carga de datos
+
+    public async Task CargarBomberosView()
+    {
+        BomberoTodos = new();
+        var bomberos = await Context.Bomberos.ToListAsync();
+        foreach (Bombero b in bomberos)
+        {
+            BomberoViweModel bombero = new()
+                {
+                    Nombre = b.Nombre,
+                    Apellido = b.Apellido,
+                    NumeroLegajo = b.NumeroLegajo
+                };
+            BomberoTodos.Add(bombero);
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Init();
+    }
+
+    private async Task Init()
+    {
+        AscensoVM = new();
+        gradoAscensoError = string.Empty;
+
+        Context = DbFactory.CreateDbContext();
+
+        await CargarBomberosView();
+    }
+
+    public void Dispose()
+    {
+        Context?.Dispose();
+    }
+}

@@ -1,7 +1,6 @@
-﻿using FireForce.Core.Data.Enums;
-using System.ComponentModel.DataAnnotations;
+﻿using FireForce.Shared.Enums;
 
-namespace FireForce.Core.Data.Models.Salidas.Planillas
+namespace FireForce.Data.Models.Salidas.Planillas
 {
     public class FactorClimatico : Salida
     {

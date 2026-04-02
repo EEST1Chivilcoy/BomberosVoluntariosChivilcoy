@@ -1,30 +1,28 @@
-﻿using FireForce.Core.Data.Models.Salidas.Componentes;
-using FireForce.Core.Data.Models.Salidas.Planillas;
-using Microsoft.EntityFrameworkCore;
-using System.Reflection.Metadata;
-using FireForce.Core.Data.Models.Salidas.Planillas.Incendios;
-using FireForce.Core.Data.Models.Salidas.Planillas.Servicios;
-using FireForce.Core.Data.Models.Grupos.Dependencias;
-using FireForce.Core.Data.Models.Grupos.Brigadas;
-using FireForce.Core.Data.Models.Grupos.FuerzasIntervinientes;
-using FireForce.Core.Data.Models.Imagenes;
-using FireForce.Core.Data.Models.Grupos.Dependencias.Comunicaciones;
-using FireForce.Core.Data.Models.Grupos.Dependencias.EquiposAutonomos;
-using FireForce.Core.Data.Models.Vehiculos;
-using FireForce.Core.Data.Enums.Discriminadores;
-using FireForce.Core.Data.Models.Personas;
-using FireForce.Core.Data.Models.Personas.Personal;
-using FireForce.Core.Data.Models.Personas.Personal.Componentes;
-using FireForce.Core.Data.Models.Vehiculos.Flota;
-using FireForce.Core.Data.Models.Objetos;
-using FireForce.Core.Data.Models.Objetos.Componentes;
-using FireForce.Core.Data.Models.Socios;
-using FireForce.Core.Data.Models.Socios.Componentes;
-using FireForce.Core.Data.Models.Socios.Componentes.Pagos;
-using FireForce.Core.Data.Enums.Socios;
-using FireForce.Core.Data.Models.Otros.Partes;
+﻿using Microsoft.EntityFrameworkCore;
+using FireForce.Shared.Enums.Discriminadores;
+using FireForce.Data.Models.Personas.Personal;
+using FireForce.Data.Models.Salidas.Planillas.Servicios;
+using FireForce.Data.Models.Personas;
+using FireForce.Data.Models.Salidas.Planillas;
+using FireForce.Data.Models.Grupos.Dependencias.Comunicaciones;
+using FireForce.Data.Models.Grupos.Dependencias;
+using FireForce.Data.Models.Objetos.Componentes;
+using FireForce.Data.Models.Personas.Personal.Componentes;
+using FireForce.Data.Models.Objetos;
+using FireForce.Data.Models.Imagenes;
+using FireForce.Data.Models.Salidas.Planillas.Incendios;
+using FireForce.Data.Models.Grupos.FuerzasIntervinientes;
+using FireForce.Data.Models.Salidas.Componentes;
+using FireForce.Data.Models.Socios.Componentes;
+using FireForce.Data.Models.Grupos.Brigadas;
+using FireForce.Data.Models.Grupos.Dependencias.EquiposAutonomos;
+using FireForce.Data.Models.Socios.Componentes.Pagos;
+using FireForce.Data.Models.Socios;
+using FireForce.Data.Models.Vehiculos;
+using FireForce.Data.Models.Vehiculos.Flota;
+using FireForce.Data.Models.Otros.Partes;
 
-namespace FireForce.Core.Data
+namespace FireForce.Data
 {
     public class BomberosDbContext : DbContext
     {

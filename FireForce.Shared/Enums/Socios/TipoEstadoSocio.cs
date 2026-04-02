@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FireForce.Core.Data.Enums.Socios
+namespace FireForce.Shared.Enums.Socios
 {
     /// <summary>
     /// Representa los diferentes estados en los que puede encontrarse un socio.

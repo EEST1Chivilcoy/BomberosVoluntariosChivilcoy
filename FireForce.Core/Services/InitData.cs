@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using FireForce.Core.Data;
+using FireForce.Data;
 
 namespace FireForce.Core.Services
 {

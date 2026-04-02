@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FireForce.Core.Data.Enums.Socios
+namespace FireForce.Shared.Enums.Socios
 {
     /// <summary>
     /// Representa las zonas geográficas o áreas de operación de los socios.

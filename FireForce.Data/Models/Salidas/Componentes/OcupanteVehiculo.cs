@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using FireForce.Core.Data.Enums;
-using FireForce.Core.Data.Models.Grupos.FuerzasIntervinientes;
-using FireForce.Core.Data.Models.Personas;
+using FireForce.Data.Models.Personas;
+using FireForce.Shared.Enums;
 
-namespace FireForce.Core.Data.Models.Salidas.Componentes
+namespace FireForce.Data.Models.Salidas.Componentes
 {
     public class OcupanteVehiculo
     {

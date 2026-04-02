@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FireForce.Core.Data.Enums
+namespace FireForce.Shared.Enums
 {
     /// <summary>
     /// Representa las áreas responsables de imponer sanciones.

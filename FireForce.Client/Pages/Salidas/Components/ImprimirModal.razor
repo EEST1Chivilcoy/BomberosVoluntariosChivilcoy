@@ -1,0 +1,30 @@
+﻿@using FireForce.Client.Data.ViewModels.Incendios;
+@using FireForce.Client.Data.ViewModels.Personal;
+@inject NavigationManager navigationManager
+
+@*Despues de la Carga*@
+<Modal Footer="null" Title="@("Success")"
+       Visible="@_visible1"
+       OnCancel="@HandleCancel1">
+
+    <Result Status="ResultStatus.Success"
+            Title="Se cargo correctamente la salida"
+            SubTitle="">
+    </Result>
+
+    <p style="font-size: 20px; text-align: center;">¿Desea imprimir la planilla de intervención?</p>
+    <button @onclick="@(() => { navigationManager.NavigateTo($"/fire-force/PlanillasIntervencion/Imprimir/{AnioNumeroParte}/{NumeroParte}/{true}", true); })">Si</button>
+    <button @onclick="@(() => { navigationManager.NavigateTo("/fire-force/Salidas"); })">No</button>
+</Modal>
+
+@code {
+    [Parameter] public int AnioNumeroParte { get; set; }
+    [Parameter] public int NumeroParte { get; set; }
+
+    bool _visible1 = true;
+
+    void HandleCancel1()
+    {
+        _visible1 = false;
+    }
+}

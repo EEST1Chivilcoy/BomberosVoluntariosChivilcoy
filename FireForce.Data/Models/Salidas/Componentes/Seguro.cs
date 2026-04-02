@@ -1,8 +1,6 @@
-﻿using FireForce.Core.Data.Models.Salidas.Planillas;
-using System.ComponentModel.DataAnnotations;
-using FireForce.Core.Data.Enums.Discriminadores;
+﻿using FireForce.Shared.Enums.Discriminadores;
 
-namespace FireForce.Core.Data.Models.Salidas.Componentes
+namespace FireForce.Data.Models.Salidas.Componentes
 {
     public abstract class Seguro
     {

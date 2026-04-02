@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FireForce.Core.Data.Enums.Discriminadores
+namespace FireForce.Shared.Enums.Discriminadores
 {
     /// <summary>
     /// Representa los tipos de historial de socio en el sistema.

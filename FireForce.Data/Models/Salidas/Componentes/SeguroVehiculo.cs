@@ -1,6 +1,4 @@
-﻿using FireForce.Core.Data.Models.Vehiculos;
-
-namespace FireForce.Core.Data.Models.Salidas.Componentes
+﻿namespace FireForce.Data.Models.Salidas.Componentes
 {
     public class SeguroVehiculo : Seguro
     {

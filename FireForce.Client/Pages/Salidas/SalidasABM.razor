@@ -1,0 +1,866 @@
+﻿@page "/fire-force/Salidas"
+@using FireForce.Shared.Enums.Discriminadores
+@using System.Globalization;
+@using FireForce.Shared.Enums.Salidas
+@inject IJSRuntime JS
+
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Policy = "AdminOnly")]
+
+<style>
+
+    .salidas-abm {
+        --abm-primary-color: #A63333;
+        --abm-primary-dark: #732D2D;
+        --abm-warning-color: #F9A825;
+        --abm-accent-color: #FFD54F;
+    }
+
+        .salidas-abm .main-card {
+            backdrop-filter: blur(12px) !important;
+            border-radius: 18px !important;
+            border: 1px solid rgba(130, 0, 20, 0.15) !important;
+            overflow: hidden !important;
+            margin-bottom: 32px !important;
+        }
+
+        .salidas-abm .header-section {
+            background: linear-gradient(135deg, var(--abm-primary-color) 0%, var(--abm-primary-dark) 100%) !important;
+            color: white !important;
+            padding: 28px !important;
+            position: relative !important;
+            overflow: hidden !important;
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            flex-wrap: wrap;
+        }
+
+            .salidas-abm .header-section::before {
+                content: '';
+                display: none;
+            }
+
+            .salidas-abm .header-section .lava-bubbles {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                z-index: 1;
+                overflow: hidden;
+            }
+
+            .salidas-abm .header-section .lava-bubble {
+                position: absolute;
+                border-radius: 50%;
+                opacity: 0.45;
+                background: radial-gradient(circle at 60% 40%, #FFD54F 0%, #F9A825 80%, transparent 100%);
+                animation: lava-bubble-move 8s linear infinite;
+                filter: blur(1.5px);
+                mix-blend-mode: lighten;
+            }
+
+                .salidas-abm .header-section .lava-bubble.b1 {
+                    left: 10%;
+                    width: 60px;
+                    height: 60px;
+                    bottom: -70px;
+                    animation-delay: 0s;
+                    animation-duration: 7.5s;
+                }
+
+                .salidas-abm .header-section .lava-bubble.b2 {
+                    left: 35%;
+                    width: 90px;
+                    height: 90px;
+                    bottom: -100px;
+                    animation-delay: 2s;
+                    animation-duration: 9s;
+                    background: radial-gradient(circle at 60% 40%, #FFEB3B 0%, #FFD54F 80%, transparent 100%);
+                }
+
+                .salidas-abm .header-section .lava-bubble.b3 {
+                    left: 65%;
+                    width: 50px;
+                    height: 50px;
+                    bottom: -60px;
+                    animation-delay: 1.5s;
+                    animation-duration: 6.5s;
+                    background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #FFD54F 80%, transparent 100%);
+                }
+
+                .salidas-abm .header-section .lava-bubble.b4 {
+                    left: 80%;
+                    width: 70px;
+                    height: 70px;
+                    bottom: -80px;
+                    animation-delay: 3.2s;
+                    animation-duration: 8.5s;
+                    background: radial-gradient(circle at 60% 40%, #F9A825 0%, #FFD54F 80%, transparent 100%);
+                }
+
+                .salidas-abm .header-section .lava-bubble.b5 {
+                    left: 55%;
+                    width: 40px;
+                    height: 40px;
+                    bottom: -50px;
+                    animation-delay: 5s;
+                    animation-duration: 7.2s;
+                    background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #F9A825 80%, transparent 100%);
+                }
+
+    @@keyframes lava-bubble-move {
+        0% {
+            transform: translateY(0) scale(1) rotate(0deg);
+            opacity: 0.45;
+        }
+
+        60% {
+            opacity: 0.7;
+            filter: blur(2.5px);
+        }
+
+        80% {
+            transform: translateY(-220px) scale(1.15) rotate(10deg);
+            opacity: 0.6;
+        }
+
+        100% {
+            transform: translateY(-320px) scale(0.95) rotate(-8deg);
+            opacity: 0;
+        }
+    }
+
+    .salidas-abm .main-title {
+        font-family: 'Poppins', 'Fjalla One', sans-serif !important;
+        font-size: 2.2rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 1px !important;
+        margin: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 12px !important;
+        animation: text-glow 2.5s ease-in-out infinite alternate !important;
+        position: relative !important;
+        z-index: 2 !important;
+    }
+
+    .salidas-abm .title-icon {
+        color: var(--abm-accent-color) !important;
+        font-size: 2rem !important;
+        filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25)) !important;
+    }
+
+    @@keyframes text-glow {
+        0%, 100% {
+            text-shadow: 0 0 5px var(--abm-warning-color), 0 0 10px var(--abm-accent-color);
+        }
+
+        50% {
+            text-shadow: 0 0 12px var(--abm-warning-color), 0 0 22px var(--abm-accent-color);
+        }
+    }
+
+    .salidas-abm .title-container {
+        position: relative !important;
+        z-index: 2 !important;
+    }
+
+    .salidas-abm .actions-row {
+        display: flex !important;
+        gap: 10px !important;
+        align-items: center !important;
+        z-index: 2 !important;
+    }
+
+    .salidas-abm .table-container {
+        padding: 0 !important;
+        overflow: hidden !important;
+    }
+
+    .ant-table {
+        width: 100%;
+        background-color: white;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .ant-table-thead .ant-table-cell {
+        background-color: #A63333 !important;
+        color: #fff !important;
+        font-weight: bold !important;
+        padding: 16px !important;
+        border: none !important;
+    }
+
+    }
+
+    .ant-table-cell {
+        padding: 16px !important;
+    }
+
+    .title-template-container {
+        background-color: #A63333;
+        padding: 16px;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .search-input {
+        width: 250px;
+    }
+
+        .search-input input {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+        }
+
+            .search-input input::placeholder {
+                color: rgba(255, 255, 255, 0.7);
+            }
+
+    .add-button {
+        background-color: #4CAF50 !important;
+        border-color: #438E46 !important;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .boton_p {
+        background-color: #732D2D !important;
+        color: white !important;
+        border: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .boton-nueva-salida {
+        background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
+        border: none !important;
+        color: #fff !important;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
+        padding: 0 20px !important;
+    }
+
+        .boton-nueva-salida:hover {
+            background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
+            color: #fff !important;
+        }
+
+    @@media (max-width: 960px) {
+        .title-template-container {
+            flex-direction: column;
+            align-items: stretch;
+        }
+    }
+
+    .ant-form-horizontal .ant-form-item-label {
+        flex-grow: 1;
+        background: #A63333;
+    }
+
+        .ant-form-horizontal .ant-form-item-label > label {
+            color: #FFFFFF;
+            padding: 2px 4px;
+        }
+
+    .ant-form-item {
+        box-sizing: border-box;
+        margin: 0;
+        margin-bottom: 0px;
+        padding: 0;
+        color: rgba(0, 0, 0, 0.85);
+        font-size: 14px;
+        line-height: 1.5715;
+        list-style: none;
+        font-feature-settings: 'tnum';
+        margin-bottom: 8px !important;
+        vertical-align: top;
+        font-weight: bold;
+    }
+
+    .ant-modal-content {
+        position: relative;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 0;
+        border-radius: 2px;
+        box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+        pointer-events: auto;
+        border: 4px solid #A63333 !important;
+    }
+
+    .modal-crear-salidas .ant-modal-content {
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        border: 2px solid #732D2D !important;
+        margin-top: -50px;
+        margin-bottom: 0px;
+    }
+
+    .modal-crear-salidas .ant-modal-header {
+        background-color: #A63333;
+        padding: 16px 24px;
+    }
+
+    .modal-crear-salidas .ant-modal-title {
+        color: white !important;
+    }
+
+    .modal-crear-salidas-content {
+        padding: 24px;
+    }
+
+    .modal-crear-salidas-form-item {
+        margin-bottom: 20px;
+        position: relative;
+        padding-left: 10px;
+    }
+
+        .modal-crear-salidas-form-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            border-radius: 5px;
+        }
+
+        .modal-crear-salidas-form-item .ant-form-item-label > label,
+        .modal-crear-salidas-form-full-width .ant-form-item-label > label {
+            font-weight: 600;
+            color: #434343;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+    .modal-crear-salidas .ant-input:hover,
+    .modal-crear-salidas .ant-select-selector:focus,
+    .modal-crear-salidas .ant-select-selector:hover,
+    .modal-crear-salidas .ant-input-number-input:hover {
+        border-color: #FFD700 !important;
+        box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
+    }
+
+
+    .modal-crear-salidas .ant-btn-primary {
+        background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
+        border: none !important;
+        color: #fff !important;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
+        margin-top: 0;
+        margin-bottom: 0;
+        padding: 0 20px !important;
+    }
+
+        .modal-crear-salidas .ant-btn-primary:hover {
+            background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
+            color: #fff !important;
+        }
+
+    .salidas-abm .fade-in {
+        animation: abm-fadeIn 0.5s ease-in-out !important;
+    }
+
+    @@keyframes abm-fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .salidas-abm .button-wrapper .ant-btn:not(.ant-btn-icon-only) {
+        border-color: transparent !important;
+        color: #fff !important;
+        border-radius: 8px;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(146,84,222,.22);
+        margin-top: 1rem;
+        height: 40px !important;
+        font-size: 16px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 6px !important;
+        padding: 0 20px !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+
+    .salidas-abm .button-wrapper .ant-btn.ant-btn-icon-only {
+        background: #fff !important;
+        color: #4caf50 !important;
+        border-radius: 8px;
+    }
+
+    .salidas-abm .button-wrapper .ant-btn:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4) !important;
+    }
+
+</style>
+
+@*Servicios Utilizados*@
+@using FireForce.Client.Services
+@inject ISalidaService SalidaService
+@inject IMessageService MessageService
+@inject NavigationManager NavigationManager
+
+<div class="salidas-abm">
+    <div class="salidas-container fade-in" style="padding:16px; min-height:100vh">
+        <Card Class="main-card">
+            <div class="header-section">
+                <div class="lava-bubbles">
+                    <div class="lava-bubble b1"></div>
+                    <div class="lava-bubble b2"></div>
+                    <div class="lava-bubble b3"></div>
+                    <div class="lava-bubble b4"></div>
+                    <div class="lava-bubble b5"></div>
+                </div>
+                <div class="title-container">
+                    <h1 class="main-title">
+                        <Icon Type="car" Class="title-icon" />
+                        SALIDAS
+                    </h1>
+                </div>
+                <div class="actions-row">
+                    <div class="button-wrapper">
+                        <Button Type="ButtonType.Primary"
+                                OnClick="() => VerAñadirSalida()"
+                                class="ant-btn"
+                                style="background-color: #4CAF50; border-color: #4CAF50;"
+                                Loading="isLoadingTable">
+                            <Icon Type="plus" /> Nueva Salida
+                        </Button>
+                    </div>
+                </div>
+            </div>
+            <div class="table-container">
+                <Table TItem="SalidaViewModelTable"
+                       DataSource="SalidaViewModels"
+                       @bind-PageIndex="_pageIndex"
+                       @bind-PageSize="_pageSize"
+                       Loading="isLoadingTable"
+                       Responsive>
+                    <ColumnDefinitions>
+                        <PropertyColumn Title="🔢 Número Parte" Property="s => s.Numero" Sortable Width="170px">
+                        </PropertyColumn>
+                        <PropertyColumn Title="🚨 Tipo de Salida" Property="s => s.TipoSalida" Sortable Width="200px">
+                        </PropertyColumn>
+                        <PropertyColumn Title="📝 Descripción" Property="s => s.Descripcion" Sortable Width="400px">
+                        </PropertyColumn>
+                        <PropertyColumn Title="📍 Dirección" Property="s => s.Direccion" Sortable>
+                        </PropertyColumn>
+                        <ActionColumn Title="⚙️ Acciones" Align=ColumnAlign.Center>
+                            <Space>
+                                <SpaceItem>
+                                    <Button OnClick="() => VerUbicacionSalida(context.Longitud, context.Latitud)">
+                                        <Icon Type="aim" />
+                                    </Button>
+                                </SpaceItem>
+                                <SpaceItem>
+                                    <Button Type="@ButtonType.Primary" OnClick="() => VerEditarSalida(context.Id)" Ghost>
+                                        <Icon Type="edit" />
+                                    </Button>
+                                </SpaceItem>
+                            </Space>
+                        </ActionColumn>
+                    </ColumnDefinitions>
+                </Table>
+            </div>
+        </Card>
+    </div>
+</div>
+
+<Modal @bind-Visible="_modalAñadirVisible"
+       Title="Crear Salida"
+       Width="@("100%")"
+       Style="max-width: 800px;"
+       OkText="@("Crear")"
+       CancelText="@("Cancelar")"
+       OnOk="@AddSalida"
+       DestroyOnClose
+       WrapClassName="modal-crear-salidas">
+    <div class="modal-crear-salidas-content">
+        <Form Model="newSalida" Layout="FormLayout.Vertical" Class="modal-crear-salidas-form">
+            <Row Class="modal-crear-salidas-row" Gutter="16">
+                <AntDesign.Col Span="12">
+                    <FormItem Label="🔢 Nº Parte" Required Class="modal-crear-salidas-form-item">
+                        <Input @bind-Value="@newSalida.NumeroSalida" ReadOnly Size="InputSize.Large" />
+                    </FormItem>
+                </AntDesign.Col>
+                <AntDesign.Col Span="12">
+                    <FormItem Label="📅 Año" Required Class="modal-crear-salidas-form-item">
+                        <Input Value="@newSalida.Anio" ReadOnly Size="InputSize.Large" />
+                    </FormItem>
+                </AntDesign.Col>
+            </Row>
+            <Row Gutter="16">
+                <AntDesign.Col Span="12">
+                    <FormItem Label="🚨 Tipo de Emergencia" Required Class="modal-crear-salidas-form-item">
+                        <EnumSelect @bind-Value="@newSalida.Categoria" Placeholder="Seleccione un tipo de emergencia" Size="InputSize.Large" />
+                    </FormItem>
+                </AntDesign.Col>
+
+                <AntDesign.Col Span="12">
+                    @if (newSalida.Categoria == CategoriaEmergencia.Incendio)
+                    {
+                        <FormItem Label="🔥 Tipo de Incendio" Required Class="modal-crear-salidas-form-item">
+                            <EnumSelect @bind-Value="@newSalida.TipoIncendio" Placeholder="Seleccione un tipo de incendio" Size="InputSize.Large" />
+                        </FormItem>
+                    }
+
+                    @if (newSalida.Categoria == CategoriaEmergencia.Rescate)
+                    {
+                        <FormItem Label="🤝 Tipo de Rescate" Required Class="modal-crear-salidas-form-item">
+                            <EnumSelect @bind-Value="@newSalida.TipoRescate" Placeholder="Seleccione un tipo de rescate" Size="InputSize.Large" />
+                        </FormItem>
+                    }
+
+                    @if (newSalida.Categoria == CategoriaEmergencia.ServicioEspecial)
+                    {
+                        <FormItem Label="🛠️ Tipo de Servicio Especial" Required Class="modal-crear-salidas-form-item">
+                            <EnumSelect @bind-Value="@newSalida.TipoServicioEspecial" Placeholder="Seleccione un tipo de servicio especial" Size="InputSize.Large" />
+                        </FormItem>
+                    }
+
+                    @if (newSalida.Categoria == CategoriaEmergencia.FactorClimatico)
+                    {
+                        <FormItem Label="🌪️ Tipo de Factor Climático" Required Class="modal-crear-salidas-form-item">
+                            <EnumSelect @bind-Value="@newSalida.TipoFactorClimatico" Placeholder="Seleccione un tipo de factor climático" Size="InputSize.Large" />
+                        </FormItem>
+                    }
+                </AntDesign.Col>
+            </Row>
+        </Form>
+    </div>
+</Modal>
+
+@code {
+    private List<SalidaViewModelTable> SalidaViewModels = new();
+    private SalidaCrearViewModel newSalida = new();
+
+    // Variable del Selector del Anio
+    int _anioSeleccionado = DateTime.Now.Year;
+
+    // Variables de Tamaño de la Tabla
+    int _pageIndex = 1;
+    int _pageSize = 5;
+
+    // Variable de Loading de la Tabla
+    bool isLoadingTable = true;
+
+    // Variables de Modal
+    bool _modalAñadirVisible = false;
+
+    public class SalidaViewModelTable
+    {
+        public int Id { get; set; }
+        public string Numero { get; set; } = null!;
+        public string TipoSalida { get; set; } = null!;
+        public string Descripcion { get; set; } = null!;
+        public string Direccion { get; set; } = null!;
+        public string Fecha { get; set; } = null!;
+        public string Hora { get; set; } = null!;
+        public double? Latitud { get; set; }
+        public double? Longitud { get; set; }
+    }
+
+    public class SalidaCrearViewModel
+    {
+        public int NumeroSalida { get; set; }
+        public int Anio { get; set; }
+        public CategoriaEmergencia Categoria { get; set; }
+        public TipoDeEmergencia TipoEmergencia { get; set; }
+
+        // Subtipo de Emergencia (si aplica)
+        public IncendioTipo? TipoIncendio { get; set; }
+        public RescateTipo? TipoRescate { get; set; }
+        public ServicioEspecialTipo? TipoServicioEspecial { get; set; }
+        public int? TipoMaterialPeligroso { get; set; }
+        public TipoFactoresClimaticos? TipoFactorClimatico { get; set; }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ObtenerSalidas(_anioSeleccionado);
+    }
+
+    private async Task VerUbicacionSalida(double? longitud, double? latitud)
+    {
+        if (longitud.HasValue && latitud.HasValue)
+        {
+            // Convertimos con punto decimal usando cultura invariante
+            string latStr = latitud.Value.ToString(CultureInfo.InvariantCulture);
+            string lonStr = longitud.Value.ToString(CultureInfo.InvariantCulture);
+
+            // URL que intenta abrir Street View; si no hay cobertura, Google redirige al mapa normal
+            string url = $"https://www.google.com/maps/@?api=1&map_action=pano&viewpoint={latStr},{lonStr}";
+
+            await JS.InvokeVoidAsync("open", url, "_blank");
+        }
+        else
+        {
+            await MessageService.ErrorAsync("No se encontraron coordenadas para la salida.");
+        }
+    }
+
+    private async Task VerEditarSalida(int id)
+    {
+        try
+        {
+            var salida = await SalidaService.ObtenerSalidaPorIdAsync(id);
+            if (salida == null)
+            {
+                await MessageService.ErrorAsync("No se encontró la salida para editar.");
+                return;
+            }
+
+            if (RutasEmergencia.TryGetValue(salida.TipoEmergencia, out var rutaTemplate))
+            {
+                string finalRoute;
+                if (rutaTemplate.Contains("{0}"))
+                {
+                    finalRoute = string.Format(rutaTemplate, salida.AnioNumeroParte, salida.NumeroParte);
+                }
+                else
+                {
+                    finalRoute = $"{rutaTemplate}/{salida.AnioNumeroParte}/{salida.NumeroParte}";
+                }
+                NavigationManager.NavigateTo(finalRoute);
+            }
+            else
+            {
+                await MessageService.ErrorAsync("No se encontró una ruta de edición para este tipo de emergencia.");
+            }
+        }
+        catch (Exception ex)
+        {
+            await MessageService.ErrorAsync($"Ocurrió un error al intentar editar la salida: {ex.InnerException?.Message ?? ex.Message}");
+        }
+    }
+
+    private async Task VerAñadirSalida()
+    {
+        _modalAñadirVisible = true;
+        newSalida = new()
+        {
+            // Asegurarse de que los subtipos se inicialicen a null para evitar selecciones predeterminadas no deseadas
+            TipoIncendio = null,
+            TipoRescate = null,
+            TipoServicioEspecial = null,
+            TipoFactorClimatico = null
+        };
+
+        newSalida.Anio = DateTime.Now.Year;
+
+        var resultado = await SalidaService.ObtenerUltimoNumeroParteDelAnioAsync(newSalida.Anio);
+
+        newSalida.NumeroSalida = resultado + 1;
+    }
+
+    private async Task AddSalida()
+    {
+        if (string.IsNullOrWhiteSpace(newSalida.Categoria.ToString()))
+        {
+            await MessageService.ErrorAsync("Debe seleccionar un tipo de emergencia.");
+            return;
+        }
+
+        if (newSalida.NumeroSalida <= 0)
+        {
+            await MessageService.ErrorAsync("El número de parte debe ser mayor que cero.");
+            return;
+        }
+
+        if (newSalida.Anio <= 0)
+        {
+            await MessageService.ErrorAsync("El año debe ser mayor que cero.");
+            return;
+        }
+
+        // Validar que se haya seleccionado un tipo de emergencia según la categoría
+        if (newSalida.Categoria == CategoriaEmergencia.Incendio && newSalida.TipoIncendio == null)
+        {
+            await MessageService.ErrorAsync("Debe seleccionar un tipo de incendio.");
+            return;
+        }
+        if (newSalida.Categoria == CategoriaEmergencia.Rescate && newSalida.TipoRescate == null)
+        {
+            await MessageService.ErrorAsync("Debe seleccionar un tipo de rescate.");
+            return;
+        }
+        if (newSalida.Categoria == CategoriaEmergencia.ServicioEspecial && newSalida.TipoServicioEspecial == null)
+        {
+            await MessageService.ErrorAsync("Debe seleccionar un tipo de servicio especial.");
+            return;
+        }
+        if (newSalida.Categoria == CategoriaEmergencia.FactorClimatico && newSalida.TipoFactorClimatico == null)
+        {
+            await MessageService.ErrorAsync("Debe seleccionar un tipo de factor climático.");
+            return;
+        }
+
+        // Determinar TipoEmergencia y su parámetro de tipo específico
+        switch (newSalida.Categoria)
+        {
+            case CategoriaEmergencia.Incendio:
+                newSalida.TipoEmergencia = newSalida.TipoIncendio switch
+                {
+                    IncendioTipo.Vivienda => TipoDeEmergencia.IncendioVivienda,
+                    IncendioTipo.Comercio => TipoDeEmergencia.IncendioComercio,
+                    IncendioTipo.EstablecimientoEducativo => TipoDeEmergencia.IncendioEstablecimientoEducativo,
+                    IncendioTipo.EstablecimientoPublico => TipoDeEmergencia.IncendioEstablecimientoPublico,
+                    IncendioTipo.HospitalesYClinicas => TipoDeEmergencia.IncendioHospitalesYClinicas,
+                    IncendioTipo.Industria => TipoDeEmergencia.IncendioIndustria,
+                    IncendioTipo.Forestal => TipoDeEmergencia.IncendioForestal,
+                    IncendioTipo.Aeronaves => TipoDeEmergencia.IncendioAeronaves, // Ya estaba, se confirma
+                    IncendioTipo.Otro => TipoDeEmergencia.Incendio,
+                    _ => throw new InvalidOperationException("Tipo de incendio no reconocido.")
+                };
+                break;
+
+            case CategoriaEmergencia.Rescate:
+                newSalida.TipoEmergencia = newSalida.TipoRescate switch
+                {
+                    RescateTipo.Persona => TipoDeEmergencia.RescatePersona,
+                    RescateTipo.Animal => TipoDeEmergencia.RescateAnimal,
+                    _ => throw new InvalidOperationException("Tipo de rescate no reconocido.")
+                };
+                break;
+
+            case CategoriaEmergencia.ServicioEspecial:
+                newSalida.TipoEmergencia = newSalida.TipoServicioEspecial switch
+                {
+                    ServicioEspecialTipo.Representacion => TipoDeEmergencia.ServicioEspecialRepresentacion,
+                    ServicioEspecialTipo.Prevencion => TipoDeEmergencia.ServicioEspecialPrevencion,
+                    ServicioEspecialTipo.Capacitacion => TipoDeEmergencia.ServicioEspecialCapacitacion,
+                    ServicioEspecialTipo.ColocacionDriza => TipoDeEmergencia.ServicioEspecialColocacionDriza,
+                    ServicioEspecialTipo.SuministroAgua => TipoDeEmergencia.ServicioEspecialSuministroAgua,
+                    ServicioEspecialTipo.FalsaAlarma => TipoDeEmergencia.ServicioEspecialFalsaAlarma,
+                    ServicioEspecialTipo.RetiradoDeObito => TipoDeEmergencia.ServicioEspecialRetiradoDeObito,
+                    ServicioEspecialTipo.ColaboracionFuerzasSeguridad => TipoDeEmergencia.ServicioEspecialColaboracionFuerzasSeguridad,
+                    _ => throw new InvalidOperationException("Tipo de servicio especial no reconocido.")
+                };
+                break;
+
+            case CategoriaEmergencia.Accidente:
+                newSalida.TipoEmergencia = TipoDeEmergencia.Accidente;
+                break;
+
+            case CategoriaEmergencia.MaterialPeligroso:
+                newSalida.TipoEmergencia = TipoDeEmergencia.MaterialPeligroso;
+                newSalida.TipoMaterialPeligroso = (int)TipoDeEmergencia.MaterialPeligroso; // Para MaterialPeligroso, el tipo es su propio valor de enum
+                break;
+
+            case CategoriaEmergencia.FactorClimatico:
+                newSalida.TipoEmergencia = TipoDeEmergencia.FactorClimatico;
+                // El tipo específico ya está en newSalida.TipoFactorClimatico
+                break;
+            default:
+                throw new InvalidOperationException("Categoría no reconocida.");
+        }
+
+        if (RutasEmergencia.TryGetValue(newSalida.TipoEmergencia, out var rutaTemplate))
+        {
+            string finalRoute;
+            if (newSalida.Categoria == CategoriaEmergencia.FactorClimatico)
+            {
+                // Para FactorClimatico, el parámetro es el TipoFactorClimatico que se seleccionó en el modal.
+                finalRoute = string.Format(rutaTemplate, (int)newSalida.TipoFactorClimatico.Value);
+            }
+            else if (newSalida.Categoria == CategoriaEmergencia.ServicioEspecial)
+            {
+                // Para ServicioEspecial, el parámetro es el TipoServicioEspecial que se seleccionó en el modal.
+                finalRoute = string.Format(rutaTemplate, (int)newSalida.TipoServicioEspecial.Value);
+            }
+            else if (newSalida.Categoria == CategoriaEmergencia.MaterialPeligroso)
+            {
+                finalRoute = string.Format(rutaTemplate);
+            }
+            else
+            {
+                // Para Incendio, Rescate, Accidente, etc.
+                finalRoute = $"{rutaTemplate}/{(int)newSalida.TipoEmergencia}";
+            }
+            NavigationManager?.NavigateTo(finalRoute);
+        }
+        else
+        {
+            await MessageService.ErrorAsync("Tipo de emergencia no válido.");
+        }
+    }
+
+    private async Task ObtenerSalidas(int anio)
+    {
+        isLoadingTable = true;
+        try
+        {
+            var salidas = await SalidaService.ObtenerSalidasPorAnioAsync(anio);
+
+            SalidaViewModels = salidas.Select(s => new SalidaViewModelTable
+            {
+                Id = s.SalidaId,
+                Numero = $"{s.NumeroParte}/{s.AnioNumeroParte}",
+                TipoSalida = s.TipoEmergencia.GetDisplayName(),
+                Descripcion = string.IsNullOrWhiteSpace(s.Descripcion) ? "Sin descripción" : s.Descripcion,
+                Direccion = string.IsNullOrWhiteSpace(s.Direccion) ? "Desconocida" : s.Direccion,
+                Fecha = s.HoraSalida.ToString("yyyy-MM-dd"),
+                Hora = s.HoraSalida.ToString("HH:mm"),
+                Latitud = s.Latitud,
+                Longitud = s.Longitud
+            }).ToList();
+
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            await MessageService.ErrorAsync($"Ocurrió un error al cargar las salidas: {ex.InnerException?.Message ?? ex.Message}");
+        }
+        finally
+        {
+            isLoadingTable = false;
+        }
+    }
+
+    // Diccionario de rutas según el tipo de emergencia
+    public Dictionary<TipoDeEmergencia, string> RutasEmergencia = new()
+    {
+        { TipoDeEmergencia.IncendioComercio, "/fire-force/salidas/incendio" },
+        { TipoDeEmergencia.IncendioEstablecimientoEducativo, "/fire-force/salidas/incendio" },
+        { TipoDeEmergencia.IncendioEstablecimientoPublico, "/fire-force/salidas/incendio" },
+        { TipoDeEmergencia.IncendioForestal, "/fire-force/salidas/incendio" },
+        { TipoDeEmergencia.IncendioHospitalesYClinicas, "/fire-force/salidas/incendio" },
+        { TipoDeEmergencia.IncendioIndustria, "/fire-force/salidas/incendio" },
+        { TipoDeEmergencia.IncendioVivienda, "/fire-force/salidas/incendio" },
+        { TipoDeEmergencia.Incendio, "/fire-force/salidas/incendio" },
+        { TipoDeEmergencia.IncendioAeronaves, "/fire-force/salidas/incendio" },
+        { TipoDeEmergencia.RescateAnimal, "/fire-force/salidas/rescate" },
+        { TipoDeEmergencia.RescatePersona, "/fire-force/salidas/rescate" },
+        { TipoDeEmergencia.ServicioEspecialRepresentacion, "/fire-force/salidas/servicio-especial/{0}" },
+        { TipoDeEmergencia.ServicioEspecialPrevencion, "/fire-force/salidas/servicio-especial/{0}" },
+        { TipoDeEmergencia.ServicioEspecialCapacitacion, "/fire-force/salidas/servicio-especial/{0}" },
+        { TipoDeEmergencia.ServicioEspecialColocacionDriza, "/fire-force/salidas/servicio-especial/{0}" },
+        { TipoDeEmergencia.ServicioEspecialSuministroAgua, "/fire-force/salidas/servicio-especial/{0}" },
+        { TipoDeEmergencia.ServicioEspecialFalsaAlarma, "/fire-force/salidas/servicio-especial/{0}" },
+        { TipoDeEmergencia.ServicioEspecialRetiradoDeObito, "/fire-force/salidas/servicio-especial/{0}" },
+        { TipoDeEmergencia.ServicioEspecialColaboracionFuerzasSeguridad, "/fire-force/salidas/servicio-especial/{0}" },
+        { TipoDeEmergencia.Accidente, "/fire-force/salidas/accidente" },
+        { TipoDeEmergencia.FactorClimatico, "/fire-force/salidas/factores-climaticos/{0}" },
+        { TipoDeEmergencia.MaterialPeligroso, "/fire-force/salidas/materiales-peligrosos" }
+    };
+}

@@ -1,8 +1,7 @@
-﻿using FireForce.Core.Data.Enums;
-using FireForce.Core.Data.Models.Salidas.Componentes;
+﻿using FireForce.Shared.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace FireForce.Core.Data.Models.Salidas.Planillas.Incendios
+namespace FireForce.Data.Models.Salidas.Planillas.Incendios
 {
     public class Incendio : Salida
     {

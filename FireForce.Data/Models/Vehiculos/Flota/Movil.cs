@@ -1,12 +1,10 @@
-﻿using FireForce.Core.Data.Enums;
-using FireForce.Core.Data.Models.Salidas.Componentes;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using FireForce.Core.Data.Models.Grupos.Dependencias.Comunicaciones;
-using FireForce.Core.Data.Enums.Discriminadores;
+using FireForce.Shared.Enums;
+using FireForce.Data.Models.Grupos.Dependencias.Comunicaciones;
+using FireForce.Data.Models.Salidas.Componentes;
 
-namespace FireForce.Core.Data.Models.Vehiculos.Flota
+namespace FireForce.Data.Models.Vehiculos.Flota
 {
     /// <summary>
     /// Clase que representa un vehículo móvil de la institución.

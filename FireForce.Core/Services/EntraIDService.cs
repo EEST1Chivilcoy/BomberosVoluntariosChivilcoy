@@ -1,24 +1,13 @@
-﻿using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Graph;
+﻿using Microsoft.Graph;
 using Microsoft.Identity.Client;
 using Microsoft.Identity.Web;
 using System.Net.Http.Headers;
-using System.Security.Claims;
-using FireForce.Core.Data.ViewModels.Personal;
-using FireForce.Core.DTOs;
+using FireForce.Shared.DTOs;
+using FireForce.Shared.ViewModels.Personal;
+using FireForce.Shared.Services;
 
 namespace FireForce.Core.Services
 {
-    public interface IEntraIDService
-    {
-        Task<(PersonalViewModel? personal, ImagenResultado? foto)> BuscarPorUPNAsync(string upn, CancellationToken token);
-        Task<(PersonalViewModel? personal, ImagenResultado? foto)> BuscarPorIDAsync(string id, CancellationToken token);
-        Task<bool> CheckDisponibilidadAsync();
-        Task<User> GetUserAsync();
-        Task<string> GetUserIdAsync();
-    }
-
     public class EntraIDService : IEntraIDService
     {
         private readonly MicrosoftIdentityConsentAndConditionalAccessHandler _consentHandler;

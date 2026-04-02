@@ -1,5 +1,5 @@
 ﻿/*using System.ComponentModel.DataAnnotations;
-using FireForce.Core.Data.Models.Socios.Componentes.Pagos;
+using FireForce.Data.Models.Socios.Componentes.Pagos;
 
 namespace FireForce.Core.Data.Models.Imagenes
 {

@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using FireForce.Core.Data.Models.Salidas.Planillas.Servicios;
 
-namespace FireForce.Core.Data.Models.Salidas.Planillas
+namespace FireForce.Data.Models.Salidas.Planillas.Servicios
 {
     public class ServicioEspecialColaboraciónFuerzasSeguridad : ServicioEspecial
     {

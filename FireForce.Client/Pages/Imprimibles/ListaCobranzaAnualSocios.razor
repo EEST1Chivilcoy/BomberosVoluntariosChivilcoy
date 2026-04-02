@@ -1,0 +1,517 @@
+@layout EmptyLayout
+
+@page "/fire-force/socios/imprimibles/lista-cobranza-anual/{Anio:int}/{ZonaParam:int}"
+
+@using FireForce.Client.Services
+@using FireForce.Shared.Enums.Discriminadores
+@using FireForce.Shared.Enums.Socios
+@using FireForce.Data.Models.Socios
+@using Microsoft.JSInterop
+
+@inject ISocioService SocioService
+@inject IJSRuntime JSRuntime
+
+<PageTitle>Lista de Cobranza Anual - Bomberos Voluntarios de Chivilcoy</PageTitle>
+
+<style>
+    :root {
+        --black: #000;
+        --border: #2e2e2e;
+        --light: #f3f3f3;
+        --white: #fff;
+    }
+
+    body {
+        font-family: 'Times New Roman', serif;
+        font-size: 9pt;
+        margin: 0;
+        color: var(--black);
+        background: var(--white);
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    #pdf-content {
+        width: 100%;
+        margin: 0 auto;
+        padding: 8px;
+        box-sizing: border-box;
+    }
+
+    .header {
+        border-bottom: 2px solid var(--black);
+        margin-bottom: 10px;
+        padding-bottom: 8px;
+    }
+
+    .header h1 {
+        margin: 0;
+        font-size: 16pt;
+        text-transform: uppercase;
+        text-align: center;
+    }
+
+    .header p {
+        margin: 4px 0 0;
+        text-align: center;
+        font-size: 9pt;
+    }
+
+    .summary {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 10px;
+        font-size: 8.5pt;
+    }
+
+    .summary-item {
+        border: 1px solid var(--border);
+        padding: 4px 8px;
+        background: var(--light);
+    }
+
+    .table-container {
+        overflow: hidden;
+    }
+
+    .pdf-table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+        font-size: 7.4pt;
+    }
+
+    .pdf-table th,
+    .pdf-table td {
+        border: 1px solid var(--border);
+        padding: 3px 2px;
+        vertical-align: middle;
+        overflow-wrap: break-word;
+        line-height: 1.15;
+    }
+
+    .pdf-table thead th {
+        background: var(--black);
+        color: var(--white);
+        text-align: center;
+        font-weight: 700;
+    }
+
+    .pdf-table tbody tr:nth-child(even) {
+        background: var(--light);
+    }
+
+    .cell-center {
+        text-align: center;
+    }
+
+    .casilla-cell {
+        font-size: 9pt;
+        font-weight: 700;
+        line-height: 1;
+    }
+
+    .cell-right {
+        text-align: right;
+    }
+
+    .action-buttons {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        z-index: 1000;
+    }
+
+    .action-button {
+        background: var(--black);
+        color: var(--white);
+        border: none;
+        padding: 10px 14px;
+        font-size: 9pt;
+        cursor: pointer;
+    }
+
+    .action-button.secondary {
+        background: var(--white);
+        color: var(--black);
+        border: 1px solid var(--black);
+    }
+
+    .action-button:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+
+    .loading-container,
+    .no-data {
+        min-height: 280px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-size: 12pt;
+    }
+
+    @@media print {
+        @@page {
+            size: A4 landscape;
+            margin: 6mm;
+        }
+
+        #pdf-content {
+            padding: 0;
+        }
+
+        .action-buttons {
+            display: none !important;
+        }
+
+        .pdf-table {
+            font-size: 6.9pt;
+        }
+
+        .pdf-table th,
+        .pdf-table td {
+            padding: 2px 1px;
+        }
+    }
+</style>
+
+@if (IsLoading)
+{
+    <div class="loading-container">
+        <p>Cargando lista de cobranza...</p>
+    </div>
+}
+else if (!Filas.Any())
+{
+    <div class="no-data">
+        <div>
+            <h3>No se encontraron socios para imprimir</h3>
+            <p>Año @Anio - Zona @ZonaTexto</p>
+        </div>
+    </div>
+}
+else
+{
+    <div id="pdf-content">
+        <header class="header">
+            <h1>Bomberos Voluntarios de Chivilcoy</h1>
+            <p>Lista de Cobranza Anual - Año @Anio - Zona @ZonaTexto</p>
+            <p>Emitido: @FechaHoraArgentina.ToString("dd/MM/yyyy HH:mm") hs</p>
+        </header>
+
+        <div class="summary">
+            <div class="summary-item"><strong>Total de socios:</strong> @Filas.Count</div>
+            <div class="summary-item"><strong>Zona:</strong> @ZonaTexto</div>
+            <div class="summary-item"><strong>Año:</strong> @Anio</div>
+        </div>
+
+        <div class="table-container">
+            <table class="pdf-table">
+                <colgroup>
+                    <col style="width:4%;" />
+                    <col style="width:13%;" />
+                    <col style="width:8%;" />
+                    <col style="width:12%;" />
+                    <col style="width:12%;" />
+                    <col style="width:10%;" />
+                    <col style="width:8%;" />
+                    @for (int i = 0; i < 12; i++)
+                    {
+                        <col style="width:2.45%;" />
+                    }
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>N°</th>
+                        <th>Nombre Completo / Razón Social</th>
+                        <th>Teléfono</th>
+                        <th>Dirección principal</th>
+                        <th>Dirección secundaria</th>
+                        <th>Nota cobrador</th>
+                        <th>Frecuencia pago</th>
+                        @for (int mes = 1; mes <= 12; mes++)
+                        {
+                            <th>@AbreviarMes(mes)</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var fila in Filas)
+                    {
+                        <tr>
+                            <td class="cell-center">@fila.NroSocio</td>
+                            <td>@fila.NombreCompleto</td>
+                            <td>@fila.Telefono</td>
+                            <td>@fila.DireccionPrincipal</td>
+                            <td>@fila.DireccionSecundaria</td>
+                            <td>@fila.NotaCobrador</td>
+                            <td class="cell-center">@fila.FrecuenciaPago</td>
+                            @for (int mes = 1; mes <= 12; mes++)
+                            {
+                                <td class="cell-center casilla-cell">@fila.CeldasMes[mes - 1]</td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="action-buttons">
+        <button class="action-button" @onclick="DescargarPdf" disabled="@IsGenerating">
+            @(IsGenerating ? "Generando..." : "Descargar PDF")
+        </button>
+        <button class="action-button secondary" @onclick="VistaPrevia" disabled="@IsGenerating">
+            Vista previa
+        </button>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public int Anio { get; set; }
+
+    [Parameter]
+    public int ZonaParam { get; set; }
+
+    private bool IsLoading { get; set; } = true;
+    private bool IsGenerating { get; set; }
+    private DateTime FechaHoraArgentina { get; set; }
+    private string ZonaTexto { get; set; } = "-";
+    private List<FilaCobranzaImprimible> Filas { get; set; } = new();
+
+    private sealed class FilaCobranzaImprimible
+    {
+        public int NroSocio { get; set; }
+        public string NombreCompleto { get; set; } = string.Empty;
+        public string Telefono { get; set; } = string.Empty;
+        public string DireccionPrincipal { get; set; } = string.Empty;
+        public string DireccionSecundaria { get; set; } = string.Empty;
+        public string NotaCobrador { get; set; } = string.Empty;
+        public string FrecuenciaPago { get; set; } = string.Empty;
+        public string[] CeldasMes { get; set; } = new string[12];
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        FechaHoraArgentina = ObtenerFechaArgentina();
+        await CargarLista();
+    }
+
+    private async Task CargarLista()
+    {
+        IsLoading = true;
+
+        try
+        {
+            var zonaFiltro = ConvertirZonaParametro(ZonaParam);
+            ZonaTexto = ObtenerZonaTexto(zonaFiltro);
+
+            var socios = await SocioService.ObtenerSociosAsync() ?? new List<Socio>();
+            var sociosZona = zonaFiltro == Zona.Ninguna
+                ? new List<Socio>()
+                : socios
+                    .Where(s => s.Zona.HasValue && s.Zona.Value.HasFlag(zonaFiltro))
+                    .OrderBy(s => s.NroSocio)
+                    .ToList();
+
+            Filas = new List<FilaCobranzaImprimible>(sociosZona.Count);
+
+            foreach (var socio in sociosZona)
+            {
+                var fila = new FilaCobranzaImprimible
+                {
+                    NroSocio = socio.NroSocio,
+                    NombreCompleto = ObtenerNombreSocio(socio),
+                    Telefono = LimpiarTexto(socio.Telefono),
+                    DireccionPrincipal = LimpiarTexto(socio.Direccion),
+                    DireccionSecundaria = LimpiarTexto(socio.DireccionSecundaria),
+                    NotaCobrador = LimpiarTexto(socio.NotaAdicional),
+                    FrecuenciaPago = ObtenerFrecuenciaPagoTexto(socio.FrecuenciaDePago)
+                };
+
+                for (var mes = 1; mes <= 12; mes++)
+                {
+                    fila.CeldasMes[mes - 1] = DebeMostrarCasilla(socio.FrecuenciaDePago, mes) ? "☐" : string.Empty;
+                }
+
+                Filas.Add(fila);
+            }
+        }
+        catch
+        {
+            Filas = new List<FilaCobranzaImprimible>();
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+    private static string ObtenerFrecuenciaPagoTexto(FrecuenciaPago? frecuenciaPago)
+    {
+        return frecuenciaPago switch
+        {
+            FrecuenciaPago.Mensual => "Mensual",
+            FrecuenciaPago.Trimestral => "Trimestral",
+            FrecuenciaPago.Semestral => "Semestral",
+            FrecuenciaPago.Anual => "Anual",
+            _ => string.Empty
+        };
+    }
+
+    private static bool DebeMostrarCasilla(FrecuenciaPago? frecuenciaPago, int mes)
+    {
+        return frecuenciaPago switch
+        {
+            FrecuenciaPago.Mensual => true,
+            FrecuenciaPago.Trimestral => mes is 1 or 4 or 7 or 10,
+            FrecuenciaPago.Semestral => mes is 1 or 7,
+            FrecuenciaPago.Anual => mes == 1,
+            _ => false
+        };
+    }
+
+    private static string ObtenerNombreSocio(Socio socio)
+    {
+        if (socio.Tipo == TipoSocio.Persona)
+        {
+            var apellido = (socio.Apellido ?? string.Empty).Trim();
+            var nombre = (socio.Nombre ?? string.Empty).Trim();
+
+            if (!string.IsNullOrWhiteSpace(apellido) && !string.IsNullOrWhiteSpace(nombre))
+            {
+                return $"{apellido}, {nombre}";
+            }
+
+            return string.IsNullOrWhiteSpace(apellido)
+                ? (string.IsNullOrWhiteSpace(nombre) ? string.Empty : nombre)
+                : apellido;
+        }
+
+        return string.IsNullOrWhiteSpace(socio.Nombre) ? string.Empty : socio.Nombre.Trim();
+    }
+
+    private static string LimpiarTexto(string? valor)
+    {
+        return string.IsNullOrWhiteSpace(valor) ? string.Empty : valor.Trim();
+    }
+
+    private static Zona ConvertirZonaParametro(int zonaParam)
+    {
+        return zonaParam switch
+        {
+            1 => Zona.Zona1,
+            2 => Zona.Zona2,
+            3 => Zona.Zona3,
+            4 => Zona.Zona4,
+            5 => Zona.Zona5,
+            _ when Enum.IsDefined(typeof(Zona), zonaParam) => (Zona)zonaParam,
+            _ => Zona.Ninguna
+        };
+    }
+
+    private static string ObtenerZonaTexto(Zona zona)
+    {
+        if (zona == Zona.Ninguna)
+        {
+            return "Sin zona";
+        }
+
+        var partes = new List<string>();
+
+        if (zona.HasFlag(Zona.Zona1)) partes.Add("1");
+        if (zona.HasFlag(Zona.Zona2)) partes.Add("2");
+        if (zona.HasFlag(Zona.Zona3)) partes.Add("3");
+        if (zona.HasFlag(Zona.Zona4)) partes.Add("4");
+        if (zona.HasFlag(Zona.Zona5)) partes.Add("5");
+
+        return partes.Count == 0 ? "Sin zona" : string.Join(", ", partes);
+    }
+
+    private static string AbreviarMes(int mes)
+    {
+        return mes switch
+        {
+            1 => "Ene",
+            2 => "Feb",
+            3 => "Mar",
+            4 => "Abr",
+            5 => "May",
+            6 => "Jun",
+            7 => "Jul",
+            8 => "Ago",
+            9 => "Sep",
+            10 => "Oct",
+            11 => "Nov",
+            12 => "Dic",
+            _ => "-"
+        };
+    }
+
+    private static DateTime ObtenerFechaArgentina()
+    {
+        try
+        {
+            var zonaArgentina = TimeZoneInfo.FindSystemTimeZoneById("America/Argentina/Buenos_Aires");
+            return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, zonaArgentina);
+        }
+        catch
+        {
+            try
+            {
+                var zonaArgentina = TimeZoneInfo.FindSystemTimeZoneById("Argentina Standard Time");
+                return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, zonaArgentina);
+            }
+            catch
+            {
+                return DateTime.UtcNow.AddHours(-3);
+            }
+        }
+    }
+
+    private async Task DescargarPdf()
+    {
+        if (IsGenerating)
+        {
+            return;
+        }
+
+        IsGenerating = true;
+
+        try
+        {
+            var nombreArchivo = $"ListaCobranza_{Anio}_Zona{ZonaTexto.Replace(", ", "-")}_{FechaHoraArgentina:yyyyMMdd_HHmmss}.pdf";
+            await JSRuntime.InvokeVoidAsync("pdfExport.generatePdfFast", "pdf-content", nombreArchivo, "landscape");
+        }
+        finally
+        {
+            IsGenerating = false;
+        }
+    }
+
+    private async Task VistaPrevia()
+    {
+        if (IsGenerating)
+        {
+            return;
+        }
+
+        IsGenerating = true;
+
+        try
+        {
+            var nombreArchivo = $"ListaCobranza_{Anio}_Zona{ZonaTexto.Replace(", ", "-")}_{FechaHoraArgentina:yyyyMMdd_HHmmss}.pdf";
+            await JSRuntime.InvokeVoidAsync("pdfExport.generatePdfPreviewFast", "pdf-content", nombreArchivo, "landscape");
+        }
+        finally
+        {
+            IsGenerating = false;
+        }
+    }
+}

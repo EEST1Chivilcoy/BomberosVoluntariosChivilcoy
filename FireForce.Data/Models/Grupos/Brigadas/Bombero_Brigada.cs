@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using FireForce.Core.Data.Models.Personas.Personal;
+using FireForce.Data.Models.Personas.Personal;
 
-namespace FireForce.Core.Data.Models.Grupos.Brigadas
+namespace FireForce.Data.Models.Grupos.Brigadas
 {
     public class Bombero_Brigada
     {
