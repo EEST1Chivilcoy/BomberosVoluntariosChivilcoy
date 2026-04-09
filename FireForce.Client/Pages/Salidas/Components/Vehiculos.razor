@@ -407,7 +407,7 @@
                         <ActionColumn Title="Acciones" Width="80">
                             <Template>
                                 <Popconfirm Title="¿Está seguro de eliminar este móvil?"
-                                OnConfirm="()=> DeleteRowMovil(MovilesSalidasL1.Movil.NumeroMovil)"
+                                OnConfirm="()=> DeleteRowMovil(MovilesSalidasL1)"
                                 OkText="Sí, eliminar"
                                 CancelText="Cancelar">
                                     <Button Type="@ButtonType.Text"
@@ -628,8 +628,10 @@
         Console.WriteLine($"Failed:{JsonSerializer.Serialize(movilSalidaView)}");
     }
 
-    private async void DeleteRowMovil(string numeroMovil)
+    private async void DeleteRowMovil(Movil_Salida movil_Salida)
     {
+        string? numeroMovil = movil_Salida.Movil.NumeroMovil;
+
         var movilToDelete = Model.Moviles.FirstOrDefault(m => m.Movil.NumeroMovil == numeroMovil);
 
         if (movilToDelete != null)
@@ -638,7 +640,7 @@
             var chofer = movilToDelete.Chofer;
             var movil = movilToDelete.Movil;
 
-            var choferview = BomberosViewModelTodos.FirstOrDefault(b => b.NumeroLegajo == movilSalidaView.Chofer?.NumeroLegajo);
+            var choferview = bomberoChoferes.FirstOrDefault(b => b.NumeroLegajo == chofer.NumeroLegajo);
 
             // Eliminar el móvil de la lista
             Model.Moviles.Remove(movilToDelete);
