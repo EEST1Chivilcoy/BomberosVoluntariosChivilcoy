@@ -403,7 +403,7 @@
     {
         foreach (var Bom in _selectedRows)
         {
-            await deleteRow(Bom.NumeroLegajo);
+            await deleteRow(Bom.BomberoId);
         }
 
         // Reasignar _selectedRows a una nueva lista vacía
@@ -415,19 +415,41 @@
         // Encuentra el bombero con el número de legajo especificado en la lista del componente
         var bomberoToRemove = bomberosSalida.FirstOrDefault(b => b.BomberoId == id);
 
-        if (bomberoToRemove != null)
+        if (bomberoToRemove is null)
+        {
+            MessageService.Error("No se encontró al bombero");
+            return;
+        }
+
+        // Primero remueve el bombero de la lista que muestra la tabla
+        bomberosSalida.Remove(bomberoToRemove);
+
+        // Añade el bombero de vuelta a la lista de bomberos disponibles para salir
+        bomberosSalirTodos.Add(bomberosTodosView.FirstOrDefault(b => b.Id == bomberoToRemove.BomberoId));
+
+        bool todosNulos = true;
+        foreach (var bomberoSalida in Model.CuerpoParticipante)
+        {
+            if (bomberoSalida.Bombero is not null)
+            {
+                todosNulos = false;
+                break;
+            }
+        }
+
+        if (!todosNulos)
         {
             var bomberoToRemoveModel = Model.CuerpoParticipante.FirstOrDefault(b => b.Bombero.PersonaId == id);
-
-            if (bomberoToRemoveModel != null)
+            if (bomberoToRemoveModel is null)
             {
-                Model.CuerpoParticipante.Remove(bomberoToRemoveModel);
+                MessageService.Error("No se encontró al bombero");
+                return;
             }
-
-            bomberosSalida.Remove(bomberoToRemove);
-
-            // Añade el bombero de vuelta a la lista de bomberos disponibles para salir
-            bomberosSalirTodos.Add(bomberosTodosView.FirstOrDefault(b => b.Id == bomberoToRemove.BomberoId));
+            Model.CuerpoParticipante.Remove(bomberoToRemoveModel);
+        }
+        else
+        {
+            // MessageService.Error("Cuerpo participante vacío");
         }
     }
 }
