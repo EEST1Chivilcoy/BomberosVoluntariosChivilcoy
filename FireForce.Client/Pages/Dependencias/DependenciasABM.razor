@@ -632,14 +632,14 @@
         // Verifica si la lista de dependencias está vacía. (Si no hay dependencias, muestra un mensaje de advertencia).
         if (Dependencias == null || Dependencias.Count == 0)
         {
-            await MessageService.WarningAsync("No se encontraron dependencias disponibles en la base de datos.");
+            return;
         }
 
         // Mapea las dependencias a ViewModel.
         DependenciaViewModels = await MapearDependenciasAsync(Dependencias);
 
         // Verifica si la lista de dependencias mapeadas está vacía. Pero tambien verifica si la lista de dependencias es nula o tiene elementos. Para determinar que es un error de mapeo.
-        if (DependenciaViewModels == null || DependenciaViewModels.Count == 0 || Dependencias != null || Dependencias.Count != 0)
+        if (DependenciaViewModels == null || DependenciaViewModels.Count == 0)
         {
             await MessageService.ErrorAsync("Error al mapear las dependencias. Por favor, intente nuevamente más tarde.");
             return;
@@ -796,6 +796,7 @@
 
     private async Task BorrarDependencia(int id)
     {
+        DependenciaViewModels = DependenciaViewModels.Where(d => d.Id != id).ToList();
         await DependenciaService.EliminarDependenciaAsync(id);
         await OnInitializedAsync();
         await MessageService.SuccessAsync("Dependencia eliminada correctamente.");
