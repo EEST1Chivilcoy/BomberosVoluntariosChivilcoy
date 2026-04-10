@@ -841,7 +841,7 @@
                     <div class="filter-row">
                         <div class="filter-group">
                             <label class="filter-label">📅 Fecha Desde</label>
-                            <DatePicker TValue="DateTime"
+                            <DatePicker Mask="dd/MM/yyyy" TValue="DateTime"
                                         DefaultValue="@DateTime.Now.AddDays(-30)"
                                         @bind-Value="@FechaBuscarI"
                                         Size="InputSize.Large"
@@ -849,7 +849,7 @@
                         </div>
                         <div class="filter-group">
                             <label class="filter-label">📅 Fecha Hasta</label>
-                            <DatePicker TValue="DateTime"
+                            <DatePicker Mask="dd/MM/yyyy" TValue="DateTime"
                                         DefaultValue="@DateTime.Now.AddDays(30)"
                                         @bind-Value="@FechaBuscarF"
                                         Size="InputSize.Large"
@@ -1048,7 +1048,7 @@
 
                 <AntDesign.Col Span="12">
                     <FormItem Label="📅 Fecha del Pago" Required>
-                        <DatePicker TValue="DateTime"
+                        <DatePicker Mask="dd/MM/yyyy" TValue="DateTime"
                                     @bind-Value="@nuevoPago.Fecha"
                                     Placeholder="@("Seleccione fecha")"
                                     Size="InputSize.Large"

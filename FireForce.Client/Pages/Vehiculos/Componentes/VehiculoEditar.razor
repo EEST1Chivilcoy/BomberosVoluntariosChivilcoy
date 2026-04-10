@@ -161,14 +161,14 @@
                             <Input @bind-Value="movilView.MarcaBateria" Placeholder="Marca de batería" />
                         </FormItem>
                         <FormItem Label="Fecha del último cambio de batería">
-                            <DatePicker @bind-Value="movilView.FechaUltimoCambioBateria" Style="width: 100%;" />
+                            <DatePicker Mask="dd/MM/yyyy" @bind-Value="movilView.FechaUltimoCambioBateria" Style="width: 100%;" />
                         </FormItem>
 
                         <FormItem Label="Fecha del último service">
-                            <DatePicker @bind-Value="vehiculoView.FechaUltimoService" Style="width: 100%;" />
+                            <DatePicker Mask="dd/MM/yyyy" @bind-Value="vehiculoView.FechaUltimoService" Style="width: 100%;" />
                         </FormItem>
                         <FormItem Label="Fecha del próximo service">
-                            <DatePicker @bind-Value="vehiculoView.FechaProximoService" Style="width: 100%;" />
+                            <DatePicker Mask="dd/MM/yyyy" @bind-Value="vehiculoView.FechaProximoService" Style="width: 100%;" />
                         </FormItem>
                     </div>
                 }
@@ -182,10 +182,10 @@
                             <AntDesign.InputNumber @bind-Value="@movilView.CantidadLitros" Min="0" Placeholder="Litros de Combustible" Style="width: 100%;" />
                         </FormItem>
                         <FormItem Label="Fecha del último service">
-                            <DatePicker @bind-Value="vehiculoView.FechaUltimoService" Style="width: 100%;" />
+                            <DatePicker Mask="dd/MM/yyyy" @bind-Value="vehiculoView.FechaUltimoService" Style="width: 100%;" />
                         </FormItem>
                         <FormItem Label="Fecha del próximo service">
-                            <DatePicker @bind-Value="vehiculoView.FechaProximoService" Style="width: 100%;" />
+                            <DatePicker Mask="dd/MM/yyyy" @bind-Value="vehiculoView.FechaProximoService" Style="width: 100%;" />
                         </FormItem>
                     </div>
                 }

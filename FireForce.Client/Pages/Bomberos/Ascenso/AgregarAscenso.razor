@@ -135,7 +135,7 @@
                 </AntDesign.Col>
                 <AntDesign.Col Span="12">
                     <FormItem Label="📅 Fecha de Ascenso" Required Class="modal-crear-ascenso-form-item">
-                        <DatePicker TValue="DateTime" DefaultValue="DateTime.Now" @bind-Value="AscensoVM.FechaAscenso" />
+                        <DatePicker Mask="dd/MM/yyyy" TValue="DateTime" DefaultValue="DateTime.Now" @bind-Value="AscensoVM.FechaAscenso" />
                     </FormItem>
                 </AntDesign.Col>
             </Row>

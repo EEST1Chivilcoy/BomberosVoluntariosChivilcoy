@@ -239,7 +239,7 @@
                             </AntDesign.Col>
                             <AntDesign.Col Span="8">
                                 <FormItem Label="Fecha de Nacimiento">
-                                    <DatePicker @bind-Value="@personalView.FechaNacimiento"
+                                    <DatePicker Mask="dd/MM/yyyy" @bind-Value="@personalView.FechaNacimiento"
                                                 Picker="@DatePickerType.Date"
                                                 Style="width: 100%;"
                                                 Placeholder="@("Seleccione fecha")"
@@ -303,7 +303,7 @@
                 <AntDesign.Row Gutter="16">
                     <AntDesign.Col Span="8">
                         <FormItem Label="Fecha de Aceptación">
-                            <DatePicker @bind-Value="@personalView.FechaAceptacion"
+                            <DatePicker Mask="dd/MM/yyyy" @bind-Value="@personalView.FechaAceptacion"
                                         Picker="@DatePickerType.Date"
                                         Style="width: 100%;"
                                         Placeholder="@("Seleccione fecha")"
@@ -325,7 +325,7 @@
                             {
                                 <div class="conditional-field">
                                     <FormItem Label="Fecha vencimiento del carnet">
-                                        <DatePicker @bind-Value="@personalView.VencimientoRegistro"
+                                        <DatePicker Mask="dd/MM/yyyy" @bind-Value="@personalView.VencimientoRegistro"
                                                     Picker="@DatePickerType.Date"
                                                     Style="width: 100%;"
                                                     Placeholder="@("Seleccione fecha de vencimiento")"

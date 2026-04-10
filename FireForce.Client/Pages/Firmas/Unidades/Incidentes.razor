@@ -489,12 +489,12 @@
                     <Row Gutter="16">
                         <Col Span="3">
                         <label class="filter-label">📅 Fecha Desde</label>
-                        <DatePicker TValue="DateTime" DefaultValue="@FechaBuscarI" @bind-Value="@FechaBuscarI"
+                            <DatePicker Mask="dd/MM/yyyy" TValue="DateTime" DefaultValue="@FechaBuscarI" @bind-Value="@FechaBuscarI"
                             Size="InputSize.Large" />
                         </Col>
                         <Col Span="3">
                         <label class="filter-label">📅 Fecha Hasta</label>
-                        <DatePicker TValue="DateTime" DefaultValue="@FechaBuscarF" @bind-Value="@FechaBuscarF"
+                            <DatePicker Mask="dd/MM/yyyy" TValue="DateTime" DefaultValue="@FechaBuscarF" @bind-Value="@FechaBuscarF"
                             Size="InputSize.Large" />
                         </Col>
                     </Row>
@@ -591,7 +591,7 @@
                 </AntDesign.Col>
                 @*      <AntDesign.Col Span="8">
                     <FormItem Label="📅 Fecha" Required Class="modal-crear-firma-form-item">
-                        <DatePicker TValue="DateTime"
+                        <DatePicker Mask="dd/MM/yyyy" TValue="DateTime"
                                     @bind-Value="@nuevaFirma.Fecha"
                                     DefaultValue="DateTime.Today"
                                     Placeholder="@("Seleccione fecha")"

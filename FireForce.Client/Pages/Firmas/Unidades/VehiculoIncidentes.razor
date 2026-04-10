@@ -67,11 +67,11 @@
         <div class="inpt-cont-inline">
                     <div class="inpt-cont">
                         <label class="inpt-cont--lbl">Desde: </label>
-                        <DatePicker TValue="DateTime" @bind-Value="@FechaDesde" />
+                        <DatePicker Mask="dd/MM/yyyy" TValue="DateTime" @bind-Value="@FechaDesde" />
                     </div>
                     <div class="inpt-cont">
                         <label class="inpt-cont--lbl">Hasta: </label>
-                        <DatePicker TValue="DateTime" @bind-Value="@FechaHasta" DefaultValue="DateTime.Now" />
+                        <DatePicker Mask="dd/MM/yyyy" TValue="DateTime" @bind-Value="@FechaHasta" DefaultValue="DateTime.Now" />
                     </div>
                     <div class="buton-cont">
                         <Button Style="margin-bottom: 5px;">

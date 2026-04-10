@@ -263,7 +263,7 @@
                             </AntDesign.Col>
                             <AntDesign.Col Span="10">
                                 <FormItem Label="Fecha de nacimiento" Class="modal-damnificado-form-item">
-                                    <DatePicker TValue="DateTime ?" @bind-Value="@Damnificado.FechaDeNacimiento" OnChange="@CalcularEdad" />
+                                    <DatePicker Mask="dd/MM/yyyy" TValue="DateTime?" @bind-Value="@Damnificado.FechaDeNacimiento" OnChange="@CalcularEdad" />
                                 </FormItem>
                             </AntDesign.Col>
                             <AntDesign.Col Span="6">
@@ -433,7 +433,7 @@
                             </AntDesign.Col>
                             <AntDesign.Col Span="12">
                                 <FormItem Label="Fecha de Vencimiento" Class="modal-damnificado-form-item">
-                                    <DatePicker TValue="DateTime ?" @bind-Value="@Vehiculo.FechaDeVencimiento" />
+                                    <DatePicker Mask="dd/MM/yyyy" TValue="DateTime?" @bind-Value="@Vehiculo.FechaDeVencimiento" />
                                 </FormItem>
                             </AntDesign.Col>
                         </Row>

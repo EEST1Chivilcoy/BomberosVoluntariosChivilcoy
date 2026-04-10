@@ -369,7 +369,7 @@
                     <div class="filter-row">
                         <div class="filter-group">
                             <label class="filter-label">📅 Fecha Desde</label>
-                            <DatePicker TValue="DateTime"
+                            <DatePicker Mask="dd/MM/yyyy" TValue="DateTime"
                                         DefaultValue="@DateTime.Now"
                                         @bind-Value="@desde"
                                         Size="InputSize.Large"
@@ -377,7 +377,7 @@
                         </div>
                         <div class="filter-group">
                             <label class="filter-label">📅 Fecha Hasta</label>
-                            <DatePicker TValue="DateTime"
+                            <DatePicker Mask="dd/MM/yyyy" TValue="DateTime"
                                         DefaultValue="@DateTime.Now"
                                         @bind-Value="@hasta"
                                         Size="InputSize.Large"

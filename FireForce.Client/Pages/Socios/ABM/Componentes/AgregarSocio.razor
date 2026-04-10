@@ -248,7 +248,7 @@
 
                                 <AntDesign.Col Span="8">
                                     <FormItem Label="Fecha de Nacimiento">
-                                        <DatePicker @bind-Value="@personalView.FechaNacimiento"
+                                        <DatePicker Mask="dd/MM/yyyy" @bind-Value="@personalView.FechaNacimiento"
                                                     Picker="@DatePickerType.Date"
                                                     Style="width: 100%;"
                                                     Placeholder="@("Seleccione fecha")"
@@ -267,7 +267,7 @@
 
                             <AntDesign.Col Span="8">
                                 <FormItem Label="Fecha de Ingreso">
-                                    <DatePicker @bind-Value="@socioView.FechaIngreso"
+                                    <DatePicker Mask="dd/MM/yyyy" @bind-Value="@socioView.FechaIngreso"
                                                 Picker="@DatePickerType.Date"
                                                 Style="width: 100%;"
                                                 Placeholder="@("Seleccione fecha")"

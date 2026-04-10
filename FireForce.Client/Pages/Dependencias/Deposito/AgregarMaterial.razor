@@ -111,7 +111,7 @@
                 <AntDesign.Col Span="12">
                     <div class="modal-crear-movimiento-form-item">
                         <FormItem Label="📅 Fecha" Required>
-                            <DatePicker TValue="DateTime" DefaultValue="DateTime.Now" @bind-Value="MaterialViewModel.FechaAlta" Style="width: 100%;" />
+                            <DatePicker Mask="dd/MM/yyyy" TValue="DateTime" DefaultValue="DateTime.Now" @bind-Value="MaterialViewModel.FechaAlta" Style="width: 100%;" />
                         </FormItem>
                     </div>
                 </AntDesign.Col>

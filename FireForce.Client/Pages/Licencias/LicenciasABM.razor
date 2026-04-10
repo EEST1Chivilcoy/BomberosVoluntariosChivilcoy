@@ -702,7 +702,7 @@
                     <div class="filter-row">
                         <div class="filter-group">
                             <label class="filter-label">📅 Fecha Desde</label>
-                            <DatePicker TValue="DateTime"
+                            <DatePicker Mask="dd/MM/yyyy" TValue="DateTime"
                                         DefaultValue="@DateTime.Now.AddDays(-30)"
                                         @bind-Value="@FechaBuscarI"
                                         Size="InputSize.Large"
@@ -710,7 +710,7 @@
                         </div>
                         <div class="filter-group">
                             <label class="filter-label">📅 Fecha Hasta</label>
-                            <DatePicker TValue="DateTime"
+                            <DatePicker Mask="dd/MM/yyyy" TValue="DateTime"
                                         DefaultValue="@DateTime.Now.AddDays(30)"
                                         @bind-Value="@FechaBuscarF"
                                         Size="InputSize.Large"
@@ -923,7 +923,7 @@
             <Row Class="modal-crear-licencia-row" Gutter="16">
                 <AntDesign.Col Span="9">
                     <FormItem Label="📅 Fecha de Inicio" Required Class="modal-crear-licencia-form-item">
-                        <DatePicker TValue="DateTime"
+                        <DatePicker Mask="dd/MM/yyyy" TValue="DateTime"
                                     @bind-Value="@nuevaLicencia.Desde"
                                     DefaultValue="DateTime.Today"
                                     DisabledDate="@(date => date < DateTime.Today)"
@@ -934,7 +934,7 @@
 
                 <AntDesign.Col Span="9">
                     <FormItem Label="📅 Fecha de Finalización" Required Class="modal-crear-licencia-form-item">
-                        <DatePicker TValue="DateTime"
+                        <DatePicker Mask="dd/MM/yyyy" TValue="DateTime"
                                     @bind-Value="@nuevaLicencia.Hasta"
                                     DefaultValue="@(DateTime.Today.AddDays(1))"
                                     DisabledDate="@(date => date < nuevaLicencia.Desde)"

@@ -83,16 +83,16 @@
             else
             {
                 <FormItem Label="Fecha">
-                    <DatePicker TValue="DateTime" Picker="@DatePickerType.Date" @bind-Value="@Model.FechaSalida" DisabledDate="@(date => date > DateTime.Today)" />
+                    <DatePicker Mask="dd/MM/yyyy" TValue="DateTime" Picker="@DatePickerType.Date" @bind-Value="@Model.FechaSalida" DisabledDate="@(date => date > DateTime.Today)" />
                 </FormItem>
             }
 
             <div class="hora-row">
                 <FormItem Label="Hora Salida">
-                    <TimePicker @bind-Value="@Model.TimeSalida" Format="HH:mm" />
+                    <TimePicker Mask="HH:mm" @bind-Value="@Model.TimeSalida" Format="HH:mm" />
                 </FormItem>
                 <FormItem Label="Hora Llegada">
-                    <TimePicker @bind-Value="@Model.TimeLlegada" Format="HH:mm" />
+                    <TimePicker Mask="HH:mm" @bind-Value="@Model.TimeLlegada" Format="HH:mm" />
                 </FormItem>
             </div>
         </div>
