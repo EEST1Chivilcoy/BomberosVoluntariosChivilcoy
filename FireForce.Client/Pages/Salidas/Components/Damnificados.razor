@@ -73,7 +73,7 @@
         padding: 4px 10px !important;
     }
 
-    /* Modal estilo Licencias adaptado para Damnificados */
+    
     .modal-damnificado .ant-modal-content {
         border-radius: 12px;
         box-shadow: 0 4px 12px rgba(255, 163, 77, 0.15);
@@ -486,7 +486,71 @@
                 </div>
             </Modal>
         </TabPane>
+        <TabPane Key="animales" Tab="Animales">
+            <Table DataSource="AnimalesTemporal" Size="TableSize.Small" Class="damnificados-componente" Bordered>
+                <TitleTemplate>
+                    <GridRow>
+                        <GridCol Span="24" Style="text-align: right;">
+                            <Button Type="ButtonType.Primary" Class="btn-nuevo-damnificado"
+                                    OnClick="@(() => { editandoAnimal = false; Animal = new(); modalAnimal = true; })">
+                                <Icon Type="plus" /> Nuevo Animal
+                            </Button>
+                        </GridCol>
+                    </GridRow>
+                </TitleTemplate>
+                <ColumnDefinitions Context="animal">
+                    <PropertyColumn Title="N°" Property="a => a.Numero"></PropertyColumn>
+                    <PropertyColumn Title="Especie" Property="a => a.Especie"></PropertyColumn>
+                    <PropertyColumn Title="Cantidad" Property="a => a.Cantidad"></PropertyColumn>
+                    <PropertyColumn Title="Estado" Property="a => a.Estado"></PropertyColumn>
+                    <ActionColumn Title="Acciones">
+                        <Popconfirm Title="¿Eliminar?" OnConfirm="@(() => EliminarAnimal(animal))">
+                            <Button Danger><Icon Type="delete" /></Button>
+                        </Popconfirm>
+                        <Button Type="@ButtonType.Primary" OnClick="@(() => EditarAnimal(animal))">
+                            <Icon Type="edit" />
+                        </Button>
+                    </ActionColumn>
+                </ColumnDefinitions>
+            </Table>
+        </TabPane>
     </Tabs>
+    <Modal @bind-Visible="modalAnimal"
+           Title="@(editandoAnimal ? "Editar Animal" : "Datos del Animal")"
+           OnOk="AgregarEditarAnimal"
+           OnCancel="@(() => modalAnimal = false)"
+           WrapClassName="modal-damnificado"
+           Width="700">
+        <div class="modal-damnificado-content">
+            <Form Model="Animal" Layout="FormLayout.Vertical">
+                <Row Gutter="16">
+                    <AntDesign.Col Span="12">
+                        <FormItem Label="Especie">
+                            <Input @bind-Value="@Animal.Especie" Placeholder="Ej: Canino, Felino" />
+                        </FormItem>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="12">
+                        <FormItem Label="Cantidad">
+                            <AntDesign.InputNumber @bind-Value="@Animal.Cantidad" Min="1" Style="width:100%;" />
+                        </FormItem>
+                    </AntDesign.Col>
+                </Row>
+                <Row Gutter="16">
+                    <AntDesign.Col Span="24">
+                        <FormItem Label="Estado">
+                            <Select TItem="string" TItemValue="string" @bind-Value="@Animal.Estado">
+                                <SelectOptions>
+                                    <SelectOption TItemValue="string" TItem="string" Value="@("Rescatado")" Label="Rescatado" />
+                                    <SelectOption TItemValue="string" TItem="string" Value="@("Herido")" Label="Herido" />
+                                    <SelectOption TItemValue="string" TItem="string" Value="@("Fallecido")" Label="Fallecido" />
+                                </SelectOptions>
+                            </Select>
+                        </FormItem>
+                    </AntDesign.Col>
+                </Row>
+            </Form>
+        </div>
+    </Modal>
 </div>
 
 @code {
@@ -697,5 +761,51 @@
             Damnificado.FuerzaInterviniente = fuerza;
         else
             Damnificado.FuerzaInterviniente = null;
+    }
+    
+    private AnimalViewModel Animal = new();
+    private bool modalAnimal = false;
+    private bool editandoAnimal = false;
+    private List<AnimalViewModel> AnimalesTemporal = new();// ACA TA GIOO <3 (borrale el nombre y ponele otro le puse temporal para poder ver como m quedaba)
+
+ 
+    private void EditarAnimal(AnimalViewModel a)
+    {
+        Animal = new AnimalViewModel { Numero = a.Numero, Especie = a.Especie, Cantidad = a.Cantidad, Estado = a.Estado };
+        editandoAnimal = true;
+        modalAnimal = true;
+    }
+
+    private void AgregarEditarAnimal()
+    {
+        if (!editandoAnimal)
+        {
+            Animal.Numero = AnimalesTemporal.Count + 1;
+            AnimalesTemporal.Add(Animal);
+        }
+        else
+        {
+            var i = AnimalesTemporal.FindIndex(x => x.Numero == Animal.Numero);
+            if (i != -1) AnimalesTemporal[i] = Animal;
+        }
+        modalAnimal = false;
+        StateHasChanged();
+    }
+
+    private async Task EliminarAnimal(AnimalViewModel a)
+    {
+        AnimalesTemporal.Remove(a);
+        for (int i = 0; i < AnimalesTemporal.Count; i++) AnimalesTemporal[i].Numero = i + 1;
+        StateHasChanged();
+    }
+}
+@code {
+    // esto para la base de datos del pinche rocco
+    public class AnimalViewModel
+    {
+        public int Numero { get; set; }
+        public string Especie { get; set; } = "";
+        public int Cantidad { get; set; }
+        public string Estado { get; set; } = "vivido ahre";
     }
 }
