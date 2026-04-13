@@ -487,7 +487,7 @@
             </Modal>
         </TabPane>
         <TabPane Key="animales" Tab="Animales">
-            <Table DataSource="AnimalesTemporal" Size="TableSize.Small" Class="damnificados-componente" Bordered>
+            <Table DataSource="AnimalesViewModel" Size="TableSize.Small" Class="damnificados-componente" Bordered>
                 <TitleTemplate>
                     <GridRow>
                         <GridCol Span="24" Style="text-align: right;">
@@ -500,6 +500,7 @@
                 </TitleTemplate>
                 <ColumnDefinitions Context="animal">
                     <PropertyColumn Title="N°" Property="a => a.Numero"></PropertyColumn>
+                    <PropertyColumn Title="Responsable" Property="a => a.Responsable.NombreYApellido"></PropertyColumn>
                     <PropertyColumn Title="Especie" Property="a => a.Especie"></PropertyColumn>
                     <PropertyColumn Title="Cantidad" Property="a => a.Cantidad"></PropertyColumn>
                     <PropertyColumn Title="Estado" Property="a => a.Estado"></PropertyColumn>
@@ -535,6 +536,34 @@
                         </FormItem>
                     </AntDesign.Col>
                 </Row>
+                @if (Model.Damnificados != null && Model.Damnificados.Any())
+                {
+                    <Row Gutter="16">
+                        <AntDesign.Col Span="12">
+                            <FormItem Label="¿Se conoce al responsable?" Class="modal-damnificado-form-item">
+                                <Switch @bind-Checked="@Animal.SeConoceResponsable" />
+                            </FormItem>
+                        </AntDesign.Col>
+                        @if (Animal.SeConoceResponsable)
+                        {
+                            <AntDesign.Col Span="12">
+                                <FormItem Label="Responsable" Class="modal-damnificado-form-item">
+                                    <Select TItem="DamnificadoViewModel"
+                                            TItemValue="int?"
+                                            DataSource="@Model.Damnificados"
+                                            @bind-Value="@Animal.ResponsableId"
+                                            ValueName="@nameof(DamnificadoViewModel.Numero)"
+                                            ItemLabel="c => c.NombreYApellido"
+                                            Placeholder="Seleccione al responsable"
+                                            AllowClear="true"
+                                            EnableSearch="true"
+                                            OnSelectedItemChanged="OnResponsableSeleccionado">
+                                    </Select>
+                                </FormItem>
+                            </AntDesign.Col>
+                        }
+                    </Row>
+                }
                 <Row Gutter="16">
                     <AntDesign.Col Span="24">
                         <FormItem Label="Estado">
@@ -543,6 +572,7 @@
                                     <SelectOption TItemValue="string" TItem="string" Value="@("Rescatado")" Label="Rescatado" />
                                     <SelectOption TItemValue="string" TItem="string" Value="@("Herido")" Label="Herido" />
                                     <SelectOption TItemValue="string" TItem="string" Value="@("Fallecido")" Label="Fallecido" />
+                                    <SelectOption TItemValue="string" TItem="string" Value="@("Desaparecido")" Label="Desaparecido" />
                                 </SelectOptions>
                             </Select>
                         </FormItem>
@@ -736,6 +766,15 @@
             Vehiculo.Conductor = null;
     }
 
+    private void OnResponsableSeleccionado(DamnificadoViewModel responsable)
+    {
+        if (responsable != null)
+        {
+            Animal.Responsable = responsable;
+        }
+        else Animal.Responsable = null;
+    }
+
     private IEnumerable<int> PasajerosSeleccionados
     {
         get => Vehiculo.Pasajeros?.Select(p => p.Numero) ?? Enumerable.Empty<int>();
@@ -762,13 +801,13 @@
         else
             Damnificado.FuerzaInterviniente = null;
     }
-    
+
     private AnimalViewModel Animal = new();
     private bool modalAnimal = false;
     private bool editandoAnimal = false;
-    private List<AnimalViewModel> AnimalesTemporal = new();// ACA TA GIOO <3 (borrale el nombre y ponele otro le puse temporal para poder ver como m quedaba)
+    private List<AnimalViewModel> AnimalesViewModel = new();// ACA TA GIOO <3 (borrale el nombre y ponele otro le puse temporal para poder ver como m quedaba)
 
- 
+
     private void EditarAnimal(AnimalViewModel a)
     {
         Animal = new AnimalViewModel { Numero = a.Numero, Especie = a.Especie, Cantidad = a.Cantidad, Estado = a.Estado };
@@ -780,13 +819,13 @@
     {
         if (!editandoAnimal)
         {
-            Animal.Numero = AnimalesTemporal.Count + 1;
-            AnimalesTemporal.Add(Animal);
+            Animal.Numero = AnimalesViewModel.Count + 1;
+            AnimalesViewModel.Add(Animal);
         }
         else
         {
-            var i = AnimalesTemporal.FindIndex(x => x.Numero == Animal.Numero);
-            if (i != -1) AnimalesTemporal[i] = Animal;
+            var i = AnimalesViewModel.FindIndex(x => x.Numero == Animal.Numero);
+            if (i != -1) AnimalesViewModel[i] = Animal;
         }
         modalAnimal = false;
         StateHasChanged();
@@ -794,18 +833,20 @@
 
     private async Task EliminarAnimal(AnimalViewModel a)
     {
-        AnimalesTemporal.Remove(a);
-        for (int i = 0; i < AnimalesTemporal.Count; i++) AnimalesTemporal[i].Numero = i + 1;
+        AnimalesViewModel.Remove(a);
+        for (int i = 0; i < AnimalesViewModel.Count; i++) AnimalesViewModel[i].Numero = i + 1;
         StateHasChanged();
     }
-}
-@code {
+
     // esto para la base de datos del pinche rocco
     public class AnimalViewModel
     {
         public int Numero { get; set; }
-        public string Especie { get; set; } = "";
+        public bool SeConoceResponsable { get; set; }
+        public int? ResponsableId { get; set; }
+        public DamnificadoViewModel? Responsable { get; set; }
+        public string Especie { get; set; } = "No especificado";
         public int Cantidad { get; set; }
-        public string Estado { get; set; } = "vivido ahre";
+        public string Estado { get; set; } = "No especificado";
     }
 }
