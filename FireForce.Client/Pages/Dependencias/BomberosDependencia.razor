@@ -229,15 +229,15 @@
 	}
 </style>
 
-<Modal Visible="true"
+<Modal @bind-Visible="ExternalVisible"
 	   Title="Bomberos de la Dependencia"
-	   Width=@("100vw")
+	   Width=@("90vw")
 	   Style="top: 0; padding: 0; height: 100vh; max-width: 100vw;"
 	   BodyStyle="padding: 0; height: calc(100vh - 55px); overflow: hidden;"
 	   Footer="null"
 	   Closable="true"
-	   OnCancel="@HandleClose"
-	   WrapClassName="fullscreen-modal">
+	   WrapClassName="fullscreen-modal"
+	   OnCancel="@HandleClose">
 
 	<div class="bomberos-abm" style="height: 100%; display: flex; flex-direction: column;">
 		<div class="table-container" style="flex: 1; display: flex; flex-direction: column;">
@@ -326,6 +326,7 @@
 	[Parameter] public int DependenciaId { get; set; } // ID de la Dependencia que se está editando
 	[Parameter] public string DependenciaNombre { get; set; } = string.Empty; // Nombre de la Dependencia
 	[Parameter] public EventCallback OnClose { get; set; } // Callback para cerrar la vista
+	[Parameter] public bool ExternalVisible { get; set; } // Controlador de visibilidad externo
 	private List<Bombero?> DependenciaBomberos = new(); // Lista de Bomberos de la Dependencia
 	public List<BomberoDependenciaViewModel?> BomberosViewModel { get; set; } = new(); // Lista de Bomberos en formato ViewModel para la Dependencia
 	private List<int> BomberosSeleccionados = new List<int>(); // Lista de IDs de Bomberos seleccionados para agregar a la Dependencia
@@ -399,17 +400,12 @@
 		// Mapeamos los bomberos de la dependencia a ViewModel
 		BomberosViewModel = MapFirefightersToDepartmentViewModels(DependenciaBomberos);
 
-		// Si no se pudieron mapear los bomberos a ViewModel, mostramos un mensaje de error
-		if (BomberosViewModel == null || !BomberosViewModel.Any() || DependenciaBomberos != null || DependenciaBomberos.Any())
-	{
-            await MessageService.ErrorAsync("Error al mapear los bomberos de la dependencia a ViewModel");
-            return;
-		}
+		if (BomberosViewModel is null || !BomberosViewModel.Any()) return;
 
-        // Limpiamos la lista de bomberos seleccionados
+		// Limpiamos la lista de bomberos seleccionados
 		BomberosSeleccionados = new();
 
-        // Si todo salió bien, actualizamos el estado del componente
+		// Si todo salió bien, actualizamos el estado del componente
 		StateHasChanged();
 	}
 
