@@ -501,7 +501,7 @@
                 <ColumnDefinitions Context="animal">
                     <PropertyColumn Title="N°" Property="a => a.Numero"></PropertyColumn>
                     <PropertyColumn Title="Responsable" Property="a => a.Responsable.NombreYApellido"></PropertyColumn>
-                    <PropertyColumn Title="Especie" Property="a => a.Especie"></PropertyColumn>
+                    <PropertyColumn Title="Especie" Property="a => a.Tipo"></PropertyColumn>
                     <PropertyColumn Title="Cantidad" Property="a => a.Cantidad"></PropertyColumn>
                     <PropertyColumn Title="Estado" Property="a => a.Estado"></PropertyColumn>
                     <ActionColumn Title="Acciones">
@@ -527,7 +527,7 @@
                 <Row Gutter="16">
                     <AntDesign.Col Span="12">
                         <FormItem Label="Especie">
-                            <Input @bind-Value="@Animal.Especie" Placeholder="Ej: Canino, Felino" />
+                            <Input @bind-Value="@Animal.Tipo" Placeholder="Ej: Canino, Felino" />
                         </FormItem>
                     </AntDesign.Col>
                     <AntDesign.Col Span="12">
@@ -810,7 +810,7 @@
 
     private void EditarAnimal(AnimalViewModel a)
     {
-        Animal = new AnimalViewModel { Numero = a.Numero, Especie = a.Especie, Cantidad = a.Cantidad, Estado = a.Estado };
+        Animal = new AnimalViewModel { Numero = a.Numero, Tipo = a.Tipo, Cantidad = a.Cantidad, Estado = a.Estado };
         editandoAnimal = true;
         modalAnimal = true;
     }
@@ -845,7 +845,7 @@
         public bool SeConoceResponsable { get; set; }
         public int? ResponsableId { get; set; }
         public DamnificadoViewModel? Responsable { get; set; }
-        public string Especie { get; set; } = "No especificado";
+        public string Tipo { get; set; } = "No especificado";
         public int Cantidad { get; set; }
         public string Estado { get; set; } = "No especificado";
     }
