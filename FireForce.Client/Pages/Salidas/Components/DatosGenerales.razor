@@ -14,7 +14,12 @@
 @implements IDisposable
 
 <style>
+    
+    .ant-select-open .ant-select-selection-item {
+        display: none !important;
+    }
 
+    }
     .map-container {
         width: 100%;
         aspect-ratio: 1 / 1;
@@ -110,13 +115,15 @@
                                 TItemValue="Direccion"
                                 DataSource="@direcciones"
                                 @bind-Value="@Model.DireccionDTO"
-                                Placeholder="Ingrese una direccion o coordenadas"
+                                Placeholder="Ingrese una dirección o coordenadas"
                                 LabelName="@nameof(Direccion.Descripcion)"
                                 OnSearch="OnSearch"
-                                SearchDebounceMilliseconds="2000"
+                                SearchDebounceMilliseconds="800" 
                                 EnableSearch
+                                AllowClear 
                                 Loading="@_loading"
-                                OnSelectedItemChanged="OnStreetSelected">
+                                OnSelectedItemChanged="OnStreetSelected"
+                                Style="width: 100%;">
                         </Select>
                     </FormItem>
                     <FormItem Label="Tipo Zona">
