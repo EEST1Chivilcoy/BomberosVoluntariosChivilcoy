@@ -308,6 +308,13 @@ else
                                 <div class="fila-label">DIRECCIÓN</div>
                                 <div class="fila-valor">@bono.Direccion</div>
                             </div>
+                            @if (!string.IsNullOrWhiteSpace(bono.DireccionPago))
+                            {
+                            <div class="fila">
+                                <div class="fila-label">DIRECCIÓN DE PAGO</div>
+                                <div class="fila-valor">@bono.DireccionPago</div>
+                            </div>
+                            }
                             <div class="fila">
                                 <div class="fila-label">FORMA DE PAGO</div>
                                 <div class="fila-valor">@bono.FrecuenciaPagoTexto @Mes/@AnioSeleccionado</div>
@@ -358,6 +365,7 @@ else
         public int NroSocio { get; set; }
         public string NombreSocio { get; set; } = string.Empty;
         public string Direccion { get; set; } = string.Empty;
+        public string DireccionPago { get; set; } = string.Empty;
         public string ZonaTexto { get; set; } = string.Empty;
         public string FrecuenciaPagoTexto { get; set; } = string.Empty;
         public string MontoCuotaTexto { get; set; } = "$0";
@@ -394,14 +402,15 @@ else
                 .Where(s => DebeEmitirBono(s.FrecuenciaDePago, Mes))
                 .OrderBy(s => s.NroSocio)
                 .Select(s => new BonoImprimible
-                {
-                    NroSocio = s.NroSocio,
-                    NombreSocio = ObtenerNombreSocio(s),
-                    Direccion = ObtenerDireccionParaBono(s),
-                    ZonaTexto = ObtenerZonaTexto(s.Zona ?? Zona.Ninguna),
-                    FrecuenciaPagoTexto = ObtenerFrecuenciaPagoTexto(s.FrecuenciaDePago),
-                    MontoCuotaTexto = $"${s.MontoCuota:N0}"
-                })
+                    {
+                        NroSocio = s.NroSocio,
+                        NombreSocio = ObtenerNombreSocio(s),
+                        Direccion = ObtenerDireccionParaBono(s),
+                        DireccionPago = s.DireccionSecundaria,
+                        ZonaTexto = ObtenerZonaTexto(s.Zona ?? Zona.Ninguna),
+                        FrecuenciaPagoTexto = ObtenerFrecuenciaPagoTexto(s.FrecuenciaDePago),
+                        MontoCuotaTexto = $"${s.MontoCuota:N0}"
+                    })
                 .ToList();
         }
         catch
