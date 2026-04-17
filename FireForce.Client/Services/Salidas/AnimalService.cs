@@ -1,11 +1,6 @@
 ﻿using FireForce.Data;
 using FireForce.Data.Models.Salidas.Componentes;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FireForce.Client.Services.Salidas
 {
@@ -53,7 +48,6 @@ namespace FireForce.Client.Services.Salidas
             animalAEditar.Cantidad = animal.Cantidad;
             animalAEditar.Nombre = animal.Nombre;
             animalAEditar.Observaciones = animal.Observaciones;
-            animalAEditar.SeConoceResponsable = animal.SeConoceResponsable;
             animalAEditar.DamnificadoId = animal.DamnificadoId;
             animalAEditar.Damnificado = animal.Damnificado;
 

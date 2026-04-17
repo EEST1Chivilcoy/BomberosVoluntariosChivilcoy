@@ -45,11 +45,6 @@ namespace FireForce.Data.Models.Salidas.Componentes
         public string? Observaciones { get; set; }
 
         /// <summary>
-        /// Booleano para saber si se conoce al responsable del animal.
-        /// </summary>
-        public bool SeConoceResponsable { get; set; }
-
-        /// <summary>
         /// Identificador único del responsable del animal.
         /// </summary>
         public int? DamnificadoId { get; set; }
