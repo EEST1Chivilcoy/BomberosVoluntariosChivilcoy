@@ -499,8 +499,8 @@
                     </GridRow>
                 </TitleTemplate>
                 <ColumnDefinitions Context="animal">
-                    <PropertyColumn Title="N°" Property="a => a.Numero"></PropertyColumn>
-                    <PropertyColumn Title="Responsable" Property="a => a.Responsable.NombreYApellido"></PropertyColumn>
+                    <PropertyColumn Title="N°" Property="a => a.NumeroOrden"></PropertyColumn>
+                    <PropertyColumn Title="Responsable" Property="a => a.NombreDamnificado"></PropertyColumn>
                     <PropertyColumn Title="Especie" Property="a => a.Tipo"></PropertyColumn>
                     <PropertyColumn Title="Cantidad" Property="a => a.Cantidad"></PropertyColumn>
                     <PropertyColumn Title="Estado" Property="a => a.Estado"></PropertyColumn>
@@ -526,10 +526,18 @@
             <Form Model="Animal" Layout="FormLayout.Vertical">
                 <Row Gutter="16">
                     <AntDesign.Col Span="12">
-                        <FormItem Label="Especie">
-                            <Input @bind-Value="@Animal.Tipo" Placeholder="Ej: Canino, Felino" />
+                        <FormItem Label="Tipo">
+                            <EnumSelect TEnum="TipoAnimal" @bind-Value="Animal.Tipo" AllowClear />
                         </FormItem>
                     </AntDesign.Col>
+                    @if (Animal.Tipo == TipoAnimal.Otro)
+                    {
+                        <AntDesign.Col Span="12">
+                            <FormItem Label="Tipo">
+                                <Input @bind-Value="Animal.TipoOtro" />
+                            </FormItem>
+                        </AntDesign.Col>
+                    }
                     <AntDesign.Col Span="12">
                         <FormItem Label="Cantidad">
                             <AntDesign.InputNumber @bind-Value="@Animal.Cantidad" Min="1" Style="width:100%;" />
@@ -551,7 +559,7 @@
                                     <Select TItem="DamnificadoViewModel"
                                             TItemValue="int?"
                                             DataSource="@Model.Damnificados"
-                                            @bind-Value="@Animal.ResponsableId"
+                                            @bind-Value="@Animal.DamnificadoId"
                                             ValueName="@nameof(DamnificadoViewModel.Numero)"
                                             ItemLabel="c => c.NombreYApellido"
                                             Placeholder="Seleccione al responsable"
@@ -567,14 +575,7 @@
                 <Row Gutter="16">
                     <AntDesign.Col Span="24">
                         <FormItem Label="Estado">
-                            <Select TItem="string" TItemValue="string" @bind-Value="@Animal.Estado">
-                                <SelectOptions>
-                                    <SelectOption TItemValue="string" TItem="string" Value="@("Rescatado")" Label="Rescatado" />
-                                    <SelectOption TItemValue="string" TItem="string" Value="@("Herido")" Label="Herido" />
-                                    <SelectOption TItemValue="string" TItem="string" Value="@("Fallecido")" Label="Fallecido" />
-                                    <SelectOption TItemValue="string" TItem="string" Value="@("Desaparecido")" Label="Desaparecido" />
-                                </SelectOptions>
-                            </Select>
+                            <EnumSelect TEnum="EstadoAnimal" @bind-Value="Animal.Estado" AllowClear />
                         </FormItem>
                     </AntDesign.Col>
                 </Row>
@@ -770,9 +771,9 @@
     {
         if (responsable != null)
         {
-            Animal.Responsable = responsable;
+            Animal.DamnificadoViewModel = responsable;
         }
-        else Animal.Responsable = null;
+        else Animal.DamnificadoViewModel = null;
     }
 
     private IEnumerable<int> PasajerosSeleccionados
@@ -810,7 +811,13 @@
 
     private void EditarAnimal(AnimalViewModel a)
     {
-        Animal = new AnimalViewModel { Numero = a.Numero, Tipo = a.Tipo, Cantidad = a.Cantidad, Estado = a.Estado };
+        Animal = new AnimalViewModel
+        {
+            NumeroOrden = a.NumeroOrden,
+            Tipo = a.Tipo, Cantidad = a.Cantidad,
+            Estado = a.Estado,
+            SeConoceResponsable = a.SeConoceResponsable
+        };
         editandoAnimal = true;
         modalAnimal = true;
     }
@@ -819,12 +826,12 @@
     {
         if (!editandoAnimal)
         {
-            Animal.Numero = AnimalesViewModel.Count + 1;
+            Animal.NumeroOrden = AnimalesViewModel.Count + 1;
             AnimalesViewModel.Add(Animal);
         }
         else
         {
-            var i = AnimalesViewModel.FindIndex(x => x.Numero == Animal.Numero);
+            var i = AnimalesViewModel.FindIndex(x => x.NumeroOrden == Animal.NumeroOrden);
             if (i != -1) AnimalesViewModel[i] = Animal;
         }
         modalAnimal = false;
@@ -834,19 +841,7 @@
     private async Task EliminarAnimal(AnimalViewModel a)
     {
         AnimalesViewModel.Remove(a);
-        for (int i = 0; i < AnimalesViewModel.Count; i++) AnimalesViewModel[i].Numero = i + 1;
+        for (int i = 0; i < AnimalesViewModel.Count; i++) AnimalesViewModel[i].NumeroOrden = i + 1;
         StateHasChanged();
-    }
-
-    // esto para la base de datos del pinche rocco
-    public class AnimalViewModel
-    {
-        public int Numero { get; set; }
-        public bool SeConoceResponsable { get; set; }
-        public int? ResponsableId { get; set; }
-        public DamnificadoViewModel? Responsable { get; set; }
-        public string Tipo { get; set; } = "No especificado";
-        public int Cantidad { get; set; }
-        public string Estado { get; set; } = "No especificado";
     }
 }

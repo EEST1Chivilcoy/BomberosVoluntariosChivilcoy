@@ -22,10 +22,23 @@ namespace FireForce.Client.Data.ViewModels.Personal
         [StringLength(255)]
         public string? Observaciones { get; set; }
 
+        public int NumeroOrden { get; set; }
+
         public bool SeConoceResponsable { get; set; }
 
         public int? DamnificadoId { get; set; }
 
         public Damnificado_Salida? Damnificado { get; set; }
+
+        public DamnificadoViewModel? DamnificadoViewModel { get; set; }
+
+        public string NombreDamnificado
+        {
+            get
+            {
+                if (DamnificadoViewModel is null) return "Desconocido";
+                else return DamnificadoViewModel.NombreYApellido;
+            }
+        }
     }
 }
