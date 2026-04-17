@@ -422,16 +422,17 @@
         {
             var contacto = await Context.Contactos.Where(c => c.PersonalId == a.PersonaId).SingleOrDefaultAsync();
             BomberoViweModel Bm = new()
-            {
-                NumeroLegajo = a.NumeroLegajo,
-                Nombre = a.Nombre,
-                Apellido = a.Apellido,
-                Grado = a.Grado,
-                TelefonoCel = contacto.TelefonoCel,
-                TelefonoLaboral = contacto.TelefonoLaboral,
-                Email = contacto.Email
-            };
-            BomberosVM.Add(Bm);
+                {
+                    NumeroLegajo = a.NumeroLegajo,
+                    Nombre = a.Nombre,
+                    Apellido = a.Apellido,
+                    Grado = a.Grado,
+                    Direccion = a.Direccion,
+                    TelefonoCel = contacto?.TelefonoCel,
+                    TelefonoLaboral = contacto?.TelefonoLaboral,
+                    Email = contacto?.Email
+                };
+            BomberosVM?.Add(Bm);
         }
     }
 

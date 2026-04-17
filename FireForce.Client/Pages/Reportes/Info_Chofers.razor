@@ -471,8 +471,8 @@
                 DotacionNumero = (int)chofer.Dotacion,
                 VencimientoRegistro = chofer.VencimientoRegistro,
                 NumeroLegajo = chofer.NumeroLegajo,
-                TelefonoCel = contactos.TelefonoCel,
-                TelefonoLaboral = contactos.TelefonoLaboral
+                TelefonoCel = contactos?.TelefonoCel,
+                TelefonoLaboral = contactos?.TelefonoLaboral
             };
 
             b.Add(ChoferesPasajeVM);

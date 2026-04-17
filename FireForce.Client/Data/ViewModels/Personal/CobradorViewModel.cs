@@ -21,17 +21,16 @@ namespace FireForce.Client.Data.ViewModels.Personal
         /// Regiónes asignadas al cobrador.
         /// </summary>
         [Required(ErrorMessage = "Debés asignar al menos una zona al cobrador.")]
-        public Zona ZonasAsignadas { get; set; } = Zona.Ninguna;
+        public Zona ZonasAsignadas { get; set; }
 
         public string ZonasAsignadasAsString
         {
             get
             {
-                if (ZonasAsignadas == Zona.Ninguna)
-                    return "Ninguna";
+
                 var zonas = Enum.GetValues(typeof(Zona))
                                .Cast<Zona>()
-                               .Where(z => z != Zona.Ninguna && ZonasAsignadas.HasFlag(z))
+                               .Where(z => z == Zona.Ninguna && ZonasAsignadas.HasFlag(z))
                                .Select(z => z.GetDisplayName());
 
                 return string.Join(", ", zonas);
