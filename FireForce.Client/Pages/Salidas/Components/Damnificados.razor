@@ -526,21 +526,21 @@
             <Form Model="Animal" Layout="FormLayout.Vertical">
                 <Row Gutter="16">
                     <AntDesign.Col Span="12">
-                        <FormItem Label="Tipo">
+                        <FormItem Label="Tipo" Class="modal-damnificado-form-item">
                             <EnumSelect TEnum="TipoAnimal" @bind-Value="Animal.Tipo" AllowClear />
                         </FormItem>
                     </AntDesign.Col>
                     @if (Animal.Tipo == TipoAnimal.Otro)
                     {
                         <AntDesign.Col Span="12">
-                            <FormItem Label="Tipo">
+                            <FormItem Label="Tipo" Class="modal-damnificado-form-item">
                                 <Input @bind-Value="Animal.TipoOtro" />
                             </FormItem>
                         </AntDesign.Col>
                     }
                     <AntDesign.Col Span="12">
-                        <FormItem Label="Cantidad">
-                            <AntDesign.InputNumber @bind-Value="@Animal.Cantidad" Min="1" Style="width:100%;" />
+                        <FormItem Label="Cantidad" Class="modal-damnificado-form-item">
+                            <AntDesign.InputNumber @bind-Value="@Animal.Cantidad" Min="1" DefaultValue="1" Style="width:100%;" />
                         </FormItem>
                     </AntDesign.Col>
                 </Row>
@@ -574,8 +574,20 @@
                 }
                 <Row Gutter="16">
                     <AntDesign.Col Span="24">
-                        <FormItem Label="Estado">
+                        <FormItem Label="Estado" Class="modal-damnificado-form-item">
                             <EnumSelect TEnum="EstadoAnimal" @bind-Value="Animal.Estado" AllowClear />
+                        </FormItem>
+                    </AntDesign.Col>
+                </Row>
+                <Row Gutter="16">
+                    <AntDesign.Col Span="12">
+                        <FormItem Label="Nombre" Class="modal-damnificado-form-item">
+                            <Input @bind-Value="Animal.Nombre" />
+                        </FormItem>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="12">
+                        <FormItem Label="Observaciones" Class="modal-damnificado-form-item">
+                            <TextArea @bind-Value="@Animal.Observaciones" Rows="3" />
                         </FormItem>
                     </AntDesign.Col>
                 </Row>
@@ -589,8 +601,9 @@
 
     private DamnificadoViewModel Damnificado = new DamnificadoViewModel();
     private VehiculoDamnificadoViewModel Vehiculo = new VehiculoDamnificadoViewModel();
-    private bool modalDamnificados = false, modalVehiculo = false;
-    private bool editandoDamnificado = false, editandoVehiculo = false;
+    private AnimalViewModel Animal = new AnimalViewModel();
+    private bool modalDamnificados = false, modalVehiculo = false, modalAnimal = false;
+    private bool editandoDamnificado = false, editandoVehiculo = false, editandoAnimal = false;
 
     private string ObtenerPasajerosTexto(VehiculoDamnificadoViewModel vehiculo)
     {
@@ -600,7 +613,7 @@
             return "Sin pasajeros";
     }
 
-    private async Task EliminarDamnificado(DamnificadoViewModel damnificado)
+    private void EliminarDamnificado(DamnificadoViewModel damnificado)
     {
         var damnificadoAEliminar = Model.Damnificados.SingleOrDefault(d => d.Numero == damnificado.Numero);
 
@@ -636,7 +649,7 @@
         MessageService.Success("Damnificado eliminado correctamente");
     }
 
-    private async Task EliminarVehiculo(VehiculoDamnificadoViewModel vehiculo)
+    private void EliminarVehiculo(VehiculoDamnificadoViewModel vehiculo)
     {
         var vehiculoAEliminar = Model.VehiculosDamnificados.SingleOrDefault(v => v.Numero == vehiculo.Numero);
 
@@ -803,9 +816,6 @@
             Damnificado.FuerzaInterviniente = null;
     }
 
-    private AnimalViewModel Animal = new();
-    private bool modalAnimal = false;
-    private bool editandoAnimal = false;
     private List<AnimalViewModel> AnimalesViewModel = new();// ACA TA GIOO <3 (borrale el nombre y ponele otro le puse temporal para poder ver como m quedaba)
 
 
@@ -814,9 +824,14 @@
         Animal = new AnimalViewModel
         {
             NumeroOrden = a.NumeroOrden,
-            Tipo = a.Tipo, Cantidad = a.Cantidad,
+            Tipo = a.Tipo,
+            TipoOtro = a.TipoOtro,
+            Cantidad = a.Cantidad,
             Estado = a.Estado,
-            SeConoceResponsable = a.SeConoceResponsable
+            SeConoceResponsable = a.SeConoceResponsable,
+            Nombre = a.Nombre,
+            Observaciones = a.Observaciones,
+            DamnificadoId = a.DamnificadoId
         };
         editandoAnimal = true;
         modalAnimal = true;
@@ -838,7 +853,7 @@
         StateHasChanged();
     }
 
-    private async Task EliminarAnimal(AnimalViewModel a)
+    private void EliminarAnimal(AnimalViewModel a)
     {
         AnimalesViewModel.Remove(a);
         for (int i = 0; i < AnimalesViewModel.Count; i++) AnimalesViewModel[i].NumeroOrden = i + 1;
