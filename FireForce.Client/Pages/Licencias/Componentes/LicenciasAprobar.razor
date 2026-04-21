@@ -425,7 +425,7 @@
                 Responsive
                 Size="TableSize.Small"
                 PageSize="5"
-                HidePagination="@(LicenciasVM_PendientesDeAprobacion.Count > 5)"
+                HidePagination="@(LicenciasVM_PendientesDeAprobacion.Count <= 5)"
                 ScrollX="600px">
 
                     <ColumnDefinitions Context="licencia">
