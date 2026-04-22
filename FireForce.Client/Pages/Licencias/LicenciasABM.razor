@@ -9,7 +9,7 @@
 @inject ILicenciaService LicenciaService
 @inject IMessageService MessageService
 @inject IBomberoService BomberoService
-
+@inject IJSRuntime Js
 @page "/fire-force/licencias"
 
 @using Microsoft.AspNetCore.Authorization
@@ -444,6 +444,8 @@
     .licencias-abm .fade-in {
         animation: abm-fadeIn 0.5s ease-in-out !important;
     }
+
+
 
     @@keyframes abm-fadeIn {
         from {
@@ -903,10 +905,22 @@
             @if (nuevaLicencia.TipoLicencia == TipoLicencia.RazonesDeSalud)
             {
                 <FormItem Label="📎 Certificado Médico" Class="modal-crear-licencia-form-item">
-                    <Upload Accept=".pdf,.jpg,.png,.jpeg"
-                            ShowUploadList>
-                        <Button Icon="upload">Adjuntar Certificado</Button>
-                    </Upload>
+                    <div class="upload-wrapper" style="display: flex; align-items: center; gap: 12px;">
+                        
+                        <InputFile id="certificadoInput" OnChange="HandleFileSelected" style="display: none;" />
+
+                     
+                        <label for="certificadoInput" class="ant-btn ant-btn-default modern-button" style="cursor: pointer; display: inline-flex; align-items: center; justify-content: center; padding: 4px 15px;">
+                            <Icon Type="upload" Style="margin-right: 8px;" /> Adjuntar Certificado
+                        </label>
+
+                        @if (!string.IsNullOrEmpty(fileName))
+                        {
+                            <Tag Color="@("processing")" Closable OnClose="RemoveFile">
+                                <Icon Type="file" /> @fileName
+                            </Tag>
+                        }
+                    </div>
                 </FormItem>
             }
 
@@ -1292,32 +1306,54 @@
         try
         {
             var nuevaLicenciaModel = new Licencia
-            {
-                TipoLicencia = nuevaLicencia.TipoLicencia!.Value,
-                PersonalId = nuevaLicencia.PersonaId,
-                Descripcion = nuevaLicencia.Descripcion,
-                Desde = nuevaLicencia.Desde,
-                Hasta = nuevaLicencia.Hasta,
-                EstadoLicencia = TipoEstadoLicencia.Pendiente
-            };
+                {
+                    TipoLicencia = nuevaLicencia.TipoLicencia!.Value,
+                    PersonalId = nuevaLicencia.PersonaId,
+                    Descripcion = nuevaLicencia.Descripcion,
+                    Desde = nuevaLicencia.Desde,
+                    Hasta = nuevaLicencia.Hasta,
+                    EstadoLicencia = TipoEstadoLicencia.Pendiente
+                };
 
-            // Guardar en la base de datos
             await LicenciaService.AgregarLicencia(nuevaLicenciaModel);
-
-            await MessageService.SuccessAsync("✅ Licencia creada exitosamente y enviada para aprobación.");
+            await MessageService.SuccessAsync("✅ Licencia creada exitosamente.");
         }
-        catch (Exception ex)
-        {
+    catch (Exception ex)
+    {
             await MessageService.ErrorAsync($"❌ Error al crear la licencia: {ex.Message}");
         }
-        finally
-        {
+    finally
+    {
             isLoadingComponent = false;
-
-            // Cerrar modal y limpiar formulario
             _modalAñadirVisible = false;
             nuevaLicencia = new LicenciaViewModel();
             await Init();
         }
+    } 
+
+    private InputFile inputReader;
+    private string fileName; 
+
+    private async Task DispararInputFile()
+    {
+     
+        await Js.InvokeVoidAsync("eval", "document.getElementById('certificadoInput').click()");
     }
+
+    private void HandleFileSelected(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        if (file != null)
+        {
+            fileName = file.Name;
+            StateHasChanged();
+        }
+    }
+
+    private void RemoveFile()
+    {
+        fileName = null;
+        StateHasChanged();
+    }
+}
 }
