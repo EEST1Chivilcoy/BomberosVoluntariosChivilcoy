@@ -43,6 +43,7 @@ namespace FireForce.Client.Services
                 query = query
                     .Include(b => b.Imagen)
                     .Include(b => b.Brigadas)
+                    .Include(b => b.Guardias)
                     .Include(b => b.VehiculosEncargado)
                     .Include(b => b.Dependencias)
                     .Include(b => b.Contacto);
@@ -72,6 +73,7 @@ namespace FireForce.Client.Services
                 query = query
                     .Include(b => b.Imagen)
                     .Include(b => b.Brigadas)
+                    .Include(b => b.Guardias)
                     .Include(b => b.VehiculosEncargado)
                     .Include(b => b.Dependencias)
                     .Include(b => b.Contacto);
@@ -393,6 +395,7 @@ namespace FireForce.Client.Services
             {
                 query = query
                     .Include(b => b.Brigadas)
+                    .Include(b => b.Guardias)
                     .Include(b => b.VehiculosEncargado)
                     .Include(b => b.Dependencias)
                     .Include(b => b.Salidas)

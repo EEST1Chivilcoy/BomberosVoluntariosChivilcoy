@@ -6,14 +6,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Services\GuardiaService.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Services\GuardiaService.cs" />
-  </ItemGroup>
-
 
   <ItemGroup>
     <SupportedPlatform Include="browser" />
@@ -30,7 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\Personal\ABM\Componentes\Guardias\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 

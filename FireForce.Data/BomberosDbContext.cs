@@ -15,6 +15,7 @@ using FireForce.Data.Models.Grupos.FuerzasIntervinientes;
 using FireForce.Data.Models.Salidas.Componentes;
 using FireForce.Data.Models.Socios.Componentes;
 using FireForce.Data.Models.Grupos.Brigadas;
+using FireForce.Data.Models.Grupos.Guardia;
 using FireForce.Data.Models.Grupos.Dependencias.EquiposAutonomos;
 using FireForce.Data.Models.Socios.Componentes.Pagos;
 using FireForce.Data.Models.Socios;
@@ -116,10 +117,15 @@ namespace FireForce.Data
 
         public DbSet<Brigada> Brigadas { get; set; }
 
+        public DbSet<Guardia> Guardias { get; set; }
+
+
         // Tablas para Relacion Muchos a Muchos
 
         public DbSet<Bombero_Dependencia> bombero_dependencia { get; set; }
         public DbSet<Bombero_Brigada> bombero_brigada { get; set; }
+        public DbSet<Bombero_Guardia> bombero_guardia { get; set; }
+
 
         // Propiedad experimental
         public DbSet<Salida> Salidas { get; set; }
@@ -251,6 +257,21 @@ namespace FireForce.Data
                 .HasOne(bb => bb.Brigada)
                 .WithMany(b => b.Bomberos) // Asegúrate de que en Brigada tienes una colección de BomberoBrigada
                 .HasForeignKey(bb => bb.BrigadaId);
+
+
+            modelBuilder.Entity<Bombero_Guardia>()
+ .HasKey(bb => new { bb.PersonaId, bb.GuardiaId });
+
+            modelBuilder.Entity<Bombero_Guardia>()
+                .HasOne(bb => bb.Bombero)
+                .WithMany(b => b.Guardias)
+                .HasForeignKey(bb => bb.PersonaId);
+
+            modelBuilder.Entity<Bombero_Guardia>()
+                .HasOne(bb => bb.Guardia)
+                .WithMany(b => b.Bomberos) 
+                .HasForeignKey(bb => bb.GuardiaId);
+
 
             // --- Configuración para OcupanteVehiculo (la tabla intermedia) ---
             modelBuilder.Entity<OcupanteVehiculo>(entity =>

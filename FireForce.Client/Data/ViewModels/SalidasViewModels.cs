@@ -99,11 +99,6 @@ namespace FireForce.Client.Data.ViewModels
             }
         }
 
-        /// <summary>
-        /// Guardia que está a cargo de la salida.
-        /// Esta propiedad representa la guardia seleccionada para la salida.
-        /// </summary>
-        public Guardia? GuardiaSelecionada { get; set; }
 
         /// <summary>
         /// Descripción del incidente o motivo de la salida.
