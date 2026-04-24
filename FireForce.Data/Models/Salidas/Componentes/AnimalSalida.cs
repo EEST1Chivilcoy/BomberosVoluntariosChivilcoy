@@ -45,10 +45,21 @@ namespace FireForce.Data.Models.Salidas.Componentes
         public string? Observaciones { get; set; }
 
         /// <summary>
-        /// Identificador único del responsable del animal.
+        /// Nombre del responsable del animal
         /// </summary>
-        public int? DamnificadoId { get; set; }
+        [StringLength(255)]
+        public string? NombreResponsable { get; set; }
 
-        public Damnificado_Salida? Damnificado { get; set; }
+        /// <summary>
+        /// Apellido del responsable del animal
+        /// </summary>
+        [StringLength(255)]
+        public string? ApellidoResponsable { get; set; }
+
+        /// <summary>
+        /// DNI del responsable del animal
+        /// </summary>
+        [StringLength(255)]
+        public string? DniResponsable { get; set; }
     }
 }

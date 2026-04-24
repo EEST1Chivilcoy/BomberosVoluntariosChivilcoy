@@ -1,10 +1,11 @@
-﻿using FireForce.Data.Models.Personas;
+﻿using DocumentFormat.OpenXml.Bibliography;
+using FireForce.Data.Models.Personas;
 using FireForce.Shared.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace FireForce.Client.Data.ViewModels.Personal
 {
-    class AnimalViewModel
+    class AnimalViewModel : IEditableViewModel<AnimalViewModel>
     {
         [Required(ErrorMessage = "Por favor, especifique un tipo de animal")]
         public TipoAnimal Tipo {  get; set; }
@@ -26,19 +27,56 @@ namespace FireForce.Client.Data.ViewModels.Personal
 
         public bool SeConoceResponsable { get; set; }
 
-        public int? DamnificadoId { get; set; }
+        [StringLength(255)]
+        public string? NombreResponsable { get; set; }
 
-        public Damnificado_Salida? Damnificado { get; set; }
+        [StringLength(255)]
+        public string? ApellidoResponsable { get; set; }
 
-        public DamnificadoViewModel? DamnificadoViewModel { get; set; }
+        [StringLength(255)]
+        public string? DniResponsable { get; set; }
 
-        public string NombreDamnificado
+        public string NombreYApellidoResponsable
         {
             get
             {
-                if (DamnificadoViewModel is null) return "Desconocido";
-                else return DamnificadoViewModel.NombreYApellido;
+                if (NombreResponsable is null && ApellidoResponsable is null) return "Desconocido";
+                else if (ApellidoResponsable is null && NombreResponsable is not null) return NombreResponsable;
+                else return $"{ApellidoResponsable}, {NombreResponsable}";
             }
+        }
+
+        public void ActualizarDesde(AnimalViewModel source)
+        {
+            Tipo = source.Tipo;
+            TipoOtro = source.TipoOtro;
+            Estado = source.Estado;
+            Cantidad = source.Cantidad;
+            Nombre = source.Nombre;
+            Observaciones = source.Observaciones;
+            NumeroOrden = source.NumeroOrden;
+            SeConoceResponsable = source.SeConoceResponsable;
+            NombreResponsable = source.NombreResponsable;
+            ApellidoResponsable = source.ApellidoResponsable;
+            DniResponsable = source.DniResponsable;
+        }
+
+        public AnimalViewModel Clonar()
+        {
+            return new AnimalViewModel
+            {
+                Tipo = this.Tipo,
+                TipoOtro = this.TipoOtro,
+                Estado = this.Estado,
+                Cantidad = this.Cantidad,
+                Nombre = this.Nombre,
+                Observaciones = this.Observaciones,
+                NumeroOrden = this.NumeroOrden,
+                SeConoceResponsable = this.SeConoceResponsable,
+                NombreResponsable = this.NombreResponsable,
+                ApellidoResponsable = this.ApellidoResponsable,
+                DniResponsable = this.DniResponsable
+            };
         }
     }
 }

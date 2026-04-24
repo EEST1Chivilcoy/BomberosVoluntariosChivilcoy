@@ -500,7 +500,7 @@
                 </TitleTemplate>
                 <ColumnDefinitions Context="animal">
                     <PropertyColumn Title="N°" Property="a => a.NumeroOrden"></PropertyColumn>
-                    <PropertyColumn Title="Responsable" Property="a => a.NombreDamnificado"></PropertyColumn>
+                    <PropertyColumn Title="Responsable" Property="a => a.NombreYApellidoResponsable"></PropertyColumn>
                     <PropertyColumn Title="Especie" Property="a => a.Tipo"></PropertyColumn>
                     <PropertyColumn Title="Cantidad" Property="a => a.Cantidad"></PropertyColumn>
                     <PropertyColumn Title="Estado" Property="a => a.Estado"></PropertyColumn>
@@ -544,34 +544,33 @@
                         </FormItem>
                     </AntDesign.Col>
                 </Row>
-                @if (Model.Damnificados != null && Model.Damnificados.Any())
-                {
-                    <Row Gutter="16">
+                <Row Gutter="16">
+                    <AntDesign.Col Span="12">
+                        <FormItem Label="¿Se conoce al responsable?" Class="modal-damnificado-form-item">
+                            <Switch @bind-Checked="@Animal.SeConoceResponsable" />
+                        </FormItem>
+                    </AntDesign.Col>
+                    @if (Animal.SeConoceResponsable)
+                    {
                         <AntDesign.Col Span="12">
-                            <FormItem Label="¿Se conoce al responsable?" Class="modal-damnificado-form-item">
-                                <Switch @bind-Checked="@Animal.SeConoceResponsable" />
-                            </FormItem>
-                        </AntDesign.Col>
-                        @if (Animal.SeConoceResponsable)
-                        {
-                            <AntDesign.Col Span="12">
-                                <FormItem Label="Responsable" Class="modal-damnificado-form-item">
-                                    <Select TItem="DamnificadoViewModel"
-                                            TItemValue="int?"
-                                            DataSource="@Model.Damnificados"
-                                            @bind-Value="@Animal.DamnificadoId"
-                                            ValueName="@nameof(DamnificadoViewModel.Numero)"
-                                            ItemLabel="c => c.NombreYApellido"
-                                            Placeholder="Seleccione al responsable"
-                                            AllowClear="true"
-                                            EnableSearch="true"
-                                            OnSelectedItemChanged="OnResponsableSeleccionado">
-                                    </Select>
+                            <Row Gutter="8">
+                                <FormItem Label="Nombre" Class="modal-damnificado-form-item">
+                                    <Input @bind-Value="Animal.NombreResponsable"></Input>
                                 </FormItem>
-                            </AntDesign.Col>
-                        }
-                    </Row>
-                }
+                            </Row>
+                            <Row Gutter="8">
+                                <FormItem Label="Apellido" Class="modal-damnificado-form-item">
+                                    <Input @bind-Value="Animal.ApellidoResponsable"></Input>
+                                </FormItem>
+                            </Row>
+                            <Row Gutter="8">
+                                <FormItem Label="DNI" Class="modal-damnificado-form-item">
+                                    <Input @bind-Value="Animal.DniResponsable"></Input>
+                                </FormItem>
+                            </Row>
+                        </AntDesign.Col>
+                    }
+                </Row>
                 <Row Gutter="16">
                     <AntDesign.Col Span="24">
                         <FormItem Label="Estado" Class="modal-damnificado-form-item">
@@ -780,15 +779,6 @@
             Vehiculo.Conductor = null;
     }
 
-    private void OnResponsableSeleccionado(DamnificadoViewModel responsable)
-    {
-        if (responsable != null)
-        {
-            Animal.DamnificadoViewModel = responsable;
-        }
-        else Animal.DamnificadoViewModel = null;
-    }
-
     private IEnumerable<int> PasajerosSeleccionados
     {
         get => Vehiculo.Pasajeros?.Select(p => p.Numero) ?? Enumerable.Empty<int>();
@@ -821,36 +811,47 @@
 
     private void EditarAnimal(AnimalViewModel a)
     {
-        Animal = new AnimalViewModel
-        {
-            NumeroOrden = a.NumeroOrden,
-            Tipo = a.Tipo,
-            TipoOtro = a.TipoOtro,
-            Cantidad = a.Cantidad,
-            Estado = a.Estado,
-            SeConoceResponsable = a.SeConoceResponsable,
-            Nombre = a.Nombre,
-            Observaciones = a.Observaciones,
-            DamnificadoId = a.DamnificadoId
-        };
+        Animal = a.Clonar();
         editandoAnimal = true;
         modalAnimal = true;
     }
 
     private void AgregarEditarAnimal()
     {
-        if (!editandoAnimal)
+        try
         {
-            Animal.NumeroOrden = AnimalesViewModel.Count + 1;
-            AnimalesViewModel.Add(Animal);
+            if (!editandoAnimal)
+            {
+                Animal.NumeroOrden = AnimalesViewModel.Count + 1;
+                AnimalesViewModel.Add(Animal);
+                MessageService.Success("Animal agregado correctamente");
+            }
+            else
+            {
+                var animalAEditar = AnimalesViewModel.SingleOrDefault(d => d.NumeroOrden == Animal.NumeroOrden);
+
+                if (animalAEditar == null)
+                {
+                    MessageService.Error("Animal no encontrado");
+                    return;
+                }
+
+                animalAEditar.ActualizarDesde(Animal);
+                MessageService.Success("Animal actualizado correctamente");
+                editandoAnimal = false;
+            }
+
+            modalAnimal = false;
+            Animal = new AnimalViewModel();
         }
-        else
+        catch (Exception e)
         {
-            var i = AnimalesViewModel.FindIndex(x => x.NumeroOrden == Animal.NumeroOrden);
-            if (i != -1) AnimalesViewModel[i] = Animal;
+            StateHasChanged();
+            if (e.InnerException != null)
+                MessageService.Error(e.InnerException.Message, 5);
+            else
+                MessageService.Error(e.Message, 5);
         }
-        modalAnimal = false;
-        StateHasChanged();
     }
 
     private void EliminarAnimal(AnimalViewModel a)
