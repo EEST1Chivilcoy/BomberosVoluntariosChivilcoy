@@ -23,7 +23,7 @@ namespace FireForce.Data.Models.Salidas.Componentes
         public string? TipoOtro { get; set; }
 
         /// <summary>
-        /// Estado en que se encontró al animal. (Rescatado - Herido - Muerto - Desaparecido)
+        /// Estado en que se encontró al animal. (Rescatado - Herido - Fallecido - Desaparecido)
         /// </summary>
         public EstadoAnimal Estado { get; set; }
 

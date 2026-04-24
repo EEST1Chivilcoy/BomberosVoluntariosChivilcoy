@@ -10,7 +10,7 @@ namespace FireForce.Shared.Enums
     {
         Rescatado,
         Herido,
-        Muerto,
+        Fallecido,
         Desaparecido
     }
 }
