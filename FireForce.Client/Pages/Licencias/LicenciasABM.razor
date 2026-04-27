@@ -818,15 +818,15 @@
                         </PropertyColumn>
 
                         <PropertyColumn Title="🏷️ Tipo"
-                                        Property="@(c => c.TipoLicencia != null ? c.TipoLicencia.GetDisplayName() : "Desconocido")"
-                                        Sortable
-                                        Width="200px" />
+                        Property="@(c => c.TipoLicencia != null ? c.TipoLicencia.GetDisplayName() : "Desconocido")"
+                        Sortable
+                        Width="200px" />
 
                         <PropertyColumn Title="📊 Estado"
-                                        Property="c => c.EstadoLicencia"
-                                        Sortable
-                                        Width="150px"
-                                        Fixed="ColumnFixPlacement.Right">
+                        Property="c => c.EstadoLicencia"
+                        Sortable
+                        Width="150px"
+                        Fixed="ColumnFixPlacement.Right">
                             <Template>
                                 @{
                                     string statusClass = licencia.EstadoLicencia switch
@@ -859,12 +859,12 @@
 
 @* Modal para añadir licencia - Rediseñado responsivo *@
 <Modal @bind-Visible="_modalAñadirVisible"
-       Title="Nueva Licencia"
-       Width="@("100%")"
-       Style="max-width: 800px;"
-       Footer="null"
-       DestroyOnClose
-       WrapClassName="modal-crear-licencia">
+Title="Nueva Licencia"
+Width="@("100%")"
+Style="max-width: 800px;"
+Footer="null"
+DestroyOnClose
+WrapClassName="modal-crear-licencia">
     <div class="modal-crear-licencia-content">
         <Form Model="nuevaLicencia" Layout="FormLayout.Vertical" Class="modal-crear-licencia-form" OnFinish="AddLicencia" Loading="isLoadingComponent">
 
@@ -872,44 +872,44 @@
                 <AntDesign.Col Span="12">
                     <FormItem Label="👤 Bombero" Required Class="modal-crear-licencia-form-item">
                         <Select TItem="BomberoViweModel"
-                                TItemValue="int"
-                                DataSource="@BomberosVM"
-                                Value="nuevaLicencia.PersonaId"
-                                ValueChanged="OnBomberoChanged"
-                                LabelName="@nameof(BomberoViweModel.NombreYApellido)"
-                                ValueName="@nameof(BomberoViweModel.Id)"
-                                Placeholder="Seleccione el bombero"
-                                AllowClear
-                                EnableSearch
-                                Size="InputSize.Large" />
+                        TItemValue="int"
+                        DataSource="@BomberosVM"
+                        Value="nuevaLicencia.PersonaId"
+                        ValueChanged="OnBomberoChanged"
+                        LabelName="@nameof(BomberoViweModel.NombreYApellido)"
+                        ValueName="@nameof(BomberoViweModel.Id)"
+                        Placeholder="Seleccione el bombero"
+                        AllowClear
+                        EnableSearch
+                        Size="InputSize.Large" />
                     </FormItem>
                 </AntDesign.Col>
 
                 <AntDesign.Col Span="12">
                     <FormItem Label="📋 Número Legajo" Class="modal-crear-licencia-form-item">
                         <AntDesign.InputNumber @bind-Value="nuevaLicencia.NumeroLegajo"
-                                               Disabled
-                                               Size="InputSize.Large" />
+                        Disabled
+                        Size="InputSize.Large" />
                     </FormItem>
                 </AntDesign.Col>
             </Row>
 
             <FormItem Label="🏷️ Tipo de Licencia" Required Class="modal-crear-licencia-form-item">
                 <EnumSelect TEnum="TipoLicencia ?"
-                            @bind-Value="@nuevaLicencia.TipoLicencia"
-                            AllowClear
-                            Placeholder="Seleccione el tipo de licencia"
-                            Size="InputSize.Large" />
+                @bind-Value="@nuevaLicencia.TipoLicencia"
+                AllowClear
+                Placeholder="Seleccione el tipo de licencia"
+                Size="InputSize.Large" />
             </FormItem>
 
             @if (nuevaLicencia.TipoLicencia == TipoLicencia.RazonesDeSalud)
             {
                 <FormItem Label="📎 Certificado Médico" Class="modal-crear-licencia-form-item">
                     <div class="upload-wrapper" style="display: flex; align-items: center; gap: 12px;">
-                        
+
                         <InputFile id="certificadoInput" OnChange="HandleFileSelected" style="display: none;" />
 
-                     
+
                         <label for="certificadoInput" class="ant-btn ant-btn-default modern-button" style="cursor: pointer; display: inline-flex; align-items: center; justify-content: center; padding: 4px 15px;">
                             <Icon Type="upload" Style="margin-right: 8px;" /> Adjuntar Certificado
                         </label>
@@ -927,10 +927,10 @@
             <AntDesign.Col Span="24" Class="modal-crear-licencia-form-full-width">
                 <FormItem Label="📝 Descripción">
                     <TextArea @bind-Value="@nuevaLicencia.Descripcion"
-                              Placeholder="Ingrese una descripción detallada de la licencia"
-                              Rows="4"
-                              ShowCounts
-                              MaxLength="500" />
+                    Placeholder="Ingrese una descripción detallada de la licencia"
+                    Rows="4"
+                    ShowCounts
+                    MaxLength="500" />
                 </FormItem>
             </AntDesign.Col>
 
@@ -938,30 +938,30 @@
                 <AntDesign.Col Span="9">
                     <FormItem Label="📅 Fecha de Inicio" Required Class="modal-crear-licencia-form-item">
                         <DatePicker Mask="dd/MM/yyyy" TValue="DateTime"
-                                    @bind-Value="@nuevaLicencia.Desde"
-                                    DefaultValue="DateTime.Today"
-                                    DisabledDate="@(date => date < DateTime.Today)"
-                                    Placeholder="@("Seleccione fecha de inicio")"
-                                    Size="InputSize.Large" />
+                        @bind-Value="@nuevaLicencia.Desde"
+                        DefaultValue="DateTime.Today"
+                        DisabledDate="d => d< DateTime.Now.AddYears(-1)"
+                        Placeholder="@("Seleccione fecha de inicio")"
+                        Size="InputSize.Large" />
                     </FormItem>
                 </AntDesign.Col>
 
                 <AntDesign.Col Span="9">
                     <FormItem Label="📅 Fecha de Finalización" Required Class="modal-crear-licencia-form-item">
                         <DatePicker Mask="dd/MM/yyyy" TValue="DateTime"
-                                    @bind-Value="@nuevaLicencia.Hasta"
-                                    DefaultValue="@(DateTime.Today.AddDays(1))"
-                                    DisabledDate="@(date => date < nuevaLicencia.Desde)"
-                                    Placeholder="@("Seleccione fecha de fin")"
-                                    Size="InputSize.Large" />
+                        @bind-Value="@nuevaLicencia.Hasta"
+                        DefaultValue="@(DateTime.Today.AddDays(1))"
+                        DisabledDate="DeshabilitarFechasFueraDeRango "
+                        Placeholder="@("Seleccione fecha de fin")"
+                        Size="InputSize.Large" />
                     </FormItem>
                 </AntDesign.Col>
 
                 <AntDesign.Col Span="6">
                     <FormItem Label="⏱️ Duración" Class="modal-crear-licencia-form-item">
                         <Input Value="@($"{nuevaLicencia.DuracionEnDias} días")"
-                               ReadOnly
-                               Size="InputSize.Large" />
+                        ReadOnly
+                        Size="InputSize.Large" />
                     </FormItem>
                 </AntDesign.Col>
 
@@ -975,10 +975,10 @@
 
 @* Modal de detalle - Rediseñado responsivo *@
 <Modal @bind-Visible="_modalDetalleVisible"
-       Title="@($"📋 Detalle de Licencia - {licenciaSeleccionada?.ApellidoYNombre}")"
-       Footer="null"
-       Width="@("90%")"
-       Style="max-width: 1000px;">
+Title="@($"📋 Detalle de Licencia - {licenciaSeleccionada?.ApellidoYNombre}")"
+Footer="null"
+Width="@("90%")"
+Style="max-width: 1000px;">
     @if (licenciaSeleccionada != null)
     {
         <div class="licencias-abm">
@@ -998,8 +998,8 @@
                         <div class="detail-label">🏷️ Tipo</div>
                         <div class="detail-value">
                             @(licenciaSeleccionada.TipoLicencia != null
-                                                    ? licenciaSeleccionada.TipoLicencia.GetDisplayName()
-                                                    : "Desconocido")
+                                                            ? licenciaSeleccionada.TipoLicencia.GetDisplayName()
+                                                            : "Desconocido")
                         </div>
                     </div>
 
@@ -1095,8 +1095,8 @@
 
                 <div style="display: flex; justify-content: center; margin-top: 24px;">
                     <Button Type="ButtonType.Primary"
-                            Size="ButtonSize.Large"
-                            OnClick="@(() => _modalDetalleVisible = false)">
+                    Size="ButtonSize.Large"
+                    OnClick="@(() => _modalDetalleVisible = false)">
                         Cerrar
                     </Button>
                 </div>
@@ -1250,7 +1250,20 @@
         }
 
         StateHasChanged();
-    }
+    } 
+    private bool DeshabilitarFechasFueraDeRango(DateTime fechaEvaluada)
+    {
+        if (nuevaLicencia.Desde == default)
+        {
+            return fechaEvaluada < DateTime.Today;
+        }
+            var inicio = nuevaLicencia.Desde;
+            var limiteMaximo = inicio.AddYears(5);
+			return fechaEvaluada < inicio || fechaEvaluada > limiteMaximo;
+        
+	}
+
+
 
     // Función para añadir una nueva licencia
     private async Task AddLicencia()
