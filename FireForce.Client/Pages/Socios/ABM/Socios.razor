@@ -480,7 +480,9 @@
                             @if (context.Estado == TipoEstadoSocio.Activo)
                             {
                                 <Popconfirm Title="¿Está seguro de dar de baja?"
-                                            OkText="Sí" CancelText="No">
+                                            OkText="Sí"
+                                            CancelText="No"
+                                            OnConfirm="() => DarDeBaja(context.Id)">
                                     <Button Danger>
                                         <Icon Type="down" /> Baja
                                     </Button>
@@ -823,6 +825,21 @@
         {
             isLoading = false;
             StateHasChanged();
+        }
+    }
+
+    private async Task DarDeBaja(int socioId)
+    {
+        try
+        {
+            await SocioService.DarDeBajaAsync(socioId);
+            message.Success("Socio dado de baja correctamente");
+
+            await LoadSocios();
+        }
+        catch (Exception ex)
+        {
+            message.Error($"Error al dar de baja: {ex.Message}");
         }
     }
 }

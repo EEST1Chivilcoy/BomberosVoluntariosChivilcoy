@@ -14,6 +14,7 @@ namespace FireForce.Client.Services
         Task<Socio?> ObtenerSocioPorIdAsync(int socioId, bool asNoTracking = true);
         Task EditarSocioAsync(Socio socio);
         Task<int> ObtenerProximoNroSocioAsync();
+        Task DarDeBajaAsync(int socioId);
     }
 
     public class SocioService : ISocioService
@@ -264,6 +265,27 @@ namespace FireForce.Client.Services
                 .MaxAsync(s => (int?)s.NroSocio) ?? 0;
 
             return maxNroSocio + 1;
+        }
+
+        public async Task DarDeBajaAsync(int socioId)
+        {
+            var socio = await ObtenerSocioPorIdAsync(socioId, asNoTracking: false)
+                ?? throw new KeyNotFoundException($"No se encontró el socio con Id {socioId}");
+
+            if (socio.EstadoSocio == TipoEstadoSocio.Inactivo)
+                return;
+
+            var movimientoEstado = new MovimientoCambioEstado
+            {
+                Estado = TipoEstadoSocio.Inactivo,
+                Motivo = "Baja manual desde el sistema"
+            };
+
+            await _historialSocioService.CrearMovimientoSocio(socioId, movimientoEstado);
+
+            socio.EstadoSocio = TipoEstadoSocio.Inactivo;
+
+            await _context.SaveChangesAsync();
         }
     }
 }
