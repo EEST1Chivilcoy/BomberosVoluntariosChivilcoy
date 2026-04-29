@@ -1,4 +1,4 @@
-﻿@using FireForce.Data.Models.Grupos.Brigadas
+﻿@using FireForce.Data.Models.Grupos.Guardia
 @using FireForce.Client.Data.ViewModels.Personal
 @using FireForce.Data.Models.Personas.Personal
 @using FireForce.Data.Models.Personas.Personal.Componentes
@@ -6,9 +6,9 @@
 
 @*Servicios Utilizados*@
 @using FireForce.Client.Services
+@inject IGuardiaService GuardiaService
 @inject IBomberoService BomberoService
 @inject IMessageService MessageService
-@inject IGuardiaService GuardiaService
 
 <style>
     .ant-table {
@@ -119,7 +119,7 @@
        DataSource="@BomberosGuardiaViewModel"
        @bind-PageIndex="_pageIndex"
        @bind-PageSize="_pageSize"
-       Title="Bomberos de Guardia"
+       Title="Bomberos de la Guardia"
        Responsive>
     <TitleTemplate>
         <Flex Justify="FlexJustify.FlexEnd">
@@ -133,14 +133,14 @@
 
     <ColumnDefinitions>
 
-        <PropertyColumn Title="N° Legajo" Property="d=>d.NroLeg" Sortable />
+        <PropertyColumn Title="N° Legajo" Property="d => d.NroLeg" Sortable />
 
-        <PropertyColumn Title="Apellido y Nombre" Property="d=>d.ApellidoYNombre" Sortable />
+        <PropertyColumn Title="Apellido y Nombre" Property="d => d.ApellidoYNombre" Sortable />
 
         <ActionColumn Title="Acciones" Align=ColumnAlign.Center>
             <Space>
                 <SpaceItem>
-                    <Popconfirm Title="¿Deseas remover a este bombero de guardias?"
+                    <Popconfirm Title="¿Deseas remover a este bombero de la guardia?"
                                 OnConfirm="() => QuitarBomberoGuardia(context.Id, GuardiaId)"
                                 OkText="Si"
                                 CancelText="No">
@@ -157,7 +157,7 @@
 
 <Modal @bind-Visible="_modalAñadirBomberosVisible" Title="Añadir Bomberos" OkText="@("Guardar")" CancelText="@("Cancelar")" OnOk="@AddBomberoToGuardia">
     <Select Mode="SelectMode.Multiple"
-            Placeholder="Elige los bomberos a agregar guardia"
+            Placeholder="Elige los bomberos a agregar a la guardia"
             DataSource="@BomberosCandidatosViewModel"
             Values="@BomberosSeleccionados"
             TItem="BomberoViweModel"
@@ -170,20 +170,18 @@
 </Modal>
 
 @code {
-    [Parameter] public int GuardiaId { get; set; } // ID de la Brigada que se está editando
+    [Parameter] public int GuardiaId { get; set; }
 
-    private List<Bombero?> GuardiaBomberos = new(); // Lista de Bomberos de la Brigada
-    public List<BomberoGuardiaViewModel> BomberosGuardiaViewModel { get; set; } = new(); // Lista de Bomberos de la Brigada en formato ViewModel para la Brigada
-    private List<int> BomberosSeleccionados = new List<int>(); // Lista de IDs de Bomberos seleccionados para agregar a la Brigada
-    public List<BomberoViweModel> BomberosTodosViewModel { get; set; } = new(); // Lista de Bomberos en formato ViewModel para todos los Bomberos disponibles
-    public List<Bombero> BomberosTodos { get; set; } = new(); // Lista de todos los Bomberos disponibles
+    private List<Bombero?> GuardiaBomberos = new();
+    public List<BomberoGuardiaViewModel?> BomberosGuardiaViewModel { get; set; } = new();
+    private List<int> BomberosSeleccionados = new List<int>();
+    public List<BomberoViweModel?> BomberosTodosViewModel { get; set; } = new();
+    public List<Bombero> BomberosTodos { get; set; } = new();
     private List<BomberoViweModel> BomberosCandidatosViewModel = new();
 
-    // Variables de Tamaño de la Tabla
     int _pageIndex = 1;
     int _pageSize = 5;
 
-    // Modals
     private bool _modalAñadirBomberosVisible = false;
 
     public class BomberoGuardiaViewModel
@@ -221,7 +219,7 @@
     {
         if (GuardiaId <= 0)
         {
-            await MessageService.ErrorAsync("El ID de la guardia es inválido.");
+            await MessageService.ErrorAsync("El ID de la Guardia es inválido.");
             return;
         }
 
@@ -234,19 +232,21 @@
 
         GuardiaBomberos = await GuardiaService.ObtenerBomberosDeGuardiaAsync(GuardiaId);
         var bomberosActuales = GuardiaBomberos.Where(b => b != null).Select(b => b.NumeroLegajo);
+
         BomberosCandidatosViewModel = BomberosTodosViewModel
         .Where(b => b.NumeroLegajo != guardia.Encargado?.NumeroLegajo && !bomberosActuales.Contains(b.NumeroLegajo.Value))
         .ToList();
 
         BomberosGuardiaViewModel = GuardiaBomberos.Where(b => b != null).Select(b => new BomberoGuardiaViewModel
-            {
-                Id = b.PersonaId,
-                NroLeg = b.NumeroLegajo,
-                ApellidoYNombre = $"{b.Apellido}, {b.Nombre}"
-            }).ToList();
+        {
+            Id = b.PersonaId,
+            NroLeg = b.NumeroLegajo,
+            ApellidoYNombre = $"{b.Apellido}, {b.Nombre}"
+        }).ToList();
+
         if (!BomberosGuardiaViewModel.Any() && GuardiaBomberos.Any())
         {
-            await MessageService.ErrorAsync("Error al mapear los bomberos de guardia a ViewModel.");
+            await MessageService.ErrorAsync("Error al mapear los bomberos de la Guardia a ViewModel.");
             return;
         }
 
@@ -267,7 +267,7 @@
             await GuardiaService.AgregarBomberoAGuardiaAsync(GuardiaId, BomberoSelId);
         }
 
-        await MessageService.SuccessAsync($"Se añadieron {BomberosSeleccionados.Count} Bomberos a guardia");
+        await MessageService.SuccessAsync($"Se añadieron {BomberosSeleccionados.Count} Bomberos a la Guardia");
         _modalAñadirBomberosVisible = false;
         await CargarGuardia();
     }

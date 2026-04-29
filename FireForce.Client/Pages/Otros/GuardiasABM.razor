@@ -39,7 +39,7 @@
         }
 
         .guardias-abm .header-section {
-            background: linear-gradient(135deg, var(--brigadas-primary-color) 0%, var(--brigadas-primary-dark) 100%) !important;
+            background: linear-gradient(135deg, var(--guardias-primary-color) 0%, var(--guardias-primary-dark) 100%) !important;
             color: white !important;
             padding: 28px !important;
             position: relative !important;
@@ -80,7 +80,7 @@
                     animation-duration: 7.5s;
                 }
 
-                .brigadas-abm .header-section .lava-bubble.b2 {
+                .guardias-abm .header-section .lava-bubble.b2 {
                     left: 35%;
                     width: 90px;
                     height: 90px;
@@ -202,7 +202,7 @@
     }
 
     .guardias-abm .add-button {
-        background: linear-gradient(135deg, var(--brigadas-success-color) 0%, var(--brigadas-success-dark) 100%) !important;
+        background: linear-gradient(135deg, var(--guardias-success-color) 0%, var(--guardias-success-dark) 100%) !important;
         border: none !important;
         color: white !important;
         box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3) !important;
@@ -324,7 +324,7 @@
         margin-bottom: 0px;
     }
 
-    .modal-crear-guardia.ant-btn-primary {
+    .modal-crear-guardia .ant-btn-primary {
         background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
         border: none !important;
         color: #fff !important;
@@ -428,7 +428,7 @@
                                     </Popconfirm>
                                 </SpaceItem>
                                 <SpaceItem>
-                                    <Button Type="@ButtonType.Primary" OnClick="() => ViewEditGuardias(guardia.Id)" Ghost>
+                                    <Button Type="@ButtonType.Primary" OnClick="() => ViewEditGuardia(guardia.Id)" Ghost>
                                         <Icon Type="edit" />
                                     </Button>
                                 </SpaceItem>
@@ -440,8 +440,7 @@
         </Card>
     </div>
 </div>
-
-@*Modal para Añadir guardia con diseño de Licencias*@
+@*Modal para Añadir Guardia*@
 <Modal @bind-Visible="_modalAñadirVisible"
        Title="Añadir Guardia"
        Width="@("100%")"
@@ -478,7 +477,7 @@
     </div>
 </Modal>
 
-@*Modal para Editar Guardia con diseño de Licencias*@
+@*Modal para Editar Guardia*@
 <Modal @bind-Visible="_modalEditarVisible"
        Title="Editar Guardia"
        Width="@("100%")"
@@ -512,18 +511,18 @@
                 </AntDesign.Col>
             </Row>
         </Form>
-
     </div>
 </Modal>
 
 <Modal @bind-Visible="_modalDetallesVisible" Title="@TitleGuardiaSel" Maximizable="@true" Centered="@true">
-    <BomberosGuardia GuardiaId="@IdGuardiaSel"></BomberosGuardia>
+    <BomberoGuardias GuardiaId="@IdGuardiaSel"></BomberoGuardias>
 </Modal>
 
 @code {
     // Lista con todos los bomberos
     private List<Bombero> bomberosTodos = new();
     private List<BomberoViweModel> bomberosTodosViewModel = new();
+
     // Lista de Guardias
     private List<Guardia> Guardias = new List<Guardia>();
     private List<GuardiaViewModelTable> GuardiaViewModels = new List<GuardiaViewModelTable>();
@@ -539,7 +538,7 @@
     private string? TitleGuardiaSel;
     private int IdGuardiaSel;
 
-    // Variables de Tamaño de la Tabla
+    // Paginación
     int _pageIndex = 1;
     int _pageSize = 5;
 
@@ -556,47 +555,51 @@
         await CargarBomberos();
         await CargarGuardias();
     }
+
     private async Task CargarBomberos()
     {
         bomberosTodos = await BomberoService.ObtenerTodosLosBomberosAsync();
+
         if (bomberosTodos == null)
         {
             await MessageService.ErrorAsync("No se encontraron bomberos disponibles.");
             return;
         }
 
-        bomberosTodosViewModel = bomberosTodos.ToBomberoViewModelList();
-        if (bomberosTodosViewModel == null)
-            bomberosTodosViewModel = new List<BomberoViweModel>();
+        bomberosTodosViewModel = bomberosTodos.ToBomberoViewModelList()
+                                   ?? new List<BomberoViweModel>();
     }
+
     private async Task CargarGuardias()
     {
         Guardias = await GuardiaService.ObtenerTodasLasGuardiasAsync();
+
         if (Guardias == null || Guardias.Count == 0)
         {
             await MessageService.WarningAsync("No se encontraron guardias disponibles en la base de datos.");
             return;
         }
 
-        GuardiaViewModels = Guardias.Select(b => new GuardiaViewModelTable
+        GuardiaViewModels = Guardias.Select(g => new GuardiaViewModelTable
         {
-            Id = b.GuardiaId,
-            Nombre = b.NombreGuardia,
-            EncargadoApellidoYNombre = b.Encargado != null
-                ? $"{b.Encargado.Apellido}, {b.Encargado.Nombre}"
+            Id = g.GuardiaId,
+            Nombre = g.NombreGuardia,
+            EncargadoApellidoYNombre = g.Encargado != null
+                ? $"{g.Encargado.Apellido}, {g.Encargado.Nombre}"
                 : "Sin Encargado"
         }).ToList();
-        if (GuardiaViewModels == null || GuardiaViewModels.Count == 0 && Guardias.Count > 0)
+
+        if ((GuardiaViewModels == null || GuardiaViewModels.Count == 0) && Guardias.Count > 0)
         {
-            await MessageService.ErrorAsync("Error al mapear las guardias. Por favor, intente nuevamente más tarde.");
-            return;
+            await MessageService.ErrorAsync("Error al mapear las guardias.");
         }
     }
+
     private async Task ViewAddGuardia()
     {
         if (bomberosTodos.Count == 0)
         {
-            await MessageService.ErrorAsync("No hay bomberos disponibles para asignar como encargado.");
+            await MessageService.ErrorAsync("No hay bomberos disponibles.");
             return;
         }
 
@@ -608,56 +611,39 @@
     {
         if (newGuardia.Encargado == null)
         {
-            await MessageService.ErrorAsync("El encargado de la guardia no puede estar vacío.");
+            await MessageService.ErrorAsync("El encargado no puede estar vacío.");
             return;
         }
+
         if (string.IsNullOrWhiteSpace(newGuardia.Nombre))
         {
-            await MessageService.ErrorAsync("El nombre de la guardia no puede estar vacío.");
+            await MessageService.ErrorAsync("El nombre no puede estar vacío.");
             return;
         }
 
-        Bombero BomberoEncargado = await BomberoService.ObtenerBomberoObjetoPorLegajoAsync(newGuardia.Encargado.NumeroLegajo.Value);
-        if (BomberoEncargado == null)
-        {
-            await MessageService.ErrorAsync("El encargado seleccionado no es válido.");
-            return;
-        }
+        var bomberoEncargado = await BomberoService
+            .ObtenerBomberoObjetoPorLegajoAsync(newGuardia.Encargado.NumeroLegajo.Value);
 
-        var guardias = new Guardia
+        var guardia = new Guardia
         {
             NombreGuardia = newGuardia.Nombre,
-            Encargado = BomberoEncargado
+            Encargado = bomberoEncargado
         };
 
-        await GuardiaService.AgregarGuardiaAsync(guardias);
-        newGuardia = new GuardiaViewModelTable();
+        await GuardiaService.AgregarGuardiaAsync(guardia);
+
         _modalAñadirVisible = false;
         await CargarGuardias();
-        await MessageService.SuccessAsync("Guardia añadida correctamente.");
+
+        await MessageService.SuccessAsync("Guardia creada correctamente.");
     }
 
-    private async Task ViewEditGuardias(int id)
+    private async Task ViewEditGuardia(int id)
     {
-        if (id <= 0)
-        {
-            await MessageService.ErrorAsync("ID inválido. Por favor, proporcione un ID válido.");
-            return;
-        }
-
         var guardia = await GuardiaService.ObtenerGuardiaPorIdAsync(id);
-        if (guardia == null)
-        {
-            await MessageService.ErrorAsync("Error al intentar editar la guardia: No se encontró.");
-            return;
-        }
 
-        var encargado = bomberosTodosViewModel.FirstOrDefault(b => b.NumeroLegajo == guardia.Encargado.NumeroLegajo);
-        if (encargado == null)
-        {
-            await MessageService.ErrorAsync("Error al intentar editar la dependencia: No se encontró un encargado válido.");
-            return;
-        }
+        var encargado = bomberosTodosViewModel
+            .FirstOrDefault(b => b.NumeroLegajo == guardia.Encargado.NumeroLegajo);
 
         selGuardia = new GuardiaViewModelTable
         {
@@ -671,53 +657,31 @@
 
     private async Task EditGuardia()
     {
-        if (selGuardia.Encargado == null)
-        {
-            await MessageService.ErrorAsync("El encargado de la guardia no puede estar vacío.");
-            return;
-        }
-        if (string.IsNullOrWhiteSpace(selGuardia.Nombre))
-        {
-            await MessageService.ErrorAsync("El nombre de la guardia no puede estar vacío.");
-            return;
-        }
-        if (selGuardia.Id <= 0)
-        {
-            await MessageService.ErrorAsync("ID inválido. Por favor, proporcione un ID válido.");
-            return;
-        }
-
-        var BomberoEncargado = await BomberoService.ObtenerBomberoObjetoPorLegajoAsync(selGuardia.Encargado.NumeroLegajo.Value);
-        if (BomberoEncargado == null)
-        {
-            await MessageService.ErrorAsync("El encargado seleccionado no es válido.");
-            return;
-        }
+        var bomberoEncargado = await BomberoService
+            .ObtenerBomberoObjetoPorLegajoAsync(selGuardia.Encargado.NumeroLegajo.Value);
 
         var guardia = new Guardia
         {
             GuardiaId = selGuardia.Id,
             NombreGuardia = selGuardia.Nombre,
-            Encargado = BomberoEncargado
+            Encargado = bomberoEncargado
         };
 
         await GuardiaService.EditarGuardiaAsync(guardia);
+
         _modalEditarVisible = false;
         await CargarGuardias();
+
         await MessageService.SuccessAsync("Guardia editada correctamente.");
     }
 
     private async Task ViewGuardiaDetails(int id)
     {
         var guardia = await GuardiaService.ObtenerGuardiaPorIdAsync(id);
-        if (guardia == null)
-        {
-            await MessageService.ErrorAsync("Error al abrir guardia: No se encontró.");
-            return;
-        }
 
         TitleGuardiaSel = guardia.NombreGuardia;
         IdGuardiaSel = guardia.GuardiaId;
+
         _modalDetallesVisible = true;
     }
 
@@ -725,6 +689,7 @@
     {
         await GuardiaService.EliminarGuardiaAsync(id);
         await CargarGuardias();
-        await MessageService.SuccessAsync("Guardia eliminada con éxito.");
+
+        await MessageService.SuccessAsync("Guardia eliminada.");
     }
 }
