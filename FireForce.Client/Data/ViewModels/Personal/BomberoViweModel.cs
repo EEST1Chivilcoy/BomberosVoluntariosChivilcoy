@@ -87,5 +87,7 @@ namespace FireForce.Client.Data.ViewModels.Personal
         /// </summary>
         [StringLength(255)]
         public string? NombresBrigada { get; set; }
+
+        public int? OrdenPersonalizado { get; set; }
     }
 }

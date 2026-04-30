@@ -1,0 +1,255 @@
+﻿@using FireForce.Data.Models.Personas.Personal
+@using FireForce.Data.Models.Personas.Personal.Componentes
+@using FireForce.Client.Pages.Personal.ABM.Componentes.Bomberos
+@using FireForce.Client.Data.Mappers
+
+@page "/fire-force/Orden"
+
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Policy = "AdminOnly")]
+
+@using FireForce.Client.Services
+@inject IBomberoService BomberoService
+
+<style>
+    .bomberos-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 1000;
+        background-color: #e60000;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding-top: 40px;
+        font-family: 'Segoe UI', sans-serif;
+        overflow-y: auto;
+    }
+
+    .bomberos-title {
+        color: white;
+        font-size: 3.5rem;
+        text-align: center;
+        font-weight: 900;
+        text-transform: uppercase;
+        margin-bottom: 50px;
+        text-shadow: 4px 4px 0px #ff8c00;
+    }
+
+    .grid-card {
+        background-color: white;
+        width: 90%;
+        max-width: 900px;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .custom-grid {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+        .custom-grid th {
+            background-color: #f8f9fa;
+            padding: 12px;
+            border-bottom: 2px solid #e60000;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .custom-grid td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+    .bombero-row {
+        cursor: grab;
+        transition: background 0.15s;
+    }
+
+        .bombero-row:active {
+            cursor: grabbing;
+        }
+
+        .bombero-row.dragging {
+            opacity: 0.4;
+        }
+
+        .bombero-row.drag-over {
+            background-color: #fff3f3;
+            outline: 2px dashed #e60000;
+        }
+
+    .orden-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        background-color: #ffe5e5;
+        color: #e60000;
+        font-weight: bold;
+        font-size: 13px;
+    }
+
+    .handle {
+        color: #aaa;
+        font-size: 18px;
+        margin-right: 8px;
+    }
+
+    .btn-confirmar {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 15px 40px;
+        font-size: 1.2rem;
+        font-weight: bold;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+        .btn-confirmar:hover {
+            background-color: #218838;
+        }
+
+    .loading-wrap {
+        display: flex;
+        justify-content: center;
+        padding: 40px 0;
+    }
+</style>
+
+<div class="bomberos-container">
+    <h1 class="bomberos-title">BOMBEROS VOLUNTARIOS CHIVILCOY</h1>
+    <Icon Type="fire" Class="title-icon" />
+
+    <div class="grid-card">
+        @if (isLoading)
+        {
+            <div class="loading-wrap">
+                <Spin />
+            </div>
+        }
+        else if (bomberos == null || !bomberos.Any())
+        {
+          
+        }
+        else
+        {
+            <table class="custom-grid">
+                <thead>
+                    <tr>
+                        <th style="width: 80px;">#</th>
+                        <th style="width: 80px;">Foto</th>
+                        <th>👤 Apellido y Nombre</th>
+                        <th>🆔 Legajo</th>
+                        <th>🎖️ Jerarquía</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var (bombero, index) in bomberos.Select((b, i) => (b, i)))
+                    {
+                        <tr class="bombero-row @(dragSrcId == bombero.Id ? "dragging" : "") @(dragOverId == bombero.Id ? "drag-over" : "")"
+                            draggable="true"
+                            @ondragstart="() => OnDragStart(bombero.Id)"
+                            @ondragover:preventDefault
+                            @ondragover="() => OnDragOver(bombero.Id)"
+                            @ondragleave="OnDragLeave"
+                            @ondrop="() => OnDrop(bombero.Id)">
+
+                            <td>
+                                <span class="handle">⠿</span>
+                                <span class="orden-badge">@(index + 1)</span>
+                            </td>
+                            <td>
+                                @if (bombero.UrlImagen != null)
+                                {
+                                    <Avatar Size="AvatarSize.Large" Src="@bombero.UrlImagen" />
+                                }
+                                else
+                                {
+                                    <Avatar Size="AvatarSize.Large" Icon="user" />
+                                }
+                            </td>
+                            <td>@bombero.ApellidoYNombre</td>
+                            <td>@bombero.NumeroLegajo</td>
+                            <td>@bombero.Grado</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+
+        <button class="btn-confirmar" @onclick="ConfirmarOrden" disabled="@isLoading">
+            CONFIRMAR
+        </button>
+    </div>
+</div>
+
+@code {
+    private bool isLoading = true;
+
+    List<BomberoViweModel>? bomberos;
+    List<BomberoViweModel>? SinFiltrar;
+
+    private int? dragSrcId = null;
+    private int? dragOverId = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        isLoading = true;
+        var resultado = await BomberoService.ObtenerTodosLosBomberosAsync(ConImagenes: true);
+        SinFiltrar = resultado.ToBomberoViewModelList()
+                              .OrderBy(b => b.OrdenPersonalizado ?? int.MaxValue)
+                              .ToList();
+        bomberos = SinFiltrar;
+        isLoading = false;
+    }
+
+    private void OnDragStart(int id) => dragSrcId = id;
+
+    private void OnDragOver(int id) => dragOverId = id;
+
+    private void OnDragLeave() => dragOverId = null;
+
+    private void OnDrop(int dstId)
+    {
+        if (dragSrcId == null || dragSrcId == dstId) return;
+
+        var srcItem = bomberos!.First(b => b.Id == dragSrcId);
+        var srcIdx = bomberos!.IndexOf(srcItem);
+        var dstIdx = bomberos!.IndexOf(bomberos.First(b => b.Id == dstId));
+
+        bomberos.RemoveAt(srcIdx);
+        bomberos.Insert(dstIdx, srcItem);
+
+        RecalcularOrden();
+
+        dragSrcId = null;
+        dragOverId = null;
+    }
+
+    private void RecalcularOrden()
+    {
+        for (int i = 0; i < bomberos!.Count; i++)
+            bomberos[i].OrdenPersonalizado = i + 1;
+    }
+
+    private async Task ConfirmarOrden()
+    {
+        Console.WriteLine("Orden confirmado:");
+    }
+}
