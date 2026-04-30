@@ -1,6 +1,8 @@
 ﻿using FireForce.Data.Models.Personas;
+using FireForce.Data.Models.Salidas.Planillas;
 using FireForce.Shared.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FireForce.Data.Models.Salidas.Componentes
 {
@@ -9,7 +11,7 @@ namespace FireForce.Data.Models.Salidas.Componentes
         /// <summary>
         /// Identificador único del animal afectado.
         /// </summary>
-        public int AnimalId { get; set; }
+        public int AnimalSalidaId { get; set; }
 
         /// <summary>
         /// Especie o raza del animal.
@@ -60,6 +62,17 @@ namespace FireForce.Data.Models.Salidas.Componentes
         /// DNI del responsable del animal
         /// </summary>
         [StringLength(255)]
-        public string? DniResponsable { get; set; }
+        public string? DocumentoResponsable { get; set; }
+
+        /// <summary>
+        /// Identificador único de la salida a la que pertenece el damnificado.
+        /// </summary>
+        public int SalidaId { get; set; }
+
+        /// <summary>
+        /// Referencia a la salida a la que pertenece el damnificado.
+        /// </summary>
+        [ForeignKey(nameof(SalidaId))]
+        public Salida Salida { get; set; } = null!;
     }
 }
