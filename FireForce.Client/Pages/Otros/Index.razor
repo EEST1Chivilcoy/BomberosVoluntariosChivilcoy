@@ -1014,7 +1014,7 @@
     <section class="logout-section" aria-label="Cerrar sesión">
         <div class="logout-container">
             <Button Class="logout-button"
-                    OnClick="CerrarSesion"
+                    OnClick="ShowModal"
                     Size="ButtonSize.Large"
                     AriaLabel="Cerrar sesión y salir del sistema">
                 <Icon Type="logout" Style="margin-right: 0.5rem;" />
@@ -1022,9 +1022,46 @@
             </Button>
         </div>
     </section>
+    <Modal Title="Confirmar cierre de sesión"
+           Visible="@_visible"
+           OnOk="@HandleOk"
+           OnCancel="@HandleCancel"
+           ConfirmLoading="@_confirmLoading">
+        <p>¿Estás seguro que querés cerrar sesión?</p>
+    </Modal>
 </div>
 
 @code {
+
+    /* =====================
+        MODAL CERRAR SESIÓN
+       ===================== */
+    bool _visible = false;
+    bool _confirmLoading = false;
+
+    private void ShowModal()
+    {
+        _visible = true;
+    }
+
+    private async Task HandleOk(MouseEventArgs e)
+    {
+        _confirmLoading = true;
+
+        await Task.Delay(800); // opcional (efecto visual)
+
+        _visible = false;
+        _confirmLoading = false;
+
+        CerrarSesion(); // <- acá recién cierra sesión
+    }
+
+    private void HandleCancel(MouseEventArgs e)
+    {
+        _visible = false;
+    }
+
+
     // ========================================
     // MÉTODOS DE NAVEGACIÓN
     // Centraliza la lógica de navegación
