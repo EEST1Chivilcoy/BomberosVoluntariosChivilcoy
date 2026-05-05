@@ -46,6 +46,7 @@ namespace FireForce.Client.Data.Mappers
                 Peso = bombero.Peso,
                 EsChofer = bombero.Chofer,
                 VencimientoRegistro = bombero.VencimientoRegistro,
+                OrdenPersonalizado = bombero.OrdenPersonalizado,
 
                 // Mapeo de Contacto (si existe)
                 TelefonoCel = bombero.Contacto?.TelefonoCel,

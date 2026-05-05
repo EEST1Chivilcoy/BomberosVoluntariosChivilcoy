@@ -3,7 +3,7 @@ using FireForce.Data.Models.Personas.Personal.Componentes;
 using FireForce.Client.Helpers;
 using FireForce.Shared.Enums;
 using FireForce.Data.Models.Imagenes;
-using FireForce.Data.Models.Personas.Personal.Componentes;
+using FireForce.Data.Models.DTO;
 using FireForce.Data.Models.Personas.Personal;
 using FireForce.Data;
 
@@ -21,6 +21,7 @@ namespace FireForce.Client.Services
         Task<Bombero> ObtenerBomberoPorIdAsync(int id, bool asnotracking = false, bool conRelaciones = true);
         Task<Bombero> ObtenerBomberoPorEntraIdAsync(Guid id, bool asnotracking = false, bool conRelaciones = true);
         Task<Bombero> ObtenerBomberoObjetoPorLegajoAsync(int numeroLegajo);
+        Task<bool> GuardarOrdenAsync(List<ActualizarOrdenDTO> orden);
     }
 
     public class BomberoService : IBomberoService
@@ -418,6 +419,38 @@ namespace FireForce.Client.Services
                 .FirstOrDefaultAsync(b => b.NumeroLegajo == numeroLegajo);
 
             return bombero;
+        }
+
+        public async Task<bool> GuardarOrdenAsync(List<ActualizarOrdenDTO> orden)
+        {
+            if (orden == null || !orden.Any())
+                return false;
+
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+
+            try
+            {
+                var ids = orden.Select(o => o.Id).ToList();
+                var bomberos = await _context.Bomberos
+                    .Where(b => ids.Contains(b.PersonaId))
+                    .ToListAsync();
+
+                foreach (var bombero in bomberos)
+                {
+                    var dto = orden.First(o => o.Id == bombero.PersonaId);
+                    bombero.OrdenPersonalizado = dto.OrdenPersonalizado;
+                }
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                await transaction.RollbackAsync();
+                _context.ChangeTracker.Clear();
+                return false;
+            }
         }
     }
 }

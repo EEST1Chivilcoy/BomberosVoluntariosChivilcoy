@@ -2,6 +2,7 @@
 @using FireForce.Data.Models.Personas.Personal.Componentes
 @using FireForce.Client.Pages.Personal.ABM.Componentes.Bomberos
 @using FireForce.Client.Data.Mappers
+@using FireForce.Data.Models.DTO
 
 @page "/fire-force/Orden"
 
@@ -10,6 +11,8 @@
 
 @using FireForce.Client.Services
 @inject IBomberoService BomberoService
+@inject NavigationManager Navigation
+@inject IMessageService MessageService
 
 <style>
     .bomberos-container {
@@ -211,12 +214,23 @@
     protected override async Task OnInitializedAsync()
     {
         isLoading = true;
+       await CargarBomberos();
+        isLoading = false;
+    }
+
+    private async Task CargarBomberos()
+    {
         var resultado = await BomberoService.ObtenerTodosLosBomberosAsync(ConImagenes: true);
+        if(resultado == null || !resultado.Any())
+        {
+           await MessageService.ErrorAsync("No se pudieron cargar los bomberos. Intente nuevamente más tarde.");
+            return;
+        }
         SinFiltrar = resultado.ToBomberoViewModelList()
-                              .OrderBy(b => b.OrdenPersonalizado ?? int.MaxValue)
+                              .OrderBy(b => b.Grado)
+                              .ThenBy(b => b.OrdenPersonalizado)
                               .ToList();
         bomberos = SinFiltrar;
-        isLoading = false;
     }
 
     private void OnDragStart(int id) => dragSrcId = id;
@@ -250,6 +264,17 @@
 
     private async Task ConfirmarOrden()
     {
-        Console.WriteLine("Orden confirmado:");
+        var ordenDTO = bomberos!.Select(b => new ActualizarOrdenDTO
+        {
+            Id = b.Id,
+            OrdenPersonalizado = b.OrdenPersonalizado!.Value
+        }).ToList();
+
+        var ok = await BomberoService.GuardarOrdenAsync(ordenDTO);
+
+        if (ok)
+            await MessageService.SuccessAsync("Orden guardado correctamente.");
+        else
+            await MessageService.ErrorAsync("Error al guardar el orden."); ;
     }
 }

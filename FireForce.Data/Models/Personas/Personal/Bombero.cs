@@ -141,5 +141,6 @@ namespace FireForce.Data.Models.Personas.Personal
         /// </summary>
         public List<Licencia> Licencias { get; set; } = new();
 
+        public int OrdenPersonalizado { get; set; } = new();
     }
 }
