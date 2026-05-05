@@ -1026,27 +1026,27 @@
 
     private void searchC(string value, EstadoCobrador estado)
     {
-        int number;
+        if (SinFiltrarC == null)
+            return;
 
         EstadoC = estado;
 
-        cobradores = SinFiltrarC.Where(d => d.Estado == EstadoC).ToList();
+        var query = SinFiltrarC.Where(d => d.Estado == EstadoC);
 
-        if (string.IsNullOrEmpty(value))
+        if (!string.IsNullOrWhiteSpace(value))
         {
-            StateHasChanged();
-            return;
+            int number;
+            bool isNumber = int.TryParse(value, out number);
+
+            query = query.Where(d =>
+                (!string.IsNullOrEmpty(d.Nombre) && ContieneIgnorandoAcentos(d.Nombre, value)) ||
+                (!string.IsNullOrEmpty(d.Apellido) && ContieneIgnorandoAcentos(d.Apellido, value)) ||
+                (isNumber && d.Documento == number)
+            );
         }
 
-        cobradores = cobradores.Where(d =>
-        ContieneIgnorandoAcentos(d.Nombre, value) ||
-        ContieneIgnorandoAcentos(d.Apellido, value))
-        .ToList();
-        if (int.TryParse(value, out number))
-        {
-            cobradores = cobradores.Where(d =>
-            d.Documento.Equals(number)).ToList();
-        }
+        cobradores = query.ToList();
+
         StateHasChanged();
     }
 }
