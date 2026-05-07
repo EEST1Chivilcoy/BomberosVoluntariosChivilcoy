@@ -33,6 +33,10 @@ namespace FireForce.Client.Services
                 }
                 _context.Materiales.Add(material);
                 await _context.SaveChangesAsync();
+                var numero = material.MaterialId.ToString("D12");
+
+                material.Codigo = $"{numero.Substring(0, 3)}-{numero.Substring(3, 3)}-{numero.Substring(6, 3)}-{numero.Substring(9, 3)}";
+                await _context.SaveChangesAsync();
                 return material;
             }
             catch (Exception ex)
