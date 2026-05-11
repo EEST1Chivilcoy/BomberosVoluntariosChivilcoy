@@ -600,27 +600,18 @@
         _visible = switchMoviles;
     }
 
-    private async Task<List<BomberoViweModel>> FiltrarBomberosChoferesAsync(List<BomberoViweModel> bomberos)
+    private Task<List<BomberoViweModel>> FiltrarBomberosChoferesAsync(List<BomberoViweModel> bomberos)
     {
         if (bomberos == null || !bomberos.Any())
         {
-            await MessageService.ErrorAsync("No hay bomberos disponibles para filtrar.");
-            return new List<BomberoViweModel>(); // Retorna lista vacía para evitar errores
+            return Task.FromResult(new List<BomberoViweModel>());
         }
 
-        // Filtra los choferes y crea copias independientes de cada objeto
         var choferes = bomberos
             .Where(b => b.EsChofer)
             .ToList();
 
-
-        if (!choferes.Any())
-        {
-            await MessageService.WarningAsync("No se encontraron bomberos con el rol de chofer.");
-        }
-
-        await MessageService.SuccessAsync("Bomberos choferes filtrados correctamente.");
-        return choferes;
+        return Task.FromResult(choferes);
     }
 
     private void OnFinishFailed(EditContext editContext)
