@@ -605,6 +605,7 @@
                         </PropertyColumn>
                         <PropertyColumn Title="🎖️ Jerarquía"
                                         Property="@(c => c.Grado)"
+                                        SorterCompare="@((x, y) => ((GradoComisionDirectiva)x).CompareTo((GradoComisionDirectiva)y))"s
                                         Sortable
                                         DefaultSortOrder="SortDirection.Ascending">
                             <Template>
@@ -979,10 +980,6 @@
 
         if (string.IsNullOrEmpty(value))
         {
-            bomberos = bomberos
-       .OrderBy(b => b.Grado)
-       .ToList();
-
             StateHasChanged();
             return;
         }
@@ -997,10 +994,6 @@
             bomberos = bomberos.Where(d =>
             d.NumeroLegajo.Equals(number)).ToList();
         }
-        bomberos = bomberos
-       .OrderBy(b => b.Grado)
-       .ToList();
-
         StateHasChanged();
     }
 
