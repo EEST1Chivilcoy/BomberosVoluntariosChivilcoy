@@ -72,12 +72,12 @@ namespace FireForce.Client.Pages.Salidas
 
                     salidaGuardada = await SalidaService.GuardarSalida(incendio);
                     await message.SuccessAsync("Salida guardada correctamente.");
+                    await Init();
                     HandleOk1(salidaGuardada.AnioNumeroParte, salidaGuardada.NumeroParte);
                 }
 
                 if (salidaGuardada == null)
                     throw new Exception("No se pudo guardar o editar la salida.");
-                await Init();
                 StateHasChanged();
             }
             catch (Exception e)
