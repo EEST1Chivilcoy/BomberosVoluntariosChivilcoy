@@ -447,7 +447,7 @@
 
         if (!todosNulos)
         {
-            var bomberoToRemoveModel = Model.CuerpoParticipante.FirstOrDefault(b => b.Bombero.PersonaId == id);
+            var bomberoToRemoveModel = Model.CuerpoParticipante.FirstOrDefault(b => b.PersonaId == id);
             if (bomberoToRemoveModel is null)
             {
                 MessageService.Error("No se encontró al bombero");
