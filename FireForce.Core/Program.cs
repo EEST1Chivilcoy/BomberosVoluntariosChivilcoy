@@ -132,7 +132,6 @@ builder.Services.AddScoped<IBomberoService, BomberoService>();
 builder.Services.AddScoped<IComisionDirectivaService, ComisionDirectivaService>();
 builder.Services.AddScoped<ICobradorService, CobradorService>();
 builder.Services.AddScoped<IBrigadaService, BrigadaService>();
-builder.Services.AddScoped<IGuardiaService, GuardiaService>();
 builder.Services.AddScoped<IDepositoService, DepositoService>();
 builder.Services.AddScoped<IEquipoAutonomoService, EquipoAutonomoService>();
 builder.Services.AddScoped<IMovimientoEquipoAutonomoService, MovimientoEquipoAutonomoService>();

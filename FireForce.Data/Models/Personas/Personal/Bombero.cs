@@ -7,7 +7,6 @@ using FireForce.Data.Models.Objetos.Componentes;
 using FireForce.Data.Models.Personas.Personal.Componentes;
 using FireForce.Data.Models.Grupos.Dependencias;
 using FireForce.Data.Models.Grupos.Brigadas;
-using FireForce.Data.Models.Grupos.Guardia;
 using FireForce.Data.Models.Vehiculos.Flota;
 using FireForce.Data.Models.Salidas.Componentes;
 
@@ -92,7 +91,6 @@ namespace FireForce.Data.Models.Personas.Personal
         /// </summary>
         public List<Bombero_Brigada> Brigadas { get; set; } = new List<Bombero_Brigada>();
 
-        public List<Bombero_Guardia> Guardias { get; set; } = new List<Bombero_Guardia>();
 
 
         /// <summary>
