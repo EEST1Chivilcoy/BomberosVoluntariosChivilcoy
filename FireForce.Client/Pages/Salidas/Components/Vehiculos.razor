@@ -294,7 +294,7 @@
 <div class="vehiculos-modulo">
     <div class="switch-principal-container ">
         <span class="switch-label-custom">¿Participaron moviles en la salida?</span>
-        <Switch @bind-Checked="participaronVehiculos" />
+        <Switch @bind-Checked="participaronVehiculos" @Disabled="_bloquearSwitchVisible"/>
         <span style="color:dodgerblue; font-weight: bold; width: 20px;">
             @(participaronVehiculos ? "Sí" : "No")
         </span>
@@ -570,6 +570,7 @@
 
     private bool switchMoviles = false;
     private bool _visible = false;
+    private bool _bloquearSwitchVisible = false;
     private bool loading = false;
     private bool participaronVehiculos = false;
 
@@ -622,6 +623,17 @@
 
             // Eliminar los bomberos que están en la lista de removibles
             bomberoChoferesSalir.RemoveAll(b => bomberosToRemove.Contains(b));
+
+            // Mostrar el modal si hay móviles en el modelo
+            if (Model.Moviles?.Any() == true)
+            {
+                _visible = true;
+                _bloquearSwitchVisible = true;
+            }
+            else
+            {
+				_bloquearSwitchVisible = false;
+            }
         }
     }
 
