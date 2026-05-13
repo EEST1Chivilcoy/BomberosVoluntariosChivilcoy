@@ -414,10 +414,18 @@
     {
         // Encuentra el bombero con el número de legajo especificado en la lista del componente
         var bomberoToRemove = bomberosSalida.FirstOrDefault(b => b.BomberoId == id);
-
+        
         if (bomberoToRemove is null)
         {
             MessageService.Error("No se encontró al bombero");
+            return;
+        }
+
+        var bomberoDevolver = bomberosTodosView.FirstOrDefault(b => b.Id == bomberoToRemove.BomberoId);
+
+        if (bomberoDevolver is null)
+        {
+            MessageService.Error("No se encontró al bombero para devolver a la lista");
             return;
         }
 
@@ -425,7 +433,7 @@
         bomberosSalida.Remove(bomberoToRemove);
 
         // Añade el bombero de vuelta a la lista de bomberos disponibles para salir
-        bomberosSalirTodos.Add(bomberosTodosView.FirstOrDefault(b => b.Id == bomberoToRemove.BomberoId));
+        bomberosSalirTodos.Add(bomberoDevolver);
 
         bool todosNulos = true;
         foreach (var bomberoSalida in Model.CuerpoParticipante)
