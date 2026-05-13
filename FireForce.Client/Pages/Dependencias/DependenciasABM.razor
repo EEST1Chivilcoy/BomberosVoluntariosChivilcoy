@@ -560,9 +560,10 @@
     </div>
 </Modal>
 
-<Modal @bind-Visible="_modalDetallesVisible" Title="@TitleDependenciaSel" Maximizable="@true" Centered="@true">
-    <BomberosDependencia DependenciaId="@IdDependenciaSel" ExternalVisible="_modalDetallesVisible" OnClose="() => _modalDetallesVisible=false"></BomberosDependencia>
-</Modal>
+@if (_modalDetallesVisible)
+{
+    <BomberosDependencia DependenciaId="@IdDependenciaSel" ExternalVisible="_modalDetallesVisible" OnClose="() => _modalDetallesVisible = false"></BomberosDependencia>
+}
 
 @code {
     // Lista con todos los bomberos

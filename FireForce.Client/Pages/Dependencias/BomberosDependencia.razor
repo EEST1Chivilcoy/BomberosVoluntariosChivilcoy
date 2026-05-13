@@ -398,7 +398,7 @@
 		DependenciaBomberos = await DependenciaService.ObtenerBomberosDeDependenciaAsync(DependenciaId);
 
 		// Mapeamos los bomberos de la dependencia a ViewModel
-		BomberosViewModel = MapFirefightersToDepartmentViewModels(DependenciaBomberos);
+		BomberosViewModel = MapFirefightersToDepartmentViewModels(DependenciaBomberos) ?? new List<BomberoDependenciaViewModel?>();
 
 		if (BomberosViewModel is null || !BomberosViewModel.Any()) return;
 
