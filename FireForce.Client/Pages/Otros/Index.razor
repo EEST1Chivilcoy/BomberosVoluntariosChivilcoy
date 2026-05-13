@@ -898,13 +898,6 @@
                                 </Button>
                                 <Button Type="ButtonType.Default"
                                         Class="action-button"
-                                        OnClick="NavigateToGuardias"
-                                        AriaLabel="Ir a Guardias">
-                                    <i class="fa-solid fa-users-gear" aria-hidden="true"></i>
-                                    <span>Guardias</span>
-                                </Button>
-                                <Button Type="ButtonType.Default"
-                                        Class="action-button"
                                         OnClick="NavigateToEquipos"
                                         AriaLabel="Ir a Equipos Autónomos">
                                     <i class="fa-solid fa-lungs" aria-hidden="true"></i>
@@ -1064,7 +1057,6 @@
     private void NavigateToDependencias() => navigationManager.NavigateTo("/fire-force/Dependencias");
     private void NavigateToFuerzas() => navigationManager.NavigateTo("/fire-force/FuerzasIntervinientes");
     private void NavigateToBrigadas() => navigationManager.NavigateTo("/fire-force/Brigadas");
-    private void NavigateToGuardias() => navigationManager.NavigateTo("/fire-force/Guardias");
     private void NavigateToEquipos() => navigationManager.NavigateTo("/fire-force/Dependencias/EquiposAutonomos");
     private void NavigateToPartesVehiculos() => navigationManager.NavigateTo("/fire-force/partes-vehiculos");
 
