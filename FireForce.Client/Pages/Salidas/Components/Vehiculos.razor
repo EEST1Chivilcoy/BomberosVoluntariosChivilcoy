@@ -459,7 +459,7 @@
                             <ActionColumn Title="Acciones" Width="80" Align="ColumnAlign.Center">
                                 <Template>
                                     <Popconfirm Title="¿Está seguro de eliminar este móvil?"
-                                                OnConfirm="()=> DeleteRowMovil(MovilesSalidasL1)"
+                                                OnConfirm="Task () => DeleteRowMovil(MovilesSalidasL1)"
                                                 OkText="Sí, eliminar"
                                                 CancelText="Cancelar">
                                         <Button Danger
@@ -693,7 +693,7 @@
         Console.WriteLine($"Failed:{JsonSerializer.Serialize(movilSalidaView)}");
     }
 
-    private async void DeleteRowMovil(Movil_Salida movil_Salida)
+    private async Task DeleteRowMovil(Movil_Salida movil_Salida)
     {
         string? numeroMovil = movil_Salida.Movil.NumeroMovil;
 
