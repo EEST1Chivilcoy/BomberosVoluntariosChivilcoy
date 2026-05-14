@@ -219,6 +219,7 @@ namespace FireForce.Client.Data.ViewModels
 
         public List<DamnificadoViewModel> Damnificados { get; set; } = new();
         public List<VehiculoDamnificadoViewModel> VehiculosDamnificados { get; set; } = new();
+        public List<AnimalViewModel> AnimalesDamnificados { get; set; } = new();
 
         // --- Sección del Seguro ---
 

@@ -487,7 +487,7 @@
             </Modal>
         </TabPane>
         <TabPane Key="animales" Tab="Animales">
-            <Table DataSource="AnimalesViewModel" Size="TableSize.Small" Class="damnificados-componente" Bordered>
+            <Table DataSource="Model.AnimalesDamnificados" Size="TableSize.Small" Class="damnificados-componente" Bordered>
                 <TitleTemplate>
                     <GridRow>
                         <GridCol Span="24" Style="text-align: right;">
@@ -527,7 +527,7 @@
                 <Row Gutter="16">
                     <AntDesign.Col Span="12">
                         <FormItem Label="Tipo" Class="modal-damnificado-form-item">
-                            <EnumSelect TEnum="TipoAnimal" @bind-Value="Animal.Tipo" AllowClear />
+                            <EnumSelect TEnum="TipoAnimal?" @bind-Value="Animal.Tipo" AllowClear/>
                         </FormItem>
                     </AntDesign.Col>
                     @if (Animal.Tipo == TipoAnimal.Otro)
@@ -806,9 +806,6 @@
             Damnificado.FuerzaInterviniente = null;
     }
 
-    private List<AnimalViewModel> AnimalesViewModel = new();// ACA TA GIOO <3 (borrale el nombre y ponele otro le puse temporal para poder ver como m quedaba)
-
-
     private void EditarAnimal(AnimalViewModel a)
     {
         Animal = a.Clonar();
@@ -822,13 +819,13 @@
         {
             if (!editandoAnimal)
             {
-                Animal.NumeroOrden = AnimalesViewModel.Count + 1;
-                AnimalesViewModel.Add(Animal);
+                Animal.NumeroOrden = Model.AnimalesDamnificados.Count + 1;
+                Model.AnimalesDamnificados.Add(Animal);
                 MessageService.Success("Animal agregado correctamente");
             }
             else
             {
-                var animalAEditar = AnimalesViewModel.SingleOrDefault(d => d.NumeroOrden == Animal.NumeroOrden);
+                var animalAEditar = Model.AnimalesDamnificados.SingleOrDefault(d => d.NumeroOrden == Animal.NumeroOrden);
 
                 if (animalAEditar == null)
                 {
@@ -856,8 +853,8 @@
 
     private void EliminarAnimal(AnimalViewModel a)
     {
-        AnimalesViewModel.Remove(a);
-        for (int i = 0; i < AnimalesViewModel.Count; i++) AnimalesViewModel[i].NumeroOrden = i + 1;
+        Model.AnimalesDamnificados.Remove(a);
+        for (int i = 0; i < Model.AnimalesDamnificados.Count; i++) Model.AnimalesDamnificados[i].NumeroOrden = i + 1;
         StateHasChanged();
     }
 }
