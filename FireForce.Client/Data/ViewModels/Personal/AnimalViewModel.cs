@@ -7,6 +7,8 @@ namespace FireForce.Client.Data.ViewModels.Personal
 {
     public class AnimalViewModel : IEditableViewModel<AnimalViewModel>
     {
+        public int Id { get; set; }
+
         [Required(ErrorMessage = "Por favor, especifique un tipo de animal")]
         public TipoAnimal? Tipo {  get; set; }
 
