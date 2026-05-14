@@ -5,10 +5,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FireForce.Client.Data.ViewModels.Personal
 {
-    class AnimalViewModel : IEditableViewModel<AnimalViewModel>
+    public class AnimalViewModel : IEditableViewModel<AnimalViewModel>
     {
         [Required(ErrorMessage = "Por favor, especifique un tipo de animal")]
-        public TipoAnimal Tipo {  get; set; }
+        public TipoAnimal? Tipo {  get; set; }
 
         public string? TipoOtro { get; set; }
 

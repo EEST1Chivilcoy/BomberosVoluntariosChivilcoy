@@ -6,6 +6,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FireForce.Data.Models.Salidas.Componentes
 {
+    /// <summary>
+    /// Representa a un animal damnificado.  
+    /// </summary>
     public class AnimalSalida
     {
         /// <summary>
