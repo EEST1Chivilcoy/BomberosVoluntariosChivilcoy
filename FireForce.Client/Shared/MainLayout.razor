@@ -91,6 +91,9 @@
                     <MenuItem Key="brigadas" OnClick="@(() => navigationManager.NavigateTo("/fire-force/Brigadas"))" class="compact-item">
                         <span class="compact-text">Brigadas</span>
                     </MenuItem>
+                    <MenuItem Key="orden" OnClick="@(() => navigationManager.NavigateTo("/fire-force/Orden"))" class="compact-item">
+                        <span class="compact-text">Orden</span>
+                    </MenuItem>
                     <MenuItem Key="equipos-autonomos" OnClick="@(() => navigationManager.NavigateTo("/fire-force/Dependencias/EquiposAutonomos"))" class="compact-item">
                         <span class="compact-text">Equipos Autónomos</span>
                     </MenuItem>
@@ -186,6 +189,10 @@
                     </MenuItem>
                     <MenuItem Key="brigadas"><IconTemplate><i class="fa-solid fa-users-gear submenu-icon"></i></IconTemplate>
                         <ChildContent><a class="menu-link" href="/fire-force/Brigadas">Brigadas</a></ChildContent>
+                    </MenuItem>
+                    <MenuItem Key="orden">
+                        <IconTemplate><i class="fa-solid fa-users-gear submenu-icon"></i></IconTemplate>
+                        <ChildContent><a class="menu-link" href="/fire-force/Orden">Orden</a></ChildContent>
                     </MenuItem>
                     <MenuItem Key="equipos-autonomos"><IconTemplate><i class="fa-solid fa-mask-face submenu-icon"></i></IconTemplate>
                         <ChildContent><a class="menu-link" href="/fire-force/Dependencias/EquiposAutonomos">Equipos Autónomos</a></ChildContent>
