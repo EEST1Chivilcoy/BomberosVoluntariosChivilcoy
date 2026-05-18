@@ -539,7 +539,6 @@
                         <PropertyColumn Title="🎖️ Jerarquía"
                                         Property="@(c => c.Grado)"
                                         SorterCompare="@((x, y) => ((EscalafonJerarquico)x).CompareTo((EscalafonJerarquico)y))"
-                                        Sortable
                                         DefaultSortOrder="SortDirection.Ascending">
                             <Template>
                                 @context.Grado.GetDisplayName()
@@ -976,7 +975,7 @@
 
         EstadoB = estado;
 
-        bomberos = SinFiltrarB.Where(d => d.Estado == EstadoB).ToList();
+        bomberos = SinFiltrarB.Where(d => d.Estado == EstadoB).OrderBy(d => (EscalafonJerarquico)d.Grado).ThenBy(d => d.OrdenPersonalizado).ToList();
 
         if (string.IsNullOrEmpty(value))
         {
@@ -993,8 +992,7 @@
         {
             bomberos = bomberos.Where(d =>
             d.NumeroLegajo.Equals(number)).ToList();
-        }
-        StateHasChanged();
+        }        StateHasChanged();
     }
 
     private void searchCD(string value, EstadoComisionDirectiva estado)
