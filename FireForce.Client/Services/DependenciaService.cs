@@ -16,6 +16,7 @@ namespace FireForce.Client.Services
         Task AgregarBomberoADependenciaAsync(int dependenciaId, int bomberoId);
         Task QuitarBomberoDeDependenciaAsync(int dependenciaId, int bomberoId);
         Task<bool> ComprobarBomberoEnDependenciaAsync(int dependenciaId, int bomberoId);
+        Task<Bombero?> ObtenerEncargadoDeDependenciaAsync(int dependenciaId);
     }
 
     public class DependenciaService : IDependenciaService
@@ -128,6 +129,14 @@ namespace FireForce.Client.Services
         {
             return await _context.Set<Bombero_Dependencia>()
                 .AnyAsync(bd => bd.DependenciaId == dependenciaId && bd.PersonaId == bomberoId);
+        }
+
+        public async Task<Bombero?> ObtenerEncargadoDeDependenciaAsync(int dependenciaId)
+        {
+            var dependencia = await _context.Dependencias
+                .Include(d => d.Encargado)
+                .FirstOrDefaultAsync(d => d.DependenciaId == dependenciaId);
+            return dependencia?.Encargado;
         }
     }
 }

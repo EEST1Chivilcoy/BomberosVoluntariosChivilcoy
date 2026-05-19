@@ -311,7 +311,7 @@
 <Modal @bind-Visible="_modalAñadirBomberosVisible" Title="Añadir Bomberos" OkText="@("Guardar")" CancelText="@("Cancelar")" OnOk="@AddFirefighterToDepartmentAsync">
 	<Select Mode="SelectMode.Multiple"
 			Placeholder="Elige los bomberos a agregar a la dependencia"
-			DataSource="@BomberosTodosViewModel"
+			DataSource="@BomberosParaAgregarViewModel"
 			Values="@BomberosSeleccionados"
 			TItem="BomberoViweModel"
 			TItemValue="int"
@@ -332,6 +332,9 @@
 	private List<int> BomberosSeleccionados = new List<int>(); // Lista de IDs de Bomberos seleccionados para agregar a la Dependencia
 	public List<BomberoViweModel?> BomberosTodosViewModel { get; set; } = new(); // Lista de Bomberos en formato ViewModel para todos los Bomberos disponibles
 	public List<Bombero?> BomberosTodos { get; set; } = new(); // Lista de todos los Bomberos disponibles
+	public List<Bombero?> BomberosParaAgregar { get; set; } = new(); // Lista de Bomberos disponibles para agregar a la Dependencia
+	public List<BomberoViweModel?> BomberosParaAgregarViewModel { get; set; } = new(); // Lista de Bomberos en formato ViewModel para los Bomberos disponibles para agregar
+	public Bombero? Encargado { get; set; } // Encargado de la Dependencia
 
 	// Variables de Tamaño de la Tabla
 	int _pageIndex = 1;
@@ -394,11 +397,19 @@
 			return;
 		}
 
+		// Obtenemos el encargado de la dependencia para excluirlo de la lista de bomberos disponibles para agregar
+		Encargado = await DependenciaService.ObtenerEncargadoDeDependenciaAsync(DependenciaId);
+		if (Encargado != null)
+		{
+			BomberosParaAgregar = BomberosTodos.Where(b => b.PersonaId != Encargado.PersonaId).ToList();
+			BomberosParaAgregarViewModel = BomberosParaAgregar.ToBomberoViewModelList();
+		}
+
 		// Obtenemos los bomberos de la dependencia específica
 		DependenciaBomberos = await DependenciaService.ObtenerBomberosDeDependenciaAsync(DependenciaId);
 
 		// Mapeamos los bomberos de la dependencia a ViewModel
-		BomberosViewModel = MapFirefightersToDepartmentViewModels(DependenciaBomberos) ?? new List<BomberoDependenciaViewModel?>();
+		BomberosViewModel = MapFirefightersToDepartmentViewModels(DependenciaBomberos)!;
 
 		if (BomberosViewModel is null || !BomberosViewModel.Any()) return;
 
@@ -409,18 +420,25 @@
 		StateHasChanged();
 	}
 
-	public List<BomberoDependenciaViewModel?> MapFirefightersToDepartmentViewModels(List<Bombero?> bomberos)
+	public List<BomberoDependenciaViewModel> MapFirefightersToDepartmentViewModels(List<Bombero?> bomberos)
 	{
-		if (bomberos.Any())
+		if (bomberos != null && bomberos.Any())
 		{
-			return DependenciaBomberos.Select(b => new BomberoDependenciaViewModel
+			List<BomberoDependenciaViewModel> viewModels = new List<BomberoDependenciaViewModel>();
+
+			foreach (var bombero in bomberos)
+			{
+				if (bombero is null) continue;
+				viewModels.Add(new BomberoDependenciaViewModel
 				{
-					Id = b.PersonaId,
-					NroLeg = b.NumeroLegajo,
-					ApellidoYNombre = $"{b.Apellido}, {b.Nombre}"
-				}).ToList();
+					Id = bombero.PersonaId,
+					NroLeg = bombero.NumeroLegajo,
+					ApellidoYNombre = $"{bombero.Apellido}, {bombero.Nombre}"
+				});
+			}
+			return viewModels;
 		}
-		return null;
+		return new();
 	}
 
 	public async Task RemoveFirefighterFromDepartment(int BomberoID, int DependenciaID)
