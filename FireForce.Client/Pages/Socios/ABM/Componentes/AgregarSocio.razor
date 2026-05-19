@@ -386,6 +386,9 @@
                                 <FormItem Label="Ocupación">
                                     <Input @bind-Value="@socioView.Ocupacion" Placeholder="Ingrese ocupación" AllowClear="true" />
                                 </FormItem>
+                                <FormItem Label="Estado">
+                                    <EnumSelect TEnum="TipoEstadoSocio ?" @bind-Value="@socioView.EstadoSocio" AllowClear/>
+                                </FormItem>
                             </AntDesign.Col>
                         </AntDesign.Row>
 
@@ -515,6 +518,9 @@
 
         public string? NotaAdicional { get; set; }
 
+        [Required(ErrorMessage = "El estado es obligatorio.")]
+        public TipoEstadoSocio? EstadoSocio { get; set; } = TipoEstadoSocio.Activo;
+
         // -- Datos de Contacto --
 
         [StringLength(255, ErrorMessage = "El teléfono no puede superar los 255 caracteres.")]
@@ -630,7 +636,8 @@
                 Email = socioView.Email,
                 MontoCuota = socioView.CuotaValor!.Value,
                 FrecuenciaDePago = socioView.FrecuenciaPago!.Value,
-                FormaPago = socioView.FormaPago!.Value
+                FormaPago = socioView.FormaPago!.Value,
+                EstadoSocio = socioView.EstadoSocio!.Value
             };
 
             if (socioView is SocioPersonaViewModel socioPersonaView)
