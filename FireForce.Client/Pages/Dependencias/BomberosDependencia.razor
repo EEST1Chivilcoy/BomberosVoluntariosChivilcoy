@@ -449,7 +449,7 @@
 			return;
 		}
 
-		bool isBomberoInDependencia = await DependenciaService.ComprobarBomberoEnDependenciaAsync(BomberoID, DependenciaID);
+		bool isBomberoInDependencia = await DependenciaService.ComprobarBomberoEnDependenciaAsync(DependenciaID, BomberoID);
 
 		if (!isBomberoInDependencia)
 		{
