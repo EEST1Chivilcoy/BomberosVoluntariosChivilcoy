@@ -15,203 +15,335 @@
 @inject IMessageService MessageService
 
 <style>
-    .bomberos-container {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        z-index: 100;
-        background-color: #e60000;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        padding-top: 40px;
-        font-family: 'Segoe UI', sans-serif;
+    .orden-abm {
+        --primary: #A63333;
+        --primary-dark: #732D2D;
+        --success: #4CAF50;
+        --success-dark: #438E46;
+        --accent: #FFD54F;
+    }
+
+        .orden-abm .page-container {
+            padding: 12px;
+            min-height: 100vh;
+        }
+
+        .orden-abm .main-card {
+            background: rgba(255,255,255,.96);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,.2);
+            box-shadow: 0 8px 32px rgba(166,51,51,.10), 0 4px 16px rgba(0,0,0,.05);
+        }
+
+        .orden-abm .header-section {
+            position: relative;
+            overflow: hidden;
+            padding: 28px;
+            color: white;
+            background: linear-gradient( 135deg, var(--primary), var(--primary-dark) );
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .orden-abm .main-title {
+            margin: 0;
+            font-size: 2.2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            animation: glow 2s infinite alternate;
+            position: relative;
+            z-index: 2;
+        }
+
+        .orden-abm .title-icon {
+            color: var(--accent);
+            font-size: 2rem;
+        }
+
+    @@keyframes glow {
+        from {
+            text-shadow: 0 0 5px #F9A825, 0 0 10px #FFD54F;
+        }
+
+        to {
+            text-shadow: 0 0 14px #F9A825, 0 0 25px #FFD54F;
+        }
+    }
+
+    .lava-bubbles {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+    }
+
+    .lava-bubble {
+        position: absolute;
+        border-radius: 50%;
+        background: radial-gradient( circle, #FFD54F, transparent );
+        opacity: .35;
+        animation: bubble 8s linear infinite;
+    }
+
+    .b1 {
+        width: 70px;
+        height: 70px;
+        left: 10%;
+    }
+
+    .b2 {
+        width: 90px;
+        height: 90px;
+        left: 40%;
+        animation-delay: 2s;
+    }
+
+    .b3 {
+        width: 60px;
+        height: 60px;
+        left: 70%;
+        animation-delay: 4s;
+    }
+
+    @@keyframes bubble {
+        from {
+            transform: translateY(120px);
+        }
+
+        to {
+            transform: translateY(-280px);
+            opacity: 0;
+        }
+    }
+
+    .table-wrapper {
+        padding: 24px;
+    }
+
+    .scroll {
+        max-height: 720px;
         overflow-y: auto;
-    }
-
-    .bomberos-title {
-        color: white;
-        font-size: 3.5rem;
-        text-align: center;
-        font-weight: 900;
-        text-transform: uppercase;
-        margin-bottom: 50px;
-        text-shadow: 4px 4px 0px #ff8c00;
-    }
-
-    .grid-card {
-        background-color: white;
-        width: 90%;
-        max-width: 900px;
-        border-radius: 8px;
-        padding: 20px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        text-align: center;
-        margin-bottom: 40px;
-        display: flex;
-        flex-direction: column;
+        border-radius: 12px;
     }
 
     .custom-grid {
         width: 100%;
         border-collapse: collapse;
-        margin-bottom: 20px;
-        color: #333;
     }
 
         .custom-grid th {
-            background-color: #f8f9fa;
-            padding: 12px;
-            border-bottom: 2px solid #e60000;
-            text-align: left;
-            font-weight: bold;
+            background: var(--primary);
+            color: white;
+            padding: 16px;
+            font-weight: 700;
+            border: none;
         }
 
         .custom-grid td {
-            padding: 12px;
-            border-bottom: 1px solid #eee;
-            text-align: left;
-            vertical-align: middle;
+            padding: 16px;
+            border-bottom: 1px solid #f0f0f0;
         }
 
     .bombero-row {
+        transition: .25s;
         cursor: grab;
-        transition: background 0.15s;
     }
 
-        .bombero-row:active {
-            cursor: grabbing;
+        .bombero-row:hover {
+            background: #fff8f8;
         }
 
         .bombero-row.dragging {
-            opacity: 0.4;
+            opacity: .45;
         }
 
         .bombero-row.drag-over {
-            background-color: #fff3f3;
-            outline: 2px dashed #e60000;
+            background: #fff0f0;
+            outline: 2px dashed var(--primary);
         }
 
     .orden-badge {
+        width: 34px;
+        height: 34px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 26px;
-        height: 26px;
         border-radius: 50%;
-        background-color: #ffe5e5;
-        color: #e60000;
+        background: linear-gradient( 135deg, #ffd54f, #ffb300 );
+        color: #732D2D;
         font-weight: bold;
-        font-size: 13px;
     }
 
     .handle {
-        color: #aaa;
-        font-size: 18px;
-        margin-right: 8px;
+        font-size: 20px;
+        margin-right: 10px;
+        color: #888;
     }
 
-    .btn-confirmar {
-        background-color: #28a745;
-        color: white;
-        border: none;
-        padding: 15px 40px;
-        font-size: 1.2rem;
-        font-weight: bold;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background 0.3s;
+    .footer-actions {
+        padding: 24px;
+        display: flex;
+        justify-content: flex-end;
     }
 
-        .btn-confirmar:hover {
-            background-color: #218838;
+    .orden-abm .btn-confirmar {
+        height: 56px !important;
+        min-width: 240px !important;
+        padding: 0 32px !important;
+        border: none !important;
+        border-radius: 10px !important;
+        font-size: 1.1rem !important;
+        font-weight: 700 !important;
+        color: white !important;
+        background: linear-gradient( 135deg, #4CAF50 0%, #438E46 100% ) !important;
+        box-shadow: 0 4px 12px rgba(76,175,80,.30) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 10px !important;
+        transition: all .30s cubic-bezier(.4,0,.2,1) !important;
+    }
+
+        .orden-abm .btn-confirmar:hover {
+            transform: translateY(-3px) !important;
+            background: linear-gradient( 135deg, #388E3C 0%, #4CAF50 100% ) !important;
+            box-shadow: 0 8px 22px rgba(76,175,80,.40) !important;
+        }
+
+        .orden-abm .btn-confirmar:active {
+            transform: translateY(-1px) scale(.98) !important;
+        }
+
+        .orden-abm .btn-confirmar[disabled] {
+            opacity: .65;
         }
 
     .loading-wrap {
-        display: flex;
-        justify-content: center;
-        padding: 40px 0;
-    }
-
-    .scroll {
-        max-height: 750px;
-        overflow-y: auto;
-        border-radius: 8px;
+        padding: 50px;
+        text-align: center;
     }
 </style>
 
-<div class="bomberos-container">
-    <h1 class="bomberos-title">BOMBEROS VOLUNTARIOS CHIVILCOY</h1>
+<div class="orden-abm">
 
-    <Icon Type="fire" Class="title-icon" />
-    <div class="grid-card">
-        @if (isLoading)
-        {
-            <div class="loading-wrap">
-                <Spin />
-            </div>
-        }
-        else if (bomberos == null || !bomberos.Any())
-        {
-            <div class="loading-wrap">
-                <p>No se encontraron bomberos.</p>
-            </div>
-        }
-        else
-        {
-            <div class="scroll">
-            <table class="custom-grid">
-                <thead>
-                    <tr>
-                        <th style="width: 80px;">#</th>
-                        <th style="width: 80px;">Foto</th>
-                        <th>👤 Apellido y Nombre</th>
-                        <th>🆔 Legajo</th>
-                        <th>🎖️ Jerarquía</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var (bombero, index) in bomberos.Select((b, i) => (b, i)))
-                    {
-                        <tr class="bombero-row @(dragSrcId == bombero.Id ? "dragging" : "") @(dragOverId == bombero.Id ? "drag-over" : "")"
-                            draggable="true"
-                            @ondragstart="() => OnDragStart(bombero.Id)"
-                            @ondragover:preventDefault
-                            @ondragover="() => OnDragOver(bombero.Id)"
-                            @ondragleave="OnDragLeave"
-                            @ondrop="() => OnDrop(bombero.Id)">
+    <div class="page-container">
 
-                            <td>
-                                <span class="handle">⠿</span>
-                                <span class="orden-badge">@(index + 1)</span>
-                            </td>
-                            <td>
-                                @if (bombero.UrlImagen != null)
+        <Card Class="main-card">
+
+            <div class="header-section">
+
+                <div class="lava-bubbles">
+                    <div class="lava-bubble b1"></div>
+                    <div class="lava-bubble b2"></div>
+                    <div class="lava-bubble b3"></div>
+                </div>
+
+                <h1 class="main-title">
+                    <Icon Type="fire" Class="title-icon" />
+                    ORDEN DEL PERSONAL
+                </h1>
+
+                <Button Class="btn-confirmar"
+                        OnClick="ConfirmarOrden"
+                        Loading="@isLoading"
+                        Icon="save">
+
+                    GUARDAR ORDEN
+
+                </Button>
+
+            </div>
+
+            <div class="table-wrapper">
+
+                @if (isLoading)
+                {
+                    <div class="loading-wrap">
+                        <Spin />
+                    </div>
+                }
+                else
+                {
+                    <div class="scroll">
+
+                        <table class="custom-grid">
+
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Foto</th>
+                                    <th>Apellido y Nombre</th>
+                                    <th>Legajo</th>
+                                    <th>Jerarquía</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                @foreach (var (bombero, index)
+                                                            in bomberos.Select((b, i) => (b, i)))
                                 {
-                                    <Avatar Size="AvatarSize.Large" Src="@bombero.UrlImagen" />
-                                }
-                                else
-                                {
-                                    <Avatar Size="AvatarSize.Large" Icon="user" />
-                                }
-                            </td>
-                            <td>@bombero.ApellidoYNombre</td>
-                            <td>@bombero.NumeroLegajo</td>
-                            <td>@bombero.Grado</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-            </div>
-        }
+                                    <tr class="bombero-row
+                                                @(dragSrcId == bombero.Id ? "dragging" : "")
+                                                @(dragOverId == bombero.Id ? "drag-over" : "")"
+                                        draggable="true"
+                                        @ondragstart="() => OnDragStart(bombero.Id)"
+                                        @ondragover:preventDefault
+                                        @ondragover="() => OnDragOver(bombero.Id)"
+                                        @ondrop="() => OnDrop(bombero.Id)">
 
-        <button class="btn-confirmar" @onclick="ConfirmarOrden" disabled="@isLoading">
-            CONFIRMAR
-        </button>
+                                        <td>
+
+                                            <span class="handle">
+                                                ☰
+                                            </span>
+
+                                            <span class="orden-badge">
+                                                @(index + 1)
+                                            </span>
+
+                                        </td>
+
+                                        <td>
+
+                                            <Avatar Size="AvatarSize.Large"
+                                                    Src="@bombero.UrlImagen"
+                                                    Icon="user" />
+
+                                        </td>
+
+                                        <td>
+                                            @bombero.ApellidoYNombre
+                                        </td>
+
+                                        <td>
+                                            @bombero.NumeroLegajo
+                                        </td>
+
+                                        <td>
+                                            @bombero.Grado
+                                        </td>
+
+                                    </tr>
+                                }
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+                }
+
+            </div>
+
+        </Card>
+
     </div>
+
 </div>
 
 @code {
