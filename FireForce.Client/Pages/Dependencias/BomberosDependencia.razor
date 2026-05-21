@@ -328,13 +328,9 @@
 	[Parameter] public EventCallback OnClose { get; set; } // Callback para cerrar la vista
 	[Parameter] public bool ExternalVisible { get; set; } // Controlador de visibilidad externo
 	private List<Bombero?> DependenciaBomberos = new(); // Lista de Bomberos de la Dependencia
-	public List<BomberoDependenciaViewModel?> BomberosViewModel { get; set; } = new(); // Lista de Bomberos en formato ViewModel para la Dependencia
+	public List<BomberoDependenciaViewModel> BomberosViewModel { get; set; } = new(); // Lista de Bomberos en formato ViewModel para la Dependencia
 	private List<int> BomberosSeleccionados = new List<int>(); // Lista de IDs de Bomberos seleccionados para agregar a la Dependencia
-	public List<BomberoViweModel?> BomberosTodosViewModel { get; set; } = new(); // Lista de Bomberos en formato ViewModel para todos los Bomberos disponibles
-	public List<Bombero?> BomberosTodos { get; set; } = new(); // Lista de todos los Bomberos disponibles
-	public List<Bombero?> BomberosParaAgregar { get; set; } = new(); // Lista de Bomberos disponibles para agregar a la Dependencia
-	public List<BomberoViweModel?> BomberosParaAgregarViewModel { get; set; } = new(); // Lista de Bomberos en formato ViewModel para los Bomberos disponibles para agregar
-	public Bombero? Encargado { get; set; } // Encargado de la Dependencia
+	public List<BomberoViweModel> BomberosParaAgregarViewModel { get; set; } = new(); // Lista de Bomberos en formato ViewModel para los Bomberos disponibles para agregar
 
 	// Variables de Tamaño de la Tabla
 	int _pageIndex = 1;
@@ -375,43 +371,33 @@
 			return;
 		}
 
-
 		// Si todo está bien, obtenemos todos los bomberos de la base de datos
-		BomberosTodos = await BomberoService.ObtenerTodosLosBomberosAsync();
+		var bomberosTodos = await BomberoService.ObtenerTodosLosBomberosAsync();
 
 		// Si no hay bomberos, mostramos un mensaje de error
 
-		if (BomberosTodos == null || !BomberosTodos.Any())
+		if (bomberosTodos.Count == 0)
 		{
 			await MessageService.ErrorAsync("No hay bomberos disponibles en la base de datos.");
 			return;
 		}
 
-		// Los mapeamos a ViewModel
-		BomberosTodosViewModel = BomberosTodos.ToBomberoViewModelList();
-
-		// Si no hay bomberos disponibles en la lista, mostramos un mensaje de error indicando que fue un error de mapeo
-		if (BomberosTodosViewModel == null || !BomberosTodosViewModel.Any())
+		// Obtenemos el encargado de la dependencia para excluirlo de la lista de bomberos disponibles para agregar
+		var encargadoId = await DependenciaService.ObtenerEncargadoDeDependenciaIdAsync(DependenciaId);
+		if (!encargadoId.HasValue)
 		{
-			await MessageService.ErrorAsync("Error al mapear los bomberos a la lista de ViewModel.");
+			await MessageService.ErrorAsync("No se encontro el encargado.");
 			return;
 		}
 
-		// Obtenemos el encargado de la dependencia para excluirlo de la lista de bomberos disponibles para agregar
-		Encargado = await DependenciaService.ObtenerEncargadoDeDependenciaAsync(DependenciaId);
-		if (Encargado != null)
-		{
-			BomberosParaAgregar = BomberosTodos.Where(b => b.PersonaId != Encargado.PersonaId).ToList();
-			BomberosParaAgregarViewModel = BomberosParaAgregar.ToBomberoViewModelList();
-		}
+		var bomberosParaAgregar = bomberosTodos.Where(b => b.PersonaId != encargadoId.Value).ToList();
+		BomberosParaAgregarViewModel = bomberosParaAgregar.ToBomberoViewModelList();
 
 		// Obtenemos los bomberos de la dependencia específica
 		DependenciaBomberos = await DependenciaService.ObtenerBomberosDeDependenciaAsync(DependenciaId);
 
 		// Mapeamos los bomberos de la dependencia a ViewModel
 		BomberosViewModel = MapFirefightersToDepartmentViewModels(DependenciaBomberos)!;
-
-		if (BomberosViewModel is null || !BomberosViewModel.Any()) return;
 
 		// Limpiamos la lista de bomberos seleccionados
 		BomberosSeleccionados = new();
@@ -485,7 +471,7 @@
 
 	public async Task showAddFirefightersModal()
 	{
-		if (BomberosTodos == null || !BomberosTodos.Any())
+		if (BomberosParaAgregarViewModel.Count == 0)
 		{
 			await MessageService.ErrorAsync("No hay bomberos disponibles para agregar.");
 			return;
