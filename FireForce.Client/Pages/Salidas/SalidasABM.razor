@@ -639,7 +639,7 @@
                 }
                 else
                 {
-                    finalRoute = $"{rutaTemplate}/{salida.AnioNumeroParte}/{salida.NumeroParte}";
+                    finalRoute = $"{rutaTemplate}/{(int)salida.TipoEmergencia}/{salida.AnioNumeroParte}/{salida.NumeroParte}";
                 }
                 NavigationManager.NavigateTo(finalRoute);
             }
