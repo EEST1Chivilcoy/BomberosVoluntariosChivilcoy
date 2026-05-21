@@ -17,28 +17,44 @@
 <style>
     .bomberos-container {
         position: fixed;
-        top: 0;
+        top: 60px;
         left: 0;
         width: 100vw;
         height: 100vh;
-        z-index: 1000;
+        z-index: 100;
         background-color: #e60000;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: flex-start;
-        padding-top: 40px;
-        font-family: 'Segoe UI', sans-serif;
+        padding-top: 0px;
+        font-family: 'Segoe UI', sae60000;
+        ns-serif;
         overflow-y: auto;
     }
 
+    .title-header {
+        top: 0px;
+        left: 0;
+        width: 100vw;
+        background-color: white;
+        padding-top: 0px;
+        margin-bottom: 10px;
+    }
+
+    /* #820014(bordo)
+       #e60000(rojo)
+       black(negro)
+    */
+
     .bomberos-title {
-        color: white;
+        color: black;
         font-size: 3.5rem;
         text-align: center;
         font-weight: 900;
         text-transform: uppercase;
-        margin-bottom: 50px;
+        margin-top: 35px;
+        margin-bottom: 35px;
         text-shadow: 4px 4px 0px #ff8c00;
     }
 
@@ -48,7 +64,7 @@
         max-width: 900px;
         border-radius: 8px;
         padding: 20px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        /*box-shadow: 0 4px 15px rgba(0,0,0,0.2);*/
         text-align: center;
         margin-bottom: 40px;
     }
@@ -136,9 +152,13 @@
 </style>
 
 <div class="bomberos-container">
-    <h1 class="bomberos-title">BOMBEROS VOLUNTARIOS CHIVILCOY</h1>
-    <Icon Type="fire" Class="title-icon" />
-
+    <div class="title-header"
+    <h1 class="bomberos-title"> 
+        <Icon Type="fire"/>
+        BOMBEROS VOLUNTARIOS CHIVILCOY
+        <Icon Type="fire" Class="title-icon" />
+    </h1>
+    </div>
     <div class="grid-card">
         @if (isLoading)
         {
