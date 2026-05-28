@@ -16,8 +16,8 @@
 
 <style>
     /* ===========================
-               VARIABLES PRINCIPALES
-               =========================== */
+                   VARIABLES PRINCIPALES
+                   =========================== */
     .dependencias-abm {
         --abm-primary-color: #A63333;
         --abm-primary-dark: #732D2D;
@@ -402,6 +402,22 @@
             background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
             color: #fff !important;
         }
+
+    .boton-agregar {
+        background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
+        border: none !important;
+        color: #fff !important;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
+        padding: 0 20px !important;
+        border-radius: 8px !important;
+        transition: background 0.3s;
+    }
+
+        .boton-agregar:hover {
+            background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
+            color: #fff !important;
+        }
 </style>
 
 
@@ -486,17 +502,15 @@
 </div>
 
 @*Modal para Añadir Dependencias con diseño de Dependencias*@
-<Modal @bind-Visible="_modalAñadirVisible"
+<Modal Footer="null" Visible="_modalAgregarVisible"
        Title="Añadir Dependencia"
        Width="@("100%")"
        Style="max-width: 800px;"
-       OkText="@("Guardar")"
-       CancelText="@("Cancelar")"
-       OnOk="@AddDependencia"
+       OnCancel="CerrarAgregar"
        DestroyOnClose
        WrapClassName="modal-crear-dependencia">
     <div class="modal-crear-dependencia-content">
-        <Form Model="newDependencia" Layout="FormLayout.Vertical" Class="modal-crear-dependencia-form">
+        <Form OnFinish="AddDependencia" Model="newDependencia" Layout="FormLayout.Vertical" Class="modal-crear-dependencia-form">
             <Row Class="modal-crear-dependencia-row" Gutter="16">
                 <AntDesign.Col Span="16">
                     <FormItem Label="Nombre" Required Class="modal-crear-dependencia-form-item">
@@ -518,22 +532,28 @@
                     </FormItem>
                 </AntDesign.Col>
             </Row>
+            <div class="modal-crear-dependencia-footer">
+                <Button Class="boton-agregar" HtmlType="submit">
+                    Agregar
+                </Button>
+                <Button Style="border: 1px solid #d9d9d9; color: #666;" OnClick="CerrarAgregar">
+                    Cancelar
+                </Button>
+            </div>
         </Form>
     </div>
 </Modal>
 
 @*Modal para Editar Dependencias con diseño de Dependencias*@
-<Modal @bind-Visible="_modalEditarVisible"
+<Modal Footer="null" Visible="_modalEditarVisible"
        Title="Editar Dependencia"
        Width="@("100%")"
        Style="max-width: 800px;"
-       OkText="@("Editar")"
-       CancelText="@("Cancelar")"
-       OnOk="@EditDependencia"
+       OnCancel="CerrarEditar"
        DestroyOnClose
        WrapClassName="modal-crear-dependencia">
     <div class="modal-crear-dependencia-content">
-        <Form Model="selDependencia" Layout="FormLayout.Vertical" Class="modal-crear-dependencia-form">
+        <Form OnFinish="EditDependencia" Model="selDependencia" Layout="FormLayout.Vertical" Class="modal-crear-dependencia-form">
             <Row Class="modal-crear-dependencia-row" Gutter="16">
                 <AntDesign.Col Span="16">
                     <FormItem Label="Nombre" Required Class="modal-crear-dependencia-form-item">
@@ -555,8 +575,15 @@
                     </FormItem>
                 </AntDesign.Col>
             </Row>
+            <div class="modal-crear-dependencia-footer">
+                <Button Class="boton-agregar" HtmlType="submit">
+                    Editar
+                </Button>
+                <Button Style="border: 1px solid #d9d9d9; color: #666;" OnClick="CerrarEditar">
+                    Cancelar
+                </Button>
+            </div>
         </Form>
-
     </div>
 </Modal>
 
@@ -579,7 +606,7 @@
     private int IdDependenciaSel;
 
     // Modals
-    private bool _modalAñadirVisible = false;
+    private bool _modalAgregarVisible = false;
     private bool _modalDetallesVisible = false;
     private bool _modalEditarVisible = false;
 
@@ -589,6 +616,7 @@
     // Variables de Tamaño de la Tabla
     int _pageIndex = 1;
     int _pageSize = 5;
+
 
     // Lista de ViewModels de Dependencia
     private List<DependenciaViewModelTable> DependenciaViewModels = new List<DependenciaViewModelTable>();
@@ -606,7 +634,7 @@
         // Validamos si el servicio de Bombero está disponible.
         if (BomberoService == null)
         {
-            await MessageService.ErrorAsync("El servicio de Bombero no está disponible. Por favor, intente nuevamente más tarde.");
+            MessageService.Error("El servicio de Bombero no está disponible. Por favor, intente nuevamente más tarde.");
             return;
         }
 
@@ -615,7 +643,7 @@
         // Verifica si la lista de bomberos está vacía.
         if (bomberosTodos == null || bomberosTodos.Count == 0)
         {
-            await MessageService.ErrorAsync("No se encontraron bomberos disponibles.");
+            MessageService.Error("No se encontraron bomberos disponibles.");
             return;
         }
 
@@ -642,7 +670,7 @@
         // Verifica si la lista de dependencias mapeadas está vacía. Pero tambien verifica si la lista de dependencias es nula o tiene elementos. Para determinar que es un error de mapeo.
         if (DependenciaViewModels == null || DependenciaViewModels.Count == 0)
         {
-            await MessageService.ErrorAsync("Error al mapear las dependencias. Por favor, intente nuevamente más tarde.");
+            MessageService.Error("Error al mapear las dependencias. Por favor, intente nuevamente más tarde.");
             return;
         }
 
@@ -664,13 +692,13 @@
     {
         if (newDependencia.Encargado == null)
         {
-            await MessageService.ErrorAsync("No se ha seleccionado un encargado. Por favor, elija un encargado antes de continuar.");
+            MessageService.Error("No se ha seleccionado un encargado. Por favor, elija un encargado antes de continuar.");
             return;
         }
 
         if (string.IsNullOrWhiteSpace(newDependencia.Nombre))
         {
-            await MessageService.ErrorAsync("El nombre de la dependencia no puede estar vacío.");
+            MessageService.Error("El nombre de la dependencia no puede estar vacío.");
             return;
         }
 
@@ -678,7 +706,7 @@
 
         if (BomberoEncargado == null)
         {
-            await MessageService.ErrorAsync("El encargado seleccionado no es válido.");
+            MessageService.Error("El encargado seleccionado no es válido.");
             return;
         }
 
@@ -690,28 +718,28 @@
 
         await DependenciaService.AgregarDependenciaAsync(dependencia);
         newDependencia = new DependenciaViewModelTable();
-        _modalAñadirVisible = false;
-        await OnInitializedAsync();
-        await MessageService.SuccessAsync("Dependencia añadida correctamente.");
+        _modalAgregarVisible = false;
+        MessageService.Success("Dependencia añadida correctamente.");
+        await OnInitializedAsync();        
     }
 
     private async Task EditDependencia()
     {
         if (selDependencia.Encargado == null)
         {
-            await MessageService.ErrorAsync("No se ha seleccionado un encargado. Por favor, elija un encargado antes de continuar.");
+            MessageService.Error("No se ha seleccionado un encargado. Por favor, elija un encargado antes de continuar.");
             return;
         }
 
         if (string.IsNullOrWhiteSpace(selDependencia.Nombre))
         {
-            await MessageService.ErrorAsync("El nombre de la dependencia no puede estar vacío.");
+            MessageService.Error("El nombre de la dependencia no puede estar vacío.");
             return;
         }
 
         if (selDependencia.Id <= 0)
         {
-            await MessageService.ErrorAsync("ID inválido. Por favor, proporcione un ID válido.");
+            MessageService.Error("ID inválido. Por favor, proporcione un ID válido.");
             return;
         }
 
@@ -719,7 +747,7 @@
 
         if (BomberoEncargado == null)
         {
-            await MessageService.ErrorAsync("El encargado seleccionado no es válido.");
+            MessageService.Error("El encargado seleccionado no es válido.");
             return;
         }
 
@@ -732,27 +760,27 @@
 
         await DependenciaService.EditarDependenciaAsync(dependencia);
         _modalEditarVisible = false;
-        await OnInitializedAsync();
-        await MessageService.SuccessAsync("Dependencia editada correctamente.");
+        MessageService.Success("Dependencia editada correctamente.");
+        await OnInitializedAsync();        
     }
 
     private async Task VerAñadirDependencia()
     {
         if (bomberosTodos.Count == 0)
         {
-            await MessageService.ErrorAsync("No hay bomberos disponibles para asignar como encargado.");
+            MessageService.Error("No hay bomberos disponibles para asignar como encargado.");
             return;
         }
 
         newDependencia = new DependenciaViewModelTable();
-        _modalAñadirVisible = true;
+        _modalAgregarVisible = true;
     }
 
     private async Task VerEditarDependencia(int id)
     {
         if (id <= 0)
         {
-            await MessageService.ErrorAsync("ID inválido. Por favor, proporcione un ID válido.");
+            MessageService.Error("ID inválido. Por favor, proporcione un ID válido.");
             return;
         }
 
@@ -760,7 +788,7 @@
 
         if (Dependencia == null)
         {
-            await MessageService.ErrorAsync("Error al intentar editar la dependencia: No se encontró.");
+            MessageService.Error("Error al intentar editar la dependencia: No se encontró.");
             return;
         }
 
@@ -768,7 +796,7 @@
 
         if (encargado == null)
         {
-            await MessageService.ErrorAsync("Error al intentar editar la dependencia: No se encontró un encargado válido.");
+            MessageService.Error("Error al intentar editar la dependencia: No se encontró un encargado válido.");
             return;
         }
 
@@ -792,14 +820,24 @@
             _modalDetallesVisible = true;
         }
         else
-            await MessageService.ErrorAsync("Error al abrir la dependencia: No se encontró.");
+            MessageService.Error("Error al abrir la dependencia: No se encontró.");
     }
 
     private async Task BorrarDependencia(int id)
     {
         DependenciaViewModels = DependenciaViewModels.Where(d => d.Id != id).ToList();
         await DependenciaService.EliminarDependenciaAsync(id);
-        await OnInitializedAsync();
-        await MessageService.SuccessAsync("Dependencia eliminada correctamente.");
+        MessageService.Success("Dependencia eliminada correctamente.");
+        await OnInitializedAsync();        
+    }
+
+    private void CerrarAgregar()
+    {
+        _modalAgregarVisible = false;
+    }
+
+    private void CerrarEditar()
+    {
+        _modalEditarVisible = false;
     }
 }

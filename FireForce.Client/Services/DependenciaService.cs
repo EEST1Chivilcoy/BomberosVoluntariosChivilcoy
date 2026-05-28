@@ -46,14 +46,16 @@ namespace FireForce.Client.Services
 
         public async Task EditarDependenciaAsync(Dependencia dependencia)
         {
-            var dependenciaExistente = await _context.Dependencias.FindAsync(dependencia.DependenciaId);
+            var dependenciaExistente = await _context.Dependencias
+                .Include(d => d.Bomberos)
+                .SingleOrDefaultAsync(d => d.DependenciaId == dependencia.DependenciaId);
 
             if (dependenciaExistente != null)
             {
                 dependenciaExistente.NombreDependencia = dependencia.NombreDependencia;
                 dependenciaExistente.Encargado = dependencia.Encargado;
+                dependenciaExistente.Bomberos.RemoveAll(b => b.PersonaId == dependencia.Encargado.PersonaId);
 
-                _context.Dependencias.Update(dependenciaExistente);
                 await _context.SaveChangesAsync();
             }
         }

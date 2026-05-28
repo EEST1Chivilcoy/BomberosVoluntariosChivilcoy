@@ -118,7 +118,7 @@ namespace FireForce.Shared.ViewModels.Personal
         /// </summary>
         public string NombreYApellido
         {
-            get { return Nombre + "," + Apellido; }
+            get { return Nombre + ", " + Apellido; }
         }
 
         /// <summary>
@@ -126,7 +126,7 @@ namespace FireForce.Shared.ViewModels.Personal
         /// </summary>
         public string ApellidoYNombre
         {
-            get { return Apellido + "," + Nombre; }
+            get { return Apellido + ", " + Nombre; }
         }
     }
 }

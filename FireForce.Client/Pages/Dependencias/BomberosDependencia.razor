@@ -319,7 +319,6 @@
 			ValueName="@nameof(BomberoViweModel.Id)"
 			EnableSearch="true"
 			ValuesChanged="@(async (values) => await HandleValuesChange(values))" />
-	<p>Seleccionados: @String.Join(", ", BomberosSeleccionados)</p>
 </Modal>
 
 @code {
@@ -371,6 +370,16 @@
 			return;
 		}
 
+		var dependencia = await DependenciaService.ObtenerDependenciaPorIdAsync(DependenciaId);
+
+		if (dependencia == null)
+		{
+			await MessageService.ErrorAsync("No se encontró la dependencia.");
+			return;
+		}
+
+		DependenciaNombre = dependencia.NombreDependencia;
+
 		// Si todo está bien, obtenemos todos los bomberos de la base de datos
 		var bomberosTodos = await BomberoService.ObtenerTodosLosBomberosAsync();
 
@@ -390,11 +399,14 @@
 			return;
 		}
 
-		var bomberosParaAgregar = bomberosTodos.Where(b => b.PersonaId != encargadoId.Value).ToList();
-		BomberosParaAgregarViewModel = bomberosParaAgregar.ToBomberoViewModelList();
-
 		// Obtenemos los bomberos de la dependencia específica
 		DependenciaBomberos = await DependenciaService.ObtenerBomberosDeDependenciaAsync(DependenciaId);
+
+		// Filtramos los bomberos para agregar, excluyendo al encargado y a los que ya están en la dependencia
+		var bomberosParaAgregar = bomberosTodos.Where(b => 
+			b.PersonaId != encargadoId.Value && 
+			!DependenciaBomberos.Any(db => db?.PersonaId == b.PersonaId)).ToList();
+		BomberosParaAgregarViewModel = bomberosParaAgregar.ToBomberoViewModelList();
 
 		// Mapeamos los bomberos de la dependencia a ViewModel
 		BomberosViewModel = MapFirefightersToDepartmentViewModels(DependenciaBomberos)!;
@@ -459,7 +471,7 @@
 				}
 			}
 
-			await MessageService.SuccessAsync($"Se añadieron {BomberosSeleccionados.Count} Bomberos a la Dependencia");
+			MessageService.Success($"Se añadieron {BomberosSeleccionados.Count} Bomberos a la Dependencia");
 			_modalAñadirBomberosVisible = false;
 			await OnInit();
 		}
