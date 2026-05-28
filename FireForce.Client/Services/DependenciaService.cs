@@ -16,6 +16,7 @@ namespace FireForce.Client.Services
         Task AgregarBomberoADependenciaAsync(int dependenciaId, int bomberoId);
         Task QuitarBomberoDeDependenciaAsync(int dependenciaId, int bomberoId);
         Task<bool> ComprobarBomberoEnDependenciaAsync(int dependenciaId, int bomberoId);
+        Task<int?> ObtenerEncargadoDeDependenciaIdAsync(int dependenciaId);
     }
 
     public class DependenciaService : IDependenciaService
@@ -45,14 +46,16 @@ namespace FireForce.Client.Services
 
         public async Task EditarDependenciaAsync(Dependencia dependencia)
         {
-            var dependenciaExistente = await _context.Dependencias.FindAsync(dependencia.DependenciaId);
+            var dependenciaExistente = await _context.Dependencias
+                .Include(d => d.Bomberos)
+                .SingleOrDefaultAsync(d => d.DependenciaId == dependencia.DependenciaId);
 
             if (dependenciaExistente != null)
             {
                 dependenciaExistente.NombreDependencia = dependencia.NombreDependencia;
                 dependenciaExistente.Encargado = dependencia.Encargado;
+                dependenciaExistente.Bomberos.RemoveAll(b => b.PersonaId == dependencia.Encargado.PersonaId);
 
-                _context.Dependencias.Update(dependenciaExistente);
                 await _context.SaveChangesAsync();
             }
         }
@@ -73,9 +76,20 @@ namespace FireForce.Client.Services
                 .Include(d => d.Bomberos) // Aquí Bomberos es de tipo List<Bombero_Dependencia>
                 .FirstOrDefaultAsync(d => d.DependenciaId == dependenciaId);
 
-            return dependencia?.Bomberos
-                .Select(bd => bd.Bombero) // Proyecta los bomberos reales
-                .ToList() ?? new List<Bombero?>();
+            var todosBomberos = await _context.Bomberos.ToListAsync();
+
+            List<Bombero?> bomberos = new List<Bombero?>();
+
+            foreach (var bd in dependencia?.Bomberos ?? new List<Bombero_Dependencia>())
+            {
+                var bombero = todosBomberos.FirstOrDefault(b => b.PersonaId == bd.PersonaId);
+                if (bombero != null)
+                {
+                    bomberos.Add(bombero);
+                }
+            }
+
+            return bomberos;
         }
 
         public async Task AgregarBomberoADependenciaAsync(int dependenciaId, int bomberoId)
@@ -103,7 +117,9 @@ namespace FireForce.Client.Services
             var relacion = new Bombero_Dependencia
             {
                 DependenciaId = dependenciaId,
-                PersonaId = bomberoId
+                Dependencia = dependencia,
+                PersonaId = bomberoId,
+                Bombero = bombero
             };
 
             _context.Set<Bombero_Dependencia>().Add(relacion);
@@ -128,6 +144,15 @@ namespace FireForce.Client.Services
         {
             return await _context.Set<Bombero_Dependencia>()
                 .AnyAsync(bd => bd.DependenciaId == dependenciaId && bd.PersonaId == bomberoId);
+        }
+
+        public async Task<int?> ObtenerEncargadoDeDependenciaIdAsync(int dependenciaId)
+        {
+            return await _context.Dependencias
+                .AsNoTracking()
+                .Where(x => x.DependenciaId == dependenciaId)
+                .Select(x => x.EncargadoPersonaId)                
+                .FirstOrDefaultAsync();
         }
     }
 }
