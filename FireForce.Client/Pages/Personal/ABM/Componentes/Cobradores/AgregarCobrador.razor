@@ -168,6 +168,7 @@
     @if (personalView != null)
     {
         <Form Model="@personalView"
+              Context="formContext"
               Layout="FormLayout.Vertical"
               OnFinish="OnFinish"
               ValidateOnChange="@true"
@@ -253,12 +254,12 @@
                             </AntDesign.Col>
                             <AntDesign.Col Span="6">
                                 <FormItem Label="Sexo">
-                                    <EnumSelect TEnum="TipoSexo ?" @bind-Value="@personalView.Sexo" />
+                                    <EnumSelect TEnum="TipoSexo?" @bind-Value="@personalView.Sexo" />
                                 </FormItem>
                             </AntDesign.Col>
                             <AntDesign.Col Span="6">
                                 <FormItem Label="Grupo Sanguíneo">
-                                    <EnumSelect TEnum="TipoGrupoSanguineo ?" @bind-Value="@personalView.GrupoSanguineo" AllowClear />
+                                    <EnumSelect TEnum="TipoGrupoSanguineo?" @bind-Value="@personalView.GrupoSanguineo" AllowClear />
                                 </FormItem>
                             </AntDesign.Col>
                         </AntDesign.Row>
@@ -273,12 +274,26 @@
                 <AntDesign.Row Gutter="16">
                     <AntDesign.Col Span="6">
                         <FormItem Label="Estado">
-                            <EnumSelect TEnum="EstadoCobrador ?" @bind-Value="@personalView.Estado" AllowClear />
+                            <EnumSelect TEnum="EstadoCobrador?" @bind-Value="@personalView.Estado" AllowClear />
                         </FormItem>
                     </AntDesign.Col>
                     <AntDesign.Col Span="6">
                         <FormItem Label="Zonas asignadas">
-                            <EnumSelect Mode="SelectMode.Multiple" TEnum="Zona" @bind-Value="@personalView.ZonasAsignadas" AllowClear />
+                            <Select TItem="Zona"
+                                    TItemValue="Zona"
+                                    Mode="SelectMode.Multiple"
+                                    Values="@zonasSeleccionadas"
+                                    ValuesChanged="OnZonasChanged"
+                                    AllowClear>
+
+                                <SelectOption Value="@Zona.Ninguna">Ninguna</SelectOption>
+                                <SelectOption Value="@Zona.Zona1">Zona 1</SelectOption>
+                                <SelectOption Value="@Zona.Zona2">Zona 2</SelectOption>
+                                <SelectOption Value="@Zona.Zona3">Zona 3</SelectOption>
+                                <SelectOption Value="@Zona.Zona4">Zona 4</SelectOption>
+                                <SelectOption Value="@Zona.Zona5">Zona 5 - Libre</SelectOption>
+
+                            </Select>
                         </FormItem>
                     </AntDesign.Col>
                 </AntDesign.Row>
@@ -433,6 +448,8 @@
     protected override async Task OnInitializedAsync()
     {
         isLoading = true;
+        zonasSeleccionadas = new List<Zona> { Zona.Ninguna };
+        personalView.ZonasAsignadas = Zona.Ninguna;
 
         try
         {
@@ -525,5 +542,33 @@
         {
             isLoading = false;
         }
+    }
+
+    private IEnumerable<Zona> zonasSeleccionadas = new List<Zona>();
+
+    private Task OnZonasChanged(IEnumerable<Zona> values)
+    {
+        var zonas = values.ToList();
+
+        // Si selecciona otras zonas, quitar Ninguna
+        if (zonas.Contains(Zona.Ninguna) && zonas.Count > 1)
+        {
+            zonas.Remove(Zona.Ninguna);
+        }
+
+        // Si no queda ninguna, volver a Ninguna
+        if (!zonas.Any())
+        {
+            zonas.Add(Zona.Ninguna);
+        }
+
+        zonasSeleccionadas = zonas;
+
+        personalView.ZonasAsignadas = zonas
+            .Aggregate((Zona)0, (current, zona) => current | zona);
+
+        StateHasChanged();
+
+        return Task.CompletedTask;
     }
 }
