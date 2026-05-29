@@ -13,7 +13,7 @@ namespace FireForce.Shared.Enums.Socios
         /// Sin zonas asignadas.
         /// </summary>
         [Display(Name = "Ninguna")]
-        Ninguna = 0,
+        Ninguna = 1 << 5,
 
         /// <summary>
         /// Representa la Zona 1.
