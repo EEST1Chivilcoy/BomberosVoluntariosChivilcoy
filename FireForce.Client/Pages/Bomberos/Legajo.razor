@@ -1,5 +1,19 @@
-﻿@page "/fire-force/Bomberos/Legajo"
+﻿@using Microsoft.Graph;
+@using System.Security.Claims;
+@using Microsoft.EntityFrameworkCore;
+@using FireForce.Client.Pages.Personal.ABM.Componentes.Bomberos
+@using FireForce.Data.Models.Personas.Personal
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+@page "/fire-force/Bomberos/Legajo"
 @inject NavigationManager NavigationManager
+
+@using FireForce.Client.Services
+@inject IBomberoService BomberoService
+
+@using FireForce.Shared.Services
+@inject IEntraIDService EntraIDService
 
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize(Policy = "AdminOnly")]
@@ -17,21 +31,21 @@
                 <Card Bordered="false" Class="profile-card">
                     <div class="profile-content">
                         <div class="profile-header">
-                            <h1 class="name-box">AGUSTIN ESTEBAN ROSSI</h1>
-                            <p class="subtitle-text">AYUDANTE MAYOR</p>
+                            <h1 class="name-box">@BomberoActual.Nombre + @BomberoActual.Apellido</h1>
+                            <p class="subtitle-text">@BomberoActual.Grado</p>
                         </div>
 
                         <div class="info-block">
                             <label class="label" for="dni-input">D.N.I</label>
-                            <Input Id="dni-input" Value="@("36.997.084")" Disabled aria-label="Documento Nacional de Identidad" />
+                            <Input Id="dni-input" Value="@BomberoActual.Documento" Disabled aria-label="Documento Nacional de Identidad" />
                         </div>
                         <div class="info-block">
                             <label class="label" for="legajo-input">LEGAJO</label>
-                            <Input Id="legajo-input" Value="@("170")" Disabled aria-label="Número de legajo" />
+                            <Input Id="legajo-input" Value="@BomberoActual.NumeroLegajo" Disabled aria-label="Número de legajo" />
                         </div>
                         <div class="info-block">
                             <label class="label" for="fecha-input">FECHA DE INGRESO</label>
-                            <Input Id="fecha-input" Value="@("08/02/2011")" Disabled aria-label="Fecha de ingreso" />
+                            <Input Id="fecha-input" Value="@BomberoActual.FechaAceptacion" Disabled aria-label="Fecha de ingreso" />
                         </div>
                         <div class="info-block">
                             <label class="label" for="handy-input">AÑOS DE SERVICIO</label>
@@ -124,4 +138,38 @@
     private string mesAnterior = DateTime.Now.AddMonths(-1).ToString("MMMM", new System.Globalization.CultureInfo("es-ES")).ToUpper();
     private string mesActual = DateTime.Now.ToString("MMMM", new System.Globalization.CultureInfo("es-ES")).ToUpper();
     private string añoActual = DateTime.Now.Year.ToString();
+
+    private Bombero? BomberoActual;
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var entraIdString = await EntraIDService.GetUserIdAsync();
+
+        try
+        {
+            if (Guid.TryParse(entraIdString, out var entraGuid))
+            {
+                BomberoActual = await BomberoService
+                    .ObtenerBomberoPorEntraIdAsync(entraGuid);
+            }
+           else if (BomberoActual == null)
+            {
+                BomberoActual = await BomberoService
+                .ObtenerBomberoObjetoPorLegajoAsync(13);
+
+
+            }
+        }
+       catch
+    {
+       
+    }
+       
+        }
+
+       
+    }
 }
+    
