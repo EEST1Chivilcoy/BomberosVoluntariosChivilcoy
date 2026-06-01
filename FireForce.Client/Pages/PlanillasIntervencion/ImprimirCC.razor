@@ -576,7 +576,7 @@
             IntervencionVM.GraduadoRango = encargado?.Grado.ToString();
             IntervencionVM.NumeroParte = salida.NumeroParte;
             IntervencionVM.AnioSalida = salida.AnioNumeroParte;
-            IntervencionVM.Recepcionista = salida.NombreYApellidoReceptor ?? "No se registro recepcionista.";
+            IntervencionVM.Recepcionista = salida.NombreYApellidoReceptor?.Trim() == "," ? "No se registro recepcionista." : salida.NombreYApellidoReceptor;
             IntervencionVM.TipoServicio = "" + salida.TipoServicio;
             IntervencionVM.Direccion = salida.Direccion ?? "Dirección Desconocida";
             IntervencionVM.DetallesSalida = salida.Descripcion;
