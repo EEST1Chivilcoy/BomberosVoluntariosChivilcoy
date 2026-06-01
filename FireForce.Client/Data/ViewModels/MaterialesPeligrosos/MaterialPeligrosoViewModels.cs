@@ -109,6 +109,7 @@ namespace FireForce.Client.Data.ViewModels.MaterialesPeligrosos
         /// <summary>
         /// Situación anterior a la explosión.
         /// </summary>
+        [Required]
         public TipoSituacionExplosion? TipoSituacion { get; set; }
     }
 }
