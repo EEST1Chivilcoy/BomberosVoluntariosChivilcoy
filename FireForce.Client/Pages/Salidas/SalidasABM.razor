@@ -640,11 +640,14 @@
                 string finalRoute;
                 if (rutaTemplate.Contains("{0}"))
                 {
-                    finalRoute = string.Format(rutaTemplate, salida.AnioNumeroParte, salida.NumeroParte);
+                    finalRoute = $"{rutaTemplate}/{(int)salida.TipoEmergencia}/{salida.AnioNumeroParte}/{salida.NumeroParte}";
                 }
                 else
                 {
-                    finalRoute = $"{rutaTemplate}/{(int)salida.TipoEmergencia}/{salida.AnioNumeroParte}/{salida.NumeroParte}";
+                    if (salida.TipoEmergencia == TipoDeEmergencia.MaterialPeligroso)
+                        finalRoute = $"{rutaTemplate}/{salida.AnioNumeroParte}/{salida.NumeroParte}";
+                    else
+                        finalRoute = $"{rutaTemplate}/{(int)salida.TipoEmergencia}/{salida.AnioNumeroParte}/{salida.NumeroParte}";
                 }
                 NavigationManager.NavigateTo(finalRoute);
             }
