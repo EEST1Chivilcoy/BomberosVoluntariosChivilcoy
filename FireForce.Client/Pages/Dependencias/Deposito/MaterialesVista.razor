@@ -23,7 +23,7 @@
       OnFinishFailed="OnFinishFailed"
       Style="width: 100%;height: 100%;">
     <FormItem Label="Fecha de alta">
-        <DatePicker @bind-Value="MaterialesVM.FechaAlta" />
+        <DatePicker Mask="dd/MM/yyyy" @bind-Value="MaterialesVM.FechaAlta" />
     </FormItem>
     <FormItem Label="Descripción">
         <Input @bind-Value="MaterialesVM.Descripcion" />

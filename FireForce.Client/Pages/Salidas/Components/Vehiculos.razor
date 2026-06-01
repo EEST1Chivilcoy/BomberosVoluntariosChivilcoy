@@ -458,7 +458,7 @@
                 </AntDesign.Col>
                 <AntDesign.Col Xs="24" Sm="12">
                     <FormItem Label="Fecha de la Factura" Required Class="modal-vehiculo-form-item">
-                        <DatePicker TValue="DateTime?"
+                        <DatePicker Mask="dd/MM/yyyy" TValue="DateTime?"
                                     @bind-Value="@movilSalidaView.FechaFactura"
                                     Placeholder="@("Seleccione la fecha")" />
                     </FormItem>

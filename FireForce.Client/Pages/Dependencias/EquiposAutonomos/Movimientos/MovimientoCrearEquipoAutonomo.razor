@@ -241,7 +241,7 @@
             <AntDesign.Col Span="12">
                 <FormItem Label="📅 Fecha de vencimiento de la prueba hidráulica"
                           Class="modal-crear-equipo-form-item">
-                    <DatePicker @bind-Value="@movimientoViewModel.FechaVencimientoPruebaHidraulica"
+                    <DatePicker Mask="dd/MM/yyyy" @bind-Value="@movimientoViewModel.FechaVencimientoPruebaHidraulica"
                                 Size="InputSize.Large"
                                 Placeholder=@("Seleccione la fecha de vencimiento") />
                 </FormItem>
