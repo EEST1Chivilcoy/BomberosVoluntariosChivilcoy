@@ -1,6 +1,7 @@
 ﻿@using Microsoft.Graph;
 @using System.Security.Claims;
 @using Microsoft.EntityFrameworkCore;
+@using FireForce.Client.Data.Mappers
 @using FireForce.Client.Pages.Personal.ABM.Componentes.Bomberos
 @using FireForce.Data.Models.Personas.Personal
 
@@ -31,21 +32,21 @@
                 <Card Bordered="false" Class="profile-card">
                     <div class="profile-content">
                         <div class="profile-header">
-                            <h1 class="name-box">@BomberoActual.Nombre + @BomberoActual.Apellido</h1>
-                            <p class="subtitle-text">@BomberoActual.Grado</p>
+                            <h1 class="name-box">@bomberoView.Nombre @bomberoView.Apellido</h1>
+                            <p class="subtitle-text">@bomberoView.Grado</p>
                         </div>
 
                         <div class="info-block">
                             <label class="label" for="dni-input">D.N.I</label>
-                            <Input Id="dni-input" Value="@BomberoActual.Documento" Disabled aria-label="Documento Nacional de Identidad" />
+                            <Input Id="dni-input" Value="@bomberoView.Documento" Disabled aria-label="Documento Nacional de Identidad" />
                         </div>
                         <div class="info-block">
                             <label class="label" for="legajo-input">LEGAJO</label>
-                            <Input Id="legajo-input" Value="@BomberoActual.NumeroLegajo" Disabled aria-label="Número de legajo" />
+                            <Input Id="legajo-input" Value="@bomberoView.NumeroLegajo" Disabled aria-label="Número de legajo" />
                         </div>
                         <div class="info-block">
                             <label class="label" for="fecha-input">FECHA DE INGRESO</label>
-                            <Input Id="fecha-input" Value="@BomberoActual.FechaAceptacion" Disabled aria-label="Fecha de ingreso" />
+                            <Input Id="fecha-input" Value="@bomberoView.FechaAceptacion" Disabled aria-label="Fecha de ingreso" />
                         </div>
                         <div class="info-block">
                             <label class="label" for="handy-input">AÑOS DE SERVICIO</label>
@@ -139,37 +140,33 @@
     private string mesActual = DateTime.Now.ToString("MMMM", new System.Globalization.CultureInfo("es-ES")).ToUpper();
     private string añoActual = DateTime.Now.Year.ToString();
 
-    private Bombero? BomberoActual;
+    private int añosDeServicio;
 
+    private Bombero BomberoActual;
+    private BomberoViweModel bomberoView = new();
 
 
     protected override async Task OnInitializedAsync()
-    {
+    { 
         var entraIdString = await EntraIDService.GetUserIdAsync();
-
         try
         {
             if (Guid.TryParse(entraIdString, out var entraGuid))
             {
-                BomberoActual = await BomberoService
+                var bombero = await BomberoService
                     .ObtenerBomberoPorEntraIdAsync(entraGuid);
-            }
-           else if (BomberoActual == null)
-            {
-                BomberoActual = await BomberoService
-                .ObtenerBomberoObjetoPorLegajoAsync(13);
-
-
+                bomberoView = bombero.ToBomberoViewModel();
             }
         }
-       catch
-    {
-       
-    }
-       
-        }
+        catch
+        {
+            var bombero = await BomberoService
+            .ObtenerBomberoObjetoPorLegajoAsync(12);
+            bomberoView = bombero.ToBomberoViewModel();
 
-       
+        }
     }
+    }
+
 }
     
