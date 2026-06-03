@@ -261,12 +261,12 @@
                             </AntDesign.Col>
                             <AntDesign.Col Span="6">
                                 <FormItem Label="Sexo">
-                                    <EnumSelect TEnum="TipoSexo ?" @bind-Value="@personalView.Sexo" />
+                                    <EnumSelect TEnum="TipoSexo?" @bind-Value="@personalView.Sexo" />
                                 </FormItem>
                             </AntDesign.Col>
                             <AntDesign.Col Span="6">
                                 <FormItem Label="Grupo Sanguíneo">
-                                    <EnumSelect TEnum="TipoGrupoSanguineo ?" @bind-Value="@personalView.GrupoSanguineo" AllowClear />
+                                    <EnumSelect TEnum="TipoGrupoSanguineo?" @bind-Value="@personalView.GrupoSanguineo" AllowClear />
                                 </FormItem>
                             </AntDesign.Col>
                         </AntDesign.Row>
@@ -280,22 +280,22 @@
                 <AntDesign.Row Gutter="16">
                     <AntDesign.Col Span="6">
                         <FormItem Label="Número Legajo">
-                            <Input @bind-Value="@personalView.NumeroLegajo" Placeholder="Ingrese número de legajo" />
+                            <AntDesign.InputNumber TValue="int?" @bind-Value="personalView.NumeroLegajo" Placeholder="Ingrese número de legajo" Min="1" Style="width:100%;" />
                         </FormItem>
                     </AntDesign.Col>
                     <AntDesign.Col Span="6">
                         <FormItem Label="Dotación">
-                            <EnumSelect TEnum="TipoDotaciones ?" @bind-Value="@personalView.Dotacion" />
+                            <EnumSelect TEnum="TipoDotaciones?" @bind-Value="@personalView.Dotacion" />
                         </FormItem>
                     </AntDesign.Col>
                     <AntDesign.Col Span="6">
                         <FormItem Label="Jerarquía">
-                            <EnumSelect TEnum="EscalafonJerarquico ?" @bind-Value="@personalView.Grado" AllowClear />
+                            <EnumSelect TEnum="EscalafonJerarquico?" @bind-Value="@personalView.Grado" AllowClear />
                         </FormItem>
                     </AntDesign.Col>
                     <AntDesign.Col Span="6">
                         <FormItem Label="Estado">
-                            <EnumSelect TEnum="EstadoBombero ?" @bind-Value="personalView.Estado" AllowClear />
+                            <EnumSelect TEnum="EstadoBombero?" @bind-Value="personalView.Estado" AllowClear />
                         </FormItem>
                     </AntDesign.Col>
                 </AntDesign.Row>
