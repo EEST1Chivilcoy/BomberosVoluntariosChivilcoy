@@ -501,7 +501,7 @@
                 <ColumnDefinitions Context="animal">
                     <PropertyColumn Title="N°" Property="a => a.NumeroOrden"></PropertyColumn>
                     <PropertyColumn Title="Responsable" Property="a => a.NombreYApellidoResponsable"></PropertyColumn>
-                    <PropertyColumn Title="Especie" Property="a => a.Tipo"></PropertyColumn>
+                    <PropertyColumn Title="Especie" Property="@(a => a.Tipo == TipoAnimal.Otro ? a.TipoOtro : a.Tipo.ToString())"></PropertyColumn>
                     <PropertyColumn Title="Cantidad" Property="a => a.Cantidad"></PropertyColumn>
                     <PropertyColumn Title="Estado" Property="a => a.Estado"></PropertyColumn>
                     <ActionColumn Title="Acciones">
