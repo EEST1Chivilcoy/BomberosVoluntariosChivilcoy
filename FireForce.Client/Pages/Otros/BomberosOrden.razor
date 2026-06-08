@@ -14,213 +14,555 @@
 @inject NavigationManager Navigation
 @inject IMessageService MessageService
 
+
+
 <style>
     .bomberos-container {
-        position: fixed;
-        top: 60px;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        z-index: 100;
-        background-color: #e60000;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        padding-top: 0px;
-        font-family: 'Segoe UI', sae60000;
-        ns-serif;
-        overflow-y: auto;
+        --orden-primary-color: #A63333;
+        --orden-primary-dark: #732D2D;
+        --orden-success-color: #4CAF50;
+        --orden-success-dark: #438E46;
+        --orden-accent-color: #FFD54F;
+        --orden-warning-color: #F9A825;
     }
 
-    .title-header {
-        top: 0px;
-        left: 0;
-        width: 100vw;
-        background-color: white;
-        padding-top: 0px;
-        margin-bottom: 10px;
+        .bomberos-container .orden-container {
+            padding: 12px !important;
+            min-height: 100vh !important;
+        }
+
+        .bomberos-container .main-card {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(10px) !important;
+            border-radius: 16px !important;
+            box-shadow: 0 8px 32px rgba(166, 51, 51, 0.1), 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            overflow: hidden !important;
+        }
+
+        .bomberos-container .header-section {
+            background: linear-gradient(135deg, var(--orden-primary-color) 0%, var(--orden-primary-dark) 100%) !important;
+            color: white !important;
+            padding: 28px !important;
+            position: relative !important;
+            overflow: hidden !important;
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            flex-wrap: wrap;
+        }
+
+            .bomberos-container .header-section .lava-bubbles {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                z-index: 1;
+                overflow: hidden;
+            }
+
+            .bomberos-container .header-section .lava-bubble {
+                position: absolute;
+                border-radius: 50%;
+                opacity: 0.45;
+                background: radial-gradient(circle at 60% 40%, #FFD54F 0%, #F9A825 80%, transparent 100%);
+                animation: lava-bubble-move 8s linear infinite;
+                filter: blur(1.5px);
+                mix-blend-mode: lighten;
+            }
+
+                .bomberos-container .header-section .lava-bubble.b1 {
+                    left: 10%;
+                    width: 60px;
+                    height: 60px;
+                    bottom: -70px;
+                    animation-delay: 0s;
+                    animation-duration: 7.5s;
+                }
+
+                .bomberos-container .header-section .lava-bubble.b2 {
+                    left: 35%;
+                    width: 90px;
+                    height: 90px;
+                    bottom: -100px;
+                    animation-delay: 2s;
+                    animation-duration: 9s;
+                    background: radial-gradient(circle at 60% 40%, #FFEB3B 0%, #FFD54F 80%, transparent 100%);
+                }
+
+                .bomberos-container .header-section .lava-bubble.b3 {
+                    left: 65%;
+                    width: 50px;
+                    height: 50px;
+                    bottom: -60px;
+                    animation-delay: 1.5s;
+                    animation-duration: 6.5s;
+                    background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #FFD54F 80%, transparent 100%);
+                }
+
+                .bomberos-container .header-section .lava-bubble.b4 {
+                    left: 80%;
+                    width: 70px;
+                    height: 70px;
+                    bottom: -80px;
+                    animation-delay: 3.2s;
+                    animation-duration: 8.5s;
+                    background: radial-gradient(circle at 60% 40%, #F9A825 0%, #FFD54F 80%, transparent 100%);
+                }
+
+                .bomberos-container .header-section .lava-bubble.b5 {
+                    left: 55%;
+                    width: 40px;
+                    height: 40px;
+                    bottom: -50px;
+                    animation-delay: 5s;
+                    animation-duration: 7.2s;
+                    background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #F9A825 80%, transparent 100%);
+                }
+
+    @@keyframes lava-bubble-move {
+        0% {
+            transform: translateY(0) scale(1) rotate(0deg);
+            opacity: 0.45;
+        }
+
+        60% {
+            opacity: 0.7;
+            filter: blur(2.5px);
+        }
+
+        80% {
+            transform: translateY(-220px) scale(1.15) rotate(10deg);
+            opacity: 0.6;
+        }
+
+        100% {
+            transform: translateY(-320px) scale(0.95) rotate(-8deg);
+            opacity: 0;
+        }
     }
 
-    /* #820014(bordo)
-       #e60000(rojo)
-       black(negro)
-    */
-
-    .bomberos-title {
-        color: black;
-        font-size: 3.5rem;
-        text-align: center;
-        font-weight: 900;
-        text-transform: uppercase;
-        margin-top: 35px;
-        margin-bottom: 35px;
-        text-shadow: 4px 4px 0px #ff8c00;
+    .bomberos-container .main-title {
+        font-family: 'Poppins', 'Fjalla One', sans-serif !important;
+        font-size: 2.2rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 1px !important;
+        margin: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 12px !important;
+        animation: text-glow 2.5s ease-in-out infinite alternate !important;
+        position: relative !important;
+        z-index: 2 !important;
     }
 
-    .grid-card {
-        background-color: white;
-        width: 90%;
-        max-width: 900px;
-        border-radius: 8px;
-        padding: 20px;
-        /*box-shadow: 0 4px 15px rgba(0,0,0,0.2);*/
-        text-align: center;
-        margin-bottom: 40px;
+    .bomberos-container .title-icon {
+        color: #FFD54F !important;
+        font-size: 2rem !important;
+        filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25)) !important;
     }
 
-    .custom-grid {
-        width: 100%;
-        border-collapse: collapse;
+    @@keyframes text-glow {
+        0%, 100% {
+            text-shadow: 0 0 5px #F9A825, 0 0 10px #FFD54F;
+        }
+
+        50% {
+            text-shadow: 0 0 12px #F9A825, 0 0 22px #FFD54F;
+        }
+    }
+
+    .bomberos-container .title-container {
+        position: relative !important;
+        z-index: 2 !important;
+    }
+
+    .bomberos-container .actions-row {
+        display: flex !important;
+        gap: 10px !important;
+        align-items: center !important;
+        z-index: 2 !important;
+    }
+
+    .bomberos-container .table-container {
+        padding: 0 !important;
+        overflow: hidden !important;
+    }
+
+    .bomberos-container .btn-confirmar {
+        height: 40px !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        position: relative !important;
+        overflow: hidden !important;
+    }
+
+    .bomberos-container .add-button {
+        background: linear-gradient(135deg, var(--orden-success-color) 0%, var(--orden-success-dark) 100%) !important;
+        border: none !important;
+        color: white !important;
+        box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3) !important;
+        padding: 0 20px !important;
+        font-weight: 600 !important;
+        border-radius: 8px !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+
+        .bomberos-container .add-button:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4) !important;
+        }
+
+    .bomberos-container .ant-table-thead .ant-table-cell {
+        background-color: #A63333 !important;
+        color: #fff !important;
+        font-weight: bold !important;
+        padding: 16px !important;
+        border: none !important;
+    }
+
+    .bomberos-container .ant-table-cell {
+        padding: 16px !important;
+    }
+
+    .bomberos-container .fade-in {
+        animation: abm-fadeIn 0.5s ease-in-out !important;
+    }
+
+    @@keyframes abm-fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .modal-crear-orden .ant-modal-content {
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        border: 2px solid #732D2D;
+        margin-top: -50px;
+        margin-bottom: 0px;
+    }
+
+    .modal-crear-orden .ant-modal-title {
+        color: white !important;
+    }
+
+    .modal-crear-orden .ant-modal-header {
+        background-color: #A63333;
+        padding: 16px 24px;
+    }
+
+    .modal-crear-orden-content {
+        padding: 24px;
+    }
+
+    .modal-crear-orden-form-item {
         margin-bottom: 20px;
-        color: #333;
+        position: relative;
+        padding-left: 10px;
     }
 
-        .custom-grid th {
-            background-color: #f8f9fa;
-            padding: 12px;
-            border-bottom: 2px solid #e60000;
-            text-align: left;
-            font-weight: bold;
+        .modal-crear-orden-form-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            border-radius: 5px;
         }
 
-        .custom-grid td {
-            padding: 12px;
-            border-bottom: 1px solid #eee;
-            text-align: left;
-            vertical-align: middle;
+        .modal-crear-orden-form-item .ant-form-item-label > label {
+            font-weight: 600;
+            color: #434343;
+            display: flex;
+
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            transition: color 0.3s ease;
         }
 
-    .bombero-row {
-        cursor: grab;
-        transition: background 0.15s;
+            .modal-crear-orden-form-item .ant-form-item-label > label:hover {
+                color: #FFD700;
+            }
+
+    .modal-crear-orden .ant-input:focus,
+    .modal-crear-orden .ant-input:hover,
+    .modal-crear-orden .ant-select-selector:focus,
+    .modal-crear-orden .ant-select-selector:hover {
+        border-color: #FFD700 !important;
+        box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
     }
 
-        .bombero-row:active {
-            cursor: grabbing;
-        }
-
-        .bombero-row.dragging {
-            opacity: 0.4;
-        }
-
-        .bombero-row.drag-over {
-            background-color: #fff3f3;
-            outline: 2px dashed #e60000;
-        }
-
-    .orden-badge {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 26px;
-        height: 26px;
-        border-radius: 50%;
-        background-color: #ffe5e5;
-        color: #e60000;
-        font-weight: bold;
-        font-size: 13px;
+    .modal-crear-orden .ant-picker,
+    .modal-crear-orden .ant-input,
+    .modal-crear-orden .ant-select-selector,
+    .modal-crear-orden .ant-input-number,
+    .modal-crear-orden .ant-textarea {
+        border-radius: 8px !important;
+        border: 1px solid #d9d9d9 !important;
+        background: #fff !important;
+        color: #434343 !important;
+        transition: all 0.3s ease !important;
     }
 
-    .handle {
-        color: #aaa;
-        font-size: 18px;
-        margin-right: 8px;
-    }
-
-    .btn-confirmar {
-        background-color: #28a745;
-        color: white;
-        border: none;
-        padding: 15px 40px;
-        font-size: 1.2rem;
-        font-weight: bold;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background 0.3s;
-    }
-
-        .btn-confirmar:hover {
-            background-color: #218838;
-        }
-
-    .loading-wrap {
+    .modal-crear-orden .modal-crear-orden-footer {
         display: flex;
-        justify-content: center;
-        padding: 40px 0;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 18px;
+        margin-bottom: 0px;
     }
+
+    .modal-crear-orden .ant-btn-primary {
+        background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
+        border: none !important;
+        color: #fff !important;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
+        margin-top: 0;
+        margin-bottom: 0;
+        padding: 0 20px !important;
+    }
+
+        .modal-crear-orden .ant-btn-primary:hover {
+            background: linear-gradient(135deg, #388E3C 0%, #4CAF50 100%) !important;
+            color: #fff !important;
+        }
+
+    @@media (max-width: 1199px) {
+        .bomberos-container .orden-container {
+            padding: 8px !important;
+        }
+
+        .bomberos-container .header-section {
+            padding: 20px !important;
+            flex-direction: column;
+            align-items: flex-start !important;
+        }
+
+        .bomberos-container .actions-row {
+            margin-top: 15px;
+            justify-content: flex-start !important;
+            width: 100%;
+        }
+
+        .bomberos-container .main-title {
+            font-size: 2rem !important;
+            flex-direction: column !important;
+            text-align: center !important;
+            gap: 8px !important;
+        }
+    }
+    /*grilla*/
+    .ant-modal-content {
+            position: relative;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 0;
+            border-radius: 2px;
+            box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+            pointer-events: auto;
+            border: 1px solid red !important;
+        }
+
+    
+    
+        .grid-card {
+            background-color: white;
+            width: 90%;
+        max-width: 900px;
+        margin: 30px auto;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .custom-grid {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+            .custom-grid th {
+                background-color: #f8f9fa;
+                padding: 12px;
+                border-bottom: 2px solid #e60000;
+                text-align: left;
+                font-weight: bold;
+            }
+
+            .custom-grid td {
+                padding: 12px;
+                border-bottom: 1px solid #eee;
+                text-align: left;
+                vertical-align: middle;
+            }
+
+        .bombero-row {
+            cursor: grab;
+            transition: background 0.15s;
+        }
+
+            .bombero-row:active {
+                cursor: grabbing;
+            }
+
+            .bombero-row.dragging {
+                opacity: 0.4;
+            }
+
+            .bombero-row.drag-over {
+                background-color: #fff3f3;
+                outline: 2px dashed #e60000;
+            }
+
+        .orden-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background-color: #ffe5e5;
+            color: #e60000;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .handle {
+            color: #aaa;
+            font-size: 18px;
+            margin-right: 8px;
+        }
+
+        .btn-confirmar {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+            .btn-confirmar:hover {
+                background-color: #218838;
+            }
+
+        .loading-wrap {
+            display: flex;
+            justify-content: center;
+            padding: 40px 0;
+            }
+
 </style>
 
-<div class="bomberos-container">
-    <div class="title-header"
-    <h1 class="bomberos-title"> 
-        <Icon Type="fire"/>
-        BOMBEROS VOLUNTARIOS CHIVILCOY
-        <Icon Type="fire" Class="title-icon" />
-    </h1>
-    </div>
-    <div class="grid-card">
-        @if (isLoading)
-        {
-            <div class="loading-wrap">
-                <Spin />
-            </div>
-        }
-        else if (bomberos == null || !bomberos.Any())
-        {
+        <div class="bomberos-container fade-in">
+            <Card Class="main-card">
+                <div class="header-section">
+                    <div class="lava-bubbles">
+                        <div class="lava-bubble b1"></div>
+                        <div class="lava-bubble b2"></div>
+                        <div class="lava-bubble b3"></div>
+                        <div class="lava-bubble b4"></div>
+                        <div class="lava-bubble b5"></div>
+                    </div>
+                    <div class="title-container">
+                        <h1 class="main-title">
+                            <Icon Type="fire" Class="title-icon" />
+                            ORDEN DE LOS BOMBEROS
+                        </h1>
+                    </div>
+                    <div class="actions-row">
+                    
+                        <Button Class="btn-confirmar add-button"
+                                OnClick="() => ConfirmarOrden()"
+                                Disabled="@isLoading"
+                                Size="ButtonSize.Large">
+                            CONFIRMAR
+                        </Button>
+                    </div>
+                </div>
+
+                    <div class="grid-card">
+                        @if (isLoading)
+                        {
+                            <div class="loading-wrap">
+                                <Spin />
+                            </div>
+                        }
+                        else if (bomberos == null || !bomberos.Any())
+                        {
           
-        }
-        else
-        {
-            <table class="custom-grid">
-                <thead>
-                    <tr>
-                        <th style="width: 80px;">#</th>
-                        <th style="width: 80px;">Foto</th>
-                        <th>👤 Apellido y Nombre</th>
-                        <th>🆔 Legajo</th>
-                        <th>🎖️ Jerarquía</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var (bombero, index) in bomberos.Select((b, i) => (b, i)))
-                    {
-                        <tr class="bombero-row @(dragSrcId == bombero.Id ? "dragging" : "") @(dragOverId == bombero.Id ? "drag-over" : "")"
-                            draggable="true"
-                            @ondragstart="() => OnDragStart(bombero.Id)"
-                            @ondragover:preventDefault
-                            @ondragover="() => OnDragOver(bombero.Id)"
-                            @ondragleave="OnDragLeave"
-                            @ondrop="() => OnDrop(bombero.Id)">
+                        }
+                        else
+                        {
+                            <table class="custom-grid">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 80px;">#</th>
+                                        <th style="width: 80px;">Foto</th>
+                                        <th>👤 Apellido y Nombre</th>
+                                        <th>🆔 Legajo</th>
+                                        <th>🎖️ Jerarquía</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var (bombero, index) in bomberos.Select((b, i) => (b, i)))
+                                    {
+                                        <tr class="bombero-row @(dragSrcId == bombero.Id ? "dragging" : "") @(dragOverId == bombero.Id ? "drag-over" : "")"
+                                            draggable="true"
+                                            @ondragstart="() => OnDragStart(bombero.Id)"
+                                            @ondragover:preventDefault
+                                            @ondragover="() => OnDragOver(bombero.Id)"
+                                            @ondragleave="OnDragLeave"
+                                            @ondrop="() => OnDrop(bombero.Id)">
 
-                            <td>
-                                <span class="handle">⠿</span>
-                                <span class="orden-badge">@(index + 1)</span>
-                            </td>
-                            <td>
-                                @if (bombero.UrlImagen != null)
-                                {
-                                    <Avatar Size="AvatarSize.Large" Src="@bombero.UrlImagen" />
-                                }
-                                else
-                                {
-                                    <Avatar Size="AvatarSize.Large" Icon="user" />
-                                }
-                            </td>
-                            <td>@bombero.ApellidoYNombre</td>
-                            <td>@bombero.NumeroLegajo</td>
-                            <td>@bombero.Grado</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        }
+                                            <td>
+                                                <span class="handle">⠿</span>
+                                                <span class="orden-badge">@(index + 1)</span>
+                                            </td>
+                                            <td>
+                                                @if (bombero.UrlImagen != null)
+                                                {
+                                                    <Avatar Size="AvatarSize.Large" Src="@bombero.UrlImagen" />
+                                                }
+                                                else
+                                                {
+                                                    <Avatar Size="AvatarSize.Large" Icon="user" />
+                                                }
+                                            </td>
+                                            <td>@bombero.ApellidoYNombre</td>
+                                            <td>@bombero.NumeroLegajo</td>
+                                            <td>@bombero.Grado</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                   </div>
 
-        <button class="btn-confirmar" @onclick="ConfirmarOrden" disabled="@isLoading">
-            CONFIRMAR
-        </button>
-    </div>
-</div>
+            </Card>
+        </div>
 
 @code {
     private bool isLoading = true;
@@ -252,6 +594,10 @@
                               .ToList();
         bomberos = SinFiltrar;
     }
+    
+    // Variables de Tamaño de la Tabla
+    int _pageIndex = 1;
+    int _pageSize = 5;
 
     private void OnDragStart(int id) => dragSrcId = id;
 
