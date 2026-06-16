@@ -210,6 +210,7 @@ namespace FireForce.Client.Data.Mappers
             destination.TipoSuperficieAfectada = source.TipoSuperficieAfectada!.Value;
             destination.DetalleSuperficieAfectadaIncendio = source.DetalleSuperficieAfectadaIncendio;
             destination.SuperficieAfectadaCausa = source.SuperficieAfectadaCausa;
+            // (NO EXISTE EN DESTINO) destination.SuperficieAfectadaIncendio = source.SuperficieAfectadaIncendio;
             destination.TipoAbertura = source.TipoAbertura;
             destination.OtraAbertura = source.OtraAbertura;
             destination.TipoTecho = source.TipoTecho;
@@ -312,10 +313,8 @@ namespace FireForce.Client.Data.Mappers
             destination.AnioNumeroParte = source.AnioNumeroParte;
             destination.HoraSalida = source.HoraSalida;
             destination.HoraLlegada = source.HoraLLegada;
-            destination.Descripcion = source.Descripcion;
+            destination.Descripcion = source.Descripcion!;
             destination.Direccion = source.Direccion;
-            destination.PisoNumero = source.PisoNumero;
-            destination.Depto = source.Depto;
             destination.TipoZona = source.TipoZona!.Value;
             destination.Latitud = source.Latitud;
             destination.Longitud = source.Longitud;
@@ -327,6 +326,10 @@ namespace FireForce.Client.Data.Mappers
             destination.TipoServicio = source.TipoServicio!.Value;
             destination.EncargadoId = source.BomberoEncargadoId;
             destination.QuienLlenoId = source.BomberoPlanillaId;
+
+            // MAPEO PROVISIONAL DE DEPARTAMENTO
+            destination.Depto = source.Departamentos?.FirstOrDefault()?.Depto;
+            destination.PisoNumero = source.Departamentos?.FirstOrDefault()?.PisoNumero;
 
             //Mapeo de colecciones
             destination.Damnificados = source.Damnificados?.Select(d => new Damnificado_Salida
@@ -357,7 +360,7 @@ namespace FireForce.Client.Data.Mappers
                 DocumentoResponsable = a.DniResponsable
             }).ToList() ?? new List<AnimalSalida>();
 
-            destination.Moviles = source.Moviles.ToList();
+            if (source.ParticiparonVehiculos) destination.Moviles = source.Moviles.ToList();
 
             destination.CuerpoParticipante = source.CuerpoParticipante?.Select(cp => new BomberoSalida
             {
@@ -631,9 +634,38 @@ namespace FireForce.Client.Data.Mappers
             viewModel.CuerpoParticipante = model.CuerpoParticipante?.Select(cp => new BomberoSalida { BomberoSalidaId = cp.BomberoSalidaId, PersonaId = cp.PersonaId, Bombero = cp.Bombero, Grado = cp.Grado, MovilId = cp.MovilId, MovilAsignado = cp.MovilAsignado }).ToList() ?? new List<BomberoSalida>();
             viewModel.BomberosParticipantes = model.CuerpoParticipante?.Select(cp => new BomberoViweModel { Id = cp.PersonaId, Nombre = cp.Bombero?.Nombre, Apellido = cp.Bombero?.Apellido, NumeroLegajo = cp.Bombero?.NumeroLegajo ?? 0 }).ToList() ?? new List<BomberoViweModel>();
             viewModel.Moviles = model.Moviles.ToList();
+            viewModel.ParticiparonVehiculos = model.Moviles != null && model.Moviles.Any();
             //viewModel.FuerzasIntervinientes = model.FuerzasIntervinientes?.Select(f => new FuerzaIntervinienteViewModel { Id = f.Id, EncargadoApellidoyNombre = f.EncargadoApellidoyNombre, NumeroUnidad = f.NumeroUnidad, FuerzaViewModel = new SimpleFuerzaViewModel { Id = f.FuerzaIntervinienteId, Nombre = f.Fuerzainterviniente?.NombreFuerza ?? string.Empty } }).ToList() ?? new List<FuerzaIntervinienteViewModel>();
 
             // TODO: Mapear Damnificados, Animales y otras colecciones si es necesario
+            viewModel.Damnificados = model.Damnificados.Select(d => new DamnificadoViewModel
+            {
+                Id = d.SalidaId,
+                Nombre = d.Nombre,
+                Apellido = d.Apellido,
+                Dni = d.Documento,
+                Sexo = d.Sexo,
+                LugarDeNacimiento = d.LugarNacimiento,
+                Edad = d.Edad,
+                Estado = d.Estado,
+                FuerzaIntervinienteId = d.FuerzaIntervinienteId,
+                Destino = d.Destino
+            }).ToList();
+
+            viewModel.AnimalesDamnificados = model.Animales.Select(a => new AnimalViewModel
+            {
+                Id = a.SalidaId,
+                Tipo = a.Tipo,
+                TipoOtro = a.TipoOtro,
+                Estado = a.Estado,
+                Cantidad = a.Cantidad,
+                Nombre = a.Nombre,
+                Observaciones = a.Observaciones,
+                NombreResponsable = a.NombreResponsable,
+                ApellidoResponsable = a.ApellidoResponsable,
+                DniResponsable = a.DocumentoResponsable,
+                SeConoceResponsable = String.IsNullOrEmpty($"{a.NombreResponsable}{a.ApellidoResponsable}{a.DocumentoResponsable}")
+            }).ToList();
         }
     }
 }

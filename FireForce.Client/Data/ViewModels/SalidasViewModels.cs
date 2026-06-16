@@ -229,7 +229,7 @@ namespace FireForce.Client.Data.ViewModels
         public DateTime? FechaVencimineto { get; set; }
 
         // --- Sección de Recursos Moviles y Humanos ---
-
+        public bool ParticiparonVehiculos { get; set; } = false;
         public List<Movil_Salida> Moviles { get; set; } = new();
         public List<BomberoSalida> CuerpoParticipante { get; set; } = new();
 
