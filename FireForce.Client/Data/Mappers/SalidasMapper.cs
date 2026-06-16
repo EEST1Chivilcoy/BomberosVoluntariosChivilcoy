@@ -1,3 +1,4 @@
+using FireForce.Data.Models.Personas;
 using FireForce.Data.Models.Personas.Personal;
 using FireForce.Data.Models.Grupos.FuerzasIntervinientes;
 using FireForce.Client.Data.ViewModels.Accidente;
@@ -13,6 +14,9 @@ using FireForce.Data.Models.Salidas.Planillas.Servicios;
 using FireForce.Data.Models.Salidas.Planillas;
 using FireForce.Data.Models.Salidas.Planillas.Incendios;
 using FireForce.Data.Models.Salidas.Componentes;
+using FireForce.Client.Helpers;
+using AntDesign;
+using FireForce.Data.Models.Personas;
 
 namespace FireForce.Client.Data.Mappers
 {
@@ -24,6 +28,14 @@ namespace FireForce.Client.Data.Mappers
             {
                 return null;
             }
+
+            ValidationHelper.Validar(viewModel);
+
+            if (!(viewModel.BomberoEncargadoId > 0))
+                throw new ArgumentException("Debe especificar quién está a cargo de la salida");
+
+            if (!(viewModel.BomberoPlanillaId > 0))
+                throw new ArgumentException("Debe especificar quién llenó la planila");
 
             return viewModel switch
             {
@@ -111,7 +123,7 @@ namespace FireForce.Client.Data.Mappers
             matpel.OtraAccionesPersonas = viewModel.OtraAccionesPersonas;
             matpel.DetallesAccionesPersonas = viewModel.DetallesAccionesPersonas;
             matpel.TipoSuperficie = viewModel.TipoSuperficie!.Value;
-            matpel.CantidadAfectadaMaterialPeligroso = viewModel.Cantidad!.Value;
+            matpel.CantidadAfectadaMaterialPeligroso = viewModel.CantidadAfectada!.Value;
             matpel.TipoSituacion = viewModel.TipoSituacion!.Value;
             return matpel;
         }
@@ -311,24 +323,25 @@ namespace FireForce.Client.Data.Mappers
             destination.ApellidoSolicitante = source.ApellidoSolicitante;
             destination.DniSolicitante = source.DniSolicitante;
             destination.TelefonoSolicitante = source.TelefonoSolicitante;
+            destination.NombreYApellidoReceptor = source.ApellidoReceptor + ", " + source.NombreReceptor;
             destination.TipoServicio = source.TipoServicio!.Value;
             destination.EncargadoId = source.BomberoEncargadoId;
             destination.QuienLlenoId = source.BomberoPlanillaId;
 
-            // Mapeo de colecciones
-            //destination.Damnificados = source.Damnificados?.Select(d => new Damnificado_Salida
-            //{
-            //    Damnificado_SalidaId = d.Damnificado_SalidaId,
-            //    Nombre = d.Nombre,
-            //    Apellido = d.Apellido,
-            //    Documento = d.Documento,
-            //    Edad = d.Edad,
-            //    Sexo = d.Sexo,
-            //    Estado = d.Estado,
-            //    Destino = d.Destino,
-            //    FuerzaIntervinienteId = d.FuerzaIntervinienteId,
-            //    FuerzaInterviniente = null
-            //}).ToList() ?? new List<Damnificado_Salida>();
+            //Mapeo de colecciones
+            destination.Damnificados = source.Damnificados?.Select(d => new Damnificado_Salida
+            {
+                Damnificado_SalidaId = d.Id,
+                Nombre = d.Nombre,
+                Apellido = d.Apellido,
+                Documento = d.Dni,
+                Edad = d.Edad,
+                Sexo = d.Sexo,
+                Estado = d.Estado,
+                Destino = d.Destino,
+                FuerzaIntervinienteId = d.FuerzaIntervinienteId,
+                FuerzaInterviniente = null
+            }).ToList() ?? new List<Damnificado_Salida>();
 
             destination.Animales = source.AnimalesDamnificados?.Select(a => new AnimalSalida
             {
@@ -501,7 +514,7 @@ namespace FireForce.Client.Data.Mappers
                     mpvm.OtraAccionesPersonas = mp.OtraAccionesPersonas;
                     mpvm.DetallesAccionesPersonas = mp.DetallesAccionesPersonas;
                     mpvm.TipoSuperficie = mp.TipoSuperficie;
-                    mpvm.Cantidad = mp.CantidadAfectadaMaterialPeligroso;
+                    mpvm.CantidadAfectada = mp.CantidadAfectadaMaterialPeligroso;
                     mpvm.TipoSituacion = mp.TipoSituacion;
                     break;
                 case Accidente a:

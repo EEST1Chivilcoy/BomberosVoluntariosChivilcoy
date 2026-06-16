@@ -1,6 +1,7 @@
 ﻿@using FireForce.Shared.Enums;
 @using FireForce.Shared.Enums.Salidas;
 @using FireForce.Client.Data.ViewModels;
+@using FireForce.Client.Data.ViewModels.Rescates;
 @using FireForce.Client.Data.ViewModels.Incendios;
 @using FireForce.Client.Data.ViewModels.MaterialesPeligrosos;
 @using FireForce.Client.Data.ViewModels.Accidente;
@@ -220,6 +221,32 @@
             </div>
         }
 
+        @* --- RESCATES --- *@
+        @if (Model is RescateViewModels rescateView)
+        {
+            <div class="ts-block">
+                <div class="ts-section-title">Datos del Rescate</div>
+
+                @if (rescateView is RescatePersonaViewModels rescatePersonaView)
+                {
+                    <FormItem Label="Lugar de donde se rescató a la persona" Required>
+                        <EnumSelect TEnum="TipoLugarRescatePersona?" @bind-Value="@rescatePersonaView.TipoRescatePersona" />
+                    </FormItem>
+                    @if (rescatePersonaView.TipoRescatePersona == TipoLugarRescatePersona.Otro)
+                        rescatePersonaView.OtroLugar = true;
+                }
+
+                @if (rescateView is RescateAnimaViewModels rescateAnimalView)
+                {
+                    <FormItem Label="Lugar de donde se rescató al animal" Required>
+                        <EnumSelect TEnum="TipoLugarRescateAnimal?" @bind-Value="@rescateAnimalView.TipoRescateAnimal" />
+                    </FormItem>
+                    @if (rescateAnimalView.TipoRescateAnimal == TipoLugarRescateAnimal.Otro)
+                        rescateAnimalView.OtroLugar = true;
+                }
+            </div>
+        }
+
         @* --- MATERIALES PELIGROSOS --- *@
         @if (Model is MaterialPeligrosoViewModels matpelView)
         {
@@ -281,7 +308,7 @@
                     </div>
                     <div class="ts-col">
                         <FormItem Label="Cantidad Afectada (m²)">
-                            <AntDesign.InputNumber @bind-Value="@matpelView.Cantidad" />
+                            <AntDesign.InputNumber @bind-Value="@matpelView.CantidadAfectada" />
                         </FormItem>
                     </div>
                 </div>

@@ -160,6 +160,7 @@ namespace FireForce.Client.Data.ViewModels
         /// Tipo de zona donde ocurrió el incidente.
         /// Puede ser Urbana, Rural.
         /// </summary>
+        [Required]
         public TipoZona? TipoZona { get; set; }
 
         // --- Sección de Datos del Solicitante ---

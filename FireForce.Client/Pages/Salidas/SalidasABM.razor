@@ -468,13 +468,18 @@
                         <ActionColumn Title="⚙️ Acciones" Align=ColumnAlign.Center>
                             <Space>
                                 <SpaceItem>
-                                    <Button OnClick="() => VerUbicacionSalida(context.Longitud, context.Latitud)">
-                                        <Icon Type="aim" />
+                                    <Button OnClick="() => VerImprimirSalida(context.Id)">
+                                        <Icon Type="printer" />
                                     </Button>
                                 </SpaceItem>
                                 <SpaceItem>
                                     <Button Type="@ButtonType.Primary" OnClick="() => VerEditarSalida(context.Id)" Ghost>
                                         <Icon Type="edit" />
+                                    </Button>
+                                </SpaceItem>
+                                <SpaceItem>
+                                    <Button OnClick="() => VerUbicacionSalida(context.Longitud, context.Latitud)">
+                                        <Icon Type="aim" />
                                     </Button>
                                 </SpaceItem>
                             </Space>
@@ -635,11 +640,14 @@
                 string finalRoute;
                 if (rutaTemplate.Contains("{0}"))
                 {
-                    finalRoute = string.Format(rutaTemplate, salida.AnioNumeroParte, salida.NumeroParte);
+                    finalRoute = $"{rutaTemplate}/{(int)salida.TipoEmergencia}/{salida.AnioNumeroParte}/{salida.NumeroParte}";
                 }
                 else
                 {
-                    finalRoute = $"{rutaTemplate}/{salida.AnioNumeroParte}/{salida.NumeroParte}";
+                    if (salida.TipoEmergencia == TipoDeEmergencia.MaterialPeligroso)
+                        finalRoute = $"{rutaTemplate}/{salida.AnioNumeroParte}/{salida.NumeroParte}";
+                    else
+                        finalRoute = $"{rutaTemplate}/{(int)salida.TipoEmergencia}/{salida.AnioNumeroParte}/{salida.NumeroParte}";
                 }
                 NavigationManager.NavigateTo(finalRoute);
             }
@@ -653,6 +661,24 @@
             await MessageService.ErrorAsync($"Ocurrió un error al intentar editar la salida: {ex.InnerException?.Message ?? ex.Message}");
         }
     }
+
+    private async Task VerImprimirSalida(int id)
+    {
+        try
+        {
+            var salida = await SalidaService.ObtenerSalidaPorIdAsync(id);
+            if (salida == null)
+            {
+                await MessageService.ErrorAsync("No se encontró la salida para imprimir.");
+                return;
+            }
+            NavigationManager.NavigateTo($"/fire-force/PlanillasIntervencion/Imprimir/{salida.AnioNumeroParte}/{salida.NumeroParte}/{true}", true);
+        }
+        catch (Exception ex)
+        {
+            await MessageService.ErrorAsync($"Ocurrió un error al intentar imprimir la salida: {ex.InnerException?.Message ?? ex.Message}");
+        }
+	}
 
     private async Task VerAñadirSalida()
     {

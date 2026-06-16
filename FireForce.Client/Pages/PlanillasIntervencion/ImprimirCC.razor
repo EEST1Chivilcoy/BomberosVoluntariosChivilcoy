@@ -258,7 +258,7 @@
                 <ul>
                     <li style="display: inline-block;">FECHA: @IntervencionVM.FechaImprimir</li>
                     <li style="display: inline-block; margin-left: 8.5em;"> Día: @IntervencionVM.DiaDeLaSemana </li>
-                    <li>AVISADO POR: @IntervencionVM.AvisadoPor </li>
+                    <li>AVISADO POR: @IntervencionVM.AvisadoPor</li>
                     <li>RECEPCIONADO POR: @IntervencionVM.Recepcionista</li>
                     <li>TIPO SERVICIO: @IntervencionVM.TipoServicio</li>
                     <li>DIRECCION: @IntervencionVM.Direccion</li>
@@ -321,11 +321,6 @@
                     <p>..........................................................................................................................................................................................................</p>
                 </div>
             </div>
-        </div>
-        <div>
-            <p class="sec3-titulo">
-                B) Incendio
-            </p>
         </div>
         @if (IntervencionVM.TipoTecho != null && IntervencionVM.TipoAbertura != null)
         {
@@ -434,7 +429,15 @@
 
         public string? DetallesSalida { get; set; }
 
-        public string? AvisadoPor { get; set; }
+		private string? _avisadoPor;
+        public string? AvisadoPor
+        {
+            get => _avisadoPor;
+            set
+            {
+				_avisadoPor = value?.Trim() == "," ? "No se registró solicitante." : value;
+            }
+        }
 
         public string? TipoServicio { get; set; }
 
@@ -453,7 +456,7 @@
 
         public string GraduadoCargo
         {
-            get { return ApellidoConfecciono + ", " + GraduadoNombre; }
+            get { return GraduadoApellido + ", " + GraduadoNombre; }
         }
 
         //Rangos Graduado - Confecciono (Modificar luego)
@@ -565,15 +568,15 @@
             IntervencionVM.HoraSalida = salida.HoraSalida.ToString(@"HH\:mm\:ss");
             IntervencionVM.HoraLlegada = salida.HoraLlegada.ToString(@"HH\:mm\:ss");
             IntervencionVM.AvisadoPor = salida.NombreSolicitante + "," + salida.ApellidoSolicitante;
-            IntervencionVM.NombreConfecciono = quienlleno.Nombre;
-            IntervencionVM.ApellidoConfecciono = quienlleno.Apellido;
-            IntervencionVM.ConfeccionoRango = quienlleno.Grado.ToString();
-            IntervencionVM.GraduadoNombre = encargado.Nombre;
-            IntervencionVM.GraduadoApellido = encargado.Apellido;
-            IntervencionVM.GraduadoRango = quienlleno.Grado.ToString();
+            IntervencionVM.NombreConfecciono = quienlleno?.Nombre;
+            IntervencionVM.ApellidoConfecciono = quienlleno?.Apellido;
+            IntervencionVM.ConfeccionoRango = quienlleno?.Grado.ToString();
+            IntervencionVM.GraduadoNombre = encargado?.Nombre.ToString();
+            IntervencionVM.GraduadoApellido = encargado?.Apellido;
+            IntervencionVM.GraduadoRango = encargado?.Grado.ToString();
             IntervencionVM.NumeroParte = salida.NumeroParte;
             IntervencionVM.AnioSalida = salida.AnioNumeroParte;
-            IntervencionVM.Recepcionista = salida.NombreYApellidoReceptor ?? "No se registro recepcionista.";
+            IntervencionVM.Recepcionista = salida.NombreYApellidoReceptor?.Trim() == "," ? "No se registro recepcionista." : salida.NombreYApellidoReceptor;
             IntervencionVM.TipoServicio = "" + salida.TipoServicio;
             IntervencionVM.Direccion = salida.Direccion ?? "Dirección Desconocida";
             IntervencionVM.DetallesSalida = salida.Descripcion;
