@@ -876,7 +876,7 @@
 
         if (TipoPersonal.ToLower() == "bomberos")
         {
-            var bomberos = await BomberoService.ObtenerTodosLosBomberosAsync(ConImagenes: true, ConTodasLasDemasRelaciones: true);
+            var bomberos = await BomberoService.ObtenerTodosLosBomberosAsync(ConImagenes: true, ConTodasLasDemasRelaciones: false, b => b.Ascensos);
             SinFiltrarB = bomberos.ToBomberoViewModelList();
 
             searchB(searchString, EstadoB);
@@ -919,7 +919,7 @@
 
         if (TipoPersonal.ToLower() == "bomberos")
         {
-            var bomberos = await BomberoService.ObtenerTodosLosBomberosAsync(ConImagenes: true, ConTodasLasDemasRelaciones: true);
+            var bomberos = await BomberoService.ObtenerTodosLosBomberosAsync(ConImagenes: true, ConTodasLasDemasRelaciones: false, b => b.Ascensos);
             SinFiltrarB = bomberos.ToBomberoViewModelList();
 
             searchB(searchString, EstadoB);
