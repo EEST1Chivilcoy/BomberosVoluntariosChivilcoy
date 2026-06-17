@@ -635,9 +635,10 @@ namespace FireForce.Client.Data.Mappers
             viewModel.BomberosParticipantes = model.CuerpoParticipante?.Select(cp => new BomberoViweModel { Id = cp.PersonaId, Nombre = cp.Bombero?.Nombre, Apellido = cp.Bombero?.Apellido, NumeroLegajo = cp.Bombero?.NumeroLegajo ?? 0 }).ToList() ?? new List<BomberoViweModel>();
             viewModel.Moviles = model.Moviles.ToList();
             viewModel.ParticiparonVehiculos = model.Moviles != null && model.Moviles.Any();
+            viewModel.BomberoEncargadoId = model.EncargadoId;
+            viewModel.BomberoPlanillaId = model.QuienLlenoId;
             //viewModel.FuerzasIntervinientes = model.FuerzasIntervinientes?.Select(f => new FuerzaIntervinienteViewModel { Id = f.Id, EncargadoApellidoyNombre = f.EncargadoApellidoyNombre, NumeroUnidad = f.NumeroUnidad, FuerzaViewModel = new SimpleFuerzaViewModel { Id = f.FuerzaIntervinienteId, Nombre = f.Fuerzainterviniente?.NombreFuerza ?? string.Empty } }).ToList() ?? new List<FuerzaIntervinienteViewModel>();
 
-            // TODO: Mapear Damnificados, Animales y otras colecciones si es necesario
             viewModel.Damnificados = model.Damnificados.Select(d => new DamnificadoViewModel
             {
                 Id = d.SalidaId,
@@ -666,6 +667,16 @@ namespace FireForce.Client.Data.Mappers
                 DniResponsable = a.DocumentoResponsable,
                 SeConoceResponsable = String.IsNullOrEmpty($"{a.NombreResponsable}{a.ApellidoResponsable}{a.DocumentoResponsable}")
             }).ToList();
+
+            viewModel.CuerpoParticipante = model.CuerpoParticipante?.Select(cp => new BomberoSalida
+            {
+                BomberoSalidaId = cp.BomberoSalidaId,
+                PersonaId = cp.PersonaId,
+                Bombero = cp.Bombero,
+                Grado = cp.Grado,
+                MovilId = cp.MovilId,
+                MovilAsignado = cp.MovilAsignado
+            }).ToList() ?? new List<BomberoSalida>();
         }
     }
 }
