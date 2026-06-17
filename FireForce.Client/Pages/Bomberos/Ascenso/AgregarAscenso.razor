@@ -330,7 +330,11 @@
                 await message.ErrorAsync("El grado de ascenso debe ser superior al grado actual");
                 return;
             }
-
+            if (AscensoVM.FechaAscenso.Date > DateTime.Today)
+            {
+                await message.ErrorAsync("La fecha de ascenso no puede ser posterior a la fecha actual");
+                return;
+            }
             if (AscensoVM.GradoAntiguo == EscalafonJerarquico.Jefe)
             {
                 await message.ErrorAsync("El bombero ya se encuentra en el grado máximo");
