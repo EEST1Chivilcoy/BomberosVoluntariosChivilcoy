@@ -427,9 +427,9 @@
                 Nombre = a.Nombre,
                 Apellido = a.Apellido,
                 Grado = a.Grado,
-                TelefonoCel = contacto.TelefonoCel,
-                TelefonoLaboral = contacto.TelefonoLaboral,
-                Email = contacto.Email
+                TelefonoCel = contacto?.TelefonoCel,
+                TelefonoLaboral = contacto?.TelefonoLaboral,
+                Email = contacto?.Email
             };
             BomberosVM.Add(Bm);
         }
