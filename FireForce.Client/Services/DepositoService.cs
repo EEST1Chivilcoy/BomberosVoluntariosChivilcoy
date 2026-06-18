@@ -25,6 +25,7 @@ namespace FireForce.Client.Services
         }
         public async Task<Material> AgregarMaterial(Material material)
         {
+            await using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
                 if (await _context.Materiales.AnyAsync(b => b.MaterialId == material.MaterialId))
@@ -37,10 +38,12 @@ namespace FireForce.Client.Services
 
                 material.Codigo = $"{numero.Substring(0, 3)}-{numero.Substring(3, 3)}-{numero.Substring(6, 3)}-{numero.Substring(9, 3)}";
                 await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
                 return material;
             }
             catch (Exception ex)
             {
+                await transaction.RollbackAsync();
                 // Registrar el error en un log en el futuro
                 Console.WriteLine(ex.Message);
                 throw;
@@ -48,6 +51,7 @@ namespace FireForce.Client.Services
         }
         public async Task<MovimientoMaterial> CargarMovimiento(MovimientoMaterial movimiento)
         {
+            await using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
                 var BomberoDestino = movimiento.DestinoBombero != null ? await _context.Bomberos.SingleOrDefaultAsync(m => m.NumeroLegajo == movimiento.DestinoBombero.NumeroLegajo) : null;
@@ -64,10 +68,12 @@ namespace FireForce.Client.Services
                 _context.Movimientos.Add(movimiento);
                 ActualizarStock(movimiento, MaterialAsignado);
                 await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
                 return movimiento;
             }
             catch (Exception ex)
             {
+                await transaction.RollbackAsync();
                 // Registrar el error en un log en el futuro
                 Console.WriteLine(ex.Message);
                 throw;
@@ -123,7 +129,6 @@ namespace FireForce.Client.Services
                     throw new Exception("Stock insuficiente");
                 }
 
-                _context.SaveChanges();
                 return;
             }
             catch (Exception ex)
