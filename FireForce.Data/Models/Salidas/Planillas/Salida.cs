@@ -8,7 +8,6 @@ using FireForce.Data.Models.Personas.Personal;
 
 namespace FireForce.Data.Models.Salidas.Planillas
 {
-
     public abstract class Salida
     {
         /// <summary>
@@ -115,6 +114,8 @@ namespace FireForce.Data.Models.Salidas.Planillas
 
 
         public List<Damnificado_Salida> Damnificados { get; set; } = new();
+
+        public List<AnimalSalida> Animales { get; set; } = new();
 
         public int? SeguroId { get; set; }
         public SeguroVivienda? Seguro { get; set; }

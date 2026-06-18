@@ -22,7 +22,6 @@
     .ant-modal-content {
         border: 2px solid #A63333 !important;
         border-radius: 8px !important;
-        overflow: hidden !important;
     }
 
     .ant-modal-header {
@@ -117,13 +116,7 @@
                 </AntDesign.Col>
             </Row>
             <Row Gutter="16">
-                <AntDesign.Col Span="12">
-                    <div class="modal-crear-movimiento-form-item">
-                        <FormItem Label="🏷️ Código de Barra" Required>
-                            <Input @bind-Value="MaterialViewModel.Codigo" Placeholder="Ingrese el código" />
-                        </FormItem>
-                    </div>
-                </AntDesign.Col>
+             
             </Row>
 
             <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;" class="modal-crear-movimiento-footer">

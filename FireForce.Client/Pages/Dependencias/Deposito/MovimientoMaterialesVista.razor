@@ -280,7 +280,7 @@
                                     <CheckboxGroup Style="display: flex; gap: 20px;" @bind-Value="@_value" TValue="string" OnChange="OnChange">
                                         <Checkbox Label="Bombero" @bind-Value="@chIsBombero">Bombero</Checkbox>
                                         <Checkbox Label="Movil" @bind-Value="@chIsMovil">Móvil</Checkbox>
-                                        <Checkbox Label="Comisión Diretiva" @bind-Value="@MovimientoVM.esComisionDirectiva">Comisión Directiva</Checkbox>"
+                                        <Checkbox Label="Comisión Diretiva" @bind-Value="@MovimientoVM.esComisionDirectiva">Comisión Directiva</Checkbox> @*" <- Comilla salvaje*@
                                     </CheckboxGroup>
                                 </FormItem>
                             </div>

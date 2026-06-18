@@ -330,6 +330,20 @@ namespace FireForce.Client.Data.Mappers
             //    FuerzaInterviniente = null
             //}).ToList() ?? new List<Damnificado_Salida>();
 
+            destination.Animales = source.AnimalesDamnificados?.Select(a => new AnimalSalida
+            {
+                AnimalSalidaId = a.Id,
+                Tipo = a.Tipo!.Value,
+                TipoOtro = a.TipoOtro,
+                Estado = a.Estado,
+                Cantidad = a.Cantidad,
+                Nombre = a.Nombre,
+                Observaciones = a.Observaciones,
+                NombreResponsable = a.NombreResponsable,
+                ApellidoResponsable = a.ApellidoResponsable,
+                DocumentoResponsable = a.DniResponsable
+            }).ToList() ?? new List<AnimalSalida>();
+
             destination.Moviles = source.Moviles.ToList();
 
             destination.CuerpoParticipante = source.CuerpoParticipante?.Select(cp => new BomberoSalida
@@ -605,6 +619,8 @@ namespace FireForce.Client.Data.Mappers
             viewModel.BomberosParticipantes = model.CuerpoParticipante?.Select(cp => new BomberoViweModel { Id = cp.PersonaId, Nombre = cp.Bombero?.Nombre, Apellido = cp.Bombero?.Apellido, NumeroLegajo = cp.Bombero?.NumeroLegajo ?? 0 }).ToList() ?? new List<BomberoViweModel>();
             viewModel.Moviles = model.Moviles.ToList();
             //viewModel.FuerzasIntervinientes = model.FuerzasIntervinientes?.Select(f => new FuerzaIntervinienteViewModel { Id = f.Id, EncargadoApellidoyNombre = f.EncargadoApellidoyNombre, NumeroUnidad = f.NumeroUnidad, FuerzaViewModel = new SimpleFuerzaViewModel { Id = f.FuerzaIntervinienteId, Nombre = f.Fuerzainterviniente?.NombreFuerza ?? string.Empty } }).ToList() ?? new List<FuerzaIntervinienteViewModel>();
+
+            // TODO: Mapear Damnificados, Animales y otras colecciones si es necesario
         }
     }
 }

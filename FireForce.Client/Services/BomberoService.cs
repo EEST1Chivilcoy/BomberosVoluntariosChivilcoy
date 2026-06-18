@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 using FireForce.Data.Models.Personas.Personal.Componentes;
 using FireForce.Client.Helpers;
 using FireForce.Shared.Enums;
@@ -17,7 +18,10 @@ namespace FireForce.Client.Services
         Task<Sancion> SancionarBombero(Sancion sancion);
         Task<bool> CambiarEstado(int id, EstadoBombero estado);
         Task<AscensoBombero> AscenderBombero(AscensoBombero ascenso);
-        Task<List<Bombero>> ObtenerTodosLosBomberosAsync(bool ConImagenes = false, bool ConTodasLasDemasRelaciones = false);
+        Task<List<Bombero>> ObtenerTodosLosBomberosAsync(
+            bool ConImagenes = false,
+            bool ConTodasLasDemasRelaciones = false,
+            params Expression<Func<Bombero, object>>[] includes);
         Task<Bombero> ObtenerBomberoPorIdAsync(int id, bool asnotracking = false, bool conRelaciones = true);
         Task<Bombero> ObtenerBomberoPorEntraIdAsync(Guid id, bool asnotracking = false, bool conRelaciones = true);
         Task<Bombero> ObtenerBomberoObjetoPorLegajoAsync(int numeroLegajo);
@@ -373,12 +377,13 @@ namespace FireForce.Client.Services
 
         public async Task<List<Bombero>> ObtenerTodosLosBomberosAsync(
             bool ConImagenes = false,
-            bool ConTodasLasDemasRelaciones = false)
+            bool ConTodasLasDemasRelaciones = false,
+            params Expression<Func<Bombero, object>>[] includes)
         {
             IQueryable<Bombero> query = _context.Bomberos.AsQueryable();
 
             // Si no se pide nada, traemos solo los bomberos pelados
-            if (!ConImagenes && !ConTodasLasDemasRelaciones)
+            if (!ConImagenes && !ConTodasLasDemasRelaciones && includes.Length == 0)
             {
                 return await query
                     .AsNoTracking()
@@ -404,6 +409,11 @@ namespace FireForce.Client.Services
                     .Include(b => b.DestinoMaterial)
                     .Include(b => b.SancionesRecibidas)
                     .Include(b => b.Licencias);
+            }
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
             }
 
             return await query

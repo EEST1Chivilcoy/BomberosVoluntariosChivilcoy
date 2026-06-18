@@ -6,9 +6,13 @@
 		<UserSecretsId>f08ce748-0a84-44c1-8c1e-cca58d1deceb</UserSecretsId>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.25" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.25" />
-		<PackageReference Include="MQTTnet" Version="5.1.0.1559" />		
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.28" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.28" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.17">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="MQTTnet" Version="5.1.0.1559" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\FireForce.Client\FireForce.Client.csproj" />

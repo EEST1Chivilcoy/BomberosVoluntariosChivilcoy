@@ -99,6 +99,7 @@ namespace FireForce.Data
         public DbSet<ServicioEspecialColaboraciónFuerzasSeguridad> ServicioEspecialColaboraciónFuerzasSeguridad { get; set; }
         public DbSet<Movil_Salida> MovilesSalida { get; set; }
         public DbSet<BomberoSalida> BomberosSalida { get; set; }
+        public DbSet<AnimalSalida> AnimalesSalida { get; set; }
         public DbSet<Material> Materiales { get; set; }
 
         public DbSet<MovimientoMaterial> Movimientos { get; set; }
