@@ -14,8 +14,8 @@
   <ItemGroup>
 	  <PackageReference Include="AntDesign" Version="1.6.0" />
 	  <PackageReference Include="ClosedXML" Version="0.105.0" />
-	  <PackageReference Include="Microsoft.AspNetCore.Components" Version="8.0.25" />
-	  <PackageReference Include="Microsoft.AspNetCore.Components.Forms" Version="8.0.25" />
+	  <PackageReference Include="Microsoft.AspNetCore.Components" Version="8.0.28" />
+	  <PackageReference Include="Microsoft.AspNetCore.Components.Forms" Version="8.0.28" />
 	  <PackageReference Include="Microsoft.Identity.Web" Version="4.6.0" />	  
 	  <PackageReference Include="Microsoft.Identity.Web.UI" Version="4.6.0" />
 	  <PackageReference Include="System.Formats.Asn1" Version="8.0.2" />

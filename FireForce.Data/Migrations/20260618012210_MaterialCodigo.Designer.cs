@@ -4,6 +4,7 @@ using FireForce.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FireForce.Core.Data.Migrations
 {
     [DbContext(typeof(BomberosDbContext))]
-    partial class BomberosDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260618012210_MaterialCodigo")]
+    partial class MaterialCodigo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -612,57 +615,6 @@ namespace FireForce.Core.Data.Migrations
                     b.HasIndex("PersonaId");
 
                     b.ToTable("Sanciones");
-                });
-
-            modelBuilder.Entity("FireForce.Data.Models.Salidas.Componentes.AnimalSalida", b =>
-                {
-                    b.Property<int>("AnimalSalidaId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("AnimalSalidaId"));
-
-                    b.Property<string>("ApellidoResponsable")
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<int>("Cantidad")
-                        .HasColumnType("int");
-
-                    b.Property<string>("DocumentoResponsable")
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<int>("Estado")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Nombre")
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("NombreResponsable")
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("Observaciones")
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<int>("SalidaId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Tipo")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TipoOtro")
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)");
-
-                    b.HasKey("AnimalSalidaId");
-
-                    b.HasIndex("SalidaId");
-
-                    b.ToTable("AnimalesSalida");
                 });
 
             modelBuilder.Entity("FireForce.Data.Models.Salidas.Componentes.BomberoSalida", b =>
@@ -2273,17 +2225,6 @@ namespace FireForce.Core.Data.Migrations
                     b.Navigation("PersonalSancionado");
                 });
 
-            modelBuilder.Entity("FireForce.Data.Models.Salidas.Componentes.AnimalSalida", b =>
-                {
-                    b.HasOne("FireForce.Data.Models.Salidas.Planillas.Salida", "Salida")
-                        .WithMany("Animales")
-                        .HasForeignKey("SalidaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Salida");
-                });
-
             modelBuilder.Entity("FireForce.Data.Models.Salidas.Componentes.BomberoSalida", b =>
                 {
                     b.HasOne("FireForce.Data.Models.Vehiculos.Flota.Movil", "MovilAsignado")
@@ -2574,8 +2515,6 @@ namespace FireForce.Core.Data.Migrations
 
             modelBuilder.Entity("FireForce.Data.Models.Salidas.Planillas.Salida", b =>
                 {
-                    b.Navigation("Animales");
-
                     b.Navigation("CuerpoParticipante");
 
                     b.Navigation("Damnificados");
