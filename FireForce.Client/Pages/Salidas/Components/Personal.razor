@@ -403,7 +403,7 @@
     {
         foreach (var Bom in _selectedRows)
         {
-            await deleteRow(Bom.NumeroLegajo);
+            await deleteRow(Bom.BomberoId);
         }
 
         // Reasignar _selectedRows a una nueva lista vacía
@@ -412,22 +412,36 @@
 
     private async Task deleteRow(int id)
     {
-        // Encuentra el bombero con el número de legajo especificado en la lista del componente
-        var bomberoToRemove = bomberosSalida.FirstOrDefault(b => b.BomberoId == id);
-
-        if (bomberoToRemove != null)
+        // Encuentra el bombero con el número de Id
+        var bomberoAQuitar = bomberosSalida.FirstOrDefault(b => b.BomberoId == id);
+        
+        if (bomberoAQuitar is null)
         {
-            var bomberoToRemoveModel = Model.CuerpoParticipante.FirstOrDefault(b => b.Bombero.PersonaId == id);
-
-            if (bomberoToRemoveModel != null)
-            {
-                Model.CuerpoParticipante.Remove(bomberoToRemoveModel);
-            }
-
-            bomberosSalida.Remove(bomberoToRemove);
-
-            // Añade el bombero de vuelta a la lista de bomberos disponibles para salir
-            bomberosSalirTodos.Add(bomberosTodosView.FirstOrDefault(b => b.Id == bomberoToRemove.BomberoId));
+            MessageService.Error("No se encontró al bombero");
+            return;
         }
+
+        var bomberoADevolver = bomberosTodosView.FirstOrDefault(b => b.Id == bomberoAQuitar.BomberoId);
+
+        if (bomberoADevolver is null)
+        {
+            MessageService.Error("No se encontró al bombero para devolver a la lista");
+            return;
+        }
+
+        // Primero remueve el bombero de la lista que muestra la tabla
+        bomberosSalida.Remove(bomberoAQuitar);
+
+        // Añade el bombero de vuelta a la lista de bomberos disponibles para salir
+        bomberosSalirTodos.Add(bomberoADevolver);
+
+        var bomberoAQuitarModel = Model.CuerpoParticipante.FirstOrDefault(b => b.PersonaId == id);
+        if (bomberoAQuitarModel is null)
+        {
+            MessageService.Error("No se encontró al bombero");
+            return;
+        }
+
+        Model.CuerpoParticipante.Remove(bomberoAQuitarModel);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using FireForce.Data.Models.Personas.Personal;
 
 namespace FireForce.Data.Models.Grupos.Dependencias
@@ -23,6 +24,9 @@ namespace FireForce.Data.Models.Grupos.Dependencias
         /// Encargado de la dependencia. Campo obligatorio.
         /// </summary>
         public Bombero Encargado { get; set; } = null!;
+
+        [ForeignKey(nameof(Encargado))]
+        public int EncargadoPersonaId { get; set; }
 
         /// <summary>
         /// Lista de bomberos que pertenecen a la dependencia.

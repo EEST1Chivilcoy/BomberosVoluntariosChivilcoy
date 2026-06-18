@@ -228,7 +228,7 @@
 
                                 <AntDesign.Col Span="8">
                                     <FormItem Label="Fecha de Nacimiento">
-                                        <DatePicker @bind-Value="@personalView.FechaNacimiento"
+                                        <DatePicker Mask="dd/MM/yyyy" @bind-Value="@personalView.FechaNacimiento"
                                                     Picker="@DatePickerType.Date"
                                                     Style="width: 100%;"
                                                     Placeholder="@("Seleccione fecha")"
@@ -247,7 +247,7 @@
 
                             <AntDesign.Col Span="8">
                                 <FormItem Label="Fecha de Ingreso">
-                                    <DatePicker @bind-Value="@socioView.FechaIngreso"
+                                    <DatePicker Mask="dd/MM/yyyy" @bind-Value="@socioView.FechaIngreso"
                                                 Picker="@DatePickerType.Date"
                                                 Style="width: 100%;"
                                                 Placeholder="@("Seleccione fecha")"
@@ -366,6 +366,9 @@
                             <AntDesign.Col Span="24">
                                 <FormItem Label="Ocupación">
                                     <Input @bind-Value="@socioView.Ocupacion" Placeholder="Ingrese ocupación" AllowClear="true" />
+                                </FormItem>
+                                <FormItem Label="Estado">
+                                    <EnumSelect TEnum="TipoEstadoSocio ?" @bind-Value="@socioView.EstadoSocio" AllowClear/>
                                 </FormItem>
                             </AntDesign.Col>
                         </AntDesign.Row>
@@ -490,6 +493,9 @@
 
         public string? NotaAdicional { get; set; }
 
+        [Required(ErrorMessage = "El estado es obligatorio.")]
+        public TipoEstadoSocio? EstadoSocio { get; set; } = TipoEstadoSocio.Activo;
+
         // -- Datos de Contacto --
 
         [StringLength(255, ErrorMessage = "El teléfono no puede superar los 255 caracteres.")]
@@ -594,6 +600,7 @@
                 Zona = socioView.Zona!.Value,
                 FechaIngreso = socioView.FechaIngreso,
                 Ocupacion = socioView.Ocupacion,
+                EstadoSocio = socioView.EstadoSocio,
                 Telefono = socioView.Telefono,
                 Email = socioView.Email,
                 MontoCuota = socioView.CuotaValor!.Value,
@@ -836,6 +843,7 @@
                 Zona = socio.Zona,
                 FechaIngreso = socio.FechaIngreso,
                 Ocupacion = socio.Ocupacion,
+                EstadoSocio = socio.EstadoSocio,
                 Telefono = socio.Telefono,
                 Email = socio.Email,
                 CuotaValor = socio.MontoCuota,
@@ -860,6 +868,7 @@
                 Zona = socio.Zona,
                 FechaIngreso = socio.FechaIngreso,
                 Ocupacion = socio.Ocupacion,
+                EstadoSocio = socio.EstadoSocio,
                 Telefono = socio.Telefono,
                 Email = socio.Email,
                 CuotaValor = socio.MontoCuota,

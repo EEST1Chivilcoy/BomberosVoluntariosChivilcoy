@@ -86,12 +86,15 @@
         <Row Class="modal-crear-licencia-row" Gutter="16">
             <AntDesign.Col Span="8">
                 <FormItem Label="#️⃣ Num. Serie" Class="modal-crear-licencia-form-item">
-                    <Input @bind-Value="@ComunicacionVM.NroSerie" />
+                    <AntDesign.InputNumber TValue="int?" 
+                    @bind-Value="@ComunicacionVM.NroSerie" />
                 </FormItem>
             </AntDesign.Col>
             <AntDesign.Col Span="8">
                 <FormItem Label="⚙️ Num. Equipo" Class="modal-crear-licencia-form-item">
-                    <Input @bind-Value="@ComunicacionVM.NroEquipo" />
+                    <AntDesign.InputNumber TValue="int?"
+                    @bind-Value="@ComunicacionVM.NroEquipo" />
+                    
                 </FormItem>
             </AntDesign.Col>
             <AntDesign.Col Span="8">
@@ -189,11 +192,11 @@
 
     private class ComunicacionViewModel
     {
-        [Required, StringLength(255)]
-        public string NroEquipo { get; set; }
+        [Required]
+        public int? NroEquipo { get; set; }
         public string? Modelo { get; set; }
         public string? Marca { get; set; }
-        public string? NroSerie { get; set; }
+        public int? NroSerie { get; set; }
         public TipoEstadoHandie Estado { get; set; }
         public int? NroLegajo { get; set; }
         public Movil? Movil { get; set; }
@@ -280,7 +283,7 @@
     {
         try
         {
-            if (await Context.Comunicacion.SingleOrDefaultAsync(c => c.NroEquipo == ComunicacionVM.NroEquipo) != null)
+            if (await Context.Comunicacion.SingleOrDefaultAsync(c => c.NroEquipo == ComunicacionVM.NroEquipo.ToString()) != null)
             {
                 await message.ErrorAsync("Número de equipo repetido");
                 return;
@@ -291,10 +294,10 @@
                 Bombero? bomberoSelec = await Context.Bomberos.SingleOrDefaultAsync(bom => bom.NumeroLegajo == ComunicacionVM.NroLegajo);
                 Comunicacion comunicacion = new()
                 {
-                    NroEquipo = ComunicacionVM.NroEquipo,
+                    NroEquipo = ComunicacionVM.NroEquipo?.ToString(),
                     Modelo = ComunicacionVM.Modelo,
                     Marca = ComunicacionVM.Marca,
-                    NroSerie = ComunicacionVM.NroSerie,
+                    NroSerie = ComunicacionVM.NroSerie?.ToString(),
                     Estado = ComunicacionVM.Estado,
                     Bombero = bomberoSelec
                 };
@@ -305,10 +308,10 @@
                 Movil? movilSelec = await Context.Moviles.SingleOrDefaultAsync(mov => mov.NumeroMovil == ComunicacionVM.NumeroMovil);
                 Comunicacion comunicacion = new()
                 {
-                    NroEquipo = ComunicacionVM.NroEquipo,
+                    NroEquipo = ComunicacionVM.NroEquipo?.ToString(),
                     Modelo = ComunicacionVM.Modelo,
                     Marca = ComunicacionVM.Marca,
-                    NroSerie = ComunicacionVM.NroSerie,
+                    NroSerie = ComunicacionVM.NroSerie?.ToString(),
                     Estado = ComunicacionVM.Estado,
                     Movil = movilSelec
                 };
@@ -318,10 +321,10 @@
             {
                 Comunicacion comunicacion = new()
                 {
-                    NroEquipo = ComunicacionVM.NroEquipo,
+                    NroEquipo = ComunicacionVM.NroEquipo?.ToString(),
                     Modelo = ComunicacionVM.Modelo,
                     Marca = ComunicacionVM.Marca,
-                    NroSerie = ComunicacionVM.NroSerie,
+                    NroSerie = ComunicacionVM.NroSerie?.ToString(),
                     Estado = ComunicacionVM.Estado
                 };
                 Context.Comunicacion.Add(comunicacion);

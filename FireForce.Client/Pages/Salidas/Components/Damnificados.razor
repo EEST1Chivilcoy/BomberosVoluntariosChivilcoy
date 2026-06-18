@@ -73,7 +73,7 @@
         padding: 4px 10px !important;
     }
 
-    /* Modal estilo Licencias adaptado para Damnificados */
+    
     .modal-damnificado .ant-modal-content {
         border-radius: 12px;
         box-shadow: 0 4px 12px rgba(255, 163, 77, 0.15);
@@ -263,7 +263,7 @@
                             </AntDesign.Col>
                             <AntDesign.Col Span="10">
                                 <FormItem Label="Fecha de nacimiento" Class="modal-damnificado-form-item">
-                                    <DatePicker TValue="DateTime ?" @bind-Value="@Damnificado.FechaDeNacimiento" OnChange="@CalcularEdad" />
+                                    <DatePicker Mask="dd/MM/yyyy" TValue="DateTime?" @bind-Value="@Damnificado.FechaDeNacimiento" OnChange="@CalcularEdad" />
                                 </FormItem>
                             </AntDesign.Col>
                             <AntDesign.Col Span="6">
@@ -433,7 +433,7 @@
                             </AntDesign.Col>
                             <AntDesign.Col Span="12">
                                 <FormItem Label="Fecha de Vencimiento" Class="modal-damnificado-form-item">
-                                    <DatePicker TValue="DateTime ?" @bind-Value="@Vehiculo.FechaDeVencimiento" />
+                                    <DatePicker Mask="dd/MM/yyyy" TValue="DateTime?" @bind-Value="@Vehiculo.FechaDeVencimiento" />
                                 </FormItem>
                             </AntDesign.Col>
                         </Row>
@@ -486,7 +486,113 @@
                 </div>
             </Modal>
         </TabPane>
+        <TabPane Key="animales" Tab="Animales">
+            <Table DataSource="Model.AnimalesDamnificados" Size="TableSize.Small" Class="damnificados-componente" Bordered>
+                <TitleTemplate>
+                    <GridRow>
+                        <GridCol Span="24" Style="text-align: right;">
+                            <Button Type="ButtonType.Primary" Class="btn-nuevo-damnificado"
+                                    OnClick="@(() => { editandoAnimal = false; Animal = new(); modalAnimal = true; })">
+                                <Icon Type="plus" /> Nuevo Animal
+                            </Button>
+                        </GridCol>
+                    </GridRow>
+                </TitleTemplate>
+                <ColumnDefinitions Context="animal">
+                    <PropertyColumn Title="N°" Property="a => a.NumeroOrden"></PropertyColumn>
+                    <PropertyColumn Title="Responsable" Property="a => a.NombreYApellidoResponsable"></PropertyColumn>
+                    <PropertyColumn Title="Especie" Property="@(a => a.Tipo == TipoAnimal.Otro ? a.TipoOtro : a.Tipo.ToString())"></PropertyColumn>
+                    <PropertyColumn Title="Cantidad" Property="a => a.Cantidad"></PropertyColumn>
+                    <PropertyColumn Title="Estado" Property="a => a.Estado"></PropertyColumn>
+                    <ActionColumn Title="Acciones">
+                        <Popconfirm Title="¿Eliminar?" OnConfirm="@(() => EliminarAnimal(animal))">
+                            <Button Danger><Icon Type="delete" /></Button>
+                        </Popconfirm>
+                        <Button Type="@ButtonType.Primary" OnClick="@(() => EditarAnimal(animal))">
+                            <Icon Type="edit" />
+                        </Button>
+                    </ActionColumn>
+                </ColumnDefinitions>
+            </Table>
+        </TabPane>
     </Tabs>
+    <Modal @bind-Visible="modalAnimal"
+           Title="@(editandoAnimal ? "Editar Animal" : "Datos del Animal")"
+           OnOk="AgregarEditarAnimal"
+           OnCancel="@(() => modalAnimal = false)"
+           WrapClassName="modal-damnificado"
+           Width="700">
+        <div class="modal-damnificado-content">
+            <Form Model="Animal" Layout="FormLayout.Vertical">
+                <Row Gutter="16">
+                    <AntDesign.Col Span="12">
+                        <FormItem Label="Tipo" Class="modal-damnificado-form-item">
+                            <EnumSelect TEnum="TipoAnimal?" @bind-Value="Animal.Tipo" AllowClear/>
+                        </FormItem>
+                    </AntDesign.Col>
+                    @if (Animal.Tipo == TipoAnimal.Otro)
+                    {
+                        <AntDesign.Col Span="12">
+                            <FormItem Label="Tipo" Class="modal-damnificado-form-item">
+                                <Input @bind-Value="Animal.TipoOtro" />
+                            </FormItem>
+                        </AntDesign.Col>
+                    }
+                    <AntDesign.Col Span="12">
+                        <FormItem Label="Cantidad" Class="modal-damnificado-form-item">
+                            <AntDesign.InputNumber @bind-Value="@Animal.Cantidad" Min="1" DefaultValue="1" Style="width:100%;" />
+                        </FormItem>
+                    </AntDesign.Col>
+                </Row>
+                <Row Gutter="16">
+                    <AntDesign.Col Span="12">
+                        <FormItem Label="¿Se conoce al responsable?" Class="modal-damnificado-form-item">
+                            <Switch @bind-Checked="@Animal.SeConoceResponsable" />
+                        </FormItem>
+                    </AntDesign.Col>
+                    @if (Animal.SeConoceResponsable)
+                    {
+                        <AntDesign.Col Span="12">
+                            <Row Gutter="8">
+                                <FormItem Label="Nombre" Class="modal-damnificado-form-item">
+                                    <Input @bind-Value="Animal.NombreResponsable"></Input>
+                                </FormItem>
+                            </Row>
+                            <Row Gutter="8">
+                                <FormItem Label="Apellido" Class="modal-damnificado-form-item">
+                                    <Input @bind-Value="Animal.ApellidoResponsable"></Input>
+                                </FormItem>
+                            </Row>
+                            <Row Gutter="8">
+                                <FormItem Label="DNI" Class="modal-damnificado-form-item">
+                                    <Input @bind-Value="Animal.DniResponsable"></Input>
+                                </FormItem>
+                            </Row>
+                        </AntDesign.Col>
+                    }
+                </Row>
+                <Row Gutter="16">
+                    <AntDesign.Col Span="24">
+                        <FormItem Label="Estado" Class="modal-damnificado-form-item">
+                            <EnumSelect TEnum="EstadoAnimal" @bind-Value="Animal.Estado" AllowClear />
+                        </FormItem>
+                    </AntDesign.Col>
+                </Row>
+                <Row Gutter="16">
+                    <AntDesign.Col Span="12">
+                        <FormItem Label="Nombre" Class="modal-damnificado-form-item">
+                            <Input @bind-Value="Animal.Nombre" />
+                        </FormItem>
+                    </AntDesign.Col>
+                    <AntDesign.Col Span="12">
+                        <FormItem Label="Observaciones" Class="modal-damnificado-form-item">
+                            <TextArea @bind-Value="@Animal.Observaciones" Rows="3" />
+                        </FormItem>
+                    </AntDesign.Col>
+                </Row>
+            </Form>
+        </div>
+    </Modal>
 </div>
 
 @code {
@@ -494,8 +600,9 @@
 
     private DamnificadoViewModel Damnificado = new DamnificadoViewModel();
     private VehiculoDamnificadoViewModel Vehiculo = new VehiculoDamnificadoViewModel();
-    private bool modalDamnificados = false, modalVehiculo = false;
-    private bool editandoDamnificado = false, editandoVehiculo = false;
+    private AnimalViewModel Animal = new AnimalViewModel();
+    private bool modalDamnificados = false, modalVehiculo = false, modalAnimal = false;
+    private bool editandoDamnificado = false, editandoVehiculo = false, editandoAnimal = false;
 
     private string ObtenerPasajerosTexto(VehiculoDamnificadoViewModel vehiculo)
     {
@@ -505,7 +612,7 @@
             return "Sin pasajeros";
     }
 
-    private async Task EliminarDamnificado(DamnificadoViewModel damnificado)
+    private void EliminarDamnificado(DamnificadoViewModel damnificado)
     {
         var damnificadoAEliminar = Model.Damnificados.SingleOrDefault(d => d.Numero == damnificado.Numero);
 
@@ -541,7 +648,7 @@
         MessageService.Success("Damnificado eliminado correctamente");
     }
 
-    private async Task EliminarVehiculo(VehiculoDamnificadoViewModel vehiculo)
+    private void EliminarVehiculo(VehiculoDamnificadoViewModel vehiculo)
     {
         var vehiculoAEliminar = Model.VehiculosDamnificados.SingleOrDefault(v => v.Numero == vehiculo.Numero);
 
@@ -697,5 +804,57 @@
             Damnificado.FuerzaInterviniente = fuerza;
         else
             Damnificado.FuerzaInterviniente = null;
+    }
+
+    private void EditarAnimal(AnimalViewModel a)
+    {
+        Animal = a.Clonar();
+        editandoAnimal = true;
+        modalAnimal = true;
+    }
+
+    private void AgregarEditarAnimal()
+    {
+        try
+        {
+            if (!editandoAnimal)
+            {
+                Animal.NumeroOrden = Model.AnimalesDamnificados.Count + 1;
+                Model.AnimalesDamnificados.Add(Animal);
+                MessageService.Success("Animal agregado correctamente");
+            }
+            else
+            {
+                var animalAEditar = Model.AnimalesDamnificados.SingleOrDefault(d => d.NumeroOrden == Animal.NumeroOrden);
+
+                if (animalAEditar == null)
+                {
+                    MessageService.Error("Animal no encontrado");
+                    return;
+                }
+
+                animalAEditar.ActualizarDesde(Animal);
+                MessageService.Success("Animal actualizado correctamente");
+                editandoAnimal = false;
+            }
+
+            modalAnimal = false;
+            Animal = new AnimalViewModel();
+        }
+        catch (Exception e)
+        {
+            StateHasChanged();
+            if (e.InnerException != null)
+                MessageService.Error(e.InnerException.Message, 5);
+            else
+                MessageService.Error(e.Message, 5);
+        }
+    }
+
+    private void EliminarAnimal(AnimalViewModel a)
+    {
+        Model.AnimalesDamnificados.Remove(a);
+        for (int i = 0; i < Model.AnimalesDamnificados.Count; i++) Model.AnimalesDamnificados[i].NumeroOrden = i + 1;
+        StateHasChanged();
     }
 }

@@ -52,6 +52,11 @@ namespace FireForce.Client.Data.Mappers
                 TelefonoLaboral = bombero.Contacto?.TelefonoLaboral,
                 Email = bombero.Contacto?.Email,
 
+                FechaAscenso = bombero.Ascensos?
+                .OrderByDescending(a => a.FechaAscenso)
+                .Select(a => a.FechaAscenso)
+                .FirstOrDefault(),
+
                 // Mapeo de Imagen (si existe)
                 UrlImagen = bombero.Imagen != null ? $"/api/imagenes/{bombero.Imagen.ImagenId}" : null,
 

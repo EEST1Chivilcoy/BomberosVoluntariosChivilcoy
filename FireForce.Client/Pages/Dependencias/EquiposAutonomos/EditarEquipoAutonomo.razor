@@ -207,7 +207,7 @@
     <Row Class="modal-crear-equipo-row" Gutter="16">
         <AntDesign.Col Span="12">
             <FormItem Label="📅 Fecha de vencimiento de la prueba hidráulica">
-                <DatePicker @bind-Value="@viewModel.FechaVencimientoPruebaHidraulica"
+                <DatePicker Mask="dd/MM/yyyy" @bind-Value="@viewModel.FechaVencimientoPruebaHidraulica"
                             Size="InputSize.Large"
                             Placeholder=@("Seleccione la fecha de vencimiento") />
             </FormItem>
@@ -215,7 +215,7 @@
 
         <AntDesign.Col Span="12">
             <FormItem Label="🧪 Fecha de la última prueba hidráulica">
-                <DatePicker @bind-Value="@viewModel.UltimaFechaPruebaHidraulica"
+                <DatePicker Mask="dd/MM/yyyy" @bind-Value="@viewModel.UltimaFechaPruebaHidraulica"
                             Size="InputSize.Large"
                             Placeholder=@("Seleccione la fecha anterior de prueba") />
             </FormItem>

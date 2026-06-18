@@ -480,6 +480,7 @@
                             @if (context.Estado == TipoEstadoSocio.Activo)
                             {
                                 <Popconfirm Title="¿Está seguro de dar de baja?"
+                                            OnConfirm="() => CambiarEstadoSocio(context.Id, TipoEstadoSocio.Inactivo)"
                                             OkText="Sí" CancelText="No">
                                     <Button Danger>
                                         <Icon Type="down" /> Baja
@@ -489,6 +490,7 @@
                             else if (context.Estado == TipoEstadoSocio.Inactivo)
                             {
                                 <Popconfirm Title="¿Está seguro de dar de alta?"
+                                            OnConfirm="() => CambiarEstadoSocio(context.Id, TipoEstadoSocio.Activo)"
                                             OkText="Sí" CancelText="No">
                                     <Button Color="Color.Green2">
                                         <Icon Type="up" /> Alta
@@ -825,4 +827,10 @@
             StateHasChanged();
         }
     }
+        private async Task CambiarEstadoSocio(int socioId, TipoEstadoSocio estado)
+    {
+        await SocioService.CambiarEstado(socioId, estado);
+        await LoadSocios();
+    }
+
 }
