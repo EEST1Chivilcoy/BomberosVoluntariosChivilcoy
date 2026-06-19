@@ -20,9 +20,14 @@
                     <i class="fa-solid fa-house compact-icon"></i> <span class="compact-text">Home</span>
                 </MenuItem>
 
-                <MenuItem Key="legajo" OnClick="@(() => navigationManager.NavigateTo("/fire-force/Bomberos/Legajo"))" class="compact-item">
-                    <i class="fa-solid fa-id-card compact-icon"></i> <span class="compact-text">Legajo</span>
-                </MenuItem>
+                <SubMenu Key="legajo" TitleTemplate="@legajoCompactTitle" class="compact-submenu">
+                    <MenuItem Key="legajo-main" OnClick="@(() => navigationManager.NavigateTo("/fire-force/Bomberos/Legajo"))" class="compact-item">
+                        <span class="compact-text">Legajo</span>
+                    </MenuItem>
+                    <MenuItem Key="legajo-reportes" OnClick="@(() => navigationManager.NavigateTo("/fire-force/Bomberos/Reportes"))" class="compact-item">
+                        <span class="compact-text">Reportes</span>
+                    </MenuItem>
+                </SubMenu>
 
                 <MenuItem Key="salidas" OnClick="@(() => navigationManager.NavigateTo("/fire-force/salidas"))" class="compact-item">
                     <i class="fa-solid fa-sign-out-alt compact-icon"></i> <span class="compact-text">Salidas</span>
@@ -108,10 +113,14 @@
 
             <Menu Mode="MenuMode.Inline" InlineCollapsed="collapsedMenu" class="main-menu">
 
-                <MenuItem Key="legajo" OnClick="@(() => navigationManager.NavigateTo("/fire-force/Bomberos/Legajo"))">
-                    <IconTemplate><i class="fa-solid fa-user menu-icon"></i></IconTemplate>
-                    <ChildContent><a class="menu-link" href="/fire-force/Bomberos/Legajo">Legajo</a></ChildContent>
-                </MenuItem>
+                <SubMenu Key="legajo" TitleTemplate="@legajoTitle">
+                    <MenuItem Key="legajo-main">
+                        <ChildContent><a class="menu-link" href="/fire-force/Bomberos/Legajo">Legajo</a></ChildContent>
+                    </MenuItem>
+                    <MenuItem Key="legajo-reportes">
+                        <ChildContent><a class="menu-link" href="/fire-force/Bomberos/Reportes">Reportes</a></ChildContent>
+                    </MenuItem>
+                </SubMenu>
 
                 <MenuItem Key="licencias" OnClick="@(() => navigationManager.NavigateTo("/fire-force/licencias"))">
                     <IconTemplate><i class="fa-solid fa-file-signature menu-icon"></i></IconTemplate>
@@ -237,6 +246,7 @@
         if (uri.Contains("/personal")) return "PERSONAL";
 
         if (uri.Contains("/bomberos/legajo")) return "LEGAJO";
+        if (uri.Contains("/bomberos/reportes")) return "REPORTES";
         if (uri.Contains("/bomberos/sancionados")) return "SANCIONES";
         if (uri.Contains("/bomberos/ascenso")) return "ASCENSOS";
 
@@ -272,6 +282,8 @@
         if (uri.Contains("/personal")) return new[] { "personal" };
 
         if (uri.Contains("/licencias")) return new[] { "licencias" };
+        if (uri.Contains("/bomberos/legajo")) return new[] { "legajo", "legajo-main" };
+        if (uri.Contains("/bomberos/reportes")) return new[] { "legajo", "legajo-reportes" };
         if (uri.Contains("/unidades")) return new[] { "moviles" };
         if (uri.Contains("/salidas")) return new[] { "salidas" };
         if (uri.Contains("/incidentes-vehiculos")) return new[] { "firmas" };
@@ -291,6 +303,16 @@
     RenderFragment personalCompactTitle =
         @<span class="compact-submenu-title">
             <i class="fa-solid fa-users compact-icon"></i> <span class="compact-text">Personal</span>
+        </span>;
+
+    RenderFragment legajoTitle =
+        @<span class="submenu-title">
+            <span class="submenu-title-text"><i class="fa-solid fa-id-card"></i> Legajo</span>
+        </span>;
+
+    RenderFragment legajoCompactTitle =
+        @<span class="compact-submenu-title">
+            <i class="fa-solid fa-id-card compact-icon"></i> <span class="compact-text">Legajo</span>
         </span>;
 
     RenderFragment reportesTitle =
