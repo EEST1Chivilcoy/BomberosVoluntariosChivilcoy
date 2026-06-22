@@ -844,6 +844,13 @@
                                     <i class="fa-solid fa-truck" aria-hidden="true"></i>
                                     <span>Móviles</span>
                                 </Button>
+                               <Button Type="ButtonType.Default"
+                                        Class="action-button"
+                                        OnClick="NavigateToReportePuntaje"
+                                        AriaLabel="Ver Reportes de Puntajes">
+                                    <i class="fa-solid fa-file-circle-check" aria-hidden="true"></i>
+                                    <span>Puntaje Reporte</span>
+                                </Button>
                             </div>
                         </Card>
                     </AntDesign.Col>
@@ -1050,6 +1057,7 @@
     private void NavigateToHistorialBomberos() => navigationManager.NavigateTo("/fire-force/Reportes/HistorialBomberos");
     private void NavigateToChoferes() => navigationManager.NavigateTo("/fire-force/Reportes/Reportes_Choferes");
     private void NavigateToHistorialMoviles() => navigationManager.NavigateTo("/fire-force/Reportes/HistorialMoviles");
+    private void NavigateToReportePuntaje() => navigationManager.NavigateTo("/fire-force/Bomberos/Reportes");
 
     // Utilidades
     private void NavigateToComunicacion() => navigationManager.NavigateTo("/fire-force/Dependencias/Comunicacion");

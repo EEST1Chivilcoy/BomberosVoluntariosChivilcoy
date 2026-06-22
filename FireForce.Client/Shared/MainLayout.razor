@@ -24,9 +24,6 @@
                     <MenuItem Key="legajo-main" OnClick="@(() => navigationManager.NavigateTo("/fire-force/Bomberos/Legajo"))" class="compact-item">
                         <span class="compact-text">Legajo</span>
                     </MenuItem>
-                    <MenuItem Key="legajo-reportes" OnClick="@(() => navigationManager.NavigateTo("/fire-force/Bomberos/Reportes"))" class="compact-item">
-                        <span class="compact-text">Reportes</span>
-                    </MenuItem>
                 </SubMenu>
 
                 <MenuItem Key="salidas" OnClick="@(() => navigationManager.NavigateTo("/fire-force/salidas"))" class="compact-item">
@@ -78,6 +75,9 @@
                     <MenuItem Key="reportes-moviles" OnClick="@(() => navigationManager.NavigateTo("/fire-force/Reportes/HistorialMoviles"))" class="compact-item">
                         <span class="compact-text">Móviles</span>
                     </MenuItem>
+                    <MenuItem Key="legajo-reportes" OnClick="@(() => navigationManager.NavigateTo("/fire-force/Bomberos/Reportes"))" class="compact-item">
+                        <span class="compact-text">Puntaje Reporte</span>
+                    </MenuItem>
                 </SubMenu>
 
                 <SubMenu Key="herramientas" TitleTemplate="@herramientasCompactTitle" class="compact-submenu">
@@ -116,9 +116,6 @@
                 <SubMenu Key="legajo" TitleTemplate="@legajoTitle">
                     <MenuItem Key="legajo-main">
                         <ChildContent><a class="menu-link" href="/fire-force/Bomberos/Legajo">Legajo</a></ChildContent>
-                    </MenuItem>
-                    <MenuItem Key="legajo-reportes">
-                        <ChildContent><a class="menu-link" href="/fire-force/Bomberos/Reportes">Reportes</a></ChildContent>
                     </MenuItem>
                 </SubMenu>
 
@@ -177,6 +174,9 @@
                     <MenuItem Key="reportes-moviles">
                         <IconTemplate><i class="fa-solid fa-truck-droplet submenu-icon"></i></IconTemplate>
                         <ChildContent><a class="menu-link" href="/fire-force/Reportes/HistorialMoviles">Móviles</a></ChildContent>
+                    </MenuItem>
+                    <MenuItem Key="legajo-reportes">
+                        <ChildContent><a class="menu-link" href="/fire-force/Bomberos/Reportes">Puntaje Reporte</a></ChildContent>
                     </MenuItem>
                 </SubMenu>
 
@@ -246,7 +246,6 @@
         if (uri.Contains("/personal")) return "PERSONAL";
 
         if (uri.Contains("/bomberos/legajo")) return "LEGAJO";
-        if (uri.Contains("/bomberos/reportes")) return "REPORTES";
         if (uri.Contains("/bomberos/sancionados")) return "SANCIONES";
         if (uri.Contains("/bomberos/ascenso")) return "ASCENSOS";
 
@@ -259,6 +258,7 @@
         if (uri.Contains("/fire-force/partes-vehiculos")) return "PARTES VEHÍCULOS";
         if (uri.Contains("/reportes/reportes_choferes")) return "CHOFERES";
         if (uri.Contains("/reportes/historialmoviles")) return "HISTORIAL MÓVILES";
+        if (uri.Contains("/bomberos/reportes")) return "PUNTAJE REPORTE";
 
         return "INICIO";
     }
@@ -282,8 +282,7 @@
         if (uri.Contains("/personal")) return new[] { "personal" };
 
         if (uri.Contains("/licencias")) return new[] { "licencias" };
-        if (uri.Contains("/bomberos/legajo")) return new[] { "legajo", "legajo-main" };
-        if (uri.Contains("/bomberos/reportes")) return new[] { "legajo", "legajo-reportes" };
+        if (uri.Contains("/bomberos/legajo")) return new[] { "legajo" };
         if (uri.Contains("/unidades")) return new[] { "moviles" };
         if (uri.Contains("/salidas")) return new[] { "salidas" };
         if (uri.Contains("/incidentes-vehiculos")) return new[] { "firmas" };
@@ -291,6 +290,7 @@
 
         if (uri.Contains("/reportes/reportes_choferes")) return new[] { "reportes-choferes" };
         if (uri.Contains("/reportes/historialmoviles")) return new[] { "reportes-moviles" };
+
 
         return Array.Empty<string>();
     }
