@@ -558,8 +558,8 @@ namespace FireForce.Client.Data.Mappers
                     var secdvm = (ServicioEspecialColocaciónDrizaViewModels)viewModel;
                     secdvm.Tipo = ServicioEspecialTipo.ColocacionDriza;
                     //secdvm.TipoLugar = secd.TipoLugar;
-                    secdvm.NombreEstablecimiento = secd.NombreEstablecimiento;
-                    secdvm.Detalles = secd.Detalles;
+                    //secdvm.NombreEstablecimiento = secd.NombreEstablecimiento;
+                    //secdvm.Detalles = secd.Detalles;
                     break;
                 case ServicioEspecialSuministroAgua sesa:
                     var sesavm = (ServicioEspecialSuministroAguaViewModels)viewModel;
@@ -580,10 +580,9 @@ namespace FireForce.Client.Data.Mappers
                 case ServicioEspecialColaboraciónFuerzasSeguridad secfs:
                     var secfsvm = (ServicioEspecialColaboraciónFuerzasSeguridadViewModels)viewModel;
                     secfsvm.Tipo = ServicioEspecialTipo.ColaboracionFuerzasSeguridad;
-                    secfsvm.DetallesColaboFuerzasSeguridad = secfs.DetallesColaboFuerzasSeguridad;
+                    //secfsvm.DetallesColaboFuerzasSeguridad = secfs.DetallesColaboFuerzasSeguridad;
                     break;
             }
-
             return viewModel;
         }
 

@@ -18,7 +18,7 @@ namespace FireForce.Client.Data.ViewModels.Servicios
         /// <summary>
         /// Nombre del establecimiento donde se coloco la driza.
         /// </summary>
-        [Required, StringLength(255)]
+        [StringLength(255)]
         public string? NombreEstablecimiento { get; set; }
 
         /// <summary>

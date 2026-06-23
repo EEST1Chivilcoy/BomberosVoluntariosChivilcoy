@@ -1,7 +1,10 @@
-﻿namespace FireForce.Client.Data.ViewModels.Servicios
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace FireForce.Client.Data.ViewModels.Servicios
 {
     public class ServicioEspecialFalsaAlarmaViewModel : ServicioEspecialViewModel
     {
-        /// Dejo incompleto, porque no se especificaron propiedades adicionales para esta salida.
+        [StringLength(255)]
+        public string Detalles { get; set; }
     }
 }
