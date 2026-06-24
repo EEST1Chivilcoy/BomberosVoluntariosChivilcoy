@@ -2,16 +2,19 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS dev
 WORKDIR /app
 
-# Copiar solo archivos de proyecto y solución para cachear dependencias
-COPY Vista/*.csproj ./Vista/
-COPY BlazorApp1.sln ./
-RUN dotnet restore ./Vista/Vista.csproj
+# Copiar solo la solución y los .csproj para cachear el restore de dependencias
+COPY FireForce.sln ./
+COPY FireForce.Core/*.csproj ./FireForce.Core/
+COPY FireForce.Client/*.csproj ./FireForce.Client/
+COPY FireForce.Data/*.csproj ./FireForce.Data/
+COPY FireForce.Shared/*.csproj ./FireForce.Shared/
+RUN dotnet restore ./FireForce.Core/FireForce.Core.csproj
 
 # Copiar el resto del código
 COPY . .
 
-# Ir al directorio del proyecto
-WORKDIR /app/Vista
+# Ir al directorio del proyecto host (startup project)
+WORKDIR /app/FireForce.Core
 
 # Exponer puerto para Blazor Server
 EXPOSE 5000
