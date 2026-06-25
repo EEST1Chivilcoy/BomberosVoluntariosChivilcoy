@@ -88,9 +88,14 @@ namespace FireForce.Client.Data.ViewModels.Personal
         [StringLength(255)]
         public string? NombresBrigada { get; set; }
 
+        /// <summary>
+        /// Es para el modulo de orden.
+        /// </summary>
         public int? OrdenPersonalizado { get; set; }
 
-
+        /// <summary>
+        /// Inicia en 0  luego el Jefe va a cambiarlo segun lo que elija.
+        /// </summary>
         public int Puntaje { get; set; } = 0;
 
     }

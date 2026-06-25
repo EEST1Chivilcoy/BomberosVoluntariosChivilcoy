@@ -355,7 +355,11 @@
                     Puntaje del jefe
                 </h1>
                 <div class="actions-row">
-                    <Button Class="modern-button" OnClick="@(async () => await GuardarEnExcel())" Icon="file-excel">Exportar en Excel</Button>
+                    <Button Class="modern-button"
+                            OnClick="@(async () => await GuardarPuntajes())"
+                            Icon="save">
+                        Guardar Puntajes
+                    </Button>
                 </div>
             </div>
 
@@ -417,8 +421,6 @@
 @code {
 
 
-    private Brigada[]? brigadas;
-
     BomberosDbContext Context;
 
     private TableFilter<EscalafonJerarquico>[] EscalafonJerarquicoFilter;
@@ -427,31 +429,37 @@
     IEnumerable<Bombero> selectedRows;
     ITable table;
 
-    static DateTime hasta = DateTime.Now;
-    static DateTime desde = hasta.AddMonths(-1);
-
     List<BomberoViweModel>? BomberosVM = new();
 
     int _pageIndex = 1;
     int _pageSize = 6;
     int _total = 0;
 
-    //Importar a Excel
-    private async Task GuardarEnExcel()
-    {
-        CrearExcel crear = new CrearExcel();
-        var datos = BomberosVM.Select(b => new
-        {
-                                               // tambien chequear esto
 
-            b.NumeroLegajo.Value,
-            b.Nombre,
-            b.Apellido,
-            b.Grado
-        });
-        string ExcNombre = "DatosBomberos.xlsx";
-        byte[] fileBytes = crear.ExportarEnExcel(datos);
-        await JSRuntime.InvokeVoidAsync("guardarExcel", ExcNombre, Convert.ToBase64String(fileBytes), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    //Guarda puntajes
+
+    private async Task GuardarPuntajes()
+    {
+                                            //Creo que hay una forma de optimizarlo. Despues de la revisión nos fijamos en esto.
+
+        foreach (var vm in BomberosVM)   
+        {
+            var bombero = await Context.Bomberos
+                .FirstOrDefaultAsync(b => b.NumeroLegajo == vm.NumeroLegajo);
+
+            if (bombero != null)
+            {
+                bombero.Puntaje = vm.Puntaje;
+            }
+        }
+
+        await Context.SaveChangesAsync();
+
+        await JSRuntime.InvokeVoidAsync
+        (
+            "alert",
+            "Puntajes guardados correctamente"
+        );
     }
 
     private async Task cargarbomberosVM()
@@ -464,11 +472,11 @@
             {
 
                                 // revisar esto tambien
-
-                NumeroLegajo = a.NumeroLegajo,
                 Nombre = a.Nombre,
                 Apellido = a.Apellido,
-                Grado = a.Grado
+                NumeroLegajo = a.NumeroLegajo,
+                Grado = a.Grado, 
+                Puntaje = a.Puntaje
             };
             BomberosVM?.Add(Bm);
         }
