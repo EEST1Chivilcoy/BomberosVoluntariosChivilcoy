@@ -404,6 +404,28 @@
             font-size: 1.5rem !important;
         }
     }
+
+    .personal-abm .modern-button {
+        height: 40px !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        position: relative !important;
+        overflow: hidden !important;
+        background: linear-gradient(135deg, var(--abm-success-color) 0%, var(--abm-success-dark) 100%) !important;
+        border: none !important;
+        color: white !important;
+        box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3) !important;
+        padding: 0 20px !important;
+    }
+
+    .personal-abm .modern-button:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4) !important;
+    }
 </style>
 
 <div class="personal-abm">
@@ -430,7 +452,9 @@
                                     @bind-Value="@searchString"
                         OnSearch="()=>searchB(searchString)"
                                     BindOnInput />
-                            <Button Type="ButtonType.Default">Exportar Excel</Button>
+                        </div>
+                        <div style="display:flex;justify-content:flex-end;align-items:center;">
+                            <Button Class="modern-button" Icon="file-excel" Style="margin-right:0;">Exportar Excel</Button>
                         </div>
                     </div>
                 </div>
