@@ -640,7 +640,7 @@
                 string finalRoute;
                 if (rutaTemplate.Contains("{0}"))
                 {
-                    finalRoute = $"{rutaTemplate}/{(int)salida.TipoEmergencia}/{salida.AnioNumeroParte}/{salida.NumeroParte}";
+                    finalRoute = $"{rutaTemplate.Replace("{0}", "")}{(int)salida.TipoEmergencia}/{salida.AnioNumeroParte}/{salida.NumeroParte}";
                 }
                 else
                 {
