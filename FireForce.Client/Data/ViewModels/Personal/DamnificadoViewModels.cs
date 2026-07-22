@@ -15,7 +15,7 @@ namespace FireForce.Client.Data.ViewModels.Personal
         [StringLength(255)]
         public string? Apellido { get; set; }
 
-        public string? Dni { get; set; }
+        public int? Dni { get; set; }
 
         public TipoSexo? Sexo { get; set; }
 

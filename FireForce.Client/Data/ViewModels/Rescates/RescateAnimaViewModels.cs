@@ -1,4 +1,5 @@
 ﻿using FireForce.Shared.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace FireForce.Client.Data.ViewModels.Rescates
 {
@@ -7,6 +8,7 @@ namespace FireForce.Client.Data.ViewModels.Rescates
         /// <summary>
         /// Tipo de lugar del rescate animal.
         /// </summary>
+        [Required]
         public TipoLugarRescateAnimal? TipoRescateAnimal { get; set; }
     }
 }

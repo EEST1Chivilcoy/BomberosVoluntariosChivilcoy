@@ -160,6 +160,7 @@ namespace FireForce.Client.Data.ViewModels
         /// Tipo de zona donde ocurrió el incidente.
         /// Puede ser Urbana, Rural.
         /// </summary>
+        [Required]
         public TipoZona? TipoZona { get; set; }
 
         // --- Sección de Datos del Solicitante ---
@@ -228,7 +229,7 @@ namespace FireForce.Client.Data.ViewModels
         public DateTime? FechaVencimineto { get; set; }
 
         // --- Sección de Recursos Moviles y Humanos ---
-
+        public bool ParticiparonVehiculos { get; set; } = false;
         public List<Movil_Salida> Moviles { get; set; } = new();
         public List<BomberoSalida> CuerpoParticipante { get; set; } = new();
 

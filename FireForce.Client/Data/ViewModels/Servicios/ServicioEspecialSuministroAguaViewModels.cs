@@ -1,7 +1,12 @@
-﻿namespace FireForce.Client.Data.ViewModels.Servicios
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace FireForce.Client.Data.ViewModels.Servicios
 {
     public class ServicioEspecialSuministroAguaViewModels : ServicioEspecialViewModel
     {
-        // Temporalmente no tiene campos adicionales. Se prevee que en el futuro pueda requerir campos específicos relacionados con el suministro de agua.
+        [StringLength(255)]
+        public string? NombreEstablecimientoSuministroAgua { get; set; }
+        [StringLength(255)]
+        public string? DetallesSuministroAgua { get; set; }
     }
 }

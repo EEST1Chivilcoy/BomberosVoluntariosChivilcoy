@@ -8,7 +8,6 @@ namespace FireForce.Client.Data.ViewModels.Incendios
         /// <summary>
         /// Tipo de establecimiento público donde ocurrió el incendio.
         /// </summary>
-        [Required]
         public TipoIncendioEstablecimientoPublico? TipoLugar { get; set; }
     }
 }

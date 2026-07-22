@@ -38,6 +38,7 @@ public class IncendioViewModels : SalidasViewModels
     /// <summary>
     /// Tipo de superficie afectada por el incendio. (Kilómetro, Hectáreas, Metros)
     /// </summary>
+    [Required]
     public TipoSuperficie? TipoSuperficieAfectada { get; set; }
 
     /// <summary>
@@ -48,6 +49,7 @@ public class IncendioViewModels : SalidasViewModels
     /// <summary>
     /// Detalle de la superficie afectada por el incendio.
     /// </summary>
+    [Required]
     public string? DetalleSuperficieAfectadaIncendio { get; set; }
 
     // --- Materiales y estructuras ---

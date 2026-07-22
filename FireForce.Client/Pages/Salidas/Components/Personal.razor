@@ -287,7 +287,8 @@
             MovilesParaAsignar = Model.Moviles.Select(ms => ms.Movil).ToList();
         }
 
-        if (Model.CuerpoParticipante != null)
+		// Si el modelo ya tiene participantes, los carga en la lista de salida y los elimina de la lista de disponibles
+        if (Model.CuerpoParticipante != null && bomberosSalida.Count == 0)
         {
             var bomberosToRemove = new List<BomberoViweModel>();
 
@@ -307,14 +308,13 @@
                         BomberoId = bombero.Id,
                         MovilAsignado = participante.MovilAsignado
                     };
-
                     bomberosToRemove.Add(bombero);
                 }
             }
 
             foreach (var bombero in bomberosToRemove)
             {
-                bomberosSalirTodos.Remove(bombero);
+				await AgregarCuerpoParticipante(bombero.NumeroLegajo);
             }
         }
         else

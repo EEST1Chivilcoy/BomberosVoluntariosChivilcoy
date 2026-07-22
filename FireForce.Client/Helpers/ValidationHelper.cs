@@ -13,6 +13,11 @@ namespace FireForce.Client.Helpers
             if (!esValido)
             {
                 string errores = string.Join(Environment.NewLine, validationResults.Select(r => r.ErrorMessage));
+
+                errores = errores.Replace("The ", "");
+                errores = errores.Replace(" field", "");
+                errores = errores.Replace("is required", "es obligatorio");
+
                 throw new ValidationException($"Existen errores de validación: {Environment.NewLine}{errores}");
             }
         }
