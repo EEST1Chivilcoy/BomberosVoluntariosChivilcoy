@@ -49,6 +49,10 @@
                     <i class="fa-solid fa-car compact-icon"></i> <span class="compact-text">Unidades</span>
                 </MenuItem>
 
+                <MenuItem Key="incidentes" OnClick="@(() => navigationManager.NavigateTo("/fire-force/incidentes"))" class="compact-item">
+                    <i class="fa-solid fa-clipboard-list compact-icon"></i> <span class="compact-text">Incidentes</span>
+                </MenuItem>
+
                 <SubMenu Key="etica" TitleTemplate="@eticaCompactTitle" class="compact-submenu">
                     <MenuItem Key="sanciones" OnClick="@(() => navigationManager.NavigateTo("/fire-force/bomberos/sancionados"))" class="compact-item">
                         <span class="compact-text">Sanciones</span>
@@ -144,6 +148,11 @@
                     <ChildContent><a class="menu-link" href="/fire-force/salidas">Salidas</a></ChildContent>
                 </MenuItem>
 
+                <MenuItem Key="incidentes" OnClick="@(() => navigationManager.NavigateTo("/fire-force/incidentes"))">
+                    <IconTemplate><i class="fa-solid fa-clipboard-list menu-icon"></i></IconTemplate>
+                    <ChildContent><a class="menu-link" href="/fire-force/incidentes">Incidentes</a></ChildContent>
+                </MenuItem>
+
                 <!-- reportes, herramientas, ética sin cambios -->
 
                 <SubMenu Key="reportes" TitleTemplate="@reportesTitle">
@@ -234,6 +243,7 @@
         if (uri.Contains("/licencias")) return "LICENCIAS";
         if (uri.Contains("/unidades")) return "MÓVILES";
         if (uri.Contains("/salidas")) return "SALIDAS";
+        if (uri.Contains("/incidentes")) return "INCIDENTES";
 
         if (uri.Contains("/reportes/historialbomberos")) return "HISTORIAL BOMBEROS";
         if (uri.Contains("/fire-force/partes-vehiculos")) return "PARTES VEHÍCULOS";
@@ -264,6 +274,7 @@
         if (uri.Contains("/licencias")) return new[] { "licencias" };
         if (uri.Contains("/unidades")) return new[] { "moviles" };
         if (uri.Contains("/salidas")) return new[] { "salidas" };
+        if (uri.Contains("/incidentes")) return new[] { "incidentes" };
 
 
         if (uri.Contains("/reportes/reportes_choferes")) return new[] { "reportes-choferes" };

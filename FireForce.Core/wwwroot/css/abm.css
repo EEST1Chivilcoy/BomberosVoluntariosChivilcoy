@@ -1,0 +1,376 @@
+/* ============================================================================
+   abm.css — Estilos compartidos de las pantallas ABM.
+
+   Por qué existe
+   --------------
+   Hasta ahora cada pantalla ABM repetía ~400 líneas de CSS en un bloque <style>
+   dentro del propio .razor. Como esos bloques son GLOBALES (Blazor no los aísla),
+   todas las páginas terminaban pisando los mismos selectores de Ant Design, y eso
+   se compensaba a fuerza de !important.
+
+   Acá está esa hoja una sola vez. Todo cuelga de `.abm-page`, así que los ajustes
+   sobre Ant Design solo aplican dentro de una pantalla ABM y no se filtran al
+   resto de la aplicación. Por eso casi no hace falta !important.
+
+   Cómo se usa
+   -----------
+   1. Envolver la página en un contenedor con la clase `abm-page`.
+   2. Usar las clases de este archivo; no agregar un bloque <style> a la página.
+   3. Si una pantalla necesita algo propio, agregarlo acá con su modificador
+      (por ejemplo `.abm-page--incidentes`) en vez de volver al <style> inline.
+
+   Módulo de referencia: Pages/Incidentes/.
+   ============================================================================ */
+
+:root {
+    --abm-primary-color: #A63333;
+    --abm-primary-dark: #732D2D;
+    --abm-success-color: #4CAF50;
+    --abm-success-dark: #438E46;
+    --abm-warning-color: #F57F17;
+    --abm-warning-light: #FFF8E1;
+    --abm-error-color: #C62828;
+    --abm-error-light: #FFEBEE;
+    --abm-approved-color: #2E7D32;
+    --abm-approved-light: #E6F7E9;
+    --abm-info-color: #1565C0;
+    --abm-info-light: #E3F2FD;
+    --abm-neutral-color: #616161;
+    --abm-neutral-light: #F5F5F5;
+    --abm-gold-color: #FFD700;
+    --abm-flame-color: #FFD54F;
+    --abm-radius: 16px;
+    --abm-radius-sm: 8px;
+    --abm-shadow: 0 8px 32px rgba(166, 51, 51, 0.1), 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+/* ---------------------------------------------------------------- Estructura */
+
+.abm-page .abm-container {
+    padding: 12px;
+    min-height: 100vh;
+}
+
+.abm-page .abm-main-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: var(--abm-radius);
+    box-shadow: var(--abm-shadow);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    overflow: hidden;
+}
+
+/* ------------------------------------------------------------------ Cabecera */
+
+.abm-page .abm-header-section {
+    background: linear-gradient(135deg, var(--abm-primary-color) 0%, var(--abm-primary-dark) 100%);
+    color: #fff;
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+}
+
+.abm-page .abm-header-section .title-container {
+    position: relative;
+    z-index: 2;
+}
+
+.abm-page .abm-header-section .main-title {
+    font-family: 'Poppins', 'Fjalla One', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #fff;
+}
+
+.abm-page .abm-header-section .title-icon {
+    color: var(--abm-flame-color);
+    font-size: 2rem;
+}
+
+.abm-page .abm-header-section .abm-subtitle {
+    margin: 6px 0 0;
+    opacity: 0.85;
+    font-size: 0.95rem;
+    position: relative;
+    z-index: 2;
+}
+
+/* Burbujas de brasa: decoración del encabezado, sin interacción. */
+.abm-page .lava-bubbles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.abm-page .lava-bubble {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.45;
+    background: radial-gradient(circle at 60% 40%, var(--abm-flame-color) 0%, #F9A825 80%, transparent 100%);
+    animation: abm-lava-bubble 8s linear infinite;
+    filter: blur(1.5px);
+    mix-blend-mode: lighten;
+}
+
+.abm-page .lava-bubble.b1 { left: 10%; width: 60px; height: 60px; bottom: -70px; animation-delay: 0s; animation-duration: 7.5s; }
+.abm-page .lava-bubble.b2 { left: 35%; width: 90px; height: 90px; bottom: -100px; animation-delay: 2s; animation-duration: 9s; }
+.abm-page .lava-bubble.b3 { left: 65%; width: 50px; height: 50px; bottom: -60px; animation-delay: 1.5s; animation-duration: 6.5s; }
+.abm-page .lava-bubble.b4 { left: 80%; width: 70px; height: 70px; bottom: -80px; animation-delay: 3.2s; animation-duration: 8.5s; }
+.abm-page .lava-bubble.b5 { left: 55%; width: 40px; height: 40px; bottom: -50px; animation-delay: 5s; animation-duration: 7.2s; }
+
+@keyframes abm-lava-bubble {
+    0% { transform: translateY(0) scale(1); opacity: 0.45; }
+    60% { opacity: 0.7; filter: blur(2.5px); }
+    80% { transform: translateY(-220px) scale(1.15); opacity: 0.6; }
+    100% { transform: translateY(-320px) scale(0.95); opacity: 0; }
+}
+
+/* Respeta la preferencia del sistema de reducir animaciones. */
+@media (prefers-reduced-motion: reduce) {
+    .abm-page .lava-bubble {
+        animation: none;
+        opacity: 0.25;
+    }
+}
+
+/* ------------------------------------------------------------------- Filtros */
+
+.abm-page .abm-filters {
+    padding: 18px 22px;
+    background: #fff;
+    border-bottom: 1px solid #F0F0F0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+}
+
+.abm-page .abm-filters .search-container {
+    flex: 1 1 260px;
+    min-width: 220px;
+}
+
+.abm-page .abm-filters .abm-filter-select {
+    min-width: 190px;
+}
+
+.abm-page .abm-filters .abm-actions-right {
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
+}
+
+/* --------------------------------------------------------------------- Tabla */
+
+.abm-page .abm-table-container {
+    padding: 12px 16px 20px;
+}
+
+.abm-page .ant-table-thead > tr > th {
+    background: var(--abm-neutral-light);
+    color: var(--abm-primary-dark);
+    font-weight: 600;
+}
+
+.abm-page .ant-table-tbody > tr:hover > td {
+    background: rgba(166, 51, 51, 0.04);
+}
+
+.abm-page .abm-row-clickable {
+    cursor: pointer;
+}
+
+/* ------------------------------------------------------------------- Estados */
+
+.abm-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.abm-badge--pendiente { background: var(--abm-neutral-light); color: var(--abm-neutral-color); }
+.abm-badge--proceso   { background: var(--abm-info-light); color: var(--abm-info-color); }
+.abm-badge--aprobado  { background: var(--abm-approved-light); color: var(--abm-approved-color); }
+.abm-badge--rechazado { background: var(--abm-error-light); color: var(--abm-error-color); }
+.abm-badge--alerta    { background: var(--abm-warning-light); color: var(--abm-warning-color); }
+
+/* Firmas otorgadas. */
+.abm-firmas {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 700;
+    color: var(--abm-primary-color);
+}
+
+.abm-firmas .abm-firmas-icon {
+    color: var(--abm-gold-color);
+}
+
+.abm-firmas--vacio {
+    color: #BDBDBD;
+    font-weight: 500;
+}
+
+/* ------------------------------------------------------------------- Detalle */
+
+.abm-detalle-seccion {
+    margin-bottom: 22px;
+}
+
+.abm-detalle-titulo {
+    font-weight: 700;
+    color: var(--abm-primary-dark);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.abm-detalle-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+}
+
+.abm-detalle-item {
+    background: var(--abm-neutral-light);
+    border-radius: var(--abm-radius-sm);
+    padding: 10px 12px;
+}
+
+.abm-detalle-label {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--abm-neutral-color);
+    margin-bottom: 2px;
+}
+
+.abm-detalle-valor {
+    font-weight: 600;
+    color: #262626;
+    word-break: break-word;
+}
+
+/* ------------------------------------------------------- Tareas (derivación) */
+
+.abm-tarea {
+    border-left: 3px solid var(--abm-primary-color);
+    background: #fff;
+    border-radius: var(--abm-radius-sm);
+    padding: 10px 14px;
+    margin-bottom: 8px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.abm-tarea-cabecera {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.abm-tarea-nombre {
+    font-weight: 600;
+}
+
+.abm-tarea-destino {
+    font-size: 0.85rem;
+    color: var(--abm-neutral-color);
+}
+
+.abm-tarea-descripcion {
+    margin: 6px 0 0;
+    color: #595959;
+    font-size: 0.9rem;
+}
+
+/* Las subtareas se indentan para que la cadena de derivaciones se lea sola. */
+.abm-subtareas {
+    margin-left: 22px;
+    padding-left: 10px;
+    border-left: 1px dashed #D9D9D9;
+    margin-top: 8px;
+}
+
+/* ------------------------------------------------------------------ Bitácora */
+
+.abm-bitacora {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.abm-bitacora-item {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px dashed #F0F0F0;
+}
+
+.abm-bitacora-item:last-child {
+    border-bottom: none;
+}
+
+.abm-bitacora-fecha {
+    color: var(--abm-neutral-color);
+    font-size: 0.8rem;
+    white-space: nowrap;
+    min-width: 120px;
+}
+
+.abm-bitacora-texto {
+    flex: 1;
+}
+
+.abm-bitacora-autor {
+    font-size: 0.8rem;
+    color: var(--abm-neutral-color);
+}
+
+/* --------------------------------------------------------------- Sin datos */
+
+.abm-vacio {
+    text-align: center;
+    color: var(--abm-neutral-color);
+    padding: 18px;
+    font-style: italic;
+}
+
+/* ------------------------------------------------------------- Responsivo */
+
+@media (max-width: 768px) {
+    .abm-page .abm-header-section {
+        padding: 20px 16px;
+    }
+
+    .abm-page .abm-header-section .main-title {
+        font-size: 1.5rem;
+    }
+
+    .abm-page .abm-filters .abm-actions-right {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .abm-page .abm-filters .abm-filter-select,
+    .abm-page .abm-filters .search-container {
+        width: 100%;
+        flex: 1 1 100%;
+    }
+}

@@ -307,6 +307,12 @@
         --card-color-dark: #10239e;
     }
 
+    /* Incidentes - Cyan documentos */
+    .incidentes-card {
+        --card-color: #13c2c2;
+        --card-color-dark: #08979c;
+    }
+
     /* Ética - Magenta valores */
     .etica-card {
         --card-color: #eb2f96;
@@ -753,6 +759,28 @@
                 </Authorized>
             </AuthorizeView>
 
+            <!-- INCIDENTES: Novedades y firmas -->
+            <AuthorizeView Roles="administrador">
+                <Authorized>
+                    <AntDesign.Col Xs="24" Sm="12" Lg="8">
+                        <div @onclick="NavigateToIncidentes"
+                             @onkeypress="@((e) => HandleKeyPress(e, NavigateToIncidentes))"
+                             role="button"
+                             tabindex="0"
+                             aria-label="Ver Incidentes"
+                             style="cursor: pointer; height: 100%;">
+                            <Card Class="dashboard-card incidentes-card" Hoverable>
+                                <i class="fa-solid fa-clipboard-list card-icon" aria-hidden="true"></i>
+                                <Title Level="3" Class="card-title">INCIDENTES</Title>
+                                <Paragraph Class="card-description">
+                                    Novedades y firmas de móviles y dependencias
+                                </Paragraph>
+                            </Card>
+                        </div>
+                    </AntDesign.Col>
+                </Authorized>
+            </AuthorizeView>
+
             <!-- ÉTICA: Disciplina y reconocimientos -->
             <AuthorizeView Roles="administrador">
                 <Authorized>
@@ -1008,6 +1036,7 @@
     private void NavigateToComision() => navigationManager.NavigateTo("/fire-force/personal/comisiondirectiva");
     private void NavigateToLicencias() => navigationManager.NavigateTo("/fire-force/Licencias");
     private void NavigateToUnidades() => navigationManager.NavigateTo("/fire-force/unidades");
+    private void NavigateToIncidentes() => navigationManager.NavigateTo("/fire-force/incidentes");
     private void NavigateToCobradores() => navigationManager.NavigateTo("/fire-force/personal/cobradores");
     private void NavigateToSocios() => navigationManager.NavigateTo("/fire-force/socios");
     private void NavigateToCobranza() => navigationManager.NavigateTo("/fire-force/socios/cobranza"); // Ajustar URL

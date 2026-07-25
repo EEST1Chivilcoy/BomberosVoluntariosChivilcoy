@@ -1,0 +1,241 @@
+﻿@using FireForce.Client.Data.Mappers
+@using FireForce.Client.Data.ViewModels.Incidentes
+@using FireForce.Client.Services
+@using FireForce.Data.Models.Grupos.Dependencias
+@using FireForce.Data.Models.Personas
+@using FireForce.Data.Models.Personas.Personal
+@using FireForce.Data.Models.Vehiculos.Flota
+@using FireForce.Shared.Enums.Discriminadores
+@using FireForce.Shared.Enums.Firmas
+
+@inject IIncidenteService IncidenteService
+@inject IMessageService message
+
+@* Los estilos vienen de wwwroot/css/abm.css. *@
+
+@if (estaCargando)
+{
+    <div style="text-align:center; padding:32px;">
+        <Spin Tip="Cargando datos..." />
+    </div>
+}
+else
+{
+    <Form Model="@modelo"
+          Layout="@FormLayout.Vertical"
+          OnFinish="OnFinish">
+
+        <FormItem Label="¿Sobre qué es el incidente?">
+            <EnumSelect TEnum="TipoDeIncidente"
+                        @bind-Value="@modelo.Tipo"
+                        Style="width:100%" />
+        </FormItem>
+
+        @if (modelo.Tipo == TipoDeIncidente.Movil)
+        {
+            <FormItem Label="Móvil afectado">
+                <Select TItem="VehiculoSalida"
+                        TItemValue="int?"
+                        DataSource="@moviles"
+                        @bind-Value="@modelo.VehiculoId"
+                        LabelName="@nameof(VehiculoSalida.NumeroMovil)"
+                        ValueName="@nameof(VehiculoSalida.VehiculoId)"
+                        Placeholder="Seleccioná el móvil"
+                        EnableSearch
+                        Style="width:100%" />
+            </FormItem>
+
+            @if (moviles.Count == 0)
+            {
+                <Alert Type="@AlertType.Warning"
+                       Message="No hay móviles con encargado asignado."
+                       Description="Un incidente se asigna al encargado del móvil, así que primero hay que asignarle uno desde Unidades."
+                       ShowIcon="true"
+                       Style="margin-bottom:16px;" />
+            }
+        }
+        else
+        {
+            <FormItem Label="Dependencia afectada">
+                <Select TItem="Dependencia"
+                        TItemValue="int?"
+                        DataSource="@dependencias"
+                        @bind-Value="@modelo.DependenciaId"
+                        LabelName="@nameof(Dependencia.NombreDependencia)"
+                        ValueName="@nameof(Dependencia.DependenciaId)"
+                        Placeholder="Seleccioná la dependencia"
+                        EnableSearch
+                        Style="width:100%" />
+            </FormItem>
+        }
+
+        <FormItem Label="¿Quién lo reporta?">
+            <Select TItem="PersonaOpcion"
+                    TItemValue="int"
+                    DataSource="@solicitantes"
+                    Value="@modelo.SolicitanteId"
+                    ValueChanged="OnSolicitanteChanged"
+                    LabelName="@nameof(PersonaOpcion.Etiqueta)"
+                    ValueName="@nameof(PersonaOpcion.Id)"
+                    Placeholder="Seleccioná la persona"
+                    EnableSearch
+                    Style="width:100%" />
+        </FormItem>
+
+        <FormItem Label="Categoría">
+            <EnumSelect TEnum="CategoriaIncidente"
+                        @bind-Value="@modelo.Categoria"
+                        Style="width:100%" />
+        </FormItem>
+
+        @if (modelo.SolicitanteId > 0 && !modelo.SolicitanteEsBombero)
+        {
+            <Alert Type="@AlertType.Info"
+                   Message="Quien reporta no es bombero."
+                   Description="Solo puede registrar novedades, y las novedades no otorgan firmas."
+                   ShowIcon="true"
+                   Style="margin-bottom:16px;" />
+        }
+
+        <FormItem Label="Descripción">
+            <TextArea @bind-Value="@modelo.Descripcion"
+                      Rows="4"
+                      MaxLength="1000"
+                      ShowCount
+                      Placeholder="Por ejemplo: se limpió la caja del móvil 1" />
+        </FormItem>
+
+        @if (erroresDeCoherencia.Count > 0)
+        {
+            <Alert Type="@AlertType.Error"
+                   ShowIcon="true"
+                   Style="margin-bottom:16px;">
+                <MessageTemplate>
+                    <ul style="margin:0; padding-left:18px;">
+                        @foreach (var error in erroresDeCoherencia)
+                        {
+                            <li>@error</li>
+                        }
+                    </ul>
+                </MessageTemplate>
+            </Alert>
+        }
+
+        <div style="display:flex; justify-content:flex-end; gap:8px;">
+            <Button OnClick="OnCancelar" Disabled="@estaGuardando">Cancelar</Button>
+            @* Regla del proyecto: el botón de submit no lleva OnClick; todo pasa por OnFinish. *@
+            <Button Type="ButtonType.Primary" HtmlType="submit" Loading="@estaGuardando">
+                <Icon Type="save" /> Registrar incidente
+            </Button>
+        </div>
+    </Form>
+}
+
+@code {
+    [Parameter] public EventCallback OnFinishCallback { get; set; }
+    [Parameter] public EventCallback OnCancelar { get; set; }
+
+    private IncidenteFormViewModel modelo = new();
+
+    private List<VehiculoSalida> moviles = new();
+    private List<Dependencia> dependencias = new();
+    private List<PersonaOpcion> solicitantes = new();
+    private List<string> erroresDeCoherencia = new();
+
+    private bool estaCargando = true;
+    private bool estaGuardando;
+
+    protected override async Task OnInitializedAsync()
+    {
+        estaCargando = true;
+
+        try
+        {
+            moviles = await IncidenteService.ObtenerMovilesDisponiblesAsync();
+            dependencias = await IncidenteService.ObtenerDependenciasAsync();
+
+            var personas = await IncidenteService.ObtenerSolicitantesAsync();
+            solicitantes = personas.Select(PersonaOpcion.Desde).ToList();
+        }
+        catch (Exception ex)
+        {
+            await message.ErrorAsync($"No se pudieron cargar los datos del formulario: {ex.Message}");
+        }
+        finally
+        {
+            estaCargando = false;
+        }
+    }
+
+    private void OnSolicitanteChanged(int solicitanteId)
+    {
+        modelo.SolicitanteId = solicitanteId;
+
+        var opcion = solicitantes.FirstOrDefault(s => s.Id == solicitanteId);
+        modelo.SolicitanteEsBombero = opcion?.EsBombero ?? false;
+
+        // Si no es bombero solo puede reportar novedades: se ajusta la categoría en el momento
+        // para no dejar el formulario en un estado que el servicio va a rechazar.
+        if (!modelo.SolicitanteEsBombero)
+        {
+            modelo.Categoria = CategoriaIncidente.Novedad;
+        }
+    }
+
+    private async Task OnFinish(EditContext contexto)
+    {
+        // Las validaciones que dependen de más de un campo no se pueden expresar con
+        // DataAnnotations, así que se resuelven acá antes de llamar al servicio.
+        erroresDeCoherencia = modelo.ObtenerErroresDeCoherencia().ToList();
+
+        if (erroresDeCoherencia.Count > 0)
+        {
+            return;
+        }
+
+        estaGuardando = true;
+
+        try
+        {
+            var incidente = modelo.ToIncidente();
+            await IncidenteService.CrearIncidenteAsync(incidente);
+
+            await message.SuccessAsync("El incidente se registró correctamente.");
+
+            modelo = new IncidenteFormViewModel();
+            await OnFinishCallback.InvokeAsync();
+        }
+        catch (Exception ex)
+        {
+            await message.ErrorAsync(ex.Message);
+        }
+        finally
+        {
+            estaGuardando = false;
+        }
+    }
+
+    /// <summary>
+    /// Opción del selector de solicitantes. Se arma acá porque el selector necesita una etiqueta
+    /// ya resuelta y saber si la persona es bombero, que es lo que habilita las categorías.
+    /// </summary>
+    public class PersonaOpcion
+    {
+        public int Id { get; set; }
+        public string Etiqueta { get; set; } = string.Empty;
+        public bool EsBombero { get; set; }
+
+        public static PersonaOpcion Desde(Persona persona)
+        {
+            var esBombero = persona is Bombero;
+            var nombre = $"{persona.Apellido}, {persona.Nombre}".Trim(' ', ',');
+
+            return new PersonaOpcion
+            {
+                Id = persona.PersonaId,
+                Etiqueta = esBombero ? $"{nombre} (bombero)" : nombre,
+                EsBombero = esBombero
+            };
+        }
+    }
+}

@@ -1,0 +1,468 @@
+﻿@using FireForce.Client.Data.Mappers
+@using FireForce.Client.Data.ViewModels.Incidentes
+@using FireForce.Client.Services
+@using FireForce.Data.Models.Grupos.Dependencias
+@using FireForce.Shared.Enums.Firmas
+
+@inject IIncidenteService IncidenteService
+@inject IMessageService message
+
+@* Los estilos vienen de wwwroot/css/abm.css. *@
+
+@if (estaCargando || incidente is null)
+{
+    <div style="text-align:center; padding:32px;">
+        <Spin Tip="Cargando incidente..." />
+    </div>
+}
+else
+{
+    <div class="abm-detalle-seccion">
+        <div class="abm-detalle-grid">
+            <div class="abm-detalle-item">
+                <span class="abm-detalle-label">Estado</span>
+                <span class="abm-badge @ClaseDeEstado(incidente.Estado)">
+                    @incidente.Estado.GetDisplayName()
+                </span>
+            </div>
+            <div class="abm-detalle-item">
+                <span class="abm-detalle-label">Categoría</span>
+                <span class="abm-detalle-valor">@incidente.Categoria.GetDisplayName()</span>
+            </div>
+            <div class="abm-detalle-item">
+                <span class="abm-detalle-label">Afectado</span>
+                <span class="abm-detalle-valor">@incidente.ObjetoAfectado</span>
+            </div>
+            <div class="abm-detalle-item">
+                <span class="abm-detalle-label">Fecha</span>
+                <span class="abm-detalle-valor">@incidente.Fecha.ToString("dd/MM/yyyy HH:mm")</span>
+            </div>
+            <div class="abm-detalle-item">
+                <span class="abm-detalle-label">Solicitante</span>
+                <span class="abm-detalle-valor">@incidente.SolicitanteNombre</span>
+            </div>
+            <div class="abm-detalle-item">
+                <span class="abm-detalle-label">Encargado</span>
+                <span class="abm-detalle-valor">@incidente.EncargadoNombre</span>
+            </div>
+            <div class="abm-detalle-item">
+                <span class="abm-detalle-label">Firmas otorgadas</span>
+                @if (incidente.CantidadFirmas > 0)
+                {
+                    <span class="abm-firmas">
+                        <Icon Type="star" Theme="IconThemeType.Fill" Class="abm-firmas-icon" />
+                        @incidente.CantidadFirmas
+                    </span>
+                }
+                else
+                {
+                    <span class="abm-detalle-valor">—</span>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="abm-detalle-seccion">
+        <div class="abm-detalle-titulo"><Icon Type="file-text" /> Descripción</div>
+        <p class="abm-detalle-valor">@incidente.Descripcion</p>
+    </div>
+
+    @if (!incidente.EstaResuelto)
+    {
+        <div class="abm-detalle-seccion">
+            <div class="abm-detalle-titulo"><Icon Type="thunderbolt" /> Acciones del encargado</div>
+            <Space Wrap>
+                <SpaceItem>
+                    <Button Type="ButtonType.Primary" OnClick="AbrirAprobacion">
+                        <Icon Type="check" /> Aprobar
+                    </Button>
+                </SpaceItem>
+                <SpaceItem>
+                    <Button Danger OnClick="AbrirRechazo">
+                        <Icon Type="close" /> Rechazar
+                    </Button>
+                </SpaceItem>
+                <SpaceItem>
+                    <Button OnClick="() => AbrirDerivacion(null)">
+                        <Icon Type="share-alt" /> Derivar a otro departamento
+                    </Button>
+                </SpaceItem>
+            </Space>
+        </div>
+    }
+
+    <div class="abm-detalle-seccion">
+        <div class="abm-detalle-titulo">
+            <Icon Type="apartment" /> Derivaciones (@incidente.CantidadTareas)
+        </div>
+
+        @if (incidente.Tareas.Count == 0)
+        {
+            <p class="abm-vacio">Todavía no se derivó a ningún departamento.</p>
+        }
+        else
+        {
+            @RenderTareas(incidente.Tareas)
+        }
+    </div>
+
+    <div class="abm-detalle-seccion">
+        <div class="abm-detalle-titulo"><Icon Type="history" /> Bitácora</div>
+
+        @if (incidente.Movimientos.Count == 0)
+        {
+            <p class="abm-vacio">Sin movimientos registrados.</p>
+        }
+        else
+        {
+            <ul class="abm-bitacora">
+                @foreach (var movimiento in incidente.Movimientos)
+                {
+                    <li class="abm-bitacora-item">
+                        <span class="abm-bitacora-fecha">@movimiento.Fecha.ToString("dd/MM/yyyy HH:mm")</span>
+                        <span class="abm-bitacora-texto">
+                            <strong>@movimiento.Tipo.GetDisplayName()</strong> — @movimiento.Descripcion
+                            <div class="abm-bitacora-autor">Por @movimiento.AutorNombre</div>
+                        </span>
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+}
+
+@* --------------------------------------------------------------- Aprobación *@
+<Modal Title="Aprobar incidente"
+       Footer="null"
+       Centered
+       DestroyOnClose
+       Visible="@modalAprobarVisible"
+       OnCancel="CerrarSubModales">
+    <Form Model="@resolucion" Layout="@FormLayout.Vertical" OnFinish="OnAprobar">
+        @if (incidente is not null && !incidente.PuedeRecibirFirmas)
+        {
+            <Alert Type="@AlertType.Info"
+                   Message="Este incidente no otorga firmas."
+                   Description="@(incidente.Categoria == CategoriaIncidente.Novedad
+                                  ? "Las novedades no otorgan firmas."
+                                  : "Quien reporta no es bombero, así que no puede recibir firmas.")"
+                   ShowIcon="true"
+                   Style="margin-bottom:16px;" />
+        }
+        else
+        {
+            <FormItem Label="Firmas a otorgar al solicitante">
+                <AntDesign.InputNumber @bind-Value="@resolucion.CantidadFirmas"
+                                       Min="0"
+                                       Max="100"
+                                       Style="width:100%" />
+            </FormItem>
+        }
+
+        <FormItem Label="Observaciones (opcional)">
+            <TextArea @bind-Value="@resolucion.Observaciones" Rows="3" MaxLength="500" ShowCount />
+        </FormItem>
+
+        <div style="display:flex; justify-content:flex-end; gap:8px;">
+            <Button OnClick="CerrarSubModales" Disabled="@estaProcesando">Cancelar</Button>
+            <Button Type="ButtonType.Primary" HtmlType="submit" Loading="@estaProcesando">
+                <Icon Type="check" /> Aprobar
+            </Button>
+        </div>
+    </Form>
+</Modal>
+
+@* ------------------------------------------------------------------ Rechazo *@
+<Modal Title="Rechazar incidente"
+       Footer="null"
+       Centered
+       DestroyOnClose
+       Visible="@modalRechazarVisible"
+       OnCancel="CerrarSubModales">
+    <Form Model="@resolucion" Layout="@FormLayout.Vertical" OnFinish="OnRechazar">
+        <FormItem Label="Motivo del rechazo (opcional)">
+            <TextArea @bind-Value="@resolucion.Observaciones" Rows="3" MaxLength="500" ShowCount />
+        </FormItem>
+
+        <div style="display:flex; justify-content:flex-end; gap:8px;">
+            <Button OnClick="CerrarSubModales" Disabled="@estaProcesando">Cancelar</Button>
+            <Button Danger HtmlType="submit" Loading="@estaProcesando">
+                <Icon Type="close" /> Rechazar
+            </Button>
+        </div>
+    </Form>
+</Modal>
+
+@* --------------------------------------------------------------- Derivación *@
+<Modal Title="Derivar a otro departamento"
+       Footer="null"
+       Centered
+       DestroyOnClose
+       Visible="@modalDerivarVisible"
+       OnCancel="CerrarSubModales">
+    <Form Model="@derivacion" Layout="@FormLayout.Vertical" OnFinish="OnDerivar">
+        @if (derivacion.TareaPadreId.HasValue)
+        {
+            <Alert Type="@AlertType.Info"
+                   Message="Derivación en cadena"
+                   Description="Esta tarea va a quedar como subtarea de la que la originó."
+                   ShowIcon="true"
+                   Style="margin-bottom:16px;" />
+        }
+
+        <FormItem Label="Departamento destino">
+            <Select TItem="Dependencia"
+                    TItemValue="int"
+                    DataSource="@dependencias"
+                    @bind-Value="@derivacion.DependenciaDestinoId"
+                    LabelName="@nameof(Dependencia.NombreDependencia)"
+                    ValueName="@nameof(Dependencia.DependenciaId)"
+                    Placeholder="Seleccioná el departamento"
+                    EnableSearch
+                    Style="width:100%" />
+        </FormItem>
+
+        <FormItem Label="Nombre de la tarea">
+            <Input @bind-Value="@derivacion.Nombre" MaxLength="150"
+                   Placeholder="Por ejemplo: reparar bomba del móvil 1" />
+        </FormItem>
+
+        <FormItem Label="Descripción">
+            <TextArea @bind-Value="@derivacion.Descripcion" Rows="4" MaxLength="1000" ShowCount />
+        </FormItem>
+
+        <div style="display:flex; justify-content:flex-end; gap:8px;">
+            <Button OnClick="CerrarSubModales" Disabled="@estaProcesando">Cancelar</Button>
+            <Button Type="ButtonType.Primary" HtmlType="submit" Loading="@estaProcesando">
+                <Icon Type="share-alt" /> Derivar
+            </Button>
+        </div>
+    </Form>
+</Modal>
+
+@code {
+    [Parameter] public int IncidenteId { get; set; }
+    [Parameter] public EventCallback OnCambio { get; set; }
+    [Parameter] public EventCallback OnCerrar { get; set; }
+
+    private IncidenteViewModel? incidente;
+    private List<Dependencia> dependencias = new();
+
+    private ResolucionIncidenteViewModel resolucion = new();
+    private DerivacionViewModel derivacion = new();
+
+    private bool estaCargando = true;
+    private bool estaProcesando;
+
+    private bool modalAprobarVisible;
+    private bool modalRechazarVisible;
+    private bool modalDerivarVisible;
+
+    /// <summary>
+    /// Se usa OnParametersSetAsync y no OnInitializedAsync porque el componente se reutiliza para
+    /// distintos incidentes: si el padre cambia IncidenteId hay que volver a cargar.
+    /// </summary>
+    protected override async Task OnParametersSetAsync()
+    {
+        if (incidente is not null && incidente.Id == IncidenteId)
+        {
+            return;
+        }
+
+        await CargarAsync();
+    }
+
+    private async Task CargarAsync()
+    {
+        estaCargando = true;
+
+        try
+        {
+            var entidad = await IncidenteService.ObtenerIncidentePorIdAsync(IncidenteId, asNoTracking: true);
+            incidente = entidad.ToIncidenteViewModel();
+
+            if (dependencias.Count == 0)
+            {
+                dependencias = await IncidenteService.ObtenerDependenciasAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            await message.ErrorAsync($"No se pudo cargar el incidente: {ex.Message}");
+        }
+        finally
+        {
+            estaCargando = false;
+        }
+    }
+
+    private void AbrirAprobacion()
+    {
+        resolucion = new ResolucionIncidenteViewModel();
+        modalAprobarVisible = true;
+    }
+
+    private void AbrirRechazo()
+    {
+        resolucion = new ResolucionIncidenteViewModel();
+        modalRechazarVisible = true;
+    }
+
+    private void AbrirDerivacion(int? tareaPadreId)
+    {
+        derivacion = new DerivacionViewModel { TareaPadreId = tareaPadreId };
+        modalDerivarVisible = true;
+    }
+
+    private void CerrarSubModales()
+    {
+        modalAprobarVisible = false;
+        modalRechazarVisible = false;
+        modalDerivarVisible = false;
+    }
+
+    private async Task OnAprobar(EditContext contexto)
+    {
+        var firmas = incidente?.PuedeRecibirFirmas == true ? resolucion.CantidadFirmas : 0;
+
+        await EjecutarAsync(
+            () => IncidenteService.AprobarIncidenteAsync(IncidenteId, AutorId, firmas, resolucion.Observaciones),
+            "El incidente se aprobó correctamente.");
+    }
+
+    private async Task OnRechazar(EditContext contexto)
+    {
+        await EjecutarAsync(
+            () => IncidenteService.RechazarIncidenteAsync(IncidenteId, AutorId, resolucion.Observaciones),
+            "El incidente se rechazó.");
+    }
+
+    private async Task OnDerivar(EditContext contexto)
+    {
+        await EjecutarAsync(
+            () => IncidenteService.DerivarIncidenteAsync(
+                IncidenteId, AutorId, derivacion.DependenciaDestinoId,
+                derivacion.Nombre, derivacion.Descripcion, derivacion.TareaPadreId),
+            "El incidente se derivó correctamente.");
+    }
+
+    private async Task CambiarEstadoTarea(int tareaId, EstadoTarea nuevoEstado)
+    {
+        await EjecutarAsync(
+            () => IncidenteService.CambiarEstadoTareaAsync(tareaId, nuevoEstado, AutorId),
+            "Se actualizó el estado de la tarea.");
+    }
+
+    /// <summary>
+    /// Centraliza el ciclo de las acciones: bandera de progreso, mensajes, recarga y aviso al padre.
+    /// </summary>
+    private async Task EjecutarAsync(Func<Task> accion, string mensajeExito)
+    {
+        estaProcesando = true;
+
+        try
+        {
+            await accion();
+            await message.SuccessAsync(mensajeExito);
+
+            CerrarSubModales();
+            await CargarAsync();
+            await OnCambio.InvokeAsync();
+        }
+        catch (Exception ex)
+        {
+            await message.ErrorAsync(ex.Message);
+        }
+        finally
+        {
+            estaProcesando = false;
+        }
+    }
+
+    /// <summary>
+    /// Autor de los movimientos de la bitácora. Con Entra ID deshabilitado no hay usuario real
+    /// logueado, así que por ahora se registra al encargado del incidente.
+    /// </summary>
+    private int AutorId => incidente?.SolicitanteId ?? 0;
+
+    private RenderFragment RenderTareas(List<TareaViewModel> tareas) =>@<text>
+        @foreach (var tarea in tareas)
+        {
+            <div class="abm-tarea">
+                <div class="abm-tarea-cabecera">
+                    <div>
+                        <div class="abm-tarea-nombre">@tarea.Nombre</div>
+                        <div class="abm-tarea-destino">
+                            <Icon Type="bank" /> @tarea.DependenciaNombre
+                            &nbsp;·&nbsp;
+                            <Icon Type="user" /> @tarea.EncargadoNombre
+                            &nbsp;·&nbsp;
+                            @tarea.Fecha.ToString("dd/MM/yyyy HH:mm")
+                        </div>
+                    </div>
+                    <Space Wrap>
+                        <SpaceItem>
+                            <span class="abm-badge @ClaseDeEstadoTarea(tarea.Estado)">
+                                @tarea.Estado.GetDisplayName()
+                            </span>
+                        </SpaceItem>
+                        @if (incidente is not null && !incidente.EstaResuelto)
+                        {
+                            <SpaceItem>
+                                <Dropdown>
+                                    <Overlay>
+                                        <Menu>
+                                            @foreach (var estado in Enum.GetValues<EstadoTarea>())
+                                            {
+                                                var destino = estado;
+                                                <MenuItem OnClick="() => CambiarEstadoTarea(tarea.Id, destino)">
+                                                    @destino.GetDisplayName()
+                                                </MenuItem>
+                                            }
+                                        </Menu>
+                                    </Overlay>
+                                    <ChildContent>
+                                        <Button Size="@ButtonSize.Small">
+                                            Estado <Icon Type="down" />
+                                        </Button>
+                                    </ChildContent>
+                                </Dropdown>
+                            </SpaceItem>
+                            <SpaceItem>
+                                <Button Size="@ButtonSize.Small" OnClick="() => AbrirDerivacion(tarea.Id)">
+                                    <Icon Type="share-alt" /> Derivar
+                                </Button>
+                            </SpaceItem>
+                        }
+                    </Space>
+                </div>
+                <p class="abm-tarea-descripcion">@tarea.Descripcion</p>
+
+                @if (tarea.Subtareas.Count > 0)
+                {
+                    <div class="abm-subtareas">
+                        @RenderTareas(tarea.Subtareas)
+                    </div>
+                }
+            </div>
+        }
+    </text>;
+
+    private static string ClaseDeEstado(EstadoIncidente estado) => estado switch
+    {
+        EstadoIncidente.Pendiente => "abm-badge--pendiente",
+        EstadoIncidente.EnProceso => "abm-badge--proceso",
+        EstadoIncidente.Aprobado => "abm-badge--aprobado",
+        EstadoIncidente.Desaprobado => "abm-badge--rechazado",
+        _ => "abm-badge--pendiente"
+    };
+
+    private static string ClaseDeEstadoTarea(EstadoTarea estado) => estado switch
+    {
+        EstadoTarea.Pendiente => "abm-badge--pendiente",
+        EstadoTarea.EnProceso => "abm-badge--proceso",
+        EstadoTarea.Solucionado => "abm-badge--aprobado",
+        EstadoTarea.SinSolucion => "abm-badge--alerta",
+        _ => "abm-badge--pendiente"
+    };
+}

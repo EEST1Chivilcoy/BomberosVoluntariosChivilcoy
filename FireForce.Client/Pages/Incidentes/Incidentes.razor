@@ -1,0 +1,265 @@
+﻿@page "/fire-force/incidentes"
+
+@using FireForce.Client.Data.Mappers
+@using FireForce.Client.Data.ViewModels.Incidentes
+@using FireForce.Client.Pages.Incidentes.Componentes
+@using FireForce.Client.Services
+@using FireForce.Shared.Enums.Firmas
+@using Microsoft.AspNetCore.Authorization
+
+@attribute [Authorize]
+
+@inject IIncidenteService IncidenteService
+@inject IMessageService message
+
+@* Los estilos viven en wwwroot/css/abm.css. No agregar un bloque <style> acá. *@
+
+<PageTitle>Incidentes</PageTitle>
+
+<div class="abm-page">
+    <div class="abm-container">
+        <Card Class="abm-main-card">
+
+            <div class="abm-header-section">
+                <div class="lava-bubbles">
+                    <div class="lava-bubble b1"></div>
+                    <div class="lava-bubble b2"></div>
+                    <div class="lava-bubble b3"></div>
+                    <div class="lava-bubble b4"></div>
+                    <div class="lava-bubble b5"></div>
+                </div>
+                <div class="title-container">
+                    <h1 class="main-title">
+                        <Icon Type="file-search" Class="title-icon" />
+                        <span>INCIDENTES</span>
+                    </h1>
+                    <p class="abm-subtitle">
+                        Novedades, gestiones, limpiezas, mantenimientos y puestas en marcha
+                        de móviles y dependencias.
+                    </p>
+                </div>
+            </div>
+
+            <div class="abm-filters">
+                <div class="search-container">
+                    <Search Placeholder="Buscar por descripción, móvil, dependencia o solicitante"
+                            @bind-Value="@textoBusqueda"
+                            OnSearch="Filtrar"
+                            BindOnInput />
+                </div>
+
+                <Select TItem="EstadoIncidente?"
+                        TItemValue="EstadoIncidente?"
+                        Value="@estadoFiltro"
+                        ValueChanged="OnEstadoFiltroChanged"
+                        Placeholder="Todos los estados"
+                        AllowClear
+                        Class="abm-filter-select">
+                    <SelectOptions>
+                        @foreach (var estado in Enum.GetValues<EstadoIncidente>())
+                        {
+                            <SelectOption TItemValue="EstadoIncidente?"
+                                          TItem="EstadoIncidente?"
+                                          Value="@estado"
+                                          Label="@estado.GetDisplayName()" />
+                        }
+                    </SelectOptions>
+                </Select>
+
+                <div class="abm-actions-right">
+                    <Button Type="ButtonType.Primary" OnClick="AbrirAlta">
+                        <Icon Type="plus" /> Nuevo incidente
+                    </Button>
+                </div>
+            </div>
+
+            <div class="abm-table-container">
+                <Table TItem="IncidenteViewModel"
+                       DataSource="@incidentesFiltrados"
+                       @bind-PageIndex="paginaActual"
+                       @bind-PageSize="tamanioPagina"
+                       Loading="@estaCargando"
+                       Responsive>
+                    <ColumnDefinitions>
+                        <PropertyColumn Title="📅 Fecha" Property="i => i.Fecha" Format="dd/MM/yyyy HH:mm" Sortable />
+                        <PropertyColumn Title="🚒 Afectado" Property="i => i.ObjetoAfectado" Sortable />
+                        <PropertyColumn Title="🏷️ Categoría" Property="@(i => i.Categoria.GetDisplayName())" Sortable />
+                        <PropertyColumn Title="📝 Descripción" Property="i => i.Descripcion" Ellipsis />
+                        <PropertyColumn Title="👤 Solicitante" Property="i => i.SolicitanteNombre" Sortable />
+                        <PropertyColumn Title="🎖️ Encargado" Property="i => i.EncargadoNombre" Sortable />
+
+                        <ActionColumn Title="📊 Estado" Align="ColumnAlign.Center">
+                            <span class="abm-badge @ClaseDeEstado(context.Estado)">
+                                @context.Estado.GetDisplayName()
+                            </span>
+                        </ActionColumn>
+
+                        <ActionColumn Title="✍️ Firmas" Align="ColumnAlign.Center">
+                            @if (context.CantidadFirmas > 0)
+                            {
+                                <span class="abm-firmas">
+                                    <Icon Type="star" Theme="IconThemeType.Fill" Class="abm-firmas-icon" />
+                                    @context.CantidadFirmas
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="abm-firmas abm-firmas--vacio">—</span>
+                            }
+                        </ActionColumn>
+
+                        <ActionColumn Title="🧩 Tareas" Align="ColumnAlign.Center">
+                            @context.CantidadTareas
+                        </ActionColumn>
+
+                        <ActionColumn Title="⚙️ Acciones" Align="ColumnAlign.Center">
+                            <Button Type="default" OnClick="() => AbrirDetalle(context.Id)">
+                                <Icon Type="eye" /> Ver
+                            </Button>
+                        </ActionColumn>
+                    </ColumnDefinitions>
+                </Table>
+            </div>
+
+        </Card>
+    </div>
+</div>
+
+@* Alta de incidente *@
+<Modal Title="Nuevo incidente"
+       Footer="null"
+       Centered
+       DestroyOnClose
+       Visible="@modalAltaVisible"
+       OnCancel="CerrarModales">
+    <AgregarIncidente OnFinishCallback="OnAltaFinalizada" OnCancelar="CerrarModales" />
+</Modal>
+
+@* Detalle del incidente *@
+<Modal Title="Detalle del incidente"
+       Footer="null"
+       Centered
+       DestroyOnClose
+       DefaultMaximized
+       Visible="@modalDetalleVisible"
+       OnCancel="CerrarModales">
+    @if (incidenteSeleccionadoId.HasValue)
+    {
+        <DetalleIncidente IncidenteId="incidenteSeleccionadoId.Value"
+                          OnCambio="OnDetalleCambio"
+                          OnCerrar="CerrarModales" />
+    }
+</Modal>
+
+@code {
+    private List<IncidenteViewModel> incidentes = new();
+    private List<IncidenteViewModel> incidentesFiltrados = new();
+
+    private string textoBusqueda = string.Empty;
+    private EstadoIncidente? estadoFiltro;
+
+    private bool estaCargando;
+    private int paginaActual = 1;
+    private int tamanioPagina = 10;
+
+    private bool modalAltaVisible;
+    private bool modalDetalleVisible;
+    private int? incidenteSeleccionadoId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarIncidentesAsync();
+    }
+
+    private async Task CargarIncidentesAsync()
+    {
+        estaCargando = true;
+
+        try
+        {
+            var datos = await IncidenteService.ObtenerIncidentesAsync();
+            incidentes = datos.ToIncidenteViewModelList();
+            Filtrar();
+        }
+        catch (Exception ex)
+        {
+            await message.ErrorAsync($"No se pudieron cargar los incidentes: {ex.Message}");
+        }
+        finally
+        {
+            estaCargando = false;
+        }
+    }
+
+    private void Filtrar()
+    {
+        IEnumerable<IncidenteViewModel> consulta = incidentes;
+
+        if (estadoFiltro.HasValue)
+        {
+            consulta = consulta.Where(i => i.Estado == estadoFiltro.Value);
+        }
+
+        if (!string.IsNullOrWhiteSpace(textoBusqueda))
+        {
+            var texto = textoBusqueda.Trim();
+
+            consulta = consulta.Where(i =>
+                i.Descripcion.Contains(texto, StringComparison.OrdinalIgnoreCase) ||
+                i.ObjetoAfectado.Contains(texto, StringComparison.OrdinalIgnoreCase) ||
+                i.SolicitanteNombre.Contains(texto, StringComparison.OrdinalIgnoreCase) ||
+                i.EncargadoNombre.Contains(texto, StringComparison.OrdinalIgnoreCase));
+        }
+
+        incidentesFiltrados = consulta.ToList();
+        paginaActual = 1;
+    }
+
+    private void OnEstadoFiltroChanged(EstadoIncidente? estado)
+    {
+        estadoFiltro = estado;
+        Filtrar();
+    }
+
+    private void AbrirAlta()
+    {
+        modalAltaVisible = true;
+    }
+
+    private void AbrirDetalle(int incidenteId)
+    {
+        incidenteSeleccionadoId = incidenteId;
+        modalDetalleVisible = true;
+    }
+
+    private void CerrarModales()
+    {
+        modalAltaVisible = false;
+        modalDetalleVisible = false;
+        incidenteSeleccionadoId = null;
+    }
+
+    private async Task OnAltaFinalizada()
+    {
+        CerrarModales();
+        await CargarIncidentesAsync();
+    }
+
+    /// <summary>
+    /// El detalle avisó que cambió algo (aprobación, rechazo, derivación). Se refresca la grilla
+    /// pero el modal queda abierto para que se vea el resultado.
+    /// </summary>
+    private async Task OnDetalleCambio()
+    {
+        await CargarIncidentesAsync();
+    }
+
+    private static string ClaseDeEstado(EstadoIncidente estado) => estado switch
+    {
+        EstadoIncidente.Pendiente => "abm-badge--pendiente",
+        EstadoIncidente.EnProceso => "abm-badge--proceso",
+        EstadoIncidente.Aprobado => "abm-badge--aprobado",
+        EstadoIncidente.Desaprobado => "abm-badge--rechazado",
+        _ => "abm-badge--pendiente"
+    };
+}
