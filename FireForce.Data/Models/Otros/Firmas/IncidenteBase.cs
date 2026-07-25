@@ -63,7 +63,11 @@ namespace FireForce.Data.Models.Otros.Firmas
         /// <summary>
         /// Quien reporta el incidente. Puede ser cualquier persona, no solo un bombero.
         /// </summary>
-        [Required]
+        /// <remarks>
+        /// La obligatoriedad la impone <see cref="SolicitanteId"/>, que no admite null. No lleva
+        /// <c>[Required]</c> para que se pueda validar la entidad con DataAnnotations teniendo solo
+        /// la clave foránea cargada, sin materializar la navegación.
+        /// </remarks>
         public Persona Solicitante { get; set; } = null!;
 
         // --- Encargado del incidente ---
@@ -79,7 +83,7 @@ namespace FireForce.Data.Models.Otros.Firmas
         /// Se asigna al crear el incidente y <b>no cambia</b>: derivar a otro departamento se hace
         /// creando una <see cref="Tarea"/>, no reasignando el incidente.
         /// </summary>
-        [Required]
+        /// <remarks>Ver la nota de <see cref="Solicitante"/> sobre por qué no lleva <c>[Required]</c>.</remarks>
         public Bombero Encargado { get; set; } = null!;
 
         // --- Colecciones ---

@@ -7,10 +7,17 @@ namespace FireForce.Shared.Enums.Firmas
     /// </summary>
     public enum EstadoIncidente
     {
+        [Display(Name = "Pendiente")]
         Pendiente = 0,
+
         [Display(Name = "En proceso")]
         EnProceso = 1,
+
+        [Display(Name = "Aprobado")]
         Aprobado = 2,
+
+        // En el cuartel lo llaman "rechazado"; el nombre del valor se mantiene por compatibilidad.
+        [Display(Name = "Rechazado")]
         Desaprobado = 3,
     }
 }

@@ -170,6 +170,7 @@ builder.Services.AddScoped<IParteVehiculoService, ParteVehiculoService>();
 builder.Services.AddScoped<IPagoService, PagoService>();
 builder.Services.AddScoped<ISaldoSocioService, SaldoSocioService>();
 builder.Services.AddScoped<IImagenService, ImagenService>();
+builder.Services.AddScoped<IIncidenteService, IncidenteService>();
 
 // Configuración de Nominatim (externalizada para poder cambiar de proveedor)
 builder.Services.Configure<NominatimSettings>(
