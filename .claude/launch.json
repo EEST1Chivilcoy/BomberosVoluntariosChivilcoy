@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "FireForce",
+      "runtimeExecutable": "dotnet",
+      "runtimeArgs": ["run", "--project", "FireForce.Core", "--urls", "http://localhost:5183"],
+      "port": 5183,
+      "url": "http://localhost:5183"
+    }
+  ]
+}

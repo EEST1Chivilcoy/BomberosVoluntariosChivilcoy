@@ -1,4 +1,5 @@
 using AntDesign;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Components.Server.Circuits;
 using Microsoft.AspNetCore.Localization;
@@ -32,8 +33,20 @@ var initialScopes = builder.Configuration["DownstreamApi:Scopes"]?.Split(' ')
 // Agregar cache distribuido ANTES de la autenticación
 builder.Services.AddDistributedMemoryCache();
 
+// Permite trabajar sin Microsoft Entra ID (ver appsettings.Development.json).
+// Con la bandera en true se autentica automáticamente un usuario ficticio con todos los roles,
+// así que [Authorize], AuthorizeView y las políticas siguen funcionando igual que con Entra ID.
+var autenticacionDeshabilitada = builder.Configuration.GetValue<bool>("Autenticacion:Deshabilitada");
+
+var esquemaPorDefecto = autenticacionDeshabilitada
+    ? DesarrolloAuthenticationHandler.Esquema
+    : OpenIdConnectDefaults.AuthenticationScheme;
+
+// Los servicios de Microsoft.Identity.Web se registran SIEMPRE, aunque la autenticación esté
+// deshabilitada: hay componentes que inyectan MicrosoftIdentityConsentAndConditionalAccessHandler
+// y GraphServiceClient, y sin esos registros la inyección de dependencias fallaría en runtime.
 // Configuración de autenticación CON configuraciones para Azure
-builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+builder.Services.AddAuthentication(esquemaPorDefecto)
     .AddMicrosoftIdentityWebApp(options =>
     {
         builder.Configuration.Bind("AzureAd", options);
@@ -71,6 +84,16 @@ builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
     .EnableTokenAcquisitionToCallDownstreamApi(initialScopes)
     .AddMicrosoftGraph(builder.Configuration.GetSection("MicrosoftGraph"))
     .AddInMemoryTokenCaches();
+
+// Esquema de desarrollo: solo se agrega si la autenticación está deshabilitada.
+if (autenticacionDeshabilitada)
+{
+    builder.Services.AddAuthentication()
+        .AddScheme<AuthenticationSchemeOptions, DesarrolloAuthenticationHandler>(
+            DesarrolloAuthenticationHandler.Esquema, _ => { });
+
+    Console.WriteLine("⚠️  Autenticación de Entra ID DESHABILITADA: se usa un usuario de desarrollo con todos los roles.");
+}
 
 
 // Configuración de cookies para Azure Web Apps
