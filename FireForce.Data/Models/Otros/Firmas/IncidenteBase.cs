@@ -1,16 +1,24 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using FireForce.Data.Models.Grupos.Dependencias;
+using FireForce.Data.Models.Personas;
 using FireForce.Data.Models.Personas.Personal;
-using FireForce.Shared.Enums;
+using FireForce.Shared.Enums.Discriminadores;
+using FireForce.Shared.Enums.Firmas;
 
 namespace FireForce.Data.Models.Otros.Firmas
 {
+    /// <summary>
+    /// Incidente reportado sobre un móvil o sobre una dependencia.
+    /// Es la raíz de la jerarquía TPH discriminada por <see cref="TipoDeIncidente"/>.
+    /// </summary>
     public abstract class IncidenteBase
     {
         [Key]
         public int Id { get; set; }
 
-        // Tipo de incidente (Movil o Dependencia)
+        /// <summary>
+        /// Discriminador: indica si el incidente es sobre un móvil o sobre una dependencia.
+        /// </summary>
+        public TipoDeIncidente Tipo { get; set; }
 
         /// <summary>
         /// Fecha en que se registró el incidente.
@@ -26,6 +34,9 @@ namespace FireForce.Data.Models.Otros.Firmas
 
         /// <summary>
         /// Categoría del incidente.
+        /// Solo un <see cref="Bombero"/> puede crear categorías distintas de
+        /// <see cref="CategoriaIncidente.Novedad"/>; cualquier otra <see cref="Persona"/> solo
+        /// puede reportar novedades.
         /// </summary>
         [Required]
         public CategoriaIncidente Categoria { get; set; }
@@ -34,24 +45,26 @@ namespace FireForce.Data.Models.Otros.Firmas
 
         public EstadoIncidente Estado { get; set; } = EstadoIncidente.Pendiente;
 
-        public DateTime? FechaEstado { get; set; } = DateTime.Now;
+        /// <summary>
+        /// Cantidad de firmas que el encargado otorgó al aprobar el incidente.
+        /// Las recibe el <see cref="Solicitante"/>, siempre que sea un <see cref="Bombero"/> y la
+        /// categoría no sea <see cref="CategoriaIncidente.Novedad"/>. Cada firma equivale a 1 punto.
+        /// </summary>
+        public int CantidadFirmas { get; set; }
 
-        public string? ObservacionesEstado { get; set; }
-
-
-        // --- Responsable del incidente ---
+        // --- Solicitante del incidente ---
 
         /// <summary>
-        /// Identificador del bombero responsable.
+        /// Identificador del solicitante.
         /// </summary>
         [Required]
-        public int AtendidoPorId { get; set; }
+        public int SolicitanteId { get; set; }
 
         /// <summary>
-        /// Bombero responsable.
+        /// Quien reporta el incidente. Puede ser cualquier persona, no solo un bombero.
         /// </summary>
         [Required]
-        public Bombero AtendidoPor { get; set; } = null!;
+        public Persona Solicitante { get; set; } = null!;
 
         // --- Encargado del incidente ---
 
@@ -62,15 +75,23 @@ namespace FireForce.Data.Models.Otros.Firmas
         public int EncargadoId { get; set; }
 
         /// <summary>
-        /// Encargado del incidente.
+        /// Encargado del móvil o de la dependencia sobre la que se reporta.
+        /// Se asigna al crear el incidente y <b>no cambia</b>: derivar a otro departamento se hace
+        /// creando una <see cref="Tarea"/>, no reasignando el incidente.
         /// </summary>
         [Required]
         public Bombero Encargado { get; set; } = null!;
 
-        // --- Datos Adiccionales si es Novedad ---
+        // --- Colecciones ---
 
-        public Dependencia? DependenciaANotificar{ get; set; }
+        /// <summary>
+        /// Tareas derivadas del incidente. Cada derivación a otro departamento crea una tarea.
+        /// </summary>
+        public List<Tarea> Tareas { get; set; } = new();
 
-        public int? DependenciaANotificarId { get; set; }
+        /// <summary>
+        /// Bitácora de auditoría del ciclo de vida del incidente.
+        /// </summary>
+        public List<MovimientoIncidente> Movimientos { get; set; } = new();
     }
 }

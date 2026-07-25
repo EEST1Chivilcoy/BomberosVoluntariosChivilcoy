@@ -347,6 +347,139 @@ namespace FireForce.Core.Data.Migrations
                     b.ToTable("Materiales");
                 });
 
+            modelBuilder.Entity("FireForce.Data.Models.Otros.Firmas.IncidenteBase", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CantidadFirmas")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Categoria")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("EncargadoId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Estado")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<DateTime>("Fecha")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("SolicitanteId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Tipo")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EncargadoId");
+
+                    b.HasIndex("SolicitanteId");
+
+                    b.ToTable("Incidentes");
+
+                    b.HasDiscriminator<int>("Tipo");
+
+                    b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("FireForce.Data.Models.Otros.Firmas.MovimientoIncidente", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AutorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Descripcion")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("Fecha")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("IncidenteId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Tipo")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AutorId");
+
+                    b.HasIndex("IncidenteId");
+
+                    b.ToTable("MovimientosIncidente");
+                });
+
+            modelBuilder.Entity("FireForce.Data.Models.Otros.Firmas.Tarea", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("DependenciaId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("EncargadoId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Estado")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<DateTime>("Fecha")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("IncidenteId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("TareaPadreId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DependenciaId");
+
+                    b.HasIndex("EncargadoId");
+
+                    b.HasIndex("IncidenteId");
+
+                    b.HasIndex("TareaPadreId");
+
+                    b.ToTable("Tareas");
+                });
+
             modelBuilder.Entity("FireForce.Data.Models.Otros.Partes.ParteVehiculo", b =>
                 {
                     b.Property<int>("Id")
@@ -1212,6 +1345,30 @@ namespace FireForce.Core.Data.Migrations
                         .IsUnique();
 
                     b.HasDiscriminator().HasValue(2);
+                });
+
+            modelBuilder.Entity("FireForce.Data.Models.Otros.Firmas.IncidenteDependencia", b =>
+                {
+                    b.HasBaseType("FireForce.Data.Models.Otros.Firmas.IncidenteBase");
+
+                    b.Property<int>("DependenciaId")
+                        .HasColumnType("int");
+
+                    b.HasIndex("DependenciaId");
+
+                    b.HasDiscriminator().HasValue(2);
+                });
+
+            modelBuilder.Entity("FireForce.Data.Models.Otros.Firmas.IncidenteMovil", b =>
+                {
+                    b.HasBaseType("FireForce.Data.Models.Otros.Firmas.IncidenteBase");
+
+                    b.Property<int>("VehiculoId")
+                        .HasColumnType("int");
+
+                    b.HasIndex("VehiculoId");
+
+                    b.HasDiscriminator().HasValue(1);
                 });
 
             modelBuilder.Entity("FireForce.Data.Models.Personas.Personal.Personal", b =>
@@ -2211,6 +2368,78 @@ namespace FireForce.Core.Data.Migrations
                     b.Navigation("Materiales");
                 });
 
+            modelBuilder.Entity("FireForce.Data.Models.Otros.Firmas.IncidenteBase", b =>
+                {
+                    b.HasOne("FireForce.Data.Models.Personas.Personal.Bombero", "Encargado")
+                        .WithMany()
+                        .HasForeignKey("EncargadoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("FireForce.Data.Models.Personas.Persona", "Solicitante")
+                        .WithMany()
+                        .HasForeignKey("SolicitanteId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Encargado");
+
+                    b.Navigation("Solicitante");
+                });
+
+            modelBuilder.Entity("FireForce.Data.Models.Otros.Firmas.MovimientoIncidente", b =>
+                {
+                    b.HasOne("FireForce.Data.Models.Personas.Persona", "Autor")
+                        .WithMany()
+                        .HasForeignKey("AutorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("FireForce.Data.Models.Otros.Firmas.IncidenteBase", "Incidente")
+                        .WithMany("Movimientos")
+                        .HasForeignKey("IncidenteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Autor");
+
+                    b.Navigation("Incidente");
+                });
+
+            modelBuilder.Entity("FireForce.Data.Models.Otros.Firmas.Tarea", b =>
+                {
+                    b.HasOne("FireForce.Data.Models.Grupos.Dependencias.Dependencia", "Dependencia")
+                        .WithMany()
+                        .HasForeignKey("DependenciaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("FireForce.Data.Models.Personas.Personal.Bombero", "Encargado")
+                        .WithMany()
+                        .HasForeignKey("EncargadoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("FireForce.Data.Models.Otros.Firmas.IncidenteBase", "Incidente")
+                        .WithMany("Tareas")
+                        .HasForeignKey("IncidenteId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("FireForce.Data.Models.Otros.Firmas.Tarea", "TareaPadre")
+                        .WithMany("Tareas")
+                        .HasForeignKey("TareaPadreId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Dependencia");
+
+                    b.Navigation("Encargado");
+
+                    b.Navigation("Incidente");
+
+                    b.Navigation("TareaPadre");
+                });
+
             modelBuilder.Entity("FireForce.Data.Models.Personas.Damnificado_Salida", b =>
                 {
                     b.HasOne("FireForce.Data.Models.Salidas.Componentes.FuerzaInterviniente_Salida", "FuerzaInterviniente")
@@ -2460,6 +2689,28 @@ namespace FireForce.Core.Data.Migrations
                     b.Navigation("Personal");
                 });
 
+            modelBuilder.Entity("FireForce.Data.Models.Otros.Firmas.IncidenteDependencia", b =>
+                {
+                    b.HasOne("FireForce.Data.Models.Grupos.Dependencias.Dependencia", "Dependencia")
+                        .WithMany()
+                        .HasForeignKey("DependenciaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Dependencia");
+                });
+
+            modelBuilder.Entity("FireForce.Data.Models.Otros.Firmas.IncidenteMovil", b =>
+                {
+                    b.HasOne("FireForce.Data.Models.Vehiculos.Flota.VehiculoSalida", "Vehiculo")
+                        .WithMany()
+                        .HasForeignKey("VehiculoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Vehiculo");
+                });
+
             modelBuilder.Entity("FireForce.Data.Models.Salidas.Componentes.SeguroVehiculo", b =>
                 {
                     b.HasOne("FireForce.Data.Models.Salidas.Componentes.VehiculoAfectado", "Vehiculo")
@@ -2560,6 +2811,18 @@ namespace FireForce.Core.Data.Migrations
             modelBuilder.Entity("FireForce.Data.Models.Grupos.Dependencias.EquiposAutonomos.EquipoAutonomo", b =>
                 {
                     b.Navigation("Movimientos");
+                });
+
+            modelBuilder.Entity("FireForce.Data.Models.Otros.Firmas.IncidenteBase", b =>
+                {
+                    b.Navigation("Movimientos");
+
+                    b.Navigation("Tareas");
+                });
+
+            modelBuilder.Entity("FireForce.Data.Models.Otros.Firmas.Tarea", b =>
+                {
+                    b.Navigation("Tareas");
                 });
 
             modelBuilder.Entity("FireForce.Data.Models.Personas.Damnificado_Salida", b =>
