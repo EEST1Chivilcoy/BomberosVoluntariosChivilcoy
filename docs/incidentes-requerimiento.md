@@ -201,10 +201,25 @@ No fue solo ampliar el tipo; también cambió la semántica (`AtendidoPor` = qui
 |---|---|---|
 | 1 | **Modelo** | ✅ **Hecho** — discriminador `Tipo`, `CantidadFirmas`, `Tareas`, `Movimientos`, `TareaPadreId`, `Autor` |
 | 2 | **DbContext** | ✅ **Hecho** — 5 `DbSet`s + relaciones + TPH (dos bloques) + conversiones |
-| 3 | **Migración** | ✅ **Hecha** — `20260725044604_ModuloIncidentes` (**sin aplicar**) |
-| 4 | **Servicio** | ⬜ `IIncidenteService` (+ movimientos aparte). **Acá van las validaciones del hueco 6.** |
-| 5 | **DI** | ⬜ `AddScoped` en `Program.cs` (~línea 136) |
-| 6 | **UI** | ⬜ De cero. Volver a agregar el ítem de menú y la tarjeta del dashboard. |
+| 3 | **Migración** | ✅ **Hecha** — `20260725044604_ModuloIncidentes` |
+| 4 | **Servicio** | ✅ **Hecho** — `IIncidenteService` con todas las reglas de negocio |
+| 5 | **DI** | ✅ **Hecho** |
+| 6 | **UI** | ✅ **Hecha** — lista + alta + detalle, con menú y tarjeta del dashboard |
+
+### Verificado end-to-end contra la base local `bomberos2`
+
+- Alta de incidente de móvil: el **encargado se resolvió solo** desde el móvil.
+- Derivación: el incidente pasó a *En proceso* y se creó la tarea en el departamento destino.
+- Derivación en cadena: la segunda tarea quedó con `TareaPadreId` apuntando a la primera.
+- Aprobación con **5 firmas** sobre una limpieza.
+- Aprobación de una **novedad**: la UI oculta el campo de firmas y avisa que no otorgan.
+- Un incidente ya resuelto deja de ofrecer acciones.
+- Bitácora: quedaron registrados los movimientos de creación, las dos derivaciones y el cambio
+  de estado.
+
+**Reglas implementadas pero todavía sin ejercitar** (falta el dato en la base local): que una
+persona que no es bombero solo pueda reportar novedades, y que un móvil sin encargado rechace el
+alta. En `bomberos2` las dos únicas personas son bomberos y el único móvil tiene encargado.
 
 #### Decisiones tomadas al implementar
 
