@@ -28,7 +28,7 @@ html {
    HEADER Y NAVEGACIÓN
    ============================================ */
 .custom-header {
-    background: linear-gradient(rgba(139, 0, 0, 0.8), rgba(178, 34, 34, 0.8)), url('/Imagenes/FondoMenuArribaInicio.png') !important;
+    background: linear-gradient(rgba(139, 0, 0, 0.8), rgba(178, 34, 34, 0.8)), url('/Imagenes/FondoMenuArribaInicio.webp') !important;
     background-size: 200px auto !important;
     background-repeat: repeat !important;
     background-position: center;
@@ -94,7 +94,7 @@ html {
    SECCIÓN HERO (PÁGINA INICIO)
    ============================================ */
 .hero-section {
-    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/Imagenes/FondoInicio.jpg');
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/Imagenes/FondoInicio.webp');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
