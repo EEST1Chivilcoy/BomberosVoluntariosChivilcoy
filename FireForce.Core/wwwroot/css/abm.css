@@ -385,3 +385,527 @@
         flex: 1 1 100%;
     }
 }
+
+/* ===== Módulo Licencias ===== */
+/* Particularidad del módulo: los filtros (fechas, búsqueda y acciones) viven
+   DENTRO del encabezado rojo, no en la barra blanca estándar .abm-filters.
+   Por eso este layout propio. */
+
+.abm-page--licencias .abm-header-section .title-container {
+    margin-bottom: 20px;
+}
+
+.abm-page--licencias .filters-section {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+.abm-page--licencias .filter-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    align-items: end;
+}
+
+.abm-page--licencias .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.abm-page--licencias .filter-label {
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.abm-page--licencias .actions-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 16px;
+    align-items: center;
+}
+
+.abm-page--licencias .actions-row .search-container {
+    min-width: 0;
+}
+
+/* Botones del encabezado. Estilizan <Button> de Ant, conservan !important. */
+.abm-page--licencias .modern-button {
+    height: 40px !important;
+    border-radius: var(--abm-radius-sm) !important;
+    font-weight: 600 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+.abm-page--licencias .add-button {
+    background: linear-gradient(135deg, var(--abm-success-color) 0%, var(--abm-success-dark) 100%) !important;
+    border: none !important;
+    color: #fff !important;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3) !important;
+    padding: 0 20px !important;
+}
+
+.abm-page--licencias .add-button:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4) !important;
+}
+
+.abm-page--licencias .notification-button {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    color: #fff !important;
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.3s ease !important;
+}
+
+.abm-page--licencias .notification-button:hover {
+    background: rgba(255, 255, 255, 0.3) !important;
+    transform: scale(1.1) !important;
+}
+
+/* La tabla scrollea dentro de la card, con la barra de scroll oculta. */
+.abm-page--licencias .abm-table-container {
+    padding: 0;
+    overflow: auto;
+    max-height: calc(100vh - 300px);
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.abm-page--licencias .abm-table-container::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
+}
+
+/* Modal de detalle (se re-envuelve en .abm-page dentro del portal del Modal). */
+.abm-page--licencias .modal-content {
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.abm-page--licencias .detail-description {
+    grid-column: 1 / -1;
+}
+
+.abm-page--licencias .detail-description .abm-detalle-valor {
+    min-height: 60px;
+    line-height: 1.5;
+}
+
+/* Componente LicenciasAprobar (dropdown de licencias pendientes). */
+.abm-page--licencias .approval-container {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    border: 1px solid #f0f0f0;
+}
+
+.abm-page--licencias .approval-header {
+    background: linear-gradient(135deg, var(--abm-primary-color) 0%, var(--abm-primary-dark) 100%);
+    padding: 16px 20px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.abm-page--licencias .approval-title {
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.abm-page--licencias .approval-content {
+    padding: 0;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.abm-page--licencias .empty-state {
+    padding: 40px 20px;
+    text-align: center;
+    color: #666;
+}
+
+.abm-page--licencias .empty-icon {
+    font-size: 3rem;
+    color: var(--abm-primary-color);
+    margin-bottom: 16px;
+}
+
+.abm-page--licencias .empty-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.abm-page--licencias .empty-description {
+    color: #666;
+    font-size: 0.95rem;
+}
+
+.abm-page--licencias .loading-container {
+    padding: 40px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    color: var(--abm-primary-color);
+}
+
+.abm-page--licencias .action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    align-items: center;
+}
+
+.abm-page--licencias .approve-button,
+.abm-page--licencias .reject-button {
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 8px;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.abm-page--licencias .approve-button {
+    color: var(--abm-success-color);
+    background: rgba(76, 175, 80, 0.1);
+}
+
+.abm-page--licencias .approve-button:hover {
+    color: #fff;
+    background: var(--abm-success-color);
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.abm-page--licencias .reject-button {
+    color: var(--abm-error-color);
+    background: rgba(198, 40, 40, 0.1);
+}
+
+.abm-page--licencias .reject-button:hover {
+    color: #fff;
+    background: var(--abm-error-color);
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(198, 40, 40, 0.3);
+}
+
+/* Responsivo del módulo. */
+@media (max-width: 1199px) {
+    .abm-page--licencias .filter-row {
+        grid-template-columns: 1fr;
+    }
+
+    .abm-page--licencias .actions-row {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+}
+
+@media (max-width: 768px) {
+    .abm-page--licencias .approval-header {
+        padding: 12px 16px;
+    }
+
+    .abm-page--licencias .approval-title {
+        font-size: 1rem;
+    }
+
+    .abm-page--licencias .action-buttons {
+        gap: 8px;
+    }
+
+    .abm-page--licencias .approve-button,
+    .abm-page--licencias .reject-button {
+        width: 32px;
+        height: 32px;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 575px) {
+    .abm-page--licencias .modern-button {
+        height: 36px !important;
+        padding: 0 12px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .abm-page--licencias .approval-content {
+        max-height: 50vh;
+    }
+}
+
+/* Modales de Licencias. Usan WrapClassName, así que el Modal se monta en un
+   portal FUERA de .abm-page: el scope es la propia clase del wrap. */
+
+.modal-crear-licencia .ant-modal-content {
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: 2px solid var(--abm-primary-dark);
+    margin-top: -50px;
+    margin-bottom: 0;
+}
+
+.modal-crear-licencia .ant-modal-title {
+    color: #fff !important;
+}
+
+.modal-crear-licencia .ant-modal-header {
+    background-color: var(--abm-primary-color);
+    padding: 16px 24px;
+}
+
+.modal-crear-licencia-content {
+    padding: 24px;
+}
+
+.modal-crear-licencia-form-item {
+    margin-bottom: 20px;
+    position: relative;
+    padding-left: 10px;
+}
+
+.modal-crear-licencia-form-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 3px;
+    border-radius: 5px;
+}
+
+.modal-crear-licencia-form-item .ant-form-item-label > label,
+.modal-crear-licencia-form-full-width .ant-form-item-label > label {
+    font-weight: 600;
+    color: #434343;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    transition: color 0.3s ease;
+}
+
+.modal-crear-licencia-form-item .ant-form-item-label > label:hover,
+.modal-crear-licencia-form-full-width .ant-form-item-label > label:hover {
+    color: var(--abm-primary-color);
+}
+
+.modal-crear-licencia .ant-input:focus,
+.modal-crear-licencia .ant-input:hover,
+.modal-crear-licencia .ant-select-selector:focus,
+.modal-crear-licencia .ant-select-selector:hover,
+.modal-crear-licencia .ant-picker:focus,
+.modal-crear-licencia .ant-picker:hover,
+.modal-crear-licencia .ant-picker-input > input:focus,
+.modal-crear-licencia .ant-picker-input > input:hover,
+.modal-crear-licencia .ant-input-number-input:focus,
+.modal-crear-licencia .ant-input-number-input:hover,
+.modal-crear-licencia .ant-textarea:focus,
+.modal-crear-licencia .ant-textarea:hover {
+    border-color: var(--abm-gold-color) !important;
+    box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
+}
+
+.modal-crear-licencia .ant-picker,
+.modal-crear-licencia .ant-input,
+.modal-crear-licencia .ant-select-selector,
+.modal-crear-licencia .ant-input-number,
+.modal-crear-licencia .ant-textarea {
+    border-radius: var(--abm-radius-sm) !important;
+    border: 1px solid #d9d9d9 !important;
+    background: #fff !important;
+    color: #434343 !important;
+    transition: all 0.3s ease !important;
+}
+
+.modal-crear-licencia .ant-btn-primary {
+    background: linear-gradient(135deg, var(--abm-success-color) 0%, var(--abm-success-dark) 100%) !important;
+    border: none !important;
+    color: #fff !important;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 0 20px !important;
+}
+
+.modal-crear-licencia .ant-btn-primary:hover {
+    background: linear-gradient(135deg, var(--abm-success-dark) 0%, var(--abm-success-color) 100%) !important;
+    color: #fff !important;
+}
+
+/* Modal de rechazo de licencia (componente LicenciasAprobar). */
+.modal-rechazar-licencia .ant-modal-content {
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: 2px solid var(--abm-primary-dark);
+    margin-top: -50px;
+    margin-bottom: 0;
+}
+
+.modal-rechazar-licencia .ant-modal-header {
+    background-color: var(--abm-primary-color);
+    border-radius: 10px 10px 0 0;
+    padding: 16px 24px;
+}
+
+.modal-rechazar-licencia .ant-modal-title {
+    color: #fff !important;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.modal-rechazar-licencia .modal-rechazo-content {
+    padding: 24px;
+}
+
+.modal-rechazar-licencia .licencia-info-card {
+    background: rgba(198, 40, 40, 0.05);
+    border: 1px solid rgba(198, 40, 40, 0.2);
+    border-radius: var(--abm-radius-sm);
+    padding: 16px;
+    margin-bottom: 20px;
+}
+
+.modal-rechazar-licencia .licencia-info-title {
+    font-weight: 700;
+    color: var(--abm-error-color);
+    margin-bottom: 16px;
+    font-size: 1.1rem;
+}
+
+.modal-rechazar-licencia .licencia-info-item {
+    background: #fff;
+    border: 1px solid rgba(198, 40, 40, 0.15);
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 8px;
+    transition: all 0.3s ease;
+}
+
+.modal-rechazar-licencia .licencia-info-item:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
+    border: 2px solid var(--abm-primary-color);
+}
+
+.modal-rechazar-licencia .licencia-info-label {
+    font-size: 0.8rem;
+    color: #666;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+    display: block;
+}
+
+.modal-rechazar-licencia .licencia-info-value {
+    font-size: 0.95rem;
+    color: #333;
+    font-weight: 500;
+    word-break: break-word;
+}
+
+.modal-rechazar-licencia .reason-form-item {
+    margin-bottom: 16px;
+}
+
+.modal-rechazar-licencia .reason-form-item .ant-form-item-label > label {
+    font-weight: 600;
+    color: var(--abm-error-color);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+}
+
+.modal-rechazar-licencia .reason-textarea {
+    border-radius: var(--abm-radius-sm) !important;
+    border: 2px solid #d9d9d9 !important;
+    transition: all 0.3s ease !important;
+}
+
+.modal-rechazar-licencia .reason-textarea:focus,
+.modal-rechazar-licencia .reason-textarea:hover {
+    border-color: var(--abm-primary-color) !important;
+    box-shadow: 0 0 0 2px rgba(166, 51, 51, 0.1) !important;
+}
+
+.modal-rechazar-licencia .button-row-right {
+    display: flex !important;
+    width: 100% !important;
+    margin-top: 20px !important;
+}
+
+.modal-rechazar-licencia .button-container-right {
+    display: flex !important;
+    gap: 12px !important;
+    margin-left: auto !important;
+}
+
+.modal-rechazar-licencia .btn-confirm-reject {
+    background: linear-gradient(135deg, var(--abm-success-color) 0%, var(--abm-success-dark) 100%) !important;
+    border: none !important;
+    color: #fff !important;
+    font-weight: 600;
+    padding: 0 24px !important;
+    height: 40px !important;
+    border-radius: var(--abm-radius-sm) !important;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.modal-rechazar-licencia .btn-confirm-reject:hover {
+    background: linear-gradient(135deg, var(--abm-success-dark) 0%, var(--abm-success-color) 100%) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
+}
+
+.modal-rechazar-licencia .btn-cancel-reject {
+    background: #f5f5f5 !important;
+    border: 1px solid #d9d9d9 !important;
+    color: #666 !important;
+    font-weight: 500;
+    padding: 0 20px !important;
+    height: 40px !important;
+    border-radius: var(--abm-radius-sm) !important;
+}
+
+.modal-rechazar-licencia .btn-cancel-reject:hover {
+    background: #e6f7ff !important;
+    border-color: #1890ff !important;
+    color: #1890ff !important;
+}
