@@ -10,10 +10,10 @@
     <base href="~/" />
     <link href="css/site.css" rel="stylesheet" />
     <link href="css/abm.css" rel="stylesheet" />
-    @* El bundle de CSS isolation se llama según el assembly: FireForce.Core.styles.css.
-       El nombre viejo (Core.styles.css) era un 404 silencioso y por eso los .razor.css
-       del proyecto nunca aplicaron. *@
-    <link href="FireForce.Core.styles.css" rel="stylesheet" />
+    @* CSS isolation: hoy no hay ningún .razor.css en el proyecto, así que el SDK no genera
+       el bundle y linkearlo daría 404. Si algún día se usa la feature, el link correcto es
+       <link href="FireForce.Core.styles.css" rel="stylesheet" /> (según el nombre del assembly;
+       el viejo "Core.styles.css" era un 404 silencioso y por eso los .razor.css nunca aplicaron). *@
     <component type="typeof(HeadOutlet)" render-mode="ServerPrerendered" />
 </head>
 <body>
