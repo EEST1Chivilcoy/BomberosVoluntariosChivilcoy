@@ -178,6 +178,34 @@
     gap: 8px;
 }
 
+/* --------------------------------------------------- Botones de acción */
+/* Estilizan <Button> de Ant Design, por eso conservan !important. */
+
+.abm-page .modern-button {
+    height: 40px !important;
+    border-radius: var(--abm-radius-sm) !important;
+    font-weight: 600 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+.abm-page .add-button {
+    background: linear-gradient(135deg, var(--abm-success-color) 0%, var(--abm-success-dark) 100%) !important;
+    border: none !important;
+    color: #fff !important;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3) !important;
+    padding: 0 20px !important;
+}
+
+.abm-page .add-button:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4) !important;
+}
+
 /* --------------------------------------------------------------------- Tabla */
 
 .abm-page .abm-table-container {
@@ -435,32 +463,8 @@
     min-width: 0;
 }
 
-/* Botones del encabezado. Estilizan <Button> de Ant, conservan !important. */
-.abm-page--licencias .modern-button {
-    height: 40px !important;
-    border-radius: var(--abm-radius-sm) !important;
-    font-weight: 600 !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 8px !important;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    position: relative !important;
-    overflow: hidden !important;
-}
-
-.abm-page--licencias .add-button {
-    background: linear-gradient(135deg, var(--abm-success-color) 0%, var(--abm-success-dark) 100%) !important;
-    border: none !important;
-    color: #fff !important;
-    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3) !important;
-    padding: 0 20px !important;
-}
-
-.abm-page--licencias .add-button:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4) !important;
-}
-
+/* Los botones .modern-button/.add-button del encabezado son los compartidos
+   de .abm-page (ver "Botones de acción"). */
 .abm-page--licencias .notification-button {
     background: rgba(255, 255, 255, 0.2) !important;
     border: 1px solid rgba(255, 255, 255, 0.3) !important;
@@ -666,10 +670,13 @@
     }
 }
 
-/* Modales de Licencias. Usan WrapClassName, así que el Modal se monta en un
-   portal FUERA de .abm-page: el scope es la propia clase del wrap. */
+/* Modales de formulario (Licencias, Ascensos y Sanciones). Usan WrapClassName,
+   así que el Modal se monta en un portal FUERA de .abm-page: el scope es la
+   propia clase del wrap. Los tres comparten el mismo diseño. */
 
-.modal-crear-licencia .ant-modal-content {
+.modal-crear-licencia .ant-modal-content,
+.modal-crear-ascenso .ant-modal-content,
+.modal-crear-sancion .ant-modal-content {
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     border: 2px solid var(--abm-primary-dark);
@@ -677,20 +684,28 @@
     margin-bottom: 0;
 }
 
-.modal-crear-licencia .ant-modal-title {
+.modal-crear-licencia .ant-modal-title,
+.modal-crear-ascenso .ant-modal-title,
+.modal-crear-sancion .ant-modal-title {
     color: #fff !important;
 }
 
-.modal-crear-licencia .ant-modal-header {
+.modal-crear-licencia .ant-modal-header,
+.modal-crear-ascenso .ant-modal-header,
+.modal-crear-sancion .ant-modal-header {
     background-color: var(--abm-primary-color);
     padding: 16px 24px;
 }
 
-.modal-crear-licencia-content {
+.modal-crear-licencia-content,
+.modal-crear-ascenso-content,
+.modal-crear-sancion-content {
     padding: 24px;
 }
 
-.modal-crear-licencia-form-item {
+.modal-crear-licencia-form-item,
+.modal-crear-ascenso-form-item,
+.modal-crear-sancion-form-item {
     margin-bottom: 20px;
     position: relative;
     padding-left: 10px;
@@ -707,7 +722,10 @@
 }
 
 .modal-crear-licencia-form-item .ant-form-item-label > label,
-.modal-crear-licencia-form-full-width .ant-form-item-label > label {
+.modal-crear-licencia-form-full-width .ant-form-item-label > label,
+.modal-crear-ascenso-form-item .ant-form-item-label > label,
+.modal-crear-ascenso-form-full-width .ant-form-item-label > label,
+.modal-crear-sancion-form-item .ant-form-item-label > label {
     font-weight: 600;
     color: #434343;
     display: flex;
@@ -718,7 +736,10 @@
 }
 
 .modal-crear-licencia-form-item .ant-form-item-label > label:hover,
-.modal-crear-licencia-form-full-width .ant-form-item-label > label:hover {
+.modal-crear-licencia-form-full-width .ant-form-item-label > label:hover,
+.modal-crear-ascenso-form-item .ant-form-item-label > label:hover,
+.modal-crear-ascenso-form-full-width .ant-form-item-label > label:hover,
+.modal-crear-sancion-form-item .ant-form-item-label > label:hover {
     color: var(--abm-primary-color);
 }
 
@@ -733,7 +754,31 @@
 .modal-crear-licencia .ant-input-number-input:focus,
 .modal-crear-licencia .ant-input-number-input:hover,
 .modal-crear-licencia .ant-textarea:focus,
-.modal-crear-licencia .ant-textarea:hover {
+.modal-crear-licencia .ant-textarea:hover,
+.modal-crear-ascenso .ant-input:focus,
+.modal-crear-ascenso .ant-input:hover,
+.modal-crear-ascenso .ant-select-selector:focus,
+.modal-crear-ascenso .ant-select-selector:hover,
+.modal-crear-ascenso .ant-picker:focus,
+.modal-crear-ascenso .ant-picker:hover,
+.modal-crear-ascenso .ant-picker-input > input:focus,
+.modal-crear-ascenso .ant-picker-input > input:hover,
+.modal-crear-ascenso .ant-input-number-input:focus,
+.modal-crear-ascenso .ant-input-number-input:hover,
+.modal-crear-ascenso .ant-textarea:focus,
+.modal-crear-ascenso .ant-textarea:hover,
+.modal-crear-sancion .ant-input:focus,
+.modal-crear-sancion .ant-input:hover,
+.modal-crear-sancion .ant-select-selector:focus,
+.modal-crear-sancion .ant-select-selector:hover,
+.modal-crear-sancion .ant-picker:focus,
+.modal-crear-sancion .ant-picker:hover,
+.modal-crear-sancion .ant-picker-input > input:focus,
+.modal-crear-sancion .ant-picker-input > input:hover,
+.modal-crear-sancion .ant-input-number-input:focus,
+.modal-crear-sancion .ant-input-number-input:hover,
+.modal-crear-sancion .ant-textarea:focus,
+.modal-crear-sancion .ant-textarea:hover {
     border-color: var(--abm-gold-color) !important;
     box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
 }
@@ -742,7 +787,17 @@
 .modal-crear-licencia .ant-input,
 .modal-crear-licencia .ant-select-selector,
 .modal-crear-licencia .ant-input-number,
-.modal-crear-licencia .ant-textarea {
+.modal-crear-licencia .ant-textarea,
+.modal-crear-ascenso .ant-picker,
+.modal-crear-ascenso .ant-input,
+.modal-crear-ascenso .ant-select-selector,
+.modal-crear-ascenso .ant-input-number,
+.modal-crear-ascenso .ant-textarea,
+.modal-crear-sancion .ant-picker,
+.modal-crear-sancion .ant-input,
+.modal-crear-sancion .ant-select-selector,
+.modal-crear-sancion .ant-input-number,
+.modal-crear-sancion .ant-textarea {
     border-radius: var(--abm-radius-sm) !important;
     border: 1px solid #d9d9d9 !important;
     background: #fff !important;
@@ -750,7 +805,9 @@
     transition: all 0.3s ease !important;
 }
 
-.modal-crear-licencia .ant-btn-primary {
+.modal-crear-licencia .ant-btn-primary,
+.modal-crear-ascenso .ant-btn-primary,
+.modal-crear-sancion .ant-btn-primary {
     background: linear-gradient(135deg, var(--abm-success-color) 0%, var(--abm-success-dark) 100%) !important;
     border: none !important;
     color: #fff !important;
@@ -761,9 +818,28 @@
     padding: 0 20px !important;
 }
 
-.modal-crear-licencia .ant-btn-primary:hover {
+.modal-crear-licencia .ant-btn-primary:hover,
+.modal-crear-ascenso .ant-btn-primary:hover,
+.modal-crear-sancion .ant-btn-primary:hover {
     background: linear-gradient(135deg, var(--abm-success-dark) 0%, var(--abm-success-color) 100%) !important;
     color: #fff !important;
+}
+
+/* Pie de los modales de Ascensos y Sanciones. */
+.modal-crear-ascenso-footer,
+.modal-crear-sancion-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 18px;
+}
+
+/* Mensaje de validación del grado (modal de Ascensos). #ff4d4f es el rojo de
+   error propio de Ant Design, para que empareje con sus validaciones. */
+.modal-crear-ascenso .grado-error {
+    color: #ff4d4f;
+    font-size: 12px;
+    margin-top: 4px;
 }
 
 /* Modal de rechazo de licencia (componente LicenciasAprobar). */
@@ -908,4 +984,570 @@
     background: #e6f7ff !important;
     border-color: #1890ff !important;
     color: #1890ff !important;
+}
+
+/* ===== Módulos Ascensos y Sanciones ===== */
+/* Comparten el mismo esquema: el encabezado rojo ubica el título a la
+   izquierda y el botón de alta a la derecha, y la tabla va al ras de la card. */
+
+.abm-page--ascensos .abm-header-section,
+.abm-page--sancionados .abm-header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.abm-page--ascensos .actions-row,
+.abm-page--sancionados .actions-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+}
+
+.abm-page--ascensos .abm-table-container,
+.abm-page--sancionados .abm-table-container {
+    padding: 0;
+}
+
+@media (max-width: 1199px) {
+    .abm-page--ascensos .abm-header-section,
+    .abm-page--sancionados .abm-header-section {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .abm-page--ascensos .actions-row,
+    .abm-page--sancionados .actions-row {
+        margin-top: 15px;
+        width: 100%;
+    }
+}
+
+/* ===== Módulo Reportes (HistorialBomberos, HistorialMoviles, Info_Chofers) ===== */
+
+/* Las tablas de reportes van al ras de la card. */
+.abm-page--historial-bomberos .abm-table-container,
+.abm-page--historial-moviles .abm-table-container,
+.abm-page--choferes .abm-table-container {
+    padding: 0;
+}
+
+/* HistorialBomberos: título y botón de exportación en la misma fila. */
+.abm-page--historial-bomberos .abm-header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.abm-page--historial-bomberos .actions-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+}
+
+@media (max-width: 960px) {
+    .abm-page--historial-bomberos .abm-header-section {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .abm-page--historial-bomberos .actions-row {
+        margin-top: 15px;
+        width: 100%;
+    }
+}
+
+/* Info_Chofers: los filtros de fecha viven DENTRO del encabezado rojo,
+   mismo esquema que Licencias. */
+.abm-page--choferes .abm-header-section .title-container {
+    margin-bottom: 20px;
+}
+
+.abm-page--choferes .filters-section {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+.abm-page--choferes .filter-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    align-items: end;
+}
+
+.abm-page--choferes .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.abm-page--choferes .filter-label {
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.abm-page--choferes .actions-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 16px;
+    align-items: center;
+}
+
+.abm-page--choferes .actions-row .search-container {
+    min-width: 0;
+}
+
+@media (max-width: 1199px) {
+    .abm-page--choferes .filter-row,
+    .abm-page--choferes .actions-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ===== Módulo Legajo ===== */
+/* Absorbe el viejo css/LegajoEstilos.css. El rojo #a51c16 del maquetado se
+   pliega a var(--abm-primary-color) (decisión de diseño: Legajo se homogeneiza
+   al ABM). El amarillo y el gris de tarjeta son propios del módulo. */
+
+.abm-page--legajo {
+    --legajo-amarillo-acento: #edb34d;
+    --legajo-gris-tarjeta: #e6e6e6f1;
+    margin-top: 80px;
+    padding: 20px 15px;
+}
+
+.abm-page--legajo .profile-section {
+    height: 100%;
+    position: relative;
+}
+
+.abm-page--legajo .avatar-container {
+    position: absolute;
+    top: -90px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+.abm-page--legajo .profile-avatar {
+    width: 160px !important;
+    height: 160px !important;
+    border: 10px solid var(--legajo-amarillo-acento) !important;
+    border-radius: 50% !important;
+}
+
+.abm-page--legajo .profile-card {
+    height: 100%;
+    border-radius: 15px !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+    background-color: var(--legajo-gris-tarjeta) !important;
+    padding-top: 60px !important;
+}
+
+.abm-page--legajo .profile-content {
+    padding-bottom: 2px;
+}
+
+.abm-page--legajo .profile-header {
+    text-align: center;
+    margin-bottom: 15px;
+    margin-top: 5px;
+}
+
+.abm-page--legajo .name-box {
+    background-color: var(--legajo-amarillo-acento);
+    color: #fff;
+    padding: 8px 15px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-size: clamp(1em, 3vw, 1.4em);
+    display: inline-block;
+    border-radius: 6px;
+    word-wrap: break-word;
+    max-width: 95%;
+}
+
+.abm-page--legajo .subtitle-text {
+    font-size: clamp(0.9em, 2.5vw, 1.2em);
+    color: #6e6e6e;
+    font-weight: 700;
+}
+
+.abm-page--legajo .info-block {
+    margin-bottom: 12px;
+}
+
+.abm-page--legajo .info-block .label {
+    color: #555;
+    margin-bottom: 2px;
+    font-weight: bold;
+    font-size: clamp(0.85em, 2vw, 1em);
+}
+
+.abm-page--legajo .ant-input[disabled],
+.abm-page--legajo .ant-input-disabled {
+    color: #7c7c7c !important;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 8px !important;
+    font-weight: bold !important;
+    height: 30px !important;
+    line-height: 30px !important;
+    cursor: default;
+    font-size: clamp(0.85em, 2vw, 1em) !important;
+}
+
+.abm-page--legajo .services-card2 {
+    border-radius: 15px !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+    background-color: var(--legajo-gris-tarjeta) !important;
+    margin-bottom: 30px !important;
+}
+
+.abm-page--legajo .header-servicios {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    margin-bottom: 25px;
+}
+
+.abm-page--legajo .banner-container {
+    display: flex;
+    justify-content: flex-start;
+    margin-left: 0;
+    flex-shrink: 0;
+}
+
+.abm-page--legajo .servicios-banner {
+    display: flex;
+    align-items: center;
+    background-color: var(--legajo-amarillo-acento);
+    height: 50px;
+    position: relative;
+    padding-left: 150px;
+    padding-right: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 0;
+    max-width: 100%;
+}
+
+.abm-page--legajo .banner-image-container {
+    position: absolute;
+    left: 0;
+    top: -38px;
+    height: 135px;
+    width: 140px;
+    z-index: 10;
+}
+
+.abm-page--legajo .banderin-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.abm-page--legajo .banner-number-overlay {
+    position: absolute;
+    left: 53%;
+    top: 41%;
+    transform: translate(-50%, -50%);
+    font-size: clamp(1.5em, 4vw, 2.5em);
+    font-weight: 1000;
+    color: #fff;
+    z-index: 20;
+    line-height: 1;
+}
+
+.abm-page--legajo .banner-text {
+    font-size: clamp(0.8em, 2vw, 1.2em);
+    font-weight: bold;
+    color: #fff;
+    white-space: normal;
+    word-wrap: break-word;
+    margin-left: 10px;
+    z-index: 1;
+    flex-grow: 1;
+    min-width: 0;
+}
+
+.abm-page--legajo .estadisticas-servicios {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    align-items: center;
+    gap: 10px;
+    margin-top: 50px;
+}
+
+.abm-page--legajo .estadisticas-servicios .ant-statistic {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    text-align: center;
+    flex-grow: 1;
+    margin: 0 5px;
+    min-width: 70px;
+}
+
+.abm-page--legajo .ant-statistic-title {
+    text-transform: uppercase;
+    font-size: clamp(0.7em, 1.5vw, 0.8em) !important;
+    font-weight: bold !important;
+    color: #333;
+    margin-bottom: 5px !important;
+    white-space: normal;
+    height: auto;
+}
+
+.abm-page--legajo .estadisticas-servicios .ant-statistic-title {
+    font-size: clamp(0.85em, 1.8vw, 1.2em) !important;
+    color: #666 !important;
+    margin-bottom: 0 !important;
+    margin-top: 5px !important;
+}
+
+.abm-page--legajo .ant-statistic-content {
+    font-weight: bold !important;
+    font-size: clamp(1.5em, 3vw, 2em) !important;
+}
+
+.abm-page--legajo .estadisticas-servicios .ant-statistic-content {
+    font-size: clamp(2em, 5vw, 3.5em) !important;
+    font-weight: 900 !important;
+}
+
+.abm-page--legajo .stats-divider {
+    border-left: 1px solid #c7c7c7 !important;
+    height: 50px !important;
+    flex-shrink: 0;
+}
+
+/* Responsivo del módulo Legajo. */
+@media (max-width: 1200px) {
+    .abm-page--legajo {
+        padding: 20px 10px;
+    }
+
+    .abm-page--legajo .servicios-banner {
+        padding-left: 120px;
+        padding-right: 20px;
+    }
+
+    .abm-page--legajo .banner-image-container {
+        height: 120px;
+        width: 120px;
+        top: -35px;
+    }
+
+    .abm-page--legajo .estadisticas-servicios {
+        gap: 8px;
+        margin-top: 40px;
+    }
+
+    .abm-page--legajo .estadisticas-servicios .ant-statistic {
+        min-width: 60px;
+    }
+}
+
+@media (max-width: 991px) {
+    .abm-page--legajo .ant-col-lg-8,
+    .abm-page--legajo .ant-col-lg-16 {
+        max-width: 100%;
+        flex: 0 0 100%;
+    }
+
+    .abm-page--legajo {
+        margin-top: 30px;
+        padding: 15px 10px;
+    }
+
+    .abm-page--legajo .profile-card {
+        padding-top: 20px !important;
+        margin-bottom: 20px;
+    }
+
+    .abm-page--legajo .profile-avatar {
+        width: 100px !important;
+        height: 100px !important;
+        border-width: 6px !important;
+    }
+
+    .abm-page--legajo .avatar-container {
+        top: -50px;
+    }
+
+    .abm-page--legajo .header-servicios {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 15px;
+    }
+
+    .abm-page--legajo .banner-container {
+        margin-left: 0;
+        justify-content: center;
+    }
+
+    .abm-page--legajo .servicios-banner {
+        padding-left: 100px;
+        padding-right: 15px;
+        height: 45px;
+        margin-top: 0;
+    }
+
+    .abm-page--legajo .banner-image-container {
+        height: 100px;
+        width: 100px;
+        top: -30px;
+    }
+
+    .abm-page--legajo .estadisticas-servicios {
+        flex-wrap: nowrap;
+        gap: 8px;
+        margin-top: 30px;
+    }
+
+    .abm-page--legajo .estadisticas-servicios .ant-statistic {
+        min-width: 60px;
+        margin: 0 2px;
+    }
+
+    .abm-page--legajo .stats-divider {
+        height: 35px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .abm-page--legajo {
+        margin-top: 20px;
+        padding: 10px 8px;
+    }
+
+    .abm-page--legajo .profile-avatar {
+        width: 80px !important;
+        height: 80px !important;
+        border-width: 5px !important;
+    }
+
+    .abm-page--legajo .avatar-container {
+        top: -40px;
+    }
+
+    .abm-page--legajo .servicios-banner {
+        padding-left: 80px;
+        padding-right: 10px;
+        height: 40px;
+    }
+
+    .abm-page--legajo .banner-image-container {
+        height: 85px;
+        width: 85px;
+        top: -25px;
+    }
+
+    .abm-page--legajo .estadisticas-servicios {
+        gap: 6px;
+        margin-top: 25px;
+    }
+
+    .abm-page--legajo .estadisticas-servicios .ant-statistic {
+        min-width: 45px;
+        margin: 0 1px;
+    }
+
+    .abm-page--legajo .stats-divider {
+        height: 30px !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .abm-page--legajo {
+        margin-top: 15px;
+        padding: 8px 5px;
+    }
+
+    .abm-page--legajo .profile-section {
+        margin-bottom: 20px;
+    }
+
+    .abm-page--legajo .profile-avatar {
+        width: 70px !important;
+        height: 70px !important;
+        border-width: 4px !important;
+    }
+
+    .abm-page--legajo .avatar-container {
+        top: -35px;
+    }
+
+    .abm-page--legajo .profile-card {
+        padding: 15px !important;
+        padding-top: 25px !important;
+    }
+
+    .abm-page--legajo .servicios-banner {
+        padding-left: 70px;
+        padding-right: 8px;
+        height: 35px;
+    }
+
+    .abm-page--legajo .banner-image-container {
+        height: 70px;
+        width: 70px;
+        top: -20px;
+    }
+
+    .abm-page--legajo .estadisticas-servicios {
+        flex-direction: column;
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .abm-page--legajo .estadisticas-servicios .ant-statistic {
+        min-width: auto;
+        width: 100%;
+    }
+
+    .abm-page--legajo .stats-divider {
+        display: none !important;
+    }
+
+    .abm-page--legajo .services-card2 {
+        padding: 10px !important;
+    }
+
+    .abm-page--legajo .header-servicios {
+        margin-bottom: 10px;
+    }
+}
+
+@media (max-width: 400px) {
+    .abm-page--legajo .name-box {
+        font-size: 0.95em !important;
+        padding: 6px 10px;
+    }
+
+    .abm-page--legajo .servicios-banner {
+        padding-left: 60px;
+        padding-right: 5px;
+        height: 32px;
+    }
+
+    .abm-page--legajo .banner-image-container {
+        height: 60px;
+        width: 60px;
+        top: -18px;
+    }
 }

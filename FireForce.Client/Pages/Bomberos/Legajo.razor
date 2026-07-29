@@ -4,9 +4,9 @@
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize(Policy = "AdminOnly")]
 
-<link rel="stylesheet" href="css/LegajoEstilos.css" />
+@* Los estilos viven en wwwroot/css/abm.css. No agregar <style> ni <link> acá. *@
 
-<div class="main-container">
+<div class="abm-page abm-page--legajo">
     <Row Gutter="30">
         <AntDesign.Col Xs="24" Sm="24" Md="24" Lg="8" Xl="6">
             <div class="profile-section">
@@ -61,23 +61,23 @@
                 <div class="estadisticas-servicios" role="region" aria-label="Estadísticas de puntaje">
                     <Statistic Title="@($"PUNTAJE MENSUAL ({mesAnterior})")"
                                Value="68"
-                               ValueStyle=" color: #a51c16; font-weight: bold;" />
+                               ValueStyle=" color: var(--abm-primary-color); font-weight: bold;" />
                     <Divider Type="@DividerType.Vertical" class="stats-divider" />
                     <Statistic Title="@($"LICENCIA MENSUAL ({mesAnterior})")"
                                Value="2"
-                               ValueStyle=" color: #a51c16; font-weight: bold;" />
+                               ValueStyle=" color: var(--abm-primary-color); font-weight: bold;" />
                     <Divider Type="@DividerType.Vertical" class="stats-divider" />
                     <Statistic Title="@($"PUNTAJE ANUAL ({añoActual})")"
                                Value="700"
-                               ValueStyle=" color: #a51c16; font-weight: bold;" />
+                               ValueStyle=" color: var(--abm-primary-color); font-weight: bold;" />
                     <Divider Type="@DividerType.Vertical" class="stats-divider" />
                     <Statistic Title="@($"LICENCIA ANUAL ({añoActual})")"
                                Value="25"
-                               ValueStyle=" color: #a51c16; font-weight: bold;" />
+                               ValueStyle=" color: var(--abm-primary-color); font-weight: bold;" />
                     <Divider Type="@DividerType.Vertical" class="stats-divider" />
                     <Statistic Title="@($"FIRMAS ({mesActual})")"
                                Value="8"
-                               ValueStyle=" color: #a51c16; font-weight: bold;" />
+                               ValueStyle=" color: var(--abm-primary-color); font-weight: bold;" />
                 </div>
             </Card>
 
@@ -98,19 +98,19 @@
                 <div class="estadisticas-servicios" role="region" aria-label="Estadísticas de servicios">
                     <Statistic Title="SERVICIOS INTERVINIENTES"
                                Value="200"
-                               ValueStyle="font-size: 2em; color: #a51c16; font-weight: bold;" />
+                               ValueStyle="font-size: 2em; color: var(--abm-primary-color); font-weight: bold;" />
                     <Divider Type="@DividerType.Vertical" class="stats-divider" />
                     <Statistic Title="SERVICIOS APRESTOS"
                                Value="120"
-                               ValueStyle="font-size: 2em; color: #a51c16; font-weight: bold;" />
+                               ValueStyle="font-size: 2em; color: var(--abm-primary-color); font-weight: bold;" />
                     <Divider Type="@DividerType.Vertical" class="stats-divider" />
                     <Statistic Title="SERVICIOS CHOFER"
                                Value="10"
-                               ValueStyle="font-size: 2em; color: #a51c16; font-weight: bold;" />
+                               ValueStyle="font-size: 2em; color: var(--abm-primary-color); font-weight: bold;" />
                     <Divider Type="@DividerType.Vertical" class="stats-divider" />
                     <Statistic Title="SERVICIOS A CARGO"
                                Value="15"
-                               ValueStyle="font-size: 2em; color: #a51c16; font-weight: bold;" />
+                               ValueStyle="font-size: 2em; color: var(--abm-primary-color); font-weight: bold;" />
                 </div>
             </Card>
 
