@@ -240,6 +240,51 @@ else
     </Form>
 </Modal>
 
+@* -------------------------------------------------- Cambio de estado de tarea *@
+<Modal Title="@($"Cambiar estado: {tareaEnCambio?.Nombre}")"
+       Footer="null"
+       Centered
+       DestroyOnClose
+       Visible="@modalEstadoVisible"
+       OnCancel="CerrarSubModales">
+    <Form Model="@cambioEstado" Layout="@FormLayout.Vertical" OnFinish="OnCambiarEstado">
+        <FormItem Label="Nuevo estado">
+            <Select TItem="EstadoTarea"
+                    TItemValue="EstadoTarea"
+                    @bind-Value="@cambioEstado.Estado"
+                    Style="width:100%">
+                <SelectOptions>
+                    @foreach (var estado in Enum.GetValues<EstadoTarea>())
+                    {
+                        <SelectOption TItemValue="EstadoTarea"
+                                      TItem="EstadoTarea"
+                                      Value="@estado"
+                                      Label="@estado.GetDisplayName()" />
+                    }
+                </SelectOptions>
+            </Select>
+        </FormItem>
+
+        <FormItem Label="¿Qué se hizo? (queda en la bitácora)">
+            <TextArea @bind-Value="@cambioEstado.Observaciones"
+                      Rows="3"
+                      MaxLength="500"
+                      ShowCount
+                      Placeholder="Por ejemplo: se cambió el retén y se probó la bomba en servicio" />
+        </FormItem>
+
+        <div style="display:flex; justify-content:flex-end; gap:8px;">
+            <Button OnClick="CerrarSubModales" Disabled="@estaProcesando">Cancelar</Button>
+            <Button Type="ButtonType.Primary"
+                    HtmlType="submit"
+                    Loading="@estaProcesando"
+                    Disabled="@(cambioEstado.Estado == tareaEnCambio?.Estado)">
+                <Icon Type="swap" /> Cambiar estado
+            </Button>
+        </div>
+    </Form>
+</Modal>
+
 @code {
     [Parameter] public int IncidenteId { get; set; }
     [Parameter] public EventCallback OnCambio { get; set; }
@@ -250,6 +295,8 @@ else
 
     private ResolucionIncidenteViewModel resolucion = new();
     private DerivacionViewModel derivacion = new();
+    private CambioEstadoTareaViewModel cambioEstado = new();
+    private TareaViewModel? tareaEnCambio;
 
     private bool estaCargando = true;
     private bool estaProcesando;
@@ -257,6 +304,7 @@ else
     private bool modalAprobarVisible;
     private bool modalRechazarVisible;
     private bool modalDerivarVisible;
+    private bool modalEstadoVisible;
 
     /// <summary>
     /// Último incidente cargado <b>o en carga</b>. La distinción importa: mientras la primera
@@ -334,6 +382,8 @@ else
         modalAprobarVisible = false;
         modalRechazarVisible = false;
         modalDerivarVisible = false;
+        modalEstadoVisible = false;
+        tareaEnCambio = null;
     }
 
     private async Task OnAprobar(EditContext contexto)
@@ -361,11 +411,27 @@ else
             "El incidente se derivó correctamente.");
     }
 
-    private async Task CambiarEstadoTarea(TareaViewModel tarea, EstadoTarea nuevoEstado)
+    private void AbrirCambioEstado(TareaViewModel tarea)
     {
-        // El cambio de estado lo hace el encargado del departamento que tiene la tarea.
+        tareaEnCambio = tarea;
+        cambioEstado = new CambioEstadoTareaViewModel { Estado = tarea.Estado };
+        modalEstadoVisible = true;
+    }
+
+    private async Task OnCambiarEstado(EditContext contexto)
+    {
+        if (tareaEnCambio is null)
+        {
+            return;
+        }
+
+        // El cambio de estado lo hace el encargado del departamento que tiene la tarea, y la
+        // observación queda en la bitácora para que cada paso de la cadena deje registro.
+        var tarea = tareaEnCambio;
+
         await EjecutarAsync(
-            () => IncidenteService.CambiarEstadoTareaAsync(tarea.Id, nuevoEstado, tarea.EncargadoId),
+            () => IncidenteService.CambiarEstadoTareaAsync(
+                tarea.Id, cambioEstado.Estado, tarea.EncargadoId, cambioEstado.Observaciones),
             "Se actualizó el estado de la tarea.");
     }
 
@@ -428,25 +494,10 @@ else
                         </SpaceItem>
                         @if (incidente is not null && !incidente.EstaResuelto)
                         {
-                            @* Select en lugar de Dropdown: el overlay del Dropdown de AntDesign
-                               no se despliega dentro del Modal. *@
                             <SpaceItem>
-                                <Select TItem="EstadoTarea"
-                                        TItemValue="EstadoTarea"
-                                        Value="@tarea.Estado"
-                                        ValueChanged="(EstadoTarea e) => CambiarEstadoTarea(tarea, e)"
-                                        Size="@InputSize.Small"
-                                        Style="width:130px">
-                                    <SelectOptions>
-                                        @foreach (var estado in Enum.GetValues<EstadoTarea>())
-                                        {
-                                            <SelectOption TItemValue="EstadoTarea"
-                                                          TItem="EstadoTarea"
-                                                          Value="@estado"
-                                                          Label="@estado.GetDisplayName()" />
-                                        }
-                                    </SelectOptions>
-                                </Select>
+                                <Button Size="@ButtonSize.Small" OnClick="() => AbrirCambioEstado(tarea)">
+                                    <Icon Type="swap" /> Cambiar estado
+                                </Button>
                             </SpaceItem>
                             <SpaceItem>
                                 <Button Size="@ButtonSize.Small" OnClick="() => AbrirDerivacion(tarea)">
