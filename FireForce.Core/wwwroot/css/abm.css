@@ -23,6 +23,17 @@
    ============================================================================ */
 
 :root {
+    /* ------------------------------------------------------------------
+       Tokens del sistema. Dos contextos de color, por decisión de diseño:
+       - El "chrome" (menú lateral, header) conserva el rojo institucional
+         oscuro de siempre.
+       - Las pantallas del sistema (ABM) usan la paleta --abm-*.
+       Cualquier color nuevo sale de acá; no hardcodear hexadecimales en
+       los módulos.
+       ------------------------------------------------------------------ */
+    --chrome-primary: #820014;
+    --chrome-primary-dark: #5c000e;
+
     --abm-primary-color: #A63333;
     --abm-primary-dark: #732D2D;
     --abm-success-color: #4CAF50;

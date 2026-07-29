@@ -2,7 +2,7 @@
    VARIABLES GLOBALES
    ========================================================= */
 :root {
-    --primary-color: #820014 !important;
+    --primary-color: var(--chrome-primary) !important;
     --primary-light: #a8071a !important;
     --text-dark: #263040 !important;
     --text-light: #ffffff !important;
