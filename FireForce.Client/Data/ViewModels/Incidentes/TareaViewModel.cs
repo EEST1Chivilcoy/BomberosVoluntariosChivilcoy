@@ -20,6 +20,12 @@ namespace FireForce.Client.Data.ViewModels.Incidentes
 
         public string DependenciaNombre { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Encargado del departamento destino. Es quien figura como autor cuando desde esta tarea
+        /// se vuelve a derivar o se cambia el estado.
+        /// </summary>
+        public int EncargadoId { get; set; }
+
         public string EncargadoNombre { get; set; } = string.Empty;
 
         public int? TareaPadreId { get; set; }

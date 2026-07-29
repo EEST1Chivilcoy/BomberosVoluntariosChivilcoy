@@ -308,9 +308,15 @@ else
         modalRechazarVisible = true;
     }
 
-    private void AbrirDerivacion(int? tareaPadreId)
+    /// <summary>
+    /// Abre el modal de derivación. Sin tarea padre deriva el encargado del incidente; con tarea
+    /// padre deriva el encargado del departamento que recibió esa tarea (cadena de derivaciones),
+    /// y así queda registrado en la bitácora.
+    /// </summary>
+    private void AbrirDerivacion(TareaViewModel? tareaPadre)
     {
-        derivacion = new DerivacionViewModel { TareaPadreId = tareaPadreId };
+        derivacion = new DerivacionViewModel { TareaPadreId = tareaPadre?.Id };
+        autorAccionId = tareaPadre?.EncargadoId ?? incidente?.EncargadoId ?? 0;
         modalDerivarVisible = true;
     }
 
@@ -326,14 +332,14 @@ else
         var firmas = incidente?.PuedeRecibirFirmas == true ? resolucion.CantidadFirmas : 0;
 
         await EjecutarAsync(
-            () => IncidenteService.AprobarIncidenteAsync(IncidenteId, AutorId, firmas, resolucion.Observaciones),
+            () => IncidenteService.AprobarIncidenteAsync(IncidenteId, EncargadoDelIncidente, firmas, resolucion.Observaciones),
             "El incidente se aprobó correctamente.");
     }
 
     private async Task OnRechazar(EditContext contexto)
     {
         await EjecutarAsync(
-            () => IncidenteService.RechazarIncidenteAsync(IncidenteId, AutorId, resolucion.Observaciones),
+            () => IncidenteService.RechazarIncidenteAsync(IncidenteId, EncargadoDelIncidente, resolucion.Observaciones),
             "El incidente se rechazó.");
     }
 
@@ -341,15 +347,16 @@ else
     {
         await EjecutarAsync(
             () => IncidenteService.DerivarIncidenteAsync(
-                IncidenteId, AutorId, derivacion.DependenciaDestinoId,
+                IncidenteId, autorAccionId, derivacion.DependenciaDestinoId,
                 derivacion.Nombre, derivacion.Descripcion, derivacion.TareaPadreId),
             "El incidente se derivó correctamente.");
     }
 
-    private async Task CambiarEstadoTarea(int tareaId, EstadoTarea nuevoEstado)
+    private async Task CambiarEstadoTarea(TareaViewModel tarea, EstadoTarea nuevoEstado)
     {
+        // El cambio de estado lo hace el encargado del departamento que tiene la tarea.
         await EjecutarAsync(
-            () => IncidenteService.CambiarEstadoTareaAsync(tareaId, nuevoEstado, AutorId),
+            () => IncidenteService.CambiarEstadoTareaAsync(tarea.Id, nuevoEstado, tarea.EncargadoId),
             "Se actualizó el estado de la tarea.");
     }
 
@@ -380,10 +387,14 @@ else
     }
 
     /// <summary>
-    /// Autor de los movimientos de la bitácora. Con Entra ID deshabilitado no hay usuario real
-    /// logueado, así que por ahora se registra al encargado del incidente.
+    /// Con Entra ID deshabilitado no hay usuario real logueado, así que como autor de aprobar y
+    /// rechazar se registra al encargado del incidente, que es quien debería ejecutarlas.
+    /// Cuando vuelva la autenticación, esto tiene que salir del usuario logueado.
     /// </summary>
-    private int AutorId => incidente?.SolicitanteId ?? 0;
+    private int EncargadoDelIncidente => incidente?.EncargadoId ?? 0;
+
+    /// <summary>Autor de la derivación en curso; se fija al abrir el modal de derivar.</summary>
+    private int autorAccionId;
 
     private RenderFragment RenderTareas(List<TareaViewModel> tareas) =>@<text>
         @foreach (var tarea in tareas)
@@ -415,7 +426,7 @@ else
                                             @foreach (var estado in Enum.GetValues<EstadoTarea>())
                                             {
                                                 var destino = estado;
-                                                <MenuItem OnClick="() => CambiarEstadoTarea(tarea.Id, destino)">
+                                                <MenuItem OnClick="() => CambiarEstadoTarea(tarea, destino)">
                                                     @destino.GetDisplayName()
                                                 </MenuItem>
                                             }
@@ -429,7 +440,7 @@ else
                                 </Dropdown>
                             </SpaceItem>
                             <SpaceItem>
-                                <Button Size="@ButtonSize.Small" OnClick="() => AbrirDerivacion(tarea.Id)">
+                                <Button Size="@ButtonSize.Small" OnClick="() => AbrirDerivacion(tarea)">
                                     <Icon Type="share-alt" /> Derivar
                                 </Button>
                             </SpaceItem>

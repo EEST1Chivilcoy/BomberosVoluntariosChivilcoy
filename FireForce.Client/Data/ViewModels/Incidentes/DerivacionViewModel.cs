@@ -6,10 +6,11 @@ namespace FireForce.Client.Data.ViewModels.Incidentes
     /// Datos del formulario con el que un encargado deriva el incidente a otro departamento.
     /// Derivar crea una tarea; si se indica <see cref="TareaPadreId"/>, la nueva queda como
     /// subtarea y así se arma la cadena de derivaciones.
+    /// Cada apertura del modal parte de una instancia nueva, así que no necesita el patrón de
+    /// edición sobre copia (<c>IEditableViewModel</c>).
     /// </summary>
-    public class DerivacionViewModel : IEditableViewModel<DerivacionViewModel>
+    public class DerivacionViewModel
     {
-        [Required(ErrorMessage = "Seleccioná el departamento destino.")]
         [Range(1, int.MaxValue, ErrorMessage = "Seleccioná el departamento destino.")]
         public int DependenciaDestinoId { get; set; }
 
@@ -25,26 +26,5 @@ namespace FireForce.Client.Data.ViewModels.Incidentes
 
         /// <summary>Tarea de la que deriva esta. Null si sale del encargado original.</summary>
         public int? TareaPadreId { get; set; }
-
-        // ✅ Implementación de ICloneable<DerivacionViewModel>
-        public DerivacionViewModel Clonar()
-        {
-            return new DerivacionViewModel
-            {
-                DependenciaDestinoId = this.DependenciaDestinoId,
-                Nombre = this.Nombre,
-                Descripcion = this.Descripcion,
-                TareaPadreId = this.TareaPadreId
-            };
-        }
-
-        // ✅ Implementación de IUpdatable<DerivacionViewModel>
-        public void ActualizarDesde(DerivacionViewModel source)
-        {
-            this.DependenciaDestinoId = source.DependenciaDestinoId;
-            this.Nombre = source.Nombre;
-            this.Descripcion = source.Descripcion;
-            this.TareaPadreId = source.TareaPadreId;
-        }
     }
 }

@@ -13,7 +13,13 @@ namespace FireForce.Client.Data.Mappers
     /// </summary>
     public static class IncidenteMapper
     {
-        public static IncidenteViewModel ToIncidenteViewModel(this IncidenteBase incidente)
+        /// <param name="incidente">Entidad a proyectar.</param>
+        /// <param name="conDetalle">
+        /// Con <c>false</c> se omiten el árbol de tareas y la bitácora (la grilla solo necesita el
+        /// conteo); el detalle usa <c>true</c>, que además requiere haber incluido las relaciones
+        /// de las tareas en la consulta.
+        /// </param>
+        public static IncidenteViewModel ToIncidenteViewModel(this IncidenteBase incidente, bool conDetalle = true)
         {
             ArgumentNullException.ThrowIfNull(incidente);
 
@@ -29,10 +35,16 @@ namespace FireForce.Client.Data.Mappers
                 SolicitanteId = incidente.SolicitanteId,
                 SolicitanteNombre = incidente.Solicitante.NombreCompleto(),
                 SolicitanteEsBombero = incidente.Solicitante is Bombero,
+                EncargadoId = incidente.EncargadoId,
                 EncargadoNombre = incidente.Encargado.NombreCompleto(),
                 CantidadFirmas = incidente.CantidadFirmas,
                 CantidadTareas = incidente.Tareas?.Count ?? 0
             };
+
+            if (!conDetalle)
+            {
+                return vm;
+            }
 
             if (incidente.Tareas is { Count: > 0 })
             {
@@ -54,7 +66,8 @@ namespace FireForce.Client.Data.Mappers
         {
             ArgumentNullException.ThrowIfNull(incidentes);
 
-            return incidentes.Select(i => i.ToIncidenteViewModel()).ToList();
+            // La grilla no muestra tareas ni bitácora, así que no vale la pena armarlas por fila.
+            return incidentes.Select(i => i.ToIncidenteViewModel(conDetalle: false)).ToList();
         }
 
         public static MovimientoIncidenteViewModel ToMovimientoViewModel(this MovimientoIncidente movimiento)
@@ -83,6 +96,7 @@ namespace FireForce.Client.Data.Mappers
                 Fecha = tarea.Fecha,
                 Estado = tarea.Estado,
                 DependenciaNombre = tarea.Dependencia?.NombreDependencia ?? string.Empty,
+                EncargadoId = tarea.EncargadoId,
                 EncargadoNombre = tarea.Encargado.NombreCompleto(),
                 TareaPadreId = tarea.TareaPadreId
             };

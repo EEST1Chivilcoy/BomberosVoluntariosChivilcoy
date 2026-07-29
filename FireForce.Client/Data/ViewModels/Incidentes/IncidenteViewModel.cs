@@ -31,6 +31,12 @@ namespace FireForce.Client.Data.ViewModels.Incidentes
         /// <summary>Un no bombero solo puede reportar novedades y nunca recibe firmas.</summary>
         public bool SolicitanteEsBombero { get; set; }
 
+        /// <summary>
+        /// Encargado del incidente. Mientras la autenticación esté deshabilitada, es también quien
+        /// se registra como autor de las acciones (aprobar, rechazar, derivar).
+        /// </summary>
+        public int EncargadoId { get; set; }
+
         public string EncargadoNombre { get; set; } = string.Empty;
 
         public int CantidadFirmas { get; set; }

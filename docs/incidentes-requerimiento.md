@@ -255,7 +255,19 @@ encargado original del incidente.
 
 ---
 
-## 8. Próximos pasos
+## 8. Deuda técnica conocida
+
+- **Autoría real de las acciones**: mientras Entra ID esté deshabilitado, como autor de
+  aprobar/rechazar se registra el encargado del incidente, y de las derivaciones el encargado del
+  eslabón correspondiente de la cadena — que es quien *debería* ejecutarlas. Cuando vuelva la
+  autenticación hay que (a) tomar el autor del usuario logueado y (b) **autorizar** que solo el
+  encargado correspondiente vea las acciones. Hoy cualquiera que entre a la página puede aprobar.
+- **Sin concurrencia optimista**: si dos personas resuelven el mismo incidente a la vez, gana el
+  último sin aviso. Es el patrón de todo el repo; si se encara, encararlo global.
+- **Preguntas de negocio menores, hoy permisivas**: ¿se puede derivar al mismo departamento del
+  incidente? ¿un bombero dado de baja puede figurar como solicitante? El código no lo restringe.
+
+## 9. Próximos pasos
 
 1. **Servicio** `IIncidenteService` — con las validaciones del hueco 6 de §5.1:
    - si el `Solicitante` no es `Bombero` → la categoría **debe** ser `Novedad`

@@ -335,6 +335,14 @@ namespace FireForce.Client.Services
                 .FirstOrDefaultAsync(t => t.Id == tareaId)
                 ?? throw new KeyNotFoundException($"No se encontró la tarea con el ID {tareaId}.");
 
+            // Misma regla que aprobar/rechazar/derivar: un incidente resuelto no admite cambios.
+            // La UI oculta los botones, pero el servicio es la fuente de verdad.
+            if (tarea.Incidente.Estado is EstadoIncidente.Aprobado or EstadoIncidente.Desaprobado)
+            {
+                throw new InvalidOperationException(
+                    $"El incidente ya fue resuelto ({tarea.Incidente.Estado.GetDisplayName()}) y sus tareas no admiten cambios.");
+            }
+
             if (tarea.Estado == nuevoEstado)
             {
                 return;
