@@ -206,20 +206,37 @@ No fue solo ampliar el tipo; también cambió la semántica (`AtendidoPor` = qui
 | 5 | **DI** | ✅ **Hecho** |
 | 6 | **UI** | ✅ **Hecha** — lista + alta + detalle, con menú y tarjeta del dashboard |
 
-### Verificado end-to-end contra la base local `bomberos2`
+#### Nota de arquitectura (2026-07-29)
 
-- Alta de incidente de móvil: el **encargado se resolvió solo** desde el móvil.
-- Derivación: el incidente pasó a *En proceso* y se creó la tarea en el departamento destino.
-- Derivación en cadena: la segunda tarea quedó con `TareaPadreId` apuntando a la primera.
-- Aprobación con **5 firmas** sobre una limpieza.
-- Aprobación de una **novedad**: la UI oculta el campo de firmas y avisa que no otorgan.
-- Un incidente ya resuelto deja de ofrecer acciones.
-- Bitácora: quedaron registrados los movimientos de creación, las dos derivaciones y el cambio
-  de estado.
+`IncidenteService` usa **`IDbContextFactory<BomberosDbContext>`** con un contexto por operación, a
+diferencia de los servicios más viejos que inyectan el `BomberosDbContext` scoped. Motivo: en
+Blazor Server el contexto scoped se comparte entre todos los componentes del circuito, y cuando dos
+componentes cargan datos a la vez (la grilla y el modal de detalle) explota con *"A second
+operation was started on this context instance"* — pasó en las pruebas reales. **Es el patrón a
+replicar al modernizar los demás servicios.**
 
-**Reglas implementadas pero todavía sin ejercitar** (falta el dato en la base local): que una
-persona que no es bombero solo pueda reportar novedades, y que un móvil sin encargado rechace el
-alta. En `bomberos2` las dos únicas personas son bomberos y el único móvil tiene encargado.
+### Verificado end-to-end contra la base local `bomberos2` (última corrida: 2026-07-29)
+
+Con datos de prueba: 5 bomberos, 3 dependencias con encargado (Test, Detall, Depósito) y 3 móviles
+(1 y 2 con encargado, **3 sin encargado**).
+
+- Alta de incidente de **móvil** y de **dependencia**: el encargado se resolvió solo en ambos casos.
+- **Móvil sin encargado**: no aparece en el selector del formulario. ✔
+- **Rechazo** con motivo → estado *Rechazado*, autor de bitácora = la encargada. ✔
+- **Derivación** → *En proceso*, tarea en el departamento destino con su encargado. ✔
+- **Derivación en cadena** → subtarea anidada (`TareaPadreId` verificado en la base). ✔
+- **Cambio de estado de tarea** → *Solucionado*, registrado en bitácora. ✔
+- Aprobación **con firmas** (5 y 3) y **sin firmas** (0, y sobre una novedad donde la UI ni ofrece
+  el campo). ✔
+- **Matriz de autoría verificada en la base**: creaciones por el solicitante; rechazo/aprobación
+  por el encargado del incidente; cada derivación por el encargado del eslabón que la originó;
+  cambio de estado por el encargado de la tarea. ✔
+- Filtro por estado y búsqueda. ✔
+- Cero errores de concurrencia de DbContext tras el cambio a `IDbContextFactory`. ✔
+
+**Única regla implementada y sin ejercitar**: que una persona que no es bombero solo pueda
+reportar novedades — por pedido del PO las pruebas se hicieron solo con bomberos. La regla está
+validada en el formulario y en el servicio.
 
 #### Decisiones tomadas al implementar
 

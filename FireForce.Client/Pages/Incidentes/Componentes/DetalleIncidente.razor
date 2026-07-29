@@ -259,16 +259,25 @@ else
     private bool modalDerivarVisible;
 
     /// <summary>
+    /// Último incidente cargado <b>o en carga</b>. La distinción importa: mientras la primera
+    /// carga está en vuelo, el Modal re-renderiza este componente y OnParametersSetAsync vuelve a
+    /// dispararse; sin esta marca se lanzaba una segunda consulta concurrente sobre el mismo
+    /// DbContext scoped ("A second operation was started on this context instance").
+    /// </summary>
+    private int? idEnCarga;
+
+    /// <summary>
     /// Se usa OnParametersSetAsync y no OnInitializedAsync porque el componente se reutiliza para
     /// distintos incidentes: si el padre cambia IncidenteId hay que volver a cargar.
     /// </summary>
     protected override async Task OnParametersSetAsync()
     {
-        if (incidente is not null && incidente.Id == IncidenteId)
+        if (idEnCarga == IncidenteId)
         {
             return;
         }
 
+        idEnCarga = IncidenteId;
         await CargarAsync();
     }
 
@@ -278,7 +287,7 @@ else
 
         try
         {
-            var entidad = await IncidenteService.ObtenerIncidentePorIdAsync(IncidenteId, asNoTracking: true);
+            var entidad = await IncidenteService.ObtenerIncidentePorIdAsync(IncidenteId);
             incidente = entidad.ToIncidenteViewModel();
 
             if (dependencias.Count == 0)
@@ -419,25 +428,25 @@ else
                         </SpaceItem>
                         @if (incidente is not null && !incidente.EstaResuelto)
                         {
+                            @* Select en lugar de Dropdown: el overlay del Dropdown de AntDesign
+                               no se despliega dentro del Modal. *@
                             <SpaceItem>
-                                <Dropdown>
-                                    <Overlay>
-                                        <Menu>
-                                            @foreach (var estado in Enum.GetValues<EstadoTarea>())
-                                            {
-                                                var destino = estado;
-                                                <MenuItem OnClick="() => CambiarEstadoTarea(tarea, destino)">
-                                                    @destino.GetDisplayName()
-                                                </MenuItem>
-                                            }
-                                        </Menu>
-                                    </Overlay>
-                                    <ChildContent>
-                                        <Button Size="@ButtonSize.Small">
-                                            Estado <Icon Type="down" />
-                                        </Button>
-                                    </ChildContent>
-                                </Dropdown>
+                                <Select TItem="EstadoTarea"
+                                        TItemValue="EstadoTarea"
+                                        Value="@tarea.Estado"
+                                        ValueChanged="(EstadoTarea e) => CambiarEstadoTarea(tarea, e)"
+                                        Size="@InputSize.Small"
+                                        Style="width:130px">
+                                    <SelectOptions>
+                                        @foreach (var estado in Enum.GetValues<EstadoTarea>())
+                                        {
+                                            <SelectOption TItemValue="EstadoTarea"
+                                                          TItem="EstadoTarea"
+                                                          Value="@estado"
+                                                          Label="@estado.GetDisplayName()" />
+                                        }
+                                    </SelectOptions>
+                                </Select>
                             </SpaceItem>
                             <SpaceItem>
                                 <Button Size="@ButtonSize.Small" OnClick="() => AbrirDerivacion(tarea)">

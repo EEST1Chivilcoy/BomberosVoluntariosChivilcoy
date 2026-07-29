@@ -16,9 +16,20 @@ namespace FireForce.Client.Services
     /// derivación mediante tareas y la bitácora de movimientos.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// Las tareas se manejan desde acá y no desde un servicio aparte porque no tienen vida propia:
     /// existen siempre dentro de un incidente y derivar implica tocar el incidente y la tarea en la
     /// misma operación.
+    /// </para>
+    /// <para>
+    /// A diferencia de los servicios más viejos del proyecto, este usa
+    /// <see cref="IDbContextFactory{TContext}"/> y crea un contexto por operación en lugar de
+    /// inyectar el <c>BomberosDbContext</c> scoped. En Blazor Server el contexto scoped se comparte
+    /// entre todos los componentes del circuito, y cuando dos componentes cargan datos a la vez
+    /// (por ejemplo la grilla y el modal de detalle) termina en "A second operation was started on
+    /// this context instance". Con un contexto por operación ese problema desaparece. Es el patrón
+    /// a replicar cuando se modernicen los demás servicios.
+    /// </para>
     /// </remarks>
     public interface IIncidenteService
     {
@@ -26,7 +37,7 @@ namespace FireForce.Client.Services
         Task<List<IncidenteBase>> ObtenerIncidentesAsync(EstadoIncidente? estado = null);
 
         /// <summary>Obtiene un incidente con su solicitante, encargado, tareas y bitácora.</summary>
-        Task<IncidenteBase> ObtenerIncidentePorIdAsync(int incidenteId, bool asNoTracking = false);
+        Task<IncidenteBase> ObtenerIncidentePorIdAsync(int incidenteId);
 
         /// <summary>
         /// Registra un incidente nuevo. El encargado se resuelve solo a partir del móvil o de la
@@ -64,11 +75,11 @@ namespace FireForce.Client.Services
 
     public class IncidenteService : IIncidenteService
     {
-        private readonly BomberosDbContext _context;
+        private readonly IDbContextFactory<BomberosDbContext> _contextFactory;
 
-        public IncidenteService(BomberosDbContext context)
+        public IncidenteService(IDbContextFactory<BomberosDbContext> contextFactory)
         {
-            _context = context;
+            _contextFactory = contextFactory;
         }
 
         // ---------------------------------------------------------------------
@@ -77,7 +88,9 @@ namespace FireForce.Client.Services
 
         public async Task<List<IncidenteBase>> ObtenerIncidentesAsync(EstadoIncidente? estado = null)
         {
-            IQueryable<IncidenteBase> consulta = _context.Incidentes
+            await using var context = await _contextFactory.CreateDbContextAsync();
+
+            IQueryable<IncidenteBase> consulta = context.Incidentes
                 .Include(i => i.Solicitante)
                 .Include(i => i.Encargado)
                 .Include(i => i.Tareas)
@@ -92,38 +105,37 @@ namespace FireForce.Client.Services
 
             // Los datos del objeto afectado dependen del subtipo, así que se cargan aparte para no
             // arrastrar Include condicionales sobre la jerarquía.
-            await CargarObjetoAfectadoAsync(incidentes);
+            await CargarObjetoAfectadoAsync(context, incidentes);
 
             return incidentes;
         }
 
-        public async Task<IncidenteBase> ObtenerIncidentePorIdAsync(int incidenteId, bool asNoTracking = false)
+        public async Task<IncidenteBase> ObtenerIncidentePorIdAsync(int incidenteId)
         {
-            IQueryable<IncidenteBase> consulta = _context.Incidentes
+            await using var context = await _contextFactory.CreateDbContextAsync();
+
+            var incidente = await context.Incidentes
                 .Include(i => i.Solicitante)
                 .Include(i => i.Encargado)
                 .Include(i => i.Movimientos).ThenInclude(m => m.Autor)
                 .Include(i => i.Tareas).ThenInclude(t => t.Dependencia)
-                .Include(i => i.Tareas).ThenInclude(t => t.Encargado);
-
-            if (asNoTracking)
-            {
-                consulta = consulta.AsNoTracking();
-            }
-
-            var incidente = await consulta.FirstOrDefaultAsync(i => i.Id == incidenteId)
+                .Include(i => i.Tareas).ThenInclude(t => t.Encargado)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(i => i.Id == incidenteId)
                 ?? throw new KeyNotFoundException($"No se encontró el incidente con el ID {incidenteId}.");
 
-            await CargarObjetoAfectadoAsync(new List<IncidenteBase> { incidente });
+            await CargarObjetoAfectadoAsync(context, new List<IncidenteBase> { incidente });
 
             return incidente;
         }
 
         public async Task<List<VehiculoSalida>> ObtenerMovilesDisponiblesAsync()
         {
+            await using var context = await _contextFactory.CreateDbContextAsync();
+
             // El DbSet de VehiculoSalida ya restringe a la flota propia (móviles y embarcaciones):
             // deja afuera los vehículos afectados y los particulares de la misma tabla TPH.
-            return await _context.VehiculoSalidas
+            return await context.VehiculoSalidas
                 .Include(v => v.Encargado)
                 .Where(v => v.EncargadoId != null)
                 .OrderBy(v => v.NumeroMovil)
@@ -133,7 +145,9 @@ namespace FireForce.Client.Services
 
         public async Task<List<Dependencia>> ObtenerDependenciasAsync()
         {
-            return await _context.Dependencias
+            await using var context = await _contextFactory.CreateDbContextAsync();
+
+            return await context.Dependencias
                 .Include(d => d.Encargado)
                 .OrderBy(d => d.NombreDependencia)
                 .AsNoTracking()
@@ -142,7 +156,9 @@ namespace FireForce.Client.Services
 
         public async Task<List<Persona>> ObtenerSolicitantesAsync()
         {
-            return await _context.Set<Persona>()
+            await using var context = await _contextFactory.CreateDbContextAsync();
+
+            return await context.Set<Persona>()
                 .OrderBy(p => p.Apellido).ThenBy(p => p.Nombre)
                 .AsNoTracking()
                 .ToListAsync();
@@ -163,8 +179,10 @@ namespace FireForce.Client.Services
 
             ValidationHelper.Validar(incidente);
 
+            await using var context = await _contextFactory.CreateDbContextAsync();
+
             // --- Paso B: validaciones caras (contra la base) ---
-            var solicitante = await _context.Set<Persona>()
+            var solicitante = await context.Set<Persona>()
                 .AsNoTracking()
                 .FirstOrDefaultAsync(p => p.PersonaId == incidente.SolicitanteId)
                 ?? throw new KeyNotFoundException($"No se encontró la persona con el ID {incidente.SolicitanteId}.");
@@ -179,8 +197,8 @@ namespace FireForce.Client.Services
             // El encargado sale del móvil o de la dependencia afectada, nunca lo elige quien carga.
             incidente.EncargadoId = incidente switch
             {
-                IncidenteMovil movil => await ResolverEncargadoDeMovilAsync(movil.VehiculoId),
-                IncidenteDependencia dependencia => await ResolverEncargadoDeDependenciaAsync(dependencia.DependenciaId),
+                IncidenteMovil movil => await ResolverEncargadoDeMovilAsync(context, movil.VehiculoId),
+                IncidenteDependencia dependencia => await ResolverEncargadoDeDependenciaAsync(context, dependencia.DependenciaId),
                 _ => throw new NotSupportedException($"Tipo de incidente no soportado: {incidente.GetType().Name}.")
             };
 
@@ -191,8 +209,8 @@ namespace FireForce.Client.Services
                 Descripcion = $"Se registró el incidente ({incidente.Categoria.GetDisplayName()})."
             });
 
-            _context.Incidentes.Add(incidente);
-            await _context.SaveChangesAsync();
+            context.Incidentes.Add(incidente);
+            await context.SaveChangesAsync();
         }
 
         // ---------------------------------------------------------------------
@@ -206,7 +224,9 @@ namespace FireForce.Client.Services
                 throw new ArgumentException("La cantidad de firmas no puede ser negativa.", nameof(cantidadFirmas));
             }
 
-            var incidente = await ObtenerParaResolverAsync(incidenteId);
+            await using var context = await _contextFactory.CreateDbContextAsync();
+
+            var incidente = await ObtenerParaResolverAsync(context, incidenteId);
 
             if (cantidadFirmas > 0)
             {
@@ -238,12 +258,14 @@ namespace FireForce.Client.Services
                 Descripcion = Combinar(detalle, observaciones)
             });
 
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
         }
 
         public async Task RechazarIncidenteAsync(int incidenteId, int autorId, string? observaciones = null)
         {
-            var incidente = await ObtenerParaResolverAsync(incidenteId);
+            await using var context = await _contextFactory.CreateDbContextAsync();
+
+            var incidente = await ObtenerParaResolverAsync(context, incidenteId);
 
             incidente.Estado = EstadoIncidente.Desaprobado;
             incidente.CantidadFirmas = 0;
@@ -255,7 +277,7 @@ namespace FireForce.Client.Services
                 Descripcion = Combinar("Se rechazó el incidente.", observaciones)
             });
 
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
         }
 
         // ---------------------------------------------------------------------
@@ -275,16 +297,18 @@ namespace FireForce.Client.Services
                 throw new ArgumentException("La descripción de la tarea es obligatoria.", nameof(descripcion));
             }
 
-            var incidente = await ObtenerParaResolverAsync(incidenteId);
+            await using var context = await _contextFactory.CreateDbContextAsync();
 
-            var dependencia = await _context.Dependencias
+            var incidente = await ObtenerParaResolverAsync(context, incidenteId);
+
+            var dependencia = await context.Dependencias
                 .AsNoTracking()
                 .FirstOrDefaultAsync(d => d.DependenciaId == dependenciaDestinoId)
                 ?? throw new KeyNotFoundException($"No se encontró la dependencia con el ID {dependenciaDestinoId}.");
 
             if (tareaPadreId.HasValue)
             {
-                var perteneceAlIncidente = await _context.Tareas
+                var perteneceAlIncidente = await context.Tareas
                     .AnyAsync(t => t.Id == tareaPadreId.Value && t.IncidenteId == incidenteId);
 
                 if (!perteneceAlIncidente)
@@ -307,7 +331,7 @@ namespace FireForce.Client.Services
 
             ValidationHelper.Validar(tarea);
 
-            _context.Tareas.Add(tarea);
+            context.Tareas.Add(tarea);
 
             // Derivar significa que el incidente pasó a estar en curso en otro departamento.
             if (incidente.Estado == EstadoIncidente.Pendiente)
@@ -322,14 +346,16 @@ namespace FireForce.Client.Services
                 Descripcion = $"Se derivó a {dependencia.NombreDependencia}: {tarea.Nombre}."
             });
 
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
 
             return tarea;
         }
 
         public async Task CambiarEstadoTareaAsync(int tareaId, EstadoTarea nuevoEstado, int autorId, string? observaciones = null)
         {
-            var tarea = await _context.Tareas
+            await using var context = await _contextFactory.CreateDbContextAsync();
+
+            var tarea = await context.Tareas
                 .Include(t => t.Dependencia)
                 .Include(t => t.Incidente).ThenInclude(i => i.Movimientos)
                 .FirstOrDefaultAsync(t => t.Id == tareaId)
@@ -360,16 +386,16 @@ namespace FireForce.Client.Services
                     observaciones)
             });
 
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
         }
 
         // ---------------------------------------------------------------------
         //  Apoyo
         // ---------------------------------------------------------------------
 
-        private async Task<IncidenteBase> ObtenerParaResolverAsync(int incidenteId)
+        private static async Task<IncidenteBase> ObtenerParaResolverAsync(BomberosDbContext context, int incidenteId)
         {
-            var incidente = await _context.Incidentes
+            var incidente = await context.Incidentes
                 .Include(i => i.Solicitante)
                 .Include(i => i.Movimientos)
                 .FirstOrDefaultAsync(i => i.Id == incidenteId)
@@ -384,11 +410,11 @@ namespace FireForce.Client.Services
             return incidente;
         }
 
-        private async Task<int> ResolverEncargadoDeMovilAsync(int vehiculoId)
+        private static async Task<int> ResolverEncargadoDeMovilAsync(BomberosDbContext context, int vehiculoId)
         {
             // Consultar por el DbSet de VehiculoSalida garantiza que sea un móvil o una embarcación
             // de la flota: los vehículos afectados y los particulares comparten tabla pero no subtipo.
-            var vehiculo = await _context.VehiculoSalidas
+            var vehiculo = await context.VehiculoSalidas
                 .AsNoTracking()
                 .FirstOrDefaultAsync(v => v.VehiculoId == vehiculoId)
                 ?? throw new KeyNotFoundException(
@@ -404,9 +430,9 @@ namespace FireForce.Client.Services
             return vehiculo.EncargadoId.Value;
         }
 
-        private async Task<int> ResolverEncargadoDeDependenciaAsync(int dependenciaId)
+        private static async Task<int> ResolverEncargadoDeDependenciaAsync(BomberosDbContext context, int dependenciaId)
         {
-            var dependencia = await _context.Dependencias
+            var dependencia = await context.Dependencias
                 .AsNoTracking()
                 .FirstOrDefaultAsync(d => d.DependenciaId == dependenciaId)
                 ?? throw new KeyNotFoundException($"No se encontró la dependencia con el ID {dependenciaId}.");
@@ -417,13 +443,13 @@ namespace FireForce.Client.Services
         /// <summary>
         /// Carga el móvil o la dependencia de cada incidente según su subtipo.
         /// </summary>
-        private async Task CargarObjetoAfectadoAsync(List<IncidenteBase> incidentes)
+        private static async Task CargarObjetoAfectadoAsync(BomberosDbContext context, List<IncidenteBase> incidentes)
         {
             var moviles = incidentes.OfType<IncidenteMovil>().ToList();
             if (moviles.Count > 0)
             {
                 var ids = moviles.Select(i => i.VehiculoId).Distinct().ToList();
-                var vehiculos = await _context.VehiculoSalidas
+                var vehiculos = await context.VehiculoSalidas
                     .Where(v => ids.Contains(v.VehiculoId))
                     .AsNoTracking()
                     .ToDictionaryAsync(v => v.VehiculoId);
@@ -441,7 +467,7 @@ namespace FireForce.Client.Services
             if (dependencias.Count > 0)
             {
                 var ids = dependencias.Select(i => i.DependenciaId).Distinct().ToList();
-                var registros = await _context.Dependencias
+                var registros = await context.Dependencias
                     .Where(d => ids.Contains(d.DependenciaId))
                     .AsNoTracking()
                     .ToDictionaryAsync(d => d.DependenciaId);
