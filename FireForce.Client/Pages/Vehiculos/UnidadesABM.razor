@@ -3,7 +3,7 @@
 @using FireForce.Client.Pages.Vehiculos.ViewModel
 @using System.Text.RegularExpressions;
 
-<link rel="stylesheet" href="css/Unidades.css" />
+@* Los estilos viven en wwwroot/css/abm.css. No agregar <style> acá. *@
 
 @*Servicios utilizados*@
 @using FireForce.Client.Services
@@ -15,11 +15,12 @@
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize(Policy = "AdminOnly")]
 
-<div class="container unidades-abm">
-	<Content class="" Style="padding: 16px;">
+<div class="abm-page abm-page--unidades">
+	<Content class="abm-container">
 		<Card Bordered="false"
-			  Style="width: 100%; border-radius: 16px; box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.1); background: #ffffff;">
-			<div class="header-section">
+			  Class="abm-main-card"
+			  Style="width: 100%;">
+			<div class="abm-header-section">
 				<div class="lava-bubbles">
 					<div class="lava-bubble b1"></div>
 					<div class="lava-bubble b2"></div>
@@ -77,7 +78,7 @@
 		   Visible="@AgregarVisible"
 		   OnCancel="@(() => AgregarVisible = false)"
 		   Footer="null"
-		   WrapClassName="fullscreen-modal" Style="max-width: unset; width: 100%; top: 0;">
+		   WrapClassName="fullscreen-modal modal-vehiculos" Style="max-width: unset; width: 100%; top: 0;">
 		<VehiculoAgregar OnClose="CloseVehiculo" />
 	</Modal>
 </div>
