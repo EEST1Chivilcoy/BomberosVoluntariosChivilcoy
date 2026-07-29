@@ -159,7 +159,7 @@ else
         }
         catch (Exception ex)
         {
-            await message.ErrorAsync($"No se pudieron cargar los datos del formulario: {ex.Message}");
+            message.Error($"No se pudieron cargar los datos del formulario: {ex.Message}");
         }
         finally
         {
@@ -200,14 +200,16 @@ else
             var incidente = modelo.ToIncidente();
             await IncidenteService.CrearIncidenteAsync(incidente);
 
-            await message.SuccessAsync("El incidente se registró correctamente.");
-
             modelo = new IncidenteFormViewModel();
             await OnFinishCallback.InvokeAsync();
+
+            // Sin await: esperar la Task del toast (~3 s hasta que desaparece) demoraba el
+            // cierre del modal y daba sensación de UI lenta.
+            message.Success("El incidente se registró correctamente.");
         }
         catch (Exception ex)
         {
-            await message.ErrorAsync(ex.Message);
+            message.Error(ex.Message);
         }
         finally
         {

@@ -183,7 +183,7 @@
         }
         catch (Exception ex)
         {
-            await message.ErrorAsync($"No se pudieron cargar los incidentes: {ex.Message}");
+            message.Error($"No se pudieron cargar los incidentes: {ex.Message}");
         }
         finally
         {
