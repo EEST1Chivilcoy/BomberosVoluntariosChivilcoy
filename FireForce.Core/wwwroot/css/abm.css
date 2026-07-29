@@ -1829,3 +1829,241 @@
         gap: 10px;
     }
 }
+
+/* ===== Módulo Personal ===== */
+/* Este módulo fue el ORIGEN del patrón (.personal-abm): casi todo su <style>
+   ya vivía acá deduplicado bajo .abm-page. Quedan dos scopes propios:
+   - .abm-page--personal: el listado (Personal.razor). Los filtros (estado,
+     búsqueda y alta) viven DENTRO del encabezado rojo, mismo esquema que
+     Licencias, pero en una sola fila de grilla.
+   - .abm-page--personal-form: los formularios y el detalle (Agregar*/Editar*/
+     DetallePersonal). Se renderizan como página propia (Agregar*) y dentro de
+     modales (Editar*, DetallePersonal); el scope va en el div raíz de cada
+     componente, que viaja con el portal del Modal, por eso no hace falta
+     WrapClassName. El rojo #c43a3a del maquetado se pliega a
+     var(--abm-primary-color). */
+
+.abm-page--personal .abm-header-section .title-container {
+    margin-bottom: 20px;
+}
+
+.abm-page--personal .filters-section {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+.abm-page--personal .actions-row {
+    display: grid;
+    grid-template-columns: 2fr 2fr auto;
+    gap: 16px;
+    align-items: center;
+}
+
+.abm-page--personal .actions-row .search-container {
+    min-width: 0;
+}
+
+/* Controles del encabezado (estilizan Ant, conservan !important). */
+.abm-page--personal .actions-row .ant-select,
+.abm-page--personal .actions-row .ant-input {
+    font-size: 16px !important;
+    width: 100% !important;
+    height: 40px !important;
+}
+
+.abm-page--personal .actions-row .ant-input-search {
+    display: flex !important;
+}
+
+.abm-page--personal .abm-select-estado {
+    width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    height: 40px !important;
+    font-size: 14px !important;
+    display: block !important;
+}
+
+.abm-page--personal .abm-select-estado .ant-select-selector {
+    width: 100% !important;
+    height: 40px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* Botonera Editar/Baja de cada fila de la tabla. */
+.abm-page--personal .abm-action-buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.abm-page--personal .abm-action-buttons .ant-btn {
+    min-width: 110px !important;
+    height: 38px !important;
+    font-size: 15px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    line-height: 1.2 !important;
+    padding: 0 12px !important;
+}
+
+.abm-page--personal .ant-btn-dangerous {
+    color: var(--abm-primary-color) !important;
+    border-color: var(--abm-primary-color) !important;
+}
+
+.abm-page--personal .ant-btn-dangerous:hover {
+    background-color: var(--abm-primary-color) !important;
+    color: #fff !important;
+}
+
+.abm-page--personal .ant-pagination {
+    justify-content: center !important;
+    margin-top: 24px !important;
+}
+
+.abm-page--personal .ant-pagination-item,
+.abm-page--personal .ant-pagination-prev,
+.abm-page--personal .ant-pagination-next {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* Responsivo del listado. */
+@media (max-width: 1199px) {
+    .abm-page--personal .actions-row {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+}
+
+@media (max-width: 768px) {
+    .abm-page--personal .abm-action-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .abm-page--personal .abm-action-buttons .ant-btn {
+        width: 100% !important;
+    }
+}
+
+/* Formularios y detalle del personal. */
+.abm-page--personal-form {
+    padding: 24px;
+    min-height: 100vh;
+}
+
+.abm-page--personal-form .page-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #1f1f1f;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+}
+
+.abm-page--personal-form .page-title-icon {
+    margin-right: 12px;
+    color: var(--abm-primary-color);
+}
+
+.abm-page--personal-form .card {
+    background-color: #fff;
+    border-radius: var(--abm-radius-sm);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.abm-page--personal-form .card-title {
+    font-size: 18px;
+    font-weight: 500;
+    color: #434343;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.abm-page--personal-form .profile-photo-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px;
+}
+
+.abm-page--personal-form .photo-preview {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.abm-page--personal-form .upload-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.abm-page--personal-form .action-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+/* Campo de vencimiento del carnet, visible solo si es chofer. */
+.abm-page--personal-form .conditional-field {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed #f0f0f0;
+}
+
+/* Campos del formulario (estilizan Ant, conservan !important). */
+.abm-page--personal-form .ant-form-item {
+    margin-bottom: 16px !important;
+}
+
+.abm-page--personal-form .ant-form-item-label > label {
+    color: #595959 !important;
+    font-weight: 500 !important;
+}
+
+.abm-page--personal-form .ant-input,
+.abm-page--personal-form .ant-select:not(.ant-select-customize-input) .ant-select-selector,
+.abm-page--personal-form .ant-picker,
+.abm-page--personal-form .ant-input-number {
+    border-radius: 4px !important;
+    border: 1px solid #d9d9d9 !important;
+}
+
+.abm-page--personal-form .ant-input:hover,
+.abm-page--personal-form .ant-select:not(.ant-select-customize-input) .ant-select-selector:hover,
+.abm-page--personal-form .ant-picker:hover,
+.abm-page--personal-form .ant-input-number:hover {
+    border-color: var(--abm-primary-color) !important;
+}
+
+.abm-page--personal-form .ant-input:focus,
+.abm-page--personal-form .ant-select-focused:not(.ant-select-customize-input) .ant-select-selector,
+.abm-page--personal-form .ant-picker-focused,
+.abm-page--personal-form .ant-input-number-focused {
+    border-color: var(--abm-primary-color) !important;
+    box-shadow: 0 0 0 2px rgba(166, 51, 51, 0.2) !important;
+}
+
+.abm-page--personal-form .ant-switch-checked {
+    background-color: var(--abm-primary-color) !important;
+}
