@@ -8,196 +8,20 @@
 
 @inject IMessageService MessageService
 
-<style>
-
-    .damnificados {
-        border: 2px solid #ffb366 !important;
-        background: linear-gradient(180deg, #fffdf9 0%, #fff7f0 100%);
-        box-shadow: 0 4px 12px rgba(255, 163, 77, 0.15);
-        border-radius: 16px;
-        margin-bottom: 2rem;
-        padding: 2.5rem 2rem 2rem 2rem;
-        transition: box-shadow 0.25s ease, transform 0.2s ease;
-    }
+@* Los estilos viven en wwwroot/css/abm.css. No agregar <style> acá. *@
 
 
-
-    .damnificados-componente .ant-table {
-        background: #fff8f0 !important;
-        color: #ff6a33 !important;
-        font-weight: 500 !important;
-        font-size: 1.05rem !important;
-        border-radius: 14px !important;
-    }
-
-        .damnificados-componente .ant-table-thead .ant-table-cell,
-        .damnificados-componente .ant-table thead th {
-            background: linear-gradient(135deg, #ff944d, #ff7a45) !important;
-            color: #fff !important;
-            font-weight: 600 !important;
-            text-align: center !important;
-            border-bottom: 2px solid #ffe0cc !important;
-            letter-spacing: 0.3px !important;
-            padding: 8px 10px !important;
-            font-size: 1.02rem !important;
-            height: 32px !important;
-            min-height: 24px !important;
-            line-height: 1.2 !important;
-            padding-top: 4px !important;
-            padding-bottom: 4px !important;
-        }
-
-    .damnificados-componente .ant-table-title {
-        background: #fff8f0 !important;
-        color: #ff6a33 !important;
-        font-weight: 700 !important;
-        font-size: 1.05rem !important;
-        text-align: left !important;
-        padding: 0.5rem 0.8rem !important;
-        border-top-left-radius: 12px !important;
-        border-top-right-radius: 12px !important;
-        border-bottom: 1px solid #ffd6b3 !important;
-    }
-
-    .damnificados-componente .ant-table-cell,
-    .damnificados-componente .ant-table td {
-        background: #fff !important;
-        color: #333 !important;
-        padding: 6px 10px !important;
-        font-size: 1rem !important;
-        height: 12px !important;
-    }
-
-    .damnificados-componente .ant-btn {
-        font-size: 0.95rem !important;
-        padding: 4px 10px !important;
-    }
-
-    
-    .modal-damnificado .ant-modal-content {
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(255, 163, 77, 0.15);
-        border: 4px solid #ffb366;
-        margin-top: -50px;
-        margin-bottom: 0px;
-        background: linear-gradient(180deg, #fffdf9 0%, #fff7f0 100%);
-    }
-
-    .modal-damnificado .ant-modal-header {
-        background-color: #fff8f0;
-        border-bottom: 1px solid #ffd6b3;
-        padding: 16px 24px;
-        border-radius: 9px 9px 0 0;
-    }
-
-    .modal-damnificado-content {
-        padding: 24px;
-    }
-
-    .modal-damnificado-form-item {
-        margin-bottom: 20px;
-        position: relative;
-        padding-left: 10px;
-    }
-
-        .modal-damnificado-form-item .ant-form-item-label > label,
-        .modal-damnificado-form-full-width .ant-form-item-label > label {
-            font-weight: 600;
-            color: #ff6a33;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-            transition: color 0.3s ease;
-        }
-
-            .modal-damnificado-form-item .ant-form-item-label > label:hover,
-            .modal-damnificado-form-full-width .ant-form-item-label > label:hover {
-                color: #ff944d;
-            }
-
-    .modal-damnificado .ant-input:focus,
-    .modal-damnificado .ant-input:hover,
-    .modal-damnificado .ant-select-selector:focus,
-    .modal-damnificado .ant-select-selector:hover,
-    .modal-damnificado .ant-picker:focus,
-    .modal-damnificado .ant-picker:hover,
-    .modal-damnificado .ant-picker-input > input:focus,
-    .modal-damnificado .ant-picker-input > input:hover,
-    .modal-damnificado .ant-input-number-input:focus,
-    .modal-damnificado .ant-input-number-input:hover,
-    .modal-damnificado .ant-textarea:focus,
-    .modal-damnificado .ant-textarea:hover {
-        border-color: #ffb366 !important;
-        box-shadow: 0 0 0 2px rgba(255, 163, 77, 0.15) !important;
-    }
-
-    .modal-damnificado .ant-picker,
-    .modal-damnificado .ant-input,
-    .modal-damnificado .ant-select-selector,
-    .modal-damnificado .ant-input-number,
-    .modal-damnificado .ant-textarea {
-        border-radius: 8px !important;
-        border: 1px solid #ffd6b3 !important;
-        background: #fff !important;
-        color: #434343 !important;
-        transition: all 0.3s ease !important;
-    }
-
-    .modal-damnificado .modal-damnificado-footer {
-        display: flex;
-        justify-content: flex-end;
-        gap: 12px;
-        margin-top: 18px;
-        margin-bottom: 0px;
-    }
-
-    .modal-damnificado .ant-btn-primary {
-        background: linear-gradient(135deg, #ff944d 0%, #ff6a33 100%) !important;
-        border: none !important;
-        color: #fff !important;
-        font-weight: 600;
-        box-shadow: 0 2px 8px rgba(255, 163, 77, 0.18);
-        margin-top: 0;
-        margin-bottom: 0;
-        padding: 0 20px !important;
-    }
-
-        .modal-damnificado .ant-btn-primary:hover {
-            background: linear-gradient(135deg, #ff7a45 0%, #ff944d 100%) !important;
-            color: #fff !important;
-        }
-
-    .btn-nuevo-damnificado {
-        background: linear-gradient(135deg, #ff944d 0%, #ff6a33 100%) !important;
-        color: #fff !important;
-        font-weight: 600;
-        border: none !important;
-        box-shadow: 0 2px 8px rgba(255, 163, 77, 0.18);
-        border-radius: 8px;
-        padding: 0 20px !important;
-        transition: background 0.3s;
-    }
-
-        .btn-nuevo-damnificado:hover {
-            background: linear-gradient(135deg, #ff7a45 0%, #ff944d 100%) !important;
-            color: #fff !important;
-        }
-</style>
-
-
-<div class="damnificados damnificados-componente">
+<div class="planilla-salida">
     <Tabs DefaultActiveKey="personas">
         <TabPane Key="personas" Tab="Personas">
             <Table DataSource="Model.Damnificados"
                    Size="TableSize.Small"
-                   Class="damnificados-componente"
                    Bordered>
                 <TitleTemplate>
                     <GridRow>
                         <GridCol Span="24" Style="text-align: right;">
                             <Button Type="ButtonType.Primary"
-                                    Class="btn-nuevo-damnificado"
+                                    Class="btn-agregar"
                                     OnClick="@(() => modalDamnificados = true)">
                                 <Icon Type="plus" /> Nuevo Damnificado
                             </Button>
@@ -313,13 +137,12 @@
         <TabPane Key="vehiculos" Tab="Vehículos">
             <Table DataSource="Model.VehiculosDamnificados"
                    Size="TableSize.Small"
-                   Class="damnificados-componente"
                    Bordered>
                 <TitleTemplate>
                     <GridRow>
                         <GridCol Span="24" Style="text-align: right;">
                             <Button Type="ButtonType.Primary"
-                                    Class="btn-nuevo-damnificado"
+                                    Class="btn-agregar"
                                     OnClick="@(() => modalVehiculo = true)">
                                 <Icon Type="plus" /> Nuevo Vehiculo
                             </Button>
@@ -487,11 +310,11 @@
             </Modal>
         </TabPane>
         <TabPane Key="animales" Tab="Animales">
-            <Table DataSource="Model.AnimalesDamnificados" Size="TableSize.Small" Class="damnificados-componente" Bordered>
+            <Table DataSource="Model.AnimalesDamnificados" Size="TableSize.Small" Bordered>
                 <TitleTemplate>
                     <GridRow>
                         <GridCol Span="24" Style="text-align: right;">
-                            <Button Type="ButtonType.Primary" Class="btn-nuevo-damnificado"
+                            <Button Type="ButtonType.Primary" Class="btn-agregar"
                                     OnClick="@(() => { editandoAnimal = false; Animal = new(); modalAnimal = true; })">
                                 <Icon Type="plus" /> Nuevo Animal
                             </Button>

@@ -194,14 +194,14 @@ html {
 /* ============================================
    SEPARADORES DE SECCIÓN
    ============================================ */
-.section-separator {
+.inst-separador {
     height: 60px;
     background: linear-gradient(45deg, #8b0000, #b22222, #8b0000);
     position: relative;
     overflow: hidden;
 }
 
-    .section-separator::before {
+    .inst-separador::before {
         content: '';
         position: absolute;
         top: 0;
@@ -1769,7 +1769,7 @@ html {
         line-height: 1 !important;
     }
 
-    .filter-label {
+    .inst-filtro-label {
         color: #666 !important;
         font-weight: 500 !important;
         text-transform: uppercase !important;
@@ -1802,7 +1802,7 @@ html {
             font-size: 2rem !important;
         }
 
-        .filter-label {
+        .inst-filtro-label {
             font-size: 0.8rem !important;
         }
     }

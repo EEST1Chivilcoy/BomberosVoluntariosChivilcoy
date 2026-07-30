@@ -8,8 +8,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <base href="~/" />
-    <link href="css/site.css" rel="stylesheet" />
-    <link href="css/abm.css" rel="stylesheet" />
+    @* asp-append-version agrega un hash del archivo a la URL: cuando el CSS cambia, el
+       navegador lo vuelve a descargar en lugar de servir la versión vieja del caché. *@
+    <link href="css/site.css" rel="stylesheet" asp-append-version="true" />
+    <link href="css/abm.css" rel="stylesheet" asp-append-version="true" />
     @* CSS isolation: hoy no hay ningún .razor.css en el proyecto, así que el SDK no genera
        el bundle y linkearlo daría 404. Si algún día se usa la feature, el link correcto es
        <link href="FireForce.Core.styles.css" rel="stylesheet" /> (según el nombre del assembly;

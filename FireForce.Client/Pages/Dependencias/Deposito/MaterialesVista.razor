@@ -9,13 +9,9 @@
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize(Policy = "AdminOnly")]
 
-<style>
-    .boton_p {
-        background-color: #732D2D !important;
-        color: white !important;
-    }
-</style>
+@* Los estilos viven en wwwroot/css/abm.css. No agregar <style> acá. *@
 
+<div class="abm-page abm-page--deposito">
 <Form Model="MaterialesVM"
       LabelColSpan="8"
       WrapperColSpan="16"
@@ -41,11 +37,12 @@
             display: flex !important;
             justify-content: flex-end !important;
             align-items: flex-end !important; height:100% !important; margin-bottom: -32px;" WrapperColOffset="8" WrapperColSpan="16">
-        <Button Class="boton_p" HtmlType="submit" Style="margin-right: 60px;">
+        <Button Class="boton-guardar" HtmlType="submit" Style="margin-right: 60px;">
             Guardar Material
         </Button>
     </FormItem>
 </Form>
+</div>
 
 
 @code {

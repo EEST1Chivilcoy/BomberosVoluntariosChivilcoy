@@ -13,64 +13,17 @@
 @inject IMessageService MessageService
 @implements IDisposable
 
-<style>
+@* Los estilos viven en wwwroot/css/abm.css. No agregar <style> acá. *@
 
-    .map-container {
-        width: 100%;
-        aspect-ratio: 1 / 1;
-        max-height: 350px;
-        border: 1px solid #ccc;
-        border-radius: 6px;
-        overflow: hidden;
-    }
-
-    @@media screen and (max-width: 768px) {
-        .map-container {
-            max-height: 300px;
-            margin-top: 16px;
-        }
-    }
-
-    .datos-generales {
-        border: 2px solid #40a9ff;
-        background: #fff;
-        border-radius: 16px;
-        box-shadow: 0 4px 16px rgba(24,144,255,0.08);
-        padding: 2.5rem 2rem 2rem 2rem;
-        margin-bottom: 2rem;
-        transition: box-shadow 0.2s;
-    }
-
-        .datos-generales .section-title {
-            color: #1890ff;
-            display: flex;
-            align-items: center;
-            gap: 0.7rem;
-        }
-
-    .hora-row {
-        display: flex;
-        gap: 24px;
-        align-items: flex-end;
-        margin-bottom: 16px;
-    }
-
-        .hora-row .ant-form-item {
-            margin-bottom: 0;
-            min-width: 180px;
-        }
-
-</style>
-
-<div class="datos-generales">
+<div class="planilla-salida">
     <Form Model="Model"
           ValidateOnChange="true"
           Loading="@(_formloading || !isApiAvailable)">
 
         @* 🕒 Información Temporal *@
         <div style="margin-bottom: 24px;">
-            <div style="border-bottom: 2px solid #1890ff; padding-bottom: 8px; margin-bottom: 16px;">
-                <h4 style="color: #1890ff; margin: 0; font-weight: 600;">🕒 Información Temporal</h4>
+            <div class="seccion-titulo">
+                <h4>🕒 Información Temporal</h4>
             </div>
             @if (Model.TimeLlegada < Model.TimeSalida)
             {
@@ -99,8 +52,8 @@
 
         @* 📍 Ubicación *@
         <div style="margin-bottom: 14px;">
-            <div style="border-bottom: 2px solid #1890ff; padding-bottom: 4px; margin-bottom: 8px;">
-                <h4 style="color: #1890ff; margin: 0; font-weight: 600; font-size: 1.08rem;">📍 Ubicación</h4>
+            <div class="seccion-titulo">
+                <h4>📍 Ubicación</h4>
             </div>
 
             <Row Gutter="24">
@@ -144,8 +97,8 @@
         @if (MostrarOpcionDepartamento)
         {
             <div style="margin-bottom: 24px;">
-                <div style="border-bottom: 2px solid #1890ff; padding-bottom: 8px; margin-bottom: 16px;">
-                    <h4 style="color: #1890ff; margin: 0; font-weight: 600;">🏢 Detalles del Lugar</h4>
+                <div class="seccion-titulo">
+                    <h4>🏢 Detalles del Lugar</h4>
                 </div>
                 <FormItem Label="¿Es Departamento?">
                     <Switch @bind-Checked="@esDepartamento" />
@@ -186,8 +139,8 @@
 
         @* 🚒 Información Operativa *@
         <div style="margin-bottom: 24px;">
-            <div style="border-bottom: 2px solid #1890ff; padding-bottom: 8px; margin-bottom: 16px;">
-                <h4 style="color: #1890ff; margin: 0; font-weight: 600;">🚒 Información Operativa</h4>
+            <div class="seccion-titulo">
+                <h4>🚒 Información Operativa</h4>
             </div>
 
             <FormItem Label="¿Se convoca Guardia?">
@@ -204,8 +157,8 @@
 
         @* Detalles o Daños Generales *@
         <div style="margin-bottom: 24px;">
-            <div style="border-bottom: 2px solid #1890ff; padding-bottom: 8px; margin-bottom: 16px;">
-                <h4 style="color: #1890ff; margin: 0; font-weight: 600;">Detalles o Daños Generales</h4>
+            <div class="seccion-titulo">
+                <h4>Detalles o Daños Generales</h4>
             </div>
 
             <FormItem Label="Tipo de Servicio" Required>

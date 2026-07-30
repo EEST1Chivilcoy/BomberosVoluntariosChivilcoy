@@ -1,12 +1,16 @@
 ﻿@inherits LayoutComponentBase
+@using FireForce.Shared.Services
 @inject NavigationManager NavManager
 @inject IJSRuntime JS
+@inject IVersionadorEstaticos Versionador
 @implements IDisposable
 
 <PageTitle>Bomberos Chivilcoy</PageTitle>
 
 <HeadContent>
-    <link href="css/institucional.css" rel="stylesheet" />
+    @* La versión en la query hace de cache-busting (equivalente casero de asp-append-version,
+       que no está disponible dentro de componentes Blazor). *@
+    <link href="css/institucional.css?v=@Versionador.ObtenerVersion("css/institucional.css")" rel="stylesheet" />
 </HeadContent>
 
 <div class="inicio-page">

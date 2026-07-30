@@ -670,13 +670,41 @@
     }
 }
 
-/* Modales de formulario (Licencias, Ascensos y Sanciones). Usan WrapClassName,
-   así que el Modal se monta en un portal FUERA de .abm-page: el scope es la
-   propia clase del wrap. Los tres comparten el mismo diseño. */
+/* ===== Modales de formulario (grupo compartido) ===== */
+/* Alta/edición de casi todos los módulos. Usan WrapClassName, así que el Modal
+   se monta en un portal FUERA de .abm-page: el scope es la propia clase del
+   wrap. El diseño es el mismo para todos, así que los selectores conviven acá
+   y cada módulo deja SOLO sus deltas en su propia sección.
+
+   Wraps que usan este grupo: Licencias (`modal-crear-licencia`), Ascensos
+   (`modal-crear-ascenso`), Sanciones (`modal-crear-sancion`), Brigadas
+   (`modal-crear-brigada`), Fuerzas Intervinientes y Partes de Vehículos
+   (`modal-crear-fuerza`), Dependencias (`modal-crear-dependencia`),
+   Movimientos de materiales (`modal-crear-movimiento`), Depósito
+   (`modal-deposito`), Comunicaciones (`modal-crear-comunicacion`), Equipos
+   Autónomos (`modal-crear-equipo`), Salidas (`modal-crear-salidas`), secciones
+   de la planilla (`modal-damnificado`, `modal-vehiculo`) y alta de pago
+   (`modal-crear-pago`). Los modales de rechazo (`modal-rechazar-licencia`,
+   `modal-rechazar-pago`) y el de impresión de pagos (`modal-imprimir-pago`)
+   entran solo en las reglas de la caja, el encabezado y el título.
+
+   No todos los wraps entran en todas las reglas: el que difiere en alguna
+   declaración queda fuera de esa regla puntual y lo aclara un comentario en la
+   sección del módulo. Al sumar un módulo nuevo, agregá su wrap a las listas de
+   selectores en vez de copiar el bloque. */
 
 .modal-crear-licencia .ant-modal-content,
 .modal-crear-ascenso .ant-modal-content,
-.modal-crear-sancion .ant-modal-content {
+.modal-crear-sancion .ant-modal-content,
+.modal-crear-brigada .ant-modal-content,
+.modal-crear-fuerza .ant-modal-content,
+.modal-crear-dependencia .ant-modal-content,
+.modal-crear-salidas .ant-modal-content,
+.modal-damnificado .ant-modal-content,
+.modal-vehiculo .ant-modal-content,
+.modal-crear-pago .ant-modal-content,
+.modal-rechazar-licencia .ant-modal-content,
+.modal-rechazar-pago .ant-modal-content {
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     border: 2px solid var(--abm-primary-dark);
@@ -684,28 +712,179 @@
     margin-bottom: 0;
 }
 
+/* Los modales de Incidentes son Centered (y el detalle, maximizado): misma
+   caja que el grupo de arriba pero SIN el margin-top, que los descentraría. */
+.modal-incidente .ant-modal-content {
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: 2px solid var(--abm-primary-dark);
+}
+
 .modal-crear-licencia .ant-modal-title,
 .modal-crear-ascenso .ant-modal-title,
-.modal-crear-sancion .ant-modal-title {
+.modal-crear-sancion .ant-modal-title,
+.modal-crear-brigada .ant-modal-title,
+.modal-crear-fuerza .ant-modal-title,
+.modal-crear-dependencia .ant-modal-title,
+.modal-crear-movimiento .ant-modal-title,
+.modal-deposito .ant-modal-title,
+.modal-crear-comunicacion .ant-modal-title,
+.modal-crear-equipo .ant-modal-title,
+.modal-crear-salidas .ant-modal-title,
+.modal-damnificado .ant-modal-title,
+.modal-vehiculo .ant-modal-title,
+.modal-crear-pago .ant-modal-title,
+.modal-rechazar-licencia .ant-modal-title,
+.modal-rechazar-pago .ant-modal-title,
+.modal-imprimir-pago .ant-modal-title,
+.modal-incidente .ant-modal-title {
     color: #fff !important;
+}
+
+/* X de cerrar estándar: círculo blanco translúcido centrado en la barra roja
+   (mismo diseño que .fullscreen-modal, en 36px porque el header es de 54px).
+   La caja interna .ant-modal-close-x conserva los 56px de Ant si no se la
+   achica: sin eso la X queda descentrada y desborda el círculo. */
+.modal-crear-licencia .ant-modal-close,
+.modal-crear-ascenso .ant-modal-close,
+.modal-crear-sancion .ant-modal-close,
+.modal-crear-brigada .ant-modal-close,
+.modal-crear-fuerza .ant-modal-close,
+.modal-crear-dependencia .ant-modal-close,
+.modal-crear-movimiento .ant-modal-close,
+.modal-deposito .ant-modal-close,
+.modal-crear-comunicacion .ant-modal-close,
+.modal-crear-equipo .ant-modal-close,
+.modal-crear-salidas .ant-modal-close,
+.modal-damnificado .ant-modal-close,
+.modal-vehiculo .ant-modal-close,
+.modal-crear-pago .ant-modal-close,
+.modal-rechazar-licencia .ant-modal-close,
+.modal-rechazar-pago .ant-modal-close,
+.modal-imprimir-pago .ant-modal-close,
+.modal-incidente .ant-modal-close,
+.modal-pago .ant-modal-close,
+.modal-direccion .ant-modal-close {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    top: 9px;
+    right: 12px;
+}
+
+.modal-crear-licencia .ant-modal-close .ant-modal-close-x,
+.modal-crear-ascenso .ant-modal-close .ant-modal-close-x,
+.modal-crear-sancion .ant-modal-close .ant-modal-close-x,
+.modal-crear-brigada .ant-modal-close .ant-modal-close-x,
+.modal-crear-fuerza .ant-modal-close .ant-modal-close-x,
+.modal-crear-dependencia .ant-modal-close .ant-modal-close-x,
+.modal-crear-movimiento .ant-modal-close .ant-modal-close-x,
+.modal-deposito .ant-modal-close .ant-modal-close-x,
+.modal-crear-comunicacion .ant-modal-close .ant-modal-close-x,
+.modal-crear-equipo .ant-modal-close .ant-modal-close-x,
+.modal-crear-salidas .ant-modal-close .ant-modal-close-x,
+.modal-damnificado .ant-modal-close .ant-modal-close-x,
+.modal-vehiculo .ant-modal-close .ant-modal-close-x,
+.modal-crear-pago .ant-modal-close .ant-modal-close-x,
+.modal-rechazar-licencia .ant-modal-close .ant-modal-close-x,
+.modal-rechazar-pago .ant-modal-close .ant-modal-close-x,
+.modal-imprimir-pago .ant-modal-close .ant-modal-close-x,
+.modal-incidente .ant-modal-close .ant-modal-close-x,
+.modal-pago .ant-modal-close .ant-modal-close-x,
+.modal-direccion .ant-modal-close .ant-modal-close-x {
+    width: 36px;
+    height: 36px;
+    line-height: 36px;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+}
+
+.modal-crear-licencia .ant-modal-close:hover,
+.modal-crear-ascenso .ant-modal-close:hover,
+.modal-crear-sancion .ant-modal-close:hover,
+.modal-crear-brigada .ant-modal-close:hover,
+.modal-crear-fuerza .ant-modal-close:hover,
+.modal-crear-dependencia .ant-modal-close:hover,
+.modal-crear-movimiento .ant-modal-close:hover,
+.modal-deposito .ant-modal-close:hover,
+.modal-crear-comunicacion .ant-modal-close:hover,
+.modal-crear-equipo .ant-modal-close:hover,
+.modal-crear-salidas .ant-modal-close:hover,
+.modal-damnificado .ant-modal-close:hover,
+.modal-vehiculo .ant-modal-close:hover,
+.modal-crear-pago .ant-modal-close:hover,
+.modal-rechazar-licencia .ant-modal-close:hover,
+.modal-rechazar-pago .ant-modal-close:hover,
+.modal-imprimir-pago .ant-modal-close:hover,
+.modal-incidente .ant-modal-close:hover,
+.modal-pago .ant-modal-close:hover,
+.modal-direccion .ant-modal-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
 }
 
 .modal-crear-licencia .ant-modal-header,
 .modal-crear-ascenso .ant-modal-header,
-.modal-crear-sancion .ant-modal-header {
+.modal-crear-sancion .ant-modal-header,
+.modal-crear-brigada .ant-modal-header,
+.modal-crear-fuerza .ant-modal-header,
+.modal-crear-dependencia .ant-modal-header,
+.modal-crear-movimiento .ant-modal-header,
+.modal-deposito .ant-modal-header,
+.modal-crear-comunicacion .ant-modal-header,
+.modal-crear-equipo .ant-modal-header,
+.modal-crear-salidas .ant-modal-header,
+.modal-damnificado .ant-modal-header,
+.modal-vehiculo .ant-modal-header,
+.modal-crear-pago .ant-modal-header,
+.modal-rechazar-licencia .ant-modal-header,
+.modal-rechazar-pago .ant-modal-header,
+.modal-imprimir-pago .ant-modal-header,
+.modal-incidente .ant-modal-header {
     background-color: var(--abm-primary-color);
-    padding: 16px 24px;
+    padding: 16px 72px 16px 24px; /* espacio a la derecha para la X */
+    /* Redondeo que acompaña la caja del modal (border-radius 12): sin esto el
+       rojo pisa las esquinas redondeadas. Antes era un delta repetido en
+       Rechazos y Planilla; ahora es parte del estándar. */
+    border-radius: 10px 10px 0 0;
 }
 
 .modal-crear-licencia-content,
 .modal-crear-ascenso-content,
-.modal-crear-sancion-content {
+.modal-crear-sancion-content,
+.modal-crear-brigada-content,
+.modal-crear-fuerza-content,
+.modal-crear-dependencia-content,
+.modal-crear-movimiento-content,
+.modal-crear-comunicacion-content,
+.modal-crear-equipo-content,
+.modal-crear-salidas-content,
+.modal-damnificado .modal-damnificado-content,
+.modal-vehiculo .modal-vehiculo-content,
+.modal-crear-pago-content {
     padding: 24px;
 }
 
 .modal-crear-licencia-form-item,
 .modal-crear-ascenso-form-item,
-.modal-crear-sancion-form-item {
+.modal-crear-sancion-form-item,
+.modal-crear-brigada-form-item,
+.modal-crear-fuerza-form-item,
+.modal-crear-dependencia-form-item,
+.modal-crear-movimiento-form-item,
+.modal-crear-comunicacion-form-item,
+.modal-crear-salidas-form-item,
+.modal-damnificado .modal-damnificado-form-item,
+.modal-vehiculo .modal-vehiculo-form-item {
     margin-bottom: 20px;
     position: relative;
     padding-left: 10px;
@@ -725,7 +904,18 @@
 .modal-crear-licencia-form-full-width .ant-form-item-label > label,
 .modal-crear-ascenso-form-item .ant-form-item-label > label,
 .modal-crear-ascenso-form-full-width .ant-form-item-label > label,
-.modal-crear-sancion-form-item .ant-form-item-label > label {
+.modal-crear-sancion-form-item .ant-form-item-label > label,
+.modal-crear-brigada-form-item .ant-form-item-label > label,
+.modal-crear-fuerza-form-item .ant-form-item-label > label,
+.modal-crear-dependencia-form-item .ant-form-item-label > label,
+.modal-crear-movimiento-form-item .ant-form-item-label > label,
+.modal-crear-movimiento-form-full-width .ant-form-item-label > label,
+.modal-crear-comunicacion-form-item .ant-form-item-label > label,
+.modal-crear-salidas-form-item .ant-form-item-label > label,
+.modal-crear-salidas-form-full-width .ant-form-item-label > label,
+.modal-damnificado .modal-damnificado-form-item .ant-form-item-label > label,
+.modal-vehiculo .modal-vehiculo-form-item .ant-form-item-label > label,
+.modal-crear-pago .ant-form-item-label > label {
     font-weight: 600;
     color: #434343;
     display: flex;
@@ -739,7 +929,20 @@
 .modal-crear-licencia-form-full-width .ant-form-item-label > label:hover,
 .modal-crear-ascenso-form-item .ant-form-item-label > label:hover,
 .modal-crear-ascenso-form-full-width .ant-form-item-label > label:hover,
-.modal-crear-sancion-form-item .ant-form-item-label > label:hover {
+.modal-crear-sancion-form-item .ant-form-item-label > label:hover,
+.modal-crear-brigada-form-item .ant-form-item-label > label:hover,
+.modal-crear-fuerza-form-item .ant-form-item-label > label:hover,
+.modal-crear-dependencia-form-item .ant-form-item-label > label:hover,
+.modal-crear-movimiento-form-item .ant-form-item-label > label:hover,
+.modal-crear-movimiento-form-full-width .ant-form-item-label > label:hover,
+.modal-crear-comunicacion-form-item .ant-form-item-label > label:hover,
+.modal-crear-equipo-form-item .ant-form-item-label > label:hover,
+.modal-crear-equipo-form-full-width .ant-form-item-label > label:hover,
+.modal-crear-salidas-form-item .ant-form-item-label > label:hover,
+.modal-crear-salidas-form-full-width .ant-form-item-label > label:hover,
+.modal-damnificado .modal-damnificado-form-item .ant-form-item-label > label:hover,
+.modal-vehiculo .modal-vehiculo-form-item .ant-form-item-label > label:hover,
+.modal-crear-pago .ant-form-item-label > label:hover {
     color: var(--abm-primary-color);
 }
 
@@ -778,7 +981,131 @@
 .modal-crear-sancion .ant-input-number-input:focus,
 .modal-crear-sancion .ant-input-number-input:hover,
 .modal-crear-sancion .ant-textarea:focus,
-.modal-crear-sancion .ant-textarea:hover {
+.modal-crear-sancion .ant-textarea:hover,
+.modal-crear-brigada .ant-input:focus,
+.modal-crear-brigada .ant-input:hover,
+.modal-crear-brigada .ant-select-selector:focus,
+.modal-crear-brigada .ant-select-selector:hover,
+.modal-crear-fuerza .ant-input:focus,
+.modal-crear-fuerza .ant-input:hover,
+.modal-crear-fuerza .ant-select-selector:focus,
+.modal-crear-fuerza .ant-select-selector:hover,
+.modal-crear-fuerza .ant-picker:focus,
+.modal-crear-fuerza .ant-picker:hover,
+.modal-crear-fuerza .ant-picker-input > input:focus,
+.modal-crear-fuerza .ant-picker-input > input:hover,
+.modal-crear-fuerza .ant-input-number-input:focus,
+.modal-crear-fuerza .ant-input-number-input:hover,
+.modal-crear-fuerza .ant-textarea:focus,
+.modal-crear-fuerza .ant-textarea:hover,
+.modal-crear-dependencia .ant-input:focus,
+.modal-crear-dependencia .ant-input:hover,
+.modal-crear-dependencia .ant-select-selector:focus,
+.modal-crear-dependencia .ant-select-selector:hover,
+.modal-crear-dependencia .ant-picker:focus,
+.modal-crear-dependencia .ant-picker:hover,
+.modal-crear-dependencia .ant-picker-input > input:focus,
+.modal-crear-dependencia .ant-picker-input > input:hover,
+.modal-crear-dependencia .ant-input-number-input:focus,
+.modal-crear-dependencia .ant-input-number-input:hover,
+.modal-crear-dependencia .ant-textarea:focus,
+.modal-crear-dependencia .ant-textarea:hover,
+.modal-crear-movimiento .ant-input:focus,
+.modal-crear-movimiento .ant-input:hover,
+.modal-crear-movimiento .ant-select-selector:focus,
+.modal-crear-movimiento .ant-select-selector:hover,
+.modal-crear-movimiento .ant-picker:focus,
+.modal-crear-movimiento .ant-picker:hover,
+.modal-crear-movimiento .ant-picker-input > input:focus,
+.modal-crear-movimiento .ant-picker-input > input:hover,
+.modal-crear-movimiento .ant-input-number-input:focus,
+.modal-crear-movimiento .ant-input-number-input:hover,
+.modal-crear-movimiento .ant-textarea:focus,
+.modal-crear-movimiento .ant-textarea:hover,
+.modal-deposito .ant-input:focus,
+.modal-deposito .ant-input:hover,
+.modal-deposito .ant-select-selector:focus,
+.modal-deposito .ant-select-selector:hover,
+.modal-deposito .ant-picker:focus,
+.modal-deposito .ant-picker:hover,
+.modal-deposito .ant-input-number:focus,
+.modal-deposito .ant-input-number:hover,
+.modal-deposito .ant-textarea:focus,
+.modal-deposito .ant-textarea:hover,
+.modal-crear-comunicacion .ant-input:focus,
+.modal-crear-comunicacion .ant-input:hover,
+.modal-crear-comunicacion .ant-select-selector:focus,
+.modal-crear-comunicacion .ant-select-selector:hover,
+.modal-crear-comunicacion .ant-picker:focus,
+.modal-crear-comunicacion .ant-picker:hover,
+.modal-crear-comunicacion .ant-picker-input > input:focus,
+.modal-crear-comunicacion .ant-picker-input > input:hover,
+.modal-crear-comunicacion .ant-input-number-input:focus,
+.modal-crear-comunicacion .ant-input-number-input:hover,
+.modal-crear-comunicacion .ant-textarea:focus,
+.modal-crear-comunicacion .ant-textarea:hover,
+.modal-crear-equipo .ant-input:focus,
+.modal-crear-equipo .ant-input:hover,
+.modal-crear-equipo .ant-select-selector:focus,
+.modal-crear-equipo .ant-select-selector:hover,
+.modal-crear-equipo .ant-picker:focus,
+.modal-crear-equipo .ant-picker:hover,
+.modal-crear-equipo .ant-picker-input > input:focus,
+.modal-crear-equipo .ant-picker-input > input:hover,
+.modal-crear-equipo .ant-input-number-input:focus,
+.modal-crear-equipo .ant-input-number-input:hover,
+.modal-crear-salidas .ant-input:focus,
+.modal-crear-salidas .ant-input:hover,
+.modal-crear-salidas .ant-select-selector:focus,
+.modal-crear-salidas .ant-select-selector:hover,
+.modal-crear-salidas .ant-picker:focus,
+.modal-crear-salidas .ant-picker:hover,
+.modal-crear-salidas .ant-picker-input > input:focus,
+.modal-crear-salidas .ant-picker-input > input:hover,
+.modal-crear-salidas .ant-input-number-input:focus,
+.modal-crear-salidas .ant-input-number-input:hover,
+.modal-crear-salidas .ant-textarea:focus,
+.modal-crear-salidas .ant-textarea:hover,
+.modal-damnificado .ant-input:focus,
+.modal-damnificado .ant-input:hover,
+.modal-damnificado .ant-select-selector:focus,
+.modal-damnificado .ant-select-selector:hover,
+.modal-damnificado .ant-picker:focus,
+.modal-damnificado .ant-picker:hover,
+.modal-damnificado .ant-picker-input > input:focus,
+.modal-damnificado .ant-picker-input > input:hover,
+.modal-damnificado .ant-input-number-input:focus,
+.modal-damnificado .ant-input-number-input:hover,
+.modal-damnificado .ant-textarea:focus,
+.modal-damnificado .ant-textarea:hover,
+.modal-damnificado .ant-input-affix-wrapper:focus,
+.modal-damnificado .ant-input-affix-wrapper:hover,
+.modal-vehiculo .ant-input:focus,
+.modal-vehiculo .ant-input:hover,
+.modal-vehiculo .ant-select-selector:focus,
+.modal-vehiculo .ant-select-selector:hover,
+.modal-vehiculo .ant-picker:focus,
+.modal-vehiculo .ant-picker:hover,
+.modal-vehiculo .ant-picker-input > input:focus,
+.modal-vehiculo .ant-picker-input > input:hover,
+.modal-vehiculo .ant-input-number-input:focus,
+.modal-vehiculo .ant-input-number-input:hover,
+.modal-vehiculo .ant-textarea:focus,
+.modal-vehiculo .ant-textarea:hover,
+.modal-vehiculo .ant-input-affix-wrapper:focus,
+.modal-vehiculo .ant-input-affix-wrapper:hover,
+.modal-crear-pago .ant-input:focus,
+.modal-crear-pago .ant-input:hover,
+.modal-crear-pago .ant-select-selector:focus,
+.modal-crear-pago .ant-select-selector:hover,
+.modal-crear-pago .ant-picker:focus,
+.modal-crear-pago .ant-picker:hover,
+.modal-crear-pago .ant-picker-input > input:focus,
+.modal-crear-pago .ant-picker-input > input:hover,
+.modal-crear-pago .ant-input-number-input:focus,
+.modal-crear-pago .ant-input-number-input:hover,
+.modal-crear-pago .ant-textarea:focus,
+.modal-crear-pago .ant-textarea:hover {
     border-color: var(--abm-gold-color) !important;
     box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
 }
@@ -797,7 +1124,63 @@
 .modal-crear-sancion .ant-input,
 .modal-crear-sancion .ant-select-selector,
 .modal-crear-sancion .ant-input-number,
-.modal-crear-sancion .ant-textarea {
+.modal-crear-sancion .ant-textarea,
+.modal-crear-brigada .ant-picker,
+.modal-crear-brigada .ant-input,
+.modal-crear-brigada .ant-select-selector,
+.modal-crear-brigada .ant-input-number,
+.modal-crear-brigada .ant-textarea,
+.modal-crear-fuerza .ant-picker,
+.modal-crear-fuerza .ant-input,
+.modal-crear-fuerza .ant-select-selector,
+.modal-crear-fuerza .ant-input-number,
+.modal-crear-fuerza .ant-textarea,
+.modal-crear-dependencia .ant-picker,
+.modal-crear-dependencia .ant-input,
+.modal-crear-dependencia .ant-select-selector,
+.modal-crear-dependencia .ant-input-number,
+.modal-crear-dependencia .ant-textarea,
+.modal-crear-movimiento .ant-picker,
+.modal-crear-movimiento .ant-input,
+.modal-crear-movimiento .ant-select-selector,
+.modal-crear-movimiento .ant-input-number,
+.modal-crear-movimiento .ant-textarea,
+.modal-deposito .ant-picker,
+.modal-deposito .ant-input,
+.modal-deposito .ant-select-selector,
+.modal-deposito .ant-input-number,
+.modal-deposito .ant-textarea,
+.modal-crear-comunicacion .ant-picker,
+.modal-crear-comunicacion .ant-input,
+.modal-crear-comunicacion .ant-select-selector,
+.modal-crear-comunicacion .ant-input-number,
+.modal-crear-comunicacion .ant-textarea,
+.modal-crear-equipo .ant-picker,
+.modal-crear-equipo .ant-input,
+.modal-crear-equipo .ant-select-selector,
+.modal-crear-equipo .ant-input-number,
+.modal-crear-salidas .ant-picker,
+.modal-crear-salidas .ant-input,
+.modal-crear-salidas .ant-select-selector,
+.modal-crear-salidas .ant-input-number,
+.modal-crear-salidas .ant-textarea,
+.modal-damnificado .ant-picker,
+.modal-damnificado .ant-input,
+.modal-damnificado .ant-select-selector,
+.modal-damnificado .ant-input-number,
+.modal-damnificado .ant-textarea,
+.modal-damnificado .ant-input-affix-wrapper,
+.modal-vehiculo .ant-picker,
+.modal-vehiculo .ant-input,
+.modal-vehiculo .ant-select-selector,
+.modal-vehiculo .ant-input-number,
+.modal-vehiculo .ant-textarea,
+.modal-vehiculo .ant-input-affix-wrapper,
+.modal-crear-pago .ant-picker,
+.modal-crear-pago .ant-input,
+.modal-crear-pago .ant-select-selector,
+.modal-crear-pago .ant-input-number,
+.modal-crear-pago .ant-textarea {
     border-radius: var(--abm-radius-sm) !important;
     border: 1px solid #d9d9d9 !important;
     background: #fff !important;
@@ -805,9 +1188,26 @@
     transition: all 0.3s ease !important;
 }
 
+/* Los modales de Movimientos, Depósito y Equipos igualan el alto del select. */
+.modal-crear-movimiento .ant-select:not(.ant-select-customize-input) .ant-select-selector,
+.modal-deposito .ant-select:not(.ant-select-customize-input) .ant-select-selector,
+.modal-crear-equipo .ant-select:not(.ant-select-customize-input) .ant-select-selector {
+    height: 40px !important;
+}
+
 .modal-crear-licencia .ant-btn-primary,
 .modal-crear-ascenso .ant-btn-primary,
-.modal-crear-sancion .ant-btn-primary {
+.modal-crear-sancion .ant-btn-primary,
+.modal-crear-brigada .ant-btn-primary,
+.modal-crear-fuerza .ant-btn-primary,
+.modal-crear-dependencia .ant-btn-primary,
+.modal-crear-dependencia .boton-agregar,
+.modal-crear-movimiento .ant-btn-primary,
+.modal-deposito .ant-btn-primary,
+.modal-crear-salidas .ant-btn-primary,
+.modal-damnificado .ant-btn-primary,
+.modal-vehiculo .ant-btn-primary,
+.modal-incidente .ant-btn-primary {
     background: linear-gradient(135deg, var(--abm-success-color) 0%, var(--abm-success-dark) 100%) !important;
     border: none !important;
     color: #fff !important;
@@ -816,22 +1216,110 @@
     margin-top: 0;
     margin-bottom: 0;
     padding: 0 20px !important;
+    border-radius: var(--abm-radius-sm);
 }
 
 .modal-crear-licencia .ant-btn-primary:hover,
 .modal-crear-ascenso .ant-btn-primary:hover,
-.modal-crear-sancion .ant-btn-primary:hover {
+.modal-crear-sancion .ant-btn-primary:hover,
+.modal-crear-brigada .ant-btn-primary:hover,
+.modal-crear-fuerza .ant-btn-primary:hover,
+.modal-crear-dependencia .ant-btn-primary:hover,
+.modal-crear-dependencia .boton-agregar:hover,
+.modal-crear-movimiento .ant-btn-primary:hover,
+.modal-deposito .ant-btn-primary:hover,
+.modal-crear-comunicacion .ant-btn-primary:hover,
+.modal-crear-comunicacion .boton-agregar:hover,
+.modal-crear-equipo .ant-btn-primary:hover,
+.modal-crear-salidas .ant-btn-primary:hover,
+.modal-damnificado .ant-btn-primary:hover,
+.modal-vehiculo .ant-btn-primary:hover,
+.modal-incidente .ant-btn-primary:hover,
+.modal-crear-pago .ant-btn-primary:hover {
     background: linear-gradient(135deg, var(--abm-success-dark) 0%, var(--abm-success-color) 100%) !important;
     color: #fff !important;
 }
 
-/* Pie de los modales de Ascensos y Sanciones. */
+/* Pie de acciones de los formularios de página completa (altas/ediciones de
+   Personal y Socios, y los modales fullscreen de Unidades): mismo botón de
+   confirmación verde que los modales de formulario, con la altura de los
+   botones de cabecera (.add-button) porque son la acción principal de la
+   página. El "Cancelar" comparte tamaño y radio pero conserva su tipo. */
+.abm-page--personal-form .action-buttons .ant-btn,
+.modal-vehiculos .modal-footer .ant-btn {
+    height: 40px;
+    padding: 0 20px;
+    font-weight: 600;
+    border-radius: var(--abm-radius-sm);
+}
+
+.abm-page--personal-form .action-buttons .ant-btn-primary:not(:disabled),
+.modal-vehiculos .modal-footer .ant-btn-primary:not(:disabled) {
+    background: linear-gradient(135deg, var(--abm-success-color) 0%, var(--abm-success-dark) 100%);
+    border: none;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
+}
+
+.abm-page--personal-form .action-buttons .ant-btn-primary:not(:disabled):hover,
+.modal-vehiculos .modal-footer .ant-btn-primary:not(:disabled):hover {
+    background: linear-gradient(135deg, var(--abm-success-dark) 0%, var(--abm-success-color) 100%);
+    color: #fff;
+}
+
+/* Pie estándar de los modales de formulario (estilo Unidades, aprobado por el
+   usuario): barra roja pegada al borde inferior, acciones verdes a la derecha
+   y SIN botón Cancelar (ese rol lo cumple la X del encabezado). Los márgenes
+   negativos compensan el padding acumulado hasta el borde del modal: casi
+   todos apilan .ant-modal-body (24px) + el div -content (24px) = 48px; los
+   que NO tienen div -content (Incidentes) pisan la variable a 24px.
+   Para modales nuevos usar .modal-footer-abm. */
 .modal-crear-ascenso-footer,
-.modal-crear-sancion-footer {
+.modal-crear-sancion-footer,
+.modal-crear-brigada-footer,
+.modal-crear-fuerza-footer,
+.modal-crear-dependencia-footer,
+.modal-crear-movimiento-footer,
+.modal-crear-comunicacion-footer,
+.modal-crear-equipo-footer,
+.modal-footer-abm {
     display: flex;
     justify-content: flex-end;
+    align-items: center;
     gap: 12px;
-    margin-top: 18px;
+    margin: 18px calc(-1 * var(--modal-pie-sangria, 48px)) calc(-1 * var(--modal-pie-sangria, 48px));
+    padding: 10px 20px;
+    background: var(--abm-primary-color);
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Sin div -content: una sola capa de padding (el body). */
+.modal-incidente {
+    --modal-pie-sangria: 24px;
+}
+
+/* Modales que usan el pie NATIVO de Ant (OkText/OnOk en vez de Footer="null"):
+   misma barra roja, y su botón Cancelar integrado se oculta. */
+.modal-crear-brigada .ant-modal-footer,
+.modal-crear-fuerza .ant-modal-footer,
+.modal-crear-salidas .ant-modal-footer,
+.modal-damnificado .ant-modal-footer,
+.modal-vehiculo .ant-modal-footer,
+.modal-crear-comunicacion .ant-modal-footer {
+    background: var(--abm-primary-color);
+    border-top: none;
+    padding: 10px 20px;
+    border-radius: 0 0 10px 10px;
+}
+
+.modal-crear-brigada .ant-modal-footer > .ant-btn:not(.ant-btn-primary),
+.modal-crear-fuerza .ant-modal-footer > .ant-btn:not(.ant-btn-primary),
+.modal-crear-salidas .ant-modal-footer > .ant-btn:not(.ant-btn-primary),
+.modal-damnificado .ant-modal-footer > .ant-btn:not(.ant-btn-primary),
+.modal-vehiculo .ant-modal-footer > .ant-btn:not(.ant-btn-primary),
+.modal-crear-comunicacion .ant-modal-footer > .ant-btn:not(.ant-btn-primary) {
+    display: none;
 }
 
 /* Mensaje de validación del grado (modal de Ascensos). #ff4d4f es el rojo de
@@ -842,34 +1330,33 @@
     margin-top: 4px;
 }
 
-/* Modal de rechazo de licencia (componente LicenciasAprobar). */
-.modal-rechazar-licencia .ant-modal-content {
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    border: 2px solid var(--abm-primary-dark);
-    margin-top: -50px;
-    margin-bottom: 0;
-}
+/* ===== Modales de rechazo (grupo compartido) ===== */
+/* Rechazo de una licencia (`modal-rechazar-licencia`, componente
+   LicenciasAprobar) y rechazo de un pago (`modal-rechazar-pago`, componente
+   PagosAprobar). Eran copia-pega entre sí; el encabezado, el título y la caja
+   del modal salen del grupo "Modales de formulario", de arriba, y lo propio del
+   rechazo (la ficha de datos, el motivo y los dos botones) vive acá. */
 
-.modal-rechazar-licencia .ant-modal-header {
-    background-color: var(--abm-primary-color);
-    border-radius: 10px 10px 0 0;
-    padding: 16px 24px;
-}
-
-.modal-rechazar-licencia .ant-modal-title {
-    color: #fff !important;
+/* Delta sobre el grupo de arriba: título con ícono (el redondeo del
+   encabezado ya es parte del estándar del grupo compartido). */
+.modal-rechazar-licencia .ant-modal-title,
+.modal-rechazar-pago .ant-modal-title {
     font-weight: 700;
     display: flex;
     align-items: center;
     gap: 8px;
 }
 
-.modal-rechazar-licencia .modal-rechazo-content {
+.modal-rechazar-licencia .modal-rechazo-content,
+.modal-rechazar-pago .modal-rechazo-content {
     padding: 24px;
 }
 
-.modal-rechazar-licencia .licencia-info-card {
+/* Ficha con los datos de lo que se está rechazando. Las clases internas
+   difieren por módulo (`licencia-info-*` / `pago-info-*`) porque vienen de los
+   .razor originales, pero el diseño es el mismo. */
+.modal-rechazar-licencia .licencia-info-card,
+.modal-rechazar-pago .pago-info-card {
     background: rgba(198, 40, 40, 0.05);
     border: 1px solid rgba(198, 40, 40, 0.2);
     border-radius: var(--abm-radius-sm);
@@ -877,14 +1364,16 @@
     margin-bottom: 20px;
 }
 
-.modal-rechazar-licencia .licencia-info-title {
+.modal-rechazar-licencia .licencia-info-title,
+.modal-rechazar-pago .pago-info-title {
     font-weight: 700;
     color: var(--abm-error-color);
     margin-bottom: 16px;
     font-size: 1.1rem;
 }
 
-.modal-rechazar-licencia .licencia-info-item {
+.modal-rechazar-licencia .licencia-info-item,
+.modal-rechazar-pago .pago-info-item {
     background: #fff;
     border: 1px solid rgba(198, 40, 40, 0.15);
     border-radius: 6px;
@@ -893,13 +1382,15 @@
     transition: all 0.3s ease;
 }
 
-.modal-rechazar-licencia .licencia-info-item:hover {
+.modal-rechazar-licencia .licencia-info-item:hover,
+.modal-rechazar-pago .pago-info-item:hover {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     transform: translateY(-1px);
     border: 2px solid var(--abm-primary-color);
 }
 
-.modal-rechazar-licencia .licencia-info-label {
+.modal-rechazar-licencia .licencia-info-label,
+.modal-rechazar-pago .pago-info-label {
     font-size: 0.8rem;
     color: #666;
     font-weight: 600;
@@ -909,18 +1400,21 @@
     display: block;
 }
 
-.modal-rechazar-licencia .licencia-info-value {
+.modal-rechazar-licencia .licencia-info-value,
+.modal-rechazar-pago .pago-info-value {
     font-size: 0.95rem;
     color: #333;
     font-weight: 500;
     word-break: break-word;
 }
 
-.modal-rechazar-licencia .reason-form-item {
+.modal-rechazar-licencia .reason-form-item,
+.modal-rechazar-pago .reason-form-item {
     margin-bottom: 16px;
 }
 
-.modal-rechazar-licencia .reason-form-item .ant-form-item-label > label {
+.modal-rechazar-licencia .reason-form-item .ant-form-item-label > label,
+.modal-rechazar-pago .reason-form-item .ant-form-item-label > label {
     font-weight: 600;
     color: var(--abm-error-color);
     display: flex;
@@ -929,31 +1423,37 @@
     font-size: 1rem;
 }
 
-.modal-rechazar-licencia .reason-textarea {
+.modal-rechazar-licencia .reason-textarea,
+.modal-rechazar-pago .reason-textarea {
     border-radius: var(--abm-radius-sm) !important;
     border: 2px solid #d9d9d9 !important;
     transition: all 0.3s ease !important;
 }
 
 .modal-rechazar-licencia .reason-textarea:focus,
-.modal-rechazar-licencia .reason-textarea:hover {
+.modal-rechazar-licencia .reason-textarea:hover,
+.modal-rechazar-pago .reason-textarea:focus,
+.modal-rechazar-pago .reason-textarea:hover {
     border-color: var(--abm-primary-color) !important;
     box-shadow: 0 0 0 2px rgba(166, 51, 51, 0.1) !important;
 }
 
-.modal-rechazar-licencia .button-row-right {
+.modal-rechazar-licencia .button-row-right,
+.modal-rechazar-pago .button-row-right {
     display: flex !important;
     width: 100% !important;
     margin-top: 20px !important;
 }
 
-.modal-rechazar-licencia .button-container-right {
+.modal-rechazar-licencia .button-container-right,
+.modal-rechazar-pago .button-container-right {
     display: flex !important;
     gap: 12px !important;
     margin-left: auto !important;
 }
 
-.modal-rechazar-licencia .btn-confirm-reject {
+.modal-rechazar-licencia .btn-confirm-reject,
+.modal-rechazar-pago .btn-confirm-reject {
     background: linear-gradient(135deg, var(--abm-success-color) 0%, var(--abm-success-dark) 100%) !important;
     border: none !important;
     color: #fff !important;
@@ -964,13 +1464,15 @@
     box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
 }
 
-.modal-rechazar-licencia .btn-confirm-reject:hover {
+.modal-rechazar-licencia .btn-confirm-reject:hover,
+.modal-rechazar-pago .btn-confirm-reject:hover {
     background: linear-gradient(135deg, var(--abm-success-dark) 0%, var(--abm-success-color) 100%) !important;
     transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
 }
 
-.modal-rechazar-licencia .btn-cancel-reject {
+.modal-rechazar-licencia .btn-cancel-reject,
+.modal-rechazar-pago .btn-cancel-reject {
     background: #f5f5f5 !important;
     border: 1px solid #d9d9d9 !important;
     color: #666 !important;
@@ -980,18 +1482,28 @@
     border-radius: var(--abm-radius-sm) !important;
 }
 
-.modal-rechazar-licencia .btn-cancel-reject:hover {
+.modal-rechazar-licencia .btn-cancel-reject:hover,
+.modal-rechazar-pago .btn-cancel-reject:hover {
     background: #e6f7ff !important;
     border-color: #1890ff !important;
     color: #1890ff !important;
 }
 
-/* ===== Módulos Ascensos y Sanciones ===== */
-/* Comparten el mismo esquema: el encabezado rojo ubica el título a la
-   izquierda y el botón de alta a la derecha, y la tabla va al ras de la card. */
+/* ===== Esquema de encabezado "título + acciones" (grupo compartido) ===== */
+/* El encabezado rojo ubica el título a la izquierda y las acciones (alta,
+   filtros, botones redondos) a la derecha, y la tabla va al ras de la card.
+   Lo usan: Ascensos, Sanciones, Brigadas, Fuerzas Intervinientes, Partes de
+   Vehículos, Dependencias, Depósito y Salidas. Cada módulo deja sus deltas
+   (paddings o overflow propios) en su propia sección, más abajo. */
 
 .abm-page--ascensos .abm-header-section,
-.abm-page--sancionados .abm-header-section {
+.abm-page--sancionados .abm-header-section,
+.abm-page--brigadas .abm-header-section,
+.abm-page--fuerzas .abm-header-section,
+.abm-page--partes .abm-header-section,
+.abm-page--dependencias .abm-header-section,
+.abm-page--deposito .abm-header-section,
+.abm-page--salidas .abm-header-section {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -999,7 +1511,13 @@
 }
 
 .abm-page--ascensos .actions-row,
-.abm-page--sancionados .actions-row {
+.abm-page--sancionados .actions-row,
+.abm-page--brigadas .actions-row,
+.abm-page--fuerzas .actions-row,
+.abm-page--partes .actions-row,
+.abm-page--dependencias .actions-row,
+.abm-page--deposito .actions-row,
+.abm-page--salidas .actions-row {
     display: flex;
     gap: 10px;
     align-items: center;
@@ -1008,19 +1526,37 @@
 }
 
 .abm-page--ascensos .abm-table-container,
-.abm-page--sancionados .abm-table-container {
+.abm-page--sancionados .abm-table-container,
+.abm-page--brigadas .abm-table-container,
+.abm-page--fuerzas .abm-table-container,
+.abm-page--partes .abm-table-container,
+.abm-page--dependencias .abm-table-container,
+.abm-page--deposito .abm-table-container,
+.abm-page--salidas .abm-table-container {
     padding: 0;
 }
 
 @media (max-width: 1199px) {
     .abm-page--ascensos .abm-header-section,
-    .abm-page--sancionados .abm-header-section {
+    .abm-page--sancionados .abm-header-section,
+    .abm-page--brigadas .abm-header-section,
+    .abm-page--fuerzas .abm-header-section,
+    .abm-page--partes .abm-header-section,
+    .abm-page--dependencias .abm-header-section,
+    .abm-page--deposito .abm-header-section,
+    .abm-page--salidas .abm-header-section {
         flex-direction: column;
         align-items: flex-start;
     }
 
     .abm-page--ascensos .actions-row,
-    .abm-page--sancionados .actions-row {
+    .abm-page--sancionados .actions-row,
+    .abm-page--brigadas .actions-row,
+    .abm-page--fuerzas .actions-row,
+    .abm-page--partes .actions-row,
+    .abm-page--dependencias .actions-row,
+    .abm-page--deposito .actions-row,
+    .abm-page--salidas .actions-row {
         margin-top: 15px;
         width: 100%;
     }
@@ -1757,19 +2293,6 @@
     grid-column: 1 / -1;
 }
 
-/* Encabezado del modal de detalles. */
-.modal-vehiculos .header-content-details-card {
-    padding: 24px 24px 20px;
-    text-align: center;
-}
-
-.modal-vehiculos .titulo-unidad {
-    font-size: 24px;
-    font-weight: 600;
-    margin-bottom: 0;
-    color: rgba(0, 0, 0, 0.85);
-}
-
 /* Footer del modal: barra fija con el rojo institucional. El fondo rojo vivía
    como .modal-footer en css/LegajoEstilos.css (#ce0f05) y estos modales lo
    heredaban de rebote; acá queda scopeado y con token. */
@@ -2067,3 +2590,2883 @@
 .abm-page--personal-form .ant-switch-checked {
     background-color: var(--abm-primary-color) !important;
 }
+
+/* ===== Módulo Dashboard (menú principal) ===== */
+/* Pages/Otros/Index.razor. No es un ABM: no tiene encabezado rojo ni tabla,
+   sino una grilla de tarjetas de navegación con un color por categoría. Igual
+   cuelga de .abm-page para no volver a filtrar selectores globales: el <style>
+   original declaraba un :root propio (--primary-color, --shadow-*, --radius-*)
+   que pisaba variables para TODA la aplicación. Esos tokens ahora viven
+   scopeados como --dash-*; los radios se pliegan a los tokens --abm-*. */
+
+.abm-page--dashboard {
+    --dash-accent: #1890ff; /* azul de Ant: color por defecto de tarjeta */
+    --dash-accent-dark: #096dd9;
+    --dash-text: #262626;
+    --dash-text-soft: #595959;
+    --dash-bg: #fafafa;
+    --dash-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --dash-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+    --dash-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.16);
+    --dash-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 24px;
+    background-color: var(--dash-bg);
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Enlace de salto para navegación por teclado. Es el primer elemento de la
+   página y vive FUERA del contenedor, por eso no lleva el prefijo del módulo
+   (se renombró .skip-link → .abm-skip-link para no ocupar un nombre global). */
+.abm-skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: #1890ff;
+    color: #fff;
+    padding: 8px 16px;
+    text-decoration: none;
+    border-radius: 0 0 4px 0;
+    z-index: 100;
+}
+
+.abm-skip-link:focus {
+    top: 0;
+}
+
+/* Banner institucional. */
+.abm-page--dashboard .banner-section {
+    margin-bottom: 32px;
+}
+
+/* Estiliza el <Card> de Ant Design, por eso conserva !important. */
+.abm-page--dashboard .banner-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--abm-radius) !important;
+    box-shadow: var(--dash-shadow-lg) !important;
+    height: 280px;
+    border: none !important;
+}
+
+.abm-page--dashboard .banner-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+}
+
+.abm-page--dashboard .banner-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(249, 168, 37, 0.85) 0%, rgba(255, 193, 7, 0.75) 50%, rgba(0, 0, 0, 0.70) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+    z-index: 2;
+}
+
+.abm-page--dashboard .banner-content {
+    text-align: center;
+    max-width: 900px;
+}
+
+/* Los títulos del banner son <Title> de Ant: conservan !important. */
+.abm-page--dashboard .banner-title {
+    color: #fff !important;
+    font-size: 2.75rem !important;
+    font-weight: 700 !important;
+    margin-bottom: 12px !important;
+    text-shadow: 2px 2px 12px rgba(0, 0, 0, 0.4);
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+}
+
+.abm-page--dashboard .banner-subtitle {
+    color: #fff !important;
+    font-size: 1.5rem !important;
+    font-weight: 500 !important;
+    margin-bottom: 0 !important;
+    text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.3);
+    opacity: 0.95;
+}
+
+/* Grilla de tarjetas de navegación. */
+.abm-page--dashboard .dashboard-grid {
+    row-gap: 32px !important;
+}
+
+.abm-page--dashboard .dashboard-card {
+    /* 100% de la columna, nunca una altura fija: la tarjeta de Utilidades tiene
+       más botones que las demás y una altura clavada la recortaba (overflow
+       hidden). Las columnas de la fila se estiran a la más alta, así que las
+       tarjetas de una misma fila siguen quedando parejas. */
+    height: 100%;
+    min-height: 425px;
+    border-radius: 12px !important;
+    transition: var(--dash-transition) !important;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: center;
+    padding: 32px 24px !important;
+    box-shadow: var(--dash-shadow-sm) !important;
+    border: 2px solid transparent !important;
+    position: relative;
+    overflow: hidden;
+    background: #fff !important;
+}
+
+.abm-page--dashboard .dashboard-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--dash-shadow-lg) !important;
+    border-color: var(--dash-accent) !important;
+}
+
+/* Foco visible para navegación por teclado. */
+.abm-page--dashboard .dashboard-card:focus-within {
+    outline: 3px solid var(--dash-accent);
+    outline-offset: 2px;
+}
+
+/* Banda de color superior: identifica la categoría de la tarjeta. */
+.abm-page--dashboard .dashboard-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--card-color, var(--dash-accent)), var(--card-color-dark, var(--dash-accent-dark)));
+    transition: height 0.3s ease;
+}
+
+.abm-page--dashboard .dashboard-card:hover::before {
+    height: 8px;
+}
+
+.abm-page--dashboard .card-icon {
+    font-size: 48px !important;
+    margin-bottom: 16px;
+    margin-top: 20px;
+    color: var(--card-color, var(--dash-accent));
+    transition: transform 0.3s ease;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.abm-page--dashboard .dashboard-card:hover .card-icon {
+    transform: scale(1.15);
+}
+
+.abm-page--dashboard .card-title {
+    margin: 12px 0 8px !important;
+    font-size: 1.35rem !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.3px;
+    color: var(--dash-text) !important;
+    line-height: 1.3;
+}
+
+.abm-page--dashboard .card-description {
+    margin: 0 0 16px !important;
+    font-size: 1rem !important;
+    color: var(--dash-text-soft) !important;
+    line-height: 1.5;
+}
+
+/* Tarjetas que agrupan varias acciones (Ética, Reportes, Utilidades). */
+.abm-page--dashboard .multi-action-card {
+    padding: 28px 24px 24px !important;
+    justify-content: flex-start;
+}
+
+.abm-page--dashboard .action-buttons-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+    margin-top: auto;
+    padding-top: 16px;
+}
+
+/* Botones internos de esas tarjetas: son <Button> de Ant, conservan !important. */
+.abm-page--dashboard .action-button {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 90px;
+    height: auto;
+    padding: 16px 12px !important;
+    border-radius: var(--abm-radius-sm) !important;
+    background-color: var(--dash-bg) !important;
+    color: var(--card-color, var(--dash-accent)) !important;
+    border: 2px solid var(--card-color, var(--dash-accent)) !important;
+    transition: var(--dash-transition) !important;
+    font-size: 0.9rem !important;
+    font-weight: 500 !important;
+}
+
+.abm-page--dashboard .action-button:hover {
+    background-color: var(--card-color, var(--dash-accent)) !important;
+    color: #fff !important;
+    transform: translateY(-2px);
+    box-shadow: var(--dash-shadow-md) !important;
+}
+
+.abm-page--dashboard .action-button:focus {
+    outline: 3px solid var(--card-color, var(--dash-accent));
+    outline-offset: 2px;
+}
+
+.abm-page--dashboard .action-button i {
+    font-size: 24px;
+    margin-bottom: 6px;
+}
+
+/* Un color por categoría: cada tarjeta define su par claro/oscuro y el resto
+   de las reglas lo lee con var(--card-color). */
+.abm-page--dashboard .legajo-card { --card-color: #1890ff; --card-color-dark: #096dd9; }      /* azul */
+.abm-page--dashboard .salidas-card { --card-color: #f5222d; --card-color-dark: #cf1322; }     /* rojo urgencia */
+.abm-page--dashboard .personal-card { --card-color: #52c41a; --card-color-dark: #389e0d; }    /* verde */
+.abm-page--dashboard .comision-card { --card-color: #722ed1; --card-color-dark: #531dab; }    /* púrpura */
+.abm-page--dashboard .licencias-card { --card-color: #fa8c16; --card-color-dark: #d46b08; }   /* naranja */
+.abm-page--dashboard .unidades-card { --card-color: #1d39c4; --card-color-dark: #10239e; }    /* azul oscuro */
+.abm-page--dashboard .incidentes-card { --card-color: #13c2c2; --card-color-dark: #08979c; }  /* cyan */
+.abm-page--dashboard .etica-card { --card-color: #eb2f96; --card-color-dark: #c41d7f; }       /* magenta */
+.abm-page--dashboard .reportes-card { --card-color: #595959; --card-color-dark: #434343; }    /* gris */
+.abm-page--dashboard .utilidades-card { --card-color: #0050b3; --card-color-dark: #003a8c; }  /* azul herramientas */
+.abm-page--dashboard .cobradores-card { --card-color: #389e0d; --card-color-dark: #237804; }  /* verde */
+.abm-page--dashboard .socios-card { --card-color: #fa8c16; --card-color-dark: #d46b08; }      /* naranja */
+.abm-page--dashboard .cobranza-card { --card-color: #36cfc9; --card-color-dark: #08979c; }    /* turquesa */
+.abm-page--dashboard .pagos-card { --card-color: #597ef7; --card-color-dark: #2f54eb; }       /* índigo */
+
+/* Cerrar sesión. */
+.abm-page--dashboard .logout-section {
+    margin-top: 48px;
+    padding: 24px;
+    display: flex;
+    justify-content: center;
+}
+
+.abm-page--dashboard .logout-container {
+    background: linear-gradient(135deg, #ff4d4f 0%, #cf1322 100%);
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 8px 24px rgba(207, 19, 34, 0.3);
+}
+
+.abm-page--dashboard .logout-button {
+    background: #fff !important;
+    color: #cf1322 !important;
+    border: none !important;
+    font-weight: 600 !important;
+    padding: 0.75rem 3rem !important;
+    height: auto !important;
+    font-size: 1.1rem !important;
+    border-radius: var(--abm-radius-sm) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    transition: all 0.3s ease !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+.abm-page--dashboard .logout-button:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2) !important;
+    background: #fff5f5 !important;
+}
+
+.abm-page--dashboard .logout-button:focus {
+    outline: 3px solid rgba(255, 255, 255, 0.6);
+    outline-offset: 2px;
+}
+
+.abm-page--dashboard .logout-button:active {
+    transform: translateY(0) !important;
+}
+
+.abm-page--dashboard .logout-button i {
+    font-size: 1.2rem;
+}
+
+/* Responsivo del dashboard. */
+@media (max-width: 992px) {
+    .abm-page--dashboard {
+        padding: 16px;
+    }
+
+    .abm-page--dashboard .banner-card {
+        height: 240px;
+    }
+
+    .abm-page--dashboard .banner-title {
+        font-size: 2rem !important;
+    }
+
+    .abm-page--dashboard .banner-subtitle {
+        font-size: 1.2rem !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .abm-page--dashboard .banner-card {
+        height: 200px;
+    }
+
+    .abm-page--dashboard .banner-title {
+        font-size: 1.6rem !important;
+    }
+
+    .abm-page--dashboard .banner-subtitle {
+        font-size: 1rem !important;
+    }
+
+    .abm-page--dashboard .dashboard-card {
+        min-height: 320px;
+        padding: 24px 16px !important;
+    }
+
+    .abm-page--dashboard .card-icon {
+        font-size: 40px !important;
+        margin-top: 10px;
+    }
+
+    .abm-page--dashboard .card-title {
+        font-size: 1.2rem !important;
+    }
+
+    .abm-page--dashboard .card-description {
+        font-size: 0.9rem !important;
+    }
+
+    .abm-page--dashboard .action-button {
+        min-width: 80px;
+        padding: 12px 8px !important;
+        font-size: 0.85rem !important;
+    }
+
+    .abm-page--dashboard .action-button i {
+        font-size: 20px;
+    }
+
+    .abm-page--dashboard .action-buttons-container {
+        gap: 8px;
+    }
+
+    .abm-page--dashboard .logout-container {
+        padding: 1.5rem;
+        margin: 0 16px;
+    }
+
+    .abm-page--dashboard .logout-button {
+        padding: 0.6rem 2rem !important;
+        font-size: 1rem !important;
+    }
+
+    .abm-page--dashboard .logout-button i {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .abm-page--dashboard {
+        padding: 12px;
+    }
+
+    .abm-page--dashboard .banner-card {
+        height: 180px;
+        border-radius: var(--abm-radius-sm) !important;
+    }
+
+    .abm-page--dashboard .banner-title {
+        font-size: 1.4rem !important;
+    }
+
+    .abm-page--dashboard .banner-subtitle {
+        font-size: 0.9rem !important;
+    }
+
+    .abm-page--dashboard .dashboard-card {
+        min-height: 280px;
+    }
+
+    .abm-page--dashboard .logout-section {
+        padding: 16px;
+        margin-top: 32px;
+    }
+
+    .abm-page--dashboard .logout-container {
+        padding: 1.25rem;
+    }
+
+    .abm-page--dashboard .logout-button {
+        padding: 0.5rem 1.5rem !important;
+        font-size: 0.95rem !important;
+    }
+}
+
+/* Impresión: sin fondo ni efectos de hover. */
+@media print {
+    .abm-page--dashboard {
+        background: #fff;
+    }
+
+    .abm-page--dashboard .dashboard-card:hover {
+        transform: none;
+        box-shadow: none;
+    }
+
+    .abm-page--dashboard .banner-section {
+        page-break-after: avoid;
+    }
+}
+
+/* ===== Módulos Brigadas, Fuerzas Intervinientes y Partes de Vehículos ===== */
+/* Los tres .razor eran copia-pega entre sí (Partes incluso conservaba las
+   clases .fuerzas-abm). El esquema de encabezado y la tabla al ras salen del
+   grupo compartido "título + acciones" (ver más arriba); acá quedan solo los
+   deltas propios de estos tres módulos. */
+
+/* Delta: la tabla recorta su contenido (las otras del grupo no lo hacen). */
+.abm-page--brigadas .abm-table-container,
+.abm-page--fuerzas .abm-table-container,
+.abm-page--partes .abm-table-container {
+    overflow: hidden;
+}
+
+/* Deltas responsivos: los otros módulos del grupo no ajustan estos paddings. */
+@media (max-width: 1199px) {
+    .abm-page--brigadas .abm-container,
+    .abm-page--fuerzas .abm-container,
+    .abm-page--partes .abm-container {
+        padding: 8px;
+    }
+
+    .abm-page--brigadas .abm-header-section,
+    .abm-page--fuerzas .abm-header-section,
+    .abm-page--partes .abm-header-section {
+        padding: 20px;
+    }
+}
+
+/* Los modales de alta/edición de los tres módulos (`modal-crear-brigada` y
+   `modal-crear-fuerza`) salen ENTEROS del grupo compartido "Modales de
+   formulario", más arriba: no tienen deltas propios.
+   Partes de Vehículos comparte el wrap .modal-crear-fuerza con Fuerzas
+   Intervinientes porque sus componentes hijos (Agregar/EditarParteVehiculo)
+   ya usaban esas clases. */
+
+/* ===== Componentes de PlanillaSalida ===== */
+/* Tablas embebidas en la planilla de intervención imprimible
+   (Components/PlanillaSalida/TablaMoviles y TablaDamnificados, usadas desde
+   Pages/PlanillasIntervencion/ImprimirCC.razor). Cada componente declaraba
+   selectores `table` y `th, td` SIN scope: mientras la planilla estaba en
+   pantalla, esos estilos se filtraban a cualquier tabla de la aplicación.
+   Acá la clase va en el propio <table>, así no depende de un contenedor. */
+
+.planilla-salida-tabla {
+    border-collapse: collapse;
+}
+
+.planilla-salida-tabla th,
+.planilla-salida-tabla td {
+    border: 1px solid #000;
+    padding: 8px;
+    text-align: left;
+}
+/* ===== Módulos Dependencias y Depósito ===== */
+/* Ambos módulos toman el esquema de encabezado (título a la izquierda,
+   acciones a la derecha y tabla al ras de la card) del grupo compartido
+   "título + acciones", más arriba: no tienen deltas de encabezado. */
+
+/* Botón redondo de acciones secundarias del encabezado (abre el modal de
+   Movimientos). Mismo diseño que el de Licencias. */
+.abm-page--deposito .notification-button {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    color: #fff !important;
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.3s ease !important;
+}
+
+.abm-page--deposito .notification-button:hover {
+    background: rgba(255, 255, 255, 0.3) !important;
+    transform: scale(1.1) !important;
+}
+
+/* --------------------------------- Movimientos de materiales (Depósito) */
+/* MovimientoMaterialesVista se renderiza DENTRO de un modal, pero su div raíz
+   lleva el scope y viaja con el portal, así que no hace falta WrapClassName. */
+
+.abm-page--deposito {
+    /* Azul propio de las acciones del listado de movimientos (no es un color
+       del sistema ABM, por eso vive como token del módulo). */
+    --deposito-accion: #2F54EB;
+}
+
+.abm-page--deposito .primary-button {
+    background-color: var(--deposito-accion);
+    border: none;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(47, 84, 235, 0.3);
+    height: 32px;
+    font-weight: 500;
+    border-radius: var(--abm-radius-sm);
+    padding: 0 15px;
+}
+
+.abm-page--deposito .movimientos-tabla {
+    margin-top: 20px;
+    border-radius: var(--abm-radius-sm);
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Filas alternadas: es propio de esta tabla, no del estándar. */
+.abm-page--deposito .movimientos-tabla .ant-table-tbody > tr:nth-child(even) > td {
+    background-color: #FAFAFA;
+}
+
+.abm-page--deposito .section-separator {
+    border: none;
+    border-top: 1px dashed #D9D9D9;
+    margin: 24px 0;
+}
+
+/* Botón de guardado del alta suelta de materiales (MaterialesVista). */
+.abm-page--deposito .boton-guardar {
+    background-color: var(--abm-primary-dark) !important;
+    color: #fff !important;
+}
+
+/* ------------------------------------------------- Modal a pantalla completa */
+/* `fullscreen-modal` es una clase de WrapClassName COMPARTIDA: la usan el
+   modal de bomberos de una dependencia y los modales del módulo Vehículos
+   (UnidadesABM / VehiculosCarta, que ya asumen el alto completo en
+   `.modal-vehiculos .modal-body-content`). Vivía suelta en el <style> de
+   BomberosDependencia, así que solo existía mientras esa pantalla estaba
+   montada; acá queda disponible siempre. Estiliza Ant, conserva !important. */
+
+.fullscreen-modal .ant-modal {
+    top: 0 !important;
+    padding: 0 !important;
+    height: 100vh !important;
+    max-width: 100vw !important;
+    width: 100vw !important;
+}
+
+.fullscreen-modal .ant-modal-content {
+    height: 100vh !important;
+    border-radius: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    max-width: none !important;
+}
+
+.fullscreen-modal .ant-modal-body {
+    flex: 1 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+}
+
+.fullscreen-modal .ant-modal-header {
+    background: var(--abm-primary-color) !important;
+    border-bottom: none !important;
+    padding: 16px 72px 16px 24px !important; /* espacio a la derecha para la X */
+}
+
+.fullscreen-modal .ant-modal-title {
+    color: #fff !important;
+    font-size: 24px !important;
+    font-weight: bold !important;
+    line-height: 32px !important;
+}
+
+.fullscreen-modal .ant-modal-close {
+    color: #fff !important;
+    background: rgba(255, 255, 255, 0.2) !important;
+    border-radius: 50% !important;
+    width: 40px !important;
+    height: 40px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.3s ease !important;
+    /* Centrado vertical respecto del header (64px de alto: 16+32+16). */
+    top: 12px !important;
+    right: 16px !important;
+}
+
+/* La caja interna del ícono conserva los 56px de Ant: sin esto la X queda
+   descentrada y desborda el círculo de 40px (se veía cortada). */
+.fullscreen-modal .ant-modal-close .ant-modal-close-x {
+    width: 40px !important;
+    height: 40px !important;
+    line-height: 40px !important;
+    font-size: 16px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.fullscreen-modal .ant-modal-close:hover {
+    background: rgba(255, 255, 255, 0.3) !important;
+    transform: scale(1.1) !important;
+}
+
+/* ------------------------------------------------- Modales de formulario */
+/* Alta/edición de dependencias (`modal-crear-dependencia`), alta de
+   movimientos (`modal-crear-movimiento`) y los modales del depósito
+   (`modal-deposito`: Movimientos, Cargar Material y Editar Material). Los tres
+   usan WrapClassName, así que se montan en un portal FUERA de .abm-page: el
+   scope es la propia clase del wrap. El diseño sale del grupo compartido
+   "Modales de formulario", más arriba; acá quedan solo los deltas. */
+
+/* Los modales del depósito NO entran en la regla `.ant-modal-content` del
+   grupo compartido: son anchos y centrados, y el `margin-top: -50px` de aquel
+   grupo (que sí lleva el de dependencias) los sacaría de pantalla. */
+.modal-crear-movimiento .ant-modal-content,
+.modal-deposito .ant-modal-content {
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: 2px solid var(--abm-primary-dark);
+    margin-bottom: 0;
+}
+
+/* Delta: el encabezado del depósito no lleva la línea inferior (el de
+   dependencias sí, como en Licencias/Ascensos/Sanciones). */
+.modal-crear-movimiento .ant-modal-header,
+.modal-deposito .ant-modal-header {
+    border-bottom: none;
+}
+
+
+/* Delta: el botón verde de estos modales redondea sus esquinas. `boton-agregar`
+   era una clase GLOBAL del alta/edición de dependencias; acá queda scopeada
+   al wrap. */
+.modal-crear-dependencia .ant-btn-primary,
+.modal-crear-dependencia .boton-agregar,
+.modal-crear-movimiento .ant-btn-primary,
+.modal-deposito .ant-btn-primary {
+    border-radius: var(--abm-radius-sm) !important;
+}
+/* ===== Módulo Comunicaciones ===== */
+/* Los filtros (búsqueda y alta) viven DENTRO del encabezado rojo, mismo
+   esquema que Licencias; la tabla va al ras de la card. El encabezado, las
+   burbujas, el título, los botones y los badges de estado son los estándar
+   de .abm-page. */
+
+.abm-page--comunicaciones .abm-header-section .title-container {
+    margin-bottom: 20px;
+}
+
+.abm-page--comunicaciones .filters-section {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+.abm-page--comunicaciones .actions-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    align-items: center;
+}
+
+.abm-page--comunicaciones .actions-row .search-container {
+    min-width: 0;
+}
+
+.abm-page--comunicaciones .abm-table-container {
+    padding: 0;
+}
+
+@media (max-width: 1199px) {
+    .abm-page--comunicaciones .actions-row {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+}
+
+/* Modales de Comunicaciones (alta y edición). Usan WrapClassName, así que se
+   montan en un portal FUERA de .abm-page: el scope es la clase del wrap.
+   Antes reusaban el nombre ajeno .modal-crear-licencia, que además pisaba a
+   los modales del módulo Licencias. El diseño sale del grupo compartido
+   "Modales de formulario", más arriba; acá quedan el tamaño y los deltas. */
+
+/* NO se fusiona con la regla `.ant-modal-content` del grupo compartido: este
+   modal fija su ancho y NO lleva el `margin-top: -50px`/`margin-bottom: 0` de
+   aquella (va centrado por el .ant-modal-wrap de abajo). */
+.modal-crear-comunicacion .ant-modal-content {
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: 2px solid var(--abm-primary-dark);
+    width: 800px !important;
+    max-width: 90vw !important;
+}
+
+.modal-crear-comunicacion .ant-modal-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-crear-comunicacion-row {
+    margin-bottom: 16px !important;
+}
+
+/* NO se fusiona con el pie del grupo compartido: separa los botones 16px en
+   vez de 12px. OJO: sin `width` explícito — la barra se estira hasta los
+   bordes del modal con los márgenes negativos del grupo compartido, y un
+   `width: 100%` la deja corta a la derecha. */
+.modal-crear-comunicacion-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 16px;
+    margin-top: 18px;
+}
+
+/* NO se fusiona con el botón verde del grupo compartido: redondea las esquinas
+   y no lleva los `margin` de aquella regla. El alta usa un <Button> sin
+   Type="Primary", por eso lleva clase propia. */
+.modal-crear-comunicacion .ant-btn-primary,
+.modal-crear-comunicacion .boton-agregar {
+    background: linear-gradient(135deg, var(--abm-success-color) 0%, var(--abm-success-dark) 100%) !important;
+    border: none !important;
+    color: #fff !important;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
+    padding: 0 20px !important;
+    border-radius: var(--abm-radius-sm) !important;
+}
+
+@media (max-width: 767px) {
+    .modal-crear-comunicacion-content {
+        padding: 16px;
+    }
+
+    .modal-crear-comunicacion .ant-modal-content {
+        width: 95vw !important;
+        margin: 10px auto !important;
+    }
+
+    .modal-crear-comunicacion .ant-modal-wrap {
+        align-items: flex-start;
+        padding-top: 20px;
+    }
+}
+
+/* ===== Módulo Equipos Autónomos ===== */
+/* Listado (EquiposAutonomosVista), los formularios en modal y la solapa de
+   Movimientos. Mismo esquema de encabezado que Comunicaciones: los filtros
+   viven dentro del encabezado rojo y la tabla va al ras de la card.
+   El violeta de "Prueba hidráulica" no tiene token en la paleta ABM: queda
+   como variable local del módulo (precedente: Legajo). */
+
+.abm-page--equipos {
+    --equipos-prueba-bg: #F3E5F5;
+    --equipos-prueba-fg: #7B1FA2;
+}
+
+.abm-page--equipos .abm-header-section .title-container {
+    margin-bottom: 20px;
+}
+
+.abm-page--equipos .filters-section {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+.abm-page--equipos .actions-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    align-items: center;
+}
+
+.abm-page--equipos .actions-row .search-container {
+    min-width: 0;
+}
+
+.abm-page--equipos .abm-table-container {
+    padding: 0;
+}
+
+/* Tabla de movimientos del equipo (se muestra dentro de un modal, por eso
+   lleva su propio marco en vez de ir al ras). */
+.abm-page--equipos .movimientos-tabla {
+    margin-top: 20px;
+    border-radius: var(--abm-radius-sm);
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.abm-page--equipos .movimientos-tabla .ant-table-tbody > tr:nth-child(even) > td {
+    background-color: #FAFAFA;
+}
+
+/* El botón de alta es el .add-button estándar (display:flex), así que la
+   barra se alinea con flex en vez de text-align. */
+.abm-page--equipos .movimientos-acciones {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 1199px) {
+    .abm-page--equipos .actions-row {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+}
+
+/* Badge de estado propio del módulo; los otros cuatro estados usan las
+   variantes estándar de .abm-badge. Se declara sin el prefijo
+   .abm-page--equipos para acompañar a las demás variantes de .abm-badge:
+   las variables locales igual se heredan del contenedor del módulo. */
+.abm-badge--prueba-hidraulica {
+    background: var(--equipos-prueba-bg, #F3E5F5);
+    color: var(--equipos-prueba-fg, #7B1FA2);
+}
+
+/* Modales del módulo (Agregar, Editar, Movimientos y alta de movimiento).
+   Usan WrapClassName="modal-crear-equipo", así que se montan en un portal
+   FUERA de .abm-page: el scope es la clase del wrap. El diseño sale del grupo
+   compartido "Modales de formulario", más arriba; este módulo es el que más
+   deltas tiene, porque su tipografía y sus espacios son más grandes. */
+
+/* NO se fusiona con la regla `.ant-modal-content` del grupo compartido: fija su
+   ancho y NO lleva el `margin-top: -50px`/`margin-bottom: 0` de aquella. */
+.modal-crear-equipo .ant-modal-content {
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: 2px solid var(--abm-primary-dark);
+    max-width: 800px;
+    width: 90vw;
+}
+
+/* El cuerpo (.modal-crear-equipo-content) toma los 24px del grupo compartido:
+   el pie rojo (sangría de 48px) asume body 24px + content 24px, así que este
+   módulo NO puede llevar un padding distinto sin descolocar la barra. */
+
+/* Delta: los campos se separan 24px en vez de 20px. */
+.modal-crear-equipo-form-item {
+    margin-bottom: 24px;
+    position: relative;
+    padding-left: 10px;
+}
+
+/* NO se fusiona con las etiquetas del grupo compartido: 15px en vez de 14px. */
+.modal-crear-equipo-form-item .ant-form-item-label > label,
+.modal-crear-equipo-form-full-width .ant-form-item-label > label {
+    font-weight: 600;
+    color: #434343;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    transition: color 0.3s ease;
+}
+
+/* Delta: los campos usan la tipografía grande del módulo. */
+.modal-crear-equipo .ant-picker,
+.modal-crear-equipo .ant-input,
+.modal-crear-equipo .ant-select-selector,
+.modal-crear-equipo .ant-input-number {
+    font-size: 15px !important;
+}
+
+.modal-crear-equipo .ant-picker {
+    height: 40px !important;
+    padding: 8px 12px !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.modal-crear-equipo .ant-picker-input > input {
+    font-size: 15px !important;
+    padding: 4px 8px !important;
+}
+
+.modal-crear-equipo .ant-picker-suffix {
+    display: flex !important;
+    align-items: center !important;
+}
+
+/* NO se fusiona con el pie del grupo compartido: separa 16px en vez de 12px y
+   despega 24px en vez de 18px. */
+.modal-crear-equipo-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    margin-top: 24px;
+}
+
+/* NO se fusiona con el botón verde del grupo compartido: es más grande
+   (padding y tipografía) y no lleva los `margin` de aquella regla. */
+.modal-crear-equipo .ant-btn-primary {
+    background: linear-gradient(135deg, var(--abm-success-color) 0%, var(--abm-success-dark) 100%) !important;
+    border: none !important;
+    color: #fff !important;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
+    padding: 0 28px !important;
+    font-size: 16px !important;
+    border-radius: var(--abm-radius-sm);
+}
+
+/* Aviso de equipo en prueba hidráulica (alta de movimiento). */
+.modal-crear-equipo .alerta-prueba-hidraulica {
+    background: var(--abm-warning-light);
+    border: 1px solid var(--abm-warning-color);
+    border-radius: var(--abm-radius-sm);
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    /* El texto queda en #856404: --abm-warning-color es demasiado claro para
+       texto corrido sobre --abm-warning-light. */
+    color: #856404;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.modal-crear-equipo .alerta-prueba-hidraulica .icon {
+    font-size: 20px;
+}
+
+@media (max-width: 1199px) {
+    .modal-crear-equipo .ant-modal-content {
+        max-width: 98vw;
+    }
+}
+
+@media (max-width: 767px) {
+    .modal-crear-equipo .ant-modal-content {
+        max-width: 100vw;
+    }
+}
+/* ===== Módulo Salidas (listado) ===== */
+/* SalidasABM.razor. El encabezado rojo lleva el título a la izquierda y las
+   acciones a la derecha, con la tabla al ras de la card: sale entero del grupo
+   compartido "título + acciones", más arriba. Sin deltas propios. */
+
+/* El modal de alta de salida (`modal-crear-salidas`) usa WrapClassName, así que
+   se monta en un portal FUERA de .abm-page: el scope es la propia clase del
+   wrap. Sale ENTERO del grupo compartido "Modales de formulario", más arriba:
+   no tiene deltas propios. */
+
+/* ===== Módulo Salidas — planillas ===== */
+/* Las seis pantallas de carga de planilla (Accidentes, FactoresClimaticos,
+   Incendios, MaterialesPeligrosos, Rescates y ServicioEspecial) traían el MISMO
+   bloque <style>, byte a byte en cinco de ellas y un subconjunto en la sexta.
+   Acá va una sola vez, bajo el scope común .abm-page--planilla.
+
+   El modificador se usa SOLO, sin `.abm-page`: estas pantallas no son listados
+   ABM (no tienen .abm-container, ni .abm-main-card, ni .abm-header-section), así
+   que `.abm-page` no les aportaría nada y su único efecto real sería repintar
+   los <Table> de los componentes de Salidas — que se migran aparte con scope
+   .planilla-salida. No agregar `.abm-page` al wrapper.
+
+   El azul #1890ff (el primario de Ant Design) es el color propio de estas
+   planillas y no equivale a ningún token --abm-*, así que queda como variable
+   local del módulo, igual que hace .abm-page--legajo con su amarillo. Plegar la
+   planilla al rojo del ABM es una decisión de diseño pendiente; acá no se hizo. */
+
+.abm-page--planilla {
+    --planilla-azul: #1890ff;
+    --planilla-azul-oscuro: #096dd9;
+    max-width: 1800px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+/* Encabezado de la planilla. */
+
+.abm-page--planilla .planilla-encabezado {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.abm-page--planilla .planilla-titulo {
+    margin: 0;
+    color: var(--planilla-azul);
+    font-size: 2.5rem;
+    font-weight: 600;
+}
+
+.abm-page--planilla .planilla-subtitulo {
+    margin: 0.5rem 0 0;
+    color: #666;
+    font-size: 1.1rem;
+}
+
+/* Solapas del formulario multipaso (estilizan Ant, conservan !important). */
+
+.abm-page--planilla .custom-tabs {
+    box-shadow: 0 4px 16px rgba(24, 144, 255, 0.08);
+    border-radius: 12px;
+}
+
+.abm-page--planilla .custom-tabs .ant-tabs-nav {
+    border-bottom: none !important;
+    margin-bottom: 1.5rem !important;
+    display: flex;
+    justify-content: center;
+}
+
+.abm-page--planilla .custom-tabs .ant-tabs-tab {
+    background: #f9f9f9;
+    border-radius: 8px 8px 0 0;
+    margin: 0 0.25rem;
+    padding: 0.5rem 1.25rem;
+    font-weight: 600;
+    color: #555;
+    transition: all 0.25s ease;
+}
+
+.abm-page--planilla .custom-tabs .ant-tabs-tab:hover {
+    background: #e6f7ff;
+    color: var(--planilla-azul);
+    cursor: pointer;
+}
+
+.abm-page--planilla .custom-tabs .ant-tabs-tab-active {
+    background: #fff;
+    color: var(--planilla-azul) !important;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e6f7ff;
+    border-bottom: none;
+    z-index: 1;
+    position: relative;
+}
+
+.abm-page--planilla .custom-tabs .ant-tabs-tab-active .ant-tabs-tab-btn {
+    font-weight: 700;
+}
+
+/* Botón "Siguiente →" que avanza de solapa. */
+.abm-page--planilla .planilla-nav-siguiente {
+    text-align: right;
+    margin-top: 1.5rem;
+}
+
+/* Pie de la última solapa: barra azul con el botón de impresión. */
+
+.abm-page--planilla .submit-section-firmas {
+    background: linear-gradient(135deg, var(--planilla-azul) 0%, var(--planilla-azul-oscuro) 100%);
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.abm-page--planilla .submit-button-firmas {
+    background: #fff !important;
+    color: var(--planilla-azul) !important;
+    border: none !important;
+    font-weight: 600 !important;
+    padding: 0.75rem 3rem !important;
+    height: auto !important;
+    font-size: 1.1rem !important;
+    border-radius: var(--abm-radius-sm) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    transition: all 0.3s ease !important;
+}
+
+.abm-page--planilla .submit-button-firmas:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Responsivo del módulo. El escalonado del título venía de reglas `h1` sueltas
+   y globales con !important (pisaban el font-size inline del <h1>); ahora que la
+   medida base sale del CSS, el !important sobra. */
+
+@media (max-width: 991px) {
+    .abm-page--planilla .planilla-titulo {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 767px) {
+    .abm-page--planilla .planilla-titulo {
+        font-size: 1.8rem;
+    }
+
+    .abm-page--planilla .submit-section-firmas {
+        padding: 1.5rem;
+    }
+
+    .abm-page--planilla .submit-button-firmas {
+        padding: 0.6rem 2rem !important;
+        font-size: 1rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .abm-page--planilla .planilla-titulo {
+        font-size: 1.6rem;
+    }
+}
+/* ===== Módulo Salidas — secciones de la planilla ===== */
+/* Absorbe los <style> de Pages/Salidas/Components/{Damnificados, DatosGenerales,
+   FuerzasIntervinientes, Participantes, Personal, TipoDeServicio, Vehiculos}.razor.
+
+   Los siete componentes son pestañas de la MISMA planilla de salida, así que
+   comparten un único scope `.planilla-salida` en el div raíz de cada uno. Antes
+   cada componente traía su propia tarjeta, su propio skin de tabla y su propia
+   paleta (naranja, azul, rojo, verde, violeta, gris y celeste); como los <style>
+   de Blazor son globales, esas siete paletas ya se pisaban entre sí en la misma
+   página. Acá quedan unificadas a los tokens --abm-*.
+
+   Ojo: los modales usan WrapClassName y se montan en un portal FUERA de
+   `.planilla-salida`; su scope es la propia clase del wrap (`.modal-damnificado`,
+   `.modal-vehiculo`), igual que hacen los modales de Licencias/Ascensos. */
+
+/* ------------------------------------------------- Tarjeta de cada sección */
+
+.planilla-salida {
+    border: 2px solid var(--abm-primary-color);
+    background: #fff;
+    border-radius: var(--abm-radius);
+    box-shadow: var(--abm-shadow);
+    margin-bottom: 2rem;
+    padding: 2.5rem 2rem 2rem;
+}
+
+/* Encabezado de subsección: un div con la línea inferior y el h4 (o el texto
+   directo, como en Datos Específicos). Reemplaza los ~10 pares de estilos
+   inline `border-bottom: 2px solid <color>` + `<h4 style="color: <color>">`. */
+.planilla-salida .seccion-titulo {
+    border-bottom: 2px solid var(--abm-primary-color);
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+    color: var(--abm-primary-dark);
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.planilla-salida .seccion-titulo h4 {
+    margin: 0;
+    font-size: inherit;
+    font-weight: 600;
+    color: inherit;
+    display: flex;
+    align-items: center;
+}
+
+/* ------------------------------------------------------ Tablas de la planilla */
+/* Estilizan la Table de Ant Design, por eso conservan !important. */
+
+.planilla-salida .ant-table {
+    background: #fff;
+    color: #262626;
+    font-weight: 500;
+    border-radius: var(--abm-radius-sm);
+    table-layout: auto;
+}
+
+.planilla-salida .ant-table-wrapper {
+    margin-top: 1rem;
+}
+
+.planilla-salida .ant-table-thead .ant-table-cell,
+.planilla-salida .ant-table thead th {
+    background: linear-gradient(135deg, var(--abm-primary-color) 0%, var(--abm-primary-dark) 100%) !important;
+    color: #fff !important;
+    font-weight: 600 !important;
+    text-align: center !important;
+    letter-spacing: 0.3px !important;
+    padding: 8px 10px !important;
+    height: 32px !important;
+    line-height: 1.2 !important;
+}
+
+.planilla-salida .ant-table-title {
+    background: var(--abm-neutral-light) !important;
+    color: var(--abm-primary-dark) !important;
+    font-weight: 700 !important;
+    text-align: left !important;
+    padding: 0.5rem 0.8rem !important;
+    border-top-left-radius: 12px !important;
+    border-top-right-radius: 12px !important;
+    border-bottom: 1px solid #F0F0F0 !important;
+}
+
+.planilla-salida .ant-table-cell,
+.planilla-salida .ant-table td {
+    color: #333 !important;
+    padding: 6px 10px !important;
+}
+
+.planilla-salida .ant-table tbody tr:hover td {
+    background: rgba(166, 51, 51, 0.04) !important;
+}
+
+.planilla-salida .ant-table-tbody > tr.ant-table-row-selected > td {
+    background: rgba(166, 51, 51, 0.08) !important;
+}
+
+/* Los botones de la fila son chicos para no engordar la tabla. */
+.planilla-salida .ant-table .ant-btn {
+    font-size: 0.95rem !important;
+    padding: 4px 10px !important;
+}
+
+/* --------------------------------------------------------------- Botones */
+
+/* Alta de un ítem de la sección (damnificado, fuerza, móvil, cuerpo).
+   Mismo diseño que `.add-button` de abm.css, pero como estos componentes
+   viven dentro de las pestañas y no puedo garantizar el ancestro `.abm-page`,
+   el estilo se repite acá scopeado a `.planilla-salida`. */
+.planilla-salida .btn-agregar {
+    background: linear-gradient(135deg, var(--abm-success-color) 0%, var(--abm-success-dark) 100%) !important;
+    border: none !important;
+    color: #fff !important;
+    font-weight: 600 !important;
+    border-radius: var(--abm-radius-sm) !important;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18) !important;
+    padding: 0 20px !important;
+    transition: all 0.3s ease !important;
+}
+
+.planilla-salida .btn-agregar:hover {
+    background: linear-gradient(135deg, var(--abm-success-dark) 0%, var(--abm-success-color) 100%) !important;
+    color: #fff !important;
+}
+
+.planilla-salida .button-wrapper .ant-btn {
+    margin-top: 1rem;
+}
+
+.planilla-salida .button-wrapper .ant-btn.ant-btn-icon-only {
+    padding: 0 !important;
+}
+
+/* Bajas: un solo rojo para toda la planilla. */
+.planilla-salida .ant-btn-dangerous {
+    background: linear-gradient(135deg, var(--abm-error-color) 0%, var(--abm-primary-dark) 100%) !important;
+    border: none !important;
+    color: #fff !important;
+    border-radius: var(--abm-radius-sm) !important;
+    font-weight: 600 !important;
+    box-shadow: 0 2px 8px rgba(198, 40, 40, 0.18) !important;
+    transition: all 0.2s ease-in-out !important;
+}
+
+.planilla-salida .ant-btn-dangerous:hover {
+    filter: brightness(1.1) !important;
+    transform: scale(1.05) !important;
+}
+
+/* Botón circular de baja dentro de la tabla de móviles. */
+.planilla-salida .btn-eliminar-circular {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 !important;
+    border: none !important;
+    transition: all 0.3s ease !important;
+}
+
+/* Ícono de baja (Font Awesome) en la tabla de personal. */
+.planilla-salida .icono-eliminar {
+    color: var(--abm-error-color);
+    cursor: pointer;
+}
+
+/* La botonera de baja de una fila se alinea a la derecha. */
+.planilla-salida .centrado,
+.planilla-salida .inpt-cont:has(.ant-btn-dangerous) {
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* -------------------------------------------------- Campos del formulario */
+/* Venían sin scope en Datos Específicos (`.ant-form-item`, `.ant-input`…), o sea
+   que se filtraban a TODA la aplicación. Acá quedan encerrados en la planilla. */
+
+.planilla-salida .ant-form-item {
+    margin-bottom: 14px !important;
+}
+
+.planilla-salida .ant-input,
+.planilla-salida .ant-select-selector,
+.planilla-salida .ant-input-number {
+    border-radius: 10px !important;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
+}
+
+.planilla-salida .ant-input:hover,
+.planilla-salida .ant-select-selector:hover,
+.planilla-salida .ant-input-number:hover {
+    border-color: var(--abm-primary-color) !important;
+}
+
+.planilla-salida .ant-input:focus,
+.planilla-salida .ant-select-selector:focus-within,
+.planilla-salida .ant-input-number-focused {
+    box-shadow: 0 0 0 2px rgba(166, 51, 51, 0.2) !important;
+}
+
+/* ------------------------------------------------ Sección Datos Generales */
+
+.planilla-salida .map-container {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    max-height: 350px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.planilla-salida .hora-row {
+    display: flex;
+    gap: 24px;
+    align-items: flex-end;
+    margin-bottom: 16px;
+}
+
+.planilla-salida .hora-row .ant-form-item {
+    margin-bottom: 0 !important;
+    min-width: 180px;
+}
+
+/* ---------------------------------------------------- Sección Vehículos */
+
+.planilla-salida .switch-principal-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    background: var(--abm-neutral-light);
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    border: 1px dashed var(--abm-primary-color);
+}
+
+.planilla-salida .switch-label-custom {
+    font-weight: 600;
+    color: var(--abm-primary-dark);
+}
+
+/* Estado vacío de la sección: acompaña a `.abm-vacio` de abm.css. */
+.planilla-salida .planilla-vacio {
+    margin-top: 32px;
+    padding: 24px;
+    background: var(--abm-neutral-light);
+    border: 1px dashed var(--abm-primary-color);
+    border-radius: var(--abm-radius-sm);
+    font-style: normal;
+}
+
+/* ----------------------------------------- Sección Datos Específicos (ts-*) */
+/* El <style> original redefinía estos selectores hasta cinco veces; acá queda
+   una sola definición, la que efectivamente ganaba la cascada. */
+
+.planilla-salida .ts-block {
+    background: #fff;
+    padding: 20px;
+    border: 2px solid #a8a6a0;
+    border-radius: 14px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.planilla-salida .ts-block:hover {
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.10);
+    transform: translateY(-2px);
+}
+
+.planilla-salida .ts-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.planilla-salida .ts-col {
+    min-width: 260px;
+}
+
+.planilla-salida .ts-check-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 10px;
+}
+
+.planilla-salida .ts-check-item {
+    display: flex;
+    align-items: center;
+    min-width: 180px;
+    padding: 4px 10px;
+    margin-bottom: 10px;
+    background: var(--abm-neutral-light);
+    border-radius: 10px;
+    box-shadow: inset 0 0 0 1px #e0e0e0;
+    transition: background 0.2s ease;
+}
+
+.planilla-salida .ts-check-item:hover {
+    background: #e9e9e9;
+}
+
+/* -------------------------------------------------- Responsivo de la planilla */
+
+@media screen and (max-width: 768px) {
+    .planilla-salida {
+        padding: 1.5rem 1rem 1rem;
+    }
+
+    .planilla-salida .map-container {
+        max-height: 300px;
+        margin-top: 16px;
+    }
+
+    .planilla-salida .hora-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+    }
+}
+
+/* ------------------------------------------------------ Modales de la planilla */
+/* `modal-damnificado` (damnificado, vehículo damnificado y animal) y
+   `modal-vehiculo` (carga de combustible) se montan en un portal fuera de
+   `.planilla-salida`: el scope es la clase del WrapClassName. El diseño sale
+   del grupo compartido "Modales de formulario", más arriba; acá quedan los
+   deltas y lo propio del modal de combustible. */
+
+/* Delta: el título lleva ícono al lado, así que se alinea en fila (el
+   redondeo del encabezado ya es parte del estándar del grupo compartido). */
+.modal-damnificado .ant-modal-title,
+.modal-vehiculo .ant-modal-title {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.modal-vehiculo .ant-btn-default {
+    border: 1px solid var(--abm-primary-color) !important;
+    color: var(--abm-primary-color) !important;
+    background: #fff !important;
+    border-radius: var(--abm-radius-sm) !important;
+    font-weight: 500;
+    transition: all 0.3s ease !important;
+}
+
+.modal-vehiculo .ant-btn-default:hover {
+    background: var(--abm-primary-color) !important;
+    color: #fff !important;
+}
+
+/* Encabezado interno del modal de combustible. */
+.modal-vehiculo .section-header {
+    border-bottom: 2px solid var(--abm-primary-color);
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.modal-vehiculo .section-header h5 {
+    color: var(--abm-primary-dark);
+    margin: 0;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.modal-vehiculo .section-icon {
+    color: var(--abm-flame-color);
+    font-size: 1.2rem;
+}
+/* ===== Módulos Socios, Cobranza y Pagos ===== */
+/* Absorbe los bloques <style> de Pages/Socios/. Notas de diseño:
+   - El listado de Socios reutiliza `.abm-page--personal` (mismo esquema de filtros
+     dentro del encabezado rojo) y los formularios Agregar/Editar reutilizan
+     `.abm-page--personal-form`; acá abajo solo vive lo que NO estaba en abm.css.
+   - Cobranza y Pagos copiaron el esquema "filtros en el encabezado" de Licencias:
+     como no se toca la sección de Licencias, esos selectores se duplican con su
+     propio scope (candidatos a unificar en una clase compartida más adelante).
+   - El azul #1890ff/#096dd9 es el azul propio de Ant Design (igual criterio que el
+     #ff4d4f de error ya presente en este archivo): se conserva literal porque es
+     chrome de Ant, no un estado del sistema. Los estados "neutro / al día" sí se
+     pliegan a los tokens --abm-info-*.
+   - Los modales que NO usan WrapClassName se montan igual en un portal fuera de
+     .abm-page: en esos casos el scope viaja en el div raíz del contenido
+     (.modal-socios-crear, .modal-imprimir-zonas). */
+
+/* ---------------------------------------------------- Comunes a los tres */
+
+/* Spinner centrado mientras carga la pantalla. */
+.abm-page--socios .abm-cargando,
+.abm-page--cobranza .abm-cargando,
+.abm-page--pagos .abm-cargando {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 300px;
+}
+
+/* Botón de impresión del encabezado (Socios y Pagos). */
+.abm-page--socios .print-button,
+.abm-page--pagos .print-button {
+    background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%) !important;
+    border: none !important;
+    color: #fff !important;
+    box-shadow: 0 4px 12px rgba(24, 144, 255, 0.3) !important;
+    padding: 0 20px !important;
+}
+
+.abm-page--socios .print-button:hover,
+.abm-page--pagos .print-button:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(24, 144, 255, 0.4) !important;
+}
+
+/* Celda de detalle que ocupa la fila completa. */
+.abm-page--socios .abm-detalle-item--full,
+.abm-page--pagos .abm-detalle-item--full {
+    grid-column: 1 / -1;
+}
+
+/* ===== Módulo Socios ===== */
+/* El listado (Socios.razor) va acompañado de `.abm-page--personal` y los
+   formularios de `.abm-page--personal-form`; acá solo lo propio del módulo. */
+
+/* Botonera del encabezado: la barra .abm-filters no se usa acá, así que
+   .abm-actions-right necesita su propio display. */
+.abm-page--socios .actions-row .abm-actions-right {
+    display: flex;
+    gap: 12px;
+}
+
+/* Inputs con AllowClear: Ant los envuelve en .ant-input-affix-wrapper, que
+   necesita el mismo tratamiento que .ant-input (y el input interno pierde
+   su borde para que no se dibuje dos veces). */
+.abm-page--socios .ant-input-affix-wrapper {
+    border-radius: 4px !important;
+    border: 1px solid #d9d9d9 !important;
+}
+
+.abm-page--socios .ant-input-affix-wrapper > .ant-input {
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.abm-page--socios .ant-input-affix-wrapper:hover {
+    border-color: var(--abm-primary-color) !important;
+}
+
+.abm-page--socios .ant-input-affix-wrapper-focused {
+    border-color: var(--abm-primary-color) !important;
+    box-shadow: 0 0 0 2px rgba(166, 51, 51, 0.2) !important;
+}
+
+/* Mapa embebido de la dirección del socio (Agregar/Editar). */
+.abm-page--socios .map-container {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    max-height: 350px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.abm-page--socios .map-toggle-button {
+    background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%) !important;
+    border: none !important;
+    color: #fff !important;
+    box-shadow: 0 4px 12px rgba(24, 144, 255, 0.3) !important;
+    padding: 0 20px !important;
+    font-weight: 600 !important;
+    border-radius: var(--abm-radius-sm) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.abm-page--socios .map-toggle-button:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(24, 144, 255, 0.4) !important;
+}
+
+@media screen and (max-width: 768px) {
+    .abm-page--socios .map-container {
+        max-height: 300px;
+        margin-top: 16px;
+    }
+}
+
+/* Detalle del socio (se muestra dentro de un Modal). */
+.abm-page--socios .abm-detalle-contenido {
+    padding: 16px;
+}
+
+/* ===== Modales de Socios (portal, scope en el div raíz del contenido) ===== */
+
+/* Modal "Crear Socio": elegir entre socio persona o socio empresa. */
+.modal-socios-crear {
+    padding: 24px;
+}
+
+.modal-socios-crear-titulo {
+    text-align: center;
+    margin-bottom: 32px;
+    color: var(--abm-primary-color);
+    font-weight: 600;
+}
+
+.modal-socios-crear-opciones {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.modal-socios-crear-link {
+    text-decoration: none;
+}
+
+.modal-socios-crear-card {
+    cursor: pointer;
+    border: 2px solid #e8e8e8;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.modal-socios-crear-card-cuerpo {
+    text-align: center;
+    padding: 24px;
+}
+
+.modal-socios-crear-icono {
+    font-size: 64px;
+    margin-bottom: 16px;
+}
+
+.modal-socios-crear-icono--persona {
+    color: var(--abm-success-color);
+}
+
+.modal-socios-crear-icono--empresa {
+    color: #1890ff;
+}
+
+.modal-socios-crear-nombre {
+    margin: 0 0 8px;
+    color: #333;
+    font-weight: 600;
+    font-size: 20px;
+}
+
+.modal-socios-crear-descripcion {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+}
+
+/* Modal de impresión por zona (Socios y Pagos comparten el mismo diseño). */
+.modal-imprimir-zonas {
+    padding: 16px;
+}
+
+.modal-imprimir-zonas-titulo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 24px;
+    color: var(--abm-primary-color);
+    font-weight: 600;
+}
+
+.modal-imprimir-zonas-campos {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.modal-imprimir-zonas-campo {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.modal-imprimir-zonas-campo label {
+    font-weight: 600;
+    color: #333;
+}
+
+.modal-imprimir-zonas-campo .ant-input-number {
+    width: 100%;
+    height: 40px;
+    font-size: 16px;
+    border-radius: var(--abm-radius-sm);
+}
+
+.modal-imprimir-zonas-switch {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 20px;
+    padding: 16px;
+    border: 2px solid #e8e8e8;
+    border-radius: 12px;
+    background: #fafafa;
+}
+
+.modal-imprimir-zonas .print-modal-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    border: 2px solid #e8e8e8;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 12px;
+}
+
+.modal-imprimir-zonas .print-modal-option:hover,
+.modal-imprimir-zonas .print-modal-option.selected {
+    border-color: var(--abm-primary-color);
+    background-color: #fff5f5;
+}
+
+.modal-imprimir-zonas .option-icon {
+    font-size: 28px;
+    color: var(--abm-primary-color);
+}
+
+.modal-imprimir-zonas .option-text h4 {
+    margin: 0 0 4px;
+    color: #333;
+    font-weight: 600;
+}
+
+.modal-imprimir-zonas .option-text p {
+    margin: 0;
+    color: #666;
+    font-size: 13px;
+}
+
+.modal-imprimir-zonas .print-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.modal-imprimir-zonas .print-confirm-button {
+    background: linear-gradient(135deg, var(--abm-primary-color) 0%, var(--abm-primary-dark) 100%) !important;
+    border: none !important;
+    color: #fff !important;
+}
+
+.modal-imprimir-zonas .print-confirm-button:hover {
+    background: linear-gradient(135deg, var(--abm-primary-dark) 0%, #5a2323 100%) !important;
+}
+
+/* ===== Módulo Cobranza ===== */
+/* Pantalla de grilla de tarjetas: cada socio con forma de pago en efectivo se
+   muestra como una tarjeta con su saldo, y el pago se dispara con un botón
+   (escritorio) o deslizando (móvil). Los filtros van DENTRO del encabezado
+   rojo, mismo esquema que Licencias. */
+
+.abm-page--cobranza .abm-header-section .title-container {
+    margin-bottom: 20px;
+}
+
+.abm-page--cobranza .filters-section {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+.abm-page--cobranza .filter-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    align-items: end;
+}
+
+.abm-page--cobranza .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.abm-page--cobranza .filter-label {
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Los controles del encabezado son translúcidos para leerse sobre el rojo.
+   Estilizan Ant Design, por eso conservan !important. */
+.abm-page--cobranza .abm-header-section .ant-picker,
+.abm-page--cobranza .abm-header-section .ant-select-selector,
+.abm-page--cobranza .abm-header-section .ant-input {
+    border-radius: var(--abm-radius-sm) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: #fff !important;
+    transition: all 0.3s ease !important;
+}
+
+.abm-page--cobranza .abm-header-section .ant-picker:hover,
+.abm-page--cobranza .abm-header-section .ant-select-selector:hover,
+.abm-page--cobranza .abm-header-section .ant-input:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.abm-page--cobranza .abm-header-section .ant-picker-input > input,
+.abm-page--cobranza .abm-header-section .ant-select-selection-item,
+.abm-page--cobranza .abm-header-section .ant-select-selection-placeholder,
+.abm-page--cobranza .abm-header-section .ant-input::placeholder {
+    color: #fff !important;
+}
+
+/* Grilla de tarjetas. */
+.abm-page--cobranza .cards-container {
+    padding: 20px;
+}
+
+.abm-page--cobranza .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+}
+
+.abm-page--cobranza .socio-card {
+    border-radius: var(--abm-radius) !important;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: none !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
+.abm-page--cobranza .socio-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(166, 51, 51, 0.15) !important;
+}
+
+/* El borde izquierdo codifica el saldo: deuda, a favor o al día. */
+.abm-page--cobranza .socio-card-deuda {
+    border-left: 5px solid var(--abm-error-color) !important;
+}
+
+.abm-page--cobranza .socio-card-favor {
+    border-left: 5px solid var(--abm-success-color) !important;
+}
+
+.abm-page--cobranza .socio-card-neutral {
+    border-left: 5px solid var(--abm-info-color) !important;
+}
+
+.abm-page--cobranza .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+.abm-page--cobranza .socio-numero {
+    background: linear-gradient(135deg, var(--abm-primary-color) 0%, var(--abm-primary-dark) 100%);
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.abm-page--cobranza .saldo-badge {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.abm-page--cobranza .saldo-deuda {
+    background-color: var(--abm-error-light);
+    color: var(--abm-error-color);
+}
+
+.abm-page--cobranza .saldo-favor {
+    background-color: var(--abm-approved-light);
+    color: var(--abm-approved-color);
+}
+
+.abm-page--cobranza .saldo-neutral {
+    background-color: var(--abm-info-light);
+    color: var(--abm-info-color);
+}
+
+.abm-page--cobranza .socio-nombre {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #262626;
+    margin-bottom: 4px;
+    line-height: 1.3;
+}
+
+.abm-page--cobranza .socio-documento {
+    color: #8c8c8c;
+    font-size: 0.9rem;
+    margin-bottom: 12px;
+}
+
+.abm-page--cobranza .info-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    color: #595959;
+    font-size: 0.9rem;
+}
+
+.abm-page--cobranza .info-row i {
+    width: 20px;
+    color: var(--abm-primary-color);
+}
+
+.abm-page--cobranza .zona-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--abm-primary-color) 0%, var(--abm-primary-dark) 100%);
+    color: #fff;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.abm-page--cobranza .card-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.abm-page--cobranza .btn-pago {
+    flex: 1;
+    background: linear-gradient(135deg, var(--abm-success-color) 0%, var(--abm-success-dark) 100%) !important;
+    border: none !important;
+    border-radius: var(--abm-radius-sm) !important;
+    font-weight: 600 !important;
+    height: 44px !important;
+    color: #fff !important;
+}
+
+.abm-page--cobranza .btn-pago:hover {
+    background: linear-gradient(135deg, var(--abm-success-dark) 0%, var(--abm-approved-color) 100%) !important;
+    transform: scale(1.02);
+}
+
+.abm-page--cobranza .btn-ubicacion {
+    flex: 1;
+    background: linear-gradient(135deg, var(--abm-primary-color) 0%, var(--abm-primary-dark) 100%) !important;
+    border: none !important;
+    border-radius: var(--abm-radius-sm) !important;
+    font-weight: 600 !important;
+    height: 44px !important;
+    color: #fff !important;
+}
+
+.abm-page--cobranza .btn-ubicacion:hover {
+    background: linear-gradient(135deg, var(--abm-primary-dark) 0%, #5a2424 100%) !important;
+    transform: scale(1.02);
+}
+
+/* Deslizar para pagar (solo móvil): evita cobros accidentales de un toque. */
+.abm-page--cobranza .slide-to-unlock-container {
+    position: relative;
+    width: 100%;
+    height: 56px;
+    background: linear-gradient(135deg, #e8e8e8 0%, #d9d9d9 100%);
+    border-radius: 28px;
+    overflow: hidden;
+    touch-action: pan-x;
+    user-select: none;
+}
+
+.abm-page--cobranza .slide-track {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.abm-page--cobranza .slide-text {
+    color: #8c8c8c;
+    font-weight: 600;
+    font-size: 0.9rem;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.abm-page--cobranza .slide-thumb {
+    position: absolute;
+    left: 4px;
+    top: 4px;
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, var(--abm-success-color) 0%, var(--abm-success-dark) 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.2rem;
+    cursor: grab;
+    transition: left 0.1s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.4);
+    z-index: 2;
+}
+
+.abm-page--cobranza .slide-thumb:active {
+    cursor: grabbing;
+    transform: scale(1.05);
+    box-shadow: 0 4px 16px rgba(76, 175, 80, 0.6);
+}
+
+.abm-page--cobranza .slide-thumb.unlocked {
+    background: linear-gradient(135deg, var(--abm-success-dark) 0%, var(--abm-approved-color) 100%);
+}
+
+.abm-page--cobranza .slide-success-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0;
+    background: linear-gradient(135deg, var(--abm-success-color) 0%, var(--abm-success-dark) 100%);
+    border-radius: 28px;
+    transition: width 0.1s ease;
+    z-index: 1;
+}
+
+/* En escritorio se ve el botón; en móvil, el deslizador. */
+.abm-page--cobranza .desktop-only {
+    display: flex;
+}
+
+.abm-page--cobranza .mobile-only {
+    display: none;
+}
+
+/* Sin resultados. */
+.abm-page--cobranza .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    background: #fff;
+    border-radius: var(--abm-radius);
+    margin: 20px;
+}
+
+.abm-page--cobranza .empty-icon {
+    font-size: 64px;
+    color: var(--abm-primary-color);
+    margin-bottom: 16px;
+}
+
+.abm-page--cobranza .empty-title {
+    font-size: 1.25rem;
+    color: #262626;
+    margin-bottom: 8px;
+}
+
+.abm-page--cobranza .empty-description {
+    color: #8c8c8c;
+}
+
+/* Responsivo del módulo. */
+@media (max-width: 1199px) {
+    .abm-page--cobranza .filter-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .abm-page--cobranza .cards-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .abm-page--cobranza .card-actions {
+        flex-direction: column;
+    }
+
+    .abm-page--cobranza .desktop-only {
+        display: none !important;
+    }
+
+    .abm-page--cobranza .mobile-only {
+        display: block !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .abm-page--cobranza .card-header {
+        flex-direction: column;
+        gap: 12px;
+    }
+}
+
+/* ===== Modales de Cobranza (WrapClassName: portal fuera de .abm-page) ===== */
+
+/* Modal de registro de pago (componente RegistrarPago). */
+/* La caja y el encabezado son los mismos que los del modal de selección de
+   dirección (`modal-direccion`), más abajo: los dos modales de Cobranza usan
+   este esquema (encabezado con degradado, sin línea inferior). */
+.modal-pago .ant-modal-content,
+.modal-direccion .ant-modal-content {
+    border-radius: var(--abm-radius) !important;
+    overflow: hidden !important;
+    border: 2px solid var(--abm-primary-dark) !important;
+}
+
+.modal-pago .ant-modal-header,
+.modal-direccion .ant-modal-header {
+    background: linear-gradient(135deg, var(--abm-primary-color) 0%, var(--abm-primary-dark) 100%) !important;
+    padding: 20px 24px !important;
+    border-bottom: none !important;
+}
+
+.modal-pago .ant-modal-title,
+.modal-direccion .ant-modal-title {
+    color: #fff !important;
+    font-weight: 600 !important;
+    font-size: 1.2rem !important;
+}
+
+/* La X estándar (círculo blanco) sale del grupo compartido; acá solo se baja
+   porque este encabezado es más alto (padding 20px en vez de 16px). */
+.modal-pago .ant-modal-close,
+.modal-direccion .ant-modal-close {
+    top: 15px;
+}
+
+/* Delta: el cuerpo del registro de pago no lleva padding (lo pone su
+   contenido); el de selección de dirección sí. */
+.modal-pago .ant-modal-body {
+    padding: 0 !important;
+}
+
+.modal-pago .registrar-pago-content {
+    padding: 24px;
+}
+
+/* Ficha del socio: el color repite el estado del saldo de la tarjeta. */
+.modal-pago .registrar-pago-socio-info {
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 20px;
+    border: 1px solid;
+}
+
+.modal-pago .registrar-pago-socio-info.socio-info-deuda {
+    background: var(--abm-error-light);
+    border-color: var(--abm-error-color);
+}
+
+.modal-pago .registrar-pago-socio-info.socio-info-favor {
+    background: var(--abm-approved-light);
+    border-color: var(--abm-success-color);
+}
+
+.modal-pago .registrar-pago-socio-info.socio-info-neutral {
+    background: var(--abm-info-light);
+    border-color: var(--abm-info-color);
+}
+
+.modal-pago .registrar-pago-socio-nombre {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #262626;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.modal-pago .registrar-pago-socio-saldo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-top: 8px;
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: var(--abm-radius-sm);
+}
+
+.modal-pago .registrar-pago-socio-saldo.saldo-deuda {
+    background-color: var(--abm-error-light);
+    color: var(--abm-error-color);
+}
+
+.modal-pago .registrar-pago-socio-saldo.saldo-favor {
+    background-color: var(--abm-approved-light);
+    color: var(--abm-approved-color);
+}
+
+.modal-pago .registrar-pago-socio-saldo.saldo-neutral {
+    background-color: var(--abm-info-light);
+    color: var(--abm-info-color);
+}
+
+.modal-pago .registrar-pago-form-item {
+    margin-bottom: 20px;
+}
+
+.modal-pago .registrar-pago-form-item label {
+    font-weight: 600;
+    color: #434343;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.modal-pago .ant-input,
+.modal-pago .ant-input-number,
+.modal-pago .ant-picker {
+    border-radius: var(--abm-radius-sm) !important;
+    height: 44px !important;
+}
+
+.modal-pago .ant-input-number {
+    width: 100% !important;
+}
+
+.modal-pago .ant-input:focus,
+.modal-pago .ant-input:hover,
+.modal-pago .ant-input-number:focus,
+.modal-pago .ant-input-number:hover,
+.modal-pago .ant-picker:focus,
+.modal-pago .ant-picker:hover,
+.modal-pago .ant-input-number-focused {
+    border-color: var(--abm-gold-color) !important;
+    box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
+}
+
+.modal-pago .ant-input-textarea-show-count::after {
+    color: #8c8c8c !important;
+}
+
+.modal-pago .registrar-pago-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding-top: 16px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.modal-pago .registrar-pago-btn-confirmar {
+    background: linear-gradient(135deg, var(--abm-success-color) 0%, var(--abm-success-dark) 100%) !important;
+    border: none !important;
+    color: #fff !important;
+    font-weight: 600 !important;
+    border-radius: var(--abm-radius-sm) !important;
+    height: 40px !important;
+    padding: 0 20px !important;
+}
+
+.modal-pago .registrar-pago-btn-confirmar:hover {
+    background: linear-gradient(135deg, var(--abm-success-dark) 0%, var(--abm-approved-color) 100%) !important;
+}
+
+.modal-pago .registrar-pago-btn-confirmar:disabled,
+.modal-pago .registrar-pago-btn-confirmar[disabled] {
+    background: #d9d9d9 !important;
+    color: #8c8c8c !important;
+}
+
+/* Modal de selección de dirección (a cuál ubicación ir en Google Maps). La caja
+   y el encabezado están fusionados con los del modal de registro de pago
+   (`modal-pago`), más arriba. */
+.modal-direccion .ant-modal-body {
+    padding: 24px !important;
+}
+
+.modal-direccion .seleccionar-direccion-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.modal-direccion .direccion-option {
+    border: 2px solid #e8e8e8;
+    border-radius: 12px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #fafafa;
+}
+
+.modal-direccion .direccion-option:hover {
+    border-color: var(--abm-primary-color);
+    background: #fff5f5;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(166, 51, 51, 0.15);
+}
+
+.modal-direccion .direccion-option-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.modal-direccion .direccion-option-label {
+    font-weight: 600;
+    color: var(--abm-primary-color);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.modal-direccion .direccion-option-icon {
+    color: var(--abm-primary-color);
+    font-size: 1.2rem;
+}
+
+.modal-direccion .direccion-option-text {
+    color: #262626;
+    font-size: 1rem;
+    line-height: 1.4;
+}
+
+/* Opción deshabilitada: el socio no tiene esa dirección cargada. */
+.modal-direccion .direccion-option.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #f5f5f5;
+    border-color: #d9d9d9;
+}
+
+.modal-direccion .direccion-option.disabled:hover {
+    border-color: #d9d9d9;
+    background: #f5f5f5;
+    transform: none;
+    box-shadow: none;
+}
+
+.modal-direccion .direccion-option.disabled .direccion-option-label,
+.modal-direccion .direccion-option.disabled .direccion-option-icon {
+    color: #8c8c8c;
+}
+
+.modal-direccion .direccion-option.disabled .direccion-option-text {
+    color: #bfbfbf;
+}
+
+.modal-direccion .direccion-no-disponible {
+    font-style: italic;
+    color: #8c8c8c;
+}
+
+.modal-direccion .direccion-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 8px;
+    padding-top: 16px;
+    border-top: 1px solid #f0f0f0;
+}
+
+/* Modal "post-it": muestra la nota adicional del socio como un papelito. */
+.modal-postit .ant-modal-content {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+.modal-postit .ant-modal-header,
+.modal-postit .ant-modal-close {
+    display: none !important;
+}
+
+.modal-postit .ant-modal-body {
+    padding: 0 !important;
+}
+
+.modal-postit .postit-container {
+    position: relative;
+    max-width: 350px;
+    margin: 0 auto;
+}
+
+.modal-postit .postit-note {
+    background: linear-gradient(135deg, #FFEB3B 0%, #FDD835 50%, #FBC02D 100%);
+    padding: 24px 20px 20px;
+    border-radius: 2px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.15), inset 0 -3px 0 rgba(0, 0, 0, 0.05);
+    transform: rotate(-2deg);
+    position: relative;
+    min-height: 150px;
+}
+
+/* La cintita de papel que "pega" el post-it. */
+.modal-postit .postit-note::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 0 0 3px 3px;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+}
+
+.modal-postit .postit-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 2px dashed rgba(0, 0, 0, 0.15);
+}
+
+.modal-postit .postit-icon {
+    font-size: 1.3rem;
+    color: #5D4037;
+}
+
+.modal-postit .postit-title {
+    font-family: 'Patrick Hand', 'Caveat', cursive, sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #5D4037;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.modal-postit .postit-content {
+    font-family: 'Patrick Hand', 'Caveat', cursive, sans-serif;
+    font-size: 1.15rem;
+    color: #4E342E;
+    line-height: 1.6;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+}
+
+.modal-postit .postit-footer {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+    padding-top: 12px;
+}
+
+.modal-postit .postit-btn-cerrar {
+    background: rgba(93, 64, 55, 0.9) !important;
+    border: none !important;
+    color: #FFF8E1 !important;
+    font-weight: 600 !important;
+    border-radius: 20px !important;
+    padding: 6px 24px !important;
+    height: auto !important;
+    font-size: 0.9rem !important;
+    transition: all 0.3s ease !important;
+}
+
+.modal-postit .postit-btn-cerrar:hover {
+    background: rgba(62, 39, 35, 0.95) !important;
+    transform: scale(1.05);
+}
+
+.modal-postit .postit-shadow {
+    position: absolute;
+    bottom: -8px;
+    left: 10px;
+    right: 10px;
+    height: 15px;
+    background: rgba(0, 0, 0, 0.15);
+    filter: blur(8px);
+    border-radius: 50%;
+    z-index: -1;
+}
+
+/* ===== Módulo Pagos ===== */
+/* Listado de pagos y componente de aprobación. Mismo esquema de Licencias:
+   filtros dentro del encabezado rojo y tabla al ras con scroll propio. */
+
+.abm-page--pagos .abm-header-section .title-container {
+    margin-bottom: 20px;
+}
+
+.abm-page--pagos .filters-section {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+.abm-page--pagos .filter-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    align-items: end;
+}
+
+.abm-page--pagos .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.abm-page--pagos .filter-label {
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Cuatro columnas: búsqueda + alta + impresión + campana de pendientes. */
+.abm-page--pagos .actions-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto auto;
+    gap: 16px;
+    align-items: center;
+}
+
+.abm-page--pagos .actions-row .search-container {
+    min-width: 0;
+}
+
+.abm-page--pagos .notification-button {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    color: #fff !important;
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.3s ease !important;
+}
+
+.abm-page--pagos .notification-button:hover {
+    background: rgba(255, 255, 255, 0.3) !important;
+    transform: scale(1.1) !important;
+}
+
+/* La tabla scrollea dentro de la card, con la barra de scroll oculta. */
+.abm-page--pagos .abm-table-container {
+    padding: 0;
+    overflow: auto;
+    max-height: calc(100vh - 300px);
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.abm-page--pagos .abm-table-container::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
+}
+
+/* Modal de detalle del pago. */
+.abm-page--pagos .modal-content {
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.abm-page--pagos .abm-detalle-item--full .abm-detalle-valor {
+    min-height: 60px;
+    line-height: 1.5;
+}
+
+/* Componente PagosAprobar (desplegable de pagos pendientes). */
+.abm-page--pagos .approval-container {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    border: 1px solid #f0f0f0;
+}
+
+.abm-page--pagos .approval-header {
+    background: linear-gradient(135deg, var(--abm-primary-color) 0%, var(--abm-primary-dark) 100%);
+    padding: 16px 20px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.abm-page--pagos .approval-title {
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.abm-page--pagos .approval-content {
+    padding: 0;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.abm-page--pagos .empty-state {
+    padding: 40px 20px;
+    text-align: center;
+    color: #666;
+}
+
+.abm-page--pagos .empty-icon {
+    font-size: 3rem;
+    color: var(--abm-primary-color);
+    margin-bottom: 16px;
+}
+
+.abm-page--pagos .empty-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.abm-page--pagos .empty-description {
+    color: #666;
+    font-size: 0.95rem;
+}
+
+.abm-page--pagos .action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    align-items: center;
+}
+
+.abm-page--pagos .approve-button,
+.abm-page--pagos .reject-button {
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 8px;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.abm-page--pagos .approve-button {
+    color: var(--abm-success-color);
+    background: rgba(76, 175, 80, 0.1);
+}
+
+.abm-page--pagos .approve-button:hover {
+    color: #fff;
+    background: var(--abm-success-color);
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.abm-page--pagos .reject-button {
+    color: var(--abm-error-color);
+    background: rgba(198, 40, 40, 0.1);
+}
+
+.abm-page--pagos .reject-button:hover {
+    color: #fff;
+    background: var(--abm-error-color);
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(198, 40, 40, 0.3);
+}
+
+/* Responsivo del módulo. */
+@media (max-width: 1199px) {
+    .abm-page--pagos .filter-row,
+    .abm-page--pagos .actions-row {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+}
+
+@media (max-width: 768px) {
+    .abm-page--pagos .approval-header {
+        padding: 12px 16px;
+    }
+
+    .abm-page--pagos .approval-title {
+        font-size: 1rem;
+    }
+
+    .abm-page--pagos .action-buttons {
+        gap: 8px;
+    }
+
+    .abm-page--pagos .approve-button,
+    .abm-page--pagos .reject-button {
+        width: 32px;
+        height: 32px;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 575px) {
+    .abm-page--pagos .modern-button {
+        height: 36px !important;
+        padding: 0 12px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .abm-page--pagos .approval-content {
+        max-height: 50vh;
+    }
+}
+
+/* ===== Modales de Pagos (WrapClassName: portal fuera de .abm-page) ===== */
+
+/* Alta de pago (`modal-crear-pago`): el diseño sale del grupo compartido
+   "Modales de formulario", más arriba. Único delta: el botón verde. */
+
+/* NO se fusiona con el botón verde del grupo compartido: no lleva los
+   `margin-top`/`margin-bottom` de aquella regla. */
+.modal-crear-pago .ant-btn-primary {
+    background: linear-gradient(135deg, var(--abm-success-color) 0%, var(--abm-success-dark) 100%) !important;
+    border: none !important;
+    color: #fff !important;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
+    padding: 0 20px !important;
+    border-radius: var(--abm-radius-sm);
+}
+
+/* Modal "qué desea imprimir": dos tarjetas grandes (bonos / lista de cobranza). */
+.modal-imprimir-pago .ant-modal-content {
+    border-radius: 14px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+    border: 2px solid var(--abm-primary-dark);
+}
+
+/* El encabezado y el color del título salen del grupo "Modales de formulario";
+   acá solo el peso del título. */
+.modal-imprimir-pago .ant-modal-title {
+    font-weight: 700;
+}
+
+.modal-imprimir-pago .modal-imprimir-content {
+    padding: 22px;
+}
+
+.modal-imprimir-pago .modal-imprimir-subtitle {
+    text-align: center;
+    margin: 0 0 18px;
+    color: var(--abm-primary-dark);
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.modal-imprimir-pago .modal-imprimir-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    width: 100%;
+}
+
+.modal-imprimir-pago .modal-imprimir-option {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 180px !important;
+    height: auto !important;
+    border-radius: 12px !important;
+    border: 2px solid #e8e8e8 !important;
+    background: #fff !important;
+    color: #333 !important;
+    padding: 18px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 10px !important;
+    text-align: center !important;
+    transition: all 0.25s ease !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+.modal-imprimir-pago .modal-imprimir-option-icon {
+    font-size: 2rem;
+    color: var(--abm-primary-color);
+}
+
+.modal-imprimir-pago .modal-imprimir-option-title {
+    margin: 0;
+    font-weight: 700;
+    color: #333;
+    font-size: 1rem;
+    white-space: normal;
+}
+
+.modal-imprimir-pago .modal-imprimir-option-description {
+    margin: 0;
+    color: #666;
+    font-size: 0.85rem;
+    line-height: 1.3;
+    white-space: normal;
+}
+
+@media (max-width: 767px) {
+    .modal-imprimir-pago .modal-imprimir-options {
+        grid-template-columns: 1fr;
+    }
+
+    .modal-imprimir-pago .modal-imprimir-content {
+        padding: 16px;
+    }
+}
+
+/* Rechazo de un pago (`modal-rechazar-pago`, componente PagosAprobar): sus
+   reglas viven fusionadas con las del rechazo de Licencias, en el grupo
+   "Modales de rechazo" (buscar `.modal-rechazar-licencia`). Acá no queda nada
+   propio. */

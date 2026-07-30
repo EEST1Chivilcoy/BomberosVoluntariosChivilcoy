@@ -8,173 +8,41 @@
 @inject ISocioService SocioService
 @inject IMessageService message
 
-<style>
-    /* Variables CSS para colores principales */
-    .detalle-socio {
-        --socio-primary-color: #A63333;
-        --socio-primary-dark: #732D2D;
-        --socio-success-color: #4CAF50;
-        --socio-warning-color: #F57F17;
-        --socio-warning-light: #FFF8E1;
-        --socio-gold-color: #FFD700;
-    }
+@* Los estilos viven en wwwroot/css/abm.css. No agregar <style> acá. *@
 
-        .detalle-socio .detail-container {
-            padding: 16px;
-        }
-
-        .detalle-socio .detail-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 16px;
-            margin-bottom: 20px;
-        }
-
-        .detalle-socio .detail-item {
-            background: #f8f9fa;
-            padding: 14px;
-            border-radius: 8px;
-            border: 1px solid #e9ecef;
-            transition: all 0.3s ease;
-        }
-
-            .detalle-socio .detail-item:hover {
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-                transform: translateY(-2px);
-            }
-
-        .detalle-socio .detail-label {
-            font-weight: 700;
-            color: var(--socio-primary-color);
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 6px;
-        }
-
-        .detalle-socio .detail-value {
-            font-size: 0.95rem;
-            color: #333;
-            word-break: break-word;
-        }
-
-        .detalle-socio .detail-full-width {
-            grid-column: 1 / -1;
-        }
-
-        .detalle-socio .section-title {
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--socio-primary-color);
-            margin: 20px 0 12px 0;
-            padding-bottom: 8px;
-            border-bottom: 2px solid var(--socio-primary-color);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-            .detalle-socio .section-title:first-child {
-                margin-top: 0;
-            }
-
-        .detalle-socio .actions-container {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-top: 24px;
-            padding-top: 16px;
-            border-top: 1px solid #f0f0f0;
-        }
-
-        .detalle-socio .pagos-button {
-            background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%) !important;
-            border: none !important;
-            color: white !important;
-            box-shadow: 0 4px 12px rgba(24, 144, 255, 0.3) !important;
-            font-weight: 600 !important;
-            border-radius: 8px !important;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-        }
-
-            .detalle-socio .pagos-button:hover {
-                transform: translateY(-2px) !important;
-                box-shadow: 0 6px 20px rgba(24, 144, 255, 0.4) !important;
-            }
-
-        .detalle-socio .status-badge {
-            padding: 4px 10px;
-            border-radius: 16px;
-            font-weight: 600;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
-
-        .detalle-socio .status-activo {
-            background: #E6F7E9;
-            color: #2E7D32;
-        }
-
-        .detalle-socio .status-inactivo {
-            background: #FFEBEE;
-            color: #C62828;
-        }
-
-        .detalle-socio .tipo-badge {
-            background: var(--socio-warning-light);
-            color: var(--socio-warning-color);
-        }
-
-        .detalle-socio .monto-tag {
-            background: #E6F7E9;
-            color: #2E7D32;
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-
-        .detalle-socio .loading-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 200px;
-        }
-</style>
-
-<div class="detalle-socio">
+@* Se renderiza dentro de un Modal (portal): el scope viaja en este div raíz. *@
+<div class="abm-page abm-page--socios">
     @if (isLoading)
     {
-        <div class="loading-container">
+        <div class="abm-cargando">
             <Spin Size="SpinSize.Large" Tip="Cargando información del socio..." />
         </div>
     }
     else if (socioView != null)
     {
-        <div class="detail-container">
+        <div class="abm-detalle-contenido">
             @* Información General *@
-            <div class="section-title">
+            <div class="abm-detalle-titulo">
                 <Icon Type="user" /> Información General
             </div>
-            <div class="detail-grid">
-                <div class="detail-item">
-                    <div class="detail-label">🆔 N° Socio</div>
-                    <div class="detail-value">@(socioView.NroSocio ?? "No disponible")</div>
+            <div class="abm-detalle-grid abm-detalle-seccion">
+                <div class="abm-detalle-item">
+                    <div class="abm-detalle-label">🆔 N° Socio</div>
+                    <div class="abm-detalle-valor">@(socioView.NroSocio ?? "No disponible")</div>
                 </div>
 
-                <div class="detail-item">
-                    <div class="detail-label">🏷️ Tipo</div>
-                    <div class="detail-value">
-                        <span class="status-badge tipo-badge">
+                <div class="abm-detalle-item">
+                    <div class="abm-detalle-label">🏷️ Tipo</div>
+                    <div class="abm-detalle-valor">
+                        <span class="abm-badge abm-badge--alerta">
                             @(socioView is SocioPersonaViewModel ? "Persona" : "Empresa")
                         </span>
                     </div>
                 </div>
 
-                <div class="detail-item">
-                    <div class="detail-label">👤 @(socioView is SocioPersonaViewModel ? "Nombre Completo" : "Razón Social")</div>
-                    <div class="detail-value">
+                <div class="abm-detalle-item">
+                    <div class="abm-detalle-label">👤 @(socioView is SocioPersonaViewModel ? "Nombre Completo" : "Razón Social")</div>
+                    <div class="abm-detalle-valor">
                         @if (socioView is SocioPersonaViewModel personaView)
                         {
                             @($"{personaView.Nombre} {personaView.Apellido}")
@@ -186,9 +54,9 @@
                     </div>
                 </div>
 
-                <div class="detail-item">
-                    <div class="detail-label">@(socioView is SocioPersonaViewModel ? "📇 DNI" : "📇 CUIT")</div>
-                    <div class="detail-value">
+                <div class="abm-detalle-item">
+                    <div class="abm-detalle-label">@(socioView is SocioPersonaViewModel ? "📇 DNI" : "📇 CUIT")</div>
+                    <div class="abm-detalle-valor">
                         @if (socioView is SocioPersonaViewModel persona)
                         {
                             @(persona.Documento ?? "No disponible")
@@ -200,18 +68,18 @@
                     </div>
                 </div>
 
-                <div class="detail-item">
-                    <div class="detail-label">📅 Fecha de Ingreso</div>
-                    <div class="detail-value">@(socioView.FechaIngreso ?? "No disponible")</div>
+                <div class="abm-detalle-item">
+                    <div class="abm-detalle-label">📅 Fecha de Ingreso</div>
+                    <div class="abm-detalle-valor">@(socioView.FechaIngreso ?? "No disponible")</div>
                 </div>
 
-                <div class="detail-item">
-                    <div class="detail-label">📊 Estado</div>
-                    <div class="detail-value">
+                <div class="abm-detalle-item">
+                    <div class="abm-detalle-label">📊 Estado</div>
+                    <div class="abm-detalle-valor">
                         @{
-                            var estadoClass = socioView.Estado == "Activo" ? "status-activo" : "status-inactivo";
+                            var estadoClass = socioView.Estado == "Activo" ? "abm-badge--aprobado" : "abm-badge--rechazado";
                         }
-                        <span class="status-badge @estadoClass">
+                        <span class="abm-badge @estadoClass">
                             @(socioView.Estado ?? "No disponible")
                         </span>
                     </div>
@@ -219,68 +87,68 @@
             </div>
 
             @* Ubicación *@
-            <div class="section-title">
+            <div class="abm-detalle-titulo">
                 <Icon Type="environment" /> Ubicación
             </div>
-            <div class="detail-grid">
-                <div class="detail-item">
-                    <div class="detail-label">🏠 Dirección</div>
-                    <div class="detail-value">@(socioView.Direccion ?? "No disponible")</div>
+            <div class="abm-detalle-grid abm-detalle-seccion">
+                <div class="abm-detalle-item">
+                    <div class="abm-detalle-label">🏠 Dirección</div>
+                    <div class="abm-detalle-valor">@(socioView.Direccion ?? "No disponible")</div>
                 </div>
 
                 @if (!string.IsNullOrWhiteSpace(socioView.DireccionSecundaria))
                 {
-                    <div class="detail-item">
-                        <div class="detail-label">🏠 Dirección Secundaria</div>
-                        <div class="detail-value">@socioView.DireccionSecundaria</div>
+                    <div class="abm-detalle-item">
+                        <div class="abm-detalle-label">🏠 Dirección Secundaria</div>
+                        <div class="abm-detalle-valor">@socioView.DireccionSecundaria</div>
                     </div>
                 }
 
-                <div class="detail-item">
-                    <div class="detail-label">🏘️ Zona</div>
-                    <div class="detail-value">@(socioView.Zona ?? "No disponible")</div>
+                <div class="abm-detalle-item">
+                    <div class="abm-detalle-label">🏘️ Zona</div>
+                    <div class="abm-detalle-valor">@(socioView.Zona ?? "No disponible")</div>
                 </div>
 
             </div>
 
             @* Información de Cuota *@
-            <div class="section-title">
+            <div class="abm-detalle-titulo">
                 <Icon Type="dollar" /> Información de Cuota
             </div>
-            <div class="detail-grid">
-                <div class="detail-item">
-                    <div class="detail-label">💰 Monto</div>
-                    <div class="detail-value">
-                        <span class="monto-tag">
+            <div class="abm-detalle-grid abm-detalle-seccion">
+                <div class="abm-detalle-item">
+                    <div class="abm-detalle-label">💰 Monto</div>
+                    <div class="abm-detalle-valor">
+                        <span class="abm-badge abm-badge--aprobado">
                             $@(socioView.CuotaValor?.ToString("N2") ?? "0.00")
                         </span>
                     </div>
                 </div>
 
-                <div class="detail-item">
-                    <div class="detail-label">📆 Frecuencia de Pago</div>
-                    <div class="detail-value">@(socioView.FrecuenciaPago ?? "No disponible")</div>
+                <div class="abm-detalle-item">
+                    <div class="abm-detalle-label">📆 Frecuencia de Pago</div>
+                    <div class="abm-detalle-valor">@(socioView.FrecuenciaPago ?? "No disponible")</div>
                 </div>
 
-                <div class="detail-item">
-                    <div class="detail-label">💳 Forma de Pago</div>
-                    <div class="detail-value">@(socioView.FormaPago ?? "No disponible")</div>
+                <div class="abm-detalle-item">
+                    <div class="abm-detalle-label">💳 Forma de Pago</div>
+                    <div class="abm-detalle-valor">@(socioView.FormaPago ?? "No disponible")</div>
                 </div>
             </div>
 
             @* Información de Contacto *@
-            <div class="section-title">
+            <div class="abm-detalle-titulo">
                 <Icon Type="phone" /> Información de Contacto
             </div>
-            <div class="detail-grid">
-                <div class="detail-item">
-                    <div class="detail-label">📞 Teléfono</div>
-                    <div class="detail-value">@(socioView.Telefono ?? "No disponible")</div>
+            <div class="abm-detalle-grid abm-detalle-seccion">
+                <div class="abm-detalle-item">
+                    <div class="abm-detalle-label">📞 Teléfono</div>
+                    <div class="abm-detalle-valor">@(socioView.Telefono ?? "No disponible")</div>
                 </div>
 
-                <div class="detail-item">
-                    <div class="detail-label">📧 Email</div>
-                    <div class="detail-value">@(socioView.Email ?? "No disponible")</div>
+                <div class="abm-detalle-item">
+                    <div class="abm-detalle-label">📧 Email</div>
+                    <div class="abm-detalle-valor">@(socioView.Email ?? "No disponible")</div>
                 </div>
             </div>
 
@@ -292,40 +160,40 @@
             }
             @if (tieneInfoAdicional)
             {
-                <div class="section-title">
+                <div class="abm-detalle-titulo">
                     <Icon Type="profile" /> Información Adicional
                 </div>
-                <div class="detail-grid">
+                <div class="abm-detalle-grid abm-detalle-seccion">
                     @if (!string.IsNullOrWhiteSpace(socioView.Ocupacion))
                     {
-                        <div class="detail-item">
-                            <div class="detail-label">💼 Ocupación</div>
-                            <div class="detail-value">@socioView.Ocupacion</div>
+                        <div class="abm-detalle-item">
+                            <div class="abm-detalle-label">💼 Ocupación</div>
+                            <div class="abm-detalle-valor">@socioView.Ocupacion</div>
                         </div>
                     }
                     @if (socioView is SocioPersonaViewModel personaViewModel)
                     {
                         @if (!string.IsNullOrWhiteSpace(personaViewModel.FechaNacimiento))
                         {
-                            <div class="detail-item">
-                                <div class="detail-label">🎂 Fecha de Nacimiento</div>
-                                <div class="detail-value">@personaViewModel.FechaNacimiento</div>
+                            <div class="abm-detalle-item">
+                                <div class="abm-detalle-label">🎂 Fecha de Nacimiento</div>
+                                <div class="abm-detalle-valor">@personaViewModel.FechaNacimiento</div>
                             </div>
                         }
 
                         @if (!string.IsNullOrWhiteSpace(personaViewModel.Edad))
                         {
-                            <div class="detail-item">
-                                <div class="detail-label">📆 Edad</div>
-                                <div class="detail-value">@personaViewModel.Edad años</div>
+                            <div class="abm-detalle-item">
+                                <div class="abm-detalle-label">📆 Edad</div>
+                                <div class="abm-detalle-valor">@personaViewModel.Edad años</div>
                             </div>
                         }
                     }
                     @if (!string.IsNullOrWhiteSpace(socioView.NotaAdicional))
                     {
-                        <div class="detail-item detail-full-width">
-                            <div class="detail-label">📝 Nota Adicional</div>
-                            <div class="detail-value">@socioView.NotaAdicional</div>
+                        <div class="abm-detalle-item abm-detalle-item--full">
+                            <div class="abm-detalle-label">📝 Nota Adicional</div>
+                            <div class="abm-detalle-valor">@socioView.NotaAdicional</div>
                         </div>
                     }
                 </div>

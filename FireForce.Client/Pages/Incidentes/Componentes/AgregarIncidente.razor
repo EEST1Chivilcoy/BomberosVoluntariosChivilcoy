@@ -121,8 +121,7 @@ else
             </Alert>
         }
 
-        <div style="display:flex; justify-content:flex-end; gap:8px;">
-            <Button OnClick="OnCancelar" Disabled="@estaGuardando">Cancelar</Button>
+        <div class="modal-footer-abm">
             @* Regla del proyecto: el botón de submit no lleva OnClick; todo pasa por OnFinish. *@
             <Button Type="ButtonType.Primary" HtmlType="submit" Loading="@estaGuardando">
                 <Icon Type="save" /> Registrar incidente

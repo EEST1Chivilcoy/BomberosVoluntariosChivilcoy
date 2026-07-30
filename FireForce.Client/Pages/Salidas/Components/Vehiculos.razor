@@ -10,292 +10,15 @@
 @inject IMessageService MessageService
 @inject IVehiculoSalidaService VehiculoSalidaService
 
-<style>
-    .vehiculos-modulo {
-        border: 2px solid #20639B !important;
-        background: linear-gradient(180deg, #f4faff 0%, #e6f2fa 100%) !important;
-        box-shadow: 0 4px 12px rgba(32, 99, 155, 0.13) !important;
-        border-radius: 16px !important;
-        margin-bottom: 2rem !important;
-        padding: 2.5rem 2rem 2rem 2rem !important;
-        transition: box-shadow 0.25s ease, transform 0.2s ease !important;
-    }
-
-        .vehiculos-modulo .section-number {
-            background: linear-gradient(135deg, #20639B, #3CAEA3);
-            color: white;
-        }
-
-        .vehiculos-modulo .ant-table {
-            background: #f4faff;
-            color: #20639B;
-            font-weight: 500;
-            font-size: 1.05rem;
-            border-radius: 14px;
-            min-width: 600px;
-            width: 100%;
-            table-layout: auto;
-        }
-
-            .vehiculos-modulo .ant-table-thead .ant-table-cell, .vehiculos-modulo .ant-table thead th {
-                background: linear-gradient(135deg, #e6f2fa, #b3e0f7);
-                border-right: 1px solid #b3e0f7;
-                color: #20639B !important;
-                font-weight: 700;
-                text-align: center;
-                border-bottom: 2.5px solid #b3e0f7;
-                letter-spacing: 0.3px;
-                font-size: 1.08rem;
-                padding: 8px 10px !important;
-                height: 32px;
-            }
-
-        .vehiculos-modulo .ant-table-title {
-            background: #f4faff;
-            color: #20639B;
-            font-weight: 700;
-            font-size: 1.08rem;
-            text-align: left;
-            padding: 0.5rem 0.8rem;
-            border-top-left-radius: 12px;
-            border-top-right-radius: 12px;
-            border-bottom: 1px solid #b3e0f7;
-        }
-
-        .vehiculos-modulo .ant-table-cell, .vehiculos-modulo .ant-table td {
-            background: #fff !important;
-            border-right: 1px solid #b3e0f7;
-            color: #333 !important;
-            font-size: 1rem;
-            padding: 6px 10px !important;
-            height: 28px;
-        }
-
-        .vehiculos-modulo .ant-table tbody tr:hover td {
-            background: #e6f2fa !important;
-        }
-
-        .vehiculos-modulo .ant-btn-dangerous, .vehiculos-modulo .ant-btn[Danger] {
-            background: linear-gradient(135deg, #20639B, #3CAEA3) !important;
-            border: none !important;
-            color: #fff !important;
-            border-radius: 8px;
-            font-weight: 600;
-            box-shadow: 0 2px 8px rgba(32,99,155,.13);
-            transition: all 0.2s ease-in-out;
-            font-size: 0.95rem !important;
-            padding: 4px 10px !important;
-        }
-
-            .vehiculos-modulo .ant-btn-dangerous:hover {
-                filter: brightness(1.1);
-                transform: scale(1.05);
-            }
-
-        .vehiculos-modulo .ant-table-tbody > tr.ant-table-row-selected > td {
-            background: #e6f2fa !important;
-        }
-
-        .vehiculos-modulo .centrado {
-            display: flex;
-            justify-content: flex-end;
-        }
-
-        .vehiculos-modulo input[type="text"],
-        .vehiculos-modulo .ant-input {
-            padding: 4px 8px !important;
-            font-size: 0.98rem !important;
-            height: 28px !important;
-            min-height: 28px !important;
-            box-sizing: border-box;
-        }
-
-    /* Modal estilo vehiculos */
-    .modal-vehiculo .ant-modal-content {
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(32, 99, 155, 0.15);
-        border: 4px solid #20639B;
-        margin-top: -50px;
-        margin-bottom: 0px;
-        background: linear-gradient(180deg, #f4faff 0%, #e6f2fa 100%);
-    }
-
-    .modal-vehiculo .ant-modal-header {
-        background-color: #f4faff;
-        border-bottom: 1px solid #b3e0f7;
-        padding: 16px 24px;
-        border-radius: 9px 9px 0 0;
-    }
-
-    .modal-vehiculo .ant-modal-title {
-        color: #20639B;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .modal-vehiculo-content {
-        padding: 24px;
-    }
-
-    .modal-vehiculo-form-item {
-        margin-bottom: 20px;
-        position: relative;
-        padding-left: 10px;
-    }
-
-        .modal-vehiculo-form-item .ant-form-item-label > label,
-        .modal-vehiculo-form-full-width .ant-form-item-label > label {
-            font-weight: 600;
-            color: #20639B;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-            transition: color 0.3s ease;
-        }
-
-            .modal-vehiculo-form-item .ant-form-item-label > label:hover,
-            .modal-vehiculo-form-full-width .ant-form-item-label > label:hover {
-                color: #3CAEA3;
-            }
-
-    .modal-vehiculo .ant-input:focus,
-    .modal-vehiculo .ant-input:hover,
-    .modal-vehiculo .ant-select-selector:focus,
-    .modal-vehiculo .ant-select-selector:hover,
-    .modal-vehiculo .ant-picker:focus,
-    .modal-vehiculo .ant-picker:hover,
-    .modal-vehiculo .ant-picker-input > input:focus,
-    .modal-vehiculo .ant-picker-input > input:hover,
-    .modal-vehiculo .ant-input-number-input:focus,
-    .modal-vehiculo .ant-input-number-input:hover,
-    .modal-vehiculo .ant-textarea:focus,
-    .modal-vehiculo .ant-textarea:hover {
-        border-color: #20639B !important;
-        box-shadow: 0 0 0 2px rgba(32, 99, 155, 0.15) !important;
-    }
-
-    .modal-vehiculo .ant-picker,
-    .modal-vehiculo .ant-input,
-    .modal-vehiculo .ant-select-selector,
-    .modal-vehiculo .ant-input-number,
-    .modal-vehiculo .ant-textarea {
-        border-radius: 8px !important;
-        background: #fff !important;
-        color: #434343 !important;
-        transition: all 0.3s ease !important;
-    }
-
-    .modal-vehiculo .ant-input-affix-wrapper {
-        border-radius: 8px !important;
-        border: 1px solid #b3e0f7 !important;
-        background: #fff !important;
-        transition: all 0.3s ease !important;
-    }
-
-        .modal-vehiculo .ant-input-affix-wrapper:focus,
-        .modal-vehiculo .ant-input-affix-wrapper:hover {
-            border-color: #20639B !important;
-            box-shadow: 0 0 0 2px rgba(32, 99, 155, 0.15) !important;
-        }
-
-    .modal-vehiculo .ant-btn-primary {
-        background: linear-gradient(135deg, #20639B 0%, #3CAEA3 100%) !important;
-        border: none !important;
-        color: #fff !important;
-        font-weight: 600;
-        box-shadow: 0 2px 8px rgba(32, 99, 155, 0.18);
-        border-radius: 8px;
-        padding: 0 20px !important;
-        transition: all 0.3s ease;
-    }
-
-        .modal-vehiculo .ant-btn-primary:hover {
-            background: linear-gradient(135deg, #3CAEA3 0%, #20639B 100%) !important;
-            color: #fff !important;
-            transform: translateY(-1px);
-        }
-
-    .modal-vehiculo .ant-btn-default {
-        border: 1px solid #20639B !important;
-        color: #20639B !important;
-        background: #fff !important;
-        border-radius: 8px;
-        font-weight: 500;
-        transition: all 0.3s ease;
-    }
-
-        .modal-vehiculo .ant-btn-default:hover {
-            background: #f4faff !important;
-            border-color: #3CAEA3 !important;
-            color: #3CAEA3 !important;
-        }
-
-    .modal-vehiculo .section-header {
-        border-bottom: 2px solid #20639B;
-        padding-bottom: 8px;
-        margin-bottom: 16px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-        .modal-vehiculo .section-header h5 {
-            color: #20639B;
-            margin: 0;
-            font-weight: 600;
-            font-size: 1.1rem;
-        }
-
-    .modal-vehiculo .section-icon {
-        color: #3CAEA3;
-        font-size: 1.2rem;
-    }
-
-    .switch-principal-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 12px;
-        background: rgba(255,255,255,0.4);
-        padding: 15px;
-        border-radius: 12px;
-        margin-bottom: 20px;
-        border: 1px dashed #20639B;
-    }
-
-    .switch-label-custom {
-        font-weight: 600;
-        color: #20639B;
-    }
-
-    .btn-eliminar-circular {
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        margin: 0 !important;
-        border: none !important;
-        background-color: #e6f7ff !important;
-        color: aqua !important;
-        transition: all 0.3s ease;
-    }
-
-        .btn-eliminar-circular:hover {
-            background-color: darkcyan !important;
-            transform: scale(1.1);
-        }
-
-</style>
+@* Los estilos viven en wwwroot/css/abm.css. No agregar <style> acá. *@
 
 
 
-<div class="vehiculos-modulo">
+<div class="planilla-salida">
     <div class="switch-principal-container ">
         <span class="switch-label-custom">¿Participaron moviles en la salida?</span>
         <Switch @bind-Checked="participaronVehiculos" @Disabled="_bloquearSwitchVisible"/>
-        <span style="color:dodgerblue; font-weight: bold; width: 20px;">
+        <span style="color: var(--abm-primary-color); font-weight: bold; width: 20px;">
             @(participaronVehiculos ? "Sí" : "No")
         </span>
     </div>
@@ -304,8 +27,8 @@
         <Form Model="movilSalidaView">
             @*Sección Datos del Vehículo*@
             <div style="margin-bottom: 24px;">
-                <div style="border-bottom: 2px solid #20639B; padding-bottom: 8px; margin-bottom: 16px;">
-                    <h4 style="color: #20639B; margin: 0; font-weight: 600;">Datos del Vehículo</h4>
+                <div class="seccion-titulo">
+                    <h4>Datos del Vehículo</h4>
                 </div>
                 <Row Gutter="16">
                     <AntDesign.Col Xs="24" Sm="12" Md="12" Lg="12">
@@ -377,7 +100,7 @@
                         <Button Type="@ButtonType.Primary"
                                 OnClick="@AgregarMovilSalida"
                                 Icon="plus"
-                                Style="background-color: #20639B; border-color: #20639B;">
+                                Class="btn-agregar">
                             Cargar Móvil
                         </Button>
                     </AntDesign.Col>
@@ -388,12 +111,12 @@
             @if (Model.Moviles != null && Model.Moviles.Any())
             {
                 <div style="margin-top: 32px;">
-                    <div style="border-bottom: 2px solid #20639B; padding-bottom: 8px; margin-bottom: 16px;">
-                        <h4 style="color: #20639B; margin: 0; font-weight: 600; display: flex; align-items: center;">
+                    <div class="seccion-titulo">
+                        <h4>
                             <Icon Type="car" style="margin-right: 8px;" />
                             Móviles Asignados a la Salida
                             <Badge Count="@Model.Moviles.Count"
-                                   Style="margin-left: 12px; background-color: #20639B;" />
+                                   Style="margin-left: 12px; background-color: var(--abm-primary-color);" />
                         </h4>
                     </div>
 
@@ -403,7 +126,6 @@
                                Context="MovilesSalidasL1"
                                DataSource="Model.Moviles"
                                Bordered
-                               Class="vehiculos-modulo"
                                Style="min-width: 600px;">
 
                             <PropertyColumn Property="c => c.Movil.NumeroMovil"
@@ -477,10 +199,10 @@
             }
             else
             {
-                <div style="margin-top: 32px; text-align: center; padding: 24px; background-color: #f4faff; border-radius: 8px; border: 1px dashed #20639B;">
-                    <Icon Type="car" style="font-size: 48px; color: #20639B; margin-bottom: 16px;" />
-                    <h5 style="color: #20639B; margin: 0;">No hay móviles asignados</h5>
-                    <p style="color: #3CAEA3; margin: 8px 0 0 0;">Complete el formulario superior para agregar móviles a la salida</p>
+                <div class="abm-vacio planilla-vacio">
+                    <Icon Type="car" style="font-size: 48px; color: var(--abm-primary-color); margin-bottom: 16px;" />
+                    <h5 style="margin: 0;">No hay móviles asignados</h5>
+                    <p style="margin: 8px 0 0 0;">Complete el formulario superior para agregar móviles a la salida</p>
                 </div>
             }
         </Form>

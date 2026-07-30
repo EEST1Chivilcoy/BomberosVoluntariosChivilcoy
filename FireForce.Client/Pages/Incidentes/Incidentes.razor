@@ -67,7 +67,7 @@
                 </Select>
 
                 <div class="abm-actions-right">
-                    <Button Type="ButtonType.Primary" OnClick="AbrirAlta">
+                    <Button Type="ButtonType.Primary" Class="modern-button add-button" OnClick="AbrirAlta">
                         <Icon Type="plus" /> Nuevo incidente
                     </Button>
                 </div>
@@ -130,6 +130,7 @@
        Footer="null"
        Centered
        DestroyOnClose
+       WrapClassName="modal-incidente"
        Visible="@modalAltaVisible"
        OnCancel="CerrarModales">
     <AgregarIncidente OnFinishCallback="OnAltaFinalizada" OnCancelar="CerrarModales" />
@@ -141,6 +142,7 @@
        Centered
        DestroyOnClose
        DefaultMaximized
+       WrapClassName="modal-incidente"
        Visible="@modalDetalleVisible"
        OnCancel="CerrarModales">
     @if (incidenteSeleccionadoId.HasValue)

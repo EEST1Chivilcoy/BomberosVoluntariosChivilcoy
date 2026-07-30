@@ -10,224 +10,7 @@
 @inject IBomberoService BomberoService
 @inject IMessageService MessageService
 
-<style>
-	/* Estilo del header de la tabla - Similar a Licencias */
-	.bomberos-abm {
-		--abm-primary-color: #A63333;
-		--abm-primary-dark: #732D2D;
-		--abm-success-color: #4CAF50;
-		--abm-success-dark: #438E46;
-		--abm-gold-color: #FFD700;
-	}
-
-	.bomberos-abm .table-container {
-		background: rgba(255, 255, 255, 0.95) !important;
-		backdrop-filter: blur(10px) !important;
-		border-radius: 16px !important;
-		box-shadow: 0 8px 32px rgba(166, 51, 51, 0.1), 0 4px 16px rgba(0, 0, 0, 0.05) !important;
-		border: 1px solid rgba(255, 255, 255, 0.2) !important;
-		overflow: hidden !important;
-	}
-
-	.bomberos-abm .header-section {
-		background: linear-gradient(135deg, #A63333 0%, #732D2D 100%) !important;
-		color: white !important;
-		padding: 28px !important;
-		position: relative !important;
-		overflow: hidden !important;
-		display: flex !important;
-		justify-content: space-between !important;
-		align-items: center !important;
-		flex-wrap: wrap;
-	}
-
-	.bomberos-abm .header-section .lava-bubbles {
-		position: absolute;
-		top: 0; left: 0; width: 100%; height: 100%;
-		pointer-events: none;
-		z-index: 1;
-		overflow: hidden;
-	}
-
-	.bomberos-abm .header-section .lava-bubble {
-		position: absolute;
-		border-radius: 50%;
-		opacity: 0.45;
-		background: radial-gradient(circle at 60% 40%, #FFD54F 0%, #F9A825 80%, transparent 100%);
-		animation: lava-bubble-move 8s linear infinite;
-		filter: blur(1.5px);
-		mix-blend-mode: lighten;
-	}
-
-	.bomberos-abm .header-section .lava-bubble.b1 {
-		left: 10%; width: 60px; height: 60px; bottom: -70px;
-		animation-delay: 0s; animation-duration: 7.5s;
-	}
-	.bomberos-abm .header-section .lava-bubble.b2 {
-		left: 35%; width: 90px; height: 90px; bottom: -100px;
-		animation-delay: 2s; animation-duration: 9s;
-		background: radial-gradient(circle at 60% 40%, #FFEB3B 0%, #FFD54F 80%, transparent 100%);
-	}
-	.bomberos-abm .header-section .lava-bubble.b3 {
-		left: 65%; width: 50px; height: 50px; bottom: -60px;
-		animation-delay: 1.5s; animation-duration: 6.5s;
-		background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #FFD54F 80%, transparent 100%);
-	}
-	.bomberos-abm .header-section .lava-bubble.b4 {
-		left: 80%; width: 70px; height: 70px; bottom: -80px;
-		animation-delay: 3.2s; animation-duration: 8.5s;
-		background: radial-gradient(circle at 60% 40%, #F9A825 0%, #FFD54F 80%, transparent 100%);
-	}
-	.bomberos-abm .header-section .lava-bubble.b5 {
-		left: 55%; width: 40px; height: 40px; bottom: -50px;
-		animation-delay: 5s; animation-duration: 7.2s;
-		background: radial-gradient(circle at 60% 40%, #FFFDE7 0%, #F9A825 80%, transparent 100%);
-	}
-
-	@@keyframes lava-bubble-move {
-		0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 0.45; }
-		60% { opacity: 0.7; filter: blur(2.5px); }
-		80% { transform: translateY(-220px) scale(1.15) rotate(10deg); opacity: 0.6; }
-		100% { transform: translateY(-320px) scale(0.95) rotate(-8deg); opacity: 0; }
-	}
-
-	.bomberos-abm .main-title {
-		font-family: 'Poppins', 'Fjalla One', sans-serif !important;
-		font-size: 2.2rem !important;
-		font-weight: 700 !important;
-		letter-spacing: 1px !important;
-		margin: 0 !important;
-		display: flex !important;
-		align-items: center !important;
-		gap: 12px !important;
-		animation: text-glow 2.5s ease-in-out infinite alternate !important;
-		position: relative !important;
-		z-index: 2 !important;
-	}
-
-	.bomberos-abm .title-icon {
-		color: #FFD54F !important;
-		font-size: 2rem !important;
-		filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25)) !important;
-	}
-
-	@@keyframes text-glow {
-		0%, 100% { text-shadow: 0 0 5px #F9A825, 0 0 10px #FFD54F; }
-		50% { text-shadow: 0 0 12px #F9A825, 0 0 22px #FFD54F; }
-	}
-
-	.bomberos-abm .title-container {
-		position: relative !important;
-		z-index: 2 !important;
-	}
-
-	.bomberos-abm .actions-row {
-		display: flex !important;
-		gap: 10px !important;
-		align-items: center !important;
-		z-index: 2 !important;
-	}
-
-	.bomberos-abm .modern-button {
-		height: 40px !important;
-		border-radius: 8px !important;
-		font-weight: 600 !important;
-		display: flex !important;
-		align-items: center !important;
-		gap: 8px !important;
-		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-		position: relative !important;
-		overflow: hidden !important;
-	}
-
-	.bomberos-abm .add-button {
-		background: linear-gradient(135deg, var(--abm-success-color) 0%, var(--abm-success-dark) 100%) !important;
-		border: none !important;
-		color: white !important;
-		box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3) !important;
-		padding: 0 20px !important;
-	}
-
-	.bomberos-abm .add-button:hover {
-		transform: translateY(-2px) !important;
-		box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4) !important;
-	}
-
-	.bomberos-abm .table-content {
-		padding: 0 !important;
-		overflow: hidden !important;
-	}
-
-	.bomberos-abm .ant-table-thead > tr > th {
-		background: #A63333 !important;
-		color: #fff !important;
-		font-weight: 600 !important;
-		border: none !important;
-		padding: 16px !important;
-	}
-
-	.bomberos-abm .ant-table-cell {
-		padding: 16px !important;
-		border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
-	}
-
-	.bomberos-abm .ant-table {
-		border-radius: 0 !important;
-	}
-
-	/* Modal fullscreen */
-	.fullscreen-modal .ant-modal {
-		top: 0 !important;
-		padding: 0 !important;
-		height: 100vh !important;
-		max-width: 100vw !important;
-		width: 100vw !important;
-	}
-
-	.fullscreen-modal .ant-modal-content {
-		height: 100vh !important;
-		border-radius: 0 !important;
-		display: flex !important;
-		flex-direction: column !important;
-		width: 100% !important;
-		max-width: none !important;
-	}
-
-	.fullscreen-modal .ant-modal-body {
-		flex: 1 !important;
-		padding: 0 !important;
-		overflow: hidden !important;
-	}
-
-	.fullscreen-modal .ant-modal-header {
-		background: #A63333 !important;
-		border-bottom: none !important;
-		padding: 16px 24px !important;
-	}
-
-	.fullscreen-modal .ant-modal-title {
-		color: white !important;
-		font-size: 24px !important;
-		font-weight: bold !important;
-	}
-
-	.fullscreen-modal .ant-modal-close {
-		color: white !important;
-		background: rgba(255, 255, 255, 0.2) !important;
-		border-radius: 50% !important;
-		width: 40px !important;
-		height: 40px !important;
-		display: flex !important;
-		align-items: center !important;
-		justify-content: center !important;
-		transition: all 0.3s ease !important;
-	}
-
-	.fullscreen-modal .ant-modal-close:hover {
-		background: rgba(255, 255, 255, 0.3) !important;
-		transform: scale(1.1) !important;
-	}
-</style>
+@* Los estilos viven en wwwroot/css/abm.css. No agregar <style> acá. *@
 
 <Modal @bind-Visible="ExternalVisible"
 	   Title="Bomberos de la Dependencia"
@@ -239,9 +22,9 @@
 	   WrapClassName="fullscreen-modal"
 	   OnCancel="@HandleClose">
 
-	<div class="bomberos-abm" style="height: 100%; display: flex; flex-direction: column;">
-		<div class="table-container" style="flex: 1; display: flex; flex-direction: column;">
-			<div class="header-section">
+	<div class="abm-page abm-page--dependencias" style="height: 100%; display: flex; flex-direction: column;">
+		<div class="abm-main-card" style="flex: 1; display: flex; flex-direction: column;">
+			<div class="abm-header-section">
 				<div class="lava-bubbles">
 					<div class="lava-bubble b1"></div>
 					<div class="lava-bubble b2"></div>
@@ -265,7 +48,7 @@
 				</div>
 			</div>
 
-			<div class="table-content" style="flex: 1; overflow: auto;">
+			<div class="abm-table-container" style="flex: 1; overflow: auto;">
 				<Table DataSource="@BomberosViewModel"
 					   PageSize="@_pageSize"
 					   Responsive

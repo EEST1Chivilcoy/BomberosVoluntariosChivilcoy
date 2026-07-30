@@ -14,13 +14,7 @@
 
 @* Los estilos viven en wwwroot/css/abm.css. No agregar <style> acá. *@
 
-<div style="display: flex; align-items: center; justify-content: flex-start; padding-left: 20px;">
-    <Icon Type="edit" Style="font-size: 24px; margin-right: 10px; color: #ff0000;" />
-    <Title Level="2" style="margin-bottom: 0;">
-        Editar la Unidad
-    </Title>
-</div>
-
+@* El título va en la barra roja del modal (Title del <Modal> en VehiculosCarta). *@
 <div class="modal-body-content">
     <div class="modal-left-panel">
         <Card Style="border: 1px solid #d9d9d9; border-radius: 20px;">
@@ -55,7 +49,7 @@
     </div>
 
     <div class="modal-right-panel">
-        <Form Model="vehiculoView" Layout="@FormLayout.Vertical">
+        <Form Model="vehiculoView" Layout="@FormLayout.Vertical" OnFinish="EditarMovil">
             <Card Title="Información Básica" Style="margin-bottom: 24px;">
                 <div class="form-grid-4-col">
                     <FormItem Label="Nº de la Unidad">
@@ -190,12 +184,15 @@
                     </div>
                 }
             </Card>
+
+            @* Adentro del Form y sin OnClick: el click dispara el submit y la
+               validación del modelo antes de llegar a EditarMovil (OnFinish).
+               El div es fijo abajo por CSS, así que se ve igual que antes. *@
+            <div class="modal-footer">
+                <Button Type="@ButtonType.Primary" HtmlType="submit">Guardar</Button>
+            </div>
         </Form>
     </div>
-</div>
-
-<div class="modal-footer">
-    <Button Type="@ButtonType.Primary" OnClick="EditarMovil">Guardar</Button>
 </div>
 
 @code {
@@ -312,7 +309,7 @@
         }
     }
 
-    public async void EditarMovil()
+    private async Task EditarMovil()
     {
         try
         {

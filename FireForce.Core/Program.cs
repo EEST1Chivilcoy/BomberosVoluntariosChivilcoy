@@ -165,12 +165,22 @@ builder.Services.AddScoped<IVehiculoSalidaService, VehiculoSalidaService>();
 builder.Services.AddScoped<IFuerzaIntervinienteService, FuerzaIntervinienteService>();
 builder.Services.AddScoped<IHistorialSocioService, HistorialSocioService>();
 builder.Services.AddScoped<ISocioService, SocioService>();
-builder.Services.AddScoped<IEntraIDService, EntraIDService>();
+// Con la autenticación deshabilitada no hay token para Microsoft Graph (IDW10503), así que
+// entra la variante que devuelve datos sintéticos y permite las altas manuales en desarrollo.
+if (autenticacionDeshabilitada)
+{
+    builder.Services.AddScoped<IEntraIDService, EntraIDServiceDeshabilitado>();
+}
+else
+{
+    builder.Services.AddScoped<IEntraIDService, EntraIDService>();
+}
 builder.Services.AddScoped<IParteVehiculoService, ParteVehiculoService>();
 builder.Services.AddScoped<IPagoService, PagoService>();
 builder.Services.AddScoped<ISaldoSocioService, SaldoSocioService>();
 builder.Services.AddScoped<IImagenService, ImagenService>();
 builder.Services.AddScoped<IIncidenteService, IncidenteService>();
+builder.Services.AddSingleton<IVersionadorEstaticos, VersionadorEstaticos>();
 
 // Configuración de Nominatim (externalizada para poder cambiar de proveedor)
 builder.Services.Configure<NominatimSettings>(

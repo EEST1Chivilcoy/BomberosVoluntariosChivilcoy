@@ -60,7 +60,7 @@
    ========================================================= */
 .top-menu {
     position: absolute;
-    top: -10px;
+    top: 0;
     left: 50%;
     transform: translateX(-50%);
     display: flex !important;
@@ -87,8 +87,10 @@
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    height: 80px !important;
-    line-height: 80px !important;
+    /* Misma altura que el header: si los ítems lo desbordan, el mouseleave se
+       dispara en zonas raras y el popup del submenú se abre lejos del título. */
+    height: var(--header-height) !important;
+    line-height: var(--header-height) !important;
     margin: 0 !important;
     padding: 0 12px !important;
     color: var(--text-light) !important;
@@ -107,6 +109,28 @@
         box-shadow 0.25s cubic-bezier(.4,0,.2,1),
         transform 0.18s cubic-bezier(.4,0,.2,1);
     box-shadow: none !important;
+}
+
+/* --- Anti-parpadeo de los submenús (bug del OverlayTrigger de AntDesign 1.6) ---
+   El trigger escucha mouseover/mouseout crudos SIN filtrar relatedTarget, y el
+   Hide() de 100ms que dispara cada mouseout NO se cancela quedándose sobre el
+   título (solo lo cancela entrar al popup). O sea: cruzar del ícono al texto
+   DENTRO del mismo título cierra el popup. La solución es que cada título de
+   submenú sea UN único blanco de puntero, sin bordes internos que cruzar: */
+
+/* 1. Los hijos del título (ícono, texto) no capturan el puntero. */
+.top-menu .ant-menu-submenu-title * {
+    pointer-events: none;
+}
+
+/* 2. El título ocupa todo el <li>: sin franjas internas li↔título. */
+.top-menu .ant-menu-submenu {
+    padding: 0 !important;
+}
+
+.top-menu .ant-menu-submenu-title {
+    width: 100%;
+    height: 100% !important;
 }
 
 .top-menu .ant-menu-item:hover,
@@ -198,46 +222,79 @@
     content: none !important;
 }
 
-.top-menu .ant-menu-submenu-popup {
-    background: var(--primary-color) !important;
+/* Popup de los submenús del menú superior. OJO: Ant lo monta como portal en
+   <body>, NO adentro de .top-menu, así que un selector descendiente de
+   .top-menu nunca lo alcanza. Se engancha con PopupClassName="top-menu-popup"
+   (definido en cada SubMenu del header de MainLayout.razor). */
+.top-menu-popup.ant-menu-submenu-popup {
+    background: transparent !important;
+    box-shadow: none !important;
+    /* Adyacencia EXACTA con el título: Ant abre el popup 4px por debajo del
+       borde; el -5px cierra ese hueco con 1px de solape de tolerancia (si el
+       mouse queda "en el aire" entre título y popup, el Hide de 100ms gana). */
+    margin-top: -5px;
+    /* CRÍTICO: el wrapper NO puede tener área propia de hover (padding cero:
+       el <ul> interno debe cubrirlo por completo). El wrapper es el elemento
+       con los handlers de Blazor, y el mouseleave sintetizado por Blazor se
+       dispara MAL cuando un mouseout tiene al wrapper como target directo
+       (transición wrapper→hijo = "salió del overlay" = Hide a los 100ms que
+       nada cancela). Entre descendientes (ul→item, item→item) no pasa. */
+    padding: 0 !important;
+}
+
+/* El ::before puente de Ant (top:-7px) también es área de hover del wrapper:
+   misma trampa de arriba. Afuera. */
+.top-menu-popup.ant-menu-submenu-popup::before {
+    display: none;
+}
+
+.top-menu-popup .ant-menu-sub {
+    background: linear-gradient(120deg, rgba(130,0,20,0.92) 60%, rgba(255,215,0,0.10) 100%) !important;
+    backdrop-filter: blur(8px) saturate(1.2);
     border-radius: 8px !important;
+    border: 1px solid rgba(255,215,0,0.13);
     box-shadow: 0 6px 24px 0 rgba(0,0,0,0.18);
     padding: 6px 0 !important;
-    animation: submenuFadeIn 0.25s cubic-bezier(.4,0,.2,1);
-    backdrop-filter: blur(8px) saturate(1.2);
-    background: linear-gradient(120deg, rgba(130,0,20,0.92) 60%, rgba(255,215,0,0.10) 100%) !important;
-    border: 1px solid rgba(255,215,0,0.13);
-}
-@keyframes submenuFadeIn {
-    from { opacity: 0; transform: translateY(-10px);}
-    to   { opacity: 1; transform: translateY(0);}
+    position: relative;
+    /* Ant le pone overflow con scroll por si el menú es larguísimo; acá los
+       popups son cortos y el overflow recortaría el ::before de abajo. */
+    overflow: visible !important;
 }
 
-.top-menu .ant-menu-submenu-popup {
-    animation: submenuSlideFadeIn 0.18s cubic-bezier(.4,0,.2,1);
-}
-@keyframes submenuSlideFadeIn {
-    0% { opacity: 0; transform: translateY(-18px) scale(0.98);}
-    60% { opacity: 0.7; }
-    100% { opacity: 1; transform: translateY(0) scale(1);}
+/* Con el popup abierto, volver a pasar el mouse por el título lo cerraba: el
+   mouseleave del popup dispara un Hide() que estar sobre el título no cancela
+   (limitación del OverlayTrigger de Ant 1.6). Este pseudo-elemento invisible
+   del <ul> extiende su zona de hover hacia arriba cubriendo el título: mientras
+   el mouse esté ahí sigue "dentro del popup" y no se cierra. Es del <ul> y no
+   del wrapper a propósito: las zonas propias del wrapper disparan el mouseleave
+   fantasma (ver arriba); las de sus descendientes, no. */
+.top-menu-popup .ant-menu-sub::before {
+    content: '';
+    /* Ant usa este mismo ::before como clearfix con display:table, y una
+       "tabla" vacía con left/right no se estira: queda con ancho 0. */
+    display: block;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(-1 * var(--header-height));
+    height: var(--header-height);
 }
 
-.top-menu .ant-menu-submenu-popup .ant-menu-item {
+.top-menu-popup .ant-menu-item {
     color: var(--text-light) !important;
+    background: transparent !important;
     border-radius: 6px !important;
     transition:
         color 0.22s cubic-bezier(.4,0,.2,1),
-        background 0.22s cubic-bezier(.4,0,.2,1),
-        box-shadow 0.22s cubic-bezier(.4,0,.2,1),
-        transform 0.15s cubic-bezier(.4,0,.2,1);
+        background 0.22s cubic-bezier(.4,0,.2,1);
 }
-.top-menu .ant-menu-submenu-popup .ant-menu-item:hover,
-.top-menu .ant-menu-submenu-popup .ant-menu-item-active,
-.top-menu .ant-menu-submenu-popup .ant-menu-item-selected {
+
+.top-menu-popup .ant-menu-item:hover,
+.top-menu-popup .ant-menu-item-active,
+.top-menu-popup .ant-menu-item-selected {
     color: var(--gold-color) !important;
     background: transparent !important;
     box-shadow: none !important;
-    transform: none !important;
 }
 
 /* ==========================================================================
@@ -581,9 +638,6 @@
     }
 
 
-    .ant-menu-submenu .ant-menu-sub{
-            transform: translateY(-14px) !important;
-}
 
 /* =========================================================
    MEDIA QUERIES

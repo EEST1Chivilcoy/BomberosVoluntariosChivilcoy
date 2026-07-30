@@ -136,6 +136,7 @@ else
        Footer="null"
        Centered
        DestroyOnClose
+       WrapClassName="modal-incidente"
        Visible="@modalAprobarVisible"
        OnCancel="CerrarSubModales">
     <Form Model="@resolucion" Layout="@FormLayout.Vertical" OnFinish="OnAprobar">
@@ -163,8 +164,7 @@ else
             <TextArea @bind-Value="@resolucion.Observaciones" Rows="3" MaxLength="500" ShowCount />
         </FormItem>
 
-        <div style="display:flex; justify-content:flex-end; gap:8px;">
-            <Button OnClick="CerrarSubModales" Disabled="@estaProcesando">Cancelar</Button>
+        <div class="modal-footer-abm">
             <Button Type="ButtonType.Primary" HtmlType="submit" Loading="@estaProcesando">
                 <Icon Type="check" /> Aprobar
             </Button>
@@ -177,6 +177,7 @@ else
        Footer="null"
        Centered
        DestroyOnClose
+       WrapClassName="modal-incidente"
        Visible="@modalRechazarVisible"
        OnCancel="CerrarSubModales">
     <Form Model="@resolucion" Layout="@FormLayout.Vertical" OnFinish="OnRechazar">
@@ -184,8 +185,7 @@ else
             <TextArea @bind-Value="@resolucion.Observaciones" Rows="3" MaxLength="500" ShowCount />
         </FormItem>
 
-        <div style="display:flex; justify-content:flex-end; gap:8px;">
-            <Button OnClick="CerrarSubModales" Disabled="@estaProcesando">Cancelar</Button>
+        <div class="modal-footer-abm">
             <Button Danger HtmlType="submit" Loading="@estaProcesando">
                 <Icon Type="close" /> Rechazar
             </Button>
@@ -198,6 +198,7 @@ else
        Footer="null"
        Centered
        DestroyOnClose
+       WrapClassName="modal-incidente"
        Visible="@modalDerivarVisible"
        OnCancel="CerrarSubModales">
     <Form Model="@derivacion" Layout="@FormLayout.Vertical" OnFinish="OnDerivar">
@@ -231,8 +232,7 @@ else
             <TextArea @bind-Value="@derivacion.Descripcion" Rows="4" MaxLength="1000" ShowCount />
         </FormItem>
 
-        <div style="display:flex; justify-content:flex-end; gap:8px;">
-            <Button OnClick="CerrarSubModales" Disabled="@estaProcesando">Cancelar</Button>
+        <div class="modal-footer-abm">
             <Button Type="ButtonType.Primary" HtmlType="submit" Loading="@estaProcesando">
                 <Icon Type="share-alt" /> Derivar
             </Button>
@@ -245,6 +245,7 @@ else
        Footer="null"
        Centered
        DestroyOnClose
+       WrapClassName="modal-incidente"
        Visible="@modalEstadoVisible"
        OnCancel="CerrarSubModales">
     <Form Model="@cambioEstado" Layout="@FormLayout.Vertical" OnFinish="OnCambiarEstado">
@@ -273,8 +274,7 @@ else
                       Placeholder="Por ejemplo: se cambió el retén y se probó la bomba en servicio" />
         </FormItem>
 
-        <div style="display:flex; justify-content:flex-end; gap:8px;">
-            <Button OnClick="CerrarSubModales" Disabled="@estaProcesando">Cancelar</Button>
+        <div class="modal-footer-abm">
             <Button Type="ButtonType.Primary"
                     HtmlType="submit"
                     Loading="@estaProcesando"

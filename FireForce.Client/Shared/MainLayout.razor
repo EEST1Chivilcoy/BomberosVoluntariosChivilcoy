@@ -1,10 +1,12 @@
 @inherits LayoutComponentBase
+@using FireForce.Shared.Services
 @inject IconService iconService
 @inject NavigationManager navigationManager
+@inject IVersionadorEstaticos Versionador
 
 <PageTitle>Bomberos Chivilcoy</PageTitle>
 
-<link href="css/layout.css" rel="stylesheet" />
+<link href="css/layout.css?v=@Versionador.ObtenerVersion("css/layout.css")" rel="stylesheet" />
 
 <Layout>
     <Header class="main-header compact-header">
@@ -29,7 +31,7 @@
                 </MenuItem>
 
                 <!-- SUBMENU PERSONAL -->
-                <SubMenu Key="personal" TitleTemplate="@personalCompactTitle" class="compact-submenu">
+                <SubMenu Key="personal" TitleTemplate="@personalCompactTitle" class="compact-submenu" PopupClassName="top-menu-popup">
                     <MenuItem Key="bomberos" OnClick="@(() => navigationManager.NavigateTo("/fire-force/personal/bomberos"))" class="compact-item">
                         <span class="compact-text">Bomberos</span>
                     </MenuItem>
@@ -53,7 +55,7 @@
                     <i class="fa-solid fa-clipboard-list compact-icon"></i> <span class="compact-text">Incidentes</span>
                 </MenuItem>
 
-                <SubMenu Key="etica" TitleTemplate="@eticaCompactTitle" class="compact-submenu">
+                <SubMenu Key="etica" TitleTemplate="@eticaCompactTitle" class="compact-submenu" PopupClassName="top-menu-popup">
                     <MenuItem Key="sanciones" OnClick="@(() => navigationManager.NavigateTo("/fire-force/bomberos/sancionados"))" class="compact-item">
                         <span class="compact-text">Sanciones</span>
                     </MenuItem>
@@ -62,7 +64,7 @@
                     </MenuItem>
                 </SubMenu>
 
-                <SubMenu Key="reportes" TitleTemplate="@reportesCompactTitle" class="compact-submenu">
+                <SubMenu Key="reportes" TitleTemplate="@reportesCompactTitle" class="compact-submenu" PopupClassName="top-menu-popup">
 
                     <MenuItem Key="reportes-bomberos" OnClick="@(() => navigationManager.NavigateTo("/fire-force/Reportes/HistorialBomberos"))" class="compact-item">
                         <span class="compact-text">Bomberos</span>
@@ -75,7 +77,9 @@
                     </MenuItem>
                 </SubMenu>
 
-                <SubMenu Key="herramientas" TitleTemplate="@herramientasCompactTitle" class="compact-submenu">
+                @* Último ítem del menú: el popup se alinea a la derecha del botón
+                   para que no quede pegado (o afuera) del borde del navegador. *@
+                <SubMenu Key="herramientas" TitleTemplate="@herramientasCompactTitle" class="compact-submenu" PopupClassName="top-menu-popup" Placement="Placement.BottomRight">
                     <MenuItem Key="fuerzas" OnClick="@(() => navigationManager.NavigateTo("/fire-force/FuerzasIntervinientes"))" class="compact-item">
                         <span class="compact-text">Fuerzas Intervinientes</span>
                     </MenuItem>
