@@ -11,7 +11,7 @@
 @* Los estilos viven en wwwroot/css/abm.css. No agregar <style> acá. *@
 
 <div class="abm-page abm-page--equipos">
-	<div class="modal-content">
+	<div class="modal-content-abm">
 
 		<div class="movimientos-acciones">
 			<Button Type="@ButtonType.Primary" Class="modern-button add-button" OnClick="@(() => _visibleAgregar = true)">
@@ -35,10 +35,11 @@
 
 <Modal Footer="null" Title="@("Nuevo Movimiento de Equipo Autónomo")"
 	   Visible="@_visibleAgregar"
-	   WrapClassName="modal-crear-equipo"
+	   WrapClassName="modal-abm modal-crear-equipo"
 	   OnCancel="@(() => _visibleAgregar = false)"
-	   Centered="@true">
-	<div class="modal-crear-equipo-content">
+	   Centered="@true"
+	   Width="800">
+	<div class="modal-content-abm">
 		<MovimientoCrearEquipoAutonomo OnFinishCallback="Init" EquipoIDSel="EquipoAutonomo.EquipoAutonomoId" />
 	</div>
 </Modal>

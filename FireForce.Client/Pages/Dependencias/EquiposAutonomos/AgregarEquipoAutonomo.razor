@@ -12,13 +12,12 @@
 
 <Form Model="@equipoAutonomo"
       Layout="FormLayout.Vertical"
-      Class="modal-crear-equipo-form"
       OnFinish="OnFinish"
       OnFinishFailed="OnFinishFailed">
 
-    <Row Class="modal-crear-equipo-row" Gutter="16">
+    <Row Gutter="16">
         <AntDesign.Col Span="12">
-            <FormItem Label="📋 Número de Serie" Required Class="modal-crear-equipo-form-item">
+            <FormItem Label="📋 Número de Serie" Required Class="modal-form-item-abm">
                 <Input @bind-Value="@equipoAutonomo.NroSerie"
                        Placeholder="Ingrese el número de serie"
                        Size="InputSize.Large" />
@@ -26,7 +25,7 @@
         </AntDesign.Col>
 
         <AntDesign.Col Span="12">
-            <FormItem Label="🔧 Número de Tubo" Class="modal-crear-equipo-form-item">
+            <FormItem Label="🔧 Número de Tubo" Class="modal-form-item-abm">
                 <Input @bind-Value="@equipoAutonomo.NroTubo"
                        Placeholder="Ingrese el número de tubo"
                        Size="InputSize.Large" />
@@ -34,9 +33,9 @@
         </AntDesign.Col>
     </Row>
 
-    <Row Class="modal-crear-equipo-row" Gutter="16">
+    <Row Gutter="16">
         <AntDesign.Col Span="12">
-            <FormItem Label="🏭 Marca" Class="modal-crear-equipo-form-item">
+            <FormItem Label="🏭 Marca" Class="modal-form-item-abm">
                 <Input @bind-Value="@equipoAutonomo.Marca"
                        Placeholder="Ingrese la marca"
                        Size="InputSize.Large" />
@@ -44,7 +43,7 @@
         </AntDesign.Col>
 
         <AntDesign.Col Span="12">
-            <FormItem Label="📱 Modelo" Class="modal-crear-equipo-form-item">
+            <FormItem Label="📱 Modelo" Class="modal-form-item-abm">
                 <Input @bind-Value="@equipoAutonomo.Modelo"
                        Placeholder="Ingrese el modelo"
                        Size="InputSize.Large" />
@@ -52,7 +51,7 @@
         </AntDesign.Col>
     </Row>
 
-    <Row Class="modal-crear-equipo-row" Gutter="24">
+    <Row Gutter="24">
         <AntDesign.Col Span="12">
             <FormItem Label="📅 Fecha de vencimiento de la prueba hidráulica">
                 <DatePicker Mask="dd/MM/yyyy" @bind-Value="@equipoAutonomo.FechaVencimientoPruebaHidraulica"
@@ -71,9 +70,9 @@
         </AntDesign.Col>
     </Row>
 
-    <Row Class="modal-crear-equipo-row" Gutter="16">
+    <Row Gutter="16">
         <AntDesign.Col Span="12">
-            <FormItem Label="🧱 Tipo de Material" Class="modal-crear-equipo-form-item">
+            <FormItem Label="🧱 Tipo de Material" Class="modal-form-item-abm">
                 <Input @bind-Value="@equipoAutonomo.TipoMaterial"
                        Placeholder="Ingrese el tipo de material"
                        Size="InputSize.Large" />

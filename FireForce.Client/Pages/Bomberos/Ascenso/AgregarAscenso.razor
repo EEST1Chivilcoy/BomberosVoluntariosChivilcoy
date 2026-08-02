@@ -16,19 +16,19 @@
        Style="max-width: 800px;"
        Footer="null"
        DestroyOnClose
-       WrapClassName="modal-crear-ascenso"
+       Centered
+       WrapClassName="modal-abm modal-crear-ascenso"
        OnCancel="@(() => OnClose.InvokeAsync())">
-    <div class="modal-crear-ascenso-content">
+    <div class="modal-content-abm">
         <Form Model="AscensoVM"
               Layout="FormLayout.Vertical"
-              Class="modal-crear-ascenso-form"
               OnFinish="OnFinish"
               OnFinishFailed="OnFinishFailed">
             <DataAnnotationsValidator />
             <ValidationSummary />
-            <Row Class="modal-crear-ascenso-row" Gutter="16">
+            <Row Gutter="16">
                 <AntDesign.Col Span="12">
-                    <FormItem Label="👤 Personal Afectado" Required Class="modal-crear-ascenso-form-item">
+                    <FormItem Label="👤 Personal Afectado" Required Class="modal-form-item-abm">
                         <Select TItem="BomberoViweModel"
                                 TItemValue="int"
                                 DataSource="@BomberoTodos"
@@ -42,27 +42,27 @@
                     </FormItem>
                 </AntDesign.Col>
                 <AntDesign.Col Span="12">
-                    <FormItem Label="📅 Fecha de Ascenso" Required Class="modal-crear-ascenso-form-item">
+                    <FormItem Label="📅 Fecha de Ascenso" Required Class="modal-form-item-abm">
                         <DatePicker Mask="dd/MM/yyyy" TValue="DateTime" DefaultValue="DateTime.Now" @bind-Value="AscensoVM.FechaAscenso" />
                     </FormItem>
                 </AntDesign.Col>
             </Row>
-            <AntDesign.Col Span="24" Class="modal-crear-ascenso-form-full-width">
-                <FormItem Label="📝 Descripción" Class="modal-crear-ascenso-form-item">
+            <AntDesign.Col Span="24" Class="modal-form-full-width-abm">
+                <FormItem Label="📝 Descripción" Class="modal-form-item-abm">
                     <TextArea @bind-Value="AscensoVM.Descripcion" 
                               Rows="4"
                               ShowCounts
                               MaxLength="500"/>
                 </FormItem>
             </AntDesign.Col>
-            <Row Class="modal-crear-ascenso-row" Gutter="16">
+            <Row Gutter="16">
                 <AntDesign.Col Span="12">
-                    <FormItem Label="🎖️ Grado anterior" Class="modal-crear-ascenso-form-item">
+                    <FormItem Label="🎖️ Grado anterior" Class="modal-form-item-abm">
                         <Input Value="@AscensoVM.GradoAntiguo.GetDisplayName()" ReadOnly />
                     </FormItem>
                 </AntDesign.Col>
                 <AntDesign.Col Span="12">
-                    <FormItem Label="🎖️ Grado ascenso" Required Class="modal-crear-ascenso-form-item">
+                    <FormItem Label="🎖️ Grado ascenso" Required Class="modal-form-item-abm">
                         <Select TItem="EscalafonJerarquico"
                                 TItemValue="EscalafonJerarquico"
                                 DataSource="@GradosDisponiblesParaAscenso"
@@ -89,21 +89,21 @@
                     </FormItem>
                 </AntDesign.Col>
             </Row>
-            <Row Class="modal-crear-ascenso-row" Gutter="16">
+            <Row Gutter="16">
                 <AntDesign.Col Span="12">
-                    <FormItem Label="📚 Número de libro" Required Class="modal-crear-ascenso-form-item">
+                    <FormItem Label="📚 Número de libro" Required Class="modal-form-item-abm">
                         <Input @bind-Value="AscensoVM.NumeroLibro" />
                         <ValidationMessage For="() => AscensoVM.NumeroLibro" />
                     </FormItem>
                 </AntDesign.Col>
                 <AntDesign.Col Span="12">
-                    <FormItem Label="📄 Número de acta" Required Class="modal-crear-ascenso-form-item">
+                    <FormItem Label="📄 Número de acta" Required Class="modal-form-item-abm">
                         <Input @bind-Value="AscensoVM.NumeroActa" />
                         <ValidationMessage For="() => AscensoVM.NumeroActa" />
                     </FormItem>
                 </AntDesign.Col>
             </Row>
-            <div class="modal-crear-ascenso-footer">
+            <div class="modal-footer-abm">
                 <Button Class="ant-btn-primary" HtmlType="submit">
                     Ascender Bombero
                 </Button>

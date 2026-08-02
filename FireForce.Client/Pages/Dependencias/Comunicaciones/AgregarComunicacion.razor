@@ -10,28 +10,27 @@
 
 @* Los estilos viven en wwwroot/css/abm.css. No agregar <style> acá. *@
 
-<div class="modal-crear-comunicacion-content">
+<div class="modal-content-abm">
     <Form Model="@ComunicacionVM"
-          Class="modal-crear-comunicacion-form"
           OnFinish="OnFinish"
           OnFinishFailed="OnFinishFailed">
 
         <Row Class="modal-crear-comunicacion-row" Gutter="16">
             <AntDesign.Col Span="8">
-                <FormItem Label="#️⃣ Num. Serie" Class="modal-crear-comunicacion-form-item">
+                <FormItem Label="#️⃣ Num. Serie" Class="modal-form-item-abm">
                     <AntDesign.InputNumber TValue="int?" 
                     @bind-Value="@ComunicacionVM.NroSerie" />
                 </FormItem>
             </AntDesign.Col>
             <AntDesign.Col Span="8">
-                <FormItem Label="⚙️ Num. Equipo" Class="modal-crear-comunicacion-form-item">
+                <FormItem Label="⚙️ Num. Equipo" Class="modal-form-item-abm">
                     <AntDesign.InputNumber TValue="int?"
                     @bind-Value="@ComunicacionVM.NroEquipo" />
                     
                 </FormItem>
             </AntDesign.Col>
             <AntDesign.Col Span="8">
-                <FormItem Label="🏷️ Modelo" Class="modal-crear-comunicacion-form-item">
+                <FormItem Label="🏷️ Modelo" Class="modal-form-item-abm">
                     <Input @bind-Value="@ComunicacionVM.Modelo" />
                 </FormItem>
             </AntDesign.Col>
@@ -39,12 +38,12 @@
 
         <Row Class="modal-crear-comunicacion-row" Gutter="16">
             <AntDesign.Col Span="12">
-                <FormItem Label="🅜 Marca" Class="modal-crear-comunicacion-form-item">
+                <FormItem Label="🅜 Marca" Class="modal-form-item-abm">
                     <Input @bind-Value="@ComunicacionVM.Marca" />
                 </FormItem>
             </AntDesign.Col>
             <AntDesign.Col Span="12">
-                <FormItem Label="📌Estado" Class="modal-crear-comunicacion-form-item">
+                <FormItem Label="📌Estado" Class="modal-form-item-abm">
                     <EnumSelect TEnum="TipoEstadoHandie" @bind-Value="@ComunicacionVM.Estado" />
                 </FormItem>
             </AntDesign.Col>
@@ -54,7 +53,7 @@
         {
             <Row Class="modal-crear-comunicacion-row" Gutter="16">
                 <AntDesign.Col Span="24">
-                    <FormItem Label="Asignación" Class="modal-crear-comunicacion-form-item">
+                    <FormItem Label="Asignación" Class="modal-form-item-abm">
                         <div style="display: flex; gap: 24px; align-items: center;">
                             <Checkbox @bind-Checked="@selectBombero" OnChange="() => HandleCheckboxChange(true, checkboxBomberoLabel)">
                                 <Icon Type="user" /> Asignar a Bombero
@@ -71,7 +70,7 @@
             {
                 <Row Class="modal-crear-comunicacion-row" Gutter="16">
                     <AntDesign.Col Span="24">
-                        <FormItem Label="Bombero Asignado" Class="modal-crear-comunicacion-form-item">
+                        <FormItem Label="Bombero Asignado" Class="modal-form-item-abm">
                             <Select TItem="BomberoViweModel"
                                     TItemValue="int?"
                                     DataSource="@BomberosVM"
@@ -91,7 +90,7 @@
             {
                 <Row Class="modal-crear-comunicacion-row" Gutter="16">
                     <AntDesign.Col Span="24">
-                        <FormItem Label="Móvil Asignado" Class="modal-crear-comunicacion-form-item">
+                        <FormItem Label="Móvil Asignado" Class="modal-form-item-abm">
                             <Select TItem="MovilViewModel"
                                     TItemValue="string"
                                     DataSource="@MovilesViewModel"
@@ -108,7 +107,7 @@
             }
         }
 
-        <div class="modal-crear-comunicacion-footer">
+        <div class="modal-footer-abm">
             <Button Class="boton-agregar" HtmlType="submit">
                 Agregar Handie
             </Button>

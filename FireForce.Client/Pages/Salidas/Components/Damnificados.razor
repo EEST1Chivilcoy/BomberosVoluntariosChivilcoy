@@ -59,58 +59,59 @@
                    CancelText="@("Cancelar")"
                    OnOk="@AgregarEditarDamnificado"
                    OnCancel="@(() => {editandoDamnificado = false; Damnificado = new();})"
-                   WrapClassName="modal-damnificado">
-                <div class="modal-damnificado-content">
-                    <Form Model="Damnificado" Layout="FormLayout.Vertical" Class="modal-damnificado-form">
+                   Centered
+                   WrapClassName="modal-abm modal-damnificado">
+                <div class="modal-content-abm">
+                    <Form Model="Damnificado" Layout="FormLayout.Vertical">
                         <Row Gutter="16">
                             <AntDesign.Col Span="8">
-                                <FormItem Label="Nombre" Class="modal-damnificado-form-item">
+                                <FormItem Label="Nombre" Class="modal-form-item-abm">
                                     <Input @bind-Value="@Damnificado.Nombre" />
                                 </FormItem>
                             </AntDesign.Col>
                             <AntDesign.Col Span="8">
-                                <FormItem Label="Apellido" Class="modal-damnificado-form-item">
+                                <FormItem Label="Apellido" Class="modal-form-item-abm">
                                     <Input @bind-Value="@Damnificado.Apellido" />
                                 </FormItem>
                             </AntDesign.Col>
                             <AntDesign.Col Span="8">
-                                <FormItem Label="Documento" Class="modal-damnificado-form-item">
+                                <FormItem Label="Documento" Class="modal-form-item-abm">
                                     <Input @bind-Value="@Damnificado.Dni" />
                                 </FormItem>
                             </AntDesign.Col>
                         </Row>
                         <Row Gutter="16">
                             <AntDesign.Col Span="8">
-                                <FormItem Label="Sexo" Class="modal-damnificado-form-item">
+                                <FormItem Label="Sexo" Class="modal-form-item-abm">
                                     <EnumSelect TEnum="TipoSexo ?" @bind-Value="@Damnificado.Sexo" AllowClear />
                                 </FormItem>
                             </AntDesign.Col>
                             <AntDesign.Col Span="10">
-                                <FormItem Label="Fecha de nacimiento" Class="modal-damnificado-form-item">
+                                <FormItem Label="Fecha de nacimiento" Class="modal-form-item-abm">
                                     <DatePicker Mask="dd/MM/yyyy" TValue="DateTime?" @bind-Value="@Damnificado.FechaDeNacimiento" OnChange="@CalcularEdad" />
                                 </FormItem>
                             </AntDesign.Col>
                             <AntDesign.Col Span="6">
-                                <FormItem Label="Edad" Class="modal-damnificado-form-item">
+                                <FormItem Label="Edad" Class="modal-form-item-abm">
                                     <Input @bind-Value="@Damnificado.Edad" Disabled="@Damnificado.FechaDeNacimiento.HasValue" />
                                 </FormItem>
                             </AntDesign.Col>
                         </Row>
                         <Row Gutter="16">
                             <AntDesign.Col Span="14">
-                                <FormItem Label="Lugar de nacimiento" Class="modal-damnificado-form-item">
+                                <FormItem Label="Lugar de nacimiento" Class="modal-form-item-abm">
                                     <Input @bind-Value="@Damnificado.LugarDeNacimiento" />
                                 </FormItem>
                             </AntDesign.Col>
                             <AntDesign.Col Span="10">
-                                <FormItem Label="Estado" Class="modal-damnificado-form-item">
+                                <FormItem Label="Estado" Class="modal-form-item-abm">
                                     <EnumSelect TEnum="TipoDamnificado ?" @bind-Value="@Damnificado.Estado" AllowClear />
                                 </FormItem>
                             </AntDesign.Col>
                         </Row>
                         <Row Gutter="16">
                             <AntDesign.Col Span="12">
-                                <FormItem Label="Fuerza que lo trasladó" Class="modal-damnificado-form-item">
+                                <FormItem Label="Fuerza que lo trasladó" Class="modal-form-item-abm">
                                     <Select TItem="FuerzaIntervinienteViewModel"
                                             TItemValue="int?"
                                             DataSource="@Model.FuerzasIntervinientes"
@@ -125,7 +126,7 @@
                                 </FormItem>
                             </AntDesign.Col>
                             <AntDesign.Col Span="12">
-                                <FormItem Label="¿Hacia dónde?" Class="modal-damnificado-form-item">
+                                <FormItem Label="¿Hacia dónde?" Class="modal-form-item-abm">
                                     <Input @bind-Value="@Damnificado.Destino" />
                                 </FormItem>
                             </AntDesign.Col>
@@ -187,75 +188,76 @@
                    CancelText="@("Cancelar")"
                    OnOk="@AgregarEditarVehiculo"
                    OnCancel="@(() => {editandoVehiculo = false; Vehiculo = new();})"
-                   WrapClassName="modal-damnificado">
-                <div class="modal-damnificado-content">
-                    <Form Model="Vehiculo" Layout="FormLayout.Vertical" Class="modal-damnificado-form">
+                   Centered
+                   WrapClassName="modal-abm modal-damnificado">
+                <div class="modal-content-abm">
+                    <Form Model="Vehiculo" Layout="FormLayout.Vertical">
                         <Row Gutter="16">
                             <AntDesign.Col Span="8">
-                                <FormItem Label="Marca" Class="modal-damnificado-form-item">
+                                <FormItem Label="Marca" Class="modal-form-item-abm">
                                     <Input @bind-Value="@Vehiculo.Marca" />
                                 </FormItem>
                             </AntDesign.Col>
                             <AntDesign.Col Span="8">
-                                <FormItem Label="Modelo" Class="modal-damnificado-form-item">
+                                <FormItem Label="Modelo" Class="modal-form-item-abm">
                                     <Input @bind-Value="@Vehiculo.Modelo" />
                                 </FormItem>
                             </AntDesign.Col>
                             <AntDesign.Col Span="8">
-                                <FormItem Label="Año" Class="modal-damnificado-form-item">
+                                <FormItem Label="Año" Class="modal-form-item-abm">
                                     <Input @bind-Value="@Vehiculo.Año" />
                                 </FormItem>
                             </AntDesign.Col>
                         </Row>
                         <Row Gutter="16">
                             <AntDesign.Col Span="8">
-                                <FormItem Label="Patente" Class="modal-damnificado-form-item">
+                                <FormItem Label="Patente" Class="modal-form-item-abm">
                                     <Input @bind-Value="@Vehiculo.Patente" />
                                 </FormItem>
                             </AntDesign.Col>
                             <AntDesign.Col Span="8">
-                                <FormItem Label="Tipo" Class="modal-damnificado-form-item">
+                                <FormItem Label="Tipo" Class="modal-form-item-abm">
                                     <Input @bind-Value="@Vehiculo.Tipo" />
                                 </FormItem>
                             </AntDesign.Col>
                             <AntDesign.Col Span="8">
-                                <FormItem Label="Color" Class="modal-damnificado-form-item">
+                                <FormItem Label="Color" Class="modal-form-item-abm">
                                     <Input @bind-Value="@Vehiculo.Color" />
                                 </FormItem>
                             </AntDesign.Col>
                         </Row>
                         <Row Gutter="16">
                             <AntDesign.Col Span="14">
-                                <FormItem Label="Observaciones" Class="modal-damnificado-form-item">
+                                <FormItem Label="Observaciones" Class="modal-form-item-abm">
                                     <TextArea @bind-Value="@Vehiculo.Observaciones" Rows="3" />
                                 </FormItem>
                             </AntDesign.Col>
                             <AntDesign.Col Span="10">
-                                <FormItem Label="¿Se activó el Airbag?" Class="modal-damnificado-form-item">
+                                <FormItem Label="¿Se activó el Airbag?" Class="modal-form-item-abm">
                                     <Switch @bind-Checked="@Vehiculo.Airbag" />
                                 </FormItem>
                             </AntDesign.Col>
                         </Row>
                         <Row Gutter="16">
                             <AntDesign.Col Span="12">
-                                <FormItem Label="Dueño (Nombre y Apellido)" Class="modal-damnificado-form-item">
+                                <FormItem Label="Dueño (Nombre y Apellido)" Class="modal-form-item-abm">
                                     <Input @bind-Value="@Vehiculo.Dueño" />
                                 </FormItem>
                             </AntDesign.Col>
                             <AntDesign.Col Span="12">
-                                <FormItem Label="Compañia Aseguradora" Class="modal-damnificado-form-item">
+                                <FormItem Label="Compañia Aseguradora" Class="modal-form-item-abm">
                                     <Input @bind-Value="@Vehiculo.CompañiaAseguradora" />
                                 </FormItem>
                             </AntDesign.Col>
                         </Row>
                         <Row Gutter="16">
                             <AntDesign.Col Span="12">
-                                <FormItem Label="Numero de Poliza" Class="modal-damnificado-form-item">
+                                <FormItem Label="Numero de Poliza" Class="modal-form-item-abm">
                                     <Input @bind-Value="@Vehiculo.NumeroDePoliza" />
                                 </FormItem>
                             </AntDesign.Col>
                             <AntDesign.Col Span="12">
-                                <FormItem Label="Fecha de Vencimiento" Class="modal-damnificado-form-item">
+                                <FormItem Label="Fecha de Vencimiento" Class="modal-form-item-abm">
                                     <DatePicker Mask="dd/MM/yyyy" TValue="DateTime?" @bind-Value="@Vehiculo.FechaDeVencimiento" />
                                 </FormItem>
                             </AntDesign.Col>
@@ -264,14 +266,14 @@
                         {
                             <Row Gutter="16">
                                 <AntDesign.Col Span="12">
-                                    <FormItem Label="¿Se conoce el conductor?" Class="modal-damnificado-form-item">
+                                    <FormItem Label="¿Se conoce el conductor?" Class="modal-form-item-abm">
                                         <Switch @bind-Checked="@Vehiculo.SeConoceConductor" />
                                     </FormItem>
                                 </AntDesign.Col>
                                 @if (Vehiculo.SeConoceConductor)
                                 {
                                     <AntDesign.Col Span="12">
-                                        <FormItem Label="Conductor" Class="modal-damnificado-form-item">
+                                        <FormItem Label="Conductor" Class="modal-form-item-abm">
                                             <Select TItem="DamnificadoViewModel"
                                                     TItemValue="int?"
                                                     DataSource="@Model.Damnificados"
@@ -289,7 +291,7 @@
                             </Row>
                             <Row Gutter="16">
                                 <AntDesign.Col Span="24">
-                                    <FormItem Label="Pasajeros" Class="modal-damnificado-form-item">
+                                    <FormItem Label="Pasajeros" Class="modal-form-item-abm">
                                         <Select Mode="SelectMode.Multiple"
                                                 TItem="DamnificadoViewModel"
                                                 TItemValue="int"
@@ -343,33 +345,34 @@
            Title="@(editandoAnimal ? "Editar Animal" : "Datos del Animal")"
            OnOk="AgregarEditarAnimal"
            OnCancel="@(() => modalAnimal = false)"
-           WrapClassName="modal-damnificado"
+           Centered
+           WrapClassName="modal-abm modal-damnificado"
            Width="700">
-        <div class="modal-damnificado-content">
+        <div class="modal-content-abm">
             <Form Model="Animal" Layout="FormLayout.Vertical">
                 <Row Gutter="16">
                     <AntDesign.Col Span="12">
-                        <FormItem Label="Tipo" Class="modal-damnificado-form-item">
+                        <FormItem Label="Tipo" Class="modal-form-item-abm">
                             <EnumSelect TEnum="TipoAnimal?" @bind-Value="Animal.Tipo" AllowClear/>
                         </FormItem>
                     </AntDesign.Col>
                     @if (Animal.Tipo == TipoAnimal.Otro)
                     {
                         <AntDesign.Col Span="12">
-                            <FormItem Label="Tipo" Class="modal-damnificado-form-item">
+                            <FormItem Label="Tipo" Class="modal-form-item-abm">
                                 <Input @bind-Value="Animal.TipoOtro" />
                             </FormItem>
                         </AntDesign.Col>
                     }
                     <AntDesign.Col Span="12">
-                        <FormItem Label="Cantidad" Class="modal-damnificado-form-item">
+                        <FormItem Label="Cantidad" Class="modal-form-item-abm">
                             <AntDesign.InputNumber @bind-Value="@Animal.Cantidad" Min="1" DefaultValue="1" Style="width:100%;" />
                         </FormItem>
                     </AntDesign.Col>
                 </Row>
                 <Row Gutter="16">
                     <AntDesign.Col Span="12">
-                        <FormItem Label="¿Se conoce al responsable?" Class="modal-damnificado-form-item">
+                        <FormItem Label="¿Se conoce al responsable?" Class="modal-form-item-abm">
                             <Switch @bind-Checked="@Animal.SeConoceResponsable" />
                         </FormItem>
                     </AntDesign.Col>
@@ -377,17 +380,17 @@
                     {
                         <AntDesign.Col Span="12">
                             <Row Gutter="8">
-                                <FormItem Label="Nombre" Class="modal-damnificado-form-item">
+                                <FormItem Label="Nombre" Class="modal-form-item-abm">
                                     <Input @bind-Value="Animal.NombreResponsable"></Input>
                                 </FormItem>
                             </Row>
                             <Row Gutter="8">
-                                <FormItem Label="Apellido" Class="modal-damnificado-form-item">
+                                <FormItem Label="Apellido" Class="modal-form-item-abm">
                                     <Input @bind-Value="Animal.ApellidoResponsable"></Input>
                                 </FormItem>
                             </Row>
                             <Row Gutter="8">
-                                <FormItem Label="DNI" Class="modal-damnificado-form-item">
+                                <FormItem Label="DNI" Class="modal-form-item-abm">
                                     <Input @bind-Value="Animal.DniResponsable"></Input>
                                 </FormItem>
                             </Row>
@@ -396,19 +399,19 @@
                 </Row>
                 <Row Gutter="16">
                     <AntDesign.Col Span="24">
-                        <FormItem Label="Estado" Class="modal-damnificado-form-item">
+                        <FormItem Label="Estado" Class="modal-form-item-abm">
                             <EnumSelect TEnum="EstadoAnimal" @bind-Value="Animal.Estado" AllowClear />
                         </FormItem>
                     </AntDesign.Col>
                 </Row>
                 <Row Gutter="16">
                     <AntDesign.Col Span="12">
-                        <FormItem Label="Nombre" Class="modal-damnificado-form-item">
+                        <FormItem Label="Nombre" Class="modal-form-item-abm">
                             <Input @bind-Value="Animal.Nombre" />
                         </FormItem>
                     </AntDesign.Col>
                     <AntDesign.Col Span="12">
-                        <FormItem Label="Observaciones" Class="modal-damnificado-form-item">
+                        <FormItem Label="Observaciones" Class="modal-form-item-abm">
                             <TextArea @bind-Value="@Animal.Observaciones" Rows="3" />
                         </FormItem>
                     </AntDesign.Col>

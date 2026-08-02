@@ -16,7 +16,7 @@
 
 @* Los estilos viven en wwwroot/css/abm.css. No agregar <style> acá. *@
 
-<div class="abm-page abm-page--brigadas">
+<div class="abm-page abm-page--titulo-acciones abm-page--brigadas">
     <div class="abm-container">
         <Card Class="abm-main-card">
             <div class="abm-header-section">
@@ -100,17 +100,18 @@
        CancelText="@("Cancelar")"
        OnOk="@AddBrigade"
        DestroyOnClose
-       WrapClassName="modal-crear-brigada">
-    <div class="modal-crear-brigada-content">
-        <Form Model="newBrigada" Layout="FormLayout.Vertical" Class="modal-crear-brigada-form">
-            <Row Class="modal-crear-brigada-row" Gutter="16">
+       Centered
+       WrapClassName="modal-abm modal-crear-brigada">
+    <div class="modal-content-abm">
+        <Form Model="newBrigada" Layout="FormLayout.Vertical">
+            <Row Gutter="16">
                 <AntDesign.Col Span="16">
-                    <FormItem Label="Nombre" Required Class="modal-crear-brigada-form-item">
+                    <FormItem Label="Nombre" Required Class="modal-form-item-abm">
                         <Input @bind-Value="newBrigada.Nombre" Size="InputSize.Large" />
                     </FormItem>
                 </AntDesign.Col>
                 <AntDesign.Col Span="8">
-                    <FormItem Label="Encargado" Required Class="modal-crear-brigada-form-item">
+                    <FormItem Label="Encargado" Required Class="modal-form-item-abm">
                         <Select TItem="BomberoViweModel"
                                 TItemValue="BomberoViweModel"
                                 DataSource="@bomberosTodosViewModel"
@@ -137,17 +138,18 @@
        CancelText="@("Cancelar")"
        OnOk="@EditBrigade"
        DestroyOnClose
-       WrapClassName="modal-crear-brigada">
-    <div class="modal-crear-brigada-content">
-        <Form Model="selBrigada" Layout="FormLayout.Vertical" Class="modal-crear-brigada-form">
-            <Row Class="modal-crear-brigada-row" Gutter="16">
+       Centered
+       WrapClassName="modal-abm modal-crear-brigada">
+    <div class="modal-content-abm">
+        <Form Model="selBrigada" Layout="FormLayout.Vertical">
+            <Row Gutter="16">
                 <AntDesign.Col Span="16">
-                    <FormItem Label="Nombre" Required Class="modal-crear-brigada-form-item">
+                    <FormItem Label="Nombre" Required Class="modal-form-item-abm">
                         <Input @bind-Value="selBrigada.Nombre" Size="InputSize.Large" />
                     </FormItem>
                 </AntDesign.Col>
                 <AntDesign.Col Span="8">
-                    <FormItem Label="Encargado" Required Class="modal-crear-brigada-form-item">
+                    <FormItem Label="Encargado" Required Class="modal-form-item-abm">
                         <Select TItem="BomberoViweModel"
                                 TItemValue="BomberoViweModel"
                                 DataSource="@bomberosTodosViewModel"

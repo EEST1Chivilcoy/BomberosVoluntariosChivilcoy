@@ -12,7 +12,7 @@
 
 @* Los estilos viven en wwwroot/css/abm.css. No agregar <style> acá. *@
 
-<div class="abm-page abm-page--partes">
+<div class="abm-page abm-page--titulo-acciones abm-page--partes">
     <div class="abm-container">
         <Card Class="abm-main-card">
             <div class="abm-header-section">
@@ -80,8 +80,9 @@
        Style="max-width: 800px;"
        Footer="null"
        DestroyOnClose
-       WrapClassName="modal-crear-fuerza">
-    <div class="modal-crear-fuerza-content">
+       Centered
+       WrapClassName="modal-abm modal-crear-fuerza">
+    <div class="modal-content-abm">
         <AgregarParteVehiculo OnCancel="CloseModals" />
     </div>
 </Modal>
@@ -93,8 +94,9 @@
        Style="max-width: 800px;"
        Footer="null"
        DestroyOnClose
-       WrapClassName="modal-crear-fuerza">
-    <div class="modal-crear-fuerza-content">
+       Centered
+       WrapClassName="modal-abm modal-crear-fuerza">
+    <div class="modal-content-abm">
         <EditarParteVehiculo OnCancel="CloseModals" ParteVehiculoId="ParteSel" />
     </div>
 </Modal>

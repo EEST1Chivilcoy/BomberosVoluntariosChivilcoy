@@ -198,13 +198,14 @@
        Style="max-width: 800px;"
        Footer="null"
        DestroyOnClose
-       WrapClassName="modal-crear-licencia">
-    <div class="modal-crear-licencia-content">
-        <Form Model="nuevaLicencia" Layout="FormLayout.Vertical" Class="modal-crear-licencia-form" OnFinish="AddLicencia" Loading="isLoadingComponent">
+       Centered
+       WrapClassName="modal-abm modal-crear-licencia">
+    <div class="modal-content-abm">
+        <Form Model="nuevaLicencia" Layout="FormLayout.Vertical" OnFinish="AddLicencia" Loading="isLoadingComponent">
 
-            <Row Class="modal-crear-licencia-row" Gutter="16">
+            <Row Gutter="16">
                 <AntDesign.Col Span="12">
-                    <FormItem Label="👤 Bombero" Required Class="modal-crear-licencia-form-item">
+                    <FormItem Label="👤 Bombero" Required Class="modal-form-item-abm">
                         <Select TItem="BomberoViweModel"
                                 TItemValue="int"
                                 DataSource="@BomberosVM"
@@ -220,7 +221,7 @@
                 </AntDesign.Col>
 
                 <AntDesign.Col Span="12">
-                    <FormItem Label="📋 Número Legajo" Class="modal-crear-licencia-form-item">
+                    <FormItem Label="📋 Número Legajo" Class="modal-form-item-abm">
                         <AntDesign.InputNumber @bind-Value="nuevaLicencia.NumeroLegajo"
                                                Disabled
                                                Size="InputSize.Large" />
@@ -228,7 +229,7 @@
                 </AntDesign.Col>
             </Row>
 
-            <FormItem Label="🏷️ Tipo de Licencia" Required Class="modal-crear-licencia-form-item">
+            <FormItem Label="🏷️ Tipo de Licencia" Required Class="modal-form-item-abm">
                 <EnumSelect TEnum="TipoLicencia ?"
                             @bind-Value="@nuevaLicencia.TipoLicencia"
                             AllowClear
@@ -238,7 +239,7 @@
 
             @if (nuevaLicencia.TipoLicencia == TipoLicencia.RazonesDeSalud)
             {
-                <FormItem Label="📎 Certificado Médico" Class="modal-crear-licencia-form-item">
+                <FormItem Label="📎 Certificado Médico" Class="modal-form-item-abm">
                     <Upload Accept=".pdf,.jpg,.png,.jpeg"
                             ShowUploadList>
                         <Button Icon="upload">Adjuntar Certificado</Button>
@@ -246,7 +247,7 @@
                 </FormItem>
             }
 
-            <AntDesign.Col Span="24" Class="modal-crear-licencia-form-full-width">
+            <AntDesign.Col Span="24" Class="modal-form-full-width-abm">
                 <FormItem Label="📝 Descripción">
                     <TextArea @bind-Value="@nuevaLicencia.Descripcion"
                               Placeholder="Ingrese una descripción detallada de la licencia"
@@ -256,9 +257,9 @@
                 </FormItem>
             </AntDesign.Col>
 
-            <Row Class="modal-crear-licencia-row" Gutter="16">
+            <Row Gutter="16">
                 <AntDesign.Col Span="9">
-                    <FormItem Label="📅 Fecha de Inicio" Required Class="modal-crear-licencia-form-item">
+                    <FormItem Label="📅 Fecha de Inicio" Required Class="modal-form-item-abm">
                         <DatePicker Mask="dd/MM/yyyy" TValue="DateTime"
                                     @bind-Value="@nuevaLicencia.Desde"
                                     DefaultValue="DateTime.Today"
@@ -269,7 +270,7 @@
                 </AntDesign.Col>
 
                 <AntDesign.Col Span="9">
-                    <FormItem Label="📅 Fecha de Finalización" Required Class="modal-crear-licencia-form-item">
+                    <FormItem Label="📅 Fecha de Finalización" Required Class="modal-form-item-abm">
                         <DatePicker Mask="dd/MM/yyyy" TValue="DateTime"
                                     @bind-Value="@nuevaLicencia.Hasta"
                                     DefaultValue="@(DateTime.Today.AddDays(1))"
@@ -280,7 +281,7 @@
                 </AntDesign.Col>
 
                 <AntDesign.Col Span="6">
-                    <FormItem Label="⏱️ Duración" Class="modal-crear-licencia-form-item">
+                    <FormItem Label="⏱️ Duración" Class="modal-form-item-abm">
                         <Input Value="@($"{nuevaLicencia.DuracionEnDias} días")"
                                ReadOnly
                                Size="InputSize.Large" />

@@ -17,7 +17,7 @@
 @* Los estilos viven en wwwroot/css/abm.css. No agregar <style> acá. *@
 
 
-<div class="abm-page abm-page--dependencias">
+<div class="abm-page abm-page--titulo-acciones abm-page--dependencias">
     <div class="abm-container">
         <Card Class="abm-main-card">
             <div class="abm-header-section">
@@ -104,17 +104,18 @@
        Style="max-width: 800px;"
        OnCancel="CerrarAgregar"
        DestroyOnClose
-       WrapClassName="modal-crear-dependencia">
-    <div class="modal-crear-dependencia-content">
-        <Form OnFinish="AddDependencia" Model="newDependencia" Layout="FormLayout.Vertical" Class="modal-crear-dependencia-form">
-            <Row Class="modal-crear-dependencia-row" Gutter="16">
+       Centered
+       WrapClassName="modal-abm modal-crear-dependencia">
+    <div class="modal-content-abm">
+        <Form OnFinish="AddDependencia" Model="newDependencia" Layout="FormLayout.Vertical">
+            <Row Gutter="16">
                 <AntDesign.Col Span="16">
-                    <FormItem Label="Nombre" Required Class="modal-crear-dependencia-form-item">
+                    <FormItem Label="Nombre" Required Class="modal-form-item-abm">
                         <Input @bind-Value="newDependencia.Nombre" Size="InputSize.Large" />
                     </FormItem>
                 </AntDesign.Col>
                 <AntDesign.Col Span="8">
-                    <FormItem Label="Encargado" Required Class="modal-crear-dependencia-form-item">
+                    <FormItem Label="Encargado" Required Class="modal-form-item-abm">
                         <Select TItem="BomberoViweModel"
                                 TItemValue="BomberoViweModel"
                                 DataSource="@bomberosTodosViewModel"
@@ -128,7 +129,7 @@
                     </FormItem>
                 </AntDesign.Col>
             </Row>
-            <div class="modal-crear-dependencia-footer">
+            <div class="modal-footer-abm">
                 <Button Class="boton-agregar" HtmlType="submit">
                     Agregar
                 </Button>
@@ -144,17 +145,18 @@
        Style="max-width: 800px;"
        OnCancel="CerrarEditar"
        DestroyOnClose
-       WrapClassName="modal-crear-dependencia">
-    <div class="modal-crear-dependencia-content">
-        <Form OnFinish="EditDependencia" Model="selDependencia" Layout="FormLayout.Vertical" Class="modal-crear-dependencia-form">
-            <Row Class="modal-crear-dependencia-row" Gutter="16">
+       Centered
+       WrapClassName="modal-abm modal-crear-dependencia">
+    <div class="modal-content-abm">
+        <Form OnFinish="EditDependencia" Model="selDependencia" Layout="FormLayout.Vertical">
+            <Row Gutter="16">
                 <AntDesign.Col Span="16">
-                    <FormItem Label="Nombre" Required Class="modal-crear-dependencia-form-item">
+                    <FormItem Label="Nombre" Required Class="modal-form-item-abm">
                         <Input @bind-Value="selDependencia.Nombre" Size="InputSize.Large" />
                     </FormItem>
                 </AntDesign.Col>
                 <AntDesign.Col Span="8">
-                    <FormItem Label="Encargado" Required Class="modal-crear-dependencia-form-item">
+                    <FormItem Label="Encargado" Required Class="modal-form-item-abm">
                         <Select TItem="BomberoViweModel"
                                 TItemValue="BomberoViweModel"
                                 DataSource="@bomberosTodosViewModel"
@@ -168,7 +170,7 @@
                     </FormItem>
                 </AntDesign.Col>
             </Row>
-            <div class="modal-crear-dependencia-footer">
+            <div class="modal-footer-abm">
                 <Button Class="boton-agregar" HtmlType="submit">
                     Editar
                 </Button>

@@ -14,7 +14,7 @@
 
 @* Los estilos viven en wwwroot/css/abm.css. No agregar <style> acá. *@
 
-<div class="abm-page abm-page--deposito">
+<div class="abm-page abm-page--titulo-acciones abm-page--deposito">
     <div class="abm-container">
         <Card Class="abm-main-card">
             <div class="abm-header-section">
@@ -73,7 +73,7 @@
                Title='Movimientos'
                OnCancel="close"
                Footer="null"
-               WrapClassName="modal-deposito"
+               WrapClassName="modal-abm modal-deposito"
                Centered="true">
             <MovimientoMaterialesVista />
         </Modal>
@@ -83,14 +83,16 @@
 <Modal Footer="null" Title="@("Cargar Material")"
        Visible="@_visibleAgregar"
        Width="800"
-       WrapClassName="modal-deposito"
+       Centered
+       WrapClassName="modal-abm modal-deposito"
        OnCancel="@(() => _visibleAgregar = false)">
     <AgregarMaterial MaterialesExistentes="Materiales" OnFinishCallback="OnFinish" />
 </Modal>
 <Modal Footer="null" Title="@("Editar Material")"
        Visible="@_visibleEditar"
        Width="800"
-       WrapClassName="modal-deposito"
+       Centered
+       WrapClassName="modal-abm modal-deposito"
        OnCancel="@(() => _visibleEditar = false)">
     <EditarMaterial Material="MaterialSeleccionado" MaterialesExistentes="Materiales" OnFinishCallback="OnFinish" />
 </Modal>

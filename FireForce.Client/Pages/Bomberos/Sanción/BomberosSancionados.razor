@@ -11,7 +11,7 @@
 
 @* Los estilos viven en wwwroot/css/abm.css. No agregar <style> acá. *@
 
-<div class="abm-page abm-page--sancionados">
+<div class="abm-page abm-page--titulo-acciones abm-page--sancionados">
     <div class="abm-container">
         <Card Class="abm-main-card">
             <div class="abm-header-section">
@@ -105,8 +105,9 @@
            OnCancel="()=> _visibleCargar = false"
            Visible="@_visibleCargar"
            DestroyOnClose
-           WrapClassName="modal-crear-sancion">
-        <div class="modal-crear-sancion-content">
+           Centered
+           WrapClassName="modal-abm modal-crear-sancion">
+        <div class="modal-content-abm">
             <AgregarSancion OnClose="OnClose" />
         </div>
     </Modal>

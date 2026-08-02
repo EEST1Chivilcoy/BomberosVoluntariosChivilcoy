@@ -11,21 +11,20 @@
 
 <Form Model="SancionVM"
       Layout="FormLayout.Vertical"
-      Class="modal-crear-sancion-form"
       OnFinish="OnFinish"
       OnFinishFailed="OnFinishFailed">
     <DataAnnotationsValidator />
     <ValidationSummary />
-    <Row Class="modal-crear-sancion-row" Gutter="24">
+    <Row Gutter="24">
         <AntDesign.Col Span="12">
-            <FormItem Label="📅 Fecha Desde" Required Class="modal-crear-sancion-form-item">
+            <FormItem Label="📅 Fecha Desde" Required Class="modal-form-item-abm">
                 <DatePicker Mask="dd/MM/yyyy" AllowClear="false" @bind-Value="SancionVM.FechaDesde" Size="InputSize.Large" />
             </FormItem>
         </AntDesign.Col>
         <AntDesign.Col Span="12">
             @if (SancionVM.TipoSancion == TipoSancion.Sancion)
             {
-                <FormItem Label="📅 Fecha Hasta" Required Class="modal-crear-sancion-form-item">
+                <FormItem Label="📅 Fecha Hasta" Required Class="modal-form-item-abm">
                     <DatePicker Mask="dd/MM/yyyy" AllowClear="false" @bind-Value="SancionVM.FechaHasta" Size="InputSize.Large" />
                 </FormItem>
             }
@@ -33,9 +32,9 @@
     </Row>
 
 
-    <Row Class="modal-crear-sancion-row" Gutter="24">
+    <Row Gutter="24">
         <AntDesign.Col Span="12">
-            <FormItem Label="👤 Personal Sancionado" Required Class="modal-crear-sancion-form-item">
+            <FormItem Label="👤 Personal Sancionado" Required Class="modal-form-item-abm">
                 <Select TItem="BomberoViweModel"
                         TItemValue="int"
                         DataSource="@ListabomberosVM"
@@ -51,33 +50,33 @@
             </FormItem>
         </AntDesign.Col>
         <AntDesign.Col Span="12">
-            <FormItem Label="📋 Numero Legajo" Class="modal-crear-sancion-form-item">
+            <FormItem Label="📋 Numero Legajo" Class="modal-form-item-abm">
                 <AntDesign.InputNumber @bind-Value="SancionVM.NumeroLegajoSancionado" Disabled Size="InputSize.Large" />
             </FormItem>
         </AntDesign.Col>
     </Row>
 
-    <Row Class="modal-crear-sancion-row" Gutter="24">
+    <Row Gutter="24">
         <AntDesign.Col Span="12">
-            <FormItem Label="🏷️ Tipo Sancion" Required Class="modal-crear-sancion-form-item">
+            <FormItem Label="🏷️ Tipo Sancion" Required Class="modal-form-item-abm">
                 <EnumSelect TEnum="TipoSancion" @bind-Value="@SancionVM.TipoSancion" Size="InputSize.Large" />
             </FormItem>
         </AntDesign.Col>
         <AntDesign.Col Span="12">
-            <FormItem Label="🗂️ Área Sancion" Required Class="modal-crear-sancion-form-item">
+            <FormItem Label="🗂️ Área Sancion" Required Class="modal-form-item-abm">
                 <EnumSelect TEnum="AreaSancion" @bind-Value="@SancionVM.SancionArea" Size="InputSize.Large" />
             </FormItem>
         </AntDesign.Col>
     </Row>
 
-    <Row Class="modal-crear-sancion-row" Gutter="38">
+    <Row Gutter="38">
         <AntDesign.Col Span="24">
-            <FormItem Label="📝 Observación" Class="modal-crear-sancion-form-item">
+            <FormItem Label="📝 Observación" Class="modal-form-item-abm">
                 <TextArea @bind-Value="SancionVM.Observaciones" Size="InputSize.Large" Rows="4" />
             </FormItem>
         </AntDesign.Col>
     </Row>
-    <div class="modal-crear-sancion-footer">
+    <div class="modal-footer-abm">
         <Button Type="ButtonType.Primary" HtmlType="submit">
             Cargar Sancion
         </Button>

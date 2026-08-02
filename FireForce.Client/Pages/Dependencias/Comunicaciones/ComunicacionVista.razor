@@ -170,9 +170,11 @@
 </div>
 
 <Modal Footer="null" Title="@("Nueva Comunicación")"
+       Centered
        Visible="@_visibleAgregar"
        OnCancel="@HandleCancelAgregar"
-       WrapClassName="modal-crear-comunicacion">
+       Width="800"
+       WrapClassName="modal-abm modal-crear-comunicacion">
     <AgregarComunicacion OnFinishCallback="OnFinishAdd" />
 </Modal>
 
@@ -180,8 +182,10 @@
        Visible="@_visible"
        OnOk="@HandleOk"
        OnCancel="@HandleCancel"
-       WrapClassName="modal-crear-comunicacion">
-    <div class="modal-crear-comunicacion-content">
+       Width="800"
+       Centered
+       WrapClassName="modal-abm modal-crear-comunicacion">
+    <div class="modal-content-abm">
         <Form Loading="loading" Model="@ComunicacionVM"
               OnFinish="OnFinish"
               OnFinishFailed="OnFinishFailed"
@@ -189,31 +193,31 @@
 
             <Row Class="modal-crear-comunicacion-row" Gutter="24">
                 <AntDesign.Col Span="12">
-                    <FormItem Label="Nro Equipo" Class="modal-crear-comunicacion-form-item">
+                    <FormItem Label="Nro Equipo" Class="modal-form-item-abm">
                         <Input DefaultValue="@ComunicacionVM.NroEquipo" @bind-Value="@ComunicacionVM.NroEquipo" />
                     </FormItem>
                 </AntDesign.Col>
                 <AntDesign.Col Span="12">
-                    <FormItem Label="Modelo" Class="modal-crear-comunicacion-form-item">
+                    <FormItem Label="Modelo" Class="modal-form-item-abm">
                         <Input DefaultValue="@ComunicacionVM.Modelo" @bind-Value="@ComunicacionVM.Modelo" />
                     </FormItem>
                 </AntDesign.Col>
             </Row>
             <Row Class="modal-crear-comunicacion-row" Gutter="24">
                 <AntDesign.Col Span="12">
-                    <FormItem Label="Marca" Class="modal-crear-comunicacion-form-item">
+                    <FormItem Label="Marca" Class="modal-form-item-abm">
                         <Input DefaultValue="@ComunicacionVM.Marca" @bind-Value="@ComunicacionVM.Marca" />
                     </FormItem>
                 </AntDesign.Col>
                 <AntDesign.Col Span="12">
-                    <FormItem Label="Nro Serie" Class="modal-crear-comunicacion-form-item">
+                    <FormItem Label="Nro Serie" Class="modal-form-item-abm">
                         <Input DefaultValue="@ComunicacionVM.NroSerie" @bind-Value="@ComunicacionVM.NroSerie" />
                     </FormItem>
                 </AntDesign.Col>
             </Row>
             <Row Class="modal-crear-comunicacion-row" Gutter="24">
                 <AntDesign.Col Span="24">
-                    <FormItem Label="Estado" Class="modal-crear-comunicacion-form-item">
+                    <FormItem Label="Estado" Class="modal-form-item-abm">
                         <EnumSelect DefaultValue="@ComunicacionVM.Estado" TEnum="TipoEstadoHandie" @bind-Value="@ComunicacionVM.Estado" />
                     </FormItem>
                 </AntDesign.Col>
@@ -222,7 +226,7 @@
             {
                 <Row Class="modal-crear-comunicacion-row" Gutter="24">
                     <AntDesign.Col Span="24">
-                        <FormItem Label="Seleccione una opción" Class="modal-crear-comunicacion-form-item">
+                        <FormItem Label="Seleccione una opción" Class="modal-form-item-abm">
                             <Checkbox @bind-Checked="@selectBombero" OnChange="() => HandleCheckboxChange(true, checkboxBomberoLabel)">Elija el bombero</Checkbox>
                             <Checkbox @bind-Checked="@selectMovil" OnChange="() => HandleCheckboxChange(true, checkboxMovilLabel)">Elija el móvil</Checkbox>
                         </FormItem>
@@ -232,7 +236,7 @@
                 {
                     <Row Class="modal-crear-comunicacion-row" Gutter="24">
                         <AntDesign.Col Span="24">
-                            <FormItem Label="@nameof(BomberoVM.NombreYApellido)" Class="modal-crear-comunicacion-form-item">
+                            <FormItem Label="@nameof(BomberoVM.NombreYApellido)" Class="modal-form-item-abm">
                                 <Select TItem="BomberoViewModel"
                                         TItemValue="int?"
                                         DataSource="@BomberosViewModel"
@@ -251,7 +255,7 @@
                 {
                     <Row Class="modal-crear-comunicacion-row" Gutter="24">
                         <AntDesign.Col Span="24">
-                            <FormItem Label="@nameof(MovilVM.NumeroMovil)" Class="modal-crear-comunicacion-form-item">
+                            <FormItem Label="@nameof(MovilVM.NumeroMovil)" Class="modal-form-item-abm">
                                 <Select TItem="MovilViewModel"
                                         TItemValue="string"
                                         DataSource="@MovilesViewModel"

@@ -28,7 +28,6 @@
 <Form Loading="loading"
       Model="@movimientoViewModel"
       Layout="FormLayout.Vertical"
-      Class="modal-crear-equipo-form"
       OnFinish="OnFinish"
       OnFinishFailed="OnFinishFailed">
 
@@ -40,9 +39,9 @@
         </div>
     }
 
-    <Row Class="modal-crear-equipo-row" Gutter="16">
+    <Row Gutter="16">
         <AntDesign.Col Span="12">
-            <FormItem Label="↔️ Tipo Movimiento" Class="modal-crear-equipo-form-item">
+            <FormItem Label="↔️ Tipo Movimiento" Class="modal-form-item-abm">
                 @if (equipoActual?.Estado == TipoEstadoEquipoAutonomo.PruebaHidraulica)
                 {
                     <Select TItem="TipoMovimientoViewModel"
@@ -71,7 +70,7 @@
                 movimientoViewModel.TipoMovimiento == TipoMovimiento.Prueba)
         {
             <AntDesign.Col Span="12">
-                <FormItem Label="📍 Tipo Destino" Class="modal-crear-equipo-form-item">
+                <FormItem Label="📍 Tipo Destino" Class="modal-form-item-abm">
                     <RadioGroup @bind-Value="@_valueSel">
                         <Radio Value="1">Dependencia</Radio>
                         <Radio Value="2">Unidad</Radio>
@@ -84,7 +83,7 @@
         {
             <AntDesign.Col Span="12">
                 <FormItem Label="📅 Fecha de vencimiento de la prueba hidráulica"
-                          Class="modal-crear-equipo-form-item">
+                          Class="modal-form-item-abm">
                     <DatePicker Mask="dd/MM/yyyy" @bind-Value="@movimientoViewModel.FechaVencimientoPruebaHidraulica"
                                 Size="InputSize.Large"
                                 Placeholder=@("Seleccione la fecha de vencimiento") />
@@ -97,9 +96,9 @@
         movimientoViewModel.TipoMovimiento == TipoMovimiento.Reparar ||
         movimientoViewModel.TipoMovimiento == TipoMovimiento.Prueba)
     {
-        <Row Class="modal-crear-equipo-row" Gutter="16">
+        <Row Gutter="16">
             <AntDesign.Col Span="12">
-                <FormItem Label="📍 Destino" Class="modal-crear-equipo-form-item">
+                <FormItem Label="📍 Destino" Class="modal-form-item-abm">
                     @if (_valueSel == 1)
                     {
                         <Select TItem="DependenciaViewModel"

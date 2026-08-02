@@ -136,10 +136,11 @@
 
 <Modal Footer="null" Title="@("Nuevo Equipo Autónomo")"
        Visible="@_visibleAgregar"
-       WrapClassName="modal-crear-equipo"
+       WrapClassName="modal-abm modal-crear-equipo"
        OnCancel="@(() => _visibleAgregar = false)"
-       Centered="@true">
-    <div class="modal-crear-equipo-content">
+       Centered="@true"
+       Width="800">
+    <div class="modal-content-abm">
         <AgregarEquipoAutonomo OnFinishCallback="OnFinishAdd" />
     </div>
 </Modal>
@@ -148,8 +149,9 @@
        Visible="@_visibleEditar"
        OnCancel="@(() => _visibleEditar = false)"
        Centered="@true"
-       WrapClassName="modal-crear-equipo">
-    <div class="modal-crear-equipo-content">
+       Width="800"
+       WrapClassName="modal-abm modal-crear-equipo">
+    <div class="modal-content-abm">
         <EditarEquipoAutonomo EquipoAutonomo="SelEquipoAutonomo" OnFinishCallback="OnFinishEdit" />
     </div>
 </Modal>
@@ -158,7 +160,8 @@
        Visible="@_visibleMovimientos"
        OnCancel="Init"
        Centered="@true"
-       WrapClassName="modal-crear-equipo">
+       Width="800"
+       WrapClassName="modal-abm modal-crear-equipo">
     <MovimientosEquipoAutonomo EquipoAutonomo="SelEquipoAutonomo" />
 </Modal>
 

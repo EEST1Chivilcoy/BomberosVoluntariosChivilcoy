@@ -14,7 +14,7 @@
 
 @* Los estilos viven en wwwroot/css/abm.css. No agregar <style> acá. *@
 
-<div class="abm-page abm-page--fuerzas">
+<div class="abm-page abm-page--titulo-acciones abm-page--fuerzas">
     <div class="abm-container">
         <Card Class="abm-main-card">
             <div class="abm-header-section">
@@ -89,12 +89,13 @@
        CancelText="@("Cancelar")"
        OnOk="@AddFuerza"
        DestroyOnClose
-       WrapClassName="modal-crear-fuerza">
-    <div class="modal-crear-fuerza-content">
-        <Form Model="nuevaFuerza" Layout="FormLayout.Vertical" Class="modal-crear-fuerza-form">
-            <Row Class="modal-crear-fuerza-row" Gutter="16">
+       Centered
+       WrapClassName="modal-abm modal-crear-fuerza">
+    <div class="modal-content-abm">
+        <Form Model="nuevaFuerza" Layout="FormLayout.Vertical">
+            <Row Gutter="16">
                 <AntDesign.Col Span="24">
-                    <FormItem Label="🏢 Nombre" Required Class="modal-crear-fuerza-form-item">
+                    <FormItem Label="🏢 Nombre" Required Class="modal-form-item-abm">
                         <Input @bind-Value="nuevaFuerza.Nombre" Size="InputSize.Large" />
                     </FormItem>
                 </AntDesign.Col>
@@ -110,18 +111,19 @@
        Style="max-width: 800px;"
        Footer="null"
        DestroyOnClose
-       WrapClassName="modal-crear-fuerza">
-    <div class="modal-crear-fuerza-content">
-        <Form Model="selFuerza" Layout="FormLayout.Vertical" Class="modal-crear-fuerza-form">
-            <Row Class="modal-crear-fuerza-row" Gutter="16">
+       Centered
+       WrapClassName="modal-abm modal-crear-fuerza">
+    <div class="modal-content-abm">
+        <Form Model="selFuerza" Layout="FormLayout.Vertical">
+            <Row Gutter="16">
                 <AntDesign.Col Span="24">
-                    <FormItem Label="Nombre" Required Class="modal-crear-fuerza-form-item">
+                    <FormItem Label="Nombre" Required Class="modal-form-item-abm">
                         <Input @bind-Value="selFuerza.Nombre" Size="InputSize.Large" />
                     </FormItem>
                 </AntDesign.Col>
             </Row>
         </Form>
-        <div class="modal-crear-fuerza-footer">
+        <div class="modal-footer-abm">
             <Button Type="ButtonType.Primary" HtmlType="ButtonHtmlType.Submit" OnClick="@EditarFuerza">
                 Editar
             </Button>

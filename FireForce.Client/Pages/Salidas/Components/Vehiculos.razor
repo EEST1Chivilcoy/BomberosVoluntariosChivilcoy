@@ -216,9 +216,10 @@
        OkText="@("Cargar Móvil")"
        OnOk="@AgregarMovilSalida"
        CancelText="@("Cancelar")"
-       WrapClassName="modal-vehiculo">
-    <div class="modal-vehiculo-content">
-        <Form Model="@movilSalidaView" Layout="FormLayout.Vertical" Class="modal-vehiculo-form">
+       Centered
+       WrapClassName="modal-abm modal-vehiculo">
+    <div class="modal-content-abm">
+        <Form Model="@movilSalidaView" Layout="FormLayout.Vertical">
             <div class="section-header">
                 <Icon Type="fire" Class="section-icon" />
                 <h5>Información del Combustible</h5>
@@ -226,13 +227,13 @@
 
             <Row Gutter="16">
                 <AntDesign.Col Xs="24" Sm="12">
-                    <FormItem Label="Número de Remito" Required Class="modal-vehiculo-form-item">
+                    <FormItem Label="Número de Remito" Required Class="modal-form-item-abm">
                         <Input @bind-Value="@movilSalidaView.NumeroFactura"
                                Placeholder="Ingrese el número de remito" />
                     </FormItem>
                 </AntDesign.Col>
                 <AntDesign.Col Xs="24" Sm="12">
-                    <FormItem Label="Fecha de la Factura" Required Class="modal-vehiculo-form-item">
+                    <FormItem Label="Fecha de la Factura" Required Class="modal-form-item-abm">
                         <DatePicker Mask="dd/MM/yyyy" TValue="DateTime?"
                                     @bind-Value="@movilSalidaView.FechaFactura"
                                     Placeholder="@("Seleccione la fecha")" />
@@ -242,13 +243,13 @@
 
             <Row Gutter="16">
                 <AntDesign.Col Xs="24" Sm="12">
-                    <FormItem Label="Tipo de Combustible" Required Class="modal-vehiculo-form-item">
+                    <FormItem Label="Tipo de Combustible" Required Class="modal-form-item-abm">
                         <Input @bind-Value="@movilSalidaView.TipoConbustible"
                                Placeholder="Ej: Nafta Super, Gasoil" />
                     </FormItem>
                 </AntDesign.Col>
                 <AntDesign.Col Xs="24" Sm="12">
-                    <FormItem Label="Cantidad de Litros" Required Class="modal-vehiculo-form-item">
+                    <FormItem Label="Cantidad de Litros" Required Class="modal-form-item-abm">
                         <AntDesign.Input @bind-Value="@movilSalidaView.CantidadLitros"
                                          Placeholder="Cantidad en litros">
                         </AntDesign.Input>
@@ -258,7 +259,7 @@
 
             <Row>
                 <AntDesign.Col Span="24">
-                    <FormItem Label="Quien llenó el tanque" Required Class="modal-vehiculo-form-item">
+                    <FormItem Label="Quien llenó el tanque" Required Class="modal-form-item-abm">
                         <Select TItem="BomberoViweModel"
                                 TItemValue="BomberoViweModel"
                                 DataSource="@bomberoChoferes"

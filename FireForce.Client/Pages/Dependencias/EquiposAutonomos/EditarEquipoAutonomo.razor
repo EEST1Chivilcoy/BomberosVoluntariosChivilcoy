@@ -12,40 +12,39 @@
 
 <Form Loading="isLoading" Model="@viewModel"
       Layout="FormLayout.Vertical"
-      Class="modal-crear-equipo-form"
       OnFinish="OnFinish"
       OnFinishFailed="OnFinishFailed">
 
 
-    <Row Class="modal-crear-equipo-row" Gutter="16">
+    <Row Gutter="16">
         <AntDesign.Col Span="12">
-            <FormItem Label="📋 Número de Serie" Required Class="modal-crear-equipo-form-item">
+            <FormItem Label="📋 Número de Serie" Required Class="modal-form-item-abm">
                 <Input @bind-Value="@viewModel.NroSerie"
                        Placeholder="Ingrese el número de serie" />
             </FormItem>
         </AntDesign.Col>
         <AntDesign.Col Span="12">
-            <FormItem Label="🔧 Número de Tubo" Class="modal-crear-equipo-form-item">
+            <FormItem Label="🔧 Número de Tubo" Class="modal-form-item-abm">
                 <Input @bind-Value="@viewModel.NroTubo"
                        Placeholder="Ingrese el número de tubo" />
             </FormItem>
         </AntDesign.Col>
     </Row>
-    <Row Class="modal-crear-equipo-row" Gutter="16">
+    <Row Gutter="16">
         <AntDesign.Col Span="12">
-            <FormItem Label="🏭 Marca" Class="modal-crear-equipo-form-item">
+            <FormItem Label="🏭 Marca" Class="modal-form-item-abm">
                 <Input @bind-Value="@viewModel.Marca"
                        Placeholder="Ingrese la marca" />
             </FormItem>
         </AntDesign.Col>
         <AntDesign.Col Span="12">
-            <FormItem Label="📱 Modelo" Class="modal-crear-equipo-form-item">
+            <FormItem Label="📱 Modelo" Class="modal-form-item-abm">
                 <Input @bind-Value="@viewModel.Modelo"
                        Placeholder="Ingrese el modelo" />
             </FormItem>
         </AntDesign.Col>
     </Row>
-    <Row Class="modal-crear-equipo-row" Gutter="16">
+    <Row Gutter="16">
         <AntDesign.Col Span="12">
             <FormItem Label="📅 Fecha de vencimiento de la prueba hidráulica">
                 <DatePicker Mask="dd/MM/yyyy" @bind-Value="@viewModel.FechaVencimientoPruebaHidraulica"
@@ -62,15 +61,15 @@
             </FormItem>
         </AntDesign.Col>
     </Row>
-    <Row Class="modal-crear-equipo-row" Gutter="16">
+    <Row Gutter="16">
         <AntDesign.Col Span="12">
-            <FormItem Label="🧱 Tipo de Material" Class="modal-crear-equipo-form-item">
+            <FormItem Label="🧱 Tipo de Material" Class="modal-form-item-abm">
                 <Input @bind-Value="@viewModel.TipoMaterial"
                        Placeholder="Ingrese el tipo de material" />
             </FormItem>
         </AntDesign.Col>
     </Row>
-    <div class="modal-crear-equipo-footer">
+    <div class="modal-footer-abm">
         <Button Type="@ButtonType.Primary" HtmlType="submit">
             Guardar Equipo
         </Button>

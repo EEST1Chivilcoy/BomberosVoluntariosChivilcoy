@@ -15,7 +15,7 @@
 @inject IMessageService MessageService
 @inject NavigationManager NavigationManager
 
-<div class="abm-page abm-page--salidas">
+<div class="abm-page abm-page--titulo-acciones abm-page--salidas">
     <div class="abm-container">
         <Card Class="abm-main-card">
             <div class="abm-header-section">
@@ -88,24 +88,25 @@
        CancelText="@("Cancelar")"
        OnOk="@AddSalida"
        DestroyOnClose
-       WrapClassName="modal-crear-salidas">
-    <div class="modal-crear-salidas-content">
-        <Form Model="newSalida" Layout="FormLayout.Vertical" Class="modal-crear-salidas-form">
-            <Row Class="modal-crear-salidas-row" Gutter="16">
+       Centered
+       WrapClassName="modal-abm modal-crear-salidas">
+    <div class="modal-content-abm">
+        <Form Model="newSalida" Layout="FormLayout.Vertical">
+            <Row Gutter="16">
                 <AntDesign.Col Span="12">
-                    <FormItem Label="🔢 Nº Parte" Required Class="modal-crear-salidas-form-item">
+                    <FormItem Label="🔢 Nº Parte" Required Class="modal-form-item-abm">
                         <Input @bind-Value="@newSalida.NumeroSalida" ReadOnly Size="InputSize.Large" />
                     </FormItem>
                 </AntDesign.Col>
                 <AntDesign.Col Span="12">
-                    <FormItem Label="📅 Año" Required Class="modal-crear-salidas-form-item">
+                    <FormItem Label="📅 Año" Required Class="modal-form-item-abm">
                         <Input Value="@newSalida.Anio" ReadOnly Size="InputSize.Large" />
                     </FormItem>
                 </AntDesign.Col>
             </Row>
             <Row Gutter="16">
                 <AntDesign.Col Span="12">
-                    <FormItem Label="🚨 Tipo de Emergencia" Required Class="modal-crear-salidas-form-item">
+                    <FormItem Label="🚨 Tipo de Emergencia" Required Class="modal-form-item-abm">
                         <EnumSelect @bind-Value="@newSalida.Categoria" Placeholder="Seleccione un tipo de emergencia" Size="InputSize.Large" />
                     </FormItem>
                 </AntDesign.Col>
@@ -113,28 +114,28 @@
                 <AntDesign.Col Span="12">
                     @if (newSalida.Categoria == CategoriaEmergencia.Incendio)
                     {
-                        <FormItem Label="🔥 Tipo de Incendio" Required Class="modal-crear-salidas-form-item">
+                        <FormItem Label="🔥 Tipo de Incendio" Required Class="modal-form-item-abm">
                             <EnumSelect @bind-Value="@newSalida.TipoIncendio" Placeholder="Seleccione un tipo de incendio" Size="InputSize.Large" />
                         </FormItem>
                     }
 
                     @if (newSalida.Categoria == CategoriaEmergencia.Rescate)
                     {
-                        <FormItem Label="🤝 Tipo de Rescate" Required Class="modal-crear-salidas-form-item">
+                        <FormItem Label="🤝 Tipo de Rescate" Required Class="modal-form-item-abm">
                             <EnumSelect @bind-Value="@newSalida.TipoRescate" Placeholder="Seleccione un tipo de rescate" Size="InputSize.Large" />
                         </FormItem>
                     }
 
                     @if (newSalida.Categoria == CategoriaEmergencia.ServicioEspecial)
                     {
-                        <FormItem Label="🛠️ Tipo de Servicio Especial" Required Class="modal-crear-salidas-form-item">
+                        <FormItem Label="🛠️ Tipo de Servicio Especial" Required Class="modal-form-item-abm">
                             <EnumSelect @bind-Value="@newSalida.TipoServicioEspecial" Placeholder="Seleccione un tipo de servicio especial" Size="InputSize.Large" />
                         </FormItem>
                     }
 
                     @if (newSalida.Categoria == CategoriaEmergencia.FactorClimatico)
                     {
-                        <FormItem Label="🌪️ Tipo de Factor Climático" Required Class="modal-crear-salidas-form-item">
+                        <FormItem Label="🌪️ Tipo de Factor Climático" Required Class="modal-form-item-abm">
                             <EnumSelect @bind-Value="@newSalida.TipoFactorClimatico" Placeholder="Seleccione un tipo de factor climático" Size="InputSize.Large" />
                         </FormItem>
                     }

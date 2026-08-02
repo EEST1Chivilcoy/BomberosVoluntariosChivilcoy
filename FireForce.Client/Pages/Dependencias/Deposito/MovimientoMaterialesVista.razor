@@ -18,8 +18,8 @@
 
 @* Los estilos viven en wwwroot/css/abm.css. No agregar <style> acá. *@
 
-<div class="abm-page abm-page--deposito">
-    <div class="modal-content">
+<div class="abm-page abm-page--titulo-acciones abm-page--deposito">
+    <div class="modal-content-abm">
 
         <div style="text-align: right; margin-bottom: 20px;">
             <Button Type="@ButtonType.Primary" OnClick="OpenFormModal" Class="primary-button">
@@ -96,24 +96,24 @@
                Style="max-width: 800px;"
                Footer="null"
                DestroyOnClose
-               WrapClassName="modal-crear-movimiento"
+               Centered
+               WrapClassName="modal-abm modal-crear-movimiento"
                OnCancel="HandleModalClose">
-            <div class="modal-crear-movimiento-content">
+            <div class="modal-content-abm">
                 <Form Model="MovimientoVM"
-                      Class="modal-crear-movimiento-form"
                       Layout="FormLayout.Vertical"
                       OnFinish="OnFinish"
                       OnFinishFailed="OnFinishFailed">
                     <Row Gutter="16">
                         <AntDesign.Col Span="12">
-                            <div class="modal-crear-movimiento-form-item">
+                            <div class="modal-form-item-abm">
                                 <FormItem Label="🏷️ Rubro" Required>
                                     <EnumSelect TEnum="@TipoMovimiento" @bind-Value="@MovimientoVM.TipoMovimiento" />
                                 </FormItem>
                             </div>
                         </AntDesign.Col>
                         <AntDesign.Col Span="12">
-                            <div class="modal-crear-movimiento-form-item">
+                            <div class="modal-form-item-abm">
                                 <FormItem Label="🔢 Cantidad" Required>
                                     <AntDesign.InputNumber @bind-Value="MovimientoVM.Cantidad" />
                                 </FormItem>
@@ -122,7 +122,7 @@
                     </Row>
                     <Row Gutter="16">
                         <AntDesign.Col Span="24">
-                            <div class="modal-crear-movimiento-form-item">
+                            <div class="modal-form-item-abm">
                                 <FormItem Label="🧱 Material otorgado" Required>
                                     <Select TItem="MaterialVM" TItemValue="int" DataSource="@MaterialesVM" @bind-Value="@MovimientoVM.MaterialId"
                                             LabelName="@nameof(MaterialVM.Descripcion)" ValueName="@nameof(MaterialVM.MaterialId)"
@@ -133,7 +133,7 @@
                     </Row>
                     <Row Gutter="16">
                         <AntDesign.Col Span="24">
-                            <div class="modal-crear-movimiento-form-item">
+                            <div class="modal-form-item-abm">
                                 <FormItem WrapperColSpan="24" LabelColSpan="4">
                                     <CheckboxGroup Style="display: flex; gap: 20px;" @bind-Value="@_value" TValue="string" OnChange="OnChange">
                                         <Checkbox Label="Bombero" @bind-Value="@chIsBombero">Bombero</Checkbox>
@@ -148,7 +148,7 @@
                         @if (chIsBombero)
                         {
                             <AntDesign.Col Span="12">
-                                <div class="modal-crear-movimiento-form-item">
+                                <div class="modal-form-item-abm">
                                     <FormItem Label="Bombero asignado">
                                         <Select TItem="BomberoViewModel" TItemValue="int?" DataSource="@bomberoTodos" @bind-Value="@MovimientoVM.BomberoAsignado"
                                                 LabelName="@nameof(BomberoViewModel.NombreYApellido)" ValueName="@nameof(BomberoViewModel.NumeroLegajo)"
@@ -160,7 +160,7 @@
                         @if (chIsMovil)
                         {
                             <AntDesign.Col Span="12">
-                                <div class="modal-crear-movimiento-form-item">
+                                <div class="modal-form-item-abm">
                                     <FormItem Label="Móvil asignado">
                                         <Select TItem="MovilViewModel" TItemValue="string" DataSource="@MovilTodos" @bind-Value="@MovimientoVM.MovilAsignado"
                                                 LabelName="@nameof(MovilViewModel.NumeroMovil)" ValueName="@nameof(MovilViewModel.NumeroMovil)"
@@ -172,7 +172,7 @@
                     </Row>
                     <Row Gutter="24">
                         <AntDesign.Col Span="24">
-                            <div class="modal-crear-movimiento-form-full-width">
+                            <div class="modal-form-full-width-abm">
                                 <FormItem Label="🧾 Observaciones">
                                     <TextArea @bind-Value="MovimientoVM.Observaciones"
                                               Placeholder="Ingrese una descripción detallada de la licencia"
@@ -181,7 +181,7 @@
                             </div>
                         </AntDesign.Col>
                     </Row>
-                    <div class="modal-crear-movimiento-footer">
+                    <div class="modal-footer-abm">
                         <Button Class="ant-btn-primary" HtmlType="submit">
                             Guardar
                         </Button>

@@ -670,99 +670,60 @@
     }
 }
 
-/* ===== Modales de formulario (grupo compartido) ===== */
+/* ===== Modales de formulario (grupo compartido: .modal-abm) ===== */
 /* Alta/edición de casi todos los módulos. Usan WrapClassName, así que el Modal
-   se monta en un portal FUERA de .abm-page: el scope es la propia clase del
-   wrap. El diseño es el mismo para todos, así que los selectores conviven acá
-   y cada módulo deja SOLO sus deltas en su propia sección.
+   se monta en un portal FUERA de .abm-page: el scope viaja en el propio wrap,
+   que lleva DOS clases: la compartida `modal-abm` (todo el diseño estándar
+   sale de acá) y la del módulo (`modal-crear-licencia`, `modal-deposito`,
+   `modal-incidente`, ...), que queda solo para los deltas de ese módulo.
 
-   Wraps que usan este grupo: Licencias (`modal-crear-licencia`), Ascensos
-   (`modal-crear-ascenso`), Sanciones (`modal-crear-sancion`), Brigadas
-   (`modal-crear-brigada`), Fuerzas Intervinientes y Partes de Vehículos
-   (`modal-crear-fuerza`), Dependencias (`modal-crear-dependencia`),
-   Movimientos de materiales (`modal-crear-movimiento`), Depósito
-   (`modal-deposito`), Comunicaciones (`modal-crear-comunicacion`), Equipos
-   Autónomos (`modal-crear-equipo`), Salidas (`modal-crear-salidas`), secciones
-   de la planilla (`modal-damnificado`, `modal-vehiculo`) y alta de pago
-   (`modal-crear-pago`). Los modales de rechazo (`modal-rechazar-licencia`,
-   `modal-rechazar-pago`) y el de impresión de pagos (`modal-imprimir-pago`)
-   entran solo en las reglas de la caja, el encabezado y el título.
+   Las clases internas también son compartidas: `modal-content-abm` (cuerpo con
+   padding 24), `modal-form-item-abm` / `modal-form-full-width-abm` (campos) y
+   `modal-footer-abm` (pie rojo). Los deltas por módulo viven en la sección del
+   módulo y se scopean con su clase de wrap (p. ej.
+   `.modal-crear-equipo .modal-footer-abm`): al tener igual especificidad y
+   venir después en el archivo, le ganan al estándar.
 
-   No todos los wraps entran en todas las reglas: el que difiere en alguna
-   declaración queda fuera de esa regla puntual y lo aclara un comentario en la
-   sección del módulo. Al sumar un módulo nuevo, agregá su wrap a las listas de
-   selectores en vez de copiar el bloque. */
+   RECETA para un modal nuevo (sin CSS nuevo sale con el estándar):
+     <Modal Footer="null" Centered DestroyOnClose
+            WrapClassName="modal-abm modal-<modulo>">
+         <div class="modal-content-abm">
+             <Form ... OnFinish="...">           (el ancho, si hace falta, va
+                 FormItems con                    en Width="..." del <Modal>,
+                 Class="modal-form-item-abm"      NUNCA por CSS: descentra)
+                 <div class="modal-footer-abm">
+                     <Button Type="Primary" HtmlType="submit">...</Button>
+                 </div>
+             </Form>
+         </div>
+     </Modal>
+   El pie rojo asume body 24px + .modal-content-abm 24px (sangría 48, ver
+   --modal-pie-sangria más abajo). Los seis modales viejos con pie NATIVO de
+   Ant (OkText/OnOk) son la excepción transitoria, no el modelo a copiar.
 
-.modal-crear-licencia .ant-modal-content,
-.modal-crear-ascenso .ant-modal-content,
-.modal-crear-sancion .ant-modal-content,
-.modal-crear-brigada .ant-modal-content,
-.modal-crear-fuerza .ant-modal-content,
-.modal-crear-dependencia .ant-modal-content,
-.modal-crear-salidas .ant-modal-content,
-.modal-damnificado .ant-modal-content,
-.modal-vehiculo .ant-modal-content,
-.modal-crear-pago .ant-modal-content,
-.modal-rechazar-licencia .ant-modal-content,
-.modal-rechazar-pago .ant-modal-content {
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    border: 2px solid var(--abm-primary-dark);
-    margin-top: -50px;
-    margin-bottom: 0;
-}
+   Quedan FUERA a propósito: los fullscreen (`.fullscreen-modal`, su propio
+   grupo más abajo), Cobranza (`modal-pago`/`modal-direccion` solo comparten la
+   X; `modal-postit` nada) y los modales sin WrapClassName. */
 
-/* Los modales de Incidentes son Centered (y el detalle, maximizado): misma
-   caja que el grupo de arriba pero SIN el margin-top, que los descentraría. */
-.modal-incidente .ant-modal-content {
+/* Todos los .modal-abm van con Centered en el <Modal> (posición vertical
+   unificada); acá no hay márgenes que corrijan la posición. */
+.modal-abm .ant-modal-content {
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     border: 2px solid var(--abm-primary-dark);
 }
 
-.modal-crear-licencia .ant-modal-title,
-.modal-crear-ascenso .ant-modal-title,
-.modal-crear-sancion .ant-modal-title,
-.modal-crear-brigada .ant-modal-title,
-.modal-crear-fuerza .ant-modal-title,
-.modal-crear-dependencia .ant-modal-title,
-.modal-crear-movimiento .ant-modal-title,
-.modal-deposito .ant-modal-title,
-.modal-crear-comunicacion .ant-modal-title,
-.modal-crear-equipo .ant-modal-title,
-.modal-crear-salidas .ant-modal-title,
-.modal-damnificado .ant-modal-title,
-.modal-vehiculo .ant-modal-title,
-.modal-crear-pago .ant-modal-title,
-.modal-rechazar-licencia .ant-modal-title,
-.modal-rechazar-pago .ant-modal-title,
-.modal-imprimir-pago .ant-modal-title,
-.modal-incidente .ant-modal-title {
+.modal-abm .ant-modal-title {
     color: #fff !important;
 }
 
 /* X de cerrar estándar: círculo blanco translúcido centrado en la barra roja
    (mismo diseño que .fullscreen-modal, en 36px porque el header es de 54px).
    La caja interna .ant-modal-close-x conserva los 56px de Ant si no se la
-   achica: sin eso la X queda descentrada y desborda el círculo. */
-.modal-crear-licencia .ant-modal-close,
-.modal-crear-ascenso .ant-modal-close,
-.modal-crear-sancion .ant-modal-close,
-.modal-crear-brigada .ant-modal-close,
-.modal-crear-fuerza .ant-modal-close,
-.modal-crear-dependencia .ant-modal-close,
-.modal-crear-movimiento .ant-modal-close,
-.modal-deposito .ant-modal-close,
-.modal-crear-comunicacion .ant-modal-close,
-.modal-crear-equipo .ant-modal-close,
-.modal-crear-salidas .ant-modal-close,
-.modal-damnificado .ant-modal-close,
-.modal-vehiculo .ant-modal-close,
-.modal-crear-pago .ant-modal-close,
-.modal-rechazar-licencia .ant-modal-close,
-.modal-rechazar-pago .ant-modal-close,
-.modal-imprimir-pago .ant-modal-close,
-.modal-incidente .ant-modal-close,
+   achica: sin eso la X queda descentrada y desborda el círculo.
+   Cobranza (`modal-pago`/`modal-direccion`) comparte SOLO la X: por eso va
+   sumada acá y no dentro de .modal-abm. */
+.modal-abm .ant-modal-close,
 .modal-pago .ant-modal-close,
 .modal-direccion .ant-modal-close {
     color: #fff;
@@ -778,24 +739,7 @@
     right: 12px;
 }
 
-.modal-crear-licencia .ant-modal-close .ant-modal-close-x,
-.modal-crear-ascenso .ant-modal-close .ant-modal-close-x,
-.modal-crear-sancion .ant-modal-close .ant-modal-close-x,
-.modal-crear-brigada .ant-modal-close .ant-modal-close-x,
-.modal-crear-fuerza .ant-modal-close .ant-modal-close-x,
-.modal-crear-dependencia .ant-modal-close .ant-modal-close-x,
-.modal-crear-movimiento .ant-modal-close .ant-modal-close-x,
-.modal-deposito .ant-modal-close .ant-modal-close-x,
-.modal-crear-comunicacion .ant-modal-close .ant-modal-close-x,
-.modal-crear-equipo .ant-modal-close .ant-modal-close-x,
-.modal-crear-salidas .ant-modal-close .ant-modal-close-x,
-.modal-damnificado .ant-modal-close .ant-modal-close-x,
-.modal-vehiculo .ant-modal-close .ant-modal-close-x,
-.modal-crear-pago .ant-modal-close .ant-modal-close-x,
-.modal-rechazar-licencia .ant-modal-close .ant-modal-close-x,
-.modal-rechazar-pago .ant-modal-close .ant-modal-close-x,
-.modal-imprimir-pago .ant-modal-close .ant-modal-close-x,
-.modal-incidente .ant-modal-close .ant-modal-close-x,
+.modal-abm .ant-modal-close .ant-modal-close-x,
 .modal-pago .ant-modal-close .ant-modal-close-x,
 .modal-direccion .ant-modal-close .ant-modal-close-x {
     width: 36px;
@@ -808,48 +752,14 @@
     color: #fff;
 }
 
-.modal-crear-licencia .ant-modal-close:hover,
-.modal-crear-ascenso .ant-modal-close:hover,
-.modal-crear-sancion .ant-modal-close:hover,
-.modal-crear-brigada .ant-modal-close:hover,
-.modal-crear-fuerza .ant-modal-close:hover,
-.modal-crear-dependencia .ant-modal-close:hover,
-.modal-crear-movimiento .ant-modal-close:hover,
-.modal-deposito .ant-modal-close:hover,
-.modal-crear-comunicacion .ant-modal-close:hover,
-.modal-crear-equipo .ant-modal-close:hover,
-.modal-crear-salidas .ant-modal-close:hover,
-.modal-damnificado .ant-modal-close:hover,
-.modal-vehiculo .ant-modal-close:hover,
-.modal-crear-pago .ant-modal-close:hover,
-.modal-rechazar-licencia .ant-modal-close:hover,
-.modal-rechazar-pago .ant-modal-close:hover,
-.modal-imprimir-pago .ant-modal-close:hover,
-.modal-incidente .ant-modal-close:hover,
+.modal-abm .ant-modal-close:hover,
 .modal-pago .ant-modal-close:hover,
 .modal-direccion .ant-modal-close:hover {
     background: rgba(255, 255, 255, 0.3);
     transform: scale(1.1);
 }
 
-.modal-crear-licencia .ant-modal-header,
-.modal-crear-ascenso .ant-modal-header,
-.modal-crear-sancion .ant-modal-header,
-.modal-crear-brigada .ant-modal-header,
-.modal-crear-fuerza .ant-modal-header,
-.modal-crear-dependencia .ant-modal-header,
-.modal-crear-movimiento .ant-modal-header,
-.modal-deposito .ant-modal-header,
-.modal-crear-comunicacion .ant-modal-header,
-.modal-crear-equipo .ant-modal-header,
-.modal-crear-salidas .ant-modal-header,
-.modal-damnificado .ant-modal-header,
-.modal-vehiculo .ant-modal-header,
-.modal-crear-pago .ant-modal-header,
-.modal-rechazar-licencia .ant-modal-header,
-.modal-rechazar-pago .ant-modal-header,
-.modal-imprimir-pago .ant-modal-header,
-.modal-incidente .ant-modal-header {
+.modal-abm .ant-modal-header {
     background-color: var(--abm-primary-color);
     padding: 16px 72px 16px 24px; /* espacio a la derecha para la X */
     /* Redondeo que acompaña la caja del modal (border-radius 12): sin esto el
@@ -858,63 +768,20 @@
     border-radius: 10px 10px 0 0;
 }
 
-.modal-crear-licencia-content,
-.modal-crear-ascenso-content,
-.modal-crear-sancion-content,
-.modal-crear-brigada-content,
-.modal-crear-fuerza-content,
-.modal-crear-dependencia-content,
-.modal-crear-movimiento-content,
-.modal-crear-comunicacion-content,
-.modal-crear-equipo-content,
-.modal-crear-salidas-content,
-.modal-damnificado .modal-damnificado-content,
-.modal-vehiculo .modal-vehiculo-content,
-.modal-crear-pago-content {
+.modal-abm .modal-content-abm {
     padding: 24px;
 }
 
-.modal-crear-licencia-form-item,
-.modal-crear-ascenso-form-item,
-.modal-crear-sancion-form-item,
-.modal-crear-brigada-form-item,
-.modal-crear-fuerza-form-item,
-.modal-crear-dependencia-form-item,
-.modal-crear-movimiento-form-item,
-.modal-crear-comunicacion-form-item,
-.modal-crear-salidas-form-item,
-.modal-damnificado .modal-damnificado-form-item,
-.modal-vehiculo .modal-vehiculo-form-item {
+.modal-abm .modal-form-item-abm {
     margin-bottom: 20px;
     position: relative;
     padding-left: 10px;
 }
 
-.modal-crear-licencia-form-item::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 3px;
-    border-radius: 5px;
-}
-
-.modal-crear-licencia-form-item .ant-form-item-label > label,
-.modal-crear-licencia-form-full-width .ant-form-item-label > label,
-.modal-crear-ascenso-form-item .ant-form-item-label > label,
-.modal-crear-ascenso-form-full-width .ant-form-item-label > label,
-.modal-crear-sancion-form-item .ant-form-item-label > label,
-.modal-crear-brigada-form-item .ant-form-item-label > label,
-.modal-crear-fuerza-form-item .ant-form-item-label > label,
-.modal-crear-dependencia-form-item .ant-form-item-label > label,
-.modal-crear-movimiento-form-item .ant-form-item-label > label,
-.modal-crear-movimiento-form-full-width .ant-form-item-label > label,
-.modal-crear-comunicacion-form-item .ant-form-item-label > label,
-.modal-crear-salidas-form-item .ant-form-item-label > label,
-.modal-crear-salidas-form-full-width .ant-form-item-label > label,
-.modal-damnificado .modal-damnificado-form-item .ant-form-item-label > label,
-.modal-vehiculo .modal-vehiculo-form-item .ant-form-item-label > label,
+/* El alta de pago (`modal-crear-pago`) no lleva clase en sus FormItem: sus
+   etiquetas entran por el wrap. */
+.modal-abm .modal-form-item-abm .ant-form-item-label > label,
+.modal-abm .modal-form-full-width-abm .ant-form-item-label > label,
 .modal-crear-pago .ant-form-item-label > label {
     font-weight: 600;
     color: #434343;
@@ -925,267 +792,55 @@
     transition: color 0.3s ease;
 }
 
-.modal-crear-licencia-form-item .ant-form-item-label > label:hover,
-.modal-crear-licencia-form-full-width .ant-form-item-label > label:hover,
-.modal-crear-ascenso-form-item .ant-form-item-label > label:hover,
-.modal-crear-ascenso-form-full-width .ant-form-item-label > label:hover,
-.modal-crear-sancion-form-item .ant-form-item-label > label:hover,
-.modal-crear-brigada-form-item .ant-form-item-label > label:hover,
-.modal-crear-fuerza-form-item .ant-form-item-label > label:hover,
-.modal-crear-dependencia-form-item .ant-form-item-label > label:hover,
-.modal-crear-movimiento-form-item .ant-form-item-label > label:hover,
-.modal-crear-movimiento-form-full-width .ant-form-item-label > label:hover,
-.modal-crear-comunicacion-form-item .ant-form-item-label > label:hover,
-.modal-crear-equipo-form-item .ant-form-item-label > label:hover,
-.modal-crear-equipo-form-full-width .ant-form-item-label > label:hover,
-.modal-crear-salidas-form-item .ant-form-item-label > label:hover,
-.modal-crear-salidas-form-full-width .ant-form-item-label > label:hover,
-.modal-damnificado .modal-damnificado-form-item .ant-form-item-label > label:hover,
-.modal-vehiculo .modal-vehiculo-form-item .ant-form-item-label > label:hover,
+.modal-abm .modal-form-item-abm .ant-form-item-label > label:hover,
+.modal-abm .modal-form-full-width-abm .ant-form-item-label > label:hover,
 .modal-crear-pago .ant-form-item-label > label:hover {
     color: var(--abm-primary-color);
 }
 
-.modal-crear-licencia .ant-input:focus,
-.modal-crear-licencia .ant-input:hover,
-.modal-crear-licencia .ant-select-selector:focus,
-.modal-crear-licencia .ant-select-selector:hover,
-.modal-crear-licencia .ant-picker:focus,
-.modal-crear-licencia .ant-picker:hover,
-.modal-crear-licencia .ant-picker-input > input:focus,
-.modal-crear-licencia .ant-picker-input > input:hover,
-.modal-crear-licencia .ant-input-number-input:focus,
-.modal-crear-licencia .ant-input-number-input:hover,
-.modal-crear-licencia .ant-textarea:focus,
-.modal-crear-licencia .ant-textarea:hover,
-.modal-crear-ascenso .ant-input:focus,
-.modal-crear-ascenso .ant-input:hover,
-.modal-crear-ascenso .ant-select-selector:focus,
-.modal-crear-ascenso .ant-select-selector:hover,
-.modal-crear-ascenso .ant-picker:focus,
-.modal-crear-ascenso .ant-picker:hover,
-.modal-crear-ascenso .ant-picker-input > input:focus,
-.modal-crear-ascenso .ant-picker-input > input:hover,
-.modal-crear-ascenso .ant-input-number-input:focus,
-.modal-crear-ascenso .ant-input-number-input:hover,
-.modal-crear-ascenso .ant-textarea:focus,
-.modal-crear-ascenso .ant-textarea:hover,
-.modal-crear-sancion .ant-input:focus,
-.modal-crear-sancion .ant-input:hover,
-.modal-crear-sancion .ant-select-selector:focus,
-.modal-crear-sancion .ant-select-selector:hover,
-.modal-crear-sancion .ant-picker:focus,
-.modal-crear-sancion .ant-picker:hover,
-.modal-crear-sancion .ant-picker-input > input:focus,
-.modal-crear-sancion .ant-picker-input > input:hover,
-.modal-crear-sancion .ant-input-number-input:focus,
-.modal-crear-sancion .ant-input-number-input:hover,
-.modal-crear-sancion .ant-textarea:focus,
-.modal-crear-sancion .ant-textarea:hover,
-.modal-crear-brigada .ant-input:focus,
-.modal-crear-brigada .ant-input:hover,
-.modal-crear-brigada .ant-select-selector:focus,
-.modal-crear-brigada .ant-select-selector:hover,
-.modal-crear-fuerza .ant-input:focus,
-.modal-crear-fuerza .ant-input:hover,
-.modal-crear-fuerza .ant-select-selector:focus,
-.modal-crear-fuerza .ant-select-selector:hover,
-.modal-crear-fuerza .ant-picker:focus,
-.modal-crear-fuerza .ant-picker:hover,
-.modal-crear-fuerza .ant-picker-input > input:focus,
-.modal-crear-fuerza .ant-picker-input > input:hover,
-.modal-crear-fuerza .ant-input-number-input:focus,
-.modal-crear-fuerza .ant-input-number-input:hover,
-.modal-crear-fuerza .ant-textarea:focus,
-.modal-crear-fuerza .ant-textarea:hover,
-.modal-crear-dependencia .ant-input:focus,
-.modal-crear-dependencia .ant-input:hover,
-.modal-crear-dependencia .ant-select-selector:focus,
-.modal-crear-dependencia .ant-select-selector:hover,
-.modal-crear-dependencia .ant-picker:focus,
-.modal-crear-dependencia .ant-picker:hover,
-.modal-crear-dependencia .ant-picker-input > input:focus,
-.modal-crear-dependencia .ant-picker-input > input:hover,
-.modal-crear-dependencia .ant-input-number-input:focus,
-.modal-crear-dependencia .ant-input-number-input:hover,
-.modal-crear-dependencia .ant-textarea:focus,
-.modal-crear-dependencia .ant-textarea:hover,
-.modal-crear-movimiento .ant-input:focus,
-.modal-crear-movimiento .ant-input:hover,
-.modal-crear-movimiento .ant-select-selector:focus,
-.modal-crear-movimiento .ant-select-selector:hover,
-.modal-crear-movimiento .ant-picker:focus,
-.modal-crear-movimiento .ant-picker:hover,
-.modal-crear-movimiento .ant-picker-input > input:focus,
-.modal-crear-movimiento .ant-picker-input > input:hover,
-.modal-crear-movimiento .ant-input-number-input:focus,
-.modal-crear-movimiento .ant-input-number-input:hover,
-.modal-crear-movimiento .ant-textarea:focus,
-.modal-crear-movimiento .ant-textarea:hover,
-.modal-deposito .ant-input:focus,
-.modal-deposito .ant-input:hover,
-.modal-deposito .ant-select-selector:focus,
-.modal-deposito .ant-select-selector:hover,
-.modal-deposito .ant-picker:focus,
-.modal-deposito .ant-picker:hover,
-.modal-deposito .ant-input-number:focus,
-.modal-deposito .ant-input-number:hover,
-.modal-deposito .ant-textarea:focus,
-.modal-deposito .ant-textarea:hover,
-.modal-crear-comunicacion .ant-input:focus,
-.modal-crear-comunicacion .ant-input:hover,
-.modal-crear-comunicacion .ant-select-selector:focus,
-.modal-crear-comunicacion .ant-select-selector:hover,
-.modal-crear-comunicacion .ant-picker:focus,
-.modal-crear-comunicacion .ant-picker:hover,
-.modal-crear-comunicacion .ant-picker-input > input:focus,
-.modal-crear-comunicacion .ant-picker-input > input:hover,
-.modal-crear-comunicacion .ant-input-number-input:focus,
-.modal-crear-comunicacion .ant-input-number-input:hover,
-.modal-crear-comunicacion .ant-textarea:focus,
-.modal-crear-comunicacion .ant-textarea:hover,
-.modal-crear-equipo .ant-input:focus,
-.modal-crear-equipo .ant-input:hover,
-.modal-crear-equipo .ant-select-selector:focus,
-.modal-crear-equipo .ant-select-selector:hover,
-.modal-crear-equipo .ant-picker:focus,
-.modal-crear-equipo .ant-picker:hover,
-.modal-crear-equipo .ant-picker-input > input:focus,
-.modal-crear-equipo .ant-picker-input > input:hover,
-.modal-crear-equipo .ant-input-number-input:focus,
-.modal-crear-equipo .ant-input-number-input:hover,
-.modal-crear-salidas .ant-input:focus,
-.modal-crear-salidas .ant-input:hover,
-.modal-crear-salidas .ant-select-selector:focus,
-.modal-crear-salidas .ant-select-selector:hover,
-.modal-crear-salidas .ant-picker:focus,
-.modal-crear-salidas .ant-picker:hover,
-.modal-crear-salidas .ant-picker-input > input:focus,
-.modal-crear-salidas .ant-picker-input > input:hover,
-.modal-crear-salidas .ant-input-number-input:focus,
-.modal-crear-salidas .ant-input-number-input:hover,
-.modal-crear-salidas .ant-textarea:focus,
-.modal-crear-salidas .ant-textarea:hover,
-.modal-damnificado .ant-input:focus,
-.modal-damnificado .ant-input:hover,
-.modal-damnificado .ant-select-selector:focus,
-.modal-damnificado .ant-select-selector:hover,
-.modal-damnificado .ant-picker:focus,
-.modal-damnificado .ant-picker:hover,
-.modal-damnificado .ant-picker-input > input:focus,
-.modal-damnificado .ant-picker-input > input:hover,
-.modal-damnificado .ant-input-number-input:focus,
-.modal-damnificado .ant-input-number-input:hover,
-.modal-damnificado .ant-textarea:focus,
-.modal-damnificado .ant-textarea:hover,
-.modal-damnificado .ant-input-affix-wrapper:focus,
-.modal-damnificado .ant-input-affix-wrapper:hover,
-.modal-vehiculo .ant-input:focus,
-.modal-vehiculo .ant-input:hover,
-.modal-vehiculo .ant-select-selector:focus,
-.modal-vehiculo .ant-select-selector:hover,
-.modal-vehiculo .ant-picker:focus,
-.modal-vehiculo .ant-picker:hover,
-.modal-vehiculo .ant-picker-input > input:focus,
-.modal-vehiculo .ant-picker-input > input:hover,
-.modal-vehiculo .ant-input-number-input:focus,
-.modal-vehiculo .ant-input-number-input:hover,
-.modal-vehiculo .ant-textarea:focus,
-.modal-vehiculo .ant-textarea:hover,
-.modal-vehiculo .ant-input-affix-wrapper:focus,
-.modal-vehiculo .ant-input-affix-wrapper:hover,
-.modal-crear-pago .ant-input:focus,
-.modal-crear-pago .ant-input:hover,
-.modal-crear-pago .ant-select-selector:focus,
-.modal-crear-pago .ant-select-selector:hover,
-.modal-crear-pago .ant-picker:focus,
-.modal-crear-pago .ant-picker:hover,
-.modal-crear-pago .ant-picker-input > input:focus,
-.modal-crear-pago .ant-picker-input > input:hover,
-.modal-crear-pago .ant-input-number-input:focus,
-.modal-crear-pago .ant-input-number-input:hover,
-.modal-crear-pago .ant-textarea:focus,
-.modal-crear-pago .ant-textarea:hover {
+/* Foco/hover dorado de los campos. Antes cada módulo listaba su subconjunto
+   de controles; ahora es el superconjunto para todo .modal-abm. */
+.modal-abm .ant-input:focus,
+.modal-abm .ant-input:hover,
+.modal-abm .ant-select-selector:focus,
+.modal-abm .ant-select-selector:hover,
+.modal-abm .ant-picker:focus,
+.modal-abm .ant-picker:hover,
+.modal-abm .ant-picker-input > input:focus,
+.modal-abm .ant-picker-input > input:hover,
+.modal-abm .ant-input-number:focus,
+.modal-abm .ant-input-number:hover,
+.modal-abm .ant-input-number-input:focus,
+.modal-abm .ant-input-number-input:hover,
+.modal-abm .ant-textarea:focus,
+.modal-abm .ant-textarea:hover,
+.modal-abm .ant-input-affix-wrapper:focus,
+.modal-abm .ant-input-affix-wrapper:hover {
     border-color: var(--abm-gold-color) !important;
     box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
 }
 
-.modal-crear-licencia .ant-picker,
-.modal-crear-licencia .ant-input,
-.modal-crear-licencia .ant-select-selector,
-.modal-crear-licencia .ant-input-number,
-.modal-crear-licencia .ant-textarea,
-.modal-crear-ascenso .ant-picker,
-.modal-crear-ascenso .ant-input,
-.modal-crear-ascenso .ant-select-selector,
-.modal-crear-ascenso .ant-input-number,
-.modal-crear-ascenso .ant-textarea,
-.modal-crear-sancion .ant-picker,
-.modal-crear-sancion .ant-input,
-.modal-crear-sancion .ant-select-selector,
-.modal-crear-sancion .ant-input-number,
-.modal-crear-sancion .ant-textarea,
-.modal-crear-brigada .ant-picker,
-.modal-crear-brigada .ant-input,
-.modal-crear-brigada .ant-select-selector,
-.modal-crear-brigada .ant-input-number,
-.modal-crear-brigada .ant-textarea,
-.modal-crear-fuerza .ant-picker,
-.modal-crear-fuerza .ant-input,
-.modal-crear-fuerza .ant-select-selector,
-.modal-crear-fuerza .ant-input-number,
-.modal-crear-fuerza .ant-textarea,
-.modal-crear-dependencia .ant-picker,
-.modal-crear-dependencia .ant-input,
-.modal-crear-dependencia .ant-select-selector,
-.modal-crear-dependencia .ant-input-number,
-.modal-crear-dependencia .ant-textarea,
-.modal-crear-movimiento .ant-picker,
-.modal-crear-movimiento .ant-input,
-.modal-crear-movimiento .ant-select-selector,
-.modal-crear-movimiento .ant-input-number,
-.modal-crear-movimiento .ant-textarea,
-.modal-deposito .ant-picker,
-.modal-deposito .ant-input,
-.modal-deposito .ant-select-selector,
-.modal-deposito .ant-input-number,
-.modal-deposito .ant-textarea,
-.modal-crear-comunicacion .ant-picker,
-.modal-crear-comunicacion .ant-input,
-.modal-crear-comunicacion .ant-select-selector,
-.modal-crear-comunicacion .ant-input-number,
-.modal-crear-comunicacion .ant-textarea,
-.modal-crear-equipo .ant-picker,
-.modal-crear-equipo .ant-input,
-.modal-crear-equipo .ant-select-selector,
-.modal-crear-equipo .ant-input-number,
-.modal-crear-salidas .ant-picker,
-.modal-crear-salidas .ant-input,
-.modal-crear-salidas .ant-select-selector,
-.modal-crear-salidas .ant-input-number,
-.modal-crear-salidas .ant-textarea,
-.modal-damnificado .ant-picker,
-.modal-damnificado .ant-input,
-.modal-damnificado .ant-select-selector,
-.modal-damnificado .ant-input-number,
-.modal-damnificado .ant-textarea,
-.modal-damnificado .ant-input-affix-wrapper,
-.modal-vehiculo .ant-picker,
-.modal-vehiculo .ant-input,
-.modal-vehiculo .ant-select-selector,
-.modal-vehiculo .ant-input-number,
-.modal-vehiculo .ant-textarea,
-.modal-vehiculo .ant-input-affix-wrapper,
-.modal-crear-pago .ant-picker,
-.modal-crear-pago .ant-input,
-.modal-crear-pago .ant-select-selector,
-.modal-crear-pago .ant-input-number,
-.modal-crear-pago .ant-textarea {
+.modal-abm .ant-picker,
+.modal-abm .ant-input,
+.modal-abm .ant-select-selector,
+.modal-abm .ant-input-number,
+.modal-abm .ant-textarea,
+.modal-abm .ant-input-affix-wrapper {
     border-radius: var(--abm-radius-sm) !important;
     border: 1px solid #d9d9d9 !important;
     background: #fff !important;
     color: #434343 !important;
     transition: all 0.3s ease !important;
+}
+
+/* Dentro de un affix-wrapper (TextArea con contador, inputs con ícono) el
+   borde y el foco dorado los dibuja el wrapper: el control interno va sin
+   borde ni halo propios, si no se ven dobles. */
+.modal-abm .ant-input-affix-wrapper .ant-input,
+.modal-abm .ant-input-affix-wrapper .ant-input:focus,
+.modal-abm .ant-input-affix-wrapper .ant-input:hover {
+    border: none !important;
+    box-shadow: none !important;
 }
 
 /* Los modales de Movimientos, Depósito y Equipos igualan el alto del select. */
@@ -1195,19 +850,12 @@
     height: 40px !important;
 }
 
-.modal-crear-licencia .ant-btn-primary,
-.modal-crear-ascenso .ant-btn-primary,
-.modal-crear-sancion .ant-btn-primary,
-.modal-crear-brigada .ant-btn-primary,
-.modal-crear-fuerza .ant-btn-primary,
-.modal-crear-dependencia .ant-btn-primary,
+/* Botón de confirmación verde estándar. `boton-agregar` cubre los <Button> sin
+   Type="Primary" que quedan en Dependencias y Comunicaciones. Equipos pisa su
+   tamaño (padding/tipografía) en su sección. */
+.modal-abm .ant-btn-primary,
 .modal-crear-dependencia .boton-agregar,
-.modal-crear-movimiento .ant-btn-primary,
-.modal-deposito .ant-btn-primary,
-.modal-crear-salidas .ant-btn-primary,
-.modal-damnificado .ant-btn-primary,
-.modal-vehiculo .ant-btn-primary,
-.modal-incidente .ant-btn-primary {
+.modal-crear-comunicacion .boton-agregar {
     background: linear-gradient(135deg, var(--abm-success-color) 0%, var(--abm-success-dark) 100%) !important;
     border: none !important;
     color: #fff !important;
@@ -1219,23 +867,9 @@
     border-radius: var(--abm-radius-sm);
 }
 
-.modal-crear-licencia .ant-btn-primary:hover,
-.modal-crear-ascenso .ant-btn-primary:hover,
-.modal-crear-sancion .ant-btn-primary:hover,
-.modal-crear-brigada .ant-btn-primary:hover,
-.modal-crear-fuerza .ant-btn-primary:hover,
-.modal-crear-dependencia .ant-btn-primary:hover,
+.modal-abm .ant-btn-primary:hover,
 .modal-crear-dependencia .boton-agregar:hover,
-.modal-crear-movimiento .ant-btn-primary:hover,
-.modal-deposito .ant-btn-primary:hover,
-.modal-crear-comunicacion .ant-btn-primary:hover,
-.modal-crear-comunicacion .boton-agregar:hover,
-.modal-crear-equipo .ant-btn-primary:hover,
-.modal-crear-salidas .ant-btn-primary:hover,
-.modal-damnificado .ant-btn-primary:hover,
-.modal-vehiculo .ant-btn-primary:hover,
-.modal-incidente .ant-btn-primary:hover,
-.modal-crear-pago .ant-btn-primary:hover {
+.modal-crear-comunicacion .boton-agregar:hover {
     background: linear-gradient(135deg, var(--abm-success-dark) 0%, var(--abm-success-color) 100%) !important;
     color: #fff !important;
 }
@@ -1271,17 +905,8 @@
    usuario): barra roja pegada al borde inferior, acciones verdes a la derecha
    y SIN botón Cancelar (ese rol lo cumple la X del encabezado). Los márgenes
    negativos compensan el padding acumulado hasta el borde del modal: casi
-   todos apilan .ant-modal-body (24px) + el div -content (24px) = 48px; los
-   que NO tienen div -content (Incidentes) pisan la variable a 24px.
-   Para modales nuevos usar .modal-footer-abm. */
-.modal-crear-ascenso-footer,
-.modal-crear-sancion-footer,
-.modal-crear-brigada-footer,
-.modal-crear-fuerza-footer,
-.modal-crear-dependencia-footer,
-.modal-crear-movimiento-footer,
-.modal-crear-comunicacion-footer,
-.modal-crear-equipo-footer,
+   todos apilan .ant-modal-body (24px) + el div .modal-content-abm (24px) = 48px;
+   los que NO tienen div de contenido (Incidentes) pisan la variable a 24px. */
 .modal-footer-abm {
     display: flex;
     justify-content: flex-end;
@@ -1300,25 +925,18 @@
 }
 
 /* Modales que usan el pie NATIVO de Ant (OkText/OnOk en vez de Footer="null"):
-   misma barra roja, y su botón Cancelar integrado se oculta. */
-.modal-crear-brigada .ant-modal-footer,
-.modal-crear-fuerza .ant-modal-footer,
-.modal-crear-salidas .ant-modal-footer,
-.modal-damnificado .ant-modal-footer,
-.modal-vehiculo .ant-modal-footer,
-.modal-crear-comunicacion .ant-modal-footer {
+   misma barra roja, y su botón Cancelar integrado se oculta. El resto de los
+   .modal-abm va con Footer="null", así que estas reglas no los alcanzan. */
+.modal-abm .ant-modal-footer {
     background: var(--abm-primary-color);
     border-top: none;
     padding: 10px 20px;
     border-radius: 0 0 10px 10px;
 }
 
-.modal-crear-brigada .ant-modal-footer > .ant-btn:not(.ant-btn-primary),
-.modal-crear-fuerza .ant-modal-footer > .ant-btn:not(.ant-btn-primary),
-.modal-crear-salidas .ant-modal-footer > .ant-btn:not(.ant-btn-primary),
-.modal-damnificado .ant-modal-footer > .ant-btn:not(.ant-btn-primary),
-.modal-vehiculo .ant-modal-footer > .ant-btn:not(.ant-btn-primary),
-.modal-crear-comunicacion .ant-modal-footer > .ant-btn:not(.ant-btn-primary) {
+/* OJO: descendiente, no hijo directo — AntD Blazor envuelve los botones del
+   pie nativo en un <div>, así que `> .ant-btn` no matchea nunca. */
+.modal-abm .ant-modal-footer .ant-btn:not(.ant-btn-primary) {
     display: none;
 }
 
@@ -1492,32 +1110,22 @@
 /* ===== Esquema de encabezado "título + acciones" (grupo compartido) ===== */
 /* El encabezado rojo ubica el título a la izquierda y las acciones (alta,
    filtros, botones redondos) a la derecha, y la tabla va al ras de la card.
-   Lo usan: Ascensos, Sanciones, Brigadas, Fuerzas Intervinientes, Partes de
+   No es para todos los .abm-page (Licencias/Comunicaciones/Equipos meten los
+   filtros ADENTRO del encabezado), así que la página que lo usa lleva la
+   clase modificadora compartida en su div raíz, junto a la del módulo:
+   `class="abm-page abm-page--titulo-acciones abm-page--<modulo>"`. Hoy la
+   llevan Ascensos, Sanciones, Brigadas, Fuerzas Intervinientes, Partes de
    Vehículos, Dependencias, Depósito y Salidas. Cada módulo deja sus deltas
    (paddings o overflow propios) en su propia sección, más abajo. */
 
-.abm-page--ascensos .abm-header-section,
-.abm-page--sancionados .abm-header-section,
-.abm-page--brigadas .abm-header-section,
-.abm-page--fuerzas .abm-header-section,
-.abm-page--partes .abm-header-section,
-.abm-page--dependencias .abm-header-section,
-.abm-page--deposito .abm-header-section,
-.abm-page--salidas .abm-header-section {
+.abm-page--titulo-acciones .abm-header-section {
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
 }
 
-.abm-page--ascensos .actions-row,
-.abm-page--sancionados .actions-row,
-.abm-page--brigadas .actions-row,
-.abm-page--fuerzas .actions-row,
-.abm-page--partes .actions-row,
-.abm-page--dependencias .actions-row,
-.abm-page--deposito .actions-row,
-.abm-page--salidas .actions-row {
+.abm-page--titulo-acciones .actions-row {
     display: flex;
     gap: 10px;
     align-items: center;
@@ -1525,38 +1133,17 @@
     z-index: 2;
 }
 
-.abm-page--ascensos .abm-table-container,
-.abm-page--sancionados .abm-table-container,
-.abm-page--brigadas .abm-table-container,
-.abm-page--fuerzas .abm-table-container,
-.abm-page--partes .abm-table-container,
-.abm-page--dependencias .abm-table-container,
-.abm-page--deposito .abm-table-container,
-.abm-page--salidas .abm-table-container {
+.abm-page--titulo-acciones .abm-table-container {
     padding: 0;
 }
 
 @media (max-width: 1199px) {
-    .abm-page--ascensos .abm-header-section,
-    .abm-page--sancionados .abm-header-section,
-    .abm-page--brigadas .abm-header-section,
-    .abm-page--fuerzas .abm-header-section,
-    .abm-page--partes .abm-header-section,
-    .abm-page--dependencias .abm-header-section,
-    .abm-page--deposito .abm-header-section,
-    .abm-page--salidas .abm-header-section {
+    .abm-page--titulo-acciones .abm-header-section {
         flex-direction: column;
         align-items: flex-start;
     }
 
-    .abm-page--ascensos .actions-row,
-    .abm-page--sancionados .actions-row,
-    .abm-page--brigadas .actions-row,
-    .abm-page--fuerzas .actions-row,
-    .abm-page--partes .actions-row,
-    .abm-page--dependencias .actions-row,
-    .abm-page--deposito .actions-row,
-    .abm-page--salidas .actions-row {
+    .abm-page--titulo-acciones .actions-row {
         margin-top: 15px;
         width: 100%;
     }
@@ -3243,17 +2830,6 @@
    scope es la propia clase del wrap. El diseño sale del grupo compartido
    "Modales de formulario", más arriba; acá quedan solo los deltas. */
 
-/* Los modales del depósito NO entran en la regla `.ant-modal-content` del
-   grupo compartido: son anchos y centrados, y el `margin-top: -50px` de aquel
-   grupo (que sí lleva el de dependencias) los sacaría de pantalla. */
-.modal-crear-movimiento .ant-modal-content,
-.modal-deposito .ant-modal-content {
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    border: 2px solid var(--abm-primary-dark);
-    margin-bottom: 0;
-}
-
 /* Delta: el encabezado del depósito no lleva la línea inferior (el de
    dependencias sí, como en Licencias/Ascensos/Sanciones). */
 .modal-crear-movimiento .ant-modal-header,
@@ -3262,15 +2838,6 @@
 }
 
 
-/* Delta: el botón verde de estos modales redondea sus esquinas. `boton-agregar`
-   era una clase GLOBAL del alta/edición de dependencias; acá queda scopeada
-   al wrap. */
-.modal-crear-dependencia .ant-btn-primary,
-.modal-crear-dependencia .boton-agregar,
-.modal-crear-movimiento .ant-btn-primary,
-.modal-deposito .ant-btn-primary {
-    border-radius: var(--abm-radius-sm) !important;
-}
 /* ===== Módulo Comunicaciones ===== */
 /* Los filtros (búsqueda y alta) viven DENTRO del encabezado rojo, mismo
    esquema que Licencias; la tabla va al ras de la card. El encabezado, las
@@ -3317,66 +2884,25 @@
    los modales del módulo Licencias. El diseño sale del grupo compartido
    "Modales de formulario", más arriba; acá quedan el tamaño y los deltas. */
 
-/* NO se fusiona con la regla `.ant-modal-content` del grupo compartido: este
-   modal fija su ancho y NO lleva el `margin-top: -50px`/`margin-bottom: 0` de
-   aquella (va centrado por el .ant-modal-wrap de abajo). */
-.modal-crear-comunicacion .ant-modal-content {
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    border: 2px solid var(--abm-primary-dark);
-    width: 800px !important;
-    max-width: 90vw !important;
-}
-
-.modal-crear-comunicacion .ant-modal-wrap {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+/* El ancho (800) lo declara el Width del <Modal>: fijarlo por CSS sobre
+   .ant-modal-content desplazaba el modal (la caja .ant-modal quedaba en los
+   520 default y el contenido desbordaba hacia la derecha). */
 
 .modal-crear-comunicacion-row {
     margin-bottom: 16px !important;
 }
 
-/* NO se fusiona con el pie del grupo compartido: separa los botones 16px en
-   vez de 12px. OJO: sin `width` explícito — la barra se estira hasta los
-   bordes del modal con los márgenes negativos del grupo compartido, y un
-   `width: 100%` la deja corta a la derecha. */
-.modal-crear-comunicacion-footer {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
+/* Delta sobre el pie estándar: separa los botones 16px en vez de 12px. */
+.modal-crear-comunicacion .modal-footer-abm {
     gap: 16px;
-    margin-top: 18px;
 }
 
-/* NO se fusiona con el botón verde del grupo compartido: redondea las esquinas
-   y no lleva los `margin` de aquella regla. El alta usa un <Button> sin
-   Type="Primary", por eso lleva clase propia. */
-.modal-crear-comunicacion .ant-btn-primary,
-.modal-crear-comunicacion .boton-agregar {
-    background: linear-gradient(135deg, var(--abm-success-color) 0%, var(--abm-success-dark) 100%) !important;
-    border: none !important;
-    color: #fff !important;
-    font-weight: 600;
-    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
-    padding: 0 20px !important;
-    border-radius: var(--abm-radius-sm) !important;
-}
+/* El botón verde (incluido el `boton-agregar` del alta, un <Button> sin
+   Type="Primary") sale entero del estándar: está sumado a la lista base. */
 
 @media (max-width: 767px) {
-    .modal-crear-comunicacion-content {
+    .modal-crear-comunicacion .modal-content-abm {
         padding: 16px;
-    }
-
-    .modal-crear-comunicacion .ant-modal-content {
-        width: 95vw !important;
-        margin: 10px auto !important;
-    }
-
-    .modal-crear-comunicacion .ant-modal-wrap {
-        align-items: flex-start;
-        padding-top: 20px;
     }
 }
 
@@ -3462,37 +2988,22 @@
    compartido "Modales de formulario", más arriba; este módulo es el que más
    deltas tiene, porque su tipografía y sus espacios son más grandes. */
 
-/* NO se fusiona con la regla `.ant-modal-content` del grupo compartido: fija su
-   ancho y NO lleva el `margin-top: -50px`/`margin-bottom: 0` de aquella. */
-.modal-crear-equipo .ant-modal-content {
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    border: 2px solid var(--abm-primary-dark);
-    max-width: 800px;
-    width: 90vw;
-}
+/* El ancho (800) lo declara el Width del <Modal>, no el CSS: ver el
+   comentario en Comunicaciones. */
 
-/* El cuerpo (.modal-crear-equipo-content) toma los 24px del grupo compartido:
-   el pie rojo (sangría de 48px) asume body 24px + content 24px, así que este
-   módulo NO puede llevar un padding distinto sin descolocar la barra. */
+/* El cuerpo (.modal-content-abm) toma los 24px del grupo compartido: el pie
+   rojo (sangría de 48px) asume body 24px + content 24px, así que este módulo
+   NO puede llevar un padding distinto sin descolocar la barra. */
 
 /* Delta: los campos se separan 24px en vez de 20px. */
-.modal-crear-equipo-form-item {
+.modal-crear-equipo .modal-form-item-abm {
     margin-bottom: 24px;
-    position: relative;
-    padding-left: 10px;
 }
 
-/* NO se fusiona con las etiquetas del grupo compartido: 15px en vez de 14px. */
-.modal-crear-equipo-form-item .ant-form-item-label > label,
-.modal-crear-equipo-form-full-width .ant-form-item-label > label {
-    font-weight: 600;
-    color: #434343;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+/* Delta: etiquetas de 15px en vez de 14px. */
+.modal-crear-equipo .modal-form-item-abm .ant-form-item-label > label,
+.modal-crear-equipo .modal-form-full-width-abm .ant-form-item-label > label {
     font-size: 15px;
-    transition: color 0.3s ease;
 }
 
 /* Delta: los campos usan la tipografía grande del módulo. */
@@ -3520,26 +3031,18 @@
     align-items: center !important;
 }
 
-/* NO se fusiona con el pie del grupo compartido: separa 16px en vez de 12px y
-   despega 24px en vez de 18px. */
-.modal-crear-equipo-footer {
-    display: flex;
-    justify-content: flex-end;
+/* Delta sobre el pie estándar: separa 16px en vez de 12px y despega 24px en
+   vez de 18px. */
+.modal-crear-equipo .modal-footer-abm {
     gap: 16px;
     margin-top: 24px;
 }
 
-/* NO se fusiona con el botón verde del grupo compartido: es más grande
-   (padding y tipografía) y no lleva los `margin` de aquella regla. */
+/* Delta sobre el botón verde estándar: más grande (padding y tipografía);
+   el resto (gradiente, color, radio) sale de la base. */
 .modal-crear-equipo .ant-btn-primary {
-    background: linear-gradient(135deg, var(--abm-success-color) 0%, var(--abm-success-dark) 100%) !important;
-    border: none !important;
-    color: #fff !important;
-    font-weight: 600;
-    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
     padding: 0 28px !important;
     font-size: 16px !important;
-    border-radius: var(--abm-radius-sm);
 }
 
 /* Aviso de equipo en prueba hidráulica (alta de movimiento). */
@@ -3561,17 +3064,6 @@
     font-size: 20px;
 }
 
-@media (max-width: 1199px) {
-    .modal-crear-equipo .ant-modal-content {
-        max-width: 98vw;
-    }
-}
-
-@media (max-width: 767px) {
-    .modal-crear-equipo .ant-modal-content {
-        max-width: 100vw;
-    }
-}
 /* ===== Módulo Salidas (listado) ===== */
 /* SalidasABM.razor. El encabezado rojo lleva el título a la izquierda y las
    acciones a la derecha, con la tabla al ras de la card: sale entero del grupo
@@ -5366,26 +4858,15 @@
 
 /* ===== Modales de Pagos (WrapClassName: portal fuera de .abm-page) ===== */
 
-/* Alta de pago (`modal-crear-pago`): el diseño sale del grupo compartido
-   "Modales de formulario", más arriba. Único delta: el botón verde. */
+/* Alta de pago (`modal-crear-pago`): sale entero del grupo compartido, sin
+   deltas (sus FormItem no llevan clase: las etiquetas entran por el wrap,
+   ver el grupo compartido). */
 
-/* NO se fusiona con el botón verde del grupo compartido: no lleva los
-   `margin-top`/`margin-bottom` de aquella regla. */
-.modal-crear-pago .ant-btn-primary {
-    background: linear-gradient(135deg, var(--abm-success-color) 0%, var(--abm-success-dark) 100%) !important;
-    border: none !important;
-    color: #fff !important;
-    font-weight: 600;
-    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
-    padding: 0 20px !important;
-    border-radius: var(--abm-radius-sm);
-}
-
-/* Modal "qué desea imprimir": dos tarjetas grandes (bonos / lista de cobranza). */
+/* Modal "qué desea imprimir": dos tarjetas grandes (bonos / lista de
+   cobranza). Delta: caja más redondeada y sombra más profunda. */
 .modal-imprimir-pago .ant-modal-content {
     border-radius: 14px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
-    border: 2px solid var(--abm-primary-dark);
 }
 
 /* El encabezado y el color del título salen del grupo "Modales de formulario";

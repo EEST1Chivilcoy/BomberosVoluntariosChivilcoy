@@ -10,27 +10,26 @@
       Model="@agregarParteVehiculoViewModel"
       Loading="_isLoading"
       Layout="FormLayout.Vertical"
-      Class="modal-crear-fuerza-form"
       OnFinish="OnFinish">
-    <Row Class="modal-crear-fuerza-row" Gutter="16">
+    <Row Gutter="16">
         <FormItem Label="Nombre"
-                  Class="modal-crear-fuerza-form-item">
+                  Class="modal-form-item-abm">
             <AntDesign.Col Span="24">
                 <Input @bind-Value="@agregarParteVehiculoViewModel.Nombre"
                        AllowClear Size="InputSize.Large" />
             </AntDesign.Col>
         </FormItem>
     </Row>
-    <Row Class="modal-crear-fuerza-row" Gutter="16">
+    <Row Gutter="16">
         <AntDesign.Col Span="24">
             <FormItem Label="Tipo de Parte"
-                      Class="modal-crear-fuerza-form-item">
+                      Class="modal-form-item-abm">
                 <EnumSelect TEnum="CategoriaParteVehiculo ?" @bind-Value="@agregarParteVehiculoViewModel.Categoria" AllowClear Size="InputSize.Large" />
             </FormItem>
         </AntDesign.Col>
     </Row>
 
-    <div class="modal-crear-fuerza-footer">
+    <div class="modal-footer-abm">
         <Button Type="ButtonType.Primary" HtmlType="submit" Disabled="!_form.IsModified">
             Editar Parte del Vehículo
         </Button>
