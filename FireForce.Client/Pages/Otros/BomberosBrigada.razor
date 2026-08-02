@@ -13,22 +13,29 @@
 @* Los estilos viven en wwwroot/css/abm.css. No agregar <style> acá. *@
 
 
+@* Alta inline: elegir bomberos y agregarlos sin abrir otro modal encima. *@
+<div class="agregar-bomberos-row">
+    <Select Mode="SelectMode.Multiple"
+            Placeholder="Elige los bomberos a agregar a la brigada"
+            DataSource="@BomberosCandidatosViewModel"
+            Values="@BomberosSeleccionados"
+            TItem="BomberoViweModel"
+            TItemValue="int"
+            LabelName="@nameof(BomberoViweModel.ApellidoYNombre)"
+            ValueName="@nameof(BomberoViweModel.Id)"
+            EnableSearch="true"
+            ValuesChanged="@(async (values) => await HandleValuesChange(values))" />
+    <Button Type="@ButtonType.Primary" OnClick="@AddBomberoToBrigada" Disabled="@(!BomberosSeleccionados.Any())">
+        <Icon Type="plus" /> Agregar
+    </Button>
+</div>
+
 <Table TItem="BomberoBrigadaViewModel"
 DataSource="@BomberosBrigadaViewModel"
 @bind-PageIndex="_pageIndex"
 @bind-PageSize="_pageSize"
 Title="Bomberos de la Brigada"
 Responsive>
-    <TitleTemplate>
-        <Flex Justify="FlexJustify.FlexEnd">
-            <Space>
-                <Button Type="ButtonType.Primary" OnClick="@(() => _modalAñadirBomberosVisible = true)">
-                    <Icon Type="plus" /> Añadir
-                </Button>
-            </Space>
-        </Flex>
-    </TitleTemplate>
-
     <ColumnDefinitions>
 
         <PropertyColumn Title="N° Legajo" Property="d=>d.NroLeg" Sortable />
@@ -53,20 +60,6 @@ Responsive>
     </ColumnDefinitions>
 </Table>
 
-<Modal @bind-Visible="_modalAñadirBomberosVisible" Title="Añadir Bomberos" OkText="@("Guardar")" CancelText="@("Cancelar")" OnOk="@AddBomberoToBrigada">
-    <Select Mode="SelectMode.Multiple"
-    Placeholder="Elige los bomberos a agregar a la brigada"
-    DataSource="@BomberosCandidatosViewModel"
-    Values="@BomberosSeleccionados"
-    TItem="BomberoViweModel"
-    TItemValue="int"
-    LabelName="@nameof(BomberoViweModel.ApellidoYNombre)"
-    ValueName="@nameof(BomberoViweModel.Id)"
-    EnableSearch="true"
-    ValuesChanged="@(async (values) => await HandleValuesChange(values))" />
-    <p>Seleccionados: @String.Join(", ", BomberosSeleccionados)</p>
-</Modal>
-
 @code {
     [Parameter] public int BrigadaId { get; set; } // ID de la Brigada que se está editando
 
@@ -80,9 +73,6 @@ Responsive>
     // Variables de Tamaño de la Tabla
     int _pageIndex = 1;
     int _pageSize = 5;
-
-    // Modals
-    private bool _modalAñadirBomberosVisible = false;
 
     public class BomberoBrigadaViewModel
     {
@@ -103,50 +93,42 @@ Responsive>
 
     private async Task CargarBomberos()
     {
-        BomberosTodos = await BomberoService.ObtenerTodosLosBomberosAsync();
-        if (BomberosTodos == null)
-        {
-            await MessageService.ErrorAsync("No se encontraron bomberos disponibles.");
-            return;
-        }
-
-        BomberosTodosViewModel = BomberosTodos.ToBomberoViewModelList();
-        if (BomberosTodosViewModel == null)
-            BomberosTodosViewModel = new List<BomberoViweModel>();
+        BomberosTodos = await BomberoService.ObtenerTodosLosBomberosAsync() ?? new();
+        BomberosTodosViewModel = BomberosTodos.ToBomberoViewModelList() ?? new List<BomberoViweModel>();
     }
 
     private async Task CargarBrigada()
     {
         if (BrigadaId <= 0)
         {
-            await MessageService.ErrorAsync("El ID de la Brigada es inválido.");
+            MessageService.Error("El ID de la Brigada es inválido.");
             return;
         }
 
         var brigada = await BrigadaService.ObtenerBrigadaPorIdAsync(BrigadaId);
         if (brigada == null)
         {
-            await MessageService.ErrorAsync("La Brigada no existe.");
+            MessageService.Error("La Brigada no existe.");
             return;
         }
 
         BrigadaBomberos = await BrigadaService.ObtenerBomberosDeBrigadaAsync(BrigadaId);
-        var bomberosActuales = BrigadaBomberos.Where(b => b != null).Select(b => b.NumeroLegajo);
+        var bomberosActuales = BrigadaBomberos.Where(b => b != null).Select(b => b!.NumeroLegajo).ToList();
+        // Candidatos: todos menos el encargado y los que ya están en la
+        // brigada (los sin legajo quedan afuera: no se pueden comparar).
         BomberosCandidatosViewModel = BomberosTodosViewModel
-        .Where(b => b.NumeroLegajo != brigada.Encargado?.NumeroLegajo && !bomberosActuales.Contains(b.NumeroLegajo.Value))
+        .Where(b => b != null && b.NumeroLegajo.HasValue
+                    && b.NumeroLegajo != brigada.Encargado?.NumeroLegajo
+                    && !bomberosActuales.Contains(b.NumeroLegajo.Value))
+        .Select(b => b!)
         .ToList();
 
         BomberosBrigadaViewModel = BrigadaBomberos.Where(b => b != null).Select(b => new BomberoBrigadaViewModel
         {
-            Id = b.PersonaId,
+            Id = b!.PersonaId,
             NroLeg = b.NumeroLegajo,
             ApellidoYNombre = $"{b.Apellido}, {b.Nombre}"
         }).ToList();
-        if (!BomberosBrigadaViewModel.Any() && BrigadaBomberos.Any())
-        {
-            await MessageService.ErrorAsync("Error al mapear los bomberos de la Brigada a ViewModel.");
-            return;
-        }
 
         BomberosSeleccionados = new();
         StateHasChanged();
@@ -155,24 +137,41 @@ Responsive>
     private async Task AddBomberoToBrigada()
     {
         if (!BomberosSeleccionados.Any())
-        {
-            _modalAñadirBomberosVisible = false;
             return;
-        }
 
-        foreach (int BomberoSelId in BomberosSeleccionados.Where(id => id > 0))
+        int agregados = 0;
+        try
         {
-            await BrigadaService.AgregarBomberoABrigadaAsync(BrigadaId, BomberoSelId);
+            foreach (int BomberoSelId in BomberosSeleccionados.Where(id => id > 0))
+            {
+                await BrigadaService.AgregarBomberoABrigadaAsync(BrigadaId, BomberoSelId);
+                agregados++;
+            }
+        }
+        catch (Exception ex)
+        {
+            // Sin este catch, la excepción del servicio (p. ej. "El bombero
+            // ya pertenece a la Brigada") tumbaba el circuito de Blazor.
+            MessageService.Error(ex.Message);
         }
 
-        await MessageService.SuccessAsync($"Se añadieron {BomberosSeleccionados.Count} Bomberos a la Brigada");
-        _modalAñadirBomberosVisible = false;
         await CargarBrigada();
+        if (agregados > 0)
+            MessageService.Success($"Se añadieron {agregados} bomberos a la brigada.");
     }
 
     private async Task QuitarBomberoBrigada(int BomberoId, int BrigadaId)
     {
-        await BrigadaService.QuitarBomberoDeBrigadaAsync(BrigadaId, BomberoId);
+        try
+        {
+            await BrigadaService.QuitarBomberoDeBrigadaAsync(BrigadaId, BomberoId);
+        }
+        catch (Exception ex)
+        {
+            MessageService.Error(ex.Message);
+            return;
+        }
+
         await CargarBrigada();
     }
 

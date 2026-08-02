@@ -35,7 +35,12 @@ namespace FireForce.Client.Services
 
         public async Task<Dependencia?> ObtenerDependenciaPorIdAsync(int id)
         {
-            return await _context.Dependencias.FindAsync(id);
+            // Con Include: los llamadores leen el Encargado (edición de la
+            // dependencia). FindAsync solo lo traía si el contexto ya lo
+            // tenía trackeado.
+            return await _context.Dependencias
+                .Include(d => d.Encargado)
+                .FirstOrDefaultAsync(d => d.DependenciaId == id);
         }
 
         public async Task AgregarDependenciaAsync(Dependencia dependencia)

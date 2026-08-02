@@ -223,66 +223,31 @@
 
     protected override async Task OnInitializedAsync()
     {
-        // Validamos si el servicio de Bombero está disponible.
-        if (BomberoService == null)
-        {
-            MessageService.Error("El servicio de Bombero no está disponible. Por favor, intente nuevamente más tarde.");
-            return;
-        }
-
-        bomberosTodos = await BomberoService.ObtenerTodosLosBomberosAsync(); // Obtiene todos los Bomberos.
-
-        // Verifica si la lista de bomberos está vacía.
-        if (bomberosTodos == null || bomberosTodos.Count == 0)
-        {
-            MessageService.Error("No se encontraron bomberos disponibles.");
-            return;
-        }
-
-        bomberosTodosViewModel = bomberosTodos.ToBomberoViewModelList(); // Convierte la lista de Bomberos a ViewModel.
-
-        // Verifica si la lista de Bomberos a ViewModel.
-        if (bomberosTodosViewModel == null || bomberosTodosViewModel.Count == 0)
-        {
-            bomberosTodosViewModel = new List<BomberoViweModel>();
-        }
-
-        // Obtiene todas las dependencias.
-        Dependencias = await DependenciaService.ObtenerTodasLasDependenciasAsync();
-
-        // Verifica si la lista de dependencias está vacía. (Si no hay dependencias, muestra un mensaje de advertencia).
-        if (Dependencias == null || Dependencias.Count == 0)
-        {
-            return;
-        }
-
-        // Mapea las dependencias a ViewModel.
-        DependenciaViewModels = await MapearDependenciasAsync(Dependencias);
-
-        // Verifica si la lista de dependencias mapeadas está vacía. Pero tambien verifica si la lista de dependencias es nula o tiene elementos. Para determinar que es un error de mapeo.
-        if (DependenciaViewModels == null || DependenciaViewModels.Count == 0)
-        {
-            MessageService.Error("Error al mapear las dependencias. Por favor, intente nuevamente más tarde.");
-            return;
-        }
-
-        // Si todo está bien, actualiza el estado del componente.
-        StateHasChanged();
+        bomberosTodos = await BomberoService.ObtenerTodosLosBomberosAsync() ?? new();
+        bomberosTodosViewModel = bomberosTodos.ToBomberoViewModelList() ?? new List<BomberoViweModel>();
+        await CargarDependencias();
     }
 
-    public async Task<List<DependenciaViewModelTable>> MapearDependenciasAsync(List<Dependencia> dependencias)
+    private async Task CargarDependencias()
     {
-        return await Task.Run(() => dependencias.Select(d => new DependenciaViewModelTable
+        Dependencias = await DependenciaService.ObtenerTodasLasDependenciasAsync() ?? new();
+
+        // Reconstruir SIEMPRE el listado mapeado (si se corta antes, la tabla
+        // retiene filas viejas al borrar la última dependencia). Una base sin
+        // dependencias es un estado normal: la tabla muestra "No hay datos".
+        DependenciaViewModels = Dependencias.Select(d => new DependenciaViewModelTable
         {
             Id = d.DependenciaId,
             Nombre = d.NombreDependencia,
-            EncargadoApellidoYNombre = $"{d.Encargado.Apellido}, {d.Encargado.Nombre}"
-        }).ToList());
+            EncargadoApellidoYNombre = d.Encargado != null
+                ? $"{d.Encargado.Apellido}, {d.Encargado.Nombre}"
+                : "Sin Encargado"
+        }).ToList();
     }
 
     private async Task AddDependencia()
     {
-        if (newDependencia.Encargado == null)
+        if (newDependencia.Encargado?.NumeroLegajo is not int legajo)
         {
             MessageService.Error("No se ha seleccionado un encargado. Por favor, elija un encargado antes de continuar.");
             return;
@@ -294,30 +259,38 @@
             return;
         }
 
-        Bombero BomberoEncargado = await BomberoService.ObtenerBomberoObjetoPorLegajoAsync(newDependencia.Encargado.NumeroLegajo.Value);
-
-        if (BomberoEncargado == null)
+        try
         {
-            MessageService.Error("El encargado seleccionado no es válido.");
+            Bombero BomberoEncargado = await BomberoService.ObtenerBomberoObjetoPorLegajoAsync(legajo);
+            if (BomberoEncargado == null)
+            {
+                MessageService.Error("El encargado seleccionado no es válido.");
+                return;
+            }
+
+            var dependencia = new Dependencia
+            {
+                NombreDependencia = newDependencia.Nombre,
+                Encargado = BomberoEncargado
+            };
+
+            await DependenciaService.AgregarDependenciaAsync(dependencia);
+        }
+        catch (Exception ex)
+        {
+            MessageService.Error($"No se pudo guardar la dependencia: {ex.Message}");
             return;
         }
 
-        var dependencia = new Dependencia
-        {
-            NombreDependencia = newDependencia.Nombre,
-            Encargado = BomberoEncargado
-        };
-
-        await DependenciaService.AgregarDependenciaAsync(dependencia);
         newDependencia = new DependenciaViewModelTable();
         _modalAgregarVisible = false;
+        await CargarDependencias();
         MessageService.Success("Dependencia añadida correctamente.");
-        await OnInitializedAsync();        
     }
 
     private async Task EditDependencia()
     {
-        if (selDependencia.Encargado == null)
+        if (selDependencia.Encargado?.NumeroLegajo is not int legajo)
         {
             MessageService.Error("No se ha seleccionado un encargado. Por favor, elija un encargado antes de continuar.");
             return;
@@ -335,28 +308,36 @@
             return;
         }
 
-        var BomberoEncargado = await BomberoService.ObtenerBomberoObjetoPorLegajoAsync(selDependencia.Encargado.NumeroLegajo.Value);
-
-        if (BomberoEncargado == null)
+        try
         {
-            MessageService.Error("El encargado seleccionado no es válido.");
+            var BomberoEncargado = await BomberoService.ObtenerBomberoObjetoPorLegajoAsync(legajo);
+            if (BomberoEncargado == null)
+            {
+                MessageService.Error("El encargado seleccionado no es válido.");
+                return;
+            }
+
+            var dependencia = new Dependencia
+            {
+                DependenciaId = selDependencia.Id,
+                NombreDependencia = selDependencia.Nombre,
+                Encargado = BomberoEncargado
+            };
+
+            await DependenciaService.EditarDependenciaAsync(dependencia);
+        }
+        catch (Exception ex)
+        {
+            MessageService.Error($"No se pudo editar la dependencia: {ex.Message}");
             return;
         }
 
-        var dependencia = new Dependencia
-        {
-            DependenciaId = selDependencia.Id,
-            NombreDependencia = selDependencia.Nombre,
-            Encargado = BomberoEncargado
-        };
-
-        await DependenciaService.EditarDependenciaAsync(dependencia);
         _modalEditarVisible = false;
+        await CargarDependencias();
         MessageService.Success("Dependencia editada correctamente.");
-        await OnInitializedAsync();        
     }
 
-    private async Task VerAñadirDependencia()
+    private void VerAñadirDependencia()
     {
         if (bomberosTodos.Count == 0)
         {
@@ -384,7 +365,7 @@
             return;
         }
 
-        var encargado = bomberosTodosViewModel.FirstOrDefault(b => b.NumeroLegajo == Dependencia.Encargado.NumeroLegajo);
+        var encargado = bomberosTodosViewModel.FirstOrDefault(b => b.NumeroLegajo == Dependencia.Encargado?.NumeroLegajo);
 
         if (encargado == null)
         {
@@ -417,10 +398,18 @@
 
     private async Task BorrarDependencia(int id)
     {
-        DependenciaViewModels = DependenciaViewModels.Where(d => d.Id != id).ToList();
-        await DependenciaService.EliminarDependenciaAsync(id);
+        try
+        {
+            await DependenciaService.EliminarDependenciaAsync(id);
+        }
+        catch (Exception ex)
+        {
+            MessageService.Error($"No se pudo eliminar la dependencia: {ex.Message}");
+            return;
+        }
+
+        await CargarDependencias();
         MessageService.Success("Dependencia eliminada correctamente.");
-        await OnInitializedAsync();        
     }
 
     private void CerrarAgregar()

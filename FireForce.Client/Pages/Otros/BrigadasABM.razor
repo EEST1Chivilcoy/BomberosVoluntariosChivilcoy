@@ -173,8 +173,16 @@
     </div>
 </Modal>
 
-<Modal @bind-Visible="_modalDetallesVisible" Title="@TitleBrigadaSel" Maximizable="@true" Centered="@true">
-    <BomberosBrigada BrigadaId="@IdBrigadaSel"></BomberosBrigada>
+<Modal @bind-Visible="_modalDetallesVisible"
+       Title="@TitleBrigadaSel"
+       Footer="null"
+       Maximizable="@true"
+       Centered
+       Width="800"
+       WrapClassName="modal-abm modal-crear-brigada">
+    <div class="modal-content-abm">
+        <BomberosBrigada BrigadaId="@IdBrigadaSel"></BomberosBrigada>
+    </div>
 </Modal>
 
 @code {
@@ -215,26 +223,18 @@
     }
     private async Task CargarBomberos()
     {
-        bomberosTodos = await BomberoService.ObtenerTodosLosBomberosAsync();
-        if (bomberosTodos == null)
-        {
-            await MessageService.ErrorAsync("No se encontraron bomberos disponibles.");
-            return;
-        }
-
-        bomberosTodosViewModel = bomberosTodos.ToBomberoViewModelList();
-        if (bomberosTodosViewModel == null)
-            bomberosTodosViewModel = new List<BomberoViweModel>();
+        bomberosTodos = await BomberoService.ObtenerTodosLosBomberosAsync() ?? new();
+        bomberosTodosViewModel = bomberosTodos.ToBomberoViewModelList() ?? new List<BomberoViweModel>();
     }
+
     private async Task CargarBrigadas()
     {
-        Brigadas = await BrigadaService.ObtenerTodasLasBrigadasAsync();
-        if (Brigadas == null || Brigadas.Count == 0)
-        {
-            await MessageService.WarningAsync("No se encontraron brigadas disponibles en la base de datos.");
-            return;
-        }
+        Brigadas = await BrigadaService.ObtenerTodasLasBrigadasAsync() ?? new();
 
+        // Reconstruir SIEMPRE el listado mapeado: si se corta antes (como
+        // pasaba al borrar la última brigada), la tabla retiene filas viejas.
+        // Una base sin brigadas es un estado normal, no un warning: la tabla
+        // ya muestra "No hay datos".
         BrigadaViewModels = Brigadas.Select(b => new BrigadaViewModelTable
         {
             Id = b.BrigadaId,
@@ -243,17 +243,12 @@
                 ? $"{b.Encargado.Apellido}, {b.Encargado.Nombre}"
                 : "Sin Encargado"
         }).ToList();
-        if (BrigadaViewModels == null || BrigadaViewModels.Count == 0 && Brigadas.Count > 0)
-        {
-            await MessageService.ErrorAsync("Error al mapear las brigadas. Por favor, intente nuevamente más tarde.");
-            return;
-        }
     }
-    private async Task ViewAddBrigade()
+    private void ViewAddBrigade()
     {
         if (bomberosTodos.Count == 0)
         {
-            await MessageService.ErrorAsync("No hay bomberos disponibles para asignar como encargado.");
+            MessageService.Error("No hay bomberos disponibles para asignar como encargado.");
             return;
         }
 
@@ -263,56 +258,65 @@
 
     private async Task AddBrigade()
     {
-        if (newBrigada.Encargado == null)
+        if (newBrigada.Encargado?.NumeroLegajo is not int legajo)
         {
-            await MessageService.ErrorAsync("El encargado de la brigada no puede estar vacío.");
+            MessageService.Error("El encargado de la brigada no puede estar vacío.");
             return;
         }
         if (string.IsNullOrWhiteSpace(newBrigada.Nombre))
         {
-            await MessageService.ErrorAsync("El nombre de la brigada no puede estar vacío.");
+            MessageService.Error("El nombre de la brigada no puede estar vacío.");
             return;
         }
 
-        Bombero BomberoEncargado = await BomberoService.ObtenerBomberoObjetoPorLegajoAsync(newBrigada.Encargado.NumeroLegajo.Value);
-        if (BomberoEncargado == null)
+        try
         {
-            await MessageService.ErrorAsync("El encargado seleccionado no es válido.");
+            Bombero BomberoEncargado = await BomberoService.ObtenerBomberoObjetoPorLegajoAsync(legajo);
+            if (BomberoEncargado == null)
+            {
+                MessageService.Error("El encargado seleccionado no es válido.");
+                return;
+            }
+
+            var brigada = new Brigada
+            {
+                NombreBrigada = newBrigada.Nombre,
+                Encargado = BomberoEncargado
+            };
+
+            await BrigadaService.AgregarBrigadaAsync(brigada);
+        }
+        catch (Exception ex)
+        {
+            MessageService.Error($"No se pudo guardar la brigada: {ex.Message}");
             return;
         }
 
-        var brigada = new Brigada
-        {
-            NombreBrigada = newBrigada.Nombre,
-            Encargado = BomberoEncargado
-        };
-
-        await BrigadaService.AgregarBrigadaAsync(brigada);
         newBrigada = new BrigadaViewModelTable();
         _modalAñadirVisible = false;
         await CargarBrigadas();
-        await MessageService.SuccessAsync("Brigada añadida correctamente.");
+        MessageService.Success("Brigada añadida correctamente.");
     }
 
     private async Task ViewEditBrigade(int id)
     {
         if (id <= 0)
         {
-            await MessageService.ErrorAsync("ID inválido. Por favor, proporcione un ID válido.");
+            MessageService.Error("ID inválido. Por favor, proporcione un ID válido.");
             return;
         }
 
         var brigada = await BrigadaService.ObtenerBrigadaPorIdAsync(id);
         if (brigada == null)
         {
-            await MessageService.ErrorAsync("Error al intentar editar la brigada: No se encontró.");
+            MessageService.Error("Error al intentar editar la brigada: No se encontró.");
             return;
         }
 
-        var encargado = bomberosTodosViewModel.FirstOrDefault(b => b.NumeroLegajo == brigada.Encargado.NumeroLegajo);
+        var encargado = bomberosTodosViewModel.FirstOrDefault(b => b.NumeroLegajo == brigada.Encargado?.NumeroLegajo);
         if (encargado == null)
         {
-            await MessageService.ErrorAsync("Error al intentar editar la dependencia: No se encontró un encargado válido.");
+            MessageService.Error("Error al intentar editar la brigada: No se encontró un encargado válido.");
             return;
         }
 
@@ -328,40 +332,49 @@
 
     private async Task EditBrigade()
     {
-        if (selBrigada.Encargado == null)
+        if (selBrigada.Encargado?.NumeroLegajo is not int legajo)
         {
-            await MessageService.ErrorAsync("El encargado de la brigada no puede estar vacío.");
+            MessageService.Error("El encargado de la brigada no puede estar vacío.");
             return;
         }
         if (string.IsNullOrWhiteSpace(selBrigada.Nombre))
         {
-            await MessageService.ErrorAsync("El nombre de la brigada no puede estar vacío.");
+            MessageService.Error("El nombre de la brigada no puede estar vacío.");
             return;
         }
         if (selBrigada.Id <= 0)
         {
-            await MessageService.ErrorAsync("ID inválido. Por favor, proporcione un ID válido.");
+            MessageService.Error("ID inválido. Por favor, proporcione un ID válido.");
             return;
         }
 
-        var BomberoEncargado = await BomberoService.ObtenerBomberoObjetoPorLegajoAsync(selBrigada.Encargado.NumeroLegajo.Value);
-        if (BomberoEncargado == null)
+        try
         {
-            await MessageService.ErrorAsync("El encargado seleccionado no es válido.");
+            var BomberoEncargado = await BomberoService.ObtenerBomberoObjetoPorLegajoAsync(legajo);
+            if (BomberoEncargado == null)
+            {
+                MessageService.Error("El encargado seleccionado no es válido.");
+                return;
+            }
+
+            var brigada = new Brigada
+            {
+                BrigadaId = selBrigada.Id,
+                NombreBrigada = selBrigada.Nombre,
+                Encargado = BomberoEncargado
+            };
+
+            await BrigadaService.EditarBrigadaAsync(brigada);
+        }
+        catch (Exception ex)
+        {
+            MessageService.Error($"No se pudo editar la brigada: {ex.Message}");
             return;
         }
 
-        var brigada = new Brigada
-        {
-            BrigadaId = selBrigada.Id,
-            NombreBrigada = selBrigada.Nombre,
-            Encargado = BomberoEncargado
-        };
-
-        await BrigadaService.EditarBrigadaAsync(brigada);
         _modalEditarVisible = false;
         await CargarBrigadas();
-        await MessageService.SuccessAsync("Brigada editada correctamente.");
+        MessageService.Success("Brigada editada correctamente.");
     }
 
     private async Task ViewBrigadeDetails(int id)
@@ -369,7 +382,7 @@
         var brigada = await BrigadaService.ObtenerBrigadaPorIdAsync(id);
         if (brigada == null)
         {
-            await MessageService.ErrorAsync("Error al abrir la brigada: No se encontró.");
+            MessageService.Error("Error al abrir la brigada: No se encontró.");
             return;
         }
 
@@ -380,8 +393,17 @@
 
     private async Task DeleteBrigade(int id)
     {
-        await BrigadaService.EliminarBrigadaAsync(id);
+        try
+        {
+            await BrigadaService.EliminarBrigadaAsync(id);
+        }
+        catch (Exception ex)
+        {
+            MessageService.Error($"No se pudo eliminar la brigada: {ex.Message}");
+            return;
+        }
+
         await CargarBrigadas();
-        await MessageService.SuccessAsync("Brigada eliminada con éxito.");
+        MessageService.Success("Brigada eliminada con éxito.");
     }
 }

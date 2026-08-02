@@ -35,7 +35,12 @@ namespace FireForce.Client.Services
 
         public async Task<Brigada?> ObtenerBrigadaPorIdAsync(int id)
         {
-            return await _context.Brigadas.FindAsync(id);
+            // Con Include: los llamadores leen el Encargado (edición de la
+            // brigada y filtro de candidatos en BomberosBrigada). FindAsync
+            // solo lo traía si el contexto ya lo tenía trackeado.
+            return await _context.Brigadas
+                .Include(b => b.Encargado)
+                .FirstOrDefaultAsync(b => b.BrigadaId == id);
         }
 
         public async Task AgregarBrigadaAsync(Brigada brigada)

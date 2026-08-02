@@ -759,6 +759,47 @@
     transform: scale(1.1);
 }
 
+/* Botón de maximizar (modales con Maximizable, p. ej. integrantes de una
+   brigada): mismo círculo blanco que la X, a su izquierda. Ant lo posiciona
+   absoluto dentro del header (54px y gris oscuro, invisible sobre la barra
+   roja). */
+.modal-abm .ant-modal-max-btn {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    top: 9px;
+    right: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.modal-abm .ant-modal-max-btn .ant-modal-max-btn-x {
+    width: 36px;
+    height: 36px;
+    line-height: 36px;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+}
+
+.modal-abm .ant-modal-max-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+/* Con botón de maximizar el título necesita más aire a la derecha. */
+.modal-abm .ant-modal-header:has(.ant-modal-max-btn) {
+    padding-right: 116px;
+}
+
 .modal-abm .ant-modal-header {
     background-color: var(--abm-primary-color);
     padding: 16px 72px 16px 24px; /* espacio a la derecha para la X */
@@ -1089,6 +1130,23 @@
     background: #e6f7ff !important;
     border-color: #1890ff !important;
     color: #1890ff !important;
+}
+
+/* ===== Alta inline de bomberos (Brigadas y Dependencias) ===== */
+/* Los modales de integrantes agregan bomberos inline (selector + botón arriba
+   de la tabla), sin abrir otro modal encima. */
+.modal-crear-brigada .agregar-bomberos-row,
+.modal-crear-dependencia .agregar-bomberos-row {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+.modal-crear-brigada .agregar-bomberos-row .ant-select,
+.modal-crear-dependencia .agregar-bomberos-row .ant-select {
+    flex: 1;
+    min-width: 0;
 }
 
 /* ===== Esquema de encabezado "título + acciones" (grupo compartido) ===== */
