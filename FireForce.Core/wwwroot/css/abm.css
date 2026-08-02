@@ -698,8 +698,8 @@
          </div>
      </Modal>
    El pie rojo asume body 24px + .modal-content-abm 24px (sangría 48, ver
-   --modal-pie-sangria más abajo). Los seis modales viejos con pie NATIVO de
-   Ant (OkText/OnOk) son la excepción transitoria, no el modelo a copiar.
+   --modal-pie-sangria más abajo). Ningún modal del grupo usa el pie nativo
+   de Ant (OkText/OnOk): siempre Footer="null" + submit dentro del Form.
 
    Quedan FUERA a propósito: los fullscreen (`.fullscreen-modal`, su propio
    grupo más abajo), Cobranza (`modal-pago`/`modal-direccion` solo comparten la
@@ -922,22 +922,6 @@
 /* Sin div -content: una sola capa de padding (el body). */
 .modal-incidente {
     --modal-pie-sangria: 24px;
-}
-
-/* Modales que usan el pie NATIVO de Ant (OkText/OnOk en vez de Footer="null"):
-   misma barra roja, y su botón Cancelar integrado se oculta. El resto de los
-   .modal-abm va con Footer="null", así que estas reglas no los alcanzan. */
-.modal-abm .ant-modal-footer {
-    background: var(--abm-primary-color);
-    border-top: none;
-    padding: 10px 20px;
-    border-radius: 0 0 10px 10px;
-}
-
-/* OJO: descendiente, no hijo directo — AntD Blazor envuelve los botones del
-   pie nativo en un <div>, así que `> .ant-btn` no matchea nunca. */
-.modal-abm .ant-modal-footer .ant-btn:not(.ant-btn-primary) {
-    display: none;
 }
 
 /* Mensaje de validación del grado (modal de Ascensos). #ff4d4f es el rojo de

@@ -213,13 +213,11 @@
 <Modal Title="Datos de la Carga de Combustible"
        Visible="@_visible"
        OnCancel="@HandleCancelMovil"
-       OkText="@("Cargar Móvil")"
-       OnOk="@AgregarMovilSalida"
-       CancelText="@("Cancelar")"
+       Footer="null"
        Centered
        WrapClassName="modal-abm modal-vehiculo">
     <div class="modal-content-abm">
-        <Form Model="@movilSalidaView" Layout="FormLayout.Vertical">
+        <Form Model="@movilSalidaView" Layout="FormLayout.Vertical" OnFinish="AgregarMovilSalida">
             <div class="section-header">
                 <Icon Type="fire" Class="section-icon" />
                 <h5>Información del Combustible</h5>
@@ -273,6 +271,11 @@
                     </FormItem>
                 </AntDesign.Col>
             </Row>
+            <div class="modal-footer-abm">
+                <Button Type="@ButtonType.Primary" HtmlType="submit" Size="ButtonSize.Large">
+                    Cargar Móvil
+                </Button>
+            </div>
         </Form>
     </div>
 </Modal>

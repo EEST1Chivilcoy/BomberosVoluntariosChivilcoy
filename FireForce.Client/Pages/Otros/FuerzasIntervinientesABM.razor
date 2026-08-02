@@ -85,14 +85,12 @@
        Title="Añadir Fuerza"
        Width="@("100%")"
        Style="max-width: 800px;"
-       OkText="@("Guardar")"
-       CancelText="@("Cancelar")"
-       OnOk="@AddFuerza"
+       Footer="null"
        DestroyOnClose
        Centered
        WrapClassName="modal-abm modal-crear-fuerza">
     <div class="modal-content-abm">
-        <Form Model="nuevaFuerza" Layout="FormLayout.Vertical">
+        <Form Model="nuevaFuerza" Layout="FormLayout.Vertical" OnFinish="AddFuerza">
             <Row Gutter="16">
                 <AntDesign.Col Span="24">
                     <FormItem Label="🏢 Nombre" Required Class="modal-form-item-abm">
@@ -100,6 +98,11 @@
                     </FormItem>
                 </AntDesign.Col>
             </Row>
+            <div class="modal-footer-abm">
+                <Button Type="@ButtonType.Primary" HtmlType="submit" Size="ButtonSize.Large">
+                    Guardar
+                </Button>
+            </div>
         </Form>
     </div>
 </Modal>

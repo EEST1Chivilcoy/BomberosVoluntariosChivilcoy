@@ -96,14 +96,12 @@
        Title="Añadir Brigada"
        Width="@("100%")"
        Style="max-width: 800px;"
-       OkText="@("Guardar")"
-       CancelText="@("Cancelar")"
-       OnOk="@AddBrigade"
+       Footer="null"
        DestroyOnClose
        Centered
        WrapClassName="modal-abm modal-crear-brigada">
     <div class="modal-content-abm">
-        <Form Model="newBrigada" Layout="FormLayout.Vertical">
+        <Form Model="newBrigada" Layout="FormLayout.Vertical" OnFinish="AddBrigade">
             <Row Gutter="16">
                 <AntDesign.Col Span="16">
                     <FormItem Label="Nombre" Required Class="modal-form-item-abm">
@@ -125,6 +123,11 @@
                     </FormItem>
                 </AntDesign.Col>
             </Row>
+            <div class="modal-footer-abm">
+                <Button Type="@ButtonType.Primary" HtmlType="submit" Size="ButtonSize.Large">
+                    Guardar
+                </Button>
+            </div>
         </Form>
     </div>
 </Modal>
@@ -134,14 +137,12 @@
        Title="Editar Brigada"
        Width="@("100%")"
        Style="max-width: 800px;"
-       OkText="@("Editar")"
-       CancelText="@("Cancelar")"
-       OnOk="@EditBrigade"
+       Footer="null"
        DestroyOnClose
        Centered
        WrapClassName="modal-abm modal-crear-brigada">
     <div class="modal-content-abm">
-        <Form Model="selBrigada" Layout="FormLayout.Vertical">
+        <Form Model="selBrigada" Layout="FormLayout.Vertical" OnFinish="EditBrigade">
             <Row Gutter="16">
                 <AntDesign.Col Span="16">
                     <FormItem Label="Nombre" Required Class="modal-form-item-abm">
@@ -163,8 +164,12 @@
                     </FormItem>
                 </AntDesign.Col>
             </Row>
+            <div class="modal-footer-abm">
+                <Button Type="@ButtonType.Primary" HtmlType="submit" Size="ButtonSize.Large">
+                    Editar
+                </Button>
+            </div>
         </Form>
-
     </div>
 </Modal>
 

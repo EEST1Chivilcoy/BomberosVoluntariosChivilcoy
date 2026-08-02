@@ -84,14 +84,12 @@
        Title="Crear Salida"
        Width="@("100%")"
        Style="max-width: 800px;"
-       OkText="@("Crear")"
-       CancelText="@("Cancelar")"
-       OnOk="@AddSalida"
+       Footer="null"
        DestroyOnClose
        Centered
        WrapClassName="modal-abm modal-crear-salidas">
     <div class="modal-content-abm">
-        <Form Model="newSalida" Layout="FormLayout.Vertical">
+        <Form Model="newSalida" Layout="FormLayout.Vertical" OnFinish="AddSalida">
             <Row Gutter="16">
                 <AntDesign.Col Span="12">
                     <FormItem Label="🔢 Nº Parte" Required Class="modal-form-item-abm">
@@ -141,6 +139,11 @@
                     }
                 </AntDesign.Col>
             </Row>
+            <div class="modal-footer-abm">
+                <Button Type="@ButtonType.Primary" HtmlType="submit" Size="ButtonSize.Large">
+                    Crear
+                </Button>
+            </div>
         </Form>
     </div>
 </Modal>

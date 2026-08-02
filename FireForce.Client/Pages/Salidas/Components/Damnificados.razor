@@ -55,14 +55,12 @@
 
             <Modal @bind-Visible="modalDamnificados"
                    Title="@(editandoDamnificado ? "Editar damnificado" : "Datos del damnificado")"
-                   OkText="@(editandoDamnificado ? "Editar" : "Agregar")"
-                   CancelText="@("Cancelar")"
-                   OnOk="@AgregarEditarDamnificado"
+                   Footer="null"
                    OnCancel="@(() => {editandoDamnificado = false; Damnificado = new();})"
                    Centered
                    WrapClassName="modal-abm modal-damnificado">
                 <div class="modal-content-abm">
-                    <Form Model="Damnificado" Layout="FormLayout.Vertical">
+                    <Form Model="Damnificado" Layout="FormLayout.Vertical" OnFinish="AgregarEditarDamnificado">
                         <Row Gutter="16">
                             <AntDesign.Col Span="8">
                                 <FormItem Label="Nombre" Class="modal-form-item-abm">
@@ -131,6 +129,11 @@
                                 </FormItem>
                             </AntDesign.Col>
                         </Row>
+                        <div class="modal-footer-abm">
+                            <Button Type="@ButtonType.Primary" HtmlType="submit" Size="ButtonSize.Large">
+                                @(editandoDamnificado ? "Editar" : "Agregar")
+                            </Button>
+                        </div>
                     </Form>
                 </div>
             </Modal>
@@ -184,14 +187,12 @@
 
             <Modal @bind-Visible="modalVehiculo"
                    Title="@(editandoVehiculo ? "Editar vehiculo" : "Datos del vehiculo")"
-                   OkText="@(editandoVehiculo ? "Editar" : "Agregar")"
-                   CancelText="@("Cancelar")"
-                   OnOk="@AgregarEditarVehiculo"
+                   Footer="null"
                    OnCancel="@(() => {editandoVehiculo = false; Vehiculo = new();})"
                    Centered
                    WrapClassName="modal-abm modal-damnificado">
                 <div class="modal-content-abm">
-                    <Form Model="Vehiculo" Layout="FormLayout.Vertical">
+                    <Form Model="Vehiculo" Layout="FormLayout.Vertical" OnFinish="AgregarEditarVehiculo">
                         <Row Gutter="16">
                             <AntDesign.Col Span="8">
                                 <FormItem Label="Marca" Class="modal-form-item-abm">
@@ -307,6 +308,11 @@
                                 </AntDesign.Col>
                             </Row>
                         }
+                        <div class="modal-footer-abm">
+                            <Button Type="@ButtonType.Primary" HtmlType="submit" Size="ButtonSize.Large">
+                                @(editandoVehiculo ? "Editar" : "Agregar")
+                            </Button>
+                        </div>
                     </Form>
                 </div>
             </Modal>
@@ -343,13 +349,13 @@
     </Tabs>
     <Modal @bind-Visible="modalAnimal"
            Title="@(editandoAnimal ? "Editar Animal" : "Datos del Animal")"
-           OnOk="AgregarEditarAnimal"
+           Footer="null"
            OnCancel="@(() => modalAnimal = false)"
            Centered
            WrapClassName="modal-abm modal-damnificado"
            Width="700">
         <div class="modal-content-abm">
-            <Form Model="Animal" Layout="FormLayout.Vertical">
+            <Form Model="Animal" Layout="FormLayout.Vertical" OnFinish="AgregarEditarAnimal">
                 <Row Gutter="16">
                     <AntDesign.Col Span="12">
                         <FormItem Label="Tipo" Class="modal-form-item-abm">
@@ -416,6 +422,11 @@
                         </FormItem>
                     </AntDesign.Col>
                 </Row>
+                <div class="modal-footer-abm">
+                    <Button Type="@ButtonType.Primary" HtmlType="submit" Size="ButtonSize.Large">
+                        @(editandoAnimal ? "Editar" : "Agregar")
+                    </Button>
+                </div>
             </Form>
         </div>
     </Modal>

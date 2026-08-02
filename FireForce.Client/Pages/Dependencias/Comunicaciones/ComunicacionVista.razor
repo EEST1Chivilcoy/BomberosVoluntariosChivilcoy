@@ -180,7 +180,7 @@
 
 <Modal Title="@("Editar Comunicación")"
        Visible="@_visible"
-       OnOk="@HandleOk"
+       Footer="null"
        OnCancel="@HandleCancel"
        Width="800"
        Centered
@@ -271,6 +271,11 @@
                     </Row>
                 }
             }
+            <div class="modal-footer-abm">
+                <Button Type="@ButtonType.Primary" HtmlType="submit" Size="ButtonSize.Large">
+                    Guardar
+                </Button>
+            </div>
         </Form>
     </div>
 </Modal>
@@ -645,14 +650,10 @@
     }
 
     private Form<ComunicacionViewModel> _form;
-    /// <param name="args"></param>
-    private void OnFinish(EditContext editContext)
-    {
-        Console.WriteLine("e");
-        _visible = false;
-    }
 
-    private async void HandleOk(MouseEventArgs e)
+    // Guardado de la edición: antes vivía en el OnOk nativo del Modal
+    // (HandleOk); ahora lo dispara el submit del Form.
+    private void OnFinish(EditContext editContext)
     {
         EditarHandie(NroEquipoEdit);
         _visible = false;
