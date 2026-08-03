@@ -840,33 +840,19 @@
     color: var(--abm-primary-color);
 }
 
-/* Foco/hover dorado de los campos. Antes cada módulo listaba su subconjunto
-   de controles; ahora es el superconjunto para todo .modal-abm. */
-.modal-abm .ant-input:focus,
-.modal-abm .ant-input:hover,
-.modal-abm .ant-select-selector:focus,
-.modal-abm .ant-select-selector:hover,
-.modal-abm .ant-picker:focus,
-.modal-abm .ant-picker:hover,
-.modal-abm .ant-picker-input > input:focus,
-.modal-abm .ant-picker-input > input:hover,
-.modal-abm .ant-input-number:focus,
-.modal-abm .ant-input-number:hover,
-.modal-abm .ant-input-number-input:focus,
-.modal-abm .ant-input-number-input:hover,
-.modal-abm .ant-textarea:focus,
-.modal-abm .ant-textarea:hover,
-.modal-abm .ant-input-affix-wrapper:focus,
-.modal-abm .ant-input-affix-wrapper:hover {
-    border-color: var(--abm-gold-color) !important;
-    box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
-}
+/* Caja de los controles, en reposo. (`.ant-textarea` NO existe en Ant: los
+   TextArea se renderizan con `.ant-input`, o envueltos en un affix cuando
+   llevan contador.)
 
+   ESTA REGLA VA ANTES QUE LA DEL FOCO A PROPÓSITO: las dos son `!important` y
+   tienen la misma especificidad (0,2,0) para los selectores de clase suelta
+   (`.ant-picker-focused`, `.ant-select-focused ...`), así que desempata el
+   ORDEN. Si el reposo va después, le gana el borde gris al dorado y el foco
+   por teclado se queda a medias (halo dorado pero borde gris). */
 .modal-abm .ant-picker,
 .modal-abm .ant-input,
 .modal-abm .ant-select-selector,
 .modal-abm .ant-input-number,
-.modal-abm .ant-textarea,
 .modal-abm .ant-input-affix-wrapper {
     border-radius: var(--abm-radius-sm) !important;
     border: 1px solid #d9d9d9 !important;
@@ -875,12 +861,52 @@
     transition: all 0.3s ease !important;
 }
 
-/* Dentro de un affix-wrapper (TextArea con contador, inputs con ícono) el
-   borde y el foco dorado los dibuja el wrapper: el control interno va sin
+/* Foco/hover dorado de los campos. Antes cada módulo listaba su subconjunto
+   de controles; ahora es el superconjunto para todo .modal-abm.
+
+   OJO con el foco por TECLADO: en Select, Picker, InputNumber y los affix, Ant
+   NO pone `:focus` en el wrapper — deja el `:focus` en el <input> interno y
+   marca el wrapper con una clase `-focused`. Sin esas clases, al tabular se
+   veía el halo AZUL de Ant y el dorado solo aparecía con el mouse encima (que
+   sí matchea `:hover` sobre el wrapper). Ant mantiene las dos formas en su
+   propio CSS y acá se hace igual.
+
+   El dorado va SIEMPRE sobre el wrapper que dibuja el borde, nunca sobre el
+   input interno: si se pone en los dos, el halo se ve doble (misma trampa que
+   el TextArea con contador). Los internos se neutralizan más abajo.
+
+   El affix lleva ADEMÁS `:focus-within` porque es el único caso donde Ant no
+   agrega la clase `-focused` al wrapper (verificado con el TextArea con
+   contador de Incidentes): sin eso, tabular hasta ese campo no marcaba nada. */
+.modal-abm .ant-input:focus,
+.modal-abm .ant-input-focused,
+.modal-abm .ant-input:hover,
+.modal-abm .ant-input-affix-wrapper:focus,
+.modal-abm .ant-input-affix-wrapper-focused,
+.modal-abm .ant-input-affix-wrapper:focus-within,
+.modal-abm .ant-input-affix-wrapper:hover,
+.modal-abm .ant-select-focused .ant-select-selector,
+.modal-abm .ant-select-selector:hover,
+.modal-abm .ant-picker:focus,
+.modal-abm .ant-picker-focused,
+.modal-abm .ant-picker:hover,
+.modal-abm .ant-input-number:focus,
+.modal-abm .ant-input-number-focused,
+.modal-abm .ant-input-number:hover {
+    border-color: var(--abm-gold-color) !important;
+    box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
+}
+
+/* Dentro de un wrapper (affix con contador o ícono, picker, input-number) el
+   borde y el halo dorado los dibuja el wrapper: el control interno va sin
    borde ni halo propios, si no se ven dobles. */
 .modal-abm .ant-input-affix-wrapper .ant-input,
 .modal-abm .ant-input-affix-wrapper .ant-input:focus,
-.modal-abm .ant-input-affix-wrapper .ant-input:hover {
+.modal-abm .ant-input-affix-wrapper .ant-input:hover,
+.modal-abm .ant-picker-input > input:focus,
+.modal-abm .ant-picker-input > input:hover,
+.modal-abm .ant-input-number-input:focus,
+.modal-abm .ant-input-number-input:hover {
     border: none !important;
     box-shadow: none !important;
 }
