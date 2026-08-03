@@ -2706,12 +2706,11 @@
     }
 }
 
-/* Los modales de alta/edición de los tres módulos (`modal-crear-brigada` y
-   `modal-crear-fuerza`) salen ENTEROS del grupo compartido "Modales de
-   formulario", más arriba: no tienen deltas propios.
-   Partes de Vehículos comparte el wrap .modal-crear-fuerza con Fuerzas
-   Intervinientes porque sus componentes hijos (Agregar/EditarParteVehiculo)
-   ya usaban esas clases. */
+/* Los modales de alta/edición de los tres módulos (`modal-crear-brigada`,
+   `modal-crear-fuerza` y `modal-crear-parte`) salen ENTEROS del grupo
+   compartido "Modales de formulario", más arriba: ninguno tiene deltas
+   propios, y las tres clases quedan declaradas para poder agregarlos sin
+   tocar los .razor. */
 
 /* ===== Componentes de PlanillaSalida ===== */
 /* Tablas embebidas en la planilla de intervención imprimible
