@@ -305,6 +305,19 @@
     word-break: break-word;
 }
 
+/* Celda que ocupa la fila entera de la grilla (descripciones, observaciones,
+   razones de rechazo). Es un modificador de .abm-detalle-item, así que va
+   global como el resto del grupo: antes se repetía scopeada por módulo
+   (Licencias la llamaba `detail-description`; Socios y Pagos, así). */
+.abm-detalle-item--full {
+    grid-column: 1 / -1;
+}
+
+.abm-detalle-item--full .abm-detalle-valor {
+    min-height: 60px;
+    line-height: 1.5;
+}
+
 /* ------------------------------------------------------- Tareas (derivación) */
 
 .abm-tarea {
@@ -498,20 +511,8 @@
     display: none;
 }
 
-/* Modal de detalle (se re-envuelve en .abm-page dentro del portal del Modal). */
-.abm-page--licencias .modal-content {
-    max-height: 80vh;
-    overflow-y: auto;
-}
-
-.abm-page--licencias .detail-description {
-    grid-column: 1 / -1;
-}
-
-.abm-page--licencias .detail-description .abm-detalle-valor {
-    min-height: 60px;
-    line-height: 1.5;
-}
+/* El modal de detalle de Licencias está en el grupo compartido `modal-detalle`
+   (buscar `.modal-detalle`), junto con el de Pagos. Acá no queda nada propio. */
 
 /* Componente LicenciasAprobar (dropdown de licencias pendientes). */
 .abm-page--licencias .approval-container {
@@ -973,33 +974,36 @@
     margin-top: 4px;
 }
 
-/* ===== Modales de rechazo (grupo compartido) ===== */
-/* Rechazo de una licencia (`modal-rechazar-licencia`, componente
-   LicenciasAprobar) y rechazo de un pago (`modal-rechazar-pago`, componente
-   PagosAprobar). Eran copia-pega entre sí; el encabezado, el título y la caja
-   del modal salen del grupo "Modales de formulario", de arriba, y lo propio del
-   rechazo (la ficha de datos, el motivo y los dos botones) vive acá. */
+/* ===== Modales de rechazo (grupo compartido: .modal-rechazo) ===== */
+/* Rechazo de una licencia (componente LicenciasAprobar) y rechazo de un pago
+   (PagosAprobar). Son copia-pega entre sí, así que ambos wraps llevan la clase
+   compartida `modal-rechazo` además de `modal-abm` y la del módulo
+   (`WrapClassName="modal-abm modal-rechazo modal-rechazar-licencia"`): TODO el
+   diseño del rechazo sale de acá con un solo selector por regla. Las clases del
+   módulo (`modal-rechazar-licencia` / `-pago`) quedan sin reglas propias, listas
+   para un delta futuro, igual que `modal-crear-fuerza`.
+
+   La caja, el encabezado y la X salen del grupo "Modales de formulario"; acá
+   vive lo propio del rechazo (la ficha de datos, el motivo y los dos botones).
+   Este grupo NO usa el pie `modal-footer-abm`: tiene botonera propia. */
 
 /* Delta sobre el grupo de arriba: título con ícono (el redondeo del
    encabezado ya es parte del estándar del grupo compartido). */
-.modal-rechazar-licencia .ant-modal-title,
-.modal-rechazar-pago .ant-modal-title {
+.modal-rechazo .ant-modal-title {
     font-weight: 700;
     display: flex;
     align-items: center;
     gap: 8px;
 }
 
-.modal-rechazar-licencia .modal-rechazo-content,
-.modal-rechazar-pago .modal-rechazo-content {
+.modal-rechazo .modal-rechazo-content {
     padding: 24px;
 }
 
-/* Ficha con los datos de lo que se está rechazando. Las clases internas
-   difieren por módulo (`licencia-info-*` / `pago-info-*`) porque vienen de los
-   .razor originales, pero el diseño es el mismo. */
-.modal-rechazar-licencia .licencia-info-card,
-.modal-rechazar-pago .pago-info-card {
+/* Ficha con los datos de lo que se está rechazando. Las clases internas eran
+   `licencia-info-*` y `pago-info-*` (venían de los .razor originales) para el
+   mismo diseño; ahora ambos usan `rechazo-info-*`. */
+.modal-rechazo .rechazo-info-card {
     background: rgba(198, 40, 40, 0.05);
     border: 1px solid rgba(198, 40, 40, 0.2);
     border-radius: var(--abm-radius-sm);
@@ -1007,16 +1011,14 @@
     margin-bottom: 20px;
 }
 
-.modal-rechazar-licencia .licencia-info-title,
-.modal-rechazar-pago .pago-info-title {
+.modal-rechazo .rechazo-info-title {
     font-weight: 700;
     color: var(--abm-error-color);
     margin-bottom: 16px;
     font-size: 1.1rem;
 }
 
-.modal-rechazar-licencia .licencia-info-item,
-.modal-rechazar-pago .pago-info-item {
+.modal-rechazo .rechazo-info-item {
     background: #fff;
     border: 1px solid rgba(198, 40, 40, 0.15);
     border-radius: 6px;
@@ -1025,15 +1027,13 @@
     transition: all 0.3s ease;
 }
 
-.modal-rechazar-licencia .licencia-info-item:hover,
-.modal-rechazar-pago .pago-info-item:hover {
+.modal-rechazo .rechazo-info-item:hover {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     transform: translateY(-1px);
     border: 2px solid var(--abm-primary-color);
 }
 
-.modal-rechazar-licencia .licencia-info-label,
-.modal-rechazar-pago .pago-info-label {
+.modal-rechazo .rechazo-info-label {
     font-size: 0.8rem;
     color: #666;
     font-weight: 600;
@@ -1043,21 +1043,18 @@
     display: block;
 }
 
-.modal-rechazar-licencia .licencia-info-value,
-.modal-rechazar-pago .pago-info-value {
+.modal-rechazo .rechazo-info-value {
     font-size: 0.95rem;
     color: #333;
     font-weight: 500;
     word-break: break-word;
 }
 
-.modal-rechazar-licencia .reason-form-item,
-.modal-rechazar-pago .reason-form-item {
+.modal-rechazo .reason-form-item {
     margin-bottom: 16px;
 }
 
-.modal-rechazar-licencia .reason-form-item .ant-form-item-label > label,
-.modal-rechazar-pago .reason-form-item .ant-form-item-label > label {
+.modal-rechazo .reason-form-item .ant-form-item-label > label {
     font-weight: 600;
     color: var(--abm-error-color);
     display: flex;
@@ -1066,37 +1063,31 @@
     font-size: 1rem;
 }
 
-.modal-rechazar-licencia .reason-textarea,
-.modal-rechazar-pago .reason-textarea {
+.modal-rechazo .reason-textarea {
     border-radius: var(--abm-radius-sm) !important;
     border: 2px solid #d9d9d9 !important;
     transition: all 0.3s ease !important;
 }
 
-.modal-rechazar-licencia .reason-textarea:focus,
-.modal-rechazar-licencia .reason-textarea:hover,
-.modal-rechazar-pago .reason-textarea:focus,
-.modal-rechazar-pago .reason-textarea:hover {
+.modal-rechazo .reason-textarea:focus,
+.modal-rechazo .reason-textarea:hover {
     border-color: var(--abm-primary-color) !important;
     box-shadow: 0 0 0 2px rgba(166, 51, 51, 0.1) !important;
 }
 
-.modal-rechazar-licencia .button-row-right,
-.modal-rechazar-pago .button-row-right {
+.modal-rechazo .button-row-right {
     display: flex !important;
     width: 100% !important;
     margin-top: 20px !important;
 }
 
-.modal-rechazar-licencia .button-container-right,
-.modal-rechazar-pago .button-container-right {
+.modal-rechazo .button-container-right {
     display: flex !important;
     gap: 12px !important;
     margin-left: auto !important;
 }
 
-.modal-rechazar-licencia .btn-confirm-reject,
-.modal-rechazar-pago .btn-confirm-reject {
+.modal-rechazo .btn-confirm-reject {
     background: linear-gradient(135deg, var(--abm-success-color) 0%, var(--abm-success-dark) 100%) !important;
     border: none !important;
     color: #fff !important;
@@ -1107,15 +1098,13 @@
     box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
 }
 
-.modal-rechazar-licencia .btn-confirm-reject:hover,
-.modal-rechazar-pago .btn-confirm-reject:hover {
+.modal-rechazo .btn-confirm-reject:hover {
     background: linear-gradient(135deg, var(--abm-success-dark) 0%, var(--abm-success-color) 100%) !important;
     transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
 }
 
-.modal-rechazar-licencia .btn-cancel-reject,
-.modal-rechazar-pago .btn-cancel-reject {
+.modal-rechazo .btn-cancel-reject {
     background: #f5f5f5 !important;
     border: 1px solid #d9d9d9 !important;
     color: #666 !important;
@@ -1125,11 +1114,35 @@
     border-radius: var(--abm-radius-sm) !important;
 }
 
-.modal-rechazar-licencia .btn-cancel-reject:hover,
-.modal-rechazar-pago .btn-cancel-reject:hover {
+.modal-rechazo .btn-cancel-reject:hover {
     background: #e6f7ff !important;
     border-color: #1890ff !important;
     color: #1890ff !important;
+}
+
+/* ===== Modales de detalle (grupo compartido: .modal-detalle) ===== */
+/* Ficha de solo lectura de una licencia (LicenciasABM) y de un pago (PagosABM).
+   Los dos wraps llevan `modal-abm modal-detalle modal-detalle-<modulo>`: la
+   caja, el encabezado rojo y la X salen del grupo "Modales de formulario" y
+   acá vive lo propio del detalle.
+
+   Antes cada uno re-envolvía su contenido en `.abm-page .abm-page--<modulo>`
+   para alcanzar sus estilos, lo cual NUNCA podía pintar el encabezado (es
+   hermano del cuerpo del modal): por eso se veían con el chrome blanco de Ant.
+   Ya no hace falta: la grilla y las celdas (`.abm-detalle-*`) son globales.
+
+   Sin pie rojo a propósito: no hay nada que confirmar, solo un Cerrar — que va
+   sin Type="Primary" para no leerse como acción de guardado. */
+
+.modal-detalle .modal-detalle-scroll {
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.modal-detalle .modal-detalle-pie {
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
 }
 
 /* ===== Alta inline de bomberos (Brigadas y Dependencias) ===== */
@@ -3720,12 +3733,6 @@
     box-shadow: 0 6px 20px rgba(24, 144, 255, 0.4) !important;
 }
 
-/* Celda de detalle que ocupa la fila completa. */
-.abm-page--socios .abm-detalle-item--full,
-.abm-page--pagos .abm-detalle-item--full {
-    grid-column: 1 / -1;
-}
-
 /* ===== Módulo Socios ===== */
 /* El listado (Socios.razor) va acompañado de `.abm-page--personal` y los
    formularios de `.abm-page--personal-form`; acá solo lo propio del módulo. */
@@ -4753,16 +4760,9 @@
     display: none;
 }
 
-/* Modal de detalle del pago. */
-.abm-page--pagos .modal-content {
-    max-height: 80vh;
-    overflow-y: auto;
-}
-
-.abm-page--pagos .abm-detalle-item--full .abm-detalle-valor {
-    min-height: 60px;
-    line-height: 1.5;
-}
+/* El modal de detalle del pago está en el grupo compartido `modal-detalle`
+   (buscar `.modal-detalle`), junto con el de Licencias. Acá no queda nada
+   propio. */
 
 /* Componente PagosAprobar (desplegable de pagos pendientes). */
 .abm-page--pagos .approval-container {
@@ -5000,7 +5000,7 @@
     }
 }
 
-/* Rechazo de un pago (`modal-rechazar-pago`, componente PagosAprobar): sus
-   reglas viven fusionadas con las del rechazo de Licencias, en el grupo
-   "Modales de rechazo" (buscar `.modal-rechazar-licencia`). Acá no queda nada
-   propio. */
+/* Rechazo de un pago (`modal-rechazar-pago`, componente PagosAprobar): comparte
+   TODAS sus reglas con el rechazo de Licencias a través de la clase
+   `modal-rechazo`, en el grupo "Modales de rechazo" (buscar `.modal-rechazo`).
+   Acá no queda nada propio. */

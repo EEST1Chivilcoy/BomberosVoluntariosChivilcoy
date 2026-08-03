@@ -299,16 +299,18 @@
     </div>
 </Modal>
 
-@* Modal de detalle - Rediseñado responsivo *@
+@* Modal de detalle *@
 <Modal @bind-Visible="_modalDetalleVisible"
        Title="@($"📋 Detalle de Licencia - {licenciaSeleccionada?.ApellidoYNombre}")"
        Footer="null"
        Width="@("90%")"
-       Style="max-width: 1000px;">
+       Style="max-width: 1000px;"
+       Centered
+       WrapClassName="modal-abm modal-detalle modal-detalle-licencia">
     @if (licenciaSeleccionada != null)
     {
-        <div class="abm-page abm-page--licencias">
-            <div class="modal-content">
+        <div class="modal-content-abm">
+            <div class="modal-detalle-scroll">
                 <div class="abm-detalle-grid">
                     <div class="abm-detalle-item">
                         <div class="abm-detalle-label">👤 Bombero</div>
@@ -401,7 +403,7 @@
 
                     @if (!string.IsNullOrWhiteSpace(licenciaSeleccionada.Descripcion))
                     {
-                        <div class="abm-detalle-item detail-description">
+                        <div class="abm-detalle-item abm-detalle-item--full">
                             <div class="abm-detalle-label">📝 Descripción</div>
                             <div class="abm-detalle-valor">@licenciaSeleccionada.Descripcion</div>
                         </div>
@@ -412,16 +414,15 @@
                         {
                             licenciaSeleccionada.RazonRechazo = "Sin razon";
                         }
-                        <div class="abm-detalle-item detail-description">
+                        <div class="abm-detalle-item abm-detalle-item--full">
                             <div class="abm-detalle-label">❌ Razon Rechazo</div>
                             <div class="abm-detalle-valor">@licenciaSeleccionada.RazonRechazo</div>
                         </div>
                     }
                 </div>
 
-                <div style="display: flex; justify-content: center; margin-top: 24px;">
-                    <Button Type="ButtonType.Primary"
-                            Size="ButtonSize.Large"
+                <div class="modal-detalle-pie">
+                    <Button Size="ButtonSize.Large"
                             OnClick="@(() => _modalDetalleVisible = false)">
                         Cerrar
                     </Button>

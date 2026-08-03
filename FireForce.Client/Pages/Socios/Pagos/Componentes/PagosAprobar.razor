@@ -149,49 +149,49 @@ Style="max-width: 900px;"
 Footer="null"
 DestroyOnClose
 Centered
-WrapClassName="modal-abm modal-rechazar-pago">
+WrapClassName="modal-abm modal-rechazo modal-rechazar-pago">
 
     <div class="modal-rechazo-content">
         @if (_pagoParaRechazar != null)
         {
-            <div class="pago-info-card">
-                <div class="pago-info-title">
+            <div class="rechazo-info-card">
+                <div class="rechazo-info-title">
                     📋 Información del Pago a Rechazar
                 </div>
 
                 <Row Gutter="12">
                     <AntDesign.Col Xs="24" Sm="12" Md="8">
-                        <div class="pago-info-item">
-                            <span class="pago-info-label">👤 Socio</span>
-                            <div class="pago-info-value">@_pagoParaRechazar.NombreSocio</div>
+                        <div class="rechazo-info-item">
+                            <span class="rechazo-info-label">👤 Socio</span>
+                            <div class="rechazo-info-value">@_pagoParaRechazar.NombreSocio</div>
                         </div>
                     </AntDesign.Col>
 
                     <AntDesign.Col Xs="12" Sm="12" Md="8">
-                        <div class="pago-info-item">
-                            <span class="pago-info-label">📋 Nro Socio</span>
-                            <div class="pago-info-value">@_pagoParaRechazar.NumeroSocio</div>
+                        <div class="rechazo-info-item">
+                            <span class="rechazo-info-label">📋 Nro Socio</span>
+                            <div class="rechazo-info-value">@_pagoParaRechazar.NumeroSocio</div>
                         </div>
                     </AntDesign.Col>
 
                     <AntDesign.Col Xs="24" Sm="12" Md="8">
-                        <div class="pago-info-item">
-                            <span class="pago-info-label">🏷️ Tipo</span>
-                            <div class="pago-info-value">@_pagoParaRechazar.Tipo.ToString()</div>
+                        <div class="rechazo-info-item">
+                            <span class="rechazo-info-label">🏷️ Tipo</span>
+                            <div class="rechazo-info-value">@_pagoParaRechazar.Tipo.ToString()</div>
                         </div>
                     </AntDesign.Col>
 
                     <AntDesign.Col Xs="12" Sm="12" Md="8">
-                        <div class="pago-info-item">
-                            <span class="pago-info-label">💵 Monto</span>
-                            <div class="pago-info-value">@_pagoParaRechazar.Monto.ToString("C2")</div>
+                        <div class="rechazo-info-item">
+                            <span class="rechazo-info-label">💵 Monto</span>
+                            <div class="rechazo-info-value">@_pagoParaRechazar.Monto.ToString("C2")</div>
                         </div>
                     </AntDesign.Col>
 
                     <AntDesign.Col Xs="12" Sm="12" Md="8">
-                        <div class="pago-info-item">
-                            <span class="pago-info-label">📅 Fecha</span>
-                            <div class="pago-info-value">@_pagoParaRechazar.Fecha.ToString("dd/MM/yyyy")</div>
+                        <div class="rechazo-info-item">
+                            <span class="rechazo-info-label">📅 Fecha</span>
+                            <div class="rechazo-info-value">@_pagoParaRechazar.Fecha.ToString("dd/MM/yyyy")</div>
                         </div>
                     </AntDesign.Col>
                 </Row>

@@ -397,12 +397,13 @@
        Title="@($"📋 Detalle de Pago - {pagoSeleccionado?.NombreSocio}")"
        Footer="null"
        Width="@("90%")"
-       Style="max-width: 800px;">
+       Style="max-width: 800px;"
+       Centered
+       WrapClassName="modal-abm modal-detalle modal-detalle-pago">
     @if (pagoSeleccionado != null)
     {
-        @* El Modal se monta en un portal fuera de .abm-page: el scope viaja en este div raíz. *@
-        <div class="abm-page abm-page--pagos">
-            <div class="modal-content">
+        <div class="modal-content-abm">
+            <div class="modal-detalle-scroll">
                 <div class="abm-detalle-grid">
                     <div class="abm-detalle-item">
                         <div class="abm-detalle-label">👤 Socio</div>
@@ -475,9 +476,8 @@
                     }
                 </div>
 
-                <div style="display: flex; justify-content: center; margin-top: 24px;">
-                    <Button Type="ButtonType.Primary"
-                            Size="ButtonSize.Large"
+                <div class="modal-detalle-pie">
+                    <Button Size="ButtonSize.Large"
                             OnClick="@(() => _modalDetalleVisible = false)">
                         Cerrar
                     </Button>

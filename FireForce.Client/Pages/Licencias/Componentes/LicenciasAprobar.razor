@@ -159,56 +159,56 @@ Style="max-width: 900px;"
 Footer="null"
 DestroyOnClose
 Centered
-WrapClassName="modal-abm modal-rechazar-licencia">
+WrapClassName="modal-abm modal-rechazo modal-rechazar-licencia">
 
     <div class="modal-rechazo-content">
         @if (_licenciaParaRechazar != null)
         {
-            <div class="licencia-info-card">
-                <div class="licencia-info-title">
+            <div class="rechazo-info-card">
+                <div class="rechazo-info-title">
                     📋 Información de la Licencia a Rechazar
                 </div>
 
                 <Row Gutter="12">
                     <AntDesign.Col Xs="24" Sm="12" Md="8">
-                        <div class="licencia-info-item">
-                            <span class="licencia-info-label">👤 Bombero</span>
-                            <div class="licencia-info-value">@_licenciaParaRechazar.ApellidoYNombre</div>
+                        <div class="rechazo-info-item">
+                            <span class="rechazo-info-label">👤 Bombero</span>
+                            <div class="rechazo-info-value">@_licenciaParaRechazar.ApellidoYNombre</div>
                         </div>
                     </AntDesign.Col>
 
                     <AntDesign.Col Xs="12" Sm="12" Md="8">
-                        <div class="licencia-info-item">
-                            <span class="licencia-info-label">📋 Legajo</span>
-                            <div class="licencia-info-value">@_licenciaParaRechazar.NumeroLegajo</div>
+                        <div class="rechazo-info-item">
+                            <span class="rechazo-info-label">📋 Legajo</span>
+                            <div class="rechazo-info-value">@_licenciaParaRechazar.NumeroLegajo</div>
                         </div>
                     </AntDesign.Col>
 
                     <AntDesign.Col Xs="24" Sm="12" Md="8">
-                        <div class="licencia-info-item">
-                            <span class="licencia-info-label">🏷️ Tipo</span>
-                            <div class="licencia-info-value">@_licenciaParaRechazar.TipoLicencia?.GetDisplayName()</div>
+                        <div class="rechazo-info-item">
+                            <span class="rechazo-info-label">🏷️ Tipo</span>
+                            <div class="rechazo-info-value">@_licenciaParaRechazar.TipoLicencia?.GetDisplayName()</div>
                         </div>
                     </AntDesign.Col>
 
                     <AntDesign.Col Xs="12" Sm="12" Md="8">
-                        <div class="licencia-info-item">
-                            <span class="licencia-info-label">⏱️ Duración</span>
-                            <div class="licencia-info-value">@_licenciaParaRechazar.DuracionEnDias días</div>
+                        <div class="rechazo-info-item">
+                            <span class="rechazo-info-label">⏱️ Duración</span>
+                            <div class="rechazo-info-value">@_licenciaParaRechazar.DuracionEnDias días</div>
                         </div>
                     </AntDesign.Col>
 
                     <AntDesign.Col Xs="12" Sm="12" Md="8">
-                        <div class="licencia-info-item">
-                            <span class="licencia-info-label">📅 Desde</span>
-                            <div class="licencia-info-value">@_licenciaParaRechazar.Desde.ToString("dd/MM/yyyy")</div>
+                        <div class="rechazo-info-item">
+                            <span class="rechazo-info-label">📅 Desde</span>
+                            <div class="rechazo-info-value">@_licenciaParaRechazar.Desde.ToString("dd/MM/yyyy")</div>
                         </div>
                     </AntDesign.Col>
 
                     <AntDesign.Col Xs="12" Sm="12" Md="8">
-                        <div class="licencia-info-item">
-                            <span class="licencia-info-label">📅 Hasta</span>
-                            <div class="licencia-info-value">@_licenciaParaRechazar.Hasta.ToString("dd/MM/yyyy")</div>
+                        <div class="rechazo-info-item">
+                            <span class="rechazo-info-label">📅 Hasta</span>
+                            <div class="rechazo-info-value">@_licenciaParaRechazar.Hasta.ToString("dd/MM/yyyy")</div>
                         </div>
                     </AntDesign.Col>
                 </Row>
