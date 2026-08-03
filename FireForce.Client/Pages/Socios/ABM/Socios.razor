@@ -306,6 +306,8 @@
     {
         isModalDetalleVisible = false;
         isModalCrearVisible = false;
+        // El modal de edición también usa este OnCancel: sin esta línea la X no lo cerraba.
+        isModalEditarVisible = false;
     }
 
     private async Task CloseEditarModal()
