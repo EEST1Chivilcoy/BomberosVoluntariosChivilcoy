@@ -281,9 +281,10 @@
        Centered="@true"
        OnCancel="@(() => _modalParametrosBonosVisible = false)"
        Visible="@_modalParametrosBonosVisible"
-       Width="500">
-    @* El Modal se monta en un portal fuera de .abm-page: el scope viaja en este div raíz. *@
-    <div class="modal-imprimir-zonas">
+       Width="500"
+       WrapClassName="modal-abm modal-imprimir-bonos">
+    @* modal-imprimir-zonas es el diseño compartido con el modal de Socios. *@
+    <div class="modal-content-abm modal-imprimir-zonas">
         <h4 class="modal-imprimir-zonas-titulo">
             <Icon Type="file-text" />
             Seleccione Zona, Mes y Año
@@ -313,11 +314,8 @@
             </div>
         }
 
-        <div class="print-modal-actions">
-            <Button OnClick="@(() => _modalParametrosBonosVisible = false)">
-                Cancelar
-            </Button>
-            <Button Type="ButtonType.Primary" Class="print-confirm-button" OnClick="ConfirmPrintBonos">
+        <div class="modal-footer-abm">
+            <Button Type="ButtonType.Primary" OnClick="ConfirmPrintBonos">
                 <Icon Type="printer" /> Imprimir
             </Button>
         </div>
@@ -358,9 +356,10 @@
        Centered="@true"
        OnCancel="@(() => _modalParametrosCobranzaVisible = false)"
        Visible="@_modalParametrosCobranzaVisible"
-       Width="500">
-    @* El Modal se monta en un portal fuera de .abm-page: el scope viaja en este div raíz. *@
-    <div class="modal-imprimir-zonas">
+       Width="500"
+       WrapClassName="modal-abm modal-imprimir-cobranza">
+    @* modal-imprimir-zonas es el diseño compartido con el modal de Socios. *@
+    <div class="modal-content-abm modal-imprimir-zonas">
         <h4 class="modal-imprimir-zonas-titulo">
             <Icon Type="printer" />
             Seleccione Zona y Año
@@ -385,11 +384,8 @@
             </div>
         }
 
-        <div class="print-modal-actions">
-            <Button OnClick="@(() => _modalParametrosCobranzaVisible = false)">
-                Cancelar
-            </Button>
-            <Button Type="ButtonType.Primary" Class="print-confirm-button" OnClick="ConfirmPrintCobranza">
+        <div class="modal-footer-abm">
+            <Button Type="ButtonType.Primary" OnClick="ConfirmPrintCobranza">
                 <Icon Type="printer" /> Imprimir
             </Button>
         </div>

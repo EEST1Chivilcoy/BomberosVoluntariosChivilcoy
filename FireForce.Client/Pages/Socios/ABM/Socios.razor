@@ -157,13 +157,14 @@
 @*Modal Crear Socio*@
 
 <Modal Title="Crear Socio"
-       Footer="footer"
+       Footer="null"
        Centered="@true"
        OnCancel="CloseModals"
        Visible="@isModalCrearVisible"
-       Width="600">
-    @* El Modal se monta en un portal fuera de .abm-page: el scope viaja en este div raíz. *@
-    <div class="modal-socios-crear">
+       Width="600"
+       WrapClassName="modal-abm modal-crear-socio">
+    @* Sin pie: las dos tarjetas navegan al alta y la X del encabezado cierra. *@
+    <div class="modal-content-abm">
         <h3 class="modal-socios-crear-titulo">
             Seleccione el tipo de socio a crear
         </h3>
@@ -200,9 +201,10 @@
        Centered="@true"
        OnCancel="ClosePrintModal"
        Visible="@isModalPrintVisible"
-       Width="500">
-    @* El Modal se monta en un portal fuera de .abm-page: el scope viaja en este div raíz. *@
-    <div class="modal-imprimir-zonas">
+       Width="500"
+       WrapClassName="modal-abm modal-imprimir-socios">
+    @* modal-imprimir-zonas es el diseño compartido con los dos modales de Pagos. *@
+    <div class="modal-content-abm modal-imprimir-zonas">
         <h4 class="modal-imprimir-zonas-titulo">
             <Icon Type="printer" />
             Seleccione qué desea imprimir
@@ -237,11 +239,8 @@
             </div>
         </div>
 
-        <div class="print-modal-actions">
-            <Button OnClick="ClosePrintModal">
-                Cancelar
-            </Button>
-            <Button Type="ButtonType.Primary" Class="print-confirm-button" OnClick="ConfirmPrint">
+        <div class="modal-footer-abm">
+            <Button Type="ButtonType.Primary" OnClick="ConfirmPrint">
                 <Icon Type="printer" /> Imprimir
             </Button>
         </div>

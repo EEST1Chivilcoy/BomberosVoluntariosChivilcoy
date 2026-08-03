@@ -3647,6 +3647,34 @@
     color: var(--abm-flame-color);
     font-size: 1.2rem;
 }
+
+/* Confirmación posterior a la carga de una salida (`modal-imprimir-salida`,
+   componente ImprimirModal): pregunta si se imprime la planilla. El <Result> de
+   Ant trae 48px de padding propio, de más dentro del cuerpo estándar de 24px. */
+.modal-imprimir-salida .ant-result {
+    padding: 8px 0 16px;
+}
+
+.modal-imprimir-salida .modal-imprimir-salida-pregunta {
+    margin: 0;
+    text-align: center;
+    font-size: 18px;
+    color: #434343;
+}
+
+/* Único pie del sistema con dos acciones: el estándar asume una sola (verde) y
+   no estiliza el .ant-btn genérico, así que el secundario caería con el radio
+   de 2px de Ant al lado de los 8px del verde. Se le igualan radio, padding y
+   peso, y conserva su tipo default: misma receta que el pie de los formularios
+   de página completa (ver `.abm-page--personal-form .action-buttons`). Va
+   scopeado al módulo a propósito: sin scope repintaría también el botón Danger
+   del rechazo de Incidentes, que va solo en su pie. */
+.modal-imprimir-salida .modal-footer-abm .ant-btn {
+    border-radius: var(--abm-radius-sm);
+    padding: 0 20px;
+    font-weight: 600;
+}
+
 /* ===== Módulos Socios, Cobranza y Pagos ===== */
 /* Absorbe los bloques <style> de Pages/Socios/. Notas de diseño:
    - El listado de Socios reutiliza `.abm-page--personal` (mismo esquema de filtros
@@ -3659,9 +3687,10 @@
      #ff4d4f de error ya presente en este archivo): se conserva literal porque es
      chrome de Ant, no un estado del sistema. Los estados "neutro / al día" sí se
      pliegan a los tokens --abm-info-*.
-   - Los modales que NO usan WrapClassName se montan igual en un portal fuera de
-     .abm-page: en esos casos el scope viaja en el div raíz del contenido
-     (.modal-socios-crear, .modal-imprimir-zonas). */
+   - Los modales de estos módulos ya están en el grupo compartido `modal-abm`
+     (ver "Modales de formulario"): el scope viaja en el WrapClassName. Las
+     clases internas que quedan acá son las del contenido propio de cada uno
+     (.modal-socios-crear-*, .modal-imprimir-zonas). */
 
 /* ---------------------------------------------------- Comunes a los tres */
 
@@ -3768,73 +3797,72 @@
     padding: 16px;
 }
 
-/* ===== Modales de Socios (portal, scope en el div raíz del contenido) ===== */
+/* ===== Modales de Socios (deltas sobre el grupo compartido .modal-abm) ===== */
 
-/* Modal "Crear Socio": elegir entre socio persona o socio empresa. */
-.modal-socios-crear {
-    padding: 24px;
-}
-
-.modal-socios-crear-titulo {
+/* Modal "Crear Socio" (`modal-crear-socio`): elegir entre socio persona o socio
+   empresa. Va sin pie: las dos tarjetas navegan al alta y la X cierra. El
+   padding del cuerpo lo pone `modal-content-abm`. */
+.modal-crear-socio .modal-socios-crear-titulo {
     text-align: center;
     margin-bottom: 32px;
     color: var(--abm-primary-color);
     font-weight: 600;
 }
 
-.modal-socios-crear-opciones {
+.modal-crear-socio .modal-socios-crear-opciones {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 24px;
 }
 
-.modal-socios-crear-link {
+.modal-crear-socio .modal-socios-crear-link {
     text-decoration: none;
 }
 
-.modal-socios-crear-card {
+.modal-crear-socio .modal-socios-crear-card {
     cursor: pointer;
     border: 2px solid #e8e8e8;
     border-radius: 12px;
     transition: all 0.3s ease;
 }
 
-.modal-socios-crear-card-cuerpo {
+.modal-crear-socio .modal-socios-crear-card-cuerpo {
     text-align: center;
     padding: 24px;
 }
 
-.modal-socios-crear-icono {
+.modal-crear-socio .modal-socios-crear-icono {
     font-size: 64px;
     margin-bottom: 16px;
 }
 
-.modal-socios-crear-icono--persona {
+.modal-crear-socio .modal-socios-crear-icono--persona {
     color: var(--abm-success-color);
 }
 
-.modal-socios-crear-icono--empresa {
+.modal-crear-socio .modal-socios-crear-icono--empresa {
     color: #1890ff;
 }
 
-.modal-socios-crear-nombre {
+.modal-crear-socio .modal-socios-crear-nombre {
     margin: 0 0 8px;
     color: #333;
     font-weight: 600;
     font-size: 20px;
 }
 
-.modal-socios-crear-descripcion {
+.modal-crear-socio .modal-socios-crear-descripcion {
     margin: 0;
     color: #666;
     font-size: 14px;
 }
 
-/* Modal de impresión por zona (Socios y Pagos comparten el mismo diseño). */
-.modal-imprimir-zonas {
-    padding: 16px;
-}
-
+/* Diseño de los modales de impresión por zona: lo comparten los tres wraps
+   `modal-imprimir-socios` (Socios), `modal-imprimir-bonos` y
+   `modal-imprimir-cobranza` (Pagos), que además llevan `modal-abm`. Por eso el
+   scope de estas reglas es la clase del contenido y no la del wrap: es el mismo
+   cuerpo montado en tres modales distintos. El padding lo pone
+   `modal-content-abm` y el pie es el `modal-footer-abm` estándar. */
 .modal-imprimir-zonas-titulo {
     display: flex;
     align-items: center;
@@ -3916,24 +3944,7 @@
     font-size: 13px;
 }
 
-.modal-imprimir-zonas .print-modal-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
-    margin-top: 24px;
-    padding-top: 16px;
-    border-top: 1px solid #f0f0f0;
-}
-
-.modal-imprimir-zonas .print-confirm-button {
-    background: linear-gradient(135deg, var(--abm-primary-color) 0%, var(--abm-primary-dark) 100%) !important;
-    border: none !important;
-    color: #fff !important;
-}
-
-.modal-imprimir-zonas .print-confirm-button:hover {
-    background: linear-gradient(135deg, var(--abm-primary-dark) 0%, #5a2323 100%) !important;
-}
+/* El pie es el `modal-footer-abm` estándar: no necesita reglas propias. */
 
 /* ===== Módulo Cobranza ===== */
 /* Pantalla de grilla de tarjetas: cada socio con forma de pago en efectivo se

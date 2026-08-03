@@ -2,19 +2,31 @@
 @using FireForce.Client.Data.ViewModels.Personal;
 @inject NavigationManager navigationManager
 
-@*Despues de la Carga*@
-<Modal Footer="null" Title="@("Success")"
+@*Confirmación posterior a la carga de una salida*@
+<Modal Title="Salida registrada"
+       Footer="null"
+       Centered
+       Width="600"
+       WrapClassName="modal-abm modal-imprimir-salida"
        Visible="@_visible1"
        OnCancel="@HandleCancel1">
 
-    <Result Status="ResultStatus.Success"
-            Title="Se cargo correctamente la salida"
-            SubTitle="">
-    </Result>
+    <div class="modal-content-abm">
+        <Result Status="ResultStatus.Success"
+                Title="Se cargó correctamente la salida">
+        </Result>
 
-    <p style="font-size: 20px; text-align: center;">¿Desea imprimir la planilla de intervención?</p>
-    <button @onclick="@(() => { navigationManager.NavigateTo($"/fire-force/PlanillasIntervencion/Imprimir/{AnioNumeroParte}/{NumeroParte}/{true}", true); })">Si</button>
-    <button @onclick="@(() => { navigationManager.NavigateTo("/fire-force/Salidas"); })">No</button>
+        <p class="modal-imprimir-salida-pregunta">¿Desea imprimir la planilla de intervención?</p>
+
+        <div class="modal-footer-abm">
+            <Button OnClick="@VolverAlListado">
+                No, volver al listado
+            </Button>
+            <Button Type="ButtonType.Primary" OnClick="@ImprimirPlanilla">
+                <Icon Type="printer" /> Sí, imprimir
+            </Button>
+        </div>
+    </div>
 </Modal>
 
 @code {
@@ -26,5 +38,15 @@
     void HandleCancel1()
     {
         _visible1 = false;
+    }
+
+    private void ImprimirPlanilla()
+    {
+        navigationManager.NavigateTo($"/fire-force/PlanillasIntervencion/Imprimir/{AnioNumeroParte}/{NumeroParte}/{true}", true);
+    }
+
+    private void VolverAlListado()
+    {
+        navigationManager.NavigateTo("/fire-force/Salidas");
     }
 }
