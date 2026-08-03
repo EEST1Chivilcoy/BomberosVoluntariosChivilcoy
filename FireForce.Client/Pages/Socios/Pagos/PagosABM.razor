@@ -549,7 +549,8 @@
 
         try
         {
-            var pagos = await PagoService.ObtenerTodosLosPagosAsync();
+            // incluirSocio: sin esto la grilla y el detalle muestran "Sin Socio" y Nro 0.
+            var pagos = await PagoService.ObtenerTodosLosPagosAsync(incluirSocio: true);
             PagosOriginales = pagos.Select(MapToViewModel).ToList();
             SociosList = await SocioService.ObtenerSociosAsync() ?? new List<Socio>();
             CobradoresList = (await CobradorService.ObtenerTodosLosCobradoresAsync()).ToList();

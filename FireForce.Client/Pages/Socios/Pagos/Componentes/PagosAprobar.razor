@@ -252,7 +252,8 @@ WrapClassName="modal-abm modal-rechazo modal-rechazar-pago">
 
         try
         {
-            var pagos = await PagoService.ObtenerPagosPorEstadoAsync(EstadoPago.PendienteAConfirmar);
+            // incluirSocio: sin esto el panel y el modal de rechazo muestran "Sin Socio" y Nro 0.
+            var pagos = await PagoService.ObtenerPagosPorEstadoAsync(EstadoPago.PendienteAConfirmar, incluirSocio: true);
             PagosPendientes = pagos
                 .OrderBy(p => p.Fecha)
                 .Select(MapToViewModel)
