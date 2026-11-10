@@ -8,24 +8,15 @@
 @*Servicios utilizados*@
 @inject IMessageService MessageService
 
-<style>
-    .participantes {
-        border: 2px solid #52c41a;
-        background: #f6ffed;
-        box-shadow: 0 2px 8px rgba(82,196,26,0.08);
-        border-radius: 10px;
-        margin-bottom: 2rem;
-        padding: 2rem 1.5rem;
-    }
-</style>
+@* Los estilos viven en wwwroot/css/abm.css. No agregar <style> acá. *@
 
-<div class="participantes">
+<div class="planilla-salida">
     <Form Model="Model"
           ValidateOnChange="@true">
         @*Sección Solicitante*@
         <div style="margin-bottom: 24px;">
-            <div style="border-bottom: 2px solid #52c41a; padding-bottom: 8px; margin-bottom: 16px;">
-                <h4 style="color: #52c41a; margin: 0; font-weight: 600;">Datos del Solicitante</h4>
+            <div class="seccion-titulo">
+                <h4>Datos del Solicitante</h4>
             </div>
 
             <Row Gutter="16">
@@ -61,8 +52,8 @@
 
         @*Sección Receptor*@
         <div style="margin-bottom: 24px;">
-            <div style="border-bottom: 2px solid #52c41a; padding-bottom: 8px; margin-bottom: 16px;">
-                <h4 style="color: #52c41a; margin: 0; font-weight: 600;">Datos del Recepcionista</h4>
+            <div class="seccion-titulo">
+                <h4>Datos del Recepcionista</h4>
             </div>
 
             <Row Gutter="16">

@@ -4,80 +4,12 @@
 @inject IMessageService message
 @using System.ComponentModel.DataAnnotations
 
-<style>
-    .movimientos-abm {
-        font-family: 'Poppins', sans-serif !important;
-        --primary-color: #f0f2f5;
-        --primary-dark: #d9d9d9;
-        --secondary-color: #2F54EB;
-        --success-color: #52C41A;
-        --success-dark: #449E17;
-        --background-card: #FFFFFF;
-        --background-body: #FFFFFF;
-        --text-color: #262626;
-        --border-color: #D9D9D9;
-        --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    }
+@* Los estilos viven en wwwroot/css/abm.css. No agregar <style> acá. *@
 
-    .ant-modal-content {
-        border: 2px solid #A63333 !important;
-        border-radius: 8px !important;
-    }
-
-    .ant-modal-header {
-        background-color: #A63333 !important;
-        border-radius: 8px 8px 0 0 !important;
-        border-bottom: none !important;
-    }
-
-    .ant-modal-header .ant-modal-title {
-        color: white !important;
-    }
-
-    .ant-modal-close {
-        color: white !important;
-    }
-
-    .movimientos-abm .cancel-button-white {
-        background-color: white !important;
-        color: black !important;
-        font-weight: 500 !important;
-        border: 1px solid #d9d9d9;
-        box-shadow: none;
-        height: 32px;
-        border-radius: 6px;
-        padding: 0 15px;
-    }
-
-    .ant-select:not(.ant-select-customize-input) .ant-select-selector {
-        border-radius: 6px !important;
-        height: 40px !important;
-    }
-
-    .ant-input:focus, .ant-input:hover,
-    .ant-input-number:focus, .ant-input-number:hover,
-    .ant-select-selector:focus, .ant-select-selector:hover {
-        border-color: #FFC107 !important;
-        box-shadow: 0 0 0 2px rgba(255, 193, 7, 0.2) !important;
-    }
-
-    .ant-modal .ant-btn-primary {
-        background: linear-gradient(135deg, #4CAF50 0%, #438E46 100%) !important;
-        border: none !important;
-        color: #fff !important;
-        font-weight: 600;
-        box-shadow: 0 2px 8px rgba(76, 175, 80, 0.18);
-        margin-top: 0;
-        margin-bottom: 0;
-        padding: 0 20px !important;
-    }
-</style>
-
-<div class="material-abm">
-    <div class="modal-crear-movimiento-content">
+<div>
+    <div class="modal-content-abm">
         <Form Model="@MaterialViewModel"
                 Style="max-width: 800px;"
-              Class="modal-crear-movimiento-form"
               Layout="FormLayout.Vertical"
               OnFinish="OnFinish"
               OnFinishFailed="OnFinishFailed"
@@ -85,14 +17,14 @@
 
             <Row Gutter="16">
                 <AntDesign.Col Span="12">
-                    <div class="modal-crear-movimiento-form-item">
+                    <div class="modal-form-item-abm">
                         <FormItem Label="🏷️ Material" Required>
                             <Input @bind-Value="MaterialViewModel.Descripcion" Placeholder="Ingrese el nombre del producto" />
                         </FormItem>
                     </div>
                 </AntDesign.Col>
                 <AntDesign.Col Span="12">
-                    <div class="modal-crear-movimiento-form-item">
+                    <div class="modal-form-item-abm">
                         <FormItem Label="📦 Cantidad" Required>
                             <AntDesign.InputNumber @bind-Value="MaterialViewModel.Stock" Style="width: 100%;" />
                         </FormItem>
@@ -101,14 +33,14 @@
             </Row>
             <Row Gutter="16">
                 <AntDesign.Col Span="12">
-                    <div class="modal-crear-movimiento-form-item">
+                    <div class="modal-form-item-abm">
                         <FormItem Label="🗂️ Rubro" Required>
                             <EnumSelect TEnum="TipoRubro" @bind-Value="MaterialViewModel.Rubro" Style="width: 100%;" />
                         </FormItem>
                     </div>
                 </AntDesign.Col>
                 <AntDesign.Col Span="12">
-                    <div class="modal-crear-movimiento-form-item">
+                    <div class="modal-form-item-abm">
                         <FormItem Label="📅 Fecha" Required>
                             <DatePicker Mask="dd/MM/yyyy" TValue="DateTime" DefaultValue="DateTime.Now" @bind-Value="MaterialViewModel.FechaAlta" Style="width: 100%;" />
                         </FormItem>
@@ -119,7 +51,7 @@
              
             </Row>
 
-            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;" class="modal-crear-movimiento-footer">
+            <div class="modal-footer-abm">
                 <Button Class="ant-btn-primary" HtmlType="submit">
                     Cargar Material
                 </Button>
