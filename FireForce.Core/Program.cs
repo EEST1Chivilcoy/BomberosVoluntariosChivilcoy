@@ -36,7 +36,10 @@ builder.Services.AddDistributedMemoryCache();
 // Permite trabajar sin Microsoft Entra ID (ver appsettings.Development.json).
 // Con la bandera en true se autentica automáticamente un usuario ficticio con todos los roles,
 // así que [Authorize], AuthorizeView y las políticas siguen funcionando igual que con Entra ID.
-var autenticacionDeshabilitada = builder.Configuration.GetValue<bool>("Autenticacion:Deshabilitada");
+// Doble llave: además de la bandera, el entorno tiene que ser Development. Así una variable de
+// configuración mal cargada en la Web App no puede dejar la app productiva abierta a cualquiera.
+var autenticacionDeshabilitada = builder.Environment.IsDevelopment()
+    && builder.Configuration.GetValue<bool>("Autenticacion:Deshabilitada");
 
 var esquemaPorDefecto = autenticacionDeshabilitada
     ? DesarrolloAuthenticationHandler.Esquema
