@@ -21,6 +21,7 @@ using FireForce.Data.Models.Socios;
 using FireForce.Data.Models.Vehiculos;
 using FireForce.Data.Models.Vehiculos.Flota;
 using FireForce.Data.Models.Otros.Partes;
+using FireForce.Data.Models.Otros.Firmas;
 
 namespace FireForce.Data
 {
@@ -131,6 +132,14 @@ namespace FireForce.Data
         // Partes de Vehiculo
         public DbSet<ParteVehiculo> PartesVehiculo { get; set; }
 
+        // Incidentes (Firmas)
+
+        public DbSet<IncidenteBase> Incidentes { get; set; }
+        public DbSet<IncidenteMovil> IncidentesMoviles { get; set; }
+        public DbSet<IncidenteDependencia> IncidentesDependencias { get; set; }
+        public DbSet<Tarea> Tareas { get; set; }
+        public DbSet<MovimientoIncidente> MovimientosIncidente { get; set; }
+
         public BomberosDbContext(DbContextOptions<BomberosDbContext> options)
             : base(options)
         {
@@ -220,6 +229,75 @@ namespace FireForce.Data
                       .IsRequired(false) // Indica que la relación es opcional (FK puede ser NULL).
                       .OnDelete(DeleteBehavior.SetNull); // Si se borra la intervención, el FK en damnificado se pone a NULL.
             });
+
+            // --- Incidentes (Firmas) ---
+
+            modelBuilder.Entity<IncidenteBase>(entity =>
+            {
+                // Quien reporta: cualquier Persona, no solo bomberos.
+                entity.HasOne(i => i.Solicitante)
+                      .WithMany()
+                      .HasForeignKey(i => i.SolicitanteId)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                // Encargado del móvil o de la dependencia. Se asigna al crear y no cambia:
+                // derivar a otro departamento se hace creando una Tarea.
+                entity.HasOne(i => i.Encargado)
+                      .WithMany()
+                      .HasForeignKey(i => i.EncargadoId)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                // La bitácora muere con el incidente.
+                entity.HasMany(i => i.Movimientos)
+                      .WithOne(m => m.Incidente)
+                      .HasForeignKey(m => m.IncidenteId)
+                      .OnDelete(DeleteBehavior.Cascade);
+
+                // Las tareas no: no se borra un incidente que ya derivó trabajo a otro departamento.
+                entity.HasMany(i => i.Tareas)
+                      .WithOne(t => t.Incidente)
+                      .HasForeignKey(t => t.IncidenteId)
+                      .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<IncidenteMovil>()
+                .HasOne(i => i.Vehiculo)
+                .WithMany()
+                .HasForeignKey(i => i.VehiculoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<IncidenteDependencia>()
+                .HasOne(i => i.Dependencia)
+                .WithMany()
+                .HasForeignKey(i => i.DependenciaId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Tarea>(entity =>
+            {
+                // Departamento destino de la derivación.
+                entity.HasOne(t => t.Dependencia)
+                      .WithMany()
+                      .HasForeignKey(t => t.DependenciaId)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(t => t.Encargado)
+                      .WithMany()
+                      .HasForeignKey(t => t.EncargadoId)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                // Encadenamiento de derivaciones sucesivas (subtareas).
+                entity.HasOne(t => t.TareaPadre)
+                      .WithMany(t => t.Tareas)
+                      .HasForeignKey(t => t.TareaPadreId)
+                      .IsRequired(false)
+                      .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<MovimientoIncidente>()
+                .HasOne(m => m.Autor)
+                .WithMany()
+                .HasForeignKey(m => m.AutorId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             // Relaciones mucho a muchos
 
@@ -331,6 +409,10 @@ namespace FireForce.Data
             .Property(p => p.Tipo)
             .HasConversion<int>();
 
+            modelBuilder.Entity<IncidenteBase>()
+                .Property(i => i.Tipo)
+                .HasConversion<int>();
+
             //Discriminacion (Pasada a ENUM)
 
             modelBuilder.Entity<Persona>()
@@ -386,6 +468,11 @@ namespace FireForce.Data
             modelBuilder.Entity<PagoSocio>()
                 .HasDiscriminator(p => p.Tipo)
                 .HasValue<PagoEfectivo>(TipoPagoSocio.Efectivo);
+
+            modelBuilder.Entity<IncidenteBase>()
+                .HasDiscriminator(i => i.Tipo)
+                .HasValue<IncidenteMovil>(TipoDeIncidente.Movil)
+                .HasValue<IncidenteDependencia>(TipoDeIncidente.Dependencia);
 
             // Configuracion de Realaciones al Borrarse
 
@@ -801,6 +888,33 @@ namespace FireForce.Data
             modelBuilder
                 .Entity<Movil_Salida>()
                 .Property(d => d.DotacionSalida)
+                .HasConversion<string>()
+                .HasMaxLength(255);
+
+            // Incidentes (Firmas). Se guardan como string y no como int para que renumerar los
+            // enums no corrompa los datos: CategoriaIncidente ya fue renumerado una vez.
+
+            modelBuilder
+                .Entity<IncidenteBase>()
+                .Property(i => i.Categoria)
+                .HasConversion<string>()
+                .HasMaxLength(255);
+
+            modelBuilder
+                .Entity<IncidenteBase>()
+                .Property(i => i.Estado)
+                .HasConversion<string>()
+                .HasMaxLength(255);
+
+            modelBuilder
+                .Entity<Tarea>()
+                .Property(t => t.Estado)
+                .HasConversion<string>()
+                .HasMaxLength(255);
+
+            modelBuilder
+                .Entity<MovimientoIncidente>()
+                .Property(m => m.Tipo)
                 .HasConversion<string>()
                 .HasMaxLength(255);
         }
